@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
-import reactLogo from "../assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
 import { getApps } from "firebase/app";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import { PROJECT_NAME } from "../consts";
@@ -36,21 +33,17 @@ export const App = () => {
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
       <h1>{PROJECT_NAME}</h1>
 
-      <Link to="/logout">Logout</Link>
+      <NavLink to="/admin">Admin</NavLink>
       <br />
-      <Link to="/signup">Sign Up</Link>
+      <NavLink to="/seasons">Seasons</NavLink>
       <br />
-      <Link to="/login">Login</Link>
+      <NavLink to="/logout">Logout</NavLink>
+      <br />
+      <NavLink to="/signup">Sign Up</NavLink>
+      <br />
+      <NavLink to="/login">Login</NavLink>
 
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
