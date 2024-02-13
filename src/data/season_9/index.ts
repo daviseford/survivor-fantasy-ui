@@ -173,7 +173,7 @@ export const SEASON_9_PLAYERS = {
 export const SEASON_9_CHALLENGES = {
   challenge_1: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_1",
+    episode_id: "/episodes/season_9/episode_1",
     variant: "combined",
     order: 1,
     post_merge: false,
@@ -191,7 +191,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_2: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_2",
+    episode_id: "/episodes/season_9/episode_2",
     variant: "reward",
     order: 2,
     post_merge: false,
@@ -209,7 +209,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_3: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_2",
+    episode_id: "/episodes/season_9/episode_2",
     variant: "immunity",
     order: 3,
     post_merge: false,
@@ -226,7 +226,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_4: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_3",
+    episode_id: "/episodes/season_9/episode_3",
     variant: "reward",
     order: 4,
     post_merge: false,
@@ -243,7 +243,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_5: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_3",
+    episode_id: "/episodes/season_9/episode_3",
     variant: "immunity",
     order: 5,
     post_merge: false,
@@ -251,7 +251,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_6: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_4",
+    episode_id: "/episodes/season_9/episode_4",
     variant: "reward",
     order: 6,
     post_merge: false,
@@ -267,7 +267,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_7: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_4",
+    episode_id: "/episodes/season_9/episode_4",
     variant: "immunity",
     order: 7,
     post_merge: false,
@@ -283,7 +283,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_8: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_5",
+    episode_id: "/episodes/season_9/episode_5",
     variant: "reward",
     order: 8,
     post_merge: false,
@@ -298,7 +298,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_9: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_5",
+    episode_id: "/episodes/season_9/episode_5",
     variant: "immunity",
     order: 9,
     post_merge: false,
@@ -313,7 +313,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_10: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_6",
+    episode_id: "/episodes/season_9/episode_6",
     variant: "reward",
     order: 10,
     post_merge: false,
@@ -328,7 +328,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_11: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_6",
+    episode_id: "/episodes/season_9/episode_6",
     variant: "immunity",
     order: 11,
     post_merge: false,
@@ -343,7 +343,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_12: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_7",
+    episode_id: "/episodes/season_9/episode_7",
     variant: "reward",
     order: 12,
     post_merge: false,
@@ -357,7 +357,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_13: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_7",
+    episode_id: "/episodes/season_9/episode_7",
     variant: "immunity",
     order: 13,
     post_merge: false,
@@ -371,7 +371,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_14: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_8",
+    episode_id: "/episodes/season_9/episode_8",
     variant: "reward",
     order: 14,
     post_merge: false,
@@ -385,7 +385,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_15: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_8",
+    episode_id: "/episodes/season_9/episode_8",
     variant: "immunity",
     order: 15,
     post_merge: true,
@@ -393,7 +393,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_16: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_9",
+    episode_id: "/episodes/season_9/episode_9",
     variant: "reward",
     order: 16,
     post_merge: true,
@@ -401,7 +401,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_17: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_9",
+    episode_id: "/episodes/season_9/episode_9",
     variant: "immunity",
     order: 17,
     post_merge: true,
@@ -409,7 +409,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_18: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_10",
+    episode_id: "/episodes/season_9/episode_10",
     variant: "reward",
     order: 18,
     post_merge: true,
@@ -422,7 +422,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_19: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_10",
+    episode_id: "/episodes/season_9/episode_10",
     variant: "immunity",
     order: 19,
     post_merge: true,
@@ -430,7 +430,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_20: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_11",
+    episode_id: "/episodes/season_9/episode_11",
     variant: "reward",
     order: 20,
     post_merge: true,
@@ -438,7 +438,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_21: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_11",
+    episode_id: "/episodes/season_9/episode_11",
     variant: "immunity",
     order: 21,
     post_merge: true,
@@ -446,7 +446,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_22: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_12",
+    episode_id: "/episodes/season_9/episode_12",
     variant: "reward",
     order: 22,
     post_merge: true,
@@ -454,7 +454,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_23: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_12",
+    episode_id: "/episodes/season_9/episode_12",
     variant: "immunity",
     order: 23,
     post_merge: true,
@@ -462,7 +462,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_24: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_13",
+    episode_id: "/episodes/season_9/episode_13",
     variant: "reward",
     order: 24,
     post_merge: true,
@@ -470,7 +470,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_25: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_13",
+    episode_id: "/episodes/season_9/episode_13",
     variant: "immunity",
     order: 25,
     post_merge: true,
@@ -478,7 +478,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_26: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_14",
+    episode_id: "/episodes/season_9/episode_14",
     variant: "immunity",
     order: 26,
     post_merge: true,
@@ -486,7 +486,7 @@ export const SEASON_9_CHALLENGES = {
   },
   challenge_27: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_14",
+    episode_id: "/episodes/season_9/episode_14",
     variant: "immunity",
     order: 27,
     post_merge: true,
@@ -497,7 +497,7 @@ export const SEASON_9_CHALLENGES = {
 export const SEASON_9_ELIMINATIONS = {
   elimination_1: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_1",
+    episode_id: "/episodes/season_9/episode_1",
     order: 1,
     player_name: "Brook Geraghty",
     votes_received: 5,
@@ -505,7 +505,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_2: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_2",
+    episode_id: "/episodes/season_9/episode_2",
     order: 2,
     player_name: "Dolly Neely",
     votes_received: 5,
@@ -513,7 +513,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_3: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_3",
+    episode_id: "/episodes/season_9/episode_3",
     order: 3,
     player_name: "John Palyok",
     votes_received: 5,
@@ -521,7 +521,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_4: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_3",
+    episode_id: "/episodes/season_9/episode_3",
     order: 4,
     player_name: "Mia Galeotalanza",
     votes_received: 5,
@@ -529,7 +529,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_5: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_4",
+    episode_id: "/episodes/season_9/episode_4",
     order: 5,
     player_name: "Brady Finta",
     votes_received: 6,
@@ -537,7 +537,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_6: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_5",
+    episode_id: "/episodes/season_9/episode_5",
     order: 6,
     player_name: "Bubba Sampson",
     votes_received: 6,
@@ -545,7 +545,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_7: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_6",
+    episode_id: "/episodes/season_9/episode_6",
     order: 7,
     player_name: "Lisa Keiffer",
     votes_received: 4,
@@ -553,7 +553,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_8: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_7",
+    episode_id: "/episodes/season_9/episode_7",
     order: 8,
     player_name: "John Kenney",
     votes_received: 5,
@@ -561,7 +561,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_9: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_8",
+    episode_id: "/episodes/season_9/episode_8",
     order: 9,
     player_name: "Rory Freeman",
     votes_received: 6,
@@ -569,7 +569,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_10: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_9",
+    episode_id: "/episodes/season_9/episode_9",
     order: 10,
     player_name: "Lea Masters",
     votes_received: 7,
@@ -577,7 +577,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_11: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_10",
+    episode_id: "/episodes/season_9/episode_10",
     order: 11,
     player_name: "Chad Crittenden",
     votes_received: 6,
@@ -585,7 +585,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_12: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_11",
+    episode_id: "/episodes/season_9/episode_11",
     order: 12,
     player_name: "Leann Slaby",
     votes_received: 4,
@@ -593,7 +593,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_13: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_12",
+    episode_id: "/episodes/season_9/episode_12",
     order: 13,
     player_name: "Ami Cusack",
     votes_received: 4,
@@ -601,7 +601,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_14: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_13",
+    episode_id: "/episodes/season_9/episode_13",
     order: 14,
     player_name: "Julie Berry",
     votes_received: 3,
@@ -609,7 +609,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_15: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_14",
+    episode_id: "/episodes/season_9/episode_14",
     order: 15,
     player_name: "Eliza Orlins",
     votes_received: 3,
@@ -617,7 +617,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_16: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_14",
+    episode_id: "/episodes/season_9/episode_14",
     order: 16,
     player_name: "Scout Cloud Lee",
     votes_received: 1,
@@ -625,7 +625,7 @@ export const SEASON_9_ELIMINATIONS = {
   },
   elimination_17: {
     season_id: "/seasons/season_9",
-    episode_id: "/episodes/episode_14",
+    episode_id: "/episodes/season_9/episode_14",
     order: 17,
     player_name: "Twila Tanner",
     votes_received: 5,
