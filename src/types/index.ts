@@ -1,7 +1,7 @@
 export type Season = {
-  id: number
-  name: string
-}
+  id: number;
+  name: string;
+};
 
 export type Episode = {
   season_id: string;
