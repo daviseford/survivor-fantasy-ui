@@ -1,0 +1,6 @@
+# Ignore artifacts:
+build
+dist
+coverage
+.github
+.firebase
