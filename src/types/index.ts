@@ -1,6 +1,8 @@
 export type Season = {
-  id: number;
+  id: `season_${number}`;
+  order: number;
   name: string;
+  img: string;
 };
 
 export type Episode = {

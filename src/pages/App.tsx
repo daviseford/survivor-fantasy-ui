@@ -1,13 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getApps } from "firebase/app";
-import { NavLink } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import { PROJECT_NAME } from "../consts";
 
 export const App = () => {
-  const [count, setCount] = useState(0);
-
   useEffect(() => {
     // https://www.freecodecamp.org/news/use-firebase-authentication-in-a-react-app/
     // https://console.firebase.google.com/project/survivor-fantasy-51c4b/authentication/users
@@ -34,28 +31,7 @@ export const App = () => {
   return (
     <>
       <h1>{PROJECT_NAME}</h1>
-
-      <NavLink to="/admin">Admin</NavLink>
-      <br />
-      <NavLink to="/seasons">Seasons</NavLink>
-      <br />
-      <NavLink to="/logout">Logout</NavLink>
-      <br />
-      <NavLink to="/signup">Sign Up</NavLink>
-      <br />
-      <NavLink to="/login">Login</NavLink>
-
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      Welcome to the app. This is the home screen.
     </>
   );
 };

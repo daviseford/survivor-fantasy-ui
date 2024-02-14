@@ -1,33 +1,70 @@
-// Create a reference to the seasons collection
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
-import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Badge, Button, Card, Group, Image, Text } from "@mantine/core";
+import { Season } from "../types";
 
 export const Seasons = () => {
-  const { season, episode } = useParams();
-  console.log({ season, episode });
+  // const { season, episode } = useParams();
+  // console.log({ season, episode });
+
+  const [seasons, setSeasons] = useState<Season[]>([]);
 
   // Create a query against the collection.
   //   const q = query(seasons, where("season_id", "==", 9));
 
   useEffect(() => {
-    const seasons = collection(db, "seasons");
-
-    console.log({ seasons });
+    const _seasons = collection(db, "seasons");
 
     const a = async () => {
-      const querySnapshot = await getDocs(seasons);
+      const querySnapshot = await getDocs(_seasons);
 
       console.log({ querySnapshot });
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
-      });
+
+      const data = querySnapshot.docs.map((x) => x.data()) as Season[];
+
+      setSeasons(data);
     };
 
     a();
   }, []);
 
-  return <div></div>;
+  console.log(seasons);
+
+  return (
+    <div>
+      {seasons.map((x) => {
+        return (
+          <div key={x.id}>
+            <Card shadow="sm" padding="lg" radius="md" withBorder>
+              <Card.Section>
+                <Image
+                  src={"/logos/" + x.id + ".webp"}
+                  height={160}
+                  alt={x.name}
+                />
+              </Card.Section>
+
+              <Group justify="space-between" mt="md" mb="xs">
+                <Text fw={500}>{x.name}</Text>
+                <Badge color="pink">Season {x.order}</Badge>
+              </Group>
+
+              {/* <Text size="sm" c="dimmed">
+        With Fjord Tours you can explore more of the magical fjord landscapes with tours and
+        activities on and around the fjords of Norway
+      </Text> */}
+
+              <Link to={`/seasons/${x.order}`}>
+                <Button color="blue" fullWidth mt="md" radius="md">
+                  Visit
+                </Button>
+              </Link>
+            </Card>
+          </div>
+        );
+      })}
+    </div>
+  );
 };
