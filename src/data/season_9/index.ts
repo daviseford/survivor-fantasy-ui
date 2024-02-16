@@ -1,179 +1,250 @@
 import { Challenge, Elimination, Episode, Player } from "../../types";
 
-export const SEASON_9_EPISODES = {
-  episode_1: {
-    season_id: "/seasons/season_9",
+export const SEASON_9_EPISODES = [
+  {
+    season_id: 9,
     order: 1,
     name: "They Came at Us with Spears!",
     post_merge: false,
     finale: false,
     merge_occurs: false,
   },
-  episode_2: {
-    season_id: "/seasons/season_9",
+  {
+    season_id: 9,
     order: 2,
     name: "Burly Girls, Bowheads, Young Studs, and the Old Bunch",
     post_merge: false,
     finale: false,
     merge_occurs: false,
   },
-  episode_3: {
-    season_id: "/seasons/season_9",
+  {
+    season_id: 9,
     order: 3,
     name: "Double Tribal, Double Trouble",
     post_merge: false,
     finale: false,
     merge_occurs: false,
   },
-  episode_4: {
-    season_id: "/seasons/season_9",
+  {
+    season_id: 9,
     order: 4,
     name: "Now That's a Reward!",
     post_merge: false,
     finale: false,
     merge_occurs: false,
   },
-  episode_5: {
-    season_id: "/seasons/season_9",
+  {
+    season_id: 9,
     order: 5,
     name: "Earthquakes and Shake-Ups!",
     post_merge: false,
     finale: false,
     merge_occurs: false,
   },
-  episode_6: {
-    season_id: "/seasons/season_9",
+  {
+    season_id: 9,
     order: 6,
     name: "Hog Tied",
     post_merge: false,
     finale: false,
     merge_occurs: false,
   },
-  episode_7: {
-    season_id: "/seasons/season_9",
+  {
+    season_id: 9,
     order: 7,
     name: "Anger, Threats, Tears... and Coffee",
     post_merge: false,
     finale: false,
     merge_occurs: false,
   },
-  episode_8: {
-    season_id: "/seasons/season_9",
+  {
+    season_id: 9,
     order: 8,
     name: "Now the Battle Really Begins",
     post_merge: false,
     finale: false,
     merge_occurs: true,
   },
-  episode_9: {
-    season_id: "/seasons/season_9",
+  {
+    season_id: 9,
     order: 9,
     name: "Gender Wars... It's Getting Ugly",
     post_merge: true,
     finale: false,
     merge_occurs: false,
   },
-  episode_10: {
-    season_id: "/seasons/season_9",
+  {
+    season_id: 9,
     order: 10,
     name: "Culture Shock and Violent Storms",
     post_merge: true,
     finale: false,
     merge_occurs: false,
   },
-  episode_11: {
-    season_id: "/seasons/season_9",
+  {
+    season_id: 9,
     order: 11,
     name: "Surprise and... Surprise Again!",
     post_merge: true,
     finale: false,
     merge_occurs: false,
   },
-  episode_12: {
-    season_id: "/seasons/season_9",
+  {
+    season_id: 9,
     order: 12,
     name: "Now Who's in Charge Here?!",
     post_merge: true,
     finale: false,
     merge_occurs: false,
   },
-  episode_13: {
-    season_id: "/seasons/season_9",
+  {
+    season_id: 9,
     order: 13,
     name: "Eruption of Volcanic Magnitude",
     post_merge: true,
     finale: false,
     merge_occurs: false,
   },
-  episode_14: {
-    season_id: "/seasons/season_9",
+  {
+    season_id: 9,
     order: 14,
     name: "Spirits and the Final Four",
     post_merge: true,
     finale: true,
     merge_occurs: false,
   },
-} satisfies Record<`episode_${number}`, Episode>;
+] satisfies Episode[];
 
-type Season_9_Players =
-  | "Brady Finta"
-  | "Brook Geraghty"
-  | "Bubba Sampson"
-  | "Chad Crittenden"
-  | "Chris Daugherty"
-  | "John Kenney"
-  | "John Palyok"
-  | "Lea Masters"
-  | "Rory Freeman"
-  | "Ami Cusack"
-  | "Dolly Neely"
-  | "Eliza Orlins"
-  | "Julie Berry"
-  | "Leann Slaby"
-  | "Lisa Keiffer"
-  | "Mia Galeotalanza"
-  | "Scout Cloud Lee"
-  | "Twila Tanner";
+// type Season_9_Players =
+//   | "Brady Finta"
+//   | "Brook Geraghty"
+//   | "Bubba Sampson"
+//   | "Chad Crittenden"
+//   | "Chris Daugherty"
+//   | "John Kenney"
+//   | "John Palyok"
+//   | "Lea Masters"
+//   | "Rory Freeman"
+//   | "Ami Cusack"
+//   | "Dolly Neely"
+//   | "Eliza Orlins"
+//   | "Julie Berry"
+//   | "Leann Slaby"
+//   | "Lisa Keiffer"
+//   | "Mia Galeotalanza"
+//   | "Scout Cloud Lee"
+//   | "Twila Tanner";
 
-const buildPlayer = <T extends Season_9_Players>(
-  name: T,
-  winner = false,
-): Record<T, Player<T>> => {
-  // @ts-expect-error Yeah yeah
+const Season_9_Players3 = [
+  "Brady Finta",
+  "Brook Geraghty",
+  "Bubba Sampson",
+  "Chad Crittenden",
+  "Chris Daugherty",
+  "John Kenney",
+  "John Palyok",
+  "Lea Masters",
+  "Rory Freeman",
+  "Ami Cusack",
+  "Dolly Neely",
+  "Eliza Orlins",
+  "Julie Berry",
+  "Leann Slaby",
+  "Lisa Keiffer",
+  "Mia Galeotalanza",
+  "Scout Cloud Lee",
+  "Twila Tanner",
+] as const;
+
+type S9_Players = (typeof Season_9_Players3)[number][0];
+
+const buildPlayer = <T extends S9_Players>(name: T, img = ""): Player<T> => {
   return {
-    [name]: {
-      name,
-      season_id: "/seasons/season_9",
-      winner,
-    },
+    name,
+    img,
+    season_id: 9,
   };
 };
 
-export const SEASON_9_PLAYERS = {
-  ...buildPlayer("Brady Finta"),
-  ...buildPlayer("Brook Geraghty"),
-  ...buildPlayer("Bubba Sampson"),
-  ...buildPlayer("Chad Crittenden"),
-  ...buildPlayer("Chris Daugherty", true),
-  ...buildPlayer("John Kenney"),
-  ...buildPlayer("John Palyok"),
-  ...buildPlayer("Lea Masters"),
-  ...buildPlayer("Rory Freeman"),
-  ...buildPlayer("Ami Cusack"),
-  ...buildPlayer("Dolly Neely"),
-  ...buildPlayer("Eliza Orlins"),
-  ...buildPlayer("Julie Berry"),
-  ...buildPlayer("Leann Slaby"),
-  ...buildPlayer("Lisa Keiffer"),
-  ...buildPlayer("Mia Galeotalanza"),
-  ...buildPlayer("Scout Cloud Lee"),
-  ...buildPlayer("Twila Tanner"),
-} satisfies Record<Season_9_Players, Player<Season_9_Players>>;
+export const SEASON_9_PLAYERS = [
+  buildPlayer(
+    "Brady Finta",
+    "https://static.wikia.nocookie.net/survivor/images/c/c5/S9_brady_t.png",
+  ),
+  buildPlayer(
+    "Brook Geraghty",
+    "https://static.wikia.nocookie.net/survivor/images/b/bb/S9_brook_t.png",
+  ),
+  buildPlayer(
+    "Bubba Sampson",
+    "https://static.wikia.nocookie.net/survivor/images/d/df/S9_travis_t.png",
+  ),
+  buildPlayer(
+    "Chad Crittenden",
+    "https://static.wikia.nocookie.net/survivor/images/5/57/S9_chad_t.png",
+  ),
+  buildPlayer(
+    "Chris Daugherty",
+    "https://static.wikia.nocookie.net/survivor/images/c/c1/S9_chris_t.png",
+  ),
+  buildPlayer(
+    "John Kenney",
+    "https://static.wikia.nocookie.net/survivor/images/e/e0/S9_johnk_t.png",
+  ),
+  buildPlayer(
+    "John Palyok",
+    "https://static.wikia.nocookie.net/survivor/images/8/85/S9_johnp_t.png",
+  ),
+  buildPlayer(
+    "Lea Masters",
+    "https://static.wikia.nocookie.net/survivor/images/6/62/S9_lea_t.png",
+  ),
+  buildPlayer(
+    "Rory Freeman",
+    "https://static.wikia.nocookie.net/survivor/images/0/0f/S9_rory_t.png",
+  ),
+  buildPlayer(
+    "Ami Cusack",
+    "https://static.wikia.nocookie.net/survivor/images/b/ba/S9_ami_t.png",
+  ),
+  buildPlayer(
+    "Dolly Neely",
+    "https://static.wikia.nocookie.net/survivor/images/5/5a/S9_dolly_t.png",
+  ),
+  buildPlayer(
+    "Eliza Orlins",
+    "https://static.wikia.nocookie.net/survivor/images/0/09/S9_eliza_t.png",
+  ),
+  buildPlayer(
+    "Julie Berry",
+    "https://static.wikia.nocookie.net/survivor/images/2/2e/S9_julie_t.png",
+  ),
+  buildPlayer(
+    "Leann Slaby",
+    "https://static.wikia.nocookie.net/survivor/images/1/1d/S9_leann_t.png",
+  ),
+  buildPlayer(
+    "Lisa Keiffer",
+    "https://static.wikia.nocookie.net/survivor/images/c/c3/S9_lisa_t.png",
+  ),
+  buildPlayer(
+    "Mia Galeotalanza",
+    "https://static.wikia.nocookie.net/survivor/images/1/1d/S9_mia_t.png",
+  ),
+  buildPlayer(
+    "Scout Cloud Lee",
+    "https://static.wikia.nocookie.net/survivor/images/d/d7/S9_scout_t.png",
+  ),
+  buildPlayer(
+    "Twila Tanner",
+    "https://static.wikia.nocookie.net/survivor/images/3/3f/S9_twila_t.png",
+  ),
+] satisfies Player<S9_Players>[];
 
 export const SEASON_9_CHALLENGES = {
   challenge_1: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_1",
+    season_id: 9,
+    episode_id: 1,
     variant: "combined",
     order: 1,
     post_merge: false,
@@ -190,8 +261,8 @@ export const SEASON_9_CHALLENGES = {
     ],
   },
   challenge_2: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_2",
+    season_id: 9,
+    episode_id: 2,
     variant: "reward",
     order: 2,
     post_merge: false,
@@ -208,8 +279,8 @@ export const SEASON_9_CHALLENGES = {
     ],
   },
   challenge_3: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_2",
+    season_id: 9,
+    episode_id: 2,
     variant: "immunity",
     order: 3,
     post_merge: false,
@@ -225,8 +296,8 @@ export const SEASON_9_CHALLENGES = {
     ],
   },
   challenge_4: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_3",
+    season_id: 9,
+    episode_id: 3,
     variant: "reward",
     order: 4,
     post_merge: false,
@@ -242,16 +313,16 @@ export const SEASON_9_CHALLENGES = {
     ],
   },
   challenge_5: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_3",
+    season_id: 9,
+    episode_id: 3,
     variant: "immunity",
     order: 5,
     post_merge: false,
     winning_players: ["John Kenney"],
   },
   challenge_6: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_4",
+    season_id: 9,
+    episode_id: 4,
     variant: "reward",
     order: 6,
     post_merge: false,
@@ -266,8 +337,8 @@ export const SEASON_9_CHALLENGES = {
     ],
   },
   challenge_7: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_4",
+    season_id: 9,
+    episode_id: 4,
     variant: "immunity",
     order: 7,
     post_merge: false,
@@ -282,8 +353,8 @@ export const SEASON_9_CHALLENGES = {
     ],
   },
   challenge_8: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_5",
+    season_id: 9,
+    episode_id: 5,
     variant: "reward",
     order: 8,
     post_merge: false,
@@ -297,8 +368,8 @@ export const SEASON_9_CHALLENGES = {
     ],
   },
   challenge_9: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_5",
+    season_id: 9,
+    episode_id: 5,
     variant: "immunity",
     order: 9,
     post_merge: false,
@@ -312,8 +383,8 @@ export const SEASON_9_CHALLENGES = {
     ],
   },
   challenge_10: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_6",
+    season_id: 9,
+    episode_id: 6,
     variant: "reward",
     order: 10,
     post_merge: false,
@@ -327,8 +398,8 @@ export const SEASON_9_CHALLENGES = {
     ],
   },
   challenge_11: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_6",
+    season_id: 9,
+    episode_id: 6,
     variant: "immunity",
     order: 11,
     post_merge: false,
@@ -342,8 +413,8 @@ export const SEASON_9_CHALLENGES = {
     ],
   },
   challenge_12: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_7",
+    season_id: 9,
+    episode_id: 7,
     variant: "reward",
     order: 12,
     post_merge: false,
@@ -356,8 +427,8 @@ export const SEASON_9_CHALLENGES = {
     ],
   },
   challenge_13: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_7",
+    season_id: 9,
+    episode_id: 7,
     variant: "immunity",
     order: 13,
     post_merge: false,
@@ -370,8 +441,8 @@ export const SEASON_9_CHALLENGES = {
     ],
   },
   challenge_14: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_8",
+    season_id: 9,
+    episode_id: 8,
     variant: "reward",
     order: 14,
     post_merge: false,
@@ -384,32 +455,32 @@ export const SEASON_9_CHALLENGES = {
     ],
   },
   challenge_15: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_8",
+    season_id: 9,
+    episode_id: 8,
     variant: "immunity",
     order: 15,
     post_merge: true,
     winning_players: ["Lea Masters"],
   },
   challenge_16: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_9",
+    season_id: 9,
+    episode_id: 9,
     variant: "reward",
     order: 16,
     post_merge: true,
     winning_players: ["Leann Slaby"],
   },
   challenge_17: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_9",
+    season_id: 9,
+    episode_id: 9,
     variant: "immunity",
     order: 17,
     post_merge: true,
     winning_players: ["Ami Cusack"],
   },
   challenge_18: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_10",
+    season_id: 9,
+    episode_id: 10,
     variant: "reward",
     order: 18,
     post_merge: true,
@@ -421,214 +492,214 @@ export const SEASON_9_CHALLENGES = {
     ],
   },
   challenge_19: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_10",
+    season_id: 9,
+    episode_id: 10,
     variant: "immunity",
     order: 19,
     post_merge: true,
     winning_players: ["Twila Tanner"],
   },
   challenge_20: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_11",
+    season_id: 9,
+    episode_id: 11,
     variant: "reward",
     order: 20,
     post_merge: true,
     winning_players: ["Eliza Orlins"],
   },
   challenge_21: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_11",
+    season_id: 9,
+    episode_id: 11,
     variant: "immunity",
     order: 21,
     post_merge: true,
     winning_players: ["Ami Cusack"],
   },
   challenge_22: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_12",
+    season_id: 9,
+    episode_id: 12,
     variant: "reward",
     order: 22,
     post_merge: true,
     winning_players: ["Eliza Orlins", "Ami Cusack", "Chris Daugherty"],
   },
   challenge_23: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_12",
+    season_id: 9,
+    episode_id: 12,
     variant: "immunity",
     order: 23,
     post_merge: true,
     winning_players: ["Chris Daugherty"],
   },
   challenge_24: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_13",
+    season_id: 9,
+    episode_id: 13,
     variant: "reward",
     order: 24,
     post_merge: true,
     winning_players: ["Julie Berry"],
   },
   challenge_25: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_13",
+    season_id: 9,
+    episode_id: 13,
     variant: "immunity",
     order: 25,
     post_merge: true,
     winning_players: ["Eliza Orlins"],
   },
   challenge_26: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_14",
+    season_id: 9,
+    episode_id: 14,
     variant: "immunity",
     order: 26,
     post_merge: true,
     winning_players: ["Chris Daugherty"],
   },
   challenge_27: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_14",
+    season_id: 9,
+    episode_id: 14,
     variant: "immunity",
     order: 27,
     post_merge: true,
     winning_players: ["Chris Daugherty"],
   },
-} satisfies Record<`challenge_${number}`, Challenge<Season_9_Players>>;
+} satisfies Record<`challenge_${number}`, Challenge<S9_Players>>;
 
 export const SEASON_9_ELIMINATIONS = {
   elimination_1: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_1",
+    season_id: 9,
+    episode_id: 1,
     order: 1,
     player_name: "Brook Geraghty",
     votes_received: 5,
     variant: "tribal",
   },
   elimination_2: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_2",
+    season_id: 9,
+    episode_id: 2,
     order: 2,
     player_name: "Dolly Neely",
     votes_received: 5,
     variant: "tribal",
   },
   elimination_3: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_3",
+    season_id: 9,
+    episode_id: 3,
     order: 3,
     player_name: "John Palyok",
     votes_received: 5,
     variant: "tribal",
   },
   elimination_4: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_3",
+    season_id: 9,
+    episode_id: 3,
     order: 4,
     player_name: "Mia Galeotalanza",
     votes_received: 5,
     variant: "tribal",
   },
   elimination_5: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_4",
+    season_id: 9,
+    episode_id: 4,
     order: 5,
     player_name: "Brady Finta",
     votes_received: 6,
     variant: "tribal",
   },
   elimination_6: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_5",
+    season_id: 9,
+    episode_id: 5,
     order: 6,
     player_name: "Bubba Sampson",
     votes_received: 6,
     variant: "tribal",
   },
   elimination_7: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_6",
+    season_id: 9,
+    episode_id: 6,
     order: 7,
     player_name: "Lisa Keiffer",
     votes_received: 4,
     variant: "tribal",
   },
   elimination_8: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_7",
+    season_id: 9,
+    episode_id: 7,
     order: 8,
     player_name: "John Kenney",
     votes_received: 5,
     variant: "tribal",
   },
   elimination_9: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_8",
+    season_id: 9,
+    episode_id: 8,
     order: 9,
     player_name: "Rory Freeman",
     votes_received: 6,
     variant: "tribal",
   },
   elimination_10: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_9",
+    season_id: 9,
+    episode_id: 9,
     order: 10,
     player_name: "Lea Masters",
     votes_received: 7,
     variant: "tribal",
   },
   elimination_11: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_10",
+    season_id: 9,
+    episode_id: 10,
     order: 11,
     player_name: "Chad Crittenden",
     votes_received: 6,
     variant: "tribal",
   },
   elimination_12: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_11",
+    season_id: 9,
+    episode_id: 11,
     order: 12,
     player_name: "Leann Slaby",
     votes_received: 4,
     variant: "tribal",
   },
   elimination_13: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_12",
+    season_id: 9,
+    episode_id: 12,
     order: 13,
     player_name: "Ami Cusack",
     votes_received: 4,
     variant: "tribal",
   },
   elimination_14: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_13",
+    season_id: 9,
+    episode_id: 13,
     order: 14,
     player_name: "Julie Berry",
     votes_received: 3,
     variant: "tribal",
   },
   elimination_15: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_14",
+    season_id: 9,
+    episode_id: 14,
     order: 15,
     player_name: "Eliza Orlins",
     votes_received: 3,
     variant: "tribal",
   },
   elimination_16: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_14",
+    season_id: 9,
+    episode_id: 14,
     order: 16,
     player_name: "Scout Cloud Lee",
     votes_received: 1,
     variant: "tribal",
   },
   elimination_17: {
-    season_id: "/seasons/season_9",
-    episode_id: "/episodes/season_9/episode_14",
+    season_id: 9,
+    episode_id: 14,
     order: 17,
     player_name: "Twila Tanner",
     votes_received: 5,
     variant: "tribal",
   },
-} satisfies Record<`elimination_${number}`, Elimination<Season_9_Players>>;
+} satisfies Record<`elimination_${number}`, Elimination<S9_Players>>;

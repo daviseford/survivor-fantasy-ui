@@ -12,9 +12,13 @@ import { Admin } from "./pages/Admin";
 import { SingleSeason } from "./pages/SingleSeason";
 import { useDisclosure } from "@mantine/hooks";
 import { PROJECT_NAME } from "./consts";
+import { DraftComponent } from "./pages/Draft";
+import { useUser } from "./hooks/useUser";
 
 export const AppRoutes = () => {
   const [opened, { toggle }] = useDisclosure();
+
+  const { user } = useUser();
 
   return (
     <MantineProvider theme={theme}>
@@ -35,7 +39,11 @@ export const AppRoutes = () => {
               hiddenFrom="sm"
               size="sm"
             />
-            <div>Logo</div>
+            {user && (
+              <div>
+                Logged in: {user.displayName} Email: {user.email}
+              </div>
+            )}
           </AppShell.Header>
 
           <AppShell.Navbar p="md">
@@ -63,6 +71,10 @@ export const AppRoutes = () => {
                 <Route path="/logout" element={<Logout />} />
 
                 {/* <Route path="/seasons/:season/:episode" element={<Seasons />} /> */}
+                <Route
+                  path="/seasons/:season/draft/:draftId"
+                  element={<DraftComponent />}
+                />
                 <Route path="/seasons/:season" element={<SingleSeason />} />
                 <Route path="/seasons" element={<Seasons />} />
 

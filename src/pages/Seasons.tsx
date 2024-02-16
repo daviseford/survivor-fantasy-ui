@@ -17,7 +17,7 @@ export const Seasons = () => {
   useEffect(() => {
     const _seasons = collection(db, "seasons");
 
-    const a = async () => {
+    const getSeasons = async () => {
       const querySnapshot = await getDocs(_seasons);
 
       console.log({ querySnapshot });
@@ -27,7 +27,7 @@ export const Seasons = () => {
       setSeasons(data);
     };
 
-    a();
+    getSeasons();
   }, []);
 
   console.log(seasons);

@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { getAnalytics } from "firebase/analytics";
-import { initializeApp } from "firebase/app";
+import { FirebaseOptions, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
 import { getFirestore } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -19,7 +20,8 @@ const firebaseConfig = {
   messagingSenderId: "608839041450",
   appId: "1:608839041450:web:0bc074ccf72ad23ff4ebd3",
   measurementId: "G-W4DJMFJDPW",
-};
+  databaseURL: "https://survivor-fantasy-51c4b-default-rtdb.firebaseio.com",
+} satisfies FirebaseOptions;
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -31,5 +33,8 @@ export const auth = getAuth(app);
 
 // Initialize Cloud Firestore and get a reference to the service
 export const db = getFirestore(app);
+
+// Initialize Cloud Realtime Database and get a reference to the service
+export const rt_db = getDatabase(app);
 
 export default app;

@@ -6,6 +6,7 @@ import { PROJECT_NAME } from "../consts";
 
 export const Login = () => {
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,7 +16,7 @@ export const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        navigate("/home");
+        navigate("/");
         console.log(user);
       })
       .catch((error) => {

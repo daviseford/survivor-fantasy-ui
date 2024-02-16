@@ -1,12 +1,17 @@
+import { User } from "firebase/auth";
+
 export type Season = {
   id: `season_${number}`;
   order: number;
   name: string;
   img: string;
+
+  players: Player[];
+  episodes: Episode[];
 };
 
 export type Episode = {
-  season_id: `/seasons/season_${number}`;
+  season_id: number;
 
   order: number;
   name: string;
@@ -17,8 +22,8 @@ export type Episode = {
 };
 
 export type Elimination<T extends string> = {
-  season_id: `/seasons/season_${number}`;
-  episode_id: string;
+  season_id: number;
+  episode_id: number;
   player_name: T;
 
   order: number;
@@ -26,15 +31,15 @@ export type Elimination<T extends string> = {
   votes_received?: number;
 };
 
-export type Player<T extends string> = {
-  season_id: `/seasons/season_${number}`;
+export type Player<T = string> = {
+  season_id: number;
   name: T;
-  winner: boolean;
+  img: string;
 };
 
 export type Challenge<PlayerNames extends string> = {
-  season_id: `/seasons/season_${number}`;
-  episode_id: string;
+  season_id: number;
+  episode_id: number;
 
   order: number;
   variant: "reward" | "immunity" | "combined";
@@ -45,4 +50,27 @@ export type Challenge<PlayerNames extends string> = {
   winning_players: PlayerNames[];
 
   post_merge: boolean;
+};
+
+type DraftUser = Pick<User, "email" | "uid" | "displayName">;
+
+export type Draft = {
+  id: string;
+  season_id: number;
+  participants: DraftUser[];
+  total_players: number;
+  current_pick_number: number;
+  current_picker: DraftUser | null;
+  /** List of user uids */
+  pick_order: DraftUser[];
+  draft_picks: DraftPick[];
+  started: boolean;
+  finished: boolean;
+};
+
+export type DraftPick = {
+  season_id: number;
+  order: number;
+  user_uid: string;
+  player_name: string;
 };

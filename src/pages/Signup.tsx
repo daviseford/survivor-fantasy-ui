@@ -1,33 +1,65 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, db } from "../firebase";
 import { PROJECT_NAME } from "../consts";
+import { setDoc, doc } from "firebase/firestore";
+import { useUser } from "../hooks/useUser";
 
 export const Signup = () => {
   const navigate = useNavigate();
 
+  const { user } = useUser();
+
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const onSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user);
-        navigate("/login");
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        // ..
-      });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+
+      // Signed in
+      const user = userCredential.user;
+
+      console.log({ user });
+
+      if (displayName && auth.currentUser) {
+        await updateProfile(auth.currentUser, { displayName });
+      }
+
+      const { uid } = user;
+
+      // Create a doc for this user
+      setDoc(doc(db, "users", uid), { uid, email: user.email, displayName });
+
+      navigate("/");
+      // ...
+    } catch (error) {
+      // @ts-expect-error asdas
+      const errorCode = error.code;
+      // @ts-expect-error asdasd
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+      // ..
+    }
   };
+
+  if (user) {
+    return (
+      <div>
+        <p>
+          You are already logged in. <NavLink to="/logout">Logout</NavLink>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <main>
@@ -36,6 +68,17 @@ export const Signup = () => {
           <div>
             <h1>{PROJECT_NAME}</h1>
             <form>
+              <div>
+                <label htmlFor="display-name">Display Name</label>
+                <input
+                  type="name"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  required
+                  placeholder="John Doe"
+                />
+              </div>
+
               <div>
                 <label htmlFor="email-address">Email address</label>
                 <input

@@ -128,3 +128,6 @@ dist
 
 # not using npm
 package-lock.json
+
+# firebase
+.firebase/
