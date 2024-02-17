@@ -7,36 +7,26 @@ import {
   SimpleGrid,
   Text,
 } from "@mantine/core";
-import { collection, getDocs } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useFirestoreQueryData } from "@react-query-firebase/firestore";
+import { collection } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { db } from "../firebase";
 import { Season } from "../types";
 
 export const Seasons = () => {
-  const [seasons, setSeasons] = useState<Season[]>([]);
+  const ref = collection(db, "seasons");
 
-  useEffect(() => {
-    const _seasons = collection(db, "seasons");
+  const { data: seasons } = useFirestoreQueryData<Season[], Season[]>(
+    ["seasons"],
+    // @ts-expect-error asd
+    ref,
+  );
 
-    const getSeasons = async () => {
-      const querySnapshot = await getDocs(_seasons);
-
-      console.log({ querySnapshot });
-
-      const data = querySnapshot.docs.map((x) => x.data()) as Season[];
-
-      setSeasons(data);
-    };
-
-    getSeasons();
-  }, []);
-
-  console.log(seasons);
+  console.log({ seasons });
 
   return (
     <SimpleGrid cols={3}>
-      {seasons.map((x) => {
+      {seasons?.map((x) => {
         return (
           <div key={x.id}>
             <Card shadow="sm" padding="lg" radius="md" withBorder>

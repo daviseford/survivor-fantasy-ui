@@ -1,6 +1,7 @@
 import { AppShell, Burger, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useDisclosure } from "@mantine/hooks";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { useUser } from "./hooks/useUser";
@@ -16,6 +17,8 @@ import { SingleCompetition } from "./pages/SingleCompetition";
 import { SingleSeason } from "./pages/SingleSeason";
 import { theme } from "./theme";
 
+const queryClient = new QueryClient();
+
 export const AppRoutes = () => {
   const [opened, { toggle }] = useDisclosure();
 
@@ -23,66 +26,68 @@ export const AppRoutes = () => {
 
   return (
     <MantineProvider theme={theme}>
-      <Router>
-        <AppShell
-          header={{ height: 60 }}
-          navbar={{
-            width: 300,
-            breakpoint: "sm",
-            collapsed: { mobile: !opened },
-          }}
-          padding="md"
-        >
-          <AppShell.Header>
-            <Burger
-              opened={opened}
-              onClick={toggle}
-              hiddenFrom="sm"
-              size="sm"
-            />
-            {user && (
-              <div>
-                Logged in: {user.displayName} Email: {user.email}
-              </div>
-            )}
-          </AppShell.Header>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <AppShell
+            header={{ height: 60 }}
+            navbar={{
+              width: 300,
+              breakpoint: "sm",
+              collapsed: { mobile: !opened },
+            }}
+            padding="md"
+          >
+            <AppShell.Header>
+              <Burger
+                opened={opened}
+                onClick={toggle}
+                hiddenFrom="sm"
+                size="sm"
+              />
+              {user && (
+                <div>
+                  Logged in: {user.displayName} Email: {user.email}
+                </div>
+              )}
+            </AppShell.Header>
 
-          <AppShell.Navbar p="md">
-            <Navbar />
-          </AppShell.Navbar>
+            <AppShell.Navbar p="md">
+              <Navbar />
+            </AppShell.Navbar>
 
-          <AppShell.Main>
-            <section>
-              <Routes>
-                <Route path="/" element={<Home />} />
+            <AppShell.Main>
+              <section>
+                <Routes>
+                  <Route path="/" element={<Home />} />
 
-                {/* User stuff */}
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/logout" element={<Logout />} />
+                  {/* User stuff */}
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/logout" element={<Logout />} />
 
-                {/* <Route path="/seasons/:seasonId/:episodeId" element={<Seasons />} /> */}
-                <Route
-                  path="/seasons/:seasonId/draft/:draftId"
-                  element={<DraftComponent />}
-                />
-                <Route path="/seasons/:seasonId" element={<SingleSeason />} />
-                <Route path="/seasons" element={<Seasons />} />
+                  {/* <Route path="/seasons/:seasonId/:episodeId" element={<Seasons />} /> */}
+                  <Route
+                    path="/seasons/:seasonId/draft/:draftId"
+                    element={<DraftComponent />}
+                  />
+                  <Route path="/seasons/:seasonId" element={<SingleSeason />} />
+                  <Route path="/seasons" element={<Seasons />} />
 
-                {/* Competitions */}
-                <Route
-                  path="/competitions/:competitionId"
-                  element={<SingleCompetition />}
-                />
-                <Route path="/competitions" element={<Competitions />} />
+                  {/* Competitions */}
+                  <Route
+                    path="/competitions/:competitionId"
+                    element={<SingleCompetition />}
+                  />
+                  <Route path="/competitions" element={<Competitions />} />
 
-                {/* TODO: Protect this */}
-                <Route path="/admin" element={<Admin />} />
-              </Routes>
-            </section>
-          </AppShell.Main>
-        </AppShell>
-      </Router>
+                  {/* TODO: Protect this */}
+                  <Route path="/admin" element={<Admin />} />
+                </Routes>
+              </section>
+            </AppShell.Main>
+          </AppShell>
+        </Router>
+      </QueryClientProvider>
     </MantineProvider>
   );
 };

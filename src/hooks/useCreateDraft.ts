@@ -8,7 +8,7 @@ import { Draft } from "../types";
 
 export const useCreateDraft = () => {
   const { slimUser } = useUser();
-  const { season } = useSeason();
+  const { data: season } = useSeason();
 
   const createDraft = async () => {
     const draftId = `draft_${uuidv4()}`;

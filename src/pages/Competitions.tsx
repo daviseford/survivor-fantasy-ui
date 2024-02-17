@@ -1,5 +1,5 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useFirestoreQueryData } from "@react-query-firebase/firestore";
+import { collection, query, where } from "firebase/firestore";
 import { NavLink } from "react-router-dom";
 import { db } from "../firebase";
 import { useUser } from "../hooks/useUser";
@@ -8,35 +8,30 @@ import { Competition } from "../types";
 export const Competitions = () => {
   const { user } = useUser();
 
-  const [competitions, setCompetitions] = useState<Competition[]>([]);
+  const ref = collection(db, "competitions");
 
-  useEffect(() => {
-    const _comps = collection(db, "competitions");
+  const _query = query(
+    ref,
+    where("participant_uids", "array-contains", user?.uid || ""),
+  );
 
-    const getCompetitions = async () => {
-      if (!user) return;
+  const { data: competitions } = useFirestoreQueryData<
+    Competition[],
+    Competition[]
+  >(
+    ["competitions", user?.uid],
+    // @ts-expect-error asd
+    _query,
+    {},
+    { enabled: Boolean(user?.uid) },
+  );
 
-      const _query = query(
-        _comps,
-        where("participant_uids", "array-contains", user?.uid),
-      );
-
-      const data = (await getDocs(_query)).docs.map((x) =>
-        x.data(),
-      ) as Competition[];
-
-      setCompetitions(data);
-    };
-
-    getCompetitions();
-  }, [user]);
-
-  console.log(competitions);
+  console.log({ competitions, user });
 
   return (
     <div>
       <h1>Competitions</h1>
-      {competitions.map((x) => {
+      {competitions?.map((x) => {
         return (
           <div key={x.id}>
             <NavLink to={`/competitions/${x.id}`}>

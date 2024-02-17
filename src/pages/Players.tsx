@@ -3,14 +3,14 @@ import { useSeason } from "../hooks/useSeason";
 import { Player } from "../types";
 
 export const Players = () => {
-  const { season } = useSeason();
+  const { data: season } = useSeason();
 
   if (!season) return null;
 
   return (
     <SimpleGrid cols={4}>
       {season.players.map((x) => (
-        <PlayerCard {...x} />
+        <PlayerCard {...x} key={x.name} />
       ))}
     </SimpleGrid>
   );

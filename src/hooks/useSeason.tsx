@@ -1,5 +1,5 @@
-import { doc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useFirestoreDocumentData } from "@react-query-firebase/firestore";
+import { doc } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 import { db } from "../firebase";
 import { Season } from "../types";
@@ -7,29 +7,23 @@ import { Season } from "../types";
 export const useSeason = (num?: number) => {
   const { seasonId } = useParams();
 
-  const [season, setSeason] = useState<Season>();
-
   // allow manual override
   const _seasonId = num ?? seasonId;
 
-  useEffect(() => {
-    if (!_seasonId) {
-      console.error("Missing _seasonId");
-      return;
-    }
-
-    const seasonDoc = doc(db, "seasons", "season_" + _seasonId);
-
-    const getSeason = async () => {
-      const _doc = (await getDoc(seasonDoc)).data() as Season;
-      setSeason(_doc);
-    };
-
-    getSeason();
-  }, [_seasonId]);
-
   console.log("Query param _seasonId = " + _seasonId);
-  console.log("Season data: ", season);
 
-  return { season };
+  const ref = doc(db, "seasons", "season_" + _seasonId);
+
+  // Query a Firestore document using useQuery
+  return useFirestoreDocumentData<Season, Season>(
+    ["season", _seasonId],
+    // @ts-expect-error TS is dumb here
+    ref,
+    {
+      // Subscribe to realtime changes
+      // subscribe: true,
+      // Include metadata changes in the updates
+      // includeMetadataChanges: true,
+    },
+  );
 };

@@ -25,16 +25,15 @@ export const useUser = () => {
     });
   }, []);
 
-  const slimUser: SlimUser | undefined =
-    useMemo(() => {
-      if (!user) return undefined;
+  const slimUser: SlimUser | undefined = useMemo(() => {
+    if (!user) return undefined;
 
-      return {
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-      };
-    }, [user]);
+    return {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+    };
+  }, [user]);
 
   return { user, slimUser };
 };

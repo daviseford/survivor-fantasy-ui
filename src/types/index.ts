@@ -21,7 +21,7 @@ export type Episode = {
   merge_occurs: boolean;
 };
 
-export type Elimination<T extends string> = {
+export type Elimination<T = string> = {
   season_id: number;
   episode_id: number;
   player_name: T;
@@ -37,7 +37,7 @@ export type Player<T = string> = {
   img: string;
 };
 
-export type Challenge<PlayerNames extends string> = {
+export type Challenge<PlayerNames = string> = {
   season_id: number;
   episode_id: number;
 
@@ -87,4 +87,10 @@ export type Competition = {
   participants: SlimUser[];
   draft_picks: DraftPick[];
   finished: boolean;
+};
+
+export type PlayerScoring = {
+  action: string;
+  description?: string;
+  fixed_value?: number;
 };

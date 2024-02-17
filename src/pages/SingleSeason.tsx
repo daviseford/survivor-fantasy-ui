@@ -7,7 +7,8 @@ import { Players } from "./Players";
 
 export const SingleSeason = () => {
   const navigate = useNavigate();
-  const { season } = useSeason();
+
+  const { data: season } = useSeason();
   const { slimUser } = useUser();
   const { createDraft } = useCreateDraft();
 

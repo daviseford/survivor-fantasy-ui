@@ -24,7 +24,7 @@ export const DraftComponent = () => {
   const { draftId } = useParams();
 
   const { slimUser } = useUser();
-  const { season } = useSeason();
+  const { data: season } = useSeason();
 
   const [draft, setDraft] = useState<Draft>();
 

@@ -1,5 +1,5 @@
-import { doc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useFirestoreDocumentData } from "@react-query-firebase/firestore";
+import { doc } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 import { db } from "../firebase";
 import { Competition } from "../types";
@@ -7,26 +7,20 @@ import { Competition } from "../types";
 export const useCompetition = () => {
   const { competitionId } = useParams();
 
-  const [competition, setCompetition] = useState<Competition>();
-
-  useEffect(() => {
-    if (!competitionId) {
-      console.error("Missing competitionId");
-      return;
-    }
-
-    const competitionDoc = doc(db, "competitions", competitionId);
-
-    const getCompetition = async () => {
-      const _doc = (await getDoc(competitionDoc)).data() as Competition;
-      setCompetition(_doc);
-    };
-
-    getCompetition();
-  }, [competitionId]);
-
   console.log("Query param competitionId = " + competitionId);
-  console.log("competition data: ", competition);
 
-  return { competition };
+  const ref = doc(db, "competitions", competitionId!);
+
+  // Query a Firestore document using useQuery
+  return useFirestoreDocumentData<Competition, Competition>(
+    ["competition", competitionId],
+    // @ts-expect-error TS is dumb here
+    ref,
+    {
+      // Subscribe to realtime changes
+      // subscribe: true,
+      // Include metadata changes in the updates
+      // includeMetadataChanges: true,
+    },
+  );
 };

@@ -18,12 +18,14 @@
   "dependencies": {
     "@mantine/core": "7.5.1",
     "@mantine/hooks": "7.5.1",
+    "@react-query-firebase/firestore": "^1.0.0-dev.7",
     "@tabler/icons-react": "^2.47.0",
     "firebase": "^10.8.0",
     "firebaseui": "^6.1.0",
     "lodash-es": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-query": "^3.39.3",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

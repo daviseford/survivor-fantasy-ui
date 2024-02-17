@@ -1,10 +1,11 @@
 import { DraftTable } from "../components/DraftTable";
 import { useCompetition } from "../hooks/useCompetition";
 import { useSeason } from "../hooks/useSeason";
+import { ScoringTable } from "./ScoringTable";
 
 export const SingleCompetition = () => {
-  const { competition } = useCompetition();
-  const { season } = useSeason(competition?.season_id);
+  const { data: competition } = useCompetition();
+  const { data: season } = useSeason(competition?.season_id);
 
   if (!competition) return <div>Missing competition!</div>;
   if (!season) return <div>Missing season!</div>;
@@ -20,6 +21,10 @@ export const SingleCompetition = () => {
       </h3>
 
       <h3>Finished: {competition.finished ? "True" : "False"}</h3>
+
+      <h1>Scoring</h1>
+
+      <ScoringTable />
 
       <h1>Initial Draft</h1>
       <DraftTable
