@@ -1,3 +1,4 @@
+import { Button } from "@mantine/core";
 import { doc, setDoc } from "firebase/firestore";
 import { SEASON_9_CHALLENGES, SEASON_9_ELIMINATIONS } from "../data/season_9";
 import { SEASONS } from "../data/seasons";
@@ -21,7 +22,7 @@ export const Admin = () => {
 
   return (
     <div>
-      <button onClick={() => uploadS9()}>Upload</button>
+      <Button onClick={() => uploadS9()}>Upload</Button>
     </div>
   );
 };

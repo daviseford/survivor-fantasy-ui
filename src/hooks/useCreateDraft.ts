@@ -22,7 +22,7 @@ export const useCreateDraft = () => {
 
     const newDraft = {
       id: draftId,
-      season_id: Number(season.order),
+      season_id: season.order,
       participants: [slimUser],
       total_players: season?.players.length,
       pick_order: [],

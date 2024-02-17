@@ -1,8 +1,15 @@
+import {
+  Anchor,
+  Button,
+  Paper,
+  PasswordInput,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { PROJECT_NAME } from "../consts";
+import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { useUser } from "../hooks/useUser";
 
@@ -26,18 +33,18 @@ export const Signup = () => {
       );
 
       // Signed in
-      const user = userCredential.user;
+      const _user = userCredential.user;
 
-      console.log({ user });
+      console.log({ _user });
 
       if (displayName && auth.currentUser) {
         await updateProfile(auth.currentUser, { displayName });
       }
 
-      const { uid } = user;
+      const { uid } = _user;
 
       // Create a doc for this user
-      setDoc(doc(db, "users", uid), { uid, email: user.email, displayName });
+      setDoc(doc(db, "users", uid), { uid, email: _user.email, displayName });
 
       navigate("/");
       // ...
@@ -55,7 +62,8 @@ export const Signup = () => {
     return (
       <div>
         <p>
-          You are already logged in. <NavLink to="/logout">Logout</NavLink>
+          You are already logged in.{" "}
+          <Button onClick={() => auth.signOut()}>Logout</Button>
         </p>
       </div>
     );
@@ -66,51 +74,46 @@ export const Signup = () => {
       <section>
         <div>
           <div>
-            <h1>{PROJECT_NAME}</h1>
-            <form>
-              <div>
-                <label htmlFor="display-name">Display Name</label>
-                <input
-                  type="name"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  required
-                  placeholder="John Doe"
-                />
-              </div>
+            <h1>Register a new account</h1>
 
-              <div>
-                <label htmlFor="email-address">Email address</label>
-                <input
-                  type="email"
-                  //   label="Email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="Email address"
-                />
-              </div>
+            <Paper radius={0} p={30}>
+              <TextInput
+                label="Display Name"
+                placeholder="John Doe"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                required
+                size="md"
+              />
+              <TextInput
+                label="Email address"
+                placeholder="hello@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                size="md"
+              />
+              <PasswordInput
+                label="Password"
+                placeholder="Your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                mt="md"
+                size="md"
+              />
 
-              <div>
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  //   label="Create password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="Password"
-                />
-              </div>
-
-              <button type="submit" onClick={onSubmit}>
+              <Button type="submit" onClick={onSubmit}>
                 Sign up
-              </button>
-            </form>
+              </Button>
 
-            <p>
-              Already have an account? <NavLink to="/login">Sign in</NavLink>
-            </p>
+              <Text ta="center" mt="md">
+                Already have an account?{" "}
+                <Anchor<"a"> href="/login" fw={700}>
+                  Login
+                </Anchor>
+              </Text>
+            </Paper>
           </div>
         </div>
       </section>

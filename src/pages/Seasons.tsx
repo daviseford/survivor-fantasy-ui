@@ -1,4 +1,12 @@
-import { Badge, Button, Card, Group, Image, Text } from "@mantine/core";
+import {
+  Badge,
+  Button,
+  Card,
+  Group,
+  Image,
+  SimpleGrid,
+  Text,
+} from "@mantine/core";
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -27,17 +35,13 @@ export const Seasons = () => {
   console.log(seasons);
 
   return (
-    <div>
+    <SimpleGrid cols={3}>
       {seasons.map((x) => {
         return (
           <div key={x.id}>
             <Card shadow="sm" padding="lg" radius="md" withBorder>
               <Card.Section>
-                <Image
-                  src={"/logos/" + x.id + ".webp"}
-                  height={160}
-                  alt={x.name}
-                />
+                <Image src={x.img} width={160} alt={x.name} />
               </Card.Section>
 
               <Group justify="space-between" mt="md" mb="xs">
@@ -59,6 +63,6 @@ export const Seasons = () => {
           </div>
         );
       })}
-    </div>
+    </SimpleGrid>
   );
 };

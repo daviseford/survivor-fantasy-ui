@@ -1,13 +1,8 @@
 import { AppShell, Burger, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useDisclosure } from "@mantine/hooks";
-import {
-  NavLink,
-  Route,
-  BrowserRouter as Router,
-  Routes,
-} from "react-router-dom";
-import { PROJECT_NAME } from "./consts";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Navbar } from "./components/Navbar";
 import { useUser } from "./hooks/useUser";
 import { Admin } from "./pages/Admin";
 import { App } from "./pages/App";
@@ -51,17 +46,7 @@ export const AppRoutes = () => {
           </AppShell.Header>
 
           <AppShell.Navbar p="md">
-            <h1>{PROJECT_NAME}</h1>
-
-            <NavLink to="/admin">Admin</NavLink>
-            <br />
-            <NavLink to="/seasons">Seasons</NavLink>
-            <br />
-            <NavLink to="/logout">Logout</NavLink>
-            <br />
-            <NavLink to="/signup">Sign Up</NavLink>
-            <br />
-            <NavLink to="/login">Login</NavLink>
+            <Navbar />
           </AppShell.Navbar>
 
           <AppShell.Main>

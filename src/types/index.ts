@@ -74,3 +74,10 @@ export type DraftPick = {
   user_uid: string;
   player_name: string;
 };
+
+export type Competitions = {
+  id: string;
+  season_id: number;
+  participants: DraftUser[];
+  finished: boolean;
+};

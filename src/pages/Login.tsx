@@ -1,7 +1,14 @@
+import {
+  Anchor,
+  Button,
+  Paper,
+  PasswordInput,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { PROJECT_NAME } from "../consts";
+import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 
 export const Login = () => {
@@ -31,41 +38,38 @@ export const Login = () => {
       <main>
         <section>
           <div>
-            <p>{PROJECT_NAME}</p>
+            <h1>Log in to an existing account</h1>
 
-            <form>
-              <div>
-                <label htmlFor="email-address">Email address</label>
-                <input
-                  id="email-address"
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="Email address"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
+            <Paper radius={0} p={30}>
+              <TextInput
+                label="Email address"
+                placeholder="hello@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                size="md"
+              />
+              <PasswordInput
+                label="Password"
+                placeholder="Your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                mt="md"
+                size="md"
+              />
 
-              <div>
-                <label htmlFor="password">Password</label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  placeholder="Password"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
+              <Button type="submit" onClick={onLogin}>
+                Sign up
+              </Button>
 
-              <div>
-                <button onClick={onLogin}>Login</button>
-              </div>
-            </form>
-
-            <p className="text-sm text-white text-center">
-              No account yet? <NavLink to="/signup">Sign up</NavLink>
-            </p>
+              <Text ta="center" mt="md">
+                Don&apos;t have an account?{" "}
+                <Anchor<"a"> href="/signup" fw={700}>
+                  Register
+                </Anchor>
+              </Text>
+            </Paper>
           </div>
         </section>
       </main>

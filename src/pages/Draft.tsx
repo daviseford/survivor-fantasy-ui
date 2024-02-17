@@ -1,8 +1,9 @@
 import {
+  Avatar,
   Badge,
-  Card,
+  Button,
   Group,
-  Image,
+  Paper,
   SimpleGrid,
   Table,
   Text,
@@ -14,7 +15,7 @@ import { useParams } from "react-router-dom";
 import { rt_db } from "../firebase";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
-import { Draft } from "../types";
+import { Draft, Player } from "../types";
 
 export const DraftComponent = () => {
   const { draftId } = useParams();
@@ -103,9 +104,9 @@ export const DraftComponent = () => {
         : draft?.current_pick_number + 1,
       current_picker: nextCurrentPicker,
       draft_picks: [
-        ...(draft.draft_picks || []),
+        ...(draft?.draft_picks || []),
         {
-          season_id: Number(season),
+          season_id: season.order,
           order: draft.current_pick_number,
           user_uid: slimUser.uid,
           player_name: playerName,
@@ -137,17 +138,15 @@ export const DraftComponent = () => {
 
   return (
     <div>
-      {/* {!draft && <button onClick={() => createDraft()}>Create Draft</button>} */}
-
       {draft && !userIsParticipant && (
-        <button onClick={joinDraft}>Join Draft</button>
+        <Button onClick={joinDraft}>Join Draft</Button>
       )}
 
       {draft && !draft?.started && (
-        <button onClick={startDraft} disabled={draft.participants.length < 2}>
+        <Button onClick={startDraft} disabled={draft.participants.length < 2}>
           Start Draft
           {draft.participants.length < 2 ? " (waiting for more players)" : ""}
-        </button>
+        </Button>
       )}
 
       <h3>
@@ -176,7 +175,7 @@ export const DraftComponent = () => {
           Draft Order: {draft.pick_order.map((x) => x.displayName).join(", ")}
         </h2>
       )}
-      {draft && (
+      {draft?.draft_picks && (
         <h2>
           Remaining Picks:{" "}
           {draft?.total_players - (draft?.draft_picks?.length || 0)}
@@ -186,27 +185,23 @@ export const DraftComponent = () => {
       <SimpleGrid cols={4}>
         {season.players.map((x) => {
           const isDrafted = isPlayerDrafted(x.name);
+
           return (
-            <div key={x.name}>
-              <Card shadow="sm" padding="lg" radius="md" withBorder>
-                <Card.Section>
-                  {x.img && <Image src={x.img} height={160} alt={x.name} />}
-                </Card.Section>
+            <Paper radius="md" withBorder p="lg" bg="var(--mantine-color-body)">
+              <Avatar src={x.img} size={120} radius={120} mx="auto" />
+              <Text ta="center" fz="lg" fw={500} mt="md">
+                {x.name}
+              </Text>
+              <Group justify="space-between" mt="md" mb="xs">
+                <Badge color="pink">Season {season.order}</Badge>
+                <Badge color={isDrafted ? "red" : "green"}>
+                  {isDrafted ? "Drafted" : "Available"}
+                </Badge>
+              </Group>
 
-                <Group justify="space-between" mt="md" mb="xs">
-                  <Text fw={500}>{x.name}</Text>
-                  <Badge color="pink">Season {season.order}</Badge>
-                  <Badge color={isDrafted ? "red" : "green"}>
-                    {isDrafted ? "Drafted" : "Not drafted"}
-                  </Badge>
-                </Group>
-
-                {/* <Text size="sm" c="dimmed">
-        With Fjord Tours you can explore more of the magical fjord landscapes with tours and
-        activities on and around the fjords of Norway
-      </Text> */}
-
-                <button
+              {!isDrafted && (
+                <Button
+                  fullWidth
                   onClick={() => draftPlayer(x.name)}
                   disabled={
                     !draft?.started ||
@@ -216,38 +211,59 @@ export const DraftComponent = () => {
                   }
                 >
                   Draft Me
-                </button>
-              </Card>
-            </div>
+                </Button>
+              )}
+            </Paper>
           );
         })}
       </SimpleGrid>
 
-      {draft?.started && <DraftTable draft={draft} />}
+      {draft?.started && <DraftTable draft={draft} players={season.players} />}
     </div>
   );
 };
 
-const DraftTable = ({ draft }: { draft: Draft }) => {
-  const rows = draft.draft_picks.map((x) => {
-    return (
-      <Table.Tr key={x.player_name}>
-        <Table.Td>{x.order}</Table.Td>
-        <Table.Td>{x.player_name}</Table.Td>
-        <Table.Td>
-          {draft.participants.find((p) => p.uid === x.user_uid)?.displayName}
-        </Table.Td>
-      </Table.Tr>
-    );
-  });
+const DraftTable = ({
+  draft,
+  players,
+}: {
+  draft: Draft;
+  players: Player[];
+}) => {
+  const rows = !draft?.draft_picks
+    ? []
+    : draft?.draft_picks.map((x) => {
+        const player = players.find((p) => p.name === x.player_name);
+
+        return (
+          <Table.Tr key={x.player_name}>
+            <Table.Td>
+              <Group gap="sm">
+                <Avatar size={40} src={player!.img} radius={40} />
+
+                <Text fz="sm" fw={500}>
+                  {x.player_name}
+                </Text>
+              </Group>
+            </Table.Td>
+            <Table.Td>{x.order}</Table.Td>
+            <Table.Td>
+              {
+                draft.participants.find((p) => p.uid === x.user_uid)
+                  ?.displayName
+              }
+            </Table.Td>
+          </Table.Tr>
+        );
+      });
 
   return (
     <div>
       <Table>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>Draft Position</Table.Th>
             <Table.Th>Player Name</Table.Th>
+            <Table.Th>Draft Position</Table.Th>
             <Table.Th>Drafted By</Table.Th>
           </Table.Tr>
         </Table.Thead>
