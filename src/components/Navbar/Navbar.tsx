@@ -1,6 +1,7 @@
 import { Code, Group } from "@mantine/core";
 import {
   IconHome,
+  IconKarate,
   IconLayoutBoard,
   IconLogin,
   IconLogout,
@@ -18,6 +19,7 @@ const data = [
   { link: "/", label: "Home", icon: IconHome },
   { link: "/admin", label: "Admin", icon: IconSettings },
   { link: "/seasons", label: "Seasons", icon: IconLayoutBoard },
+  { link: "/competitions", label: "Competitions", icon: IconKarate },
 ];
 
 export const Navbar = () => {

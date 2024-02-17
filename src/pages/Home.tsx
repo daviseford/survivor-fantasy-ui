@@ -1,6 +1,6 @@
 import { PROJECT_NAME } from "../consts";
 
-export const App = () => {
+export const Home = () => {
   return (
     <>
       <h1>{PROJECT_NAME}</h1>

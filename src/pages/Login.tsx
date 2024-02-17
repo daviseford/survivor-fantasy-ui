@@ -16,9 +16,13 @@ export const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const onLogin = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+
+    setError("");
+
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
@@ -30,6 +34,7 @@ export const Login = () => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
+        setError(errorMessage);
       });
   };
 
@@ -59,8 +64,10 @@ export const Login = () => {
                 size="md"
               />
 
+              {error && <Text c="red">{error}</Text>}
+
               <Button type="submit" onClick={onLogin}>
-                Sign up
+                Log in
               </Button>
 
               <Text ta="center" mt="md">

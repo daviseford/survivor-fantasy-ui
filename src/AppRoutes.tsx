@@ -5,8 +5,9 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { useUser } from "./hooks/useUser";
 import { Admin } from "./pages/Admin";
-import { App } from "./pages/App";
+import { Competitions } from "./pages/Competitions";
 import { DraftComponent } from "./pages/Draft";
+import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Logout } from "./pages/Logout";
 import { Seasons } from "./pages/Seasons";
@@ -52,20 +53,24 @@ export const AppRoutes = () => {
           <AppShell.Main>
             <section>
               <Routes>
-                <Route path="/" element={<App />} />
+                <Route path="/" element={<Home />} />
 
                 {/* User stuff */}
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/logout" element={<Logout />} />
 
-                {/* <Route path="/seasons/:season/:episode" element={<Seasons />} /> */}
+                {/* <Route path="/seasons/:seasonId/:episodeId" element={<Seasons />} /> */}
                 <Route
-                  path="/seasons/:season/draft/:draftId"
+                  path="/seasons/:seasonId/draft/:draftId"
                   element={<DraftComponent />}
                 />
-                <Route path="/seasons/:season" element={<SingleSeason />} />
+                <Route path="/seasons/:seasonId" element={<SingleSeason />} />
                 <Route path="/seasons" element={<Seasons />} />
+
+                {/* Competitions */}
+                {/* <Route path="/competitions/:competitionId" element={<Competitions />} /> */}
+                <Route path="/competitions" element={<Competitions />} />
 
                 {/* TODO: Protect this */}
                 <Route path="/admin" element={<Admin />} />

@@ -57,6 +57,8 @@ type DraftUser = Pick<User, "email" | "uid" | "displayName">;
 export type Draft = {
   id: string;
   season_id: number;
+  // creator's uid
+  creator: string;
   participants: DraftUser[];
   total_players: number;
   current_pick_number: number;
@@ -75,9 +77,14 @@ export type DraftPick = {
   player_name: string;
 };
 
-export type Competitions = {
+export type Competition = {
   id: string;
   season_id: number;
+  draft_id: string;
+  // creator's uid
+  creator: string;
+  participant_uids: string[];
   participants: DraftUser[];
+  draft_picks: DraftPick[];
   finished: boolean;
 };

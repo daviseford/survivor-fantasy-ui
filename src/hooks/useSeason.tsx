@@ -5,12 +5,12 @@ import { db } from "../firebase";
 import { Season } from "../types";
 
 export const useSeason = () => {
-  const { season: seasonQueryParam } = useParams();
+  const { seasonId } = useParams();
 
   const [season, setSeason] = useState<Season>();
 
   useEffect(() => {
-    const seasonDoc = doc(db, "seasons", "season_" + seasonQueryParam);
+    const seasonDoc = doc(db, "seasons", "season_" + seasonId);
 
     const getSeason = async () => {
       const _doc = (await getDoc(seasonDoc)).data() as Season;
@@ -18,9 +18,9 @@ export const useSeason = () => {
     };
 
     getSeason();
-  }, [seasonQueryParam]);
+  }, [seasonId]);
 
-  console.log("Query param season = " + seasonQueryParam);
+  console.log("Query param seasonId = " + seasonId);
   console.log("Season data: ", season);
 
   return { season };

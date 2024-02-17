@@ -2,6 +2,7 @@ import {
   Avatar,
   Badge,
   Button,
+  CopyButton,
   Group,
   Paper,
   SimpleGrid,
@@ -9,13 +10,15 @@ import {
   Text,
 } from "@mantine/core";
 import { onValue, ref, update } from "firebase/database";
+import { doc, setDoc } from "firebase/firestore";
 import { shuffle, uniqBy } from "lodash-es";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { rt_db } from "../firebase";
+import { v4 } from "uuid";
+import { db, rt_db } from "../firebase";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
-import { Draft, Player } from "../types";
+import { Competition, Draft, Player } from "../types";
 
 export const DraftComponent = () => {
   const { draftId } = useParams();
@@ -37,6 +40,26 @@ export const DraftComponent = () => {
       setDraft(data || undefined);
     });
   }, [draftId, season]);
+
+  const createCompetition = async () => {
+    if (!season || !draft) return;
+
+    const id = v4();
+
+    const competition = {
+      id,
+      draft_id: draft.id,
+      season_id: season?.order,
+      creator: draft.creator,
+      participant_uids: draft.participants.map((x) => x.uid),
+      participants: draft?.participants,
+      draft_picks: draft.draft_picks,
+      finished: false,
+    } satisfies Competition;
+
+    console.log("CREATING A COMPETITION: ", competition);
+    await setDoc(doc(db, "competitions", id), competition);
+  };
 
   const updateDraft = async (_draft: Draft) => {
     await update(ref(rt_db), { ["drafts/" + draftId]: _draft });
@@ -121,6 +144,11 @@ export const DraftComponent = () => {
     console.log(_draft);
 
     await updateDraft(_draft);
+
+    if (finished) {
+      // create an entry in our DB
+      await createCompetition();
+    }
   };
 
   const isPlayerDrafted = (name: string) => {
@@ -138,16 +166,34 @@ export const DraftComponent = () => {
 
   return (
     <div>
-      {draft && !userIsParticipant && (
-        <Button onClick={joinDraft}>Join Draft</Button>
-      )}
+      <Group>
+        {draft && !userIsParticipant && (
+          <Button onClick={joinDraft}>Join Draft</Button>
+        )}
 
-      {draft && !draft?.started && (
-        <Button onClick={startDraft} disabled={draft.participants.length < 2}>
-          Start Draft
-          {draft.participants.length < 2 ? " (waiting for more players)" : ""}
-        </Button>
-      )}
+        {draft && !draft?.started && draft.creator === slimUser?.uid && (
+          <Button onClick={startDraft} disabled={draft.participants.length < 2}>
+            Start Draft
+            {draft.participants.length < 2 ? " (waiting for more players)" : ""}
+          </Button>
+        )}
+
+        {draft && !draft?.started && draft.creator !== slimUser?.uid && (
+          <Button disabled={true}>Waiting for host to start the draft</Button>
+        )}
+
+        {draft && !draft?.started && (
+          <CopyButton value={window.location.href}>
+            {({ copied, copy }) => (
+              <Button color={copied ? "teal" : "blue"} onClick={copy}>
+                {copied
+                  ? "Copied url"
+                  : "Invite friends to join this draft (send them this url)"}
+              </Button>
+            )}
+          </CopyButton>
+        )}
+      </Group>
 
       <h3>
         Joined users:{" "}
@@ -187,7 +233,16 @@ export const DraftComponent = () => {
           const isDrafted = isPlayerDrafted(x.name);
 
           return (
-            <Paper radius="md" withBorder p="lg" bg="var(--mantine-color-body)">
+            <Paper
+              radius="md"
+              withBorder
+              p="lg"
+              bg={
+                isDrafted
+                  ? "var(--mantine-color-gray-4)"
+                  : "var(--mantine-color-body)"
+              }
+            >
               <Avatar src={x.img} size={120} radius={120} mx="auto" />
               <Text ta="center" fz="lg" fw={500} mt="md">
                 {x.name}

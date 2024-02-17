@@ -21,9 +21,12 @@ export const Signup = () => {
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const onSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+
+    setError("");
 
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -54,6 +57,7 @@ export const Signup = () => {
       // @ts-expect-error asdasd
       const errorMessage = error.message;
       console.log(errorCode, errorMessage);
+      setError(errorMessage);
       // ..
     }
   };
@@ -102,6 +106,8 @@ export const Signup = () => {
                 mt="md"
                 size="md"
               />
+
+              {error && <Text c="red">{error}</Text>}
 
               <Button type="submit" onClick={onSubmit}>
                 Sign up
