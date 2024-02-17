@@ -1,6 +1,3 @@
-import { rt_db } from "../firebase";
-import { useParams } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
 import {
   Badge,
   Card,
@@ -10,11 +7,14 @@ import {
   Table,
   Text,
 } from "@mantine/core";
-import { Draft } from "../types";
-import { onValue, ref, set, update } from "firebase/database";
-import { useUser } from "../hooks/useUser";
+import { onValue, ref, update } from "firebase/database";
 import { shuffle, uniqBy } from "lodash-es";
+import { useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
+import { rt_db } from "../firebase";
 import { useSeason } from "../hooks/useSeason";
+import { useUser } from "../hooks/useUser";
+import { Draft } from "../types";
 
 export const DraftComponent = () => {
   const { draftId } = useParams();
@@ -39,26 +39,6 @@ export const DraftComponent = () => {
 
   const updateDraft = async (_draft: Draft) => {
     await update(ref(rt_db), { ["drafts/" + draftId]: _draft });
-  };
-
-  const createDraft = async () => {
-    if (!draftId || !slimUser || !season || !season) return;
-    console.log("CREATE DRAFT");
-
-    const newDraft = {
-      id: draftId,
-      season_id: Number(season),
-      participants: [slimUser],
-      total_players: season?.players.length,
-      pick_order: [],
-      draft_picks: [],
-      current_pick_number: 0,
-      current_picker: null,
-      started: false,
-      finished: false,
-    } satisfies Draft;
-
-    await set(ref(rt_db, "drafts/" + draftId), newDraft);
   };
 
   const userIsParticipant = useMemo(() => {
@@ -92,7 +72,7 @@ export const DraftComponent = () => {
       pick_order: _draftOrder,
     } satisfies Draft;
 
-    console.log(_draftOrder, isInvalidNumberOfPlayers, _draft);
+    console.log({ _draftOrder, isInvalidNumberOfPlayers, _draft });
 
     await updateDraft(_draft);
   };
@@ -157,7 +137,7 @@ export const DraftComponent = () => {
 
   return (
     <div>
-      {!draft && <button onClick={() => createDraft()}>Create Draft</button>}
+      {/* {!draft && <button onClick={() => createDraft()}>Create Draft</button>} */}
 
       {draft && !userIsParticipant && (
         <button onClick={joinDraft}>Join Draft</button>

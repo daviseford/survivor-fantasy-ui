@@ -1,19 +1,23 @@
-import "@mantine/core/styles.css";
 import { AppShell, Burger, MantineProvider } from "@mantine/core";
-import { theme } from "./theme";
+import "@mantine/core/styles.css";
+import { useDisclosure } from "@mantine/hooks";
+import {
+  NavLink,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from "react-router-dom";
+import { PROJECT_NAME } from "./consts";
+import { useUser } from "./hooks/useUser";
+import { Admin } from "./pages/Admin";
 import { App } from "./pages/App";
-import { NavLink, BrowserRouter as Router } from "react-router-dom";
-import { Routes, Route } from "react-router-dom";
-import { Signup } from "./pages/Signup";
+import { DraftComponent } from "./pages/Draft";
 import { Login } from "./pages/Login";
 import { Logout } from "./pages/Logout";
 import { Seasons } from "./pages/Seasons";
-import { Admin } from "./pages/Admin";
+import { Signup } from "./pages/Signup";
 import { SingleSeason } from "./pages/SingleSeason";
-import { useDisclosure } from "@mantine/hooks";
-import { PROJECT_NAME } from "./consts";
-import { DraftComponent } from "./pages/Draft";
-import { useUser } from "./hooks/useUser";
+import { theme } from "./theme";
 
 export const AppRoutes = () => {
   const [opened, { toggle }] = useDisclosure();

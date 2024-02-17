@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { db } from "../firebase";
 import { Season } from "../types";
 
 export const useSeason = () => {

@@ -1,7 +1,7 @@
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase";
 import { SEASON_9_CHALLENGES, SEASON_9_ELIMINATIONS } from "../data/season_9";
 import { SEASONS } from "../data/seasons";
+import { db } from "../firebase";
 
 const uploadS9 = async () => {
   try {

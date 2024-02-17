@@ -1,8 +1,8 @@
-import { useEffect } from "react";
 import { getApps } from "firebase/app";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase";
+import { useEffect } from "react";
 import { PROJECT_NAME } from "../consts";
+import { auth } from "../firebase";
 
 export const App = () => {
   useEffect(() => {

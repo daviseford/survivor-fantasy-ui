@@ -1,9 +1,9 @@
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, db } from "../firebase";
 import { PROJECT_NAME } from "../consts";
-import { setDoc, doc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 import { useUser } from "../hooks/useUser";
 
 export const Signup = () => {

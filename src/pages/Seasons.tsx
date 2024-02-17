@@ -1,18 +1,12 @@
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { Badge, Button, Card, Group, Image, Text } from "@mantine/core";
+import { collection, getDocs } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { db } from "../firebase";
 import { Season } from "../types";
 
 export const Seasons = () => {
-  // const { season, episode } = useParams();
-  // console.log({ season, episode });
-
   const [seasons, setSeasons] = useState<Season[]>([]);
-
-  // Create a query against the collection.
-  //   const q = query(seasons, where("season_id", "==", 9));
 
   useEffect(() => {
     const _seasons = collection(db, "seasons");
