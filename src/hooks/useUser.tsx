@@ -2,6 +2,7 @@ import { User, onAuthStateChanged } from "firebase/auth";
 
 import { useEffect, useMemo, useState } from "react";
 import { auth } from "../firebase";
+import { SlimUser } from "../types";
 
 export const useUser = () => {
   const [user, setUser] = useState<User>();
@@ -24,7 +25,7 @@ export const useUser = () => {
     });
   }, []);
 
-  const slimUser: Pick<User, "email" | "displayName" | "uid"> | undefined =
+  const slimUser: SlimUser | undefined =
     useMemo(() => {
       if (!user) return undefined;
 

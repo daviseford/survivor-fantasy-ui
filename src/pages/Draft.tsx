@@ -6,7 +6,6 @@ import {
   Group,
   Paper,
   SimpleGrid,
-  Table,
   Text,
 } from "@mantine/core";
 import { onValue, ref, update } from "firebase/database";
@@ -15,10 +14,11 @@ import { shuffle, uniqBy } from "lodash-es";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { v4 } from "uuid";
+import { DraftTable } from "../components/DraftTable";
 import { db, rt_db } from "../firebase";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
-import { Competition, Draft, Player } from "../types";
+import { Competition, Draft } from "../types";
 
 export const DraftComponent = () => {
   const { draftId } = useParams();
@@ -273,57 +273,13 @@ export const DraftComponent = () => {
         })}
       </SimpleGrid>
 
-      {draft?.started && <DraftTable draft={draft} players={season.players} />}
-    </div>
-  );
-};
-
-const DraftTable = ({
-  draft,
-  players,
-}: {
-  draft: Draft;
-  players: Player[];
-}) => {
-  const rows = !draft?.draft_picks
-    ? []
-    : draft?.draft_picks.map((x) => {
-        const player = players.find((p) => p.name === x.player_name);
-
-        return (
-          <Table.Tr key={x.player_name}>
-            <Table.Td>
-              <Group gap="sm">
-                <Avatar size={40} src={player!.img} radius={40} />
-
-                <Text fz="sm" fw={500}>
-                  {x.player_name}
-                </Text>
-              </Group>
-            </Table.Td>
-            <Table.Td>{x.order}</Table.Td>
-            <Table.Td>
-              {
-                draft.participants.find((p) => p.uid === x.user_uid)
-                  ?.displayName
-              }
-            </Table.Td>
-          </Table.Tr>
-        );
-      });
-
-  return (
-    <div>
-      <Table>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Player Name</Table.Th>
-            <Table.Th>Draft Position</Table.Th>
-            <Table.Th>Drafted By</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
-      </Table>
+      {draft?.started && (
+        <DraftTable
+          draft_picks={draft.draft_picks}
+          participants={draft.participants}
+          players={season.players}
+        />
+      )}
     </div>
   );
 };

@@ -1,11 +1,13 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 import { db } from "../firebase";
 import { useUser } from "../hooks/useUser";
 import { Competition } from "../types";
 
 export const Competitions = () => {
   const { user } = useUser();
+
   const [competitions, setCompetitions] = useState<Competition[]>([]);
 
   useEffect(() => {
@@ -33,8 +35,15 @@ export const Competitions = () => {
 
   return (
     <div>
+      <h1>Competitions</h1>
       {competitions.map((x) => {
-        return <div key={x.id}>Draft: {x.draft_id}</div>;
+        return (
+          <div key={x.id}>
+            <NavLink to={`/competitions/${x.id}`}>
+              Season: {x.season_id} | Draft ID: ...{x.draft_id.slice(-4)}
+            </NavLink>
+          </div>
+        );
       })}
     </div>
   );

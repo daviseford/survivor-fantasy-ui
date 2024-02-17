@@ -12,6 +12,7 @@ import { Login } from "./pages/Login";
 import { Logout } from "./pages/Logout";
 import { Seasons } from "./pages/Seasons";
 import { Signup } from "./pages/Signup";
+import { SingleCompetition } from "./pages/SingleCompetition";
 import { SingleSeason } from "./pages/SingleSeason";
 import { theme } from "./theme";
 
@@ -69,7 +70,10 @@ export const AppRoutes = () => {
                 <Route path="/seasons" element={<Seasons />} />
 
                 {/* Competitions */}
-                {/* <Route path="/competitions/:competitionId" element={<Competitions />} /> */}
+                <Route
+                  path="/competitions/:competitionId"
+                  element={<SingleCompetition />}
+                />
                 <Route path="/competitions" element={<Competitions />} />
 
                 {/* TODO: Protect this */}

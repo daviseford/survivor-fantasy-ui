@@ -52,19 +52,19 @@ export type Challenge<PlayerNames extends string> = {
   post_merge: boolean;
 };
 
-type DraftUser = Pick<User, "email" | "uid" | "displayName">;
+export type SlimUser = Pick<User, "email" | "uid" | "displayName">;
 
 export type Draft = {
   id: string;
   season_id: number;
   // creator's uid
   creator: string;
-  participants: DraftUser[];
+  participants: SlimUser[];
   total_players: number;
   current_pick_number: number;
-  current_picker: DraftUser | null;
+  current_picker: SlimUser | null;
   /** List of user uids */
-  pick_order: DraftUser[];
+  pick_order: SlimUser[];
   draft_picks: DraftPick[];
   started: boolean;
   finished: boolean;
@@ -84,7 +84,7 @@ export type Competition = {
   // creator's uid
   creator: string;
   participant_uids: string[];
-  participants: DraftUser[];
+  participants: SlimUser[];
   draft_picks: DraftPick[];
   finished: boolean;
 };
