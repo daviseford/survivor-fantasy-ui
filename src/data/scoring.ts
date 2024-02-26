@@ -23,6 +23,10 @@ export const BASE_PLAYER_SCORING = [
     fixed_value: 5,
   },
   {
+    action: "quitter",
+    fixed_value: 3,
+  },
+  {
     action: "make_merge",
     fixed_value: 2,
   },
@@ -56,5 +60,13 @@ export const BASE_PLAYER_SCORING = [
     action: "eliminated",
     description:
       "1 pt per episode number (e.g. 5 pts for Episode 5 elimination)",
+  },
+  {
+    action: "use_shot_in_the_dark_unsuccessfully",
+    fixed_value: 1,
+  },
+  {
+    action: "use_shot_in_the_dark_successfully",
+    fixed_value: 3,
   },
 ] satisfies PlayerScoring[];

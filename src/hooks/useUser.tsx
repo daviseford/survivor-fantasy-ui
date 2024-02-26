@@ -32,6 +32,7 @@ export const useUser = () => {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
+      isAdmin: user.displayName?.toLocaleLowerCase() === "davis",
     };
   }, [user]);
 

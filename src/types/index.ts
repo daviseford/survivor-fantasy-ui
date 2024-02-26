@@ -10,8 +10,8 @@ export type Season = {
   episodes: Episode[];
 };
 
-export type Episode = {
-  season_id: number;
+export type Episode<SeasonNumber = number> = {
+  season_id: SeasonNumber;
 
   order: number;
   name: string;
@@ -21,28 +21,28 @@ export type Episode = {
   merge_occurs: boolean;
 };
 
-export type Elimination<T = string> = {
-  season_id: number;
+export type Elimination<PlayerName = string, SeasonNumber = number> = {
+  season_id: SeasonNumber;
   episode_id: number;
-  player_name: T;
+  player_name: PlayerName;
 
   order: number;
-  variant: "tribal" | "medical" | "final_tribal_council" | "other";
+  variant: "tribal" | "medical" | "final_tribal_council" | "quitter" | "other";
   votes_received?: number;
 };
 
-export type Player<T = string> = {
-  season_id: number;
-  name: T;
+export type Player<PlayerName = string, SeasonNumber = number> = {
+  season_id: SeasonNumber;
+  name: PlayerName;
   img: string;
 };
 
-export type Challenge<PlayerNames = string> = {
-  season_id: number;
+export type Challenge<PlayerNames = string, SeasonNumber = number> = {
+  season_id: SeasonNumber;
   episode_id: number;
 
   order: number;
-  variant: "reward" | "immunity" | "combined";
+  variant: ChallengeWinAction;
 
   /**
    * List of player names who won
@@ -52,7 +52,9 @@ export type Challenge<PlayerNames = string> = {
   post_merge: boolean;
 };
 
-export type SlimUser = Pick<User, "email" | "uid" | "displayName">;
+export type SlimUser = Pick<User, "email" | "uid" | "displayName"> & {
+  isAdmin: boolean;
+};
 
 export type Draft = {
   id: string;
@@ -89,8 +91,51 @@ export type Competition = {
   finished: boolean;
 };
 
+export type GameEvent<PlayerName = string, SeasonNumber = number> = {
+  season_id: SeasonNumber;
+  episode_id: number;
+  action: GameEventAction;
+  action_value?: number | null;
+  player_name: PlayerName;
+};
+
+export const ChallengeWinActions = ["reward", "combined", "immunity"] as const;
+
+export type ChallengeWinAction = (typeof ChallengeWinActions)[number];
+
+export const GameEventActions = [
+  "find_advantage",
+  "find_idol",
+  "make_final_tribal_council",
+  "use_advantage",
+  "use_idol",
+  "use_shot_in_the_dark_successfully",
+  "use_shot_in_the_dark_unsuccessfully",
+  "votes_negated_by_idol",
+] as const;
+
+export type GameEventAction = (typeof GameEventActions)[number];
+
+export const GameProgressActions = [
+  "eliminated",
+  "make_merge",
+  "medically_evacuated",
+  "quitter",
+  "win_survivor",
+] as const;
+
+export type GameProgressAction = (typeof GameProgressActions)[number];
+
+export const PlayerActions = [
+  ...ChallengeWinActions,
+  ...GameEventActions,
+  ...GameProgressActions,
+] as const;
+
+export type PlayerAction = (typeof PlayerActions)[number];
+
 export type PlayerScoring = {
-  action: string;
+  action: PlayerAction;
   description?: string;
   fixed_value?: number;
 };

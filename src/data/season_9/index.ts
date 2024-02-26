@@ -115,27 +115,7 @@ export const SEASON_9_EPISODES = [
   },
 ] satisfies Episode[];
 
-// type Season_9_Players =
-//   | "Brady Finta"
-//   | "Brook Geraghty"
-//   | "Bubba Sampson"
-//   | "Chad Crittenden"
-//   | "Chris Daugherty"
-//   | "John Kenney"
-//   | "John Palyok"
-//   | "Lea Masters"
-//   | "Rory Freeman"
-//   | "Ami Cusack"
-//   | "Dolly Neely"
-//   | "Eliza Orlins"
-//   | "Julie Berry"
-//   | "Leann Slaby"
-//   | "Lisa Keiffer"
-//   | "Mia Galeotalanza"
-//   | "Scout Cloud Lee"
-//   | "Twila Tanner";
-
-const Season_9_Players3 = [
+const Season_9_Players = [
   "Brady Finta",
   "Brook Geraghty",
   "Bubba Sampson",
@@ -156,7 +136,7 @@ const Season_9_Players3 = [
   "Twila Tanner",
 ] as const;
 
-type S9_Players = (typeof Season_9_Players3)[number][0];
+type S9_Players = (typeof Season_9_Players)[number];
 
 const buildPlayer = <T extends S9_Players>(name: T, img = ""): Player<T> => {
   return {

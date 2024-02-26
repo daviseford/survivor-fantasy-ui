@@ -1,4 +1,3 @@
-import { Code, Group } from "@mantine/core";
 import {
   IconHome,
   IconKarate,
@@ -12,14 +11,13 @@ import {
 } from "@tabler/icons-react";
 // import { MantineLogo } from '@mantinex/mantine-logo';
 import { useLocation } from "react-router-dom";
-import { PROJECT_NAME } from "../../consts";
 import { auth } from "../../firebase";
 import { useUser } from "../../hooks/useUser";
 import classes from "./Navbar.module.css";
 
 const data = [
   { link: "/", label: "Home", icon: IconHome },
-  { link: "/admin", label: "Admin", icon: IconSettings },
+  { link: "/admin", label: "Admin", icon: IconSettings, adminOnly: true },
   { link: "/seasons", label: "Seasons", icon: IconLayoutBoard },
   { link: "/competitions", label: "Competitions", icon: IconKarate },
 ];
@@ -27,13 +25,15 @@ const data = [
 export const Navbar = () => {
   const { pathname } = useLocation();
 
-  console.log({ pathname });
-
-  const { user } = useUser();
+  const { slimUser } = useUser();
 
   const links = data.map((item) => {
+    // Hide admin-only routes
+    if (!slimUser?.isAdmin && item.adminOnly) return null;
+
     const isActive =
       (pathname.startsWith("/seasons") && item.link === "/seasons") ||
+      (pathname.startsWith("/competitions") && item.link === "/competitions") ||
       item.link === pathname ||
       undefined;
 
@@ -58,57 +58,53 @@ export const Navbar = () => {
     <nav className={classes.navbar}>
       <div className={classes.navbarMain}>
         {/* <Group className={classes.header} justify="space-between"> */}
-        <Group className={classes.header}>
-          {/* <MantineLogo size={28} /> */}
-          <h1>{PROJECT_NAME}</h1>
-          <Code fw={700}>v0.0.0</Code>
-        </Group>
+        {/* <Group className={classes.header}> */}
+        {/* <MantineLogo size={28} /> */}
+        {/* <h1>{PROJECT_NAME}</h1>
+          <Code fw={700}>v0.0.0</Code> */}
+        {/* </Group> */}
         {links}
       </div>
 
       <div className={classes.footer}>
-        {!user && (
-          <a href="/signup" className={classes.link}>
-            <IconUserPlus className={classes.linkIcon} stroke={1.5} />
-            <span>Register</span>
-          </a>
+        {!slimUser && (
+          <>
+            <a href="/signup" className={classes.link}>
+              <IconUserPlus className={classes.linkIcon} stroke={1.5} />
+              <span>Register</span>
+            </a>
+            <a href="/login" className={classes.link}>
+              <IconLogin className={classes.linkIcon} stroke={1.5} />
+              <span>Login</span>
+            </a>
+          </>
         )}
 
-        {!user && (
-          <a href="/login" className={classes.link}>
-            <IconLogin className={classes.linkIcon} stroke={1.5} />
-            <span>Login</span>
-          </a>
-        )}
+        {slimUser && (
+          <>
+            <a
+              href="#"
+              className={classes["link-inactive"]}
+              onClick={(e) => e.preventDefault()}
+            >
+              <IconUser className={classes.linkIcon} stroke={1.5} />
+              <span>{slimUser.displayName}</span>
+            </a>
 
-        {user && (
-          <a
-            href="#"
-            className={classes["link-inactive"]}
-            onClick={(e) => e.preventDefault()}
-          >
-            <IconUser className={classes.linkIcon} stroke={1.5} />
-            <span>{user.displayName}</span>
-          </a>
-        )}
+            <a
+              href="#"
+              className={classes["link-inactive"]}
+              onClick={(e) => e.preventDefault()}
+            >
+              <IconMail className={classes.linkIcon} stroke={1.5} />
+              <span>{slimUser.email}</span>
+            </a>
 
-        {user && (
-          <a
-            href="#"
-            className={classes["link-inactive"]}
-            onClick={(e) => e.preventDefault()}
-          >
-            <IconMail className={classes.linkIcon} stroke={1.5} />
-
-            <span>{user.email}</span>
-          </a>
-        )}
-
-        {user && (
-          <a href="#" className={classes.link} onClick={() => handleLogout()}>
-            <IconLogout className={classes.linkIcon} stroke={1.5} />
-            <span>Logout</span>
-          </a>
+            <a href="#" className={classes.link} onClick={() => handleLogout()}>
+              <IconLogout className={classes.linkIcon} stroke={1.5} />
+              <span>Logout</span>
+            </a>
+          </>
         )}
       </div>
     </nav>

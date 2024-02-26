@@ -1,7 +1,7 @@
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
-import { Challenge, Elimination, Season } from "../../types";
+import { Challenge, Elimination, PlayerAction, Season } from "../../types";
 
-const addFixedActionPoints = (action: string) =>
+const addFixedActionPoints = (action: PlayerAction) =>
   BASE_PLAYER_SCORING.find((x) => x.action === action)?.fixed_value || 0;
 
 export const getSurvivorPointsPerEpisode = (
@@ -14,8 +14,6 @@ export const getSurvivorPointsPerEpisode = (
   if (!season || !playerName) return 0;
 
   const { episodes } = season;
-
-  console.log({ episodes, challenges, eliminations });
 
   const _episode = episodes.find((x) => x.order === episodeNumber);
   const _eliminations = eliminations?.filter(
@@ -41,6 +39,12 @@ export const getSurvivorPointsPerEpisode = (
   _eliminations?.forEach((e) => {
     if (e.player_name !== playerName) return;
     total += e.episode_id;
+
+    if (e.variant === "medical") {
+      total += addFixedActionPoints("medically_evacuated");
+    } else if (e.variant === "quitter") {
+      total += addFixedActionPoints("quitter");
+    }
   });
 
   // if the episode is the finale, and this player was never eliminated, they won survivor

@@ -1,9 +1,17 @@
-import { AppShell, Burger, MantineProvider } from "@mantine/core";
+import {
+  AppShell,
+  Burger,
+  Code,
+  Group,
+  MantineProvider,
+  Title,
+} from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useDisclosure } from "@mantine/hooks";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
+import { PROJECT_NAME } from "./consts";
 import { Admin } from "./pages/Admin";
 import { Competitions } from "./pages/Competitions";
 import { DraftComponent } from "./pages/Draft";
@@ -41,7 +49,12 @@ export const AppRoutes = () => {
                 hiddenFrom="sm"
                 size="sm"
               />
-              {/* Mobile info goes here */}
+              <Group align="center">
+                <Title order={1} pl={"lg"}>
+                  {PROJECT_NAME}
+                </Title>
+                <Code fw={700}>v0.0.0</Code>
+              </Group>
             </AppShell.Header>
 
             <AppShell.Navbar p="md">
@@ -49,34 +62,34 @@ export const AppRoutes = () => {
             </AppShell.Navbar>
 
             <AppShell.Main>
-              <section>
-                <Routes>
-                  <Route path="/" element={<Home />} />
+              <Routes>
+                <Route path="/" element={<Home />} />
 
-                  {/* User stuff */}
-                  <Route path="/signup" element={<Signup />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/logout" element={<Logout />} />
+                {/* User stuff */}
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/logout" element={<Logout />} />
 
-                  {/* <Route path="/seasons/:seasonId/:episodeId" element={<Seasons />} /> */}
-                  <Route
-                    path="/seasons/:seasonId/draft/:draftId"
-                    element={<DraftComponent />}
-                  />
-                  <Route path="/seasons/:seasonId" element={<SingleSeason />} />
-                  <Route path="/seasons" element={<Seasons />} />
+                {/* Drafting */}
+                <Route
+                  path="/seasons/:seasonId/draft/:draftId"
+                  element={<DraftComponent />}
+                />
 
-                  {/* Competitions */}
-                  <Route
-                    path="/competitions/:competitionId"
-                    element={<SingleCompetition />}
-                  />
-                  <Route path="/competitions" element={<Competitions />} />
+                {/* Seasons */}
+                <Route path="/seasons/:seasonId" element={<SingleSeason />} />
+                <Route path="/seasons" element={<Seasons />} />
 
-                  {/* TODO: Protect this */}
-                  <Route path="/admin" element={<Admin />} />
-                </Routes>
-              </section>
+                {/* Competitions */}
+                <Route
+                  path="/competitions/:competitionId"
+                  element={<SingleCompetition />}
+                />
+                <Route path="/competitions" element={<Competitions />} />
+
+                {/* TODO: Protect this */}
+                <Route path="/admin" element={<Admin />} />
+              </Routes>
             </AppShell.Main>
           </AppShell>
         </Router>
