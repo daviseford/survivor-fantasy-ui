@@ -3,6 +3,7 @@ import { sum } from "lodash-es";
 import { useChallenges } from "../../hooks/useChallenges";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useEliminations } from "../../hooks/useEliminations";
+import { useEvents } from "../../hooks/useEvents";
 import { useSeason } from "../../hooks/useSeason";
 import { getSurvivorPointsPerEpisode } from "./utils";
 
@@ -11,6 +12,7 @@ export const PerPlayerPerEpisodeScoringTable = () => {
   const { data: season } = useSeason(competition?.season_id);
   const { data: challenges } = useChallenges(competition?.season_id);
   const { data: eliminations } = useEliminations(competition?.season_id);
+  const { data: events } = useEvents(competition?.season_id);
 
   const pointsBySurvivor = season?.players?.reduce(
     (accum, player) => {
@@ -19,6 +21,7 @@ export const PerPlayerPerEpisodeScoringTable = () => {
           season,
           challenges || [],
           eliminations || [],
+          events || [],
           x.order,
           player.name,
         );
@@ -46,6 +49,7 @@ export const PerPlayerPerEpisodeScoringTable = () => {
                   season,
                   challenges || [],
                   eliminations || [],
+                  events || [],
                   e.order,
                   x,
                 );

@@ -1,5 +1,11 @@
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
-import { Challenge, Elimination, PlayerAction, Season } from "../../types";
+import {
+  Challenge,
+  Elimination,
+  GameEvent,
+  PlayerAction,
+  Season,
+} from "../../types";
 
 const addFixedActionPoints = (action: PlayerAction) =>
   BASE_PLAYER_SCORING.find((x) => x.action === action)?.fixed_value || 0;
@@ -8,6 +14,7 @@ export const getSurvivorPointsPerEpisode = (
   season: Season,
   challenges: Challenge[],
   eliminations: Elimination[],
+  events: GameEvent[],
   episodeNumber: number,
   playerName?: string,
 ) => {
@@ -20,6 +27,7 @@ export const getSurvivorPointsPerEpisode = (
     (x) => x.episode_id === episodeNumber,
   );
   const _challenges = challenges?.filter((x) => x.episode_id === episodeNumber);
+  const _events = events?.filter((x) => x.episode_id === episodeNumber);
 
   // console.log(
   //   "There is a total of " +
@@ -55,7 +63,16 @@ export const getSurvivorPointsPerEpisode = (
     total += addFixedActionPoints("win_survivor");
   }
 
-  // todo: advantages, merge stuff, votes, idols, etc
+  // Handle game events like finding idols etc
+  _events.forEach((e) => {
+    if (e.player_name !== playerName) return;
+
+    if (e.action_value) {
+      total += addFixedActionPoints(e.action) * e.action_value || 1;
+    }
+  });
+
+  // todo: post-merge stuff
 
   return total;
 };

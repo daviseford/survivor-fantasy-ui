@@ -4,27 +4,33 @@ export const BASE_PLAYER_SCORING = [
   {
     action: "reward",
     fixed_value: 1,
+    description: "Win a reward challenge",
   },
   {
     action: "combined",
     fixed_value: 3,
-    description: "Combined reward + immunity challenge",
+    description: "Win a combined reward + immunity challenge",
   },
   {
     action: "immunity",
     fixed_value: 2,
+    description: "Win an immunity challenge",
   },
   {
     action: "votes_negated_by_idol",
-    fixed_value: 5,
+    fixed_value: 1,
+    description: "Any votes negated by playing an idol (even if unnecessary)",
   },
   {
     action: "medically_evacuated",
     fixed_value: 5,
+    description: "Production pulls them out for medical reasons.",
   },
   {
     action: "quitter",
     fixed_value: 3,
+    description:
+      "Only if the contestant makes production pull them out bceause they are a crybaby.",
   },
   {
     action: "make_merge",
@@ -51,6 +57,8 @@ export const BASE_PLAYER_SCORING = [
   {
     action: "use_idol",
     fixed_value: 2,
+    description:
+      "Player gets credit for playing an idol on themself or another player.",
   },
   {
     action: "use_advantage",

@@ -1,5 +1,4 @@
-import { SimpleGrid } from "@mantine/core";
-import { DraftTable } from "../components/DraftTable";
+import { SimpleGrid, Title } from "@mantine/core";
 import {
   PerPlayerPerEpisodeScoringTable,
   ScoringLegendTable,
@@ -27,21 +26,22 @@ export const SingleCompetition = () => {
 
       <h3>Finished: {competition.finished ? "True" : "False"}</h3>
 
-      <h1>Scoring</h1>
+      <SimpleGrid cols={1} p={"lg"}>
+        <>
+          <Title order={2}>Season Scores</Title>
+          <PerPlayerPerEpisodeScoringTable />
+        </>
 
-      <PerPlayerPerEpisodeScoringTable />
+        <>
+          <Title order={2}>Survivor Individual Scores</Title>
+          <SeasonTotalContestantScoringTable />
+        </>
 
-      <SimpleGrid cols={2}>
-        <SeasonTotalContestantScoringTable />
-        <ScoringLegendTable />
+        <>
+          <Title order={2}>Scoring Values</Title>
+          <ScoringLegendTable />
+        </>
       </SimpleGrid>
-
-      <h1>Initial Draft</h1>
-      <DraftTable
-        draft_picks={competition.draft_picks}
-        players={season?.players}
-        participants={competition.participants}
-      />
     </div>
   );
 };

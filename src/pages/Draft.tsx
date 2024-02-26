@@ -12,7 +12,7 @@ import { onValue, ref, update } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
 import { shuffle, uniqBy } from "lodash-es";
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { v4 } from "uuid";
 import { DraftTable } from "../components/DraftTable";
 import { db, rt_db } from "../firebase";
@@ -23,10 +23,13 @@ import { Competition, Draft } from "../types";
 export const DraftComponent = () => {
   const { draftId } = useParams();
 
+  const navigate = useNavigate();
+
   const { slimUser } = useUser();
   const { data: season } = useSeason();
 
   const [draft, setDraft] = useState<Draft>();
+  const [competitionId, setCompetitionId] = useState<string>();
 
   console.log({ slimUser: slimUser, draft });
 
@@ -59,6 +62,8 @@ export const DraftComponent = () => {
 
     console.log("CREATING A COMPETITION: ", competition);
     await setDoc(doc(db, "competitions", id), competition);
+
+    setCompetitionId(id);
   };
 
   const updateDraft = async (_draft: Draft) => {
@@ -201,7 +206,16 @@ export const DraftComponent = () => {
           .map((x) => x.displayName || x.email || x.uid)
           .join(", ")}
       </h3>
-      <h1>Current Pick: {draft?.current_pick_number}</h1>
+
+      {Boolean(draft?.current_pick_number) && (
+        <h1>Current Pick: {draft?.current_pick_number}</h1>
+      )}
+
+      {draft?.finished && competitionId && (
+        <Button onClick={() => navigate(`/competitions/${competitionId}`)}>
+          Go to your newly created competition to get started
+        </Button>
+      )}
 
       <h2>
         Draft Status:{" "}

@@ -33,7 +33,7 @@ export const Competitions = () => {
 
   const rows = competitions?.map((x) => {
     return (
-      <Table.Tr onClick={() => navigate(`/competitions/${x.id}`)}>
+      <Table.Tr onClick={() => navigate(`/competitions/${x.id}`)} key={x.id}>
         <Table.Td>{x.draft_id.slice(-4)}</Table.Td>
         <Table.Td>{x.season_id}</Table.Td>
         <Table.Td>
@@ -43,7 +43,7 @@ export const Competitions = () => {
           {x.participants.find((p) => p.uid === x.creator)?.displayName}
         </Table.Td>
         <Table.Td>TODO</Table.Td>
-        <Table.Td>TODO</Table.Td>
+        <Table.Td>{String(x.finished)}</Table.Td>
       </Table.Tr>
     );
   });
@@ -63,14 +63,16 @@ export const Competitions = () => {
       {!isLoading && (
         <Table highlightOnHover m={"xl"}>
           <Table.Thead>
-            <Table.Th>ID</Table.Th>
-            <Table.Th>Season</Table.Th>
-            <Table.Th>Participants</Table.Th>
-            <Table.Th>Creator</Table.Th>
+            <Table.Tr>
+              <Table.Th>ID</Table.Th>
+              <Table.Th>Season</Table.Th>
+              <Table.Th>Participants</Table.Th>
+              <Table.Th>Creator</Table.Th>
 
-            {/* TODO */}
-            <Table.Th>Current Episode</Table.Th>
-            <Table.Th>Finished?</Table.Th>
+              {/* TODO */}
+              <Table.Th>Current Episode</Table.Th>
+              <Table.Th>Finished?</Table.Th>
+            </Table.Tr>
           </Table.Thead>
 
           <Table.Tbody>{rows}</Table.Tbody>

@@ -64,7 +64,15 @@ export const SEASON_99_CHALLENGES = {
     variant: "reward",
     order: 1,
     post_merge: false,
-    winning_players: [],
+    winning_players: ["Pearl Dale", "Shana Held"],
+  },
+  challenge_2: {
+    season_id: 99,
+    episode_id: 1,
+    variant: "immunity",
+    order: 1,
+    post_merge: false,
+    winning_players: ["Caden Tharp"],
   },
 } satisfies Record<`challenge_${number}`, Challenge<PlayerName, SeasonNumber>>;
 
@@ -92,7 +100,7 @@ export const SEASON_99_EVENTS = {
   event_2: {
     season_id: 99,
     episode_id: 1,
-    player_name: "Addison Dugan",
+    player_name: "Ramon Neville",
     action: "votes_negated_by_idol",
     action_value: 3,
   },
