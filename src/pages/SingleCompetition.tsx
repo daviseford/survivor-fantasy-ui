@@ -1,7 +1,12 @@
+import { SimpleGrid } from "@mantine/core";
 import { DraftTable } from "../components/DraftTable";
+import {
+  PerPlayerPerEpisodeScoringTable,
+  ScoringLegendTable,
+  SeasonTotalContestantScoringTable,
+} from "../components/ScoringTables";
 import { useCompetition } from "../hooks/useCompetition";
 import { useSeason } from "../hooks/useSeason";
-import { ScoringTable } from "./ScoringTable";
 
 export const SingleCompetition = () => {
   const { data: competition } = useCompetition();
@@ -24,7 +29,12 @@ export const SingleCompetition = () => {
 
       <h1>Scoring</h1>
 
-      <ScoringTable />
+      <PerPlayerPerEpisodeScoringTable />
+
+      <SimpleGrid cols={2}>
+        <SeasonTotalContestantScoringTable />
+        <ScoringLegendTable />
+      </SimpleGrid>
 
       <h1>Initial Draft</h1>
       <DraftTable

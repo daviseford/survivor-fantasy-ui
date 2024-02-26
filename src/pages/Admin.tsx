@@ -3,6 +3,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { SEASON_9_CHALLENGES, SEASON_9_ELIMINATIONS } from "../data/season_9";
 import { SEASONS } from "../data/seasons";
 import { db } from "../firebase";
+import { useUser } from "../hooks/useUser";
 
 const uploadS9 = async () => {
   try {
@@ -21,9 +22,15 @@ const uploadS9 = async () => {
 };
 
 export const Admin = () => {
+  const { user } = useUser();
+
+  if (!user || user?.displayName?.toLocaleLowerCase() !== "davis") {
+    return <div>Unauthorized</div>;
+  }
+
   return (
     <div>
-      <Button onClick={() => uploadS9()}>Upload</Button>
+      <Button onClick={() => uploadS9()}>Upload Static Data</Button>
     </div>
   );
 };

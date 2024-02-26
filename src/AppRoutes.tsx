@@ -4,7 +4,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
-import { useUser } from "./hooks/useUser";
 import { Admin } from "./pages/Admin";
 import { Competitions } from "./pages/Competitions";
 import { DraftComponent } from "./pages/Draft";
@@ -21,8 +20,6 @@ const queryClient = new QueryClient();
 
 export const AppRoutes = () => {
   const [opened, { toggle }] = useDisclosure();
-
-  const { user } = useUser();
 
   return (
     <MantineProvider theme={theme}>
@@ -44,11 +41,7 @@ export const AppRoutes = () => {
                 hiddenFrom="sm"
                 size="sm"
               />
-              {user && (
-                <div>
-                  Logged in: {user.displayName} Email: {user.email}
-                </div>
-              )}
+              {/* Mobile info goes here */}
             </AppShell.Header>
 
             <AppShell.Navbar p="md">

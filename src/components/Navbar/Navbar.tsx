@@ -5,7 +5,9 @@ import {
   IconLayoutBoard,
   IconLogin,
   IconLogout,
+  IconMail,
   IconSettings,
+  IconUser,
   IconUserPlus,
 } from "@tabler/icons-react";
 // import { MantineLogo } from '@mantinex/mantine-logo';
@@ -76,6 +78,29 @@ export const Navbar = () => {
           <a href="/login" className={classes.link}>
             <IconLogin className={classes.linkIcon} stroke={1.5} />
             <span>Login</span>
+          </a>
+        )}
+
+        {user && (
+          <a
+            href="#"
+            className={classes["link-inactive"]}
+            onClick={(e) => e.preventDefault()}
+          >
+            <IconUser className={classes.linkIcon} stroke={1.5} />
+            <span>{user.displayName}</span>
+          </a>
+        )}
+
+        {user && (
+          <a
+            href="#"
+            className={classes["link-inactive"]}
+            onClick={(e) => e.preventDefault()}
+          >
+            <IconMail className={classes.linkIcon} stroke={1.5} />
+
+            <span>{user.email}</span>
           </a>
         )}
 
