@@ -45,6 +45,7 @@ export type Player<PlayerName = string, SeasonNumber = number> = {
   season_num: SeasonNumber;
   name: PlayerName;
   img: string;
+  description?: string;
 };
 
 export type Challenge<PlayerNames = string, SeasonNumber = number> = {
