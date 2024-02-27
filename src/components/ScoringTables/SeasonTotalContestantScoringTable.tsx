@@ -12,7 +12,7 @@ export const SeasonTotalContestantScoringTable = () => {
   const { data: season } = useSeason(competition?.season_id);
   const { data: challenges } = useChallenges(competition?.season_id);
   const { data: eliminations } = useEliminations(competition?.season_id);
-  const { data: events } = useEvents(competition?.season_id, true);
+  const { data: events } = useEvents(season?.id);
 
   const pointsByPlayer = season?.players?.reduce(
     (accum, player) => {
@@ -21,7 +21,7 @@ export const SeasonTotalContestantScoringTable = () => {
           season,
           challenges || [],
           eliminations || [],
-          events || [],
+          Object.values(events || {}),
           x.order,
           player.name,
         );

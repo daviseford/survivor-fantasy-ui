@@ -1,7 +1,7 @@
 import { rt_db } from "../firebase";
 
 import { ref, set } from "firebase/database";
-import { v4 as uuidv4 } from "uuid";
+import { v4 } from "uuid";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
 import { Draft } from "../types";
@@ -11,7 +11,7 @@ export const useCreateDraft = () => {
   const { data: season } = useSeason();
 
   const createDraft = async () => {
-    const draftId = `draft_${uuidv4()}`;
+    const draftId = `draft_${v4()}` as const;
 
     if (!slimUser || !season || !season) {
       console.error("Missing a key prop here...");
@@ -22,8 +22,9 @@ export const useCreateDraft = () => {
 
     const newDraft = {
       id: draftId,
-      season_id: season.order,
-      creator: slimUser.uid,
+      season_id: season.id,
+      season_num: season.order,
+      creator_uid: slimUser.uid,
       participants: [slimUser],
       total_players: season?.players.length,
       pick_order: [],

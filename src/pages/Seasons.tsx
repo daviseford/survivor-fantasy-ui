@@ -22,8 +22,6 @@ export const Seasons = () => {
     ref,
   );
 
-  console.log({ seasons });
-
   return (
     <SimpleGrid cols={3}>
       {seasons?.map((x) => {
@@ -44,7 +42,7 @@ export const Seasons = () => {
         activities on and around the fjords of Norway
       </Text> */}
 
-              <Link to={`/seasons/${x.order}`}>
+              <Link to={`/seasons/${x.id}`}>
                 <Button color="blue" fullWidth mt="md" radius="md">
                   Visit
                 </Button>

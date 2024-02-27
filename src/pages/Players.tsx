@@ -24,7 +24,7 @@ const PlayerCard = (props: Player) => {
         {props.name}
       </Text>
       <Text ta="center" c="dimmed" fz="sm">
-        Season {props.season_id}
+        Season {props.season_num}
       </Text>
     </Paper>
   );

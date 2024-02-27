@@ -11,7 +11,10 @@ export type Season = {
 };
 
 export type Episode<SeasonNumber = number> = {
-  season_id: SeasonNumber;
+  id: `episode_${string}`;
+
+  season_id: Season["id"];
+  season_num: SeasonNumber;
 
   order: number;
   name: string;
@@ -22,8 +25,14 @@ export type Episode<SeasonNumber = number> = {
 };
 
 export type Elimination<PlayerName = string, SeasonNumber = number> = {
-  season_id: SeasonNumber;
-  episode_id: number;
+  id: `elimination_${string}`;
+
+  season_id: Season["id"];
+  season_num: SeasonNumber;
+
+  episode_id: Episode["id"];
+  episode_num: number;
+
   player_name: PlayerName;
 
   order: number;
@@ -32,14 +41,20 @@ export type Elimination<PlayerName = string, SeasonNumber = number> = {
 };
 
 export type Player<PlayerName = string, SeasonNumber = number> = {
-  season_id: SeasonNumber;
+  season_id: Season["id"];
+  season_num: SeasonNumber;
   name: PlayerName;
   img: string;
 };
 
 export type Challenge<PlayerNames = string, SeasonNumber = number> = {
-  season_id: SeasonNumber;
-  episode_id: number;
+  id: `challenge_${string}`;
+
+  season_id: Season["id"];
+  season_num: SeasonNumber;
+
+  episode_id: Episode["id"];
+  episode_num: number;
 
   order: number;
   variant: ChallengeWinAction;
@@ -57,10 +72,13 @@ export type SlimUser = Pick<User, "email" | "uid" | "displayName"> & {
 };
 
 export type Draft = {
-  id: string;
-  season_id: number;
+  id: `draft_${string}`;
+
+  season_id: Season["id"];
+  season_num: number;
+
   // creator's uid
-  creator: string;
+  creator_uid: string;
   participants: SlimUser[];
   total_players: number;
   current_pick_number: number;
@@ -73,7 +91,8 @@ export type Draft = {
 };
 
 export type DraftPick = {
-  season_id: number;
+  season_id: Season["id"];
+  season_num: number;
   order: number;
   user_uid: string;
   player_name: string;
@@ -81,9 +100,12 @@ export type DraftPick = {
 
 // todo
 export type PropBet = {
-  id: string;
-  season_id: number;
-  draft_id: string;
+  id: `propbet_${string}`;
+
+  season_id: Season["id"];
+  season_num: number;
+  draft_id: Draft["id"];
+
   description: string;
   value: number;
   answers: {
@@ -95,11 +117,14 @@ export type PropBet = {
 };
 
 export type Competition = {
-  id: string;
-  season_id: number;
-  draft_id: string;
+  id: `competition_${string}`;
+
+  season_id: Season["id"];
+  season_num: number;
+  draft_id: Draft["id"];
+
   // creator's uid
-  creator: string;
+  creator_uid: string;
   participant_uids: string[];
   participants: SlimUser[];
   draft_picks: DraftPick[];
@@ -109,13 +134,17 @@ export type Competition = {
 };
 
 export type GameEvent<PlayerName = string, SeasonNumber = number> = {
-  id: string
-  season_id: SeasonNumber;
-  episode_id: number;
+  id: `event_${string}`;
+
+  season_id: Season["id"];
+  season_num: SeasonNumber;
+
+  episode_id: Episode["id"];
+  episode_num: number;
+
   action: GameEventAction;
   multiplier: number | null;
   player_name: PlayerName;
-  deleted?: boolean
 };
 
 export const ChallengeWinActions = ["reward", "combined", "immunity"] as const;

@@ -38,7 +38,8 @@ const buildPlayer = <T extends PlayerName>(
   return {
     name,
     img: "https://i.pravatar.cc/150?img=" + img,
-    season_id: 99,
+    season_num: 99,
+    season_id: "season_99",
   };
 };
 
@@ -48,7 +49,9 @@ export const SEASON_99_PLAYERS = Players.map((x, i) =>
 
 export const SEASON_99_EPISODES = [
   {
-    season_id: 99,
+    id: "episode_1",
+    season_id: "season_99",
+    season_num: 99,
     order: 1,
     name: "The First Episode of my Fake Season",
     post_merge: false,
@@ -59,50 +62,60 @@ export const SEASON_99_EPISODES = [
 
 export const SEASON_99_CHALLENGES = {
   challenge_1: {
-    season_id: 99,
-    episode_id: 1,
+    id: "challenge_1",
+    season_id: "season_99",
+    season_num: 99,
+    episode_id: "episode_1",
+    episode_num: 1,
     variant: "reward",
     order: 1,
     post_merge: false,
     winning_players: ["Pearl Dale", "Shana Held"],
   },
   challenge_2: {
-    season_id: 99,
-    episode_id: 1,
+    id: "challenge_2",
+    season_id: "season_99",
+    season_num: 99,
+    episode_id: "episode_1",
+    episode_num: 1,
     variant: "immunity",
     order: 1,
     post_merge: false,
     winning_players: ["Caden Tharp"],
   },
-} satisfies Record<`challenge_${number}`, Challenge<PlayerName, SeasonNumber>>;
+} satisfies Record<Challenge["id"], Challenge<PlayerName, SeasonNumber>>;
 
 export const SEASON_99_ELIMINATIONS = {
   elimination_1: {
-    season_id: 99,
-    episode_id: 1,
+    id: "elimination_1",
+    season_id: "season_99",
+    season_num: 99,
+    episode_id: "episode_1",
+    episode_num: 1,
     order: 1,
     player_name: "Averi Duff",
     votes_received: 5,
     variant: "tribal",
   },
-} satisfies Record<
-  `elimination_${number}`,
-  Elimination<PlayerName, SeasonNumber>
->;
+} satisfies Record<Elimination["id"], Elimination<PlayerName, SeasonNumber>>;
 
 export const SEASON_99_EVENTS = {
   event_1: {
     id: "event_1",
-    season_id: 99,
-    episode_id: 1,
+    season_id: "season_99",
+    season_num: 99,
+    episode_id: "episode_1",
+    episode_num: 1,
     player_name: "Addison Dugan",
     action: "find_idol",
     multiplier: null,
   },
   event_2: {
     id: "event_2",
-    season_id: 99,
-    episode_id: 1,
+    season_id: "season_99",
+    season_num: 99,
+    episode_id: "episode_1",
+    episode_num: 1,
     player_name: "Ramon Neville",
     action: "votes_negated_by_idol",
     multiplier: 3,

@@ -12,7 +12,7 @@ export const PerPlayerPerEpisodeScoringTable = () => {
   const { data: season } = useSeason(competition?.season_id);
   const { data: challenges } = useChallenges(competition?.season_id);
   const { data: eliminations } = useEliminations(competition?.season_id);
-  const { data: events } = useEvents(competition?.season_id, true);
+  const { data: events } = useEvents(season?.id);
 
   const pointsBySurvivor = season?.players?.reduce(
     (accum, player) => {
@@ -21,7 +21,7 @@ export const PerPlayerPerEpisodeScoringTable = () => {
           season,
           challenges || [],
           eliminations || [],
-          events || [],
+          Object.values(events || {}),
           x.order,
           player.name,
         );
@@ -49,7 +49,7 @@ export const PerPlayerPerEpisodeScoringTable = () => {
                   season,
                   challenges || [],
                   eliminations || [],
-                  events || [],
+                  Object.values(events || {}),
                   e.order,
                   x,
                 );

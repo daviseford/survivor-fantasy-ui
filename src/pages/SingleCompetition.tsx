@@ -71,7 +71,7 @@ const StartCompetitionButton = () => {
     },
   );
 
-  const isCreator = slimUser?.uid === competition?.creator;
+  const isCreator = slimUser?.uid === competition?.creator_uid;
 
   if (!isCreator || !competition || competition?.started) return null;
 

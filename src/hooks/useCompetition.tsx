@@ -7,13 +7,15 @@ import { Competition } from "../types";
 export const useCompetition = () => {
   const { competitionId } = useParams();
 
-  console.log("Query param competitionId = " + competitionId);
+  const key = competitionId || "unknown";
 
-  const ref = doc(db, "competitions", competitionId!);
+  console.log("Query param competitionId = " + key);
+
+  const ref = doc(db, "competitions", key);
 
   // Query a Firestore document using useQuery
   return useFirestoreDocumentData<Competition, Competition>(
-    ["competition", competitionId],
+    ["competition", key],
     // @ts-expect-error TS is dumb here
     ref,
     {
@@ -22,6 +24,6 @@ export const useCompetition = () => {
       // Include metadata changes in the updates
       // includeMetadataChanges: true,
     },
-    { enabled: Boolean(competitionId) },
+    { enabled: Boolean(key) },
   );
 };

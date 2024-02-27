@@ -18,22 +18,19 @@ import { useEffect } from "react";
 import { v4 } from "uuid";
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { db } from "../../firebase";
-import { useEvents } from "../../hooks/useEvents";
 import { useSeason } from "../../hooks/useSeason";
 import { GameEvent, GameEventActions } from "../../types";
 
 export const CreateGameEvent = () => {
   const { data: season, isLoading } = useSeason();
 
-  const { refetch } = useEvents(season?.order);
-
-  const eventId = `event_${v4()}`;
-
   const form = useForm<GameEvent>({
     initialValues: {
-      id: eventId,
-      season_id: 1,
-      episode_id: 1,
+      id: `event_${v4()}`,
+      season_num: 1,
+      season_id: "season_1",
+      episode_id: "episode_1",
+      episode_num: 1,
       action: GameEventActions[0],
       multiplier: null,
       player_name: "",
@@ -42,12 +39,18 @@ export const CreateGameEvent = () => {
     validate: {
       player_name: isNotEmpty("Enter player name"),
     },
+
+    transformValues: (values) => ({
+      ...values,
+      episode_id: `episode_${values.episode_num}`,
+      season_id: `season_${values.season_num}`,
+    }),
   });
 
   // Set initial values with async request
   useEffect(() => {
     if (season) {
-      form.setValues({ season_id: season.order });
+      form.setValues({ season_num: season.order, season_id: season.id });
       form.resetDirty();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,14 +76,10 @@ export const CreateGameEvent = () => {
     const _validate = form.validate();
     if (_validate.hasErrors) return;
 
-    const _action = BASE_PLAYER_SCORING.find(
-      (x) => x.action === form.values.action,
-    );
-
     const values = { ...form.values };
 
     // remove any old values if not needed
-    if (!_action?.multiplier) {
+    if (!currentAction?.multiplier) {
       values.multiplier = null;
     }
 
@@ -88,8 +87,7 @@ export const CreateGameEvent = () => {
 
     const ref = doc(db, `events/${season?.id}`);
 
-    await setDoc(ref, { [eventId]: values }, { merge: true });
-    refetch();
+    await setDoc(ref, { [values.id]: values }, { merge: true });
   };
 
   return (
@@ -106,7 +104,7 @@ export const CreateGameEvent = () => {
                 withAsterisk
                 readOnly
                 label="Season #"
-                value={form.values.season_id}
+                value={form.values.season_num}
               />
 
               <NumberInput
@@ -114,7 +112,7 @@ export const CreateGameEvent = () => {
                 label="Episode #"
                 min={1}
                 max={season?.episodes.length}
-                {...form.getInputProps("episode_id")}
+                {...form.getInputProps("episode_num")}
               />
 
               <Select

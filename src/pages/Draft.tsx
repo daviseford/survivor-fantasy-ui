@@ -47,13 +47,14 @@ export const DraftComponent = () => {
   const createCompetition = async () => {
     if (!season || !draft) return;
 
-    const id = v4();
+    const id = `competition_${v4()}` as const;
 
     const competition = {
       id,
       draft_id: draft.id,
-      season_id: season?.order,
-      creator: draft.creator,
+      season_id: season?.id,
+      season_num: season?.order,
+      creator_uid: draft.creator_uid,
       participant_uids: draft.participants.map((x) => x.uid),
       participants: draft?.participants,
       draft_picks: draft.draft_picks,
@@ -136,7 +137,8 @@ export const DraftComponent = () => {
       draft_picks: [
         ...(draft?.draft_picks || []),
         {
-          season_id: season.order,
+          season_id: season.id,
+          season_num: season.order,
           order: draft.current_pick_number,
           user_uid: slimUser.uid,
           player_name: playerName,
@@ -178,14 +180,14 @@ export const DraftComponent = () => {
           <Button onClick={joinDraft}>Join Draft</Button>
         )}
 
-        {draft && !draft?.started && draft.creator === slimUser?.uid && (
+        {draft && !draft?.started && draft.creator_uid === slimUser?.uid && (
           <Button onClick={startDraft} disabled={draft.participants.length < 2}>
             Start Draft
             {draft.participants.length < 2 ? " (waiting for more players)" : ""}
           </Button>
         )}
 
-        {draft && !draft?.started && draft.creator !== slimUser?.uid && (
+        {draft && !draft?.started && draft.creator_uid !== slimUser?.uid && (
           <Button disabled={true}>Waiting for host to start the draft</Button>
         )}
 

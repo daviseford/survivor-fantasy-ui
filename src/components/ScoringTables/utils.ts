@@ -24,10 +24,12 @@ export const getSurvivorPointsPerEpisode = (
 
   const _episode = episodes.find((x) => x.order === episodeNumber);
   const _eliminations = eliminations?.filter(
-    (x) => x.episode_id === episodeNumber,
+    (x) => x.episode_num === episodeNumber,
   );
-  const _challenges = challenges?.filter((x) => x.episode_id === episodeNumber);
-  const _events = events?.filter((x) => x.episode_id === episodeNumber);
+  const _challenges = challenges?.filter(
+    (x) => x.episode_num === episodeNumber,
+  );
+  const _events = events?.filter((x) => x.episode_num === episodeNumber);
 
   // console.log(
   //   "There is a total of " +
@@ -46,7 +48,7 @@ export const getSurvivorPointsPerEpisode = (
   // if the player was eliminated, give them points based on episode number
   _eliminations?.forEach((e) => {
     if (e.player_name !== playerName) return;
-    total += e.episode_id;
+    total += e.episode_num;
 
     if (e.variant === "medical") {
       total += addFixedActionPoints("medically_evacuated");

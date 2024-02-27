@@ -40,7 +40,7 @@ export const Competitions = () => {
           {x.participants.map((x) => x.displayName ?? x.email).join(", ")}
         </Table.Td>
         <Table.Td>
-          {x.participants.find((p) => p.uid === x.creator)?.displayName}
+          {x.participants.find((p) => p.uid === x.creator_uid)?.displayName}
         </Table.Td>
         <Table.Td>TODO</Table.Td>
         <Table.Td>{String(x.finished)}</Table.Td>

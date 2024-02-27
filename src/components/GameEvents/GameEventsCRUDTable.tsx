@@ -9,7 +9,7 @@ import { GameEvent } from "../../types";
 
 export const GameEventsCRUDTable = () => {
   const { data: season } = useSeason();
-  const { data: events } = useEvents(season?.order);
+  const { data: events } = useEvents(season?.id);
 
   const handleDelete = async (e: GameEvent) => {
     modals.openConfirmModal({
@@ -19,14 +19,16 @@ export const GameEventsCRUDTable = () => {
       onConfirm: async () => {
         const ref = doc(db, `events/${season?.id}`);
 
-        await setDoc(ref, { [e.id]: { ...e, deleted: true } }, { merge: true });
+        const newEvents = { ...events };
 
-        window.location.reload();
+        delete newEvents[e.id];
+
+        await setDoc(ref, newEvents);
       },
     });
   };
 
-  const rows = (events ?? []).map((e) => {
+  const rows = Object.values(events || {}).map((e) => {
     return (
       <Table.Tr key={e.id}>
         <Table.Td>{e.action}</Table.Td>

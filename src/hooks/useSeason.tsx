@@ -4,17 +4,17 @@ import { useParams } from "react-router-dom";
 import { db } from "../firebase";
 import { Season } from "../types";
 
-export const useSeason = (num?: number) => {
+export const useSeason = (id?: Season["id"]) => {
   const { seasonId } = useParams();
 
   // allow manual override
-  const _seasonId = num ?? seasonId;
+  const _seasonId = (id ?? seasonId) || "unknown";
 
   console.log(
-    `Query param seasonId = ${seasonId}, Override param for seasonId = ${num}, _seasonId value = ${_seasonId}`,
+    `Query param seasonId = ${seasonId}, Override param for seasonId = ${id}, _seasonId value = ${_seasonId}`,
   );
 
-  const ref = doc(db, "seasons", "season_" + _seasonId);
+  const ref = doc(db, "seasons", _seasonId);
 
   // Query a Firestore document using useQuery
   return useFirestoreDocumentData<Season, Season>(

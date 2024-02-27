@@ -14,12 +14,12 @@ export const SingleSeason = () => {
 
   const handleCreateDraft = async () => {
     const draftId = await createDraft();
-    navigate(`/seasons/${season?.order}/draft/${draftId}`);
+    navigate(`/seasons/${season?.id}/draft/${draftId}`);
   };
 
   const handleManageEvents = async () => {
     if (!slimUser?.isAdmin) return;
-    navigate(`/seasons/${season?.order}/events`);
+    navigate(`/seasons/${season?.id}/events`);
   };
 
   if (isLoading)
