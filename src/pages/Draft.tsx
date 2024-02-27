@@ -58,6 +58,8 @@ export const DraftComponent = () => {
       participants: draft?.participants,
       draft_picks: draft.draft_picks,
       finished: false,
+      started: false,
+      current_episode: null,
     } satisfies Competition;
 
     console.log("CREATING A COMPETITION: ", competition);

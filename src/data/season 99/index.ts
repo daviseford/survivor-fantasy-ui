@@ -96,6 +96,7 @@ export const SEASON_99_EVENTS = {
     episode_id: 1,
     player_name: "Addison Dugan",
     action: "find_idol",
+    action_value: null,
   },
   event_2: {
     season_id: 99,

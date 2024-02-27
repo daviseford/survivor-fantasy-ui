@@ -79,6 +79,21 @@ export type DraftPick = {
   player_name: string;
 };
 
+// todo
+export type PropBet = {
+  id: string;
+  season_id: number;
+  draft_id: string;
+  description: string;
+  value: number;
+  answers: {
+    participant_uid: string;
+    answer: string | number;
+  }[];
+  correct_answer: string | number;
+  finished: boolean;
+};
+
 export type Competition = {
   id: string;
   season_id: number;
@@ -88,6 +103,8 @@ export type Competition = {
   participant_uids: string[];
   participants: SlimUser[];
   draft_picks: DraftPick[];
+  started: boolean;
+  current_episode: number | null;
   finished: boolean;
 };
 
@@ -95,7 +112,7 @@ export type GameEvent<PlayerName = string, SeasonNumber = number> = {
   season_id: SeasonNumber;
   episode_id: number;
   action: GameEventAction;
-  action_value?: number | null;
+  action_value: number | null;
   player_name: PlayerName;
 };
 

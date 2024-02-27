@@ -8,7 +8,7 @@ import {
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useDisclosure } from "@mantine/hooks";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "react-query";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { PROJECT_NAME } from "./consts";
@@ -22,9 +22,8 @@ import { Seasons } from "./pages/Seasons";
 import { Signup } from "./pages/Signup";
 import { SingleCompetition } from "./pages/SingleCompetition";
 import { SingleSeason } from "./pages/SingleSeason";
+import { queryClient } from "./queryClient";
 import { theme } from "./theme";
-
-const queryClient = new QueryClient();
 
 export const AppRoutes = () => {
   const [opened, { toggle }] = useDisclosure();

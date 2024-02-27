@@ -22,5 +22,6 @@ export const useCompetition = () => {
       // Include metadata changes in the updates
       // includeMetadataChanges: true,
     },
+    { enabled: Boolean(competitionId) },
   );
 };
