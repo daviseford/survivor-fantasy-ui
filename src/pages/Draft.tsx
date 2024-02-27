@@ -12,6 +12,7 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import { modals } from "@mantine/modals";
 import { onValue, ref, update } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
 import { shuffle, uniqBy } from "lodash-es";
@@ -298,7 +299,27 @@ export const DraftComponent = () => {
                   : "var(--mantine-color-body)"
               }
             >
-              <Avatar src={x.img} size={120} radius={120} mx="auto" />
+              <Avatar
+                src={x.img}
+                size={120}
+                radius={120}
+                mx="auto"
+                onClick={() => {
+                  modals.open({
+                    withCloseButton: false,
+                    children: (
+                      <Stack>
+                        <Center>
+                          <Title>{x.name}</Title>
+                        </Center>
+                        <Center>
+                          <Avatar size={"100%"} src={x.img} radius={10} />
+                        </Center>
+                      </Stack>
+                    ),
+                  });
+                }}
+              />
               <Text ta="center" fz="lg" fw={500} mt="md">
                 {x.name}
               </Text>
