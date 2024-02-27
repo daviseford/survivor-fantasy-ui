@@ -3,7 +3,7 @@ import { doc } from "firebase/firestore";
 import { db } from "../firebase";
 import { GameEvent } from "../types";
 
-export const useEvents = (seasonId?: number) => {
+export const useEvents = (seasonId?: number, subscribe = false) => {
   const key = "season_" + seasonId;
   const ref = doc(db, "events", key);
 
@@ -13,10 +13,13 @@ export const useEvents = (seasonId?: number) => {
   >(
     ["events", key],
     ref,
-    {},
+    {
+      subscribe,
+    },
     {
       enabled: Boolean(seasonId),
-      select: (_data) => (_data ? Object.values(_data) : []),
+      select: (_data) =>
+        _data ? Object.values(_data).filter((x) => !x.deleted) : [],
     },
   );
 };

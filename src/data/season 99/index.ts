@@ -92,6 +92,7 @@ export const SEASON_99_ELIMINATIONS = {
 
 export const SEASON_99_EVENTS = {
   event_1: {
+    id: "event_1",
     season_id: 99,
     episode_id: 1,
     player_name: "Addison Dugan",
@@ -99,6 +100,7 @@ export const SEASON_99_EVENTS = {
     multiplier: null,
   },
   event_2: {
+    id: "event_2",
     season_id: 99,
     episode_id: 1,
     player_name: "Ramon Neville",

@@ -8,14 +8,15 @@ import {
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useDisclosure } from "@mantine/hooks";
+import { ModalsProvider } from "@mantine/modals";
 import { QueryClientProvider } from "react-query";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { CreateGameEvent } from "./components/CreateGameEvent";
 import { Navbar } from "./components/Navbar";
 import { PROJECT_NAME } from "./consts";
 import { Admin } from "./pages/Admin";
 import { Competitions } from "./pages/Competitions";
 import { DraftComponent } from "./pages/Draft";
+import { GameEventsPage } from "./pages/GameEvents";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Logout } from "./pages/Logout";
@@ -31,73 +32,75 @@ export const AppRoutes = () => {
 
   return (
     <MantineProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <Router>
-          <AppShell
-            header={{ height: 60 }}
-            navbar={{
-              width: 300,
-              breakpoint: "sm",
-              collapsed: { mobile: !opened },
-            }}
-            padding="md"
-          >
-            <AppShell.Header>
-              <Burger
-                opened={opened}
-                onClick={toggle}
-                hiddenFrom="sm"
-                size="sm"
-              />
-              <Group align="center">
-                <Title order={1} pl={"lg"}>
-                  {PROJECT_NAME}
-                </Title>
-                <Code fw={700}>v0.0.0</Code>
-              </Group>
-            </AppShell.Header>
-
-            <AppShell.Navbar p="md">
-              <Navbar />
-            </AppShell.Navbar>
-
-            <AppShell.Main>
-              <Routes>
-                <Route path="/" element={<Home />} />
-
-                {/* User stuff */}
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/logout" element={<Logout />} />
-
-                {/* Drafting */}
-                <Route
-                  path="/seasons/:seasonId/draft/:draftId"
-                  element={<DraftComponent />}
+      <ModalsProvider>
+        <QueryClientProvider client={queryClient}>
+          <Router>
+            <AppShell
+              header={{ height: 60 }}
+              navbar={{
+                width: 300,
+                breakpoint: "sm",
+                collapsed: { mobile: !opened },
+              }}
+              padding="md"
+            >
+              <AppShell.Header>
+                <Burger
+                  opened={opened}
+                  onClick={toggle}
+                  hiddenFrom="sm"
+                  size="sm"
                 />
+                <Group align="center">
+                  <Title order={1} pl={"lg"}>
+                    {PROJECT_NAME}
+                  </Title>
+                  <Code fw={700}>v0.0.0</Code>
+                </Group>
+              </AppShell.Header>
 
-                {/* Seasons */}
-                <Route
-                  path="/seasons/:seasonId/create/event"
-                  element={<CreateGameEvent />}
-                />
-                <Route path="/seasons/:seasonId" element={<SingleSeason />} />
-                <Route path="/seasons" element={<Seasons />} />
+              <AppShell.Navbar p="md">
+                <Navbar />
+              </AppShell.Navbar>
 
-                {/* Competitions */}
-                <Route
-                  path="/competitions/:competitionId"
-                  element={<SingleCompetition />}
-                />
-                <Route path="/competitions" element={<Competitions />} />
+              <AppShell.Main>
+                <Routes>
+                  <Route path="/" element={<Home />} />
 
-                {/* TODO: Protect this */}
-                <Route path="/admin" element={<Admin />} />
-              </Routes>
-            </AppShell.Main>
-          </AppShell>
-        </Router>
-      </QueryClientProvider>
+                  {/* User stuff */}
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/logout" element={<Logout />} />
+
+                  {/* Drafting */}
+                  <Route
+                    path="/seasons/:seasonId/draft/:draftId"
+                    element={<DraftComponent />}
+                  />
+
+                  {/* Seasons */}
+                  <Route
+                    path="/seasons/:seasonId/events"
+                    element={<GameEventsPage />}
+                  />
+                  <Route path="/seasons/:seasonId" element={<SingleSeason />} />
+                  <Route path="/seasons" element={<Seasons />} />
+
+                  {/* Competitions */}
+                  <Route
+                    path="/competitions/:competitionId"
+                    element={<SingleCompetition />}
+                  />
+                  <Route path="/competitions" element={<Competitions />} />
+
+                  {/* TODO: Protect this */}
+                  <Route path="/admin" element={<Admin />} />
+                </Routes>
+              </AppShell.Main>
+            </AppShell>
+          </Router>
+        </QueryClientProvider>
+      </ModalsProvider>
     </MantineProvider>
   );
 };

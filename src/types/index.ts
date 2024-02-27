@@ -109,11 +109,13 @@ export type Competition = {
 };
 
 export type GameEvent<PlayerName = string, SeasonNumber = number> = {
+  id: string
   season_id: SeasonNumber;
   episode_id: number;
   action: GameEventAction;
   multiplier: number | null;
   player_name: PlayerName;
+  deleted?: boolean
 };
 
 export const ChallengeWinActions = ["reward", "combined", "immunity"] as const;

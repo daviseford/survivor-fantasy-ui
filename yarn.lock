@@ -882,6 +882,11 @@
   resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-7.6.1.tgz#9f24f86dce43466d32136aca6a22c3dfa106ef18"
   integrity sha512-zsOGzFRcQZuER2rzAjfrAqp98W7WCFA43nF1QZUKV7AHTq8q1mtr3DOhFfO3/CA+t1lai68gp1guVcIhP4lrwQ==
 
+"@mantine/modals@^7.6.1":
+  version "7.6.1"
+  resolved "https://registry.yarnpkg.com/@mantine/modals/-/modals-7.6.1.tgz#af5baf47623c18310a85036328b5aa7845278340"
+  integrity sha512-bXCViyQpXEbPGaq/UjCqe/jExku6I6i93okayN54diKZEKbjKAQjQVCowP7axUzMQNhhVRCVtSZPYbkiiEh3Ug==
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"

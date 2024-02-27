@@ -14,7 +14,6 @@ import { useUser } from "../hooks/useUser";
 export const SingleCompetition = () => {
   const { data: competition } = useCompetition();
 
-  console.log("data here", competition);
   const { data: season } = useSeason(competition?.season_id);
 
   if (!competition || !season) return null;
