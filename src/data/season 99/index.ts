@@ -96,13 +96,13 @@ export const SEASON_99_EVENTS = {
     episode_id: 1,
     player_name: "Addison Dugan",
     action: "find_idol",
-    action_value: null,
+    multiplier: null,
   },
   event_2: {
     season_id: 99,
     episode_id: 1,
     player_name: "Ramon Neville",
     action: "votes_negated_by_idol",
-    action_value: 3,
+    multiplier: 3,
   },
 } satisfies Record<`event_${number}`, GameEvent<PlayerName, SeasonNumber>>;

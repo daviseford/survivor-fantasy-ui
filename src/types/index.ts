@@ -112,7 +112,7 @@ export type GameEvent<PlayerName = string, SeasonNumber = number> = {
   season_id: SeasonNumber;
   episode_id: number;
   action: GameEventAction;
-  action_value: number | null;
+  multiplier: number | null;
   player_name: PlayerName;
 };
 
@@ -154,5 +154,6 @@ export type PlayerAction = (typeof PlayerActions)[number];
 export type PlayerScoring = {
   action: PlayerAction;
   description?: string;
+  multiplier?: boolean;
   fixed_value?: number;
 };

@@ -10,6 +10,7 @@ import "@mantine/core/styles.css";
 import { useDisclosure } from "@mantine/hooks";
 import { QueryClientProvider } from "react-query";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { CreateGameEvent } from "./components/CreateGameEvent";
 import { Navbar } from "./components/Navbar";
 import { PROJECT_NAME } from "./consts";
 import { Admin } from "./pages/Admin";
@@ -76,6 +77,10 @@ export const AppRoutes = () => {
                 />
 
                 {/* Seasons */}
+                <Route
+                  path="/seasons/:seasonId/create/event"
+                  element={<CreateGameEvent />}
+                />
                 <Route path="/seasons/:seasonId" element={<SingleSeason />} />
                 <Route path="/seasons" element={<Seasons />} />
 

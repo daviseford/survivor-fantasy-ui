@@ -19,6 +19,7 @@ export const BASE_PLAYER_SCORING = [
   {
     action: "votes_negated_by_idol",
     fixed_value: 1,
+    multiplier: true,
     description: "Any votes negated by playing an idol (even if unnecessary)",
   },
   {
@@ -30,7 +31,7 @@ export const BASE_PLAYER_SCORING = [
     action: "quitter",
     fixed_value: 3,
     description:
-      "Only if the contestant makes production pull them out bceause they are a crybaby.",
+      "Contestant makes production pull them out because they are a crybaby.",
   },
   {
     action: "make_merge",

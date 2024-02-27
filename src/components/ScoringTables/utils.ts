@@ -67,8 +67,8 @@ export const getSurvivorPointsPerEpisode = (
   _events.forEach((e) => {
     if (e.player_name !== playerName) return;
 
-    if (e.action_value) {
-      total += addFixedActionPoints(e.action) * e.action_value || 1;
+    if (e.multiplier) {
+      total += addFixedActionPoints(e.action) * e.multiplier || 1;
     }
   });
 

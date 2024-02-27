@@ -10,9 +10,9 @@ export const useSeason = (num?: number) => {
   // allow manual override
   const _seasonId = num ?? seasonId;
 
-  console.log("Query param seasonId = " + seasonId);
-  console.log("Override param for seasonId = " + num);
-  console.log("_seasonId value = " + _seasonId);
+  console.log(
+    `Query param seasonId = ${seasonId}, Override param for seasonId = ${num}, _seasonId value = ${_seasonId}`,
+  );
 
   const ref = doc(db, "seasons", "season_" + _seasonId);
 
