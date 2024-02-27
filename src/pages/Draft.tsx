@@ -1,12 +1,16 @@
 import {
   Avatar,
   Badge,
+  Breadcrumbs,
   Button,
+  Center,
   CopyButton,
   Group,
   Paper,
   SimpleGrid,
+  Stack,
   Text,
+  Title,
 } from "@mantine/core";
 import { onValue, ref, update } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
@@ -16,6 +20,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { v4 } from "uuid";
 import { DraftTable } from "../components/DraftTable";
 import { db, rt_db } from "../firebase";
+import { useCompetition } from "../hooks/useCompetition";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
 import { Competition, Draft } from "../types";
@@ -29,7 +34,9 @@ export const DraftComponent = () => {
   const { data: season } = useSeason();
 
   const [draft, setDraft] = useState<Draft>();
-  const [competitionId, setCompetitionId] = useState<string>();
+  const [competitionId, setCompetitionId] = useState<Competition["id"]>();
+
+  const { data: competition } = useCompetition(competitionId);
 
   console.log({ slimUser: slimUser, draft });
 
@@ -175,76 +182,106 @@ export const DraftComponent = () => {
 
   return (
     <div>
-      <Group>
-        {draft && !userIsParticipant && (
-          <Button onClick={joinDraft}>Join Draft</Button>
+      <Stack>
+        <Group>
+          {draft && !userIsParticipant && (
+            <Button onClick={joinDraft}>Join Draft</Button>
+          )}
+
+          {draft && !draft?.started && draft.creator_uid === slimUser?.uid && (
+            <Button
+              onClick={startDraft}
+              disabled={draft.participants.length < 2}
+            >
+              Start Draft
+              {draft.participants.length < 2
+                ? " (waiting for more players)"
+                : ""}
+            </Button>
+          )}
+
+          {draft && !draft?.started && draft.creator_uid !== slimUser?.uid && (
+            <Button disabled={true}>Waiting for host to start the draft</Button>
+          )}
+
+          {draft && !draft?.started && (
+            <CopyButton value={window.location.href}>
+              {({ copied, copy }) => (
+                <Button color={copied ? "teal" : "blue"} onClick={copy}>
+                  {copied
+                    ? "Copied url"
+                    : "Invite friends to join this draft (send them this url)"}
+                </Button>
+              )}
+            </CopyButton>
+          )}
+
+          {draft?.finished && competition?.id && (
+            <Button
+              onClick={() => navigate(`/competitions/${competition?.id}`)}
+            >
+              Go to your newly created competition to get started
+            </Button>
+          )}
+        </Group>
+
+        <Breadcrumbs separator="|">
+          <Title order={3}>Draft ID: ...{draft?.id.slice(-4)}</Title>
+          <Title order={3}>
+            Status:{" "}
+            {!draft
+              ? "Not created"
+              : draft.finished
+                ? "Finished"
+                : draft?.started
+                  ? "Started"
+                  : "Not started"}
+          </Title>
+          <Title order={3}>
+            Participants:{" "}
+            {draft?.participants
+              .map((x) => x.displayName || x.email || x.uid)
+              .join(", ")}
+          </Title>
+        </Breadcrumbs>
+
+        <Breadcrumbs separator="|">
+          {Boolean(draft?.current_pick_number) && (
+            <Title order={3}>Current Pick: {draft?.current_pick_number}</Title>
+          )}
+
+          {draft?.current_picker && (
+            <Title order={3}>
+              Picking: {draft?.current_picker?.displayName}
+            </Title>
+          )}
+
+          {draft?.draft_picks && (
+            <Title order={3}>
+              Remaining Picks:{" "}
+              {draft?.total_players - (draft?.draft_picks?.length || 0)}
+            </Title>
+          )}
+          {draft?.pick_order && (
+            <Title order={3}>
+              Draft Order:{" "}
+              {draft.pick_order.map((x) => x.displayName).join(", ")}
+            </Title>
+          )}
+        </Breadcrumbs>
+
+        {draft?.current_picker && (
+          <Center p={"xl"}>
+            <Title
+              c={draft.current_picker.uid === slimUser?.uid ? "blue" : "gray"}
+            >
+              {draft.current_picker.uid === slimUser?.uid
+                ? "You are up!"
+                : `${draft.current_picker.displayName} is picking`}{" "}
+            </Title>
+          </Center>
         )}
-
-        {draft && !draft?.started && draft.creator_uid === slimUser?.uid && (
-          <Button onClick={startDraft} disabled={draft.participants.length < 2}>
-            Start Draft
-            {draft.participants.length < 2 ? " (waiting for more players)" : ""}
-          </Button>
-        )}
-
-        {draft && !draft?.started && draft.creator_uid !== slimUser?.uid && (
-          <Button disabled={true}>Waiting for host to start the draft</Button>
-        )}
-
-        {draft && !draft?.started && (
-          <CopyButton value={window.location.href}>
-            {({ copied, copy }) => (
-              <Button color={copied ? "teal" : "blue"} onClick={copy}>
-                {copied
-                  ? "Copied url"
-                  : "Invite friends to join this draft (send them this url)"}
-              </Button>
-            )}
-          </CopyButton>
-        )}
-      </Group>
-
-      <h3>
-        Joined users:{" "}
-        {draft?.participants
-          .map((x) => x.displayName || x.email || x.uid)
-          .join(", ")}
-      </h3>
-
-      {Boolean(draft?.current_pick_number) && (
-        <h1>Current Pick: {draft?.current_pick_number}</h1>
-      )}
-
-      {draft?.finished && competitionId && (
-        <Button onClick={() => navigate(`/competitions/${competitionId}`)}>
-          Go to your newly created competition to get started
-        </Button>
-      )}
-
-      <h2>
-        Draft Status:{" "}
-        {!draft
-          ? "Not created"
-          : draft.finished
-            ? "Finished"
-            : draft?.started
-              ? "Started"
-              : "Not started"}
-      </h2>
-      {draft?.current_picker && (
-        <h2>Current Picker: {draft?.current_picker?.displayName}</h2>
-      )}
-      {draft?.pick_order && (
-        <h2>
-          Draft Order: {draft.pick_order.map((x) => x.displayName).join(", ")}
-        </h2>
-      )}
-      {draft?.draft_picks && (
-        <h2>
-          Remaining Picks:{" "}
-          {draft?.total_players - (draft?.draft_picks?.length || 0)}
-        </h2>
-      )}
+      </Stack>
 
       <SimpleGrid cols={4}>
         {season.players.map((x) => {

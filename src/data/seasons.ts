@@ -1,6 +1,7 @@
 import { Season } from "../types";
-import { SEASON_99_EPISODES, SEASON_99_PLAYERS } from "./season 99";
+import { SEASON_46_EPISODES, SEASON_46_PLAYERS } from "./season_46";
 import { SEASON_9_EPISODES, SEASON_9_PLAYERS } from "./season_9";
+import { SEASON_99_EPISODES, SEASON_99_PLAYERS } from "./season_99";
 
 export const SEASONS = {
   season_9: {
@@ -13,6 +14,16 @@ export const SEASONS = {
     episodes: SEASON_9_EPISODES,
   },
 
+  season_46: {
+    id: "season_46",
+    order: 46,
+    name: "Survivor 46",
+    img: "https://static.wikia.nocookie.net/survivor/images/0/04/Survivor_46_Logo.png",
+
+    players: SEASON_46_PLAYERS,
+    episodes: SEASON_46_EPISODES,
+  },
+
   // Fake season for testing
   season_99: {
     id: "season_99",
@@ -23,4 +34,4 @@ export const SEASONS = {
     players: SEASON_99_PLAYERS,
     episodes: SEASON_99_EPISODES,
   },
-} satisfies Record<`season_${number}`, Season>;
+} satisfies Record<Season["id"], Season>;

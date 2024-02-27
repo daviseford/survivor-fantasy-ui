@@ -120,4 +120,4 @@ export const SEASON_99_EVENTS = {
     action: "votes_negated_by_idol",
     multiplier: 3,
   },
-} satisfies Record<`event_${number}`, GameEvent<PlayerName, SeasonNumber>>;
+} satisfies Record<GameEvent["id"], GameEvent<PlayerName, SeasonNumber>>;

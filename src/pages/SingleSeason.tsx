@@ -1,4 +1,4 @@
-import { Button, Center, Group, Loader, Title } from "@mantine/core";
+import { Button, Center, Group, Loader, Stack, Title } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useCreateDraft } from "../hooks/useCreateDraft";
 import { useSeason } from "../hooks/useSeason";
@@ -45,10 +45,12 @@ export const SingleSeason = () => {
       )}
 
       {slimUser && (
-        <>
+        <Stack gap={"lg"}>
           <h3>Want to play along?</h3>
-          <Button onClick={handleCreateDraft}>Create a New Draft</Button>
-        </>
+          <Button onClick={handleCreateDraft} style={{ width: "fit-content" }}>
+            Create a New Draft
+          </Button>
+        </Stack>
       )}
       <Players />
     </div>

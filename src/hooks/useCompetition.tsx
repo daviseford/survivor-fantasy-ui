@@ -4,12 +4,12 @@ import { useParams } from "react-router-dom";
 import { db } from "../firebase";
 import { Competition } from "../types";
 
-export const useCompetition = () => {
+export const useCompetition = (id?: Competition["id"]) => {
   const { competitionId } = useParams();
 
-  const key = competitionId || "unknown";
+  const key = id || competitionId || "unknown";
 
-  console.log("Query param competitionId = " + key);
+  console.log("useCompetition competitionId = " + key);
 
   const ref = doc(db, "competitions", key);
 

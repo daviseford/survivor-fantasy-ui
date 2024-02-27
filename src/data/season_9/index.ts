@@ -141,7 +141,7 @@ export const SEASON_9_EPISODES = [
     finale: true,
     merge_occurs: false,
   },
-] satisfies Episode[];
+] satisfies Episode<SeasonNum>[];
 
 const Season_9_Players = [
   "Brady Finta",
@@ -166,7 +166,12 @@ const Season_9_Players = [
 
 type S9_Players = (typeof Season_9_Players)[number];
 
-const buildPlayer = <T extends S9_Players>(name: T, img = ""): Player<T> => {
+type SeasonNum = 9;
+
+const buildPlayer = <T extends S9_Players>(
+  name: T,
+  img = "",
+): Player<T, SeasonNum> => {
   return {
     name,
     img,
@@ -248,7 +253,7 @@ export const SEASON_9_PLAYERS = [
     "Twila Tanner",
     "https://static.wikia.nocookie.net/survivor/images/3/3f/S9_twila_t.png",
   ),
-] satisfies Player<S9_Players>[];
+] satisfies Player<S9_Players, SeasonNum>[];
 
 export const SEASON_9_CHALLENGES = {
   challenge_1: {
@@ -653,7 +658,7 @@ export const SEASON_9_CHALLENGES = {
     post_merge: true,
     winning_players: ["Chris Daugherty"],
   },
-} satisfies Record<`challenge_${number}`, Challenge<S9_Players>>;
+} satisfies Record<Challenge["id"], Challenge<S9_Players, SeasonNum>>;
 
 export const SEASON_9_ELIMINATIONS = {
   elimination_1: {
@@ -843,4 +848,4 @@ export const SEASON_9_ELIMINATIONS = {
     votes_received: 5,
     variant: "tribal",
   },
-} satisfies Record<`elimination_${number}`, Elimination<S9_Players>>;
+} satisfies Record<Elimination["id"], Elimination<S9_Players, SeasonNum>>;
