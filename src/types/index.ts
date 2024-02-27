@@ -95,6 +95,7 @@ export type DraftPick = {
   season_id: Season["id"];
   season_num: number;
   order: number;
+  user_name: string
   user_uid: string;
   player_name: string;
 };

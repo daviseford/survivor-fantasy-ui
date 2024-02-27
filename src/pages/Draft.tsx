@@ -149,6 +149,7 @@ export const DraftComponent = () => {
           season_num: season.order,
           order: draft.current_pick_number,
           user_uid: slimUser.uid,
+          user_name: slimUser.displayName || slimUser.uid,
           player_name: playerName,
         },
       ],
@@ -217,9 +218,11 @@ export const DraftComponent = () => {
             </CopyButton>
           )}
 
-          {draft?.finished && competition?.id && (
+          {draft?.finished && (competition?.id || competitionId) && (
             <Button
-              onClick={() => navigate(`/competitions/${competition?.id}`)}
+              onClick={() =>
+                navigate(`/competitions/${competition?.id || competitionId}`)
+              }
             >
               Go to your newly created competition to get started
             </Button>
@@ -282,12 +285,22 @@ export const DraftComponent = () => {
             </Title>
           </Center>
         )}
+        {draft?.finished && (
+          <Center p={"xl"}>
+            <Title c={"blue"}>Finished!</Title>
+          </Center>
+        )}
       </Stack>
 
       {!draft?.finished && (
         <SimpleGrid cols={4}>
-          {season.players.map((x) => {
-            const isDrafted = isPlayerDrafted(x.name);
+          {season.players.map((p) => {
+            const isDrafted = isPlayerDrafted(p.name);
+
+            const draftedBy = !isDrafted
+              ? null
+              : draft?.draft_picks.find((x) => x.player_name === p.name)
+                  ?.user_name;
 
             return (
               <Paper
@@ -301,7 +314,7 @@ export const DraftComponent = () => {
                 }
               >
                 <Avatar
-                  src={x.img}
+                  src={p.img}
                   size={120}
                   radius={120}
                   mx="auto"
@@ -311,16 +324,16 @@ export const DraftComponent = () => {
                       children: (
                         <Stack>
                           <Center>
-                            <Title>{x.name}</Title>
+                            <Title>{p.name}</Title>
                           </Center>
                           <Center>
-                            <Avatar size={"100%"} src={x.img} radius={10} />
+                            <Avatar size={"100%"} src={p.img} radius={10} />
                           </Center>
 
                           <Center>
-                            {x.description && (
+                            {p.description && (
                               <Text ta="center" fz="lg" c="dimmed">
-                                {x.description.split(" | ").map((x) => (
+                                {p.description.split(" | ").map((x) => (
                                   <>
                                     {x}
                                     <br />
@@ -335,11 +348,11 @@ export const DraftComponent = () => {
                   }}
                 />
                 <Text ta="center" fz="lg" fw={500} mt="md">
-                  {x.name}
+                  {p.name}
                 </Text>
-                {x.description && (
+                {p.description && (
                   <Text ta="center" fz="sm" c="dimmed">
-                    {x.description.split(" | ").map((x) => (
+                    {p.description.split(" | ").map((x) => (
                       <>
                         {x}
                         <br />
@@ -349,6 +362,9 @@ export const DraftComponent = () => {
                 )}
                 <Group justify="space-between" mt="md" mb="xs">
                   <Badge color="pink">Season {season.order}</Badge>
+                  {draftedBy && (
+                    <Badge color={"blue"}>Drafted by {draftedBy}</Badge>
+                  )}
                   <Badge color={isDrafted ? "red" : "green"}>
                     {isDrafted ? "Drafted" : "Available"}
                   </Badge>
@@ -357,7 +373,7 @@ export const DraftComponent = () => {
                 {!isDrafted && (
                   <Button
                     fullWidth
-                    onClick={() => draftPlayer(x.name)}
+                    onClick={() => draftPlayer(p.name)}
                     disabled={
                       !draft?.started ||
                       draft.finished ||

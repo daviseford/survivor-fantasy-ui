@@ -5,13 +5,18 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useEvents } from "../../hooks/useEvents";
 import { useSeason } from "../../hooks/useSeason";
+import { useUser } from "../../hooks/useUser";
 import { GameEvent } from "../../types";
 
 export const GameEventsCRUDTable = () => {
   const { data: season } = useSeason();
   const { data: events } = useEvents(season?.id);
 
+  const { slimUser } = useUser();
+
   const handleDelete = async (e: GameEvent) => {
+    if (!slimUser?.isAdmin) return;
+
     modals.openConfirmModal({
       title: "Do you want to delete this event?",
       children: <Code block>{JSON.stringify(e, null, 2)}</Code>,
@@ -35,11 +40,13 @@ export const GameEventsCRUDTable = () => {
         <Table.Td>{e.multiplier || "-"}</Table.Td>
         <Table.Td>{e.player_name}</Table.Td>
         <Table.Td>{e.episode_id}</Table.Td>
-        <Table.Td>
-          <ActionIcon color="red" onClick={() => handleDelete(e)}>
-            <IconTrash />
-          </ActionIcon>
-        </Table.Td>
+        {slimUser?.isAdmin && (
+          <Table.Td>
+            <ActionIcon color="red" onClick={() => handleDelete(e)}>
+              <IconTrash />
+            </ActionIcon>
+          </Table.Td>
+        )}
       </Table.Tr>
     );
   });
@@ -52,7 +59,7 @@ export const GameEventsCRUDTable = () => {
           <Table.Th>Multiplier</Table.Th>
           <Table.Th>Player</Table.Th>
           <Table.Th>Episode</Table.Th>
-          <Table.Th>Delete</Table.Th>
+          {slimUser?.isAdmin && <Table.Th>Delete</Table.Th>}
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>{rows}</Table.Tbody>

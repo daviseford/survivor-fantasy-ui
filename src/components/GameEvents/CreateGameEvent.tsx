@@ -9,6 +9,7 @@ import {
   NumberInput,
   Select,
   SimpleGrid,
+  Text,
   TextInput,
   Title,
 } from "@mantine/core";
@@ -60,6 +61,14 @@ export const CreateGameEvent = () => {
     return (
       <Center>
         <Loader size="xl" />
+      </Center>
+    );
+  }
+
+  if (!season?.episodes?.length) {
+    return (
+      <Center>
+        <Text>Create an Episode first before adding events</Text>
       </Center>
     );
   }
