@@ -1,4 +1,4 @@
-import { Center, Loader, Table, Title } from "@mantine/core";
+import { Alert, Center, Loader, Table, Title } from "@mantine/core";
 import { useFirestoreQueryData } from "@react-query-firebase/firestore";
 import { collection, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -48,6 +48,10 @@ export const Competitions = () => {
       </Table.Tr>
     );
   });
+
+  if (!user) {
+    return <Alert>Please register or log in to view your competitions!</Alert>;
+  }
 
   return (
     <div>

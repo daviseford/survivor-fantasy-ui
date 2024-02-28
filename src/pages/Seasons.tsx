@@ -29,7 +29,7 @@ export const Seasons = () => {
           <div key={x.id}>
             <Card shadow="sm" padding="lg" radius="md" withBorder>
               <Card.Section>
-                <Image src={x.img} width={160} alt={x.name} />
+                <Image src={x.img} height={250} alt={x.name} />
               </Card.Section>
 
               <Group justify="space-between" mt="md" mb="xs">

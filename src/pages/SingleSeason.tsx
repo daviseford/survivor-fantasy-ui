@@ -1,4 +1,12 @@
-import { Button, Center, Group, Loader, Stack, Title } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Center,
+  Group,
+  Loader,
+  Stack,
+  Title,
+} from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useCreateDraft } from "../hooks/useCreateDraft";
 import { useSeason } from "../hooks/useSeason";
@@ -32,27 +40,33 @@ export const SingleSeason = () => {
   if (!season) return <div>Error: Missing season data</div>;
 
   return (
-    <div>
+    <Box p={"md"}>
       <h1>Season {season?.order}</h1>
 
-      {slimUser?.isAdmin && (
-        <>
-          <Title>Admin Controls</Title>
-          <Group>
-            <Button onClick={handleManageSeason}>Manage Season</Button>
-          </Group>
-        </>
-      )}
+      <Stack>
+        {slimUser?.isAdmin && (
+          <>
+            <Group>
+              <Title>Admin Controls</Title>
+              <Button onClick={handleManageSeason}>Manage Season</Button>
+            </Group>
+          </>
+        )}
 
-      {slimUser && (
-        <Stack gap={"lg"}>
-          <h3>Want to play along?</h3>
-          <Button onClick={handleCreateDraft} style={{ width: "fit-content" }}>
-            Create a New Draft
-          </Button>
-        </Stack>
-      )}
-      <Players />
-    </div>
+        {slimUser && (
+          <Group pb={"lg"}>
+            <Title order={4}>Want to play along?</Title>
+            <Button
+              onClick={handleCreateDraft}
+              style={{ width: "fit-content" }}
+            >
+              Create a New Draft
+            </Button>
+          </Group>
+        )}
+
+        <Players />
+      </Stack>
+    </Box>
   );
 };
