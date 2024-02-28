@@ -2,12 +2,14 @@ import {
   Alert,
   Avatar,
   Badge,
+  Box,
   Breadcrumbs,
   Button,
   Center,
   CopyButton,
   Group,
   Paper,
+  Select,
   SimpleGrid,
   Stack,
   Text,
@@ -16,52 +18,75 @@ import {
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
-import { onValue, ref, update } from "firebase/database";
+import { ref, update } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
 import { shuffle, uniqBy } from "lodash-es";
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
 import { DraftTable } from "../components/DraftTable";
+import { PostDraftPropBetTable } from "../components/PropBetTables/PostDraftPropBetTable";
+import { PropBetsQuestions } from "../data/propbets";
 import { db, rt_db } from "../firebase";
 import { useCompetition } from "../hooks/useCompetition";
+import { useDraft } from "../hooks/useDraft";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
-import { Competition, Draft } from "../types";
+import {
+  Competition,
+  Draft,
+  PropBetsEntry,
+  PropBetsFormData,
+  Season,
+} from "../types";
 
 export const DraftComponent = () => {
-  const { draftId } = useParams();
-
   const navigate = useNavigate();
 
   const { slimUser } = useUser();
   const { data: season } = useSeason();
 
-  const [draft, setDraft] = useState<Draft>();
-  const [competitionId, setCompetitionId] = useState<Competition["id"]>();
+  const { draft } = useDraft();
+  const { data: competition } = useCompetition(draft?.competiton_id);
 
-  const { data: competition } = useCompetition(competitionId);
+  console.log({ slimUser, draft, competition });
 
-  console.log({ slimUser, draft });
+  const userHasSubmittedPropBets = Boolean(
+    draft?.prop_bets?.find((x) => x.user_uid === slimUser?.uid),
+  );
 
-  useEffect(() => {
-    if (!season || !draftId || !slimUser) return;
+  const allPlayersDoneWithPropBets =
+    draft?.prop_bets &&
+    draft?.prop_bets?.length === draft?.participants?.length;
 
-    const draftRef = ref(rt_db, "drafts/" + draftId);
-    onValue(draftRef, (snapshot) => {
-      const data = snapshot.val();
-      console.log("rt data", data);
-      setDraft(data || undefined);
-    });
-  }, [draftId, season, slimUser]);
+  const showPropBets = draft?.finished && !userHasSubmittedPropBets;
+
+  const isInvalidNumberOfPlayers = !draft
+    ? false
+    : draft.total_players % draft.participants.length !== 0;
+
+  const addPropBetsToDraft = async (values: PropBetsFormData) => {
+    if (!draft || !slimUser || userHasSubmittedPropBets) return;
+
+    const propBetEntry = {
+      id: `propbet_${v4()}`,
+      user_uid: slimUser?.uid,
+      user_name: slimUser.displayName || slimUser.uid,
+      values,
+    } satisfies PropBetsEntry;
+
+    const _propBets = [...(draft?.prop_bets || []), propBetEntry];
+
+    const _draft = { ...draft, prop_bets: _propBets } satisfies Draft;
+
+    await updateDraft(_draft);
+  };
 
   const createCompetition = async (competition_name: string) => {
     if (!season || !draft) return;
 
-    const id = `competition_${v4()}` as const;
-
     const competition = {
-      id,
+      id: draft.competiton_id,
       competition_name,
       draft_id: draft.id,
       season_id: season?.id,
@@ -70,19 +95,19 @@ export const DraftComponent = () => {
       participant_uids: draft.participants.map((x) => x.uid),
       participants: draft?.participants,
       draft_picks: draft.draft_picks,
+      prop_bets: draft.prop_bets,
       finished: false,
       started: false,
       current_episode: null,
     } satisfies Competition;
 
     console.log("CREATING A COMPETITION: ", competition);
-    await setDoc(doc(db, "competitions", id), competition);
-
-    setCompetitionId(id);
+    await setDoc(doc(db, "competitions", competition.id), competition);
   };
 
   const updateDraft = async (_draft: Draft) => {
-    await update(ref(rt_db), { ["drafts/" + draftId]: _draft });
+    if (!draft?.id) return;
+    await update(ref(rt_db), { ["drafts/" + draft.id]: _draft });
   };
 
   const userIsParticipant = useMemo(() => {
@@ -97,11 +122,6 @@ export const DraftComponent = () => {
       participants: uniqBy([...draft.participants, slimUser], (x) => x.uid),
     });
   };
-
-  // todo: use this info
-  const isInvalidNumberOfPlayers = !draft
-    ? false
-    : draft.total_players % draft.participants.length !== 0;
 
   const startDraft = async () => {
     console.log("START DRAFT");
@@ -167,25 +187,15 @@ export const DraftComponent = () => {
     console.log(_draft);
 
     await updateDraft(_draft);
-
-    // if (finished) {
-    //   const onClose = async () => {
-    //     modals.closeAll();
-    //     // create an entry in our DB
-    //     await createCompetition();
-    //   };
-
-    //   modals.open({
-    //     title: "What should we call your Competition?",
-    //     children: <NameYourCompetition onSubmit={onClose} />,
-    //   });
-
-    //   // await createCompetition();
-    // }
   };
 
   useEffect(() => {
-    if (!draft?.finished || competition || draft.creator_uid !== slimUser?.uid)
+    if (
+      !draft?.finished ||
+      competition ||
+      draft.creator_uid !== slimUser?.uid ||
+      !allPlayersDoneWithPropBets
+    )
       return;
 
     const onClose = async (values: FormData) => {
@@ -201,9 +211,14 @@ export const DraftComponent = () => {
       children: <NameYourCompetition onSubmit={onClose} />,
     });
 
-    // await createCompetition();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [competition, draft, slimUser?.uid]);
+
+  useEffect(() => {
+    if (competition) {
+      modals.closeAll();
+    }
+  }, [competition]);
 
   const isPlayerDrafted = (name: string) => {
     if (!draft?.draft_picks) return false;
@@ -271,11 +286,9 @@ export const DraftComponent = () => {
             </CopyButton>
           )}
 
-          {draft?.finished && (competition?.id || competitionId) && (
+          {draft?.finished && allPlayersDoneWithPropBets && competition && (
             <Button
-              onClick={() =>
-                navigate(`/competitions/${competition?.id || competitionId}`)
-              }
+              onClick={() => navigate(`/competitions/${draft.competiton_id}`)}
             >
               Go to your newly created competition to get started
             </Button>
@@ -352,6 +365,17 @@ export const DraftComponent = () => {
         )}
       </Stack>
 
+      {season && showPropBets && (
+        <Box p="xl">
+          <Title order={3}>Place your bets!</Title>
+          <Text c="dimmed">
+            You can pick any player for these answers, even ones you haven't
+            drafted.
+          </Text>
+          <PropBets season={season} onSubmit={addPropBetsToDraft} />
+        </Box>
+      )}
+
       {!draft?.finished && (
         <SimpleGrid cols={4}>
           {season.players.map((p) => {
@@ -372,6 +396,7 @@ export const DraftComponent = () => {
                     ? "var(--mantine-color-gray-4)"
                     : "var(--mantine-color-body)"
                 }
+                key={p.name + "-grid"}
               >
                 <Avatar
                   src={p.img}
@@ -450,12 +475,26 @@ export const DraftComponent = () => {
         </SimpleGrid>
       )}
 
+      {draft?.finished && userHasSubmittedPropBets && (
+        <Box p="lg">
+          <Title ta={"center"} order={2}>
+            Prop Bets
+          </Title>
+          <PostDraftPropBetTable />
+        </Box>
+      )}
+
       {draft?.started && (
-        <DraftTable
-          draft_picks={draft.draft_picks}
-          participants={draft.participants}
-          players={season.players}
-        />
+        <Box p="lg">
+          <Title ta={"center"} order={2} mb={"md"}>
+            Draft Results
+          </Title>
+          <DraftTable
+            draft_picks={draft.draft_picks}
+            participants={draft.participants}
+            players={season.players}
+          />
+        </Box>
       )}
     </div>
   );
@@ -497,5 +536,110 @@ const NameYourCompetition = ({ onSubmit }: Props) => {
         </Button>
       </form>
     </>
+  );
+};
+
+type PropBetsProps = {
+  season: Season;
+  onSubmit: (values: PropBetsFormData) => void;
+};
+
+const PropBets = ({ season, onSubmit }: PropBetsProps) => {
+  const form = useForm<PropBetsFormData>({
+    initialValues: {
+      propbet_first_vote: "",
+      propbet_ftc: "",
+      propbet_idols: "",
+      propbet_immunities: "",
+      propbet_medical_evac: "",
+      propbet_winner: "",
+    },
+    validate: {
+      propbet_first_vote: isNotEmpty("Enter an answer"),
+      propbet_ftc: isNotEmpty("Enter an answer"),
+      propbet_idols: isNotEmpty("Enter an answer"),
+      propbet_immunities: isNotEmpty("Enter an answer"),
+      propbet_medical_evac: isNotEmpty("Enter an answer"),
+      propbet_winner: isNotEmpty("Enter an answer"),
+    },
+  });
+
+  console.log({ form });
+
+  const players = season?.players.map((x) => x.name);
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement> | undefined,
+  ) => {
+    e?.preventDefault();
+
+    const _validate = form.validate();
+
+    if (_validate.hasErrors) return;
+
+    onSubmit(form.values);
+  };
+
+  return (
+    <Box>
+      <form onSubmit={handleSubmit}>
+        <Stack>
+          <Select
+            required
+            label={PropBetsQuestions.propbet_winner.description}
+            description={
+              PropBetsQuestions.propbet_winner.point_value + " points"
+            }
+            data={players}
+            {...form.getInputProps("propbet_winner")}
+          />
+          <Select
+            required
+            label={PropBetsQuestions.propbet_first_vote.description}
+            description={
+              PropBetsQuestions.propbet_first_vote.point_value + " points"
+            }
+            data={players}
+            {...form.getInputProps("propbet_first_vote")}
+          />
+          <Select
+            required
+            label={PropBetsQuestions.propbet_idols.description}
+            description={
+              PropBetsQuestions.propbet_idols.point_value + " points"
+            }
+            data={players}
+            {...form.getInputProps("propbet_idols")}
+          />
+          <Select
+            required
+            label={PropBetsQuestions.propbet_immunities.description}
+            description={
+              PropBetsQuestions.propbet_immunities.point_value + " points"
+            }
+            data={players}
+            {...form.getInputProps("propbet_immunities")}
+          />
+          <Select
+            required
+            label={PropBetsQuestions.propbet_ftc.description}
+            description={PropBetsQuestions.propbet_ftc.point_value + " points"}
+            data={players}
+            {...form.getInputProps("propbet_ftc")}
+          />
+          <Select
+            required
+            label={PropBetsQuestions.propbet_medical_evac.description}
+            description={
+              PropBetsQuestions.propbet_medical_evac.point_value + " points"
+            }
+            data={["Yes", "No"]}
+            {...form.getInputProps("propbet_medical_evac")}
+          />
+
+          <Button type="submit">Submit Prop Bets</Button>
+        </Stack>
+      </form>
+    </Box>
   );
 };

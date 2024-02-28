@@ -16,7 +16,7 @@ export const DraftTable = ({
         const player = players?.find((p) => p.name === x.player_name);
 
         return (
-          <Table.Tr key={x.player_name}>
+          <Table.Tr key={x.player_name + "draft_table"}>
             <Table.Td>
               <Group gap="sm">
                 <Avatar size={40} src={player!.img} radius={40} />

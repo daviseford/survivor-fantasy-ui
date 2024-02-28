@@ -5,9 +5,9 @@ import { useCompetition } from "../../hooks/useCompetition";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useEvents } from "../../hooks/useEvents";
 import { useSeason } from "../../hooks/useSeason";
-import { getSurvivorPointsPerEpisode } from "./utils";
+import { getPerUserPropPoints, getSurvivorPointsPerEpisode } from "./utils";
 
-export const PerPlayerPerEpisodeScoringTable = () => {
+export const PerUserPerEpisodeScoringTable = () => {
   const { data: competition } = useCompetition();
   const { data: season } = useSeason(competition?.season_id);
   const { data: challenges } = useChallenges(competition?.season_id);
@@ -32,9 +32,9 @@ export const PerPlayerPerEpisodeScoringTable = () => {
     {} as Record<string, number[]>,
   );
 
-  const pointsByPlayer = competition?.participants.reduce(
+  const pointsByUser = competition?.participants.reduce(
     (accum, participant) => {
-      const { uid, displayName, email } = participant;
+      const { uid } = participant;
 
       const survivorNames = competition.draft_picks
         .filter((x) => x.user_uid === uid)
@@ -57,27 +57,39 @@ export const PerPlayerPerEpisodeScoringTable = () => {
             );
           });
 
-      accum[displayName || email || uid] = playerPointsPerEpisode;
+      accum[uid] = playerPointsPerEpisode;
 
       return accum;
     },
     {} as Record<string, number[]>,
   );
 
-  console.log({ pointsBySurvivor, pointsByPlayer });
+  console.log({ pointsBySurvivor, pointsByPlayer: pointsByUser });
 
-  const rows = Object.entries(pointsByPlayer || {})
+  const rows = Object.entries(pointsByUser || {})
     .sort((a, b) => sum(b[1]) - sum(a[1])) // sort by highest
-    .map(([key, value]) => {
+    .map(([uid, value], i) => {
+      const propBetPoints = getPerUserPropPoints(
+        uid,
+        events,
+        eliminations,
+        challenges,
+        competition,
+      );
       return (
-        <Table.Tr key={key}>
-          <Table.Td>{key}</Table.Td>
+        <Table.Tr key={uid}>
+          <Table.Td>{i + 1}</Table.Td>
+          <Table.Td>
+            {competition?.participants.find((x) => x.uid === uid)?.displayName}
+          </Table.Td>
 
           {value.map((x) => (
             <Table.Td>{x}</Table.Td>
           ))}
 
-          <Table.Td>{sum(value)}</Table.Td>
+          <Table.Td>{propBetPoints}</Table.Td>
+
+          <Table.Td>{sum(value) + propBetPoints}</Table.Td>
         </Table.Tr>
       );
     });
@@ -86,8 +98,10 @@ export const PerPlayerPerEpisodeScoringTable = () => {
     <Table>
       <Table.Thead>
         <Table.Tr>
-          <Table.Th>Player Name</Table.Th>
+          <Table.Th>Rank</Table.Th>
+          <Table.Th>User Name</Table.Th>
           {season?.episodes.map((x) => <Table.Th>Ep. {x.order}</Table.Th>)}
+          <Table.Th>Prop Bet Points</Table.Th>
           <Table.Th>Total</Table.Th>
         </Table.Tr>
       </Table.Thead>
