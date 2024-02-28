@@ -1,12 +1,9 @@
-import { Box, Breadcrumbs, Button, SimpleGrid, Title } from "@mantine/core";
-import { useFirestoreDocumentMutation } from "@react-query-firebase/firestore";
-import { doc } from "firebase/firestore";
+import { Box, Breadcrumbs, SimpleGrid, Title } from "@mantine/core";
 import {
   PerUserPerEpisodeScoringTable,
   ScoringLegendTable,
   SeasonTotalContestantScoringTable,
 } from "../components/ScoringTables";
-import { db } from "../firebase";
 import { useCompetition } from "../hooks/useCompetition";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
@@ -36,7 +33,7 @@ export const SingleCompetition = () => {
           <Breadcrumbs separator=" | ">
             <h3>Started: {String(competition.started)}</h3>
 
-            <StartCompetitionButton />
+            {/* <StartCompetitionButton /> */}
 
             <h3>Current Episode: {String(competition.current_episode)}</h3>
             <h3>Finished: {String(competition.finished)}</h3>
@@ -64,33 +61,26 @@ export const SingleCompetition = () => {
   );
 };
 
-const StartCompetitionButton = () => {
-  const { slimUser } = useUser();
-  const { data: competition, refetch } = useCompetition();
+// TODO
+// const StartCompetitionButton = () => {
+//   const { slimUser } = useUser();
+//   const { data: competition } = useCompetition();
 
-  const ref = doc(db, "competitions", competition?.id || "");
-  // https://github.com/invertase/react-query-firebase/blob/main/docs/firestore/data-mutation.mdx
-  const { mutateAsync, isLoading } = useFirestoreDocumentMutation(
-    ref,
-    {},
-    {
-      onSuccess: () => {
-        refetch();
-      },
-    },
-  );
+//   const ref = doc(db, "competitions", competition?.id || "");
+//   // https://github.com/invertase/react-query-firebase/blob/main/docs/firestore/data-mutation.mdx
+//   const { mutateAsync, isLoading } = useFirestoreDocumentMutation(ref, {});
 
-  const isCreator = slimUser?.uid === competition?.creator_uid;
+//   const isCreator = slimUser?.uid === competition?.creator_uid;
 
-  if (!isCreator || !competition || competition?.started) return null;
+//   if (!isCreator || !competition || competition?.started) return null;
 
-  const handleClick = async () => {
-    await mutateAsync({ ...competition, started: true });
-  };
+//   const handleClick = async () => {
+//     await mutateAsync({ ...competition, started: true });
+//   };
 
-  return (
-    <Button onClick={handleClick} disabled={isLoading}>
-      Start Competition
-    </Button>
-  );
-};
+//   return (
+//     <Button onClick={handleClick} disabled={isLoading}>
+//       Start Competition
+//     </Button>
+//   );
+// };

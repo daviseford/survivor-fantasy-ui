@@ -21,8 +21,8 @@ import { modals } from "@mantine/modals";
 import { ref, update } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
 import { shuffle, uniqBy } from "lodash-es";
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
 import { DraftTable } from "../components/DraftTable";
 import { PropBetsQuestions } from "../data/propbets";
@@ -40,24 +40,29 @@ import {
 } from "../types";
 
 export const DraftComponent = () => {
-  const { draftId } = useParams();
-
   const navigate = useNavigate();
 
   const { slimUser } = useUser();
   const { data: season } = useSeason();
 
   const { draft } = useDraft();
+  const { data: competition } = useCompetition(draft?.competiton_id);
 
-  const [competitionId, setCompetitionId] = useState<Competition["id"]>();
-
-  const { data: competition } = useCompetition(competitionId);
-
-  console.log({ slimUser, draft });
+  console.log({ slimUser, draft, competition });
 
   const userHasSubmittedPropBets = Boolean(
     draft?.prop_bets?.find((x) => x.user_uid === slimUser?.uid),
   );
+
+  const allPlayersDoneWithPropBets =
+    draft?.prop_bets &&
+    draft?.prop_bets?.length === draft?.participants?.length;
+
+  const showPropBets = draft?.finished && !userHasSubmittedPropBets;
+
+  const isInvalidNumberOfPlayers = !draft
+    ? false
+    : draft.total_players % draft.participants.length !== 0;
 
   const addPropBetsToDraft = async (values: PropBetsFormData) => {
     if (!draft || !slimUser || userHasSubmittedPropBets) return;
@@ -79,10 +84,8 @@ export const DraftComponent = () => {
   const createCompetition = async (competition_name: string) => {
     if (!season || !draft) return;
 
-    const id = `competition_${v4()}` as const;
-
     const competition = {
-      id,
+      id: draft.competiton_id,
       competition_name,
       draft_id: draft.id,
       season_id: season?.id,
@@ -98,13 +101,12 @@ export const DraftComponent = () => {
     } satisfies Competition;
 
     console.log("CREATING A COMPETITION: ", competition);
-    await setDoc(doc(db, "competitions", id), competition);
-
-    setCompetitionId(id);
+    await setDoc(doc(db, "competitions", competition.id), competition);
   };
 
   const updateDraft = async (_draft: Draft) => {
-    await update(ref(rt_db), { ["drafts/" + draftId]: _draft });
+    if (!draft?.id) return;
+    await update(ref(rt_db), { ["drafts/" + draft.id]: _draft });
   };
 
   const userIsParticipant = useMemo(() => {
@@ -119,11 +121,6 @@ export const DraftComponent = () => {
       participants: uniqBy([...draft.participants, slimUser], (x) => x.uid),
     });
   };
-
-  // todo: use this info
-  const isInvalidNumberOfPlayers = !draft
-    ? false
-    : draft.total_players % draft.participants.length !== 0;
 
   const startDraft = async () => {
     console.log("START DRAFT");
@@ -192,7 +189,12 @@ export const DraftComponent = () => {
   };
 
   useEffect(() => {
-    if (!draft?.finished || competition || draft.creator_uid !== slimUser?.uid)
+    if (
+      !draft?.finished ||
+      competition ||
+      draft.creator_uid !== slimUser?.uid ||
+      !allPlayersDoneWithPropBets
+    )
       return;
 
     const onClose = async (values: FormData) => {
@@ -208,9 +210,15 @@ export const DraftComponent = () => {
       children: <NameYourCompetition onSubmit={onClose} />,
     });
 
-    // await createCompetition();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [competition, draft, slimUser?.uid]);
+
+  useEffect(() => {
+    if (competition) {
+      modals.closeAll();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const isPlayerDrafted = (name: string) => {
     if (!draft?.draft_picks) return false;
@@ -278,11 +286,9 @@ export const DraftComponent = () => {
             </CopyButton>
           )}
 
-          {draft?.finished && (competition?.id || competitionId) && (
+          {draft?.finished && allPlayersDoneWithPropBets && competition && (
             <Button
-              onClick={() =>
-                navigate(`/competitions/${competition?.id || competitionId}`)
-              }
+              onClick={() => navigate(`/competitions/${draft.competiton_id}`)}
             >
               Go to your newly created competition to get started
             </Button>
@@ -359,8 +365,15 @@ export const DraftComponent = () => {
         )}
       </Stack>
 
-      {draft && season && !userHasSubmittedPropBets && (
-        <PropBets season={season} onSubmit={addPropBetsToDraft} />
+      {season && showPropBets && (
+        <Box p="xl">
+          <Title order={3}>Place your bets!</Title>
+          <Text c="dimmed">
+            You can pick any player for these answers, even ones you haven't
+            drafted.
+          </Text>
+          <PropBets season={season} onSubmit={addPropBetsToDraft} />
+        </Box>
       )}
 
       {!draft?.finished && (
@@ -383,6 +396,7 @@ export const DraftComponent = () => {
                     ? "var(--mantine-color-gray-4)"
                     : "var(--mantine-color-body)"
                 }
+                key={p.name + "-grid"}
               >
                 <Avatar
                   src={p.img}
@@ -553,7 +567,7 @@ const PropBets = ({ season, onSubmit }: PropBetsProps) => {
   };
 
   return (
-    <Box m="xl">
+    <Box>
       <form onSubmit={handleSubmit}>
         <Stack>
           <Select

@@ -89,6 +89,8 @@ export type Draft = {
   season_id: Season["id"];
   season_num: number;
 
+  competiton_id: Competition["id"];
+
   // creator's uid
   creator_uid: string;
   participants: SlimUser[];

@@ -24,6 +24,7 @@ export const useCreateDraft = () => {
       id: draftId,
       season_id: season.id,
       season_num: season.order,
+      competiton_id: `competition_${v4()}` as const,
       creator_uid: slimUser.uid,
       participants: [slimUser],
       total_players: season?.players.length,
