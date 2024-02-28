@@ -1,8 +1,8 @@
-import { Breadcrumbs, Button, SimpleGrid, Title } from "@mantine/core";
+import { Box, Breadcrumbs, Button, SimpleGrid, Title } from "@mantine/core";
 import { useFirestoreDocumentMutation } from "@react-query-firebase/firestore";
 import { doc } from "firebase/firestore";
 import {
-  PerPlayerPerEpisodeScoringTable,
+  PerUserPerEpisodeScoringTable,
   ScoringLegendTable,
   SeasonTotalContestantScoringTable,
 } from "../components/ScoringTables";
@@ -21,31 +21,33 @@ export const SingleCompetition = () => {
 
   return (
     <div>
-      <h1>{competition.competition_name}</h1>
+      <Box p="lg">
+        <Title order={2}>{competition.competition_name}</Title>
 
-      <Breadcrumbs separator={" | "}>
-        <h3>Season: {competition.season_num}</h3>
-        <h3>
-          Participants:{" "}
-          {competition.participants.map((x) => x.displayName).join(", ")}
-        </h3>
-      </Breadcrumbs>
-
-      {slimUser?.isAdmin && (
-        <Breadcrumbs separator=" | ">
-          <h3>Started: {String(competition.started)}</h3>
-
-          <StartCompetitionButton />
-
-          <h3>Current Episode: {String(competition.current_episode)}</h3>
-          <h3>Finished: {String(competition.finished)}</h3>
+        <Breadcrumbs separator={" | "}>
+          <h3>Season: {competition.season_num}</h3>
+          <h3>
+            Participants:{" "}
+            {competition.participants.map((x) => x.displayName).join(", ")}
+          </h3>
         </Breadcrumbs>
-      )}
+
+        {slimUser?.isAdmin && (
+          <Breadcrumbs separator=" | ">
+            <h3>Started: {String(competition.started)}</h3>
+
+            <StartCompetitionButton />
+
+            <h3>Current Episode: {String(competition.current_episode)}</h3>
+            <h3>Finished: {String(competition.finished)}</h3>
+          </Breadcrumbs>
+        )}
+      </Box>
 
       <SimpleGrid cols={1} p={"lg"}>
         <>
           <Title order={2}>Season Scores</Title>
-          <PerPlayerPerEpisodeScoringTable />
+          <PerUserPerEpisodeScoringTable />
         </>
 
         <>
