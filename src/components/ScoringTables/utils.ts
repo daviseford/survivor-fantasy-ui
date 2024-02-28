@@ -78,7 +78,9 @@ export const getPerUserPropPoints = (
   challenges: Record<Challenge["id"], Challenge>,
   competition?: Competition,
 ) => {
-  const myPropBets = competition?.prop_bets?.find(
+  if (!competition?.prop_bets) return 0;
+
+  const myPropBets = competition.prop_bets.find(
     (x) => x.user_uid === uid,
   )?.values;
 
