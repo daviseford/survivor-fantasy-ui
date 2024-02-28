@@ -6,6 +6,7 @@ import {
   Code,
   Group,
   Loader,
+  MultiSelect,
   NumberInput,
   Select,
   SimpleGrid,
@@ -13,32 +14,39 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { isNotEmpty, useForm } from "@mantine/form";
+import { hasLength, useForm } from "@mantine/form";
 import { doc, setDoc } from "firebase/firestore";
+import { last, orderBy } from "lodash-es";
 import { useEffect } from "react";
 import { v4 } from "uuid";
-import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { db } from "../../firebase";
+import { useChallenges } from "../../hooks/useChallenges";
 import { useSeason } from "../../hooks/useSeason";
-import { GameEvent, GameEventActions } from "../../types";
+import { Challenge, ChallengeWinActions } from "../../types";
 
-export const CreateGameEvent = () => {
+export const CreateChallenge = () => {
   const { data: season, isLoading } = useSeason();
+  const { data: challenges } = useChallenges(season?.id);
 
-  const form = useForm<GameEvent>({
+  const ordersssssss = orderBy(challenges, (x) => x.order);
+
+  console.log({ ordersssssss });
+
+  const form = useForm<Challenge>({
     initialValues: {
-      id: `event_${v4()}`,
+      id: `challenge_${v4()}`,
       season_num: 1,
       season_id: "season_1",
       episode_id: "episode_1",
       episode_num: 1,
-      action: GameEventActions[0],
-      multiplier: null,
-      player_name: "",
+      variant: ChallengeWinActions[0],
+      winning_players: [],
+      post_merge: false,
+      order: 0,
     },
 
     validate: {
-      player_name: isNotEmpty("Enter player name"),
+      winning_players: hasLength({ min: 1 }, "Add winning player(s)"),
     },
 
     transformValues: (values) => ({
@@ -50,12 +58,18 @@ export const CreateGameEvent = () => {
 
   // Set initial values with async request
   useEffect(() => {
-    if (season) {
-      form.setValues({ season_num: season.order, season_id: season.id });
+    if (season && challenges) {
+      const order = (last(orderBy(challenges, (x) => x.order))?.order || 0) + 1;
+
+      form.setValues({
+        season_num: season.order,
+        season_id: season.id,
+        order,
+      });
       form.resetDirty();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [season]);
+  }, [season, challenges]);
 
   if (isLoading) {
     return (
@@ -73,39 +87,29 @@ export const CreateGameEvent = () => {
     );
   }
 
-  const currentAction = BASE_PLAYER_SCORING.find(
-    (x) => x.action === form.values.action,
-  );
-
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement> | undefined,
   ) => {
     e?.preventDefault();
 
     const _validate = form.validate();
+
     if (_validate.hasErrors) return;
 
     const values = { ...form.values };
 
-    // remove any old values if not needed
-    if (!currentAction?.multiplier) {
-      values.multiplier = null;
-    }
-
-    console.log({ values });
-
-    const ref = doc(db, `events/${season?.id}`);
+    const ref = doc(db, `challenges/${season?.id}`);
 
     await setDoc(ref, { [values.id]: values }, { merge: true });
 
     // reset id and important form values
-    form.setValues({ id: `event_${v4()}`, player_name: "" });
+    form.setValues({ id: `challenge_${v4()}`, winning_players: [] });
   };
 
   return (
     <Card withBorder>
       <Card.Section p={"md"}>
-        <Title order={4}>Create a new Event</Title>
+        <Title order={4}>Create a new Challenge</Title>
       </Card.Section>
 
       <Card.Section p={"md"}>
@@ -127,28 +131,26 @@ export const CreateGameEvent = () => {
                 {...form.getInputProps("episode_num")}
               />
 
-              <Select
+              <NumberInput
                 withAsterisk
-                label="Player Name"
+                label="Order"
+                min={1}
+                {...form.getInputProps("order")}
+              />
+
+              <MultiSelect
+                withAsterisk
+                label="Winning Players"
                 data={season?.players.map((x) => x.name)}
-                {...form.getInputProps("player_name")}
+                {...form.getInputProps("winning_players")}
               />
 
               <Select
                 withAsterisk
-                label="Action"
-                data={GameEventActions}
-                {...form.getInputProps("action")}
-                description={currentAction?.description}
+                label="Challenge Variant"
+                data={ChallengeWinActions}
+                {...form.getInputProps("variant")}
               />
-
-              {currentAction?.multiplier && (
-                <NumberInput
-                  withAsterisk
-                  label="How many?"
-                  {...form.getInputProps("multiplier")}
-                />
-              )}
 
               <Group justify="flex-end" mt="md">
                 <Button type="submit">Submit</Button>

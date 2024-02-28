@@ -19,7 +19,7 @@ export const PerPlayerPerEpisodeScoringTable = () => {
       accum[player.name] = season?.episodes.map((x) => {
         return getSurvivorPointsPerEpisode(
           season,
-          challenges || [],
+          Object.values(challenges || {}),
           eliminations || [],
           Object.values(events || {}),
           x.order,
@@ -47,7 +47,7 @@ export const PerPlayerPerEpisodeScoringTable = () => {
               survivorNames.map((x) => {
                 return getSurvivorPointsPerEpisode(
                   season,
-                  challenges || [],
+                  Object.values(challenges || {}),
                   eliminations || [],
                   Object.values(events || {}),
                   e.order,

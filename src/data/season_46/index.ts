@@ -139,16 +139,16 @@ export const SEASON_46_PLAYERS = [
 ] satisfies Player<PlayerName, SeasonNumber>[];
 
 export const SEASON_46_EPISODES = [
-  // {
-  //   id: "episode_1",
-  //   season_id: "season_46",
-  //   season_num: 46,
-  //   order: 1,
-  //   name: "This Is Where the Legends Are Made",
-  //   post_merge: false,
-  //   finale: false,
-  //   merge_occurs: false,
-  // },
+  {
+    id: "episode_1",
+    season_id: "season_46",
+    season_num: 46,
+    order: 1,
+    name: "This Is Where the Legends Are Made",
+    post_merge: false,
+    finale: false,
+    merge_occurs: false,
+  },
   // {
   //   id: "episode_2",
   //   season_id: "season_46",

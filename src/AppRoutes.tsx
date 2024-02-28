@@ -14,9 +14,10 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { PROJECT_NAME } from "./consts";
 import { Admin } from "./pages/Admin";
+import { ChallengesAdmin } from "./pages/ChallengesAdmin";
 import { Competitions } from "./pages/Competitions";
 import { DraftComponent } from "./pages/Draft";
-import { GameEventsPage } from "./pages/GameEvents";
+import { EventsAdmin } from "./pages/EventsAdmin";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Logout } from "./pages/Logout";
@@ -81,7 +82,11 @@ export const AppRoutes = () => {
                   {/* Seasons */}
                   <Route
                     path="/seasons/:seasonId/events"
-                    element={<GameEventsPage />}
+                    element={<EventsAdmin />}
+                  />
+                  <Route
+                    path="/seasons/:seasonId/challenges"
+                    element={<ChallengesAdmin />}
                   />
                   <Route path="/seasons/:seasonId" element={<SingleSeason />} />
                   <Route path="/seasons" element={<Seasons />} />

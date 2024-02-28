@@ -21,6 +21,10 @@ export const SingleSeason = () => {
     if (!slimUser?.isAdmin) return;
     navigate(`/seasons/${season?.id}/events`);
   };
+  const handleManageChallenges = async () => {
+    if (!slimUser?.isAdmin) return;
+    navigate(`/seasons/${season?.id}/challenges`);
+  };
 
   if (isLoading)
     return (
@@ -40,6 +44,7 @@ export const SingleSeason = () => {
           <Title>Admin Controls</Title>
           <Group>
             <Button onClick={handleManageEvents}>Manage Game Events</Button>
+            <Button onClick={handleManageChallenges}>Manage Challenges</Button>
           </Group>
         </>
       )}

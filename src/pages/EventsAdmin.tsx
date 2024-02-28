@@ -1,7 +1,7 @@
 import { Stack, Title } from "@mantine/core";
 import { CreateGameEvent, GameEventsCRUDTable } from "../components/GameEvents";
 
-export const GameEventsPage = () => {
+export const EventsAdmin = () => {
   return (
     <div>
       <Stack gap={"xl"}>
