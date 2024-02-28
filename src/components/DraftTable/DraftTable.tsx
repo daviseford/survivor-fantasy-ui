@@ -14,7 +14,7 @@ export const DraftTable = ({
     ? []
     : draft_picks?.map((x) => {
         const player = players?.find((p) => p.name === x.player_name);
-
+        const user = participants?.find((p) => p.uid === x.user_uid);
         return (
           <Table.Tr key={x.player_name + "draft_table"}>
             <Table.Td>
@@ -27,9 +27,7 @@ export const DraftTable = ({
               </Group>
             </Table.Td>
             <Table.Td>{x.order}</Table.Td>
-            <Table.Td>
-              {participants?.find((p) => p.uid === x.user_uid)?.displayName}
-            </Table.Td>
+            <Table.Td>{user?.displayName || user?.email}</Table.Td>
           </Table.Tr>
         );
       });

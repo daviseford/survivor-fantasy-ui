@@ -45,7 +45,7 @@ export const SeasonTotalContestantScoringTable = () => {
 
       const draftedBy = competition?.participants.find(
         (x) => x.uid === draftPick?.user_uid,
-      )?.displayName;
+      );
 
       return (
         <Table.Tr key={key}>
@@ -59,7 +59,7 @@ export const SeasonTotalContestantScoringTable = () => {
             </Group>
           </Table.Td>
           <Table.Td>{sum(value)}</Table.Td>
-          <Table.Td>{draftedBy}</Table.Td>
+          <Table.Td>{draftedBy?.displayName || draftedBy?.email}</Table.Td>
           <Table.Td>{draftPick?.order}</Table.Td>
         </Table.Tr>
       );

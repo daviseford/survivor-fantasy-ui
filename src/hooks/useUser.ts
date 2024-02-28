@@ -31,7 +31,7 @@ export const useUser = () => {
     return {
       uid: user.uid,
       email: user.email,
-      displayName: user.displayName,
+      displayName: user.displayName || user.email,
       isAdmin: user.uid === "nYFrQNEg8KX485tSVCtoLMjMMoJ3",
     };
   }, [user]);

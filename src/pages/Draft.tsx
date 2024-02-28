@@ -174,7 +174,7 @@ export const DraftComponent = () => {
           season_num: season.order,
           order: draft.current_pick_number,
           user_uid: slimUser.uid,
-          user_name: slimUser.displayName || slimUser.uid,
+          user_name: slimUser.displayName || slimUser.email || slimUser.uid,
           player_name: playerName,
         },
       ],
@@ -240,7 +240,11 @@ export const DraftComponent = () => {
           {season && !slimUser && (
             <Button
               onClick={() =>
-                modals.openContextModal({ modal: "AuthModal", innerProps: {} })
+                modals.openContextModal({
+                  modal: "AuthModal",
+                  innerProps: {},
+                  onClose: () => window.location.reload(),
+                })
               }
             >
               Log in to join this draft
@@ -329,7 +333,9 @@ export const DraftComponent = () => {
 
           {draft?.current_picker && (
             <Title order={3}>
-              Picking: {draft?.current_picker?.displayName}
+              Picking:{" "}
+              {draft?.current_picker?.displayName ||
+                draft?.current_picker?.email}
             </Title>
           )}
 
@@ -342,7 +348,7 @@ export const DraftComponent = () => {
           {draft?.pick_order && (
             <Title order={3}>
               Draft Order:{" "}
-              {draft.pick_order.map((x) => x.displayName).join(", ")}
+              {draft.pick_order.map((x) => x.displayName || x.email).join(", ")}
             </Title>
           )}
         </Breadcrumbs>
@@ -354,7 +360,7 @@ export const DraftComponent = () => {
             >
               {draft.current_picker.uid === slimUser?.uid
                 ? "You are up!"
-                : `${draft.current_picker.displayName} is picking`}{" "}
+                : `${draft.current_picker.displayName || draft.current_picker.email} is picking`}{" "}
             </Title>
           </Center>
         )}
@@ -383,9 +389,7 @@ export const DraftComponent = () => {
 
             const draftedBy = !isDrafted
               ? null
-              : draft?.draft_picks.find((x) => x.player_name === p.name)
-                  ?.user_name;
-
+              : draft?.draft_picks.find((x) => x.player_name === p.name);
             return (
               <Paper
                 radius="md"
@@ -448,7 +452,9 @@ export const DraftComponent = () => {
                 <Group justify="space-between" mt="md" mb="xs">
                   <Badge color="pink">Season {season.order}</Badge>
                   {draftedBy && (
-                    <Badge color={"blue"}>Drafted by {draftedBy}</Badge>
+                    <Badge color={"blue"}>
+                      Drafted by {draftedBy.user_name}
+                    </Badge>
                   )}
                   <Badge color={isDrafted ? "red" : "green"}>
                     {isDrafted ? "Drafted" : "Available"}

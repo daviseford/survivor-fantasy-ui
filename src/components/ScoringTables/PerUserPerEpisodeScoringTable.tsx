@@ -76,12 +76,13 @@ export const PerUserPerEpisodeScoringTable = () => {
         challenges,
         competition,
       );
+
+      const user = competition?.participants.find((x) => x.uid === uid);
+
       return (
         <Table.Tr key={uid}>
           <Table.Td>{i + 1}</Table.Td>
-          <Table.Td>
-            {competition?.participants.find((x) => x.uid === uid)?.displayName}
-          </Table.Td>
+          <Table.Td>{user?.displayName || user?.email}</Table.Td>
 
           {value.map((x) => (
             <Table.Td>{x}</Table.Td>
