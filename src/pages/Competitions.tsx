@@ -35,6 +35,7 @@ export const Competitions = () => {
     return (
       <Table.Tr onClick={() => navigate(`/competitions/${x.id}`)} key={x.id}>
         <Table.Td>{x.draft_id.slice(-4)}</Table.Td>
+        <Table.Td>{x.competition_name}</Table.Td>
         <Table.Td>{x.season_id}</Table.Td>
         <Table.Td>
           {x.participants.map((x) => x.displayName ?? x.email).join(", ")}
@@ -65,6 +66,7 @@ export const Competitions = () => {
           <Table.Thead>
             <Table.Tr>
               <Table.Th>ID</Table.Th>
+              <Table.Th>Name</Table.Th>
               <Table.Th>Season</Table.Th>
               <Table.Th>Participants</Table.Th>
               <Table.Th>Creator</Table.Th>

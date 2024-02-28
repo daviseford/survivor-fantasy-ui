@@ -1,4 +1,5 @@
 import {
+  Alert,
   Avatar,
   Badge,
   Breadcrumbs,
@@ -10,8 +11,10 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  TextInput,
   Title,
 } from "@mantine/core";
+import { isNotEmpty, useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { onValue, ref, update } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
@@ -39,7 +42,7 @@ export const DraftComponent = () => {
 
   const { data: competition } = useCompetition(competitionId);
 
-  console.log({ slimUser: slimUser, draft });
+  console.log({ slimUser, draft });
 
   useEffect(() => {
     if (!season || !draftId) return;
@@ -52,13 +55,14 @@ export const DraftComponent = () => {
     });
   }, [draftId, season]);
 
-  const createCompetition = async () => {
+  const createCompetition = async (competition_name: string) => {
     if (!season || !draft) return;
 
     const id = `competition_${v4()}` as const;
 
     const competition = {
       id,
+      competition_name,
       draft_id: draft.id,
       season_id: season?.id,
       season_num: season?.order,
@@ -94,13 +98,14 @@ export const DraftComponent = () => {
     });
   };
 
+  // todo: use this info
+  const isInvalidNumberOfPlayers = !draft
+    ? false
+    : draft.total_players % draft.participants.length !== 0;
+
   const startDraft = async () => {
     console.log("START DRAFT");
     if (!draft || !slimUser?.uid) return;
-
-    // todo: use this info
-    const isInvalidNumberOfPlayers =
-      draft.total_players % draft.participants.length !== 0;
 
     const _draftOrder = shuffle(draft.participants);
 
@@ -163,11 +168,42 @@ export const DraftComponent = () => {
 
     await updateDraft(_draft);
 
-    if (finished) {
-      // create an entry in our DB
-      await createCompetition();
-    }
+    // if (finished) {
+    //   const onClose = async () => {
+    //     modals.closeAll();
+    //     // create an entry in our DB
+    //     await createCompetition();
+    //   };
+
+    //   modals.open({
+    //     title: "What should we call your Competition?",
+    //     children: <NameYourCompetition onSubmit={onClose} />,
+    //   });
+
+    //   // await createCompetition();
+    // }
   };
+
+  useEffect(() => {
+    if (!draft?.finished || competition || draft.creator_uid !== slimUser?.uid)
+      return;
+
+    const onClose = async (values: FormData) => {
+      modals.closeAll();
+      // create an entry in our DB
+      await createCompetition(values.name);
+    };
+
+    modals.open({
+      title: "What should we call your Competition?",
+      closeOnClickOutside: false,
+      withCloseButton: false,
+      children: <NameYourCompetition onSubmit={onClose} />,
+    });
+
+    // await createCompetition();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [competition, draft, slimUser?.uid]);
 
   const isPlayerDrafted = (name: string) => {
     if (!draft?.draft_picks) return false;
@@ -190,17 +226,20 @@ export const DraftComponent = () => {
             <Button onClick={joinDraft}>Join Draft</Button>
           )}
 
-          {draft && !draft?.started && draft.creator_uid === slimUser?.uid && (
-            <Button
-              onClick={startDraft}
-              disabled={draft.participants.length < 2}
-            >
-              Start Draft
-              {draft.participants.length < 2
-                ? " (waiting for more players)"
-                : ""}
-            </Button>
-          )}
+          {draft &&
+            !draft?.started &&
+            draft.creator_uid === slimUser?.uid &&
+            !isInvalidNumberOfPlayers && (
+              <Button
+                onClick={startDraft}
+                disabled={draft.participants.length < 2}
+              >
+                Start Draft
+                {draft.participants.length < 2
+                  ? " (waiting for more players)"
+                  : ""}
+              </Button>
+            )}
 
           {draft && !draft?.started && draft.creator_uid !== slimUser?.uid && (
             <Button disabled={true}>Waiting for host to start the draft</Button>
@@ -228,6 +267,13 @@ export const DraftComponent = () => {
             </Button>
           )}
         </Group>
+
+        {draft && isInvalidNumberOfPlayers && (
+          <Alert color="red">
+            You cannot draft evenly with this number of players. Please invite a
+            friend or start over.
+          </Alert>
+        )}
 
         <Breadcrumbs separator="|">
           <Title order={3}>Draft ID: ...{draft?.id.slice(-4)}</Title>
@@ -398,5 +444,44 @@ export const DraftComponent = () => {
         />
       )}
     </div>
+  );
+};
+
+type FormData = {
+  name: string;
+};
+
+type Props = {
+  onSubmit: (values: FormData) => void;
+};
+
+const NameYourCompetition = ({ onSubmit }: Props) => {
+  const form = useForm({
+    initialValues: {
+      name: "",
+    },
+    validate: {
+      name: isNotEmpty("Do a fun name :)"),
+    },
+  });
+
+  return (
+    <>
+      <form
+        onSubmit={form.onSubmit((values) => {
+          return onSubmit(values);
+        })}
+      >
+        <TextInput
+          label="Name your competition"
+          placeholder="Jeff Probst Lovers"
+          data-autofocus
+          {...form.getInputProps("name")}
+        />
+        <Button fullWidth type="submit" mt="md">
+          Submit
+        </Button>
+      </form>
+    </>
   );
 };

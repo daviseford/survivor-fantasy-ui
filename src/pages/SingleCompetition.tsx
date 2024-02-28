@@ -1,4 +1,4 @@
-import { Button, SimpleGrid, Title } from "@mantine/core";
+import { Breadcrumbs, Button, SimpleGrid, Title } from "@mantine/core";
 import { useFirestoreDocumentMutation } from "@react-query-firebase/firestore";
 import { doc } from "firebase/firestore";
 import {
@@ -12,6 +12,7 @@ import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
 
 export const SingleCompetition = () => {
+  const { slimUser } = useUser();
   const { data: competition } = useCompetition();
 
   const { data: season } = useSeason(competition?.season_id);
@@ -20,20 +21,26 @@ export const SingleCompetition = () => {
 
   return (
     <div>
-      <h1>Competition ..{competition.id.slice(-4)}</h1>
+      <h1>{competition.competition_name}</h1>
 
-      <h3>Season: {competition.season_id}</h3>
-      <h3>
-        Participants:{" "}
-        {competition.participants.map((x) => x.displayName).join(", ")}
-      </h3>
+      <Breadcrumbs separator={" | "}>
+        <h3>Season: {competition.season_num}</h3>
+        <h3>
+          Participants:{" "}
+          {competition.participants.map((x) => x.displayName).join(", ")}
+        </h3>
+      </Breadcrumbs>
 
-      <h3>Started: {String(competition.started)}</h3>
+      {slimUser?.isAdmin && (
+        <Breadcrumbs separator=" | ">
+          <h3>Started: {String(competition.started)}</h3>
 
-      <StartCompetitionButton />
+          <StartCompetitionButton />
 
-      <h3>Current Episode: {String(competition.current_episode)}</h3>
-      <h3>Finished: {String(competition.finished)}</h3>
+          <h3>Current Episode: {String(competition.current_episode)}</h3>
+          <h3>Finished: {String(competition.finished)}</h3>
+        </Breadcrumbs>
+      )}
 
       <SimpleGrid cols={1} p={"lg"}>
         <>

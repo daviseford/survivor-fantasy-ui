@@ -130,6 +130,7 @@ export type PropBet = {
 
 export type Competition = {
   id: `competition_${string}`;
+  competition_name: string;
 
   season_id: Season["id"];
   season_num: number;
