@@ -1,4 +1,5 @@
 import { User } from "firebase/auth";
+import { PropBetsQuestions } from "../data/propbets";
 
 export type Season = {
   id: `season_${number}`;
@@ -97,9 +98,21 @@ export type Draft = {
   /** List of user uids */
   pick_order: SlimUser[];
   draft_picks: DraftPick[];
+
+  prop_bets: PropBetsEntry[];
+
   started: boolean;
   finished: boolean;
 };
+
+export type PropBetsEntry = {
+  id: `propbet_${string}`;
+  user_name: string;
+  user_uid: string;
+  values: PropBetsFormData;
+};
+
+export type PropBetsFormData = Record<keyof typeof PropBetsQuestions, string>;
 
 export type DraftPick = {
   season_id: Season["id"];
@@ -119,12 +132,12 @@ export type PropBet = {
   draft_id: Draft["id"];
 
   description: string;
-  value: number;
+  point_value: number;
   answers: {
     participant_uid: string;
-    answer: string | number;
+    answer: string;
   }[];
-  correct_answer: string | number;
+  correct_answer: string;
   finished: boolean;
 };
 
@@ -136,11 +149,13 @@ export type Competition = {
   season_num: number;
   draft_id: Draft["id"];
 
-  // creator's uid
   creator_uid: string;
   participant_uids: string[];
   participants: SlimUser[];
+
   draft_picks: DraftPick[];
+  prop_bets: PropBetsEntry[];
+
   started: boolean;
   current_episode: number | null;
   finished: boolean;
@@ -168,21 +183,21 @@ export const GameEventActions = [
   "find_advantage",
   "find_idol",
   "make_final_tribal_council",
+  "make_merge",
   "use_advantage",
   "use_idol",
   "use_shot_in_the_dark_successfully",
   "use_shot_in_the_dark_unsuccessfully",
   "votes_negated_by_idol",
+  "win_survivor",
 ] as const;
 
 export type GameEventAction = (typeof GameEventActions)[number];
 
 export const GameProgressActions = [
   "eliminated",
-  "make_merge",
   "medically_evacuated",
   "quitter",
-  "win_survivor",
 ] as const;
 
 export type GameProgressAction = (typeof GameProgressActions)[number];

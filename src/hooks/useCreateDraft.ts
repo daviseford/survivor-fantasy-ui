@@ -29,6 +29,7 @@ export const useCreateDraft = () => {
       total_players: season?.players.length,
       pick_order: [],
       draft_picks: [],
+      prop_bets: [],
       current_pick_number: 0,
       current_picker: null,
       started: false,

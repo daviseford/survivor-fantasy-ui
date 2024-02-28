@@ -20,9 +20,9 @@ export const getSurvivorPointsPerEpisode = (
 ) => {
   if (!season || !playerName) return 0;
 
-  const { episodes } = season;
+  // const { episodes } = season;
 
-  const _episode = episodes.find((x) => x.order === episodeNumber);
+  // const _episode = episodes.find((x) => x.order === episodeNumber);
   const _eliminations = eliminations?.filter(
     (x) => x.episode_num === episodeNumber,
   );
@@ -58,12 +58,12 @@ export const getSurvivorPointsPerEpisode = (
   });
 
   // if the episode is the finale, and this player was never eliminated, they won survivor
-  if (
-    _episode?.finale &&
-    !eliminations?.find((x) => x.player_name === playerName)
-  ) {
-    total += addFixedActionPoints("win_survivor");
-  }
+  // if (
+  //   _episode?.finale &&
+  //   !eliminations?.find((x) => x.player_name === playerName)
+  // ) {
+  //   total += addFixedActionPoints("win_survivor");
+  // }
 
   // Handle game events like finding idols etc
   _events.forEach((e) => {

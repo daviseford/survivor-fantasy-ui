@@ -1,5 +1,6 @@
 import { Table } from "@mantine/core";
-import { sum } from "lodash-es";
+import { countBy, entries, sum } from "lodash-es";
+import { PropBetsQuestions } from "../../data/propbets";
 import { useChallenges } from "../../hooks/useChallenges";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useEliminations } from "../../hooks/useEliminations";
@@ -32,7 +33,7 @@ export const PerPlayerPerEpisodeScoringTable = () => {
     {} as Record<string, number[]>,
   );
 
-  const pointsByPlayer = competition?.participants.reduce(
+  const pointsByUser = competition?.participants.reduce(
     (accum, participant) => {
       const { uid, displayName, email } = participant;
 
@@ -64,9 +65,106 @@ export const PerPlayerPerEpisodeScoringTable = () => {
     {} as Record<string, number[]>,
   );
 
-  console.log({ pointsBySurvivor, pointsByPlayer });
 
-  const rows = Object.entries(pointsByPlayer || {})
+  const perUserPropPoints = () => {
+    const myPropBets = competition?.prop_bets?.find(
+      (x) => x.user_uid === competition.participant_uids[0],
+    )?.values;
+
+    const _events = Object.values(events);
+    const _elims = Object.values(eliminations);
+
+    let total = 0;
+
+    // First one out
+    const firstEpisodeElim = _elims.find((x) => x.order === 1);
+    if (firstEpisodeElim?.player_name === myPropBets?.propbet_first_vote) {
+      total += PropBetsQuestions.propbet_first_vote.point_value;
+    }
+
+    // Are we a winner?
+    if (
+      _events.find(
+        (x) =>
+          x.action === "win_survivor" &&
+          x.player_name === myPropBets?.propbet_winner,
+      )
+    ) {
+      total += PropBetsQuestions.propbet_winner.point_value;
+    }
+
+    // Did we make FTC?
+    if (
+      _events.find(
+        (x) =>
+          x.action === "make_final_tribal_council" &&
+          x.player_name === myPropBets?.propbet_ftc,
+      )
+    ) {
+      total += PropBetsQuestions.propbet_ftc.point_value;
+    }
+
+    // Was there a medical evac?
+    const hasEvac = _elims.some((x) => x.variant === "medical");
+    if (
+      (hasEvac && myPropBets?.propbet_medical_evac === "Yes") ||
+      (!hasEvac && myPropBets?.propbet_medical_evac === "No")
+    ) {
+      total += PropBetsQuestions.propbet_medical_evac.point_value;
+    }
+
+    // who won the most immunities?
+    const immunities = Object.values(challenges).filter(
+      (x) => x.variant === "combined" || x.variant === "immunity",
+    );
+    const allWinners = immunities.flatMap((x) => x.winning_players);
+    const rankedWinners = entries(countBy(allWinners));
+    const winnerCount = rankedWinners?.[0]?.[1];
+    const winners = rankedWinners
+      .filter((x) => x[1] === winnerCount)
+      .map((x) => x[0]);
+
+    // console.log({
+    //   immunities,
+    //   allWinners,
+    //   rankedWinners,
+    //   winnerCount,
+    //   winners,
+    // });
+
+    if (winners.some((x) => x === myPropBets?.propbet_immunities)) {
+      total += PropBetsQuestions.propbet_immunities.point_value;
+    }
+
+    // who  found the most idols?
+    const idols = _events.filter((x) => x.action === "find_idol");
+    const allIdolFinders = idols.map((x) => x.player_name);
+    const rankedFinders = entries(countBy(allIdolFinders));
+    const highestIdolCount = rankedFinders?.[0]?.[1];
+    const idolWinners = rankedFinders
+      .filter((x) => x[1] === highestIdolCount)
+      .map((x) => x[0]);
+
+    // console.log({
+    //   immunities,
+    //   allWinners,
+    //   rankedWinners,
+    //   winnerCount,
+    //   winners,
+    // });
+
+    if (idolWinners.some((x) => x === myPropBets?.propbet_idols)) {
+      total += PropBetsQuestions.propbet_idols.point_value;
+    }
+
+    return total;
+  };
+
+  console.log({ davis: perUserPropPoints() });
+
+  console.log({ pointsBySurvivor, pointsByPlayer: pointsByUser });
+
+  const rows = Object.entries(pointsByUser || {})
     .sort((a, b) => sum(b[1]) - sum(a[1])) // sort by highest
     .map(([key, value]) => {
       return (

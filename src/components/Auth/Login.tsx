@@ -40,16 +40,6 @@ export const Login = () => {
   return (
     <Container size={420} my={40}>
       <Title ta="center">Welcome back!</Title>
-      {/* <Text c="dimmed" size="sm" ta="center" mt={5}>
-        Don't have an account yet?{" "}
-        <Anchor
-          size="sm"
-          onClick={() => navigate("/signup")}
-          component="button"
-        >
-          Create account
-        </Anchor>
-      </Text> */}
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
         <TextInput
