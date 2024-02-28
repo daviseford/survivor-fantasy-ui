@@ -25,6 +25,7 @@ import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
 import { DraftTable } from "../components/DraftTable";
+import { PostDraftPropBetTable } from "../components/PropBetTables/PostDraftPropBetTable";
 import { PropBetsQuestions } from "../data/propbets";
 import { db, rt_db } from "../firebase";
 import { useCompetition } from "../hooks/useCompetition";
@@ -217,8 +218,7 @@ export const DraftComponent = () => {
     if (competition) {
       modals.closeAll();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [competition]);
 
   const isPlayerDrafted = (name: string) => {
     if (!draft?.draft_picks) return false;
@@ -475,12 +475,26 @@ export const DraftComponent = () => {
         </SimpleGrid>
       )}
 
+      {draft?.finished && userHasSubmittedPropBets && (
+        <Box p="lg">
+          <Title ta={"center"} order={2}>
+            Prop Bets
+          </Title>
+          <PostDraftPropBetTable />
+        </Box>
+      )}
+
       {draft?.started && (
-        <DraftTable
-          draft_picks={draft.draft_picks}
-          participants={draft.participants}
-          players={season.players}
-        />
+        <Box p="lg">
+          <Title ta={"center"} order={2} mb={"md"}>
+            Draft Results
+          </Title>
+          <DraftTable
+            draft_picks={draft.draft_picks}
+            participants={draft.participants}
+            players={season.players}
+          />
+        </Box>
       )}
     </div>
   );
