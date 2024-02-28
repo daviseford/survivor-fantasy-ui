@@ -20,7 +20,7 @@ export const PerPlayerPerEpisodeScoringTable = () => {
         return getSurvivorPointsPerEpisode(
           season,
           Object.values(challenges || {}),
-          eliminations || [],
+          Object.values(eliminations || {}),
           Object.values(events || {}),
           x.order,
           player.name,
@@ -48,7 +48,7 @@ export const PerPlayerPerEpisodeScoringTable = () => {
                 return getSurvivorPointsPerEpisode(
                   season,
                   Object.values(challenges || {}),
-                  eliminations || [],
+                  Object.values(eliminations || {}),
                   Object.values(events || {}),
                   e.order,
                   x,

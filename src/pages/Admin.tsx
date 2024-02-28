@@ -1,10 +1,5 @@
 import { Button, SimpleGrid } from "@mantine/core";
 import { doc, setDoc } from "firebase/firestore";
-import {
-  SEASON_46_CHALLENGES,
-  SEASON_46_ELIMINATIONS,
-  SEASON_46_EVENTS,
-} from "../data/season_46";
 import { SEASON_9_CHALLENGES, SEASON_9_ELIMINATIONS } from "../data/season_9";
 import {
   SEASON_99_CHALLENGES,
@@ -47,9 +42,11 @@ const uploadS99 = async () => {
 const uploadS46 = async () => {
   try {
     await setDoc(doc(db, "seasons", "season_46"), SEASONS.season_46);
-    await setDoc(doc(db, "challenges", "season_46"), SEASON_46_CHALLENGES);
-    await setDoc(doc(db, "eliminations", "season_46"), SEASON_46_ELIMINATIONS);
-    await setDoc(doc(db, "events", "season_46"), SEASON_46_EVENTS);
+
+    // Uncomment to reset these (YOU WILL LOSE ALL DB DATA!!!)
+    // await setDoc(doc(db, "challenges", "season_46"), SEASON_46_CHALLENGES);
+    // await setDoc(doc(db, "eliminations", "season_46"), SEASON_46_ELIMINATIONS);
+    // await setDoc(doc(db, "events", "season_46"), SEASON_46_EVENTS);
 
     console.log("Done!");
   } catch (err) {

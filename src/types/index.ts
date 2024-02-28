@@ -24,6 +24,16 @@ export type Episode<SeasonNumber = number> = {
   merge_occurs: boolean;
 };
 
+export const EliminationVariants = [
+  "final_tribal_council",
+  "medical",
+  "other",
+  "quitter",
+  "tribal",
+] as const;
+
+export type EliminationVariant = (typeof EliminationVariants)[number];
+
 export type Elimination<PlayerName = string, SeasonNumber = number> = {
   id: `elimination_${string}`;
 
@@ -36,7 +46,7 @@ export type Elimination<PlayerName = string, SeasonNumber = number> = {
   player_name: PlayerName;
 
   order: number;
-  variant: "tribal" | "medical" | "final_tribal_council" | "quitter" | "other";
+  variant: EliminationVariant;
   votes_received?: number;
 };
 
@@ -95,7 +105,7 @@ export type DraftPick = {
   season_id: Season["id"];
   season_num: number;
   order: number;
-  user_name: string
+  user_name: string;
   user_uid: string;
   player_name: string;
 };

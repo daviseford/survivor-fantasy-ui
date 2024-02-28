@@ -13,32 +13,34 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { isNotEmpty, useForm } from "@mantine/form";
+import { hasLength, useForm } from "@mantine/form";
 import { doc, setDoc } from "firebase/firestore";
+import { last, orderBy } from "lodash-es";
 import { useEffect } from "react";
 import { v4 } from "uuid";
-import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { db } from "../../firebase";
+import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
-import { GameEvent, GameEventActions } from "../../types";
+import { Elimination, EliminationVariants } from "../../types";
 
-export const CreateGameEvent = () => {
+export const CreateElimination = () => {
   const { data: season, isLoading } = useSeason();
+  const { data: eliminations } = useEliminations(season?.id);
 
-  const form = useForm<GameEvent>({
+  const form = useForm<Elimination>({
     initialValues: {
-      id: `event_${v4()}`,
+      id: `elimination_${v4()}`,
       season_num: 1,
       season_id: "season_1",
       episode_id: "episode_1",
       episode_num: 1,
-      action: GameEventActions[0],
-      multiplier: null,
       player_name: "",
+      variant: EliminationVariants[0],
+      order: 0,
     },
 
     validate: {
-      player_name: isNotEmpty("Enter player name"),
+      player_name: hasLength({ min: 1 }, "Add winning player"),
     },
 
     transformValues: (values) => ({
@@ -50,12 +52,19 @@ export const CreateGameEvent = () => {
 
   // Set initial values with async request
   useEffect(() => {
-    if (season) {
-      form.setValues({ season_num: season.order, season_id: season.id });
+    if (season && eliminations) {
+      const order =
+        (last(orderBy(eliminations, (x) => x.order))?.order || 0) + 1;
+
+      form.setValues({
+        season_num: season.order,
+        season_id: season.id,
+        order,
+      });
       form.resetDirty();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [season]);
+  }, [season, eliminations]);
 
   if (isLoading) {
     return (
@@ -73,39 +82,27 @@ export const CreateGameEvent = () => {
     );
   }
 
-  const currentAction = BASE_PLAYER_SCORING.find(
-    (x) => x.action === form.values.action,
-  );
-
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement> | undefined,
   ) => {
     e?.preventDefault();
 
     const _validate = form.validate();
+
     if (_validate.hasErrors) return;
 
-    const values = { ...form.values };
+    const ref = doc(db, `eliminations/${season?.id}`);
 
-    // remove any old values if not needed
-    if (!currentAction?.multiplier) {
-      values.multiplier = null;
-    }
-
-    console.log({ values });
-
-    const ref = doc(db, `events/${season?.id}`);
-
-    await setDoc(ref, { [values.id]: values }, { merge: true });
+    await setDoc(ref, { [form.values.id]: form.values }, { merge: true });
 
     // reset id and important form values
-    form.setValues({ id: `event_${v4()}` });
+    form.setValues({ id: `elimination_${v4()}` });
   };
 
   return (
     <Card withBorder>
       <Card.Section p={"md"}>
-        <Title order={4}>Create a new Event</Title>
+        <Title order={4}>Create a new Elimination</Title>
       </Card.Section>
 
       <Card.Section p={"md"}>
@@ -129,26 +126,24 @@ export const CreateGameEvent = () => {
 
               <Select
                 withAsterisk
-                label="Player Name"
-                data={season?.players.map((x) => x.name)}
-                {...form.getInputProps("player_name")}
+                label="Elimination Variant"
+                data={EliminationVariants}
+                {...form.getInputProps("variant")}
               />
 
               <Select
                 withAsterisk
-                label="Action"
-                data={GameEventActions}
-                {...form.getInputProps("action")}
-                description={currentAction?.description}
+                label="Eliminated Player"
+                data={season?.players.map((x) => x.name)}
+                {...form.getInputProps("player_name")}
               />
 
-              {currentAction?.multiplier && (
-                <NumberInput
-                  withAsterisk
-                  label="How many?"
-                  {...form.getInputProps("multiplier")}
-                />
-              )}
+              <NumberInput
+                withAsterisk
+                label="Order"
+                min={1}
+                {...form.getInputProps("order")}
+              />
 
               <Group justify="flex-end" mt="md">
                 <Button type="submit">Submit</Button>

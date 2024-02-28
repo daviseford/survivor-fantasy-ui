@@ -1,4 +1,4 @@
-import { Stack, Title } from "@mantine/core"; 
+import { Stack, Title } from "@mantine/core";
 import { ChallengeCRUDTable, CreateChallenge } from "../components/Challenges";
 
 export const ChallengesAdmin = () => {

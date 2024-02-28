@@ -3,28 +3,28 @@ import { modals } from "@mantine/modals";
 import { IconTrash } from "@tabler/icons-react";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase";
-import { useChallenges } from "../../hooks/useChallenges";
+import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
-import { Challenge } from "../../types";
+import { Elimination } from "../../types";
 
-export const ChallengeCRUDTable = () => {
+export const EliminationCRUDTable = () => {
   const { data: season } = useSeason();
-  const { data: challenges } = useChallenges(season?.id);
+  const { data: eliminations } = useEliminations(season?.id);
 
   const { slimUser } = useUser();
 
-  const handleDelete = async (e: Challenge) => {
+  const handleDelete = async (e: Elimination) => {
     if (!slimUser?.isAdmin) return;
 
     modals.openConfirmModal({
-      title: "Do you want to delete this challenge?",
+      title: "Do you want to delete this elimination?",
       children: <Code block>{JSON.stringify(e, null, 2)}</Code>,
       labels: { confirm: "Delete", cancel: "Cancel" },
       onConfirm: async () => {
-        const ref = doc(db, `challenges/${season?.id}`);
+        const ref = doc(db, `eliminations/${season?.id}`);
 
-        const newEvents = { ...challenges };
+        const newEvents = { ...eliminations };
 
         delete newEvents[e.id];
 
@@ -33,14 +33,14 @@ export const ChallengeCRUDTable = () => {
     });
   };
 
-  const rows = Object.values(challenges || {})
+  const rows = Object.values(eliminations || {})
     .sort((a, b) => b.order - a.order)
     .map((e) => {
       return (
         <Table.Tr key={e.id}>
           <Table.Td>{e.order}</Table.Td>
           <Table.Td>{e.variant}</Table.Td>
-          <Table.Td>{e.winning_players.join(", ")}</Table.Td>
+          <Table.Td>{e.player_name}</Table.Td>
           <Table.Td>{e.episode_id}</Table.Td>
           {slimUser?.isAdmin && (
             <Table.Td>
@@ -59,7 +59,7 @@ export const ChallengeCRUDTable = () => {
         <Table.Tr>
           <Table.Th>Order</Table.Th>
           <Table.Th>Variant</Table.Th>
-          <Table.Th>Winning Player(s)</Table.Th>
+          <Table.Th>Player</Table.Th>
           <Table.Th>Episode</Table.Th>
           {slimUser?.isAdmin && <Table.Th>Delete</Table.Th>}
         </Table.Tr>
