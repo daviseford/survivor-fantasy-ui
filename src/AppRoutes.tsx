@@ -11,30 +11,37 @@ import { useDisclosure } from "@mantine/hooks";
 import { ModalsProvider } from "@mantine/modals";
 import { QueryClientProvider } from "react-query";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { AuthModal } from "./components/Auth/AuthModal";
+import { Logout } from "./components/Auth/Logout";
 import { Navbar } from "./components/Navbar";
 import { PROJECT_NAME } from "./consts";
 import { Admin } from "./pages/Admin";
 import { Competitions } from "./pages/Competitions";
 import { DraftComponent } from "./pages/Draft";
 import { Home } from "./pages/Home";
-import { Login } from "./pages/Login";
-import { Logout } from "./pages/Logout";
 import { SeasonAdmin } from "./pages/SeasonAdmin";
 import { Seasons } from "./pages/Seasons";
-import { Signup } from "./pages/Signup";
 import { SingleCompetition } from "./pages/SingleCompetition";
 import { SingleSeason } from "./pages/SingleSeason";
 import { queryClient } from "./queryClient";
 import { theme } from "./theme";
+
+const modals = { AuthModal };
+
+declare module "@mantine/modals" {
+  export interface MantineModalsOverride {
+    modals: typeof modals;
+  }
+}
 
 export const AppRoutes = () => {
   const [opened, { toggle }] = useDisclosure();
 
   return (
     <MantineProvider theme={theme}>
-      <ModalsProvider>
-        <QueryClientProvider client={queryClient}>
-          <Router>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <ModalsProvider modals={modals}>
             <AppShell
               header={{ height: 60 }}
               navbar={{
@@ -68,8 +75,6 @@ export const AppRoutes = () => {
                   <Route path="/" element={<Home />} />
 
                   {/* User stuff */}
-                  <Route path="/signup" element={<Signup />} />
-                  <Route path="/login" element={<Login />} />
                   <Route path="/logout" element={<Logout />} />
 
                   {/* Drafting */}
@@ -98,9 +103,9 @@ export const AppRoutes = () => {
                 </Routes>
               </AppShell.Main>
             </AppShell>
-          </Router>
-        </QueryClientProvider>
-      </ModalsProvider>
+          </ModalsProvider>
+        </Router>
+      </QueryClientProvider>
     </MantineProvider>
   );
 };

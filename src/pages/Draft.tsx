@@ -45,7 +45,7 @@ export const DraftComponent = () => {
   console.log({ slimUser, draft });
 
   useEffect(() => {
-    if (!season || !draftId) return;
+    if (!season || !draftId || !slimUser) return;
 
     const draftRef = ref(rt_db, "drafts/" + draftId);
     onValue(draftRef, (snapshot) => {
@@ -53,7 +53,7 @@ export const DraftComponent = () => {
       console.log("rt data", data);
       setDraft(data || undefined);
     });
-  }, [draftId, season]);
+  }, [draftId, season, slimUser]);
 
   const createCompetition = async (competition_name: string) => {
     if (!season || !draft) return;
@@ -222,7 +222,17 @@ export const DraftComponent = () => {
     <div>
       <Stack>
         <Group>
-          {draft && !userIsParticipant && (
+          {season && !slimUser && (
+            <Button
+              onClick={() =>
+                modals.openContextModal({ modal: "AuthModal", innerProps: {} })
+              }
+            >
+              Log in to join this draft
+            </Button>
+          )}
+
+          {draft && !userIsParticipant && slimUser && (
             <Button onClick={joinDraft}>Join Draft</Button>
           )}
 
@@ -248,7 +258,11 @@ export const DraftComponent = () => {
           {draft && !draft?.started && (
             <CopyButton value={window.location.href}>
               {({ copied, copy }) => (
-                <Button color={copied ? "teal" : "blue"} onClick={copy}>
+                <Button
+                  color={copied ? "teal" : "blue"}
+                  onClick={copy}
+                  variant="outline"
+                >
                   {copied
                     ? "Copied url"
                     : "Invite friends to join this draft (send them this url)"}

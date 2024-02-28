@@ -7,9 +7,9 @@ import {
   IconMail,
   IconSettings,
   IconUser,
-  IconUserPlus,
 } from "@tabler/icons-react";
 // import { MantineLogo } from '@mantinex/mantine-logo';
+import { modals } from "@mantine/modals";
 import { useLocation } from "react-router-dom";
 import { auth } from "../../firebase";
 import { useUser } from "../../hooks/useUser";
@@ -69,11 +69,16 @@ export const Navbar = () => {
       <div className={classes.footer}>
         {!slimUser && (
           <>
-            <a href="/signup" className={classes.link}>
-              <IconUserPlus className={classes.linkIcon} stroke={1.5} />
-              <span>Register</span>
-            </a>
-            <a href="/login" className={classes.link}>
+            <a
+              href="#"
+              className={classes.link}
+              onClick={() =>
+                modals.openContextModal({
+                  modal: "AuthModal",
+                  innerProps: {},
+                })
+              }
+            >
               <IconLogin className={classes.linkIcon} stroke={1.5} />
               <span>Login</span>
             </a>
