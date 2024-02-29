@@ -172,7 +172,9 @@ export type PropBetAnswer = {
   points_awarded: number;
 };
 
-type PropBetScores = Record<keyof typeof PropBetsQuestions, PropBetAnswer>;
+type PropBetScores = Record<keyof typeof PropBetsQuestions, PropBetAnswer> & {
+  total: number;
+};
 
 type PropBetScoresByUser = Record<SlimUser["uid"], PropBetScores>;
 
@@ -181,8 +183,9 @@ export const getPropBetScoresByUser = (
   eliminations: Record<Elimination["id"], Elimination>,
   challenges: Record<Challenge["id"], Challenge>,
   competition?: Competition,
+  season?: Season,
 ): PropBetScoresByUser => {
-  if (!competition?.participant_uids) return {};
+  if (!competition?.participant_uids || !season) return {};
 
   return competition.participant_uids.reduce<PropBetScoresByUser>((a, b) => {
     const scores = getPropBetScoresForUser(
@@ -191,6 +194,7 @@ export const getPropBetScoresByUser = (
       eliminations,
       challenges,
       competition,
+      season,
     );
     if (scores) {
       a[b] = scores;
@@ -205,6 +209,7 @@ export const getPropBetScoresForUser = (
   eliminations: Record<Elimination["id"], Elimination>,
   challenges: Record<Challenge["id"], Challenge>,
   competition: Competition,
+  season: Season,
 ): PropBetScores | undefined => {
   const myPropBets = competition.prop_bets.find(
     (x) => x.user_uid === uid,
@@ -222,7 +227,8 @@ export const getPropBetScoresForUser = (
     answer: "",
   };
 
-  const total = {
+  const scores = {
+    total: 0,
     propbet_first_vote: {
       ...emptyAnswer,
       answer: myPropBets.propbet_first_vote,
@@ -240,9 +246,10 @@ export const getPropBetScoresForUser = (
     propbet_winner: { ...emptyAnswer, answer: myPropBets.propbet_winner },
   } satisfies PropBetScores;
 
-  const addCorrect = (key: keyof typeof total) => {
-    total[key].correct = true;
-    total[key].points_awarded = PropBetsQuestions[key].point_value;
+  const addCorrect = (key: Exclude<keyof typeof scores, "total">) => {
+    scores[key].correct = true;
+    scores[key].points_awarded = PropBetsQuestions[key].point_value;
+    scores.total += PropBetsQuestions[key].point_value;
   };
 
   const _events = Object.values(events);
@@ -278,9 +285,12 @@ export const getPropBetScoresForUser = (
 
   // Was there a medical evac?
   const hasEvac = _elims.some((x) => x.variant === "medical");
+  // Wait until finale to declare right or wrong for "No" answer
+  const hasFinaleOccurred = season.episodes.some((x) => x.finale);
+
   if (
     (hasEvac && myPropBets?.propbet_medical_evac === "Yes") ||
-    (!hasEvac && myPropBets?.propbet_medical_evac === "No")
+    (!hasEvac && myPropBets?.propbet_medical_evac === "No" && hasFinaleOccurred)
   ) {
     addCorrect("propbet_medical_evac");
   }
@@ -296,13 +306,6 @@ export const getPropBetScoresForUser = (
     .filter((x) => x[1] === winnerCount)
     .map((x) => x[0]);
 
-  // console.log({
-  //   immunities,
-  //   allWinners,
-  //   rankedWinners,
-  //   winnerCount,
-  //   winners,
-  // });
   if (winners.some((x) => x === myPropBets?.propbet_immunities)) {
     addCorrect("propbet_immunities");
   }
@@ -320,5 +323,5 @@ export const getPropBetScoresForUser = (
     addCorrect("propbet_idols");
   }
 
-  return total;
+  return scores;
 };

@@ -1,4 +1,4 @@
-import { Badge, Group, Table } from "@mantine/core";
+import { Badge, Group, Table, Text } from "@mantine/core";
 import { PropBetsQuestions } from "../../data/propbets";
 import { usePropBetScoring } from "../../hooks/useGetPropBetScoring";
 import { useUser } from "../../hooks/useUser";
@@ -7,8 +7,13 @@ import { PropBetAnswer } from "../../utils/scoringUtils";
 const AnswerTd = ({ score }: { score: PropBetAnswer }) => {
   return (
     <Table.Td>
-      <Group>
-        {score.answer}
+      <Group gap={"md"}>
+        <Text
+          c={!score.correct ? "dimmed" : ""}
+          fw={score.correct ? "bolder" : ""}
+        >
+          {score.answer}
+        </Text>
         {score.correct && <Badge color="green">+{score.points_awarded}</Badge>}
       </Group>
     </Table.Td>

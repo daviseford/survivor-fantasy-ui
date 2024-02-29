@@ -18,6 +18,7 @@ export const usePropBetScoring = (competition_id?: Competition["id"]) => {
     eliminations,
     challenges,
     competition,
+    season,
   );
 
   console.log({ scores });

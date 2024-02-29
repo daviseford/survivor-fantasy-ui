@@ -13,10 +13,12 @@ import { useFirestoreQueryData } from "@react-query-firebase/firestore";
 import { collection } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
+import { useUser } from "../hooks/useUser";
 import { Season } from "../types";
 
 export const Seasons = () => {
   const navigate = useNavigate();
+  const { slimUser } = useUser();
 
   const ref = collection(db, "seasons");
 
@@ -34,6 +36,9 @@ export const Seasons = () => {
       </Title>
       <SimpleGrid cols={3}>
         {seasons?.map((x) => {
+          console.log(x.name);
+          if (x.name !== "Survivor 46" && !slimUser?.isAdmin) return null;
+
           return (
             <div key={x.id}>
               <Card shadow="sm" padding="lg" radius="md" withBorder>
