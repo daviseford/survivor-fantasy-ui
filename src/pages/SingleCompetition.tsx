@@ -1,4 +1,4 @@
-import { Box, Breadcrumbs, SimpleGrid, Title } from "@mantine/core";
+import { Box, Breadcrumbs, Card, SimpleGrid, Title } from "@mantine/core";
 import { PropBetScoring } from "../components/PropBetTables";
 import {
   PerUserPerEpisodeScoringTable,
@@ -46,24 +46,32 @@ export const SingleCompetition = () => {
 
       <SimpleGrid cols={1} p={"lg"}>
         <>
-          <Title order={2}>Season Scores</Title>
-          <PerUserPerEpisodeScoringTable />
+          <Card>
+            <Title order={2}>Season Scores</Title>
+            <PerUserPerEpisodeScoringTable />
+          </Card>
+        </>
+
+        <>
+          <Card>
+            <PropBetScoring />
+          </Card>
         </>
 
         <SimpleGrid>
           <>
-            <Title order={2}>Survivor Individual Scores</Title>
-            <SeasonTotalContestantScoringTable />
-          </>
-
-          <>
-            <PropBetScoring />
+            <Card>
+              <Title order={2}>Survivor Individual Scores</Title>
+              <SeasonTotalContestantScoringTable />
+            </Card>
           </>
         </SimpleGrid>
 
         <>
-          <Title order={2}>Scoring Values</Title>
-          <ScoringLegendTable />
+          <Card>
+            <Title order={2}>Scoring Values</Title>
+            <ScoringLegendTable />
+          </Card>
         </>
       </SimpleGrid>
     </div>
