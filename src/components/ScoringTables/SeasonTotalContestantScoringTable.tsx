@@ -5,7 +5,7 @@ import { useCompetition } from "../../hooks/useCompetition";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useEvents } from "../../hooks/useEvents";
 import { useSeason } from "../../hooks/useSeason";
-import { getSurvivorPointsPerEpisode } from "./utils";
+import { getSurvivorPointsPerEpisode } from "../../utils/scoringUtils";
 
 export const SeasonTotalContestantScoringTable = () => {
   const { data: competition } = useCompetition();

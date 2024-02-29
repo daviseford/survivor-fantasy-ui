@@ -1,4 +1,5 @@
 import { Box, Breadcrumbs, SimpleGrid, Title } from "@mantine/core";
+import { PropBetScoring } from "../components/PropBetTables";
 import {
   PerUserPerEpisodeScoringTable,
   ScoringLegendTable,
@@ -49,10 +50,16 @@ export const SingleCompetition = () => {
           <PerUserPerEpisodeScoringTable />
         </>
 
-        <>
-          <Title order={2}>Survivor Individual Scores</Title>
-          <SeasonTotalContestantScoringTable />
-        </>
+        <SimpleGrid>
+          <>
+            <Title order={2}>Survivor Individual Scores</Title>
+            <SeasonTotalContestantScoringTable />
+          </>
+
+          <>
+            <PropBetScoring />
+          </>
+        </SimpleGrid>
 
         <>
           <Title order={2}>Scoring Values</Title>

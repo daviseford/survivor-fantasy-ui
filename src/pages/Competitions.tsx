@@ -1,33 +1,14 @@
 import { Alert, Center, Loader, Table, Title } from "@mantine/core";
-import { useFirestoreQueryData } from "@react-query-firebase/firestore";
-import { collection, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { db } from "../firebase";
+import { useMyCompetitions } from "../hooks/useMyCompetitions";
 import { useUser } from "../hooks/useUser";
-import { Competition } from "../types";
 
 export const Competitions = () => {
   const { user } = useUser();
 
   const navigate = useNavigate();
 
-  const ref = collection(db, "competitions");
-
-  const _query = query(
-    ref,
-    where("participant_uids", "array-contains", user?.uid || ""),
-  );
-
-  const { data: competitions, isLoading } = useFirestoreQueryData<
-    Competition[],
-    Competition[]
-  >(
-    ["competitions", user?.uid],
-    // @ts-expect-error asd
-    _query,
-    {},
-    { enabled: Boolean(user?.uid) },
-  );
+  const { data: competitions, isLoading } = useMyCompetitions();
 
   console.log({ competitions, user });
 
@@ -43,8 +24,8 @@ export const Competitions = () => {
         <Table.Td>
           {x.participants.find((p) => p.uid === x.creator_uid)?.displayName}
         </Table.Td>
-        <Table.Td>TODO</Table.Td>
-        <Table.Td>{String(x.finished)}</Table.Td>
+        {/* <Table.Td>TODO</Table.Td> */}
+        {/* <Table.Td>{String(x.finished)}</Table.Td> */}
       </Table.Tr>
     );
   });
@@ -76,8 +57,8 @@ export const Competitions = () => {
               <Table.Th>Creator</Table.Th>
 
               {/* TODO */}
-              <Table.Th>Current Episode</Table.Th>
-              <Table.Th>Finished?</Table.Th>
+              {/* <Table.Th>Current Episode</Table.Th> */}
+              {/* <Table.Th>Finished?</Table.Th> */}
             </Table.Tr>
           </Table.Thead>
 
