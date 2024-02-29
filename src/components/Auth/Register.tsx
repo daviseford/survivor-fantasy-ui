@@ -46,9 +46,15 @@ export const Register = () => {
       const { uid } = _user;
 
       // Create a doc for this user
-      setDoc(doc(db, "users", uid), { uid, email: _user.email, displayName });
+      await setDoc(doc(db, "users", uid), {
+        uid,
+        email: _user.email,
+        displayName,
+      });
 
       modals.closeAll();
+
+      window.location.reload();
       // ...
     } catch (error) {
       // @ts-expect-error asdas

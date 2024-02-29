@@ -1,0 +1,19 @@
+.title {
+  font-family:
+    Greycliff CF,
+    var(--mantine-font-family);
+  font-size: rem(40px);
+  font-weight: 900;
+  line-height: 1.1;
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+
+  padding-left: rem(32);
+  padding-bottom: rem(10);
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    padding: 0;
+    margin: 0;
+    font-size: rem(30px);
+    line-height: 1.2;
+  }
+}

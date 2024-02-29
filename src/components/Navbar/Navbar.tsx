@@ -56,15 +56,7 @@ export const Navbar = () => {
 
   return (
     <nav className={classes.navbar}>
-      <div className={classes.navbarMain}>
-        {/* <Group className={classes.header} justify="space-between"> */}
-        {/* <Group className={classes.header}> */}
-        {/* <MantineLogo size={28} /> */}
-        {/* <h1>{PROJECT_NAME}</h1>
-          <Code fw={700}>v0.0.0</Code> */}
-        {/* </Group> */}
-        {links}
-      </div>
+      <div className={classes.navbarMain}>{links}</div>
 
       <div className={classes.footer}>
         {!slimUser && (

@@ -243,7 +243,6 @@ export const DraftComponent = () => {
                 modals.openContextModal({
                   modal: "AuthModal",
                   innerProps: {},
-                  onClose: () => window.location.reload(),
                 })
               }
             >

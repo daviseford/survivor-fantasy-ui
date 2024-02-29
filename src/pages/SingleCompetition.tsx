@@ -25,7 +25,9 @@ export const SingleCompetition = () => {
           <h3>Season: {competition.season_num}</h3>
           <h3>
             Participants:{" "}
-            {competition.participants.map((x) => x.displayName).join(", ")}
+            {competition.participants
+              .map((x) => x.displayName || x.email)
+              .join(", ")}
           </h3>
         </Breadcrumbs>
 

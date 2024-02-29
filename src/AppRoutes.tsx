@@ -1,24 +1,25 @@
 import {
+  Anchor,
   AppShell,
   Burger,
-  Code,
   Group,
   MantineProvider,
-  Title,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useDisclosure } from "@mantine/hooks";
 import { ModalsProvider } from "@mantine/modals";
 import { QueryClientProvider } from "react-query";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import classes from "./AppRoutes.module.css";
 import { AuthModal } from "./components/Auth/AuthModal";
 import { Logout } from "./components/Auth/Logout";
+import { Footer } from "./components/Footer";
+import { Home } from "./components/Home/Home";
 import { Navbar } from "./components/Navbar";
 import { PROJECT_NAME } from "./consts";
 import { Admin } from "./pages/Admin";
 import { Competitions } from "./pages/Competitions";
 import { DraftComponent } from "./pages/Draft";
-import { Home } from "./pages/Home";
 import { SeasonAdmin } from "./pages/SeasonAdmin";
 import { Seasons } from "./pages/Seasons";
 import { SingleCompetition } from "./pages/SingleCompetition";
@@ -43,7 +44,12 @@ export const AppRoutes = () => {
         <Router>
           <ModalsProvider modals={modals}>
             <AppShell
-              header={{ height: 60 }}
+              header={{
+                height: {
+                  base: 42,
+                  sm: 55,
+                },
+              }}
               navbar={{
                 width: 300,
                 breakpoint: "sm",
@@ -52,17 +58,22 @@ export const AppRoutes = () => {
               padding="md"
             >
               <AppShell.Header>
-                <Burger
-                  opened={opened}
-                  onClick={toggle}
-                  hiddenFrom="sm"
-                  size="sm"
-                />
-                <Group align="center">
-                  <Title order={1} pl={"lg"}>
+                <Group>
+                  <Burger
+                    opened={opened}
+                    onClick={toggle}
+                    hiddenFrom="sm"
+                    size="sm"
+                  />
+                  <Anchor
+                    className={classes.title}
+                    variant="gradient"
+                    gradient={{ from: "blue", to: "cyan" }}
+                    inherit
+                    href="/"
+                  >
                     {PROJECT_NAME}
-                  </Title>
-                  <Code fw={700}>v0.0.0</Code>
+                  </Anchor>
                 </Group>
               </AppShell.Header>
 
@@ -102,6 +113,10 @@ export const AppRoutes = () => {
                   <Route path="/admin" element={<Admin />} />
                 </Routes>
               </AppShell.Main>
+
+              <AppShell.Footer>
+                <Footer />
+              </AppShell.Footer>
             </AppShell>
           </ModalsProvider>
         </Router>
