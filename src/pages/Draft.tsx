@@ -382,7 +382,7 @@ export const DraftComponent = () => {
       )}
 
       {!draft?.finished && (
-        <SimpleGrid cols={4}>
+        <SimpleGrid cols={{ base: 2, sm: 4 }}>
           {season.players.map((p) => {
             const isDrafted = isPlayerDrafted(p.name);
 

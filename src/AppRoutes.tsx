@@ -81,7 +81,7 @@ export const AppRoutes = () => {
                 <Navbar />
               </AppShell.Navbar>
 
-              <AppShell.Main>
+              <AppShell.Main className={classes.main}>
                 <Routes>
                   <Route path="/" element={<Home />} />
 

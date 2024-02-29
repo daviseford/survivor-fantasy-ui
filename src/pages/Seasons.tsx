@@ -1,19 +1,23 @@
 import {
   Badge,
+  Box,
   Button,
   Card,
   Group,
   Image,
   SimpleGrid,
   Text,
+  Title,
 } from "@mantine/core";
 import { useFirestoreQueryData } from "@react-query-firebase/firestore";
 import { collection } from "firebase/firestore";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import { Season } from "../types";
 
 export const Seasons = () => {
+  const navigate = useNavigate();
+
   const ref = collection(db, "seasons");
 
   const { data: seasons } = useFirestoreQueryData<Season[], Season[]>(
@@ -23,34 +27,39 @@ export const Seasons = () => {
   );
 
   return (
-    <SimpleGrid cols={3}>
-      {seasons?.map((x) => {
-        return (
-          <div key={x.id}>
-            <Card shadow="sm" padding="lg" radius="md" withBorder>
-              <Card.Section>
-                <Image src={x.img} height={250} alt={x.name} />
-              </Card.Section>
+    <Box>
+      <Title order={3} c="dimmed" p="md">
+        Pick your favorite season in order to learn more about the contestants
+        and start a draft!
+      </Title>
+      <SimpleGrid cols={3}>
+        {seasons?.map((x) => {
+          return (
+            <div key={x.id}>
+              <Card shadow="sm" padding="lg" radius="md" withBorder>
+                <Card.Section>
+                  <Image src={x.img} height={250} alt={x.name} />
+                </Card.Section>
 
-              <Group justify="space-between" mt="md" mb="xs">
-                <Text fw={500}>{x.name}</Text>
-                <Badge color="pink">Season {x.order}</Badge>
-              </Group>
+                <Group justify="space-between" mt="md" mb="xs">
+                  <Text fw={500}>{x.name}</Text>
+                  <Badge color="pink">Season {x.order}</Badge>
+                </Group>
 
-              {/* <Text size="sm" c="dimmed">
-        With Fjord Tours you can explore more of the magical fjord landscapes with tours and
-        activities on and around the fjords of Norway
-      </Text> */}
-
-              <Link to={`/seasons/${x.id}`}>
-                <Button color="blue" fullWidth mt="md" radius="md">
-                  Visit
+                <Button
+                  color="blue"
+                  fullWidth
+                  mt="md"
+                  radius="md"
+                  onClick={() => navigate(`/seasons/${x.id}`)}
+                >
+                  Select
                 </Button>
-              </Link>
-            </Card>
-          </div>
-        );
-      })}
-    </SimpleGrid>
+              </Card>
+            </div>
+          );
+        })}
+      </SimpleGrid>
+    </Box>
   );
 };

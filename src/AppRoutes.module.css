@@ -17,3 +17,11 @@
     line-height: 1.2;
   }
 }
+
+.main {
+  margin-bottom: rem(72px);
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    margin-bottom: rem(144px);
+  }
+}
