@@ -99,6 +99,13 @@ export const CreateElimination = () => {
     form.setValues({ id: `elimination_${v4()}` });
   };
 
+  const eliminatedPlayers = Object.values(eliminations).map(
+    (x) => x.player_name,
+  );
+  const playerNames = season?.players
+    .map((x) => x.name)
+    .filter((x) => !eliminatedPlayers.includes(x));
+
   return (
     <Card withBorder>
       <Card.Section p={"md"}>
@@ -134,7 +141,7 @@ export const CreateElimination = () => {
               <Select
                 withAsterisk
                 label="Eliminated Player"
-                data={season?.players.map((x) => x.name)}
+                data={playerNames}
                 {...form.getInputProps("player_name")}
               />
 

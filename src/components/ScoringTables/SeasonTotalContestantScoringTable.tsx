@@ -47,15 +47,20 @@ export const SeasonTotalContestantScoringTable = () => {
         (x) => x.uid === draftPick?.user_uid,
       );
 
-      const isEliminated = Object.values(eliminations).some(
+      const playerElimination = Object.values(eliminations).find(
         (x) => x.player_name === playerName,
       );
+
+      const isMedicallyEvacuated =
+        playerElimination && playerElimination.variant === "medical";
 
       return (
         <Table.Tr
           key={playerName}
           style={{
-            backgroundColor: isEliminated ? "var(--mantine-color-gray-3)" : "",
+            backgroundColor: playerElimination
+              ? "var(--mantine-color-gray-3)"
+              : "",
           }}
         >
           <Table.Td>
@@ -71,7 +76,15 @@ export const SeasonTotalContestantScoringTable = () => {
           <Table.Td>{draftedBy?.displayName || draftedBy?.email}</Table.Td>
           <Table.Td>{draftPick?.order}</Table.Td>
           <Table.Td>
-            {isEliminated && <Badge color="gray">Eliminated</Badge>}
+            {playerElimination && (
+              <Badge
+                color={
+                  isMedicallyEvacuated ? "red" : playerElimination ? "gray" : ""
+                }
+              >
+                {isMedicallyEvacuated ? "Medical" : "Eliminated"}
+              </Badge>
+            )}
           </Table.Td>
         </Table.Tr>
       );

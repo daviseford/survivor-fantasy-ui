@@ -34,47 +34,49 @@ export const SingleCompetition = () => {
 
         {slimUser?.isAdmin && (
           <Breadcrumbs separator=" | ">
-            <h3>Started: {String(competition.started)}</h3>
+            {/* <h3>Started: {String(competition.started)}</h3> */}
 
             {/* <StartCompetitionButton /> */}
 
-            <h3>Current Episode: {String(competition.current_episode)}</h3>
-            <h3>Finished: {String(competition.finished)}</h3>
+            <h3>Current Episode: {season.episodes.length}</h3>
+            {/* <h3>Current Episode: {String(competition.current_episode)}</h3> */}
+            {/* <h3>Finished: {String(competition.finished)}</h3> */}
           </Breadcrumbs>
         )}
       </Box>
 
       <SimpleGrid cols={1} p={"lg"}>
-        <>
-          <Card>
-            <Title order={2}>Season Scores</Title>
-            <PerUserPerEpisodeScoringTable />
-          </Card>
-        </>
+        <GridCard title="Season Scores">
+          <PerUserPerEpisodeScoringTable />
+        </GridCard>
 
-        <>
-          <Card>
-            <PropBetScoring />
-          </Card>
-        </>
+        <GridCard title="Prop Bets">
+          <PropBetScoring />
+        </GridCard>
 
-        <SimpleGrid>
-          <>
-            <Card>
-              <Title order={2}>Survivor Individual Scores</Title>
-              <SeasonTotalContestantScoringTable />
-            </Card>
-          </>
-        </SimpleGrid>
+        <GridCard title="Survivor Scores">
+          <SeasonTotalContestantScoringTable />
+        </GridCard>
 
-        <>
-          <Card>
-            <Title order={2}>Scoring Values</Title>
-            <ScoringLegendTable />
-          </Card>
-        </>
+        <GridCard title="Scoring Values">
+          <ScoringLegendTable />
+        </GridCard>
       </SimpleGrid>
     </div>
+  );
+};
+
+const GridCard = ({
+  title,
+  children,
+}: React.PropsWithChildren<{ title: string }>) => {
+  return (
+    <Card shadow="sm" p="xl">
+      <Card.Section mb={"xs"}>
+        <Title order={2}>{title}</Title>
+      </Card.Section>
+      <Card.Section>{children}</Card.Section>
+    </Card>
   );
 };
 
