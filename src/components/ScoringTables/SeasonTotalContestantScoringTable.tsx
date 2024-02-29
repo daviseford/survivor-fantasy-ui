@@ -6,7 +6,7 @@ import { useEliminations } from "../../hooks/useEliminations";
 import { useEvents } from "../../hooks/useEvents";
 import { useSeason } from "../../hooks/useSeason";
 import { getNumberWithOrdinal } from "../../utils/misc";
-import { getSurvivorPointsPerEpisode } from "../../utils/scoringUtils";
+import { getEnhancedSurvivorPoints } from "../../utils/scoringUtils";
 
 export const SeasonTotalContestantScoringTable = () => {
   const { data: competition } = useCompetition();
@@ -18,14 +18,13 @@ export const SeasonTotalContestantScoringTable = () => {
   const pointsByPlayer = season?.players?.reduce(
     (accum, player) => {
       accum[player.name] = season?.episodes.map((x) => {
-        return getSurvivorPointsPerEpisode(
-          season,
+        return getEnhancedSurvivorPoints(
           Object.values(challenges || {}),
           Object.values(eliminations || {}),
           Object.values(events || {}),
           x.order,
           player.name,
-        );
+        ).total;
       });
 
       return accum;
