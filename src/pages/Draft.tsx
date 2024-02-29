@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
 import { DraftTable } from "../components/DraftTable";
 import { PostDraftPropBetTable } from "../components/PropBetTables/PostDraftPropBetTable";
+import { ScoringLegendTable } from "../components/ScoringTables";
 import { PropBetsQuestions } from "../data/propbets";
 import { db, rt_db } from "../firebase";
 import { useCompetition } from "../hooks/useCompetition";
@@ -501,6 +502,13 @@ export const DraftComponent = () => {
           />
         </Box>
       )}
+
+      <Box p="lg">
+        <Title ta={"center"} order={2} mb={"md"}>
+          Scoring Legend
+        </Title>
+        <ScoringLegendTable />
+      </Box>
     </div>
   );
 };
