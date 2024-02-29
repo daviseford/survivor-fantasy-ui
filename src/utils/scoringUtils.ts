@@ -79,15 +79,12 @@ export type EnhancedScores = {
 };
 
 export const getEnhancedSurvivorPoints = (
-  season: Season,
   challenges: Challenge[],
   eliminations: Elimination[],
   events: GameEvent[],
   episodeNumber: number,
-  playerName?: string,
+  playerName: string,
 ) => {
-  if (!season || !playerName) return 0;
-
   const scores: EnhancedScores = {
     episode_num: episodeNumber,
     total: 0,

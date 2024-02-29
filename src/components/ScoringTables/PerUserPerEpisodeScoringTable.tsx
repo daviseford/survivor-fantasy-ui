@@ -1,6 +1,5 @@
 import { Table } from "@mantine/core";
 import { sum } from "lodash-es";
-import { useMemo } from "react";
 import { useChallenges } from "../../hooks/useChallenges";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useEliminations } from "../../hooks/useEliminations";
@@ -8,8 +7,8 @@ import { useEvents } from "../../hooks/useEvents";
 import { usePropBetScoring } from "../../hooks/useGetPropBetScoring";
 import { useSeason } from "../../hooks/useSeason";
 import {
+  EnhancedScores,
   getEnhancedSurvivorPoints,
-  getSurvivorPointsPerEpisode,
 } from "../../utils/scoringUtils";
 
 export const PerUserPerEpisodeScoringTable = () => {
@@ -21,63 +20,41 @@ export const PerUserPerEpisodeScoringTable = () => {
 
   const propBetScores = usePropBetScoring();
 
-  const enhancedScores = useMemo(() => {
-    if (!season) return;
-
-    return getEnhancedSurvivorPoints(
-      season,
-      Object.values(challenges || {}),
-      Object.values(eliminations || {}),
-      Object.values(events || {}),
-      1,
-      "Ramon Neville",
-    );
-  }, [challenges, eliminations, events, season]);
-
-  console.log({ enhancedScores });
-
-  const pointsBySurvivor = season?.players?.reduce(
+  const survivorPointsByEpisode = season?.players.reduce(
     (accum, player) => {
-      accum[player.name] = season?.episodes.map((x) => {
-        return getSurvivorPointsPerEpisode(
-          season,
+      const p = (season?.episodes || []).map((e) =>
+        getEnhancedSurvivorPoints(
           Object.values(challenges || {}),
           Object.values(eliminations || {}),
           Object.values(events || {}),
-          x.order,
+          e.order,
           player.name,
-        );
-      });
+        ),
+      );
+
+      accum[player.name] = p;
 
       return accum;
     },
-    {} as Record<string, number[]>,
+    {} as Record<string, EnhancedScores[]>,
   );
 
-  const pointsByUser = competition?.participants.reduce(
+  const pointsByUserPerEpisode = competition?.participants.reduce(
     (accum, participant) => {
       const { uid } = participant;
 
-      const survivorNames = competition.draft_picks
+      const myPlayerNames = competition.draft_picks
         .filter((x) => x.user_uid === uid)
         .map((x) => x.player_name);
 
-      const playerPointsPerEpisode = !season
-        ? []
-        : season.episodes.map((e) => {
-            return sum(
-              survivorNames.map((x) => {
-                return getSurvivorPointsPerEpisode(
-                  season,
-                  Object.values(challenges || {}),
-                  Object.values(eliminations || {}),
-                  Object.values(events || {}),
-                  e.order,
-                  x,
-                );
-              }),
-            );
-          });
+      const playerPointsPerEpisode = (season?.episodes || []).map((e) => {
+        return sum(
+          myPlayerNames.flatMap(
+            (p) =>
+              (survivorPointsByEpisode || {})?.[p]?.[e.order - 1]?.total || 0,
+          ),
+        );
+      });
 
       accum[uid] = playerPointsPerEpisode;
 
@@ -86,9 +63,7 @@ export const PerUserPerEpisodeScoringTable = () => {
     {} as Record<string, number[]>,
   );
 
-  console.log({ pointsBySurvivor, pointsByPlayer: pointsByUser });
-
-  const rows = Object.entries(pointsByUser || {})
+  const rows = Object.entries(pointsByUserPerEpisode || {})
     .sort((a, b) => sum(b[1]) - sum(a[1])) // sort by highest
     .map(([uid, value], i) => {
       const propBetPoints = propBetScores[uid];
