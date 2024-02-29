@@ -75,8 +75,6 @@ export type Challenge<PlayerNames = string, SeasonNumber = number> = {
    * List of player names who won
    */
   winning_players: PlayerNames[];
-
-  post_merge: boolean;
 };
 
 export type SlimUser = Pick<User, "email" | "uid" | "displayName"> & {

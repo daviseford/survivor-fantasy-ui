@@ -264,7 +264,7 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_1",
     variant: "combined",
     order: 1,
-    post_merge: false,
+
     winning_players: [
       "Dolly Neely",
       "Mia Galeotalanza",
@@ -285,7 +285,7 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_2",
     variant: "reward",
     order: 2,
-    post_merge: false,
+
     winning_players: [
       "Dolly Neely",
       "Mia Galeotalanza",
@@ -306,7 +306,7 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_2",
     variant: "immunity",
     order: 3,
-    post_merge: false,
+
     winning_players: [
       "Brady Finta",
       "Bubba Sampson",
@@ -326,7 +326,7 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_3",
     variant: "reward",
     order: 4,
-    post_merge: false,
+
     winning_players: [
       "Brady Finta",
       "Bubba Sampson",
@@ -346,7 +346,7 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_3",
     variant: "immunity",
     order: 5,
-    post_merge: false,
+
     winning_players: ["John Kenney"],
   },
   challenge_6: {
@@ -357,7 +357,7 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_4",
     variant: "reward",
     order: 6,
-    post_merge: false,
+
     winning_players: [
       "Lisa Keiffer",
       "Leann Slaby",
@@ -376,7 +376,7 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_4",
     variant: "immunity",
     order: 7,
-    post_merge: false,
+
     winning_players: [
       "Lisa Keiffer",
       "Leann Slaby",
@@ -395,7 +395,7 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_5",
     variant: "reward",
     order: 8,
-    post_merge: false,
+
     winning_players: [
       "Julie Berry",
       "John Kenney",
@@ -413,7 +413,7 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_5",
     variant: "immunity",
     order: 9,
-    post_merge: false,
+
     winning_players: [
       "Julie Berry",
       "John Kenney",
@@ -431,7 +431,7 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_6",
     variant: "reward",
     order: 10,
-    post_merge: false,
+
     winning_players: [
       "Julie Berry",
       "John Kenney",
@@ -449,7 +449,7 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_6",
     variant: "immunity",
     order: 11,
-    post_merge: false,
+
     winning_players: [
       "Julie Berry",
       "John Kenney",
@@ -467,7 +467,7 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_7",
     variant: "reward",
     order: 12,
-    post_merge: false,
+
     winning_players: [
       "Leann Slaby",
       "Scout Cloud Lee",
@@ -484,7 +484,7 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_7",
     variant: "immunity",
     order: 13,
-    post_merge: false,
+
     winning_players: [
       "Leann Slaby",
       "Scout Cloud Lee",
@@ -501,7 +501,7 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_8",
     variant: "reward",
     order: 14,
-    post_merge: false,
+
     winning_players: [
       "Julie Berry",
       "Twila Tanner",
@@ -518,7 +518,6 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_8",
     variant: "immunity",
     order: 15,
-    post_merge: true,
     winning_players: ["Lea Masters"],
   },
   challenge_16: {
@@ -529,7 +528,6 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_9",
     variant: "reward",
     order: 16,
-    post_merge: true,
     winning_players: ["Leann Slaby"],
   },
   challenge_17: {
@@ -540,7 +538,6 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_9",
     variant: "immunity",
     order: 17,
-    post_merge: true,
     winning_players: ["Ami Cusack"],
   },
   challenge_18: {
@@ -551,7 +548,6 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_10",
     variant: "reward",
     order: 18,
-    post_merge: true,
     winning_players: [
       "Ami Cusack",
       "Chad Crittenden",
@@ -567,7 +563,6 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_10",
     variant: "immunity",
     order: 19,
-    post_merge: true,
     winning_players: ["Twila Tanner"],
   },
   challenge_20: {
@@ -578,7 +573,6 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_11",
     variant: "reward",
     order: 20,
-    post_merge: true,
     winning_players: ["Eliza Orlins"],
   },
   challenge_21: {
@@ -589,7 +583,6 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_11",
     variant: "immunity",
     order: 21,
-    post_merge: true,
     winning_players: ["Ami Cusack"],
   },
   challenge_22: {
@@ -600,7 +593,6 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_12",
     variant: "reward",
     order: 22,
-    post_merge: true,
     winning_players: ["Eliza Orlins", "Ami Cusack", "Chris Daugherty"],
   },
   challenge_23: {
@@ -611,7 +603,6 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_12",
     variant: "immunity",
     order: 23,
-    post_merge: true,
     winning_players: ["Chris Daugherty"],
   },
   challenge_24: {
@@ -622,7 +613,6 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_13",
     variant: "reward",
     order: 24,
-    post_merge: true,
     winning_players: ["Julie Berry"],
   },
   challenge_25: {
@@ -633,7 +623,6 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_13",
     variant: "immunity",
     order: 25,
-    post_merge: true,
     winning_players: ["Eliza Orlins"],
   },
   challenge_26: {
@@ -644,7 +633,6 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_14",
     variant: "immunity",
     order: 26,
-    post_merge: true,
     winning_players: ["Chris Daugherty"],
   },
   challenge_27: {
@@ -655,7 +643,6 @@ export const SEASON_9_CHALLENGES = {
     episode_id: "episode_14",
     variant: "immunity",
     order: 27,
-    post_merge: true,
     winning_players: ["Chris Daugherty"],
   },
 } satisfies Record<Challenge["id"], Challenge<S9_Players, SeasonNum>>;

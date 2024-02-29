@@ -1,5 +1,6 @@
+import { useMemo } from "react";
 import { Competition } from "../types";
-import { getPropBetScoresByUser } from "../utils/scoringUtils";
+import { getPropBetScoresByUser } from "../utils/propBetUtils";
 import { useChallenges } from "./useChallenges";
 import { useCompetition } from "./useCompetition";
 import { useEliminations } from "./useEliminations";
@@ -13,12 +14,16 @@ export const usePropBetScoring = (competition_id?: Competition["id"]) => {
   const { data: eliminations } = useEliminations(competition?.season_id);
   const { data: events } = useEvents(season?.id);
 
-  const scores = getPropBetScoresByUser(
-    events,
-    eliminations,
-    challenges,
-    competition,
-    season,
+  const scores = useMemo(
+    () =>
+      getPropBetScoresByUser(
+        events,
+        eliminations,
+        challenges,
+        competition,
+        season,
+      ),
+    [challenges, competition, eliminations, events, season],
   );
 
   console.log({ scores });

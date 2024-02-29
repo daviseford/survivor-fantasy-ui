@@ -5,6 +5,7 @@ import { useCompetition } from "../../hooks/useCompetition";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useEvents } from "../../hooks/useEvents";
 import { useSeason } from "../../hooks/useSeason";
+import { getNumberWithOrdinal } from "../../utils/misc";
 import { getSurvivorPointsPerEpisode } from "../../utils/scoringUtils";
 
 export const SeasonTotalContestantScoringTable = () => {
@@ -51,8 +52,18 @@ export const SeasonTotalContestantScoringTable = () => {
         (x) => x.player_name === playerName,
       );
 
-      const isMedicallyEvacuated =
-        playerElimination && playerElimination.variant === "medical";
+      const isRemovedFromGame =
+        playerElimination &&
+        (playerElimination.variant === "medical" ||
+          playerElimination.variant === "quitter");
+
+      const isFTCEliminated =
+        playerElimination &&
+        playerElimination.variant === "final_tribal_council";
+
+      const isWinner = Object.values(events).some(
+        (x) => x.player_name === playerName && x.action === "win_survivor",
+      );
 
       return (
         <Table.Tr
@@ -60,7 +71,9 @@ export const SeasonTotalContestantScoringTable = () => {
           style={{
             backgroundColor: playerElimination
               ? "var(--mantine-color-gray-3)"
-              : "",
+              : isWinner
+                ? "var(--mantine-color-green-1)"
+                : "",
           }}
         >
           <Table.Td>
@@ -79,10 +92,23 @@ export const SeasonTotalContestantScoringTable = () => {
             {playerElimination && (
               <Badge
                 color={
-                  isMedicallyEvacuated ? "red" : playerElimination ? "gray" : ""
+                  isFTCEliminated
+                    ? "blue"
+                    : isRemovedFromGame
+                      ? "red"
+                      : playerElimination
+                        ? "gray"
+                        : ""
                 }
               >
-                {isMedicallyEvacuated ? "Medical" : "Eliminated"}
+                {isFTCEliminated
+                  ? "Final Tribal"
+                  : isRemovedFromGame
+                    ? "Removed"
+                    : "Eliminated"}{" "}
+                {!isFTCEliminated
+                  ? getNumberWithOrdinal(playerElimination.order)
+                  : ""}
               </Badge>
             )}
           </Table.Td>

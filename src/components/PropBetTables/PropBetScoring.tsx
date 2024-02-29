@@ -2,7 +2,7 @@ import { Badge, Group, Table, Text } from "@mantine/core";
 import { PropBetsQuestions } from "../../data/propbets";
 import { usePropBetScoring } from "../../hooks/useGetPropBetScoring";
 import { useUser } from "../../hooks/useUser";
-import { PropBetAnswer } from "../../utils/scoringUtils";
+import { PropBetAnswer } from "../../utils/propBetUtils";
 
 const AnswerTd = ({ score }: { score: PropBetAnswer }) => {
   return (

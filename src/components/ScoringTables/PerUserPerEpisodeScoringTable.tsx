@@ -1,12 +1,16 @@
 import { Table } from "@mantine/core";
 import { sum } from "lodash-es";
+import { useMemo } from "react";
 import { useChallenges } from "../../hooks/useChallenges";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useEvents } from "../../hooks/useEvents";
 import { usePropBetScoring } from "../../hooks/useGetPropBetScoring";
 import { useSeason } from "../../hooks/useSeason";
-import { getSurvivorPointsPerEpisode } from "../../utils/scoringUtils";
+import {
+  getEnhancedSurvivorPoints,
+  getSurvivorPointsPerEpisode,
+} from "../../utils/scoringUtils";
 
 export const PerUserPerEpisodeScoringTable = () => {
   const { data: competition } = useCompetition();
@@ -16,6 +20,21 @@ export const PerUserPerEpisodeScoringTable = () => {
   const { data: events } = useEvents(season?.id);
 
   const propBetScores = usePropBetScoring();
+
+  const enhancedScores = useMemo(() => {
+    if (!season) return;
+
+    return getEnhancedSurvivorPoints(
+      season,
+      Object.values(challenges || {}),
+      Object.values(eliminations || {}),
+      Object.values(events || {}),
+      1,
+      "Ramon Neville",
+    );
+  }, [challenges, eliminations, events, season]);
+
+  console.log({ enhancedScores });
 
   const pointsBySurvivor = season?.players?.reduce(
     (accum, player) => {

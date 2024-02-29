@@ -21,16 +21,14 @@ import { useEffect } from "react";
 import { v4 } from "uuid";
 import { db } from "../../firebase";
 import { useChallenges } from "../../hooks/useChallenges";
+import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
 import { Challenge, ChallengeWinActions } from "../../types";
 
 export const CreateChallenge = () => {
   const { data: season, isLoading } = useSeason();
+  const { data: eliminations } = useEliminations(season?.id);
   const { data: challenges } = useChallenges(season?.id);
-
-  const ordersssssss = orderBy(challenges, (x) => x.order);
-
-  console.log({ ordersssssss });
 
   const form = useForm<Challenge>({
     initialValues: {
@@ -41,7 +39,6 @@ export const CreateChallenge = () => {
       episode_num: 1,
       variant: ChallengeWinActions[0],
       winning_players: [],
-      post_merge: false,
       order: 0,
     },
 
@@ -87,16 +84,10 @@ export const CreateChallenge = () => {
     );
   }
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | undefined,
-  ) => {
-    e?.preventDefault();
-
+  const handleSubmit = async (values: Challenge) => {
     const _validate = form.validate();
 
     if (_validate.hasErrors) return;
-
-    const values = { ...form.values };
 
     const ref = doc(db, `challenges/${season?.id}`);
 
@@ -105,6 +96,13 @@ export const CreateChallenge = () => {
     // reset id and important form values
     form.setValues({ id: `challenge_${v4()}`, winning_players: [] });
   };
+
+  const eliminatedPlayers = Object.values(eliminations).map(
+    (x) => x.player_name,
+  );
+  const playerNames = season?.players
+    .map((x) => x.name)
+    .filter((x) => !eliminatedPlayers.includes(x));
 
   return (
     <Card withBorder>
@@ -115,7 +113,7 @@ export const CreateChallenge = () => {
       <Card.Section p={"md"}>
         <SimpleGrid cols={2}>
           <Box maw={340} mx="auto">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
               <TextInput
                 withAsterisk
                 readOnly
@@ -141,7 +139,7 @@ export const CreateChallenge = () => {
               <MultiSelect
                 withAsterisk
                 label="Winning Players"
-                data={season?.players.map((x) => x.name)}
+                data={playerNames}
                 {...form.getInputProps("winning_players")}
               />
 

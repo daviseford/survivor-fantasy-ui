@@ -82,18 +82,14 @@ export const CreateElimination = () => {
     );
   }
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | undefined,
-  ) => {
-    e?.preventDefault();
-
+  const handleSubmit = async (values: Elimination) => {
     const _validate = form.validate();
 
     if (_validate.hasErrors) return;
 
     const ref = doc(db, `eliminations/${season?.id}`);
 
-    await setDoc(ref, { [form.values.id]: form.values }, { merge: true });
+    await setDoc(ref, { [values.id]: values }, { merge: true });
 
     // reset id and important form values
     form.setValues({ id: `elimination_${v4()}` });
@@ -115,7 +111,7 @@ export const CreateElimination = () => {
       <Card.Section p={"md"}>
         <SimpleGrid cols={2}>
           <Box maw={340} mx="auto">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
               <TextInput
                 withAsterisk
                 readOnly

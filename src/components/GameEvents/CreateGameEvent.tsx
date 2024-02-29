@@ -19,11 +19,13 @@ import { useEffect } from "react";
 import { v4 } from "uuid";
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { db } from "../../firebase";
+import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
 import { GameEvent, GameEventActions } from "../../types";
 
 export const CreateGameEvent = () => {
   const { data: season, isLoading } = useSeason();
+  const { data: eliminations } = useEliminations(season?.id);
 
   const form = useForm<GameEvent>({
     initialValues: {
@@ -77,15 +79,13 @@ export const CreateGameEvent = () => {
     (x) => x.action === form.values.action,
   );
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | undefined,
-  ) => {
-    e?.preventDefault();
+  const handleSubmit = async (values: GameEvent) => {
+    // e?.preventDefault();
 
     const _validate = form.validate();
     if (_validate.hasErrors) return;
 
-    const values = { ...form.values };
+    // const values = { ...form.values };
 
     // remove any old values if not needed
     if (!currentAction?.multiplier) {
@@ -102,6 +102,13 @@ export const CreateGameEvent = () => {
     form.setValues({ id: `event_${v4()}` });
   };
 
+  const eliminatedPlayers = Object.values(eliminations).map(
+    (x) => x.player_name,
+  );
+  const playerNames = season?.players
+    .map((x) => x.name)
+    .filter((x) => !eliminatedPlayers.includes(x));
+
   return (
     <Card withBorder>
       <Card.Section p={"md"}>
@@ -111,7 +118,7 @@ export const CreateGameEvent = () => {
       <Card.Section p={"md"}>
         <SimpleGrid cols={2}>
           <Box maw={340} mx="auto">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
               <TextInput
                 withAsterisk
                 readOnly
@@ -130,7 +137,7 @@ export const CreateGameEvent = () => {
               <Select
                 withAsterisk
                 label="Player Name"
-                data={season?.players.map((x) => x.name)}
+                data={playerNames}
                 {...form.getInputProps("player_name")}
               />
 
