@@ -11,15 +11,17 @@ export const ScoringLegendTable = () => {
   ));
 
   return (
-    <Table>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>Action</Table.Th>
-          <Table.Th>Description</Table.Th>
-          <Table.Th>Fixed Value</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>{rows}</Table.Tbody>
-    </Table>
+    <Table.ScrollContainer minWidth={300}>
+      <Table>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>Action</Table.Th>
+            <Table.Th>Description</Table.Th>
+            <Table.Th>Fixed Value</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>{rows}</Table.Tbody>
+      </Table>
+    </Table.ScrollContainer>
   );
 };

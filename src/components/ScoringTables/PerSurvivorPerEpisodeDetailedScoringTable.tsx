@@ -75,6 +75,10 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
             </Group>
           </Table.Td>
 
+          <Table.Td width={"40px"}>
+            {survivorPointsTotalSeason[playerName]}
+          </Table.Td>
+
           {episodeScores.map((s) => {
             return (
               <Table.Td width={"120px"}>
@@ -93,9 +97,6 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
               </Table.Td>
             );
           })}
-          <Table.Td width={"40px"}>
-            {survivorPointsTotalSeason[playerName]}
-          </Table.Td>
           <Table.Td width={"150px"}>
             Drafted {getNumberWithOrdinal(draftPick?.order || 0)} by{" "}
             {draftedBy?.displayName || draftedBy?.email}
@@ -129,7 +130,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
     });
 
   return (
-    <Table.ScrollContainer minWidth={500}>
+    <Table.ScrollContainer minWidth={300}>
       <Table
         highlightOnHover
         verticalSpacing={"md"}
@@ -140,9 +141,8 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
           <Table.Tr>
             <Table.Th>Rank</Table.Th>
             <Table.Th>Player</Table.Th>
-            {season?.episodes.map((x) => <Table.Th>Ep {x.order}</Table.Th>)}
-
             <Table.Th>Total</Table.Th>
+            {season?.episodes.map((x) => <Table.Th>Ep {x.order}</Table.Th>)}
             <Table.Th>Draft Pick</Table.Th>
           </Table.Tr>
         </Table.Thead>

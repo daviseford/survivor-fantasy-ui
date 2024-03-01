@@ -1,11 +1,11 @@
-import { Box, Card, Group, SimpleGrid, Title } from "@mantine/core";
-import { MyPlayers } from "../components/MyPlayers/MyPlayers";
+import { Box, Card, SimpleGrid, Text, Title } from "@mantine/core";
+import { PlayerGroupGrid } from "../components/MyPlayers";
 import { PropBetScoring } from "../components/PropBetTables";
 import {
+  PerSurvivorPerEpisodeDetailedScoringTable,
   PerUserPerEpisodeScoringTable,
   ScoringLegendTable,
 } from "../components/ScoringTables";
-import { PerSurvivorPerEpisodeDetailedScoringTable } from "../components/ScoringTables/PerSurvivorPerEpisodeDetailedScoringTable";
 import { useCompetition } from "../hooks/useCompetition";
 import { useSeason } from "../hooks/useSeason";
 
@@ -19,32 +19,13 @@ export const SingleCompetition = () => {
   return (
     <div>
       <Box p="lg">
-        <Title order={2}>{competition.competition_name}</Title>
+        <Text c="dimmed">Season {competition.season_num}</Text>
 
-        <Group>
-          <h3>Season: {competition.season_num}</h3> |
-          <h3>
-            Participants:{" "}
-            {competition.participants
-              .map((x) => x.displayName || x.email)
-              .join(", ")}
-          </h3>
-        </Group>
+        <Title order={2} mb="md">
+          {competition.competition_name}
+        </Title>
 
-        <Group>
-          <Title order={3}>My Players:</Title>
-          <MyPlayers />
-        </Group>
-
-        {/* <Breadcrumbs separator=" | ">
-            <h3>Started: {String(competition.started)}</h3>
-
-            <StartCompetitionButton />
-
-            <h3>Current Episode: {season.episodes.length}</h3>
-            <h3>Current Episode: {String(competition.current_episode)}</h3>
-            <h3>Finished: {String(competition.finished)}</h3>
-          </Breadcrumbs>  */}
+        <PlayerGroupGrid />
       </Box>
 
       <SimpleGrid cols={1} p={"lg"}>
@@ -57,10 +38,6 @@ export const SingleCompetition = () => {
             <PropBetScoring />
           </GridCard>
         )}
-
-        {/* <GridCard title="Survivor Scores">
-          <SeasonTotalContestantScoringTable />
-        </GridCard> */}
 
         <GridCard title="Survivor Scores">
           <PerSurvivorPerEpisodeDetailedScoringTable />

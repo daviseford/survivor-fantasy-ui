@@ -1,13 +1,13 @@
 import { Avatar, Group, Title, Tooltip } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { useDraft } from "../../hooks/useDraft";
+import { useIsMobile } from "../../hooks/useIsMobile";
 import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
 
 export const MyDraftedPlayers = () => {
   const { slimUser } = useUser();
 
-  const matches = useMediaQuery("(max-width: 540px");
+  const isMobile = useIsMobile();
 
   const { draft } = useDraft();
   const { data: season } = useSeason(draft?.season_id);
@@ -29,7 +29,7 @@ export const MyDraftedPlayers = () => {
         <Avatar.Group spacing={"lg"}>
           {myPlayerInfo?.map((p) => (
             <Tooltip label={p.name}>
-              <Avatar key={p.name} src={p.img} size={matches ? "lg" : "xl"} />
+              <Avatar key={p.name} src={p.img} size={isMobile ? "lg" : "xl"} />
             </Tooltip>
           ))}
         </Avatar.Group>

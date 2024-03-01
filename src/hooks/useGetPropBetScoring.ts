@@ -14,7 +14,7 @@ export const usePropBetScoring = (competition_id?: Competition["id"]) => {
   const { data: eliminations } = useEliminations(competition?.season_id);
   const { data: events } = useEvents(season?.id);
 
-  const scores = useMemo(
+  const data = useMemo(
     () =>
       getPropBetScoresByUser(
         events,
@@ -26,5 +26,5 @@ export const usePropBetScoring = (competition_id?: Competition["id"]) => {
     [challenges, competition, eliminations, events, season],
   );
 
-  return scores;
+  return { data };
 };

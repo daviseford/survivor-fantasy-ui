@@ -18,7 +18,7 @@ export const useScoringCalculations = () => {
   const { data: eliminations } = useEliminations(competition?.season_id);
   const { data: events } = useEvents(season?.id);
 
-  const propBetScores = usePropBetScoring();
+  const { data: propBetScores } = usePropBetScoring();
 
   const survivorPointsByEpisode = useMemo(() => {
     if (!season?.players) return {};
