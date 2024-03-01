@@ -77,7 +77,7 @@ export const CreateElimination = () => {
   if (!season?.episodes?.length) {
     return (
       <Center>
-        <Text>Create an Episode first before adding events</Text>
+        <Text>Create an Episode first before adding eliminations</Text>
       </Center>
     );
   }
@@ -101,6 +101,8 @@ export const CreateElimination = () => {
   const playerNames = season?.players
     .map((x) => x.name)
     .filter((x) => !eliminatedPlayers.includes(x));
+
+  const opts = EliminationVariants.slice().reverse();
 
   return (
     <Card withBorder>
@@ -130,7 +132,7 @@ export const CreateElimination = () => {
               <Select
                 withAsterisk
                 label="Elimination Variant"
-                data={EliminationVariants}
+                data={opts}
                 {...form.getInputProps("variant")}
               />
 
