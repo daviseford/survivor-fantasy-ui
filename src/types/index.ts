@@ -221,7 +221,7 @@ export type PlayerAction = (typeof PlayerActions)[number];
 
 export type PlayerScoring = {
   action: PlayerAction;
-  description?: string;
+  description: string;
   multiplier?: boolean;
   fixed_value?: number;
 };

@@ -36,24 +36,27 @@ export const BASE_PLAYER_SCORING = [
   {
     action: "make_merge",
     fixed_value: 2,
+    description: "Make it to the merge.",
   },
   {
     action: "make_final_tribal_council",
     fixed_value: 4,
+    description: "Make it to the Final Tribal Council. Even as a goat.",
   },
   {
     action: "win_survivor",
     fixed_value: 20,
+    description: "Become the Sole Survivor.",
   },
   {
     action: "find_idol",
     fixed_value: 1,
-    description: "Clues do not count",
+    description: "Clues do not count.",
   },
   {
     action: "find_advantage",
     fixed_value: 1,
-    description: "Clues do not count",
+    description: "Clues do not count.",
   },
   {
     action: "win_advantage",
@@ -65,7 +68,7 @@ export const BASE_PLAYER_SCORING = [
     action: "use_idol",
     fixed_value: 2,
     description:
-      "Player gets credit for playing an idol on themself or another player.",
+      "Player gets credit for playing an idol, whether on themself or another player.",
   },
   {
     action: "use_advantage",
@@ -76,15 +79,17 @@ export const BASE_PLAYER_SCORING = [
   {
     action: "eliminated",
     description:
-      "1 pt per episode number (e.g. 5 pts for Episode 5 elimination)",
+      "1 pt per episode number (e.g. 5 pts for Episode 5 elimination).",
   },
   {
     action: "use_shot_in_the_dark_unsuccessfully",
     fixed_value: 1,
+    description: "It was worth a shot.",
   },
   {
     action: "use_shot_in_the_dark_successfully",
     fixed_value: 6,
+    description: "Buy a lottery ticket if you pull this off.",
   },
   {
     action: "find_beware_advantage",
