@@ -389,105 +389,6 @@ export const DraftComponent = () => {
         </Box>
       )}
 
-      {!draft?.finished && (
-        <SimpleGrid cols={{ base: 2, sm: 4 }}>
-          {season.players.map((p) => {
-            const isDrafted = isPlayerDrafted(p.name);
-
-            const draftedBy = !isDrafted
-              ? null
-              : draft?.draft_picks.find((x) => x.player_name === p.name);
-            return (
-              <Paper
-                radius="md"
-                withBorder
-                p="lg"
-                bg={
-                  isDrafted
-                    ? "var(--mantine-color-gray-4)"
-                    : "var(--mantine-color-body)"
-                }
-                key={p.name + "-grid"}
-              >
-                <Avatar
-                  src={p.img}
-                  size={120}
-                  radius={120}
-                  mx="auto"
-                  onClick={() => {
-                    modals.open({
-                      withCloseButton: false,
-                      children: (
-                        <Stack>
-                          <Center>
-                            <Title>{p.name}</Title>
-                          </Center>
-                          <Center>
-                            <Avatar size={"100%"} src={p.img} radius={10} />
-                          </Center>
-
-                          <Center>
-                            {p.description && (
-                              <Text ta="center" fz="lg" c="dimmed">
-                                {p.description.split(" | ").map((x) => (
-                                  <>
-                                    {x}
-                                    <br />
-                                  </>
-                                ))}
-                              </Text>
-                            )}
-                          </Center>
-                        </Stack>
-                      ),
-                    });
-                  }}
-                />
-                <Text ta="center" fz="lg" fw={500} mt="md">
-                  {p.name}
-                </Text>
-                {p.description && (
-                  <Text ta="center" fz="sm" c="dimmed">
-                    {p.description.split(" | ").map((x) => (
-                      <>
-                        {x}
-                        <br />
-                      </>
-                    ))}
-                  </Text>
-                )}
-                <Group justify="space-between" mt="md" mb="xs">
-                  <Badge color="pink">Season {season.order}</Badge>
-                  {draftedBy && (
-                    <Badge color={"blue"}>
-                      Drafted by {draftedBy.user_name}
-                    </Badge>
-                  )}
-                  <Badge color={isDrafted ? "red" : "green"}>
-                    {isDrafted ? "Drafted" : "Available"}
-                  </Badge>
-                </Group>
-
-                {!isDrafted && (
-                  <Button
-                    fullWidth
-                    onClick={() => draftPlayer(p.name)}
-                    disabled={
-                      !draft?.started ||
-                      draft.finished ||
-                      !isCurrentDrafter ||
-                      isDrafted
-                    }
-                  >
-                    Draft Me
-                  </Button>
-                )}
-              </Paper>
-            );
-          })}
-        </SimpleGrid>
-      )}
-
       {draft?.finished && userHasSubmittedPropBets && (
         <Box p="lg">
           <Title ta={"center"} order={2}>
@@ -496,6 +397,101 @@ export const DraftComponent = () => {
           <PostDraftPropBetTable />
         </Box>
       )}
+
+      <SimpleGrid cols={{ base: 2, sm: 4 }}>
+        {season.players.map((p) => {
+          const isDrafted = isPlayerDrafted(p.name);
+
+          const draftedBy = !isDrafted
+            ? null
+            : draft?.draft_picks.find((x) => x.player_name === p.name);
+          return (
+            <Paper
+              radius="md"
+              withBorder
+              p="lg"
+              bg={
+                isDrafted
+                  ? "var(--mantine-color-gray-4)"
+                  : "var(--mantine-color-body)"
+              }
+              key={p.name + "-grid"}
+            >
+              <Avatar
+                src={p.img}
+                size={120}
+                radius={120}
+                mx="auto"
+                onClick={() => {
+                  modals.open({
+                    withCloseButton: false,
+                    children: (
+                      <Stack>
+                        <Center>
+                          <Title>{p.name}</Title>
+                        </Center>
+                        <Center>
+                          <Avatar size={"100%"} src={p.img} radius={10} />
+                        </Center>
+
+                        <Center>
+                          {p.description && (
+                            <Text ta="center" fz="lg" c="dimmed">
+                              {p.description.split(" | ").map((x) => (
+                                <>
+                                  {x}
+                                  <br />
+                                </>
+                              ))}
+                            </Text>
+                          )}
+                        </Center>
+                      </Stack>
+                    ),
+                  });
+                }}
+              />
+              <Text ta="center" fz="lg" fw={500} mt="md">
+                {p.name}
+              </Text>
+              {p.description && (
+                <Text ta="center" fz="sm" c="dimmed">
+                  {p.description.split(" | ").map((x) => (
+                    <>
+                      {x}
+                      <br />
+                    </>
+                  ))}
+                </Text>
+              )}
+              <Group justify="space-between" mt="md" mb="xs">
+                <Badge color="pink">Season {season.order}</Badge>
+                {draftedBy && (
+                  <Badge color={"blue"}>Drafted by {draftedBy.user_name}</Badge>
+                )}
+                <Badge color={isDrafted ? "red" : "green"}>
+                  {isDrafted ? "Drafted" : "Available"}
+                </Badge>
+              </Group>
+
+              {!isDrafted && (
+                <Button
+                  fullWidth
+                  onClick={() => draftPlayer(p.name)}
+                  disabled={
+                    !draft?.started ||
+                    draft.finished ||
+                    !isCurrentDrafter ||
+                    isDrafted
+                  }
+                >
+                  Draft Me
+                </Button>
+              )}
+            </Paper>
+          );
+        })}
+      </SimpleGrid>
 
       {draft?.started && (
         <Box p="lg">
