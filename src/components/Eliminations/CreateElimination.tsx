@@ -35,7 +35,7 @@ export const CreateElimination = () => {
       episode_id: "episode_1",
       episode_num: 1,
       player_name: "",
-      variant: EliminationVariants[0],
+      variant: EliminationVariants[4],
       order: 0,
     },
 
