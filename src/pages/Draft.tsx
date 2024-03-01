@@ -25,6 +25,7 @@ import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
 import { DraftTable } from "../components/DraftTable";
+import { MyDraftedPlayers } from "../components/MyPlayers/MyDraftedPlayers";
 import { PostDraftPropBetTable } from "../components/PropBetTables/PostDraftPropBetTable";
 import { ScoringLegendTable } from "../components/ScoringTables";
 import { PropBetsQuestions } from "../data/propbets";
@@ -352,6 +353,12 @@ export const DraftComponent = () => {
             </Title>
           )}
         </Breadcrumbs>
+
+        {Boolean(draft?.draft_picks?.length) && (
+          <Center p="lg">
+            <MyDraftedPlayers />
+          </Center>
+        )}
 
         {draft?.current_picker && (
           <Center p={"xl"}>

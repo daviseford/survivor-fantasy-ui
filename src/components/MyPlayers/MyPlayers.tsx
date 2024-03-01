@@ -12,12 +12,12 @@ export const MyPlayers = () => {
   const { data: competition } = useCompetition();
   const { data: season } = useSeason(competition?.season_id);
 
-  const myPlayerNames = competition?.draft_picks
+  const myPlayerNames = (competition?.draft_picks || [])
     .filter((x) => x.user_uid === slimUser?.uid)
     .map((x) => x.player_name);
 
   const myPlayerInfo = (season?.players || []).filter((p) =>
-    myPlayerNames?.includes(p.name),
+    myPlayerNames.includes(p.name),
   );
 
   return (
