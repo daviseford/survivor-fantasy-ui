@@ -79,9 +79,11 @@ export const PerUserPerEpisodeScoringTable = () => {
             <Table.Td>{x}</Table.Td>
           ))}
 
-          <Table.Td>{propBetPoints.total}</Table.Td>
+          {competition?.prop_bets && (
+            <Table.Td>{propBetPoints?.total || 0}</Table.Td>
+          )}
 
-          <Table.Td>{sum(value) + propBetPoints.total}</Table.Td>
+          <Table.Td>{sum(value) + (propBetPoints?.total || 0)}</Table.Td>
         </Table.Tr>
       );
     });
@@ -93,7 +95,7 @@ export const PerUserPerEpisodeScoringTable = () => {
           <Table.Th>Rank</Table.Th>
           <Table.Th>User Name</Table.Th>
           {season?.episodes.map((x) => <Table.Th>Ep. {x.order}</Table.Th>)}
-          <Table.Th>Prop Bet Points</Table.Th>
+          {competition?.prop_bets && <Table.Th>Prop Bet Points</Table.Th>}
           <Table.Th>Total</Table.Th>
         </Table.Tr>
       </Table.Thead>

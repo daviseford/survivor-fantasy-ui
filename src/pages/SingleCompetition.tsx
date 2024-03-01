@@ -52,9 +52,11 @@ export const SingleCompetition = () => {
           <PerUserPerEpisodeScoringTable />
         </GridCard>
 
-        <GridCard title="Prop Bets">
-          <PropBetScoring />
-        </GridCard>
+        {competition.prop_bets && (
+          <GridCard title="Prop Bets">
+            <PropBetScoring />
+          </GridCard>
+        )}
 
         <GridCard title="Survivor Scores">
           <SeasonTotalContestantScoringTable />

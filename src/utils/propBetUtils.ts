@@ -30,7 +30,8 @@ export const getPropBetScoresByUser = (
   competition?: Competition,
   season?: Season,
 ): PropBetScoresByUser => {
-  if (!competition?.participant_uids || !season) return {};
+  if (!competition?.participant_uids || !season || !competition.prop_bets)
+    return {};
 
   return competition.participant_uids.reduce<PropBetScoresByUser>((a, b) => {
     const scores = getPropBetScoresForUser(
@@ -55,13 +56,10 @@ export const getPropBetScoresForUser = (
   challenges: Record<Challenge["id"], Challenge>,
   competition: Competition,
   season: Season,
-): PropBetScores | undefined => {
+): PropBetScores => {
   const myPropBets = competition.prop_bets.find(
     (x) => x.user_uid === uid,
   )?.values;
-
-  // bail if no data
-  if (!myPropBets) return;
 
   const emptyAnswer: PropBetAnswer = {
     user_uid: uid,
@@ -72,24 +70,31 @@ export const getPropBetScoresForUser = (
     answer: "",
   };
 
+  // bail if no data
+
   const scores = {
     total: 0,
     propbet_first_vote: {
       ...emptyAnswer,
-      answer: myPropBets.propbet_first_vote,
+      answer: myPropBets?.propbet_first_vote || "",
     },
-    propbet_ftc: { ...emptyAnswer, answer: myPropBets.propbet_ftc },
-    propbet_idols: { ...emptyAnswer, answer: myPropBets.propbet_idols },
+    propbet_ftc: { ...emptyAnswer, answer: myPropBets?.propbet_ftc || "" },
+    propbet_idols: { ...emptyAnswer, answer: myPropBets?.propbet_idols || "" },
     propbet_immunities: {
       ...emptyAnswer,
-      answer: myPropBets.propbet_immunities,
+      answer: myPropBets?.propbet_immunities || "",
     },
     propbet_medical_evac: {
       ...emptyAnswer,
-      answer: myPropBets.propbet_medical_evac,
+      answer: myPropBets?.propbet_medical_evac || "",
     },
-    propbet_winner: { ...emptyAnswer, answer: myPropBets.propbet_winner },
+    propbet_winner: {
+      ...emptyAnswer,
+      answer: myPropBets?.propbet_winner || "",
+    },
   } satisfies PropBetScores;
+
+  if (!myPropBets) return scores;
 
   const addCorrect = (key: Exclude<keyof typeof scores, "total">) => {
     scores[key].correct = true;
