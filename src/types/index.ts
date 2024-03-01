@@ -154,7 +154,10 @@ export type Competition = {
   participants: SlimUser[];
 
   draft_picks: DraftPick[];
-  prop_bets: PropBetsEntry[];
+  /**
+   * legacy drafts don't have prop_bets, remove this ? after Season 46 probably
+   */
+  prop_bets?: PropBetsEntry[];
 
   started: boolean;
   current_episode: number | null;
@@ -180,8 +183,12 @@ export const ChallengeWinActions = ["reward", "combined", "immunity"] as const;
 export type ChallengeWinAction = (typeof ChallengeWinActions)[number];
 
 export const GameEventActions = [
+  "accept_beware_advantage",
+  "complete_sweat_or_savvy_task",
   "find_advantage",
   "find_idol",
+  "fulfill_beware_advantage",
+  "go_on_journey",
   "make_final_tribal_council",
   "make_merge",
   "use_advantage",

@@ -57,7 +57,7 @@ export const getPropBetScoresForUser = (
   competition: Competition,
   season: Season,
 ): PropBetScores => {
-  const myPropBets = competition.prop_bets.find(
+  const myPropBets = (competition?.prop_bets || []).find(
     (x) => x.user_uid === uid,
   )?.values;
 
@@ -69,8 +69,6 @@ export const getPropBetScoresForUser = (
     points_awarded: 0,
     answer: "",
   };
-
-  // bail if no data
 
   const scores = {
     total: 0,
@@ -94,6 +92,7 @@ export const getPropBetScoresForUser = (
     },
   } satisfies PropBetScores;
 
+  // bail if no data
   if (!myPropBets) return scores;
 
   const addCorrect = (key: Exclude<keyof typeof scores, "total">) => {

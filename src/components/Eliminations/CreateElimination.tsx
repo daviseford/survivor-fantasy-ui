@@ -23,6 +23,8 @@ import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
 import { Elimination, EliminationVariants } from "../../types";
 
+const dropdownOptions = EliminationVariants.slice().reverse();
+
 export const CreateElimination = () => {
   const { data: season, isLoading } = useSeason();
   const { data: eliminations } = useEliminations(season?.id);
@@ -35,7 +37,7 @@ export const CreateElimination = () => {
       episode_id: "episode_1",
       episode_num: 1,
       player_name: "",
-      variant: EliminationVariants[4],
+      variant: dropdownOptions[0],
       order: 0,
     },
 
@@ -102,8 +104,6 @@ export const CreateElimination = () => {
     .map((x) => x.name)
     .filter((x) => !eliminatedPlayers.includes(x));
 
-  const opts = EliminationVariants.slice().reverse();
-
   return (
     <Card withBorder>
       <Card.Section p={"md"}>
@@ -132,7 +132,7 @@ export const CreateElimination = () => {
               <Select
                 withAsterisk
                 label="Elimination Variant"
-                data={opts}
+                data={dropdownOptions}
                 {...form.getInputProps("variant")}
               />
 

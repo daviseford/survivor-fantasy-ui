@@ -20,7 +20,7 @@ export const BASE_PLAYER_SCORING = [
     action: "votes_negated_by_idol",
     fixed_value: 1,
     multiplier: true,
-    description: "Any votes negated by playing an idol (even if unnecessary)",
+    description: "Any votes negated by playing an idol",
   },
   {
     action: "medically_evacuated",
@@ -64,6 +64,8 @@ export const BASE_PLAYER_SCORING = [
   {
     action: "use_advantage",
     fixed_value: 2,
+    description:
+      "Whether it's at tribal or pre-challenge or any other time. Using an advantage triggers this.",
   },
   {
     action: "eliminated",
@@ -76,6 +78,28 @@ export const BASE_PLAYER_SCORING = [
   },
   {
     action: "use_shot_in_the_dark_successfully",
-    fixed_value: 3,
+    fixed_value: 6,
+  },
+  {
+    action: "accept_beware_advantage",
+    fixed_value: 0.5,
+    description:
+      "The player accepts the Beware advantage and begins playing under its conditions.",
+  },
+  {
+    action: "fulfill_beware_advantage",
+    fixed_value: 0.5,
+    description:
+      "The player fulfills the terms and escapes the Beware part of the advantage.",
+  },
+  {
+    action: "go_on_journey",
+    fixed_value: 0.5,
+    description: "This one's easy. Just go on a boat ride.",
+  },
+  {
+    action: "complete_sweat_or_savvy_task",
+    fixed_value: 0.5,
+    description: "Successfully complete Sweat or Savvy task",
   },
 ] satisfies PlayerScoring[];
