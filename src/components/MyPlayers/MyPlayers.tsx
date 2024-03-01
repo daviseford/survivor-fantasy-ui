@@ -1,34 +1,30 @@
 import { Avatar, Tooltip } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { useCompetition } from "../../hooks/useCompetition";
-import { useSeason } from "../../hooks/useSeason";
-import { useUser } from "../../hooks/useUser";
+import { useCompetitionMeta } from "../../hooks/useCompetitionMeta";
 
 export const MyPlayers = () => {
-  const { slimUser } = useUser();
-
   const matches = useMediaQuery("(max-width: 540px");
 
-  const { data: competition } = useCompetition();
-  const { data: season } = useSeason(competition?.season_id);
-
-  const myPlayerNames = (competition?.draft_picks || [])
-    .filter((x) => x.user_uid === slimUser?.uid)
-    .map((x) => x.player_name);
-
-  const myPlayerInfo = (season?.players || []).filter((p) =>
-    myPlayerNames.includes(p.name),
-  );
+  const { myPlayers, eliminatedPlayers } = useCompetitionMeta();
 
   return (
-    <>
-      <Avatar.Group spacing={"lg"}>
-        {myPlayerInfo?.map((p) => (
+    <Avatar.Group spacing={"lg"}>
+      {myPlayers?.map((p) => {
+        const avatarStyle = eliminatedPlayers.includes(p.name)
+          ? { filter: "grayscale(1)" }
+          : {};
+
+        return (
           <Tooltip label={p.name}>
-            <Avatar key={p.name} src={p.img} size={matches ? "lg" : "xl"} />
+            <Avatar
+              key={p.name}
+              src={p.img}
+              size={matches ? "lg" : "xl"}
+              style={avatarStyle}
+            />
           </Tooltip>
-        ))}
-      </Avatar.Group>
-    </>
+        );
+      })}
+    </Avatar.Group>
   );
 };

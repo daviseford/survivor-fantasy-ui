@@ -4,8 +4,8 @@ import { PropBetScoring } from "../components/PropBetTables";
 import {
   PerUserPerEpisodeScoringTable,
   ScoringLegendTable,
-  SeasonTotalContestantScoringTable,
 } from "../components/ScoringTables";
+import { PerSurvivorPerEpisodeDetailedScoringTable } from "../components/ScoringTables/PerSurvivorPerEpisodeDetailedScoringTable";
 import { useCompetition } from "../hooks/useCompetition";
 import { useSeason } from "../hooks/useSeason";
 
@@ -58,8 +58,12 @@ export const SingleCompetition = () => {
           </GridCard>
         )}
 
-        <GridCard title="Survivor Scores">
+        {/* <GridCard title="Survivor Scores">
           <SeasonTotalContestantScoringTable />
+        </GridCard> */}
+
+        <GridCard title="Survivor Scores">
+          <PerSurvivorPerEpisodeDetailedScoringTable />
         </GridCard>
 
         <GridCard title="Scoring Values">

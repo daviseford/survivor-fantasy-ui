@@ -61,10 +61,11 @@ export const getPropBetScoresForUser = (
     (x) => x.user_uid === uid,
   )?.values;
 
+  const _user = competition.participants.find((x) => x.uid === uid);
+  
   const emptyAnswer: PropBetAnswer = {
     user_uid: uid,
-    user_name:
-      competition.participants.find((x) => x.uid === uid)?.displayName || uid,
+    user_name: _user?.displayName || _user?.email || uid,
     correct: false,
     points_awarded: 0,
     answer: "",

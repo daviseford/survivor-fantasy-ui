@@ -186,6 +186,7 @@ export const GameEventActions = [
   "accept_beware_advantage",
   "complete_sweat_or_savvy_task",
   "find_advantage",
+  "find_beware_advantage",
   "find_idol",
   "fulfill_beware_advantage",
   "go_on_journey",
@@ -196,6 +197,7 @@ export const GameEventActions = [
   "use_shot_in_the_dark_successfully",
   "use_shot_in_the_dark_unsuccessfully",
   "votes_negated_by_idol",
+  "win_advantage",
   "win_survivor",
 ] as const;
 

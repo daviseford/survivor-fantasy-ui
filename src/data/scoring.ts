@@ -39,7 +39,7 @@ export const BASE_PLAYER_SCORING = [
   },
   {
     action: "make_final_tribal_council",
-    fixed_value: 2,
+    fixed_value: 4,
   },
   {
     action: "win_survivor",
@@ -54,6 +54,12 @@ export const BASE_PLAYER_SCORING = [
     action: "find_advantage",
     fixed_value: 1,
     description: "Clues do not count",
+  },
+  {
+    action: "win_advantage",
+    fixed_value: 1,
+    description:
+      "Obtain an advantage (e.g. extra vote) from the result of a challenge or competition.",
   },
   {
     action: "use_idol",
@@ -79,6 +85,12 @@ export const BASE_PLAYER_SCORING = [
   {
     action: "use_shot_in_the_dark_successfully",
     fixed_value: 6,
+  },
+  {
+    action: "find_beware_advantage",
+    fixed_value: 0.5,
+    description:
+      "The player finds the Beware advantage. They can pass it to someone else with no penalty.",
   },
   {
     action: "accept_beware_advantage",

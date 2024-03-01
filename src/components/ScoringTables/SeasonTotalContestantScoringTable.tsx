@@ -55,7 +55,7 @@ export const SeasonTotalContestantScoringTable = () => {
                 : "",
           }}
         >
-          <Table.Td>
+          <Table.Td width={"240px"}>
             <Group gap="sm">
               <Avatar size={40} src={playerData?.img} radius={40} />
 
@@ -64,7 +64,7 @@ export const SeasonTotalContestantScoringTable = () => {
               </Text>
             </Group>
           </Table.Td>
-          <Table.Td>{seasonScore}</Table.Td>
+          <Table.Td width={"40px"}>{seasonScore}</Table.Td>
           <Table.Td>{draftedBy?.displayName || draftedBy?.email}</Table.Td>
           <Table.Td>{draftPick?.order}</Table.Td>
           <Table.Td>
@@ -100,7 +100,7 @@ export const SeasonTotalContestantScoringTable = () => {
       <Table.Thead>
         <Table.Tr>
           <Table.Th>Player Name</Table.Th>
-          <Table.Th>Total Points</Table.Th>
+          <Table.Th>Total</Table.Th>
           <Table.Th>Drafted By</Table.Th>
           <Table.Th>Pick #</Table.Th>
           <Table.Th></Table.Th>
