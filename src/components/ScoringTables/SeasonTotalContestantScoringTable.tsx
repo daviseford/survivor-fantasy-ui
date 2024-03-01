@@ -1,42 +1,22 @@
 import { Avatar, Badge, Group, Table, Text } from "@mantine/core";
-import { sum } from "lodash-es";
-import { useChallenges } from "../../hooks/useChallenges";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useEvents } from "../../hooks/useEvents";
+import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
 import { getNumberWithOrdinal } from "../../utils/misc";
-import { getEnhancedSurvivorPoints } from "../../utils/scoringUtils";
 
 export const SeasonTotalContestantScoringTable = () => {
   const { data: competition } = useCompetition();
   const { data: season } = useSeason(competition?.season_id);
-  const { data: challenges } = useChallenges(competition?.season_id);
   const { data: eliminations } = useEliminations(competition?.season_id);
   const { data: events } = useEvents(season?.id);
 
-  const pointsByPlayer = season?.players?.reduce(
-    (accum, player) => {
-      accum[player.name] = season?.episodes.map((x) => {
-        return getEnhancedSurvivorPoints(
-          Object.values(challenges || {}),
-          Object.values(eliminations || {}),
-          Object.values(events || {}),
-          x.order,
-          player.name,
-        ).total;
-      });
+  const { survivorPointsTotalSeason } = useScoringCalculations();
 
-      return accum;
-    },
-    {} as Record<string, number[]>,
-  );
-
-  console.log({ pointsByPlayer, competition });
-
-  const rows = Object.entries(pointsByPlayer || {})
-    .sort((a, b) => sum(b[1]) - sum(a[1])) // sort by highest
-    .map(([playerName, value]) => {
+  const rows = Object.entries(survivorPointsTotalSeason)
+    .sort((a, b) => b[1] - a[1]) // sort by highest
+    .map(([playerName, seasonScore]) => {
       const playerData = season?.players.find((x) => x.name === playerName);
 
       const draftPick = competition?.draft_picks.find(
@@ -84,7 +64,7 @@ export const SeasonTotalContestantScoringTable = () => {
               </Text>
             </Group>
           </Table.Td>
-          <Table.Td>{sum(value)}</Table.Td>
+          <Table.Td>{seasonScore}</Table.Td>
           <Table.Td>{draftedBy?.displayName || draftedBy?.email}</Table.Td>
           <Table.Td>{draftPick?.order}</Table.Td>
           <Table.Td>

@@ -20,32 +20,32 @@ export const useScoringCalculations = () => {
 
   const propBetScores = usePropBetScoring();
 
-  const survivorPointsByEpisode = useMemo(
-    () =>
-      season?.players.reduce(
-        (accum, player) => {
-          const p = (season?.episodes || []).map((e) =>
-            getEnhancedSurvivorPoints(
-              Object.values(challenges || {}),
-              Object.values(eliminations || {}),
-              Object.values(events || {}),
-              e.order,
-              player.name,
-            ),
-          );
+  const survivorPointsByEpisode = useMemo(() => {
+    if (!season?.players) return {};
 
-          accum[player.name] = p;
+    return season?.players.reduce<Record<string, EnhancedScores[]>>(
+      (accum, player) => {
+        const p = (season?.episodes || []).map((e) =>
+          getEnhancedSurvivorPoints(
+            Object.values(challenges || {}),
+            Object.values(eliminations || {}),
+            Object.values(events || {}),
+            e.order,
+            player.name,
+          ),
+        );
 
-          return accum;
-        },
-        {} as Record<string, EnhancedScores[]>,
-      ),
-    [challenges, eliminations, events, season?.episodes, season?.players],
-  );
+        accum[player.name] = p;
+
+        return accum;
+      },
+      {},
+    );
+  }, [challenges, eliminations, events, season?.episodes, season?.players]);
 
   const pointsByUserPerEpisode = useMemo(
     () =>
-      competition?.participants.reduce(
+      competition?.participants.reduce<Record<string, number[]>>(
         (accum, participant) => {
           const { uid } = participant;
 
@@ -67,7 +67,7 @@ export const useScoringCalculations = () => {
 
           return accum;
         },
-        {} as Record<string, number[]>,
+        {},
       ),
     [
       competition?.draft_picks,
@@ -99,7 +99,20 @@ export const useScoringCalculations = () => {
     [pointsByUserPerEpisode, propBetScores],
   );
 
+  const survivorPointsTotalSeason = useMemo(
+    () =>
+      Object.entries(survivorPointsByEpisode).reduce<Record<string, number>>(
+        (accum, [key, value]) => {
+          accum[key] = sum(value.map((x) => x.total));
+          return accum;
+        },
+        {},
+      ),
+    [survivorPointsByEpisode],
+  );
+
   return {
+    survivorPointsTotalSeason,
     survivorPointsByEpisode,
     pointsByUserPerEpisode,
     pointsByUserPerEpisodeWithPropBets,
