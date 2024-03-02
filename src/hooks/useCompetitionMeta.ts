@@ -30,7 +30,7 @@ export const useCompetitionMeta = () => {
   }, {});
 
   const mySurvivors = slimUser?.uid
-    ? survivorsByUserUid[slimUser?.uid].map((x) => x.name)
+    ? survivorsByUserUid[slimUser?.uid]?.map((x) => x.name)
     : [];
 
   const eliminatedSurvivors = Object.values(eliminations).map(

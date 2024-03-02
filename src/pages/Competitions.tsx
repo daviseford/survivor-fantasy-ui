@@ -1,19 +1,25 @@
 import { Alert, Center, Loader, Table, Title } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import { useCompetitions } from "../hooks/useCompetitions";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useMyCompetitions } from "../hooks/useMyCompetitions";
 import { useUser } from "../hooks/useUser";
 
 export const Competitions = () => {
-  const { user } = useUser();
+  const { slimUser } = useUser();
 
   const isMobile = useIsMobile();
 
   const navigate = useNavigate();
 
   const { data: competitions, isLoading } = useMyCompetitions();
+  const { data: allCompetitions } = useCompetitions();
 
-  const rows = competitions?.map((x) => {
+  // prefer all comps if admin has access is in it
+  const _comps =
+    (allCompetitions?.length ? allCompetitions : competitions) || [];
+
+  const rows = _comps?.map((x) => {
     return (
       <Table.Tr onClick={() => navigate(`/competitions/${x.id}`)} key={x.id}>
         <Table.Td>{x.competition_name}</Table.Td>
@@ -34,7 +40,7 @@ export const Competitions = () => {
     );
   });
 
-  if (!user) {
+  if (!slimUser) {
     return <Alert>Please register or log in to view your competitions!</Alert>;
   }
 
