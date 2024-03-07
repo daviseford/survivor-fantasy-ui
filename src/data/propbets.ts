@@ -29,11 +29,10 @@ export const PropBetsQuestions = {
     point_value: 4,
     description: "Will there be a medical evacuation this season?",
   },
-} satisfies Record<
-  `propbet_${string}`,
-  {
-    id: `propbet_${string}`;
-    point_value: number;
-    description: string;
-  }
->;
+} satisfies Record<`propbet_${string}`, PropBetQuestionObj>;
+
+export type PropBetQuestionObj = {
+  id: `propbet_${string}`;
+  point_value: number;
+  description: string;
+};

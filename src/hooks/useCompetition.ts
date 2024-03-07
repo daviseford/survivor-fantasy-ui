@@ -35,10 +35,10 @@ export const useCompetition = (id?: Competition["id"]) => {
 
   const key = id ?? competitionId;
 
-  console.log("useCompetition competitionId = " + key);
-
   useEffect(() => {
     if (!key) return;
+
+    console.log("useCompetition competitionId = " + key);
 
     const ref = doc(db, "competitions", key);
 

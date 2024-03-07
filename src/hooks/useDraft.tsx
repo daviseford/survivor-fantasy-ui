@@ -18,6 +18,7 @@ export const useDraft = () => {
     if (!season || !draftId || !slimUser) return;
 
     const draftRef = ref(rt_db, "drafts/" + draftId);
+
     onValue(draftRef, (snapshot) => {
       const data = snapshot.val();
       console.log("rt data", data);

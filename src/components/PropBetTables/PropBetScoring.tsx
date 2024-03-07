@@ -1,5 +1,5 @@
 import { Badge, Group, Table, TableScrollContainer, Text } from "@mantine/core";
-import { PropBetsQuestions } from "../../data/propbets";
+import { PropBetQuestionObj, PropBetsQuestions } from "../../data/propbets";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useEliminations } from "../../hooks/useEliminations";
 import { usePropBetScoring } from "../../hooks/useGetPropBetScoring";
@@ -98,22 +98,30 @@ export const PropBetScoring = () => {
         <Table.Thead>
           <Table.Tr>
             <Table.Th></Table.Th>
-            <Table.Th>
-              {PropBetsQuestions.propbet_first_vote.description}
-            </Table.Th>
-            <Table.Th>{PropBetsQuestions.propbet_ftc.description}</Table.Th>
-            <Table.Th>{PropBetsQuestions.propbet_idols.description}</Table.Th>
-            <Table.Th>
-              {PropBetsQuestions.propbet_immunities.description}
-            </Table.Th>
-            <Table.Th>
-              {PropBetsQuestions.propbet_medical_evac.description}
-            </Table.Th>
-            <Table.Th>{PropBetsQuestions.propbet_winner.description}</Table.Th>
+            <Th {...PropBetsQuestions.propbet_first_vote} />
+            <Th {...PropBetsQuestions.propbet_ftc} />
+            <Th {...PropBetsQuestions.propbet_idols} />
+            <Th {...PropBetsQuestions.propbet_immunities} />
+            <Th {...PropBetsQuestions.propbet_medical_evac} />
+            <Th {...PropBetsQuestions.propbet_winner} />
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
     </TableScrollContainer>
+  );
+};
+
+const Th = ({ description, point_value }: PropBetQuestionObj) => {
+  return (
+    <Table.Th>
+      <Text fw={700} span>
+        {description}
+        {"  "}
+        <Text c="dimmed" size="xs" span>
+          (+{point_value})
+        </Text>
+      </Text>
+    </Table.Th>
   );
 };

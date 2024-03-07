@@ -12,12 +12,13 @@ const links = [
 
 export const Footer = () => {
   const items = links.map((link) => (
-    <Anchor<"a">
+    <Anchor
       c="dimmed"
       key={link.label}
       href={link.link}
-      onClick={(event) => event.preventDefault()}
+      // onClick={(event) => event.preventDefault()}
       size="sm"
+      target="_blank"
     >
       {link.label}
     </Anchor>
