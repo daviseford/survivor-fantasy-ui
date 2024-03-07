@@ -138,6 +138,7 @@ export const CreateGameEvent = () => {
                 withAsterisk
                 label="Player Name"
                 data={playerNames}
+                searchable
                 {...form.getInputProps("player_name")}
               />
 
@@ -145,6 +146,7 @@ export const CreateGameEvent = () => {
                 withAsterisk
                 label="Action"
                 data={GameEventActions}
+                searchable
                 {...form.getInputProps("action")}
                 description={currentAction?.description}
               />

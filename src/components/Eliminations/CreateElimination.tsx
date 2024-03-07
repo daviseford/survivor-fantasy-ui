@@ -133,6 +133,7 @@ export const CreateElimination = () => {
                 withAsterisk
                 label="Elimination Variant"
                 data={dropdownOptions}
+                searchable
                 {...form.getInputProps("variant")}
               />
 
@@ -140,6 +141,7 @@ export const CreateElimination = () => {
                 withAsterisk
                 label="Eliminated Player"
                 data={playerNames}
+                searchable
                 {...form.getInputProps("player_name")}
               />
 

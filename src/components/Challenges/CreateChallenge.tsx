@@ -140,6 +140,7 @@ export const CreateChallenge = () => {
                 withAsterisk
                 label="Winning Players"
                 data={playerNames}
+                searchable
                 {...form.getInputProps("winning_players")}
               />
 
@@ -147,6 +148,7 @@ export const CreateChallenge = () => {
                 withAsterisk
                 label="Challenge Variant"
                 data={ChallengeWinActions}
+                searchable
                 {...form.getInputProps("variant")}
               />
 
