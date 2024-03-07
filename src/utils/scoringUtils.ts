@@ -5,7 +5,7 @@ const addFixedActionPoints = (action: PlayerAction) =>
   BASE_PLAYER_SCORING.find((x) => x.action === action)?.fixed_value || 0;
 
 export type ScoringActionEntry = {
-  action: string;
+  action: PlayerAction;
   points_awarded: number;
 };
 
@@ -28,7 +28,7 @@ export const getEnhancedSurvivorPoints = (
     actions: [],
   };
 
-  const addToScores = (action: string, points_awarded: number) => {
+  const addToScores = (action: PlayerAction, points_awarded: number) => {
     scores.actions.push({ action, points_awarded });
     scores.total += points_awarded;
   };

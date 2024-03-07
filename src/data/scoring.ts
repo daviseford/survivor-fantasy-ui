@@ -4,23 +4,23 @@ export const BASE_PLAYER_SCORING = [
   {
     action: "reward",
     fixed_value: 1,
-    description: "Win a reward challenge",
+    description: "Win a reward challenge.",
   },
   {
     action: "combined",
     fixed_value: 3,
-    description: "Win a combined reward + immunity challenge",
+    description: "Win a combined reward + immunity challenge.",
   },
   {
     action: "immunity",
     fixed_value: 2,
-    description: "Win an immunity challenge",
+    description: "Win an immunity challenge.",
   },
   {
     action: "votes_negated_by_idol",
     fixed_value: 1,
     multiplier: true,
-    description: "Any votes negated by playing an idol",
+    description: "Number of votes negated by playing an idol at Tribal.",
   },
   {
     action: "medically_evacuated",
@@ -51,12 +51,12 @@ export const BASE_PLAYER_SCORING = [
   {
     action: "find_idol",
     fixed_value: 1,
-    description: "Clues do not count.",
+    description: "Find a hidden immunity idol. (Clues do not count)",
   },
   {
     action: "find_advantage",
     fixed_value: 1,
-    description: "Clues do not count.",
+    description: "Find a hidden advantage. (Clues do not count)",
   },
   {
     action: "win_advantage",
@@ -79,7 +79,7 @@ export const BASE_PLAYER_SCORING = [
   {
     action: "eliminated",
     description:
-      "1 pt per episode number (e.g. 5 pts for Episode 5 elimination).",
+      "1 point awarded per episode number (e.g. 6 points for Episode 6 elimination).",
   },
   {
     action: "use_shot_in_the_dark_unsuccessfully",

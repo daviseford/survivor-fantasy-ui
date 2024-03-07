@@ -1,9 +1,19 @@
-import { Avatar, Badge, Group, Stack, Table, Text } from "@mantine/core";
+import {
+  Avatar,
+  Badge,
+  Group,
+  Stack,
+  Table,
+  Text,
+  Tooltip,
+} from "@mantine/core";
+import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useEvents } from "../../hooks/useEvents";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
+import { PlayerAction } from "../../types";
 import { getNumberWithOrdinal } from "../../utils/misc";
 
 export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
@@ -57,6 +67,15 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
       };
       const avatarStyle = playerElimination ? { filter: "grayscale(1)" } : {};
 
+      const scoringDescriptionLookup = BASE_PLAYER_SCORING.reduce(
+        (accum, score) => {
+          accum[score.action] = score.description;
+
+          return accum;
+        },
+        {} as Record<PlayerAction, string>,
+      );
+
       return (
         <Table.Tr key={playerName} style={trStyle}>
           <Table.Td width={"20px"}>{i + 1}</Table.Td>
@@ -88,9 +107,15 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                       x.action === "eliminated" ? "red" : "dark";
 
                     return (
-                      <Badge size="sm" color={badgeColor}>
-                        {x.action.replace(/_/g, " ")} +{x.points_awarded}
-                      </Badge>
+                      <Tooltip label={scoringDescriptionLookup[x.action]}>
+                        <Badge
+                          size="sm"
+                          color={badgeColor}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {x.action.replace(/_/g, " ")} +{x.points_awarded}
+                        </Badge>
+                      </Tooltip>
                     );
                   })}
                 </Stack>
