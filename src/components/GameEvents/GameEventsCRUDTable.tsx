@@ -33,23 +33,25 @@ export const GameEventsCRUDTable = () => {
     });
   };
 
-  const rows = Object.values(events || {}).map((e) => {
-    return (
-      <Table.Tr key={e.id}>
-        <Table.Td>{e.action}</Table.Td>
-        <Table.Td>{e.multiplier || "-"}</Table.Td>
-        <Table.Td>{e.player_name}</Table.Td>
-        <Table.Td>{e.episode_id}</Table.Td>
-        {slimUser?.isAdmin && (
-          <Table.Td>
-            <ActionIcon color="red" onClick={() => handleDelete(e)}>
-              <IconTrash />
-            </ActionIcon>
-          </Table.Td>
-        )}
-      </Table.Tr>
-    );
-  });
+  const rows = Object.values(events || {})
+    .sort((a, b) => b.episode_num - a.episode_num)
+    .map((e) => {
+      return (
+        <Table.Tr key={e.id}>
+          <Table.Td>{e.action}</Table.Td>
+          <Table.Td>{e.multiplier || "-"}</Table.Td>
+          <Table.Td>{e.player_name}</Table.Td>
+          <Table.Td>{e.episode_id}</Table.Td>
+          {slimUser?.isAdmin && (
+            <Table.Td>
+              <ActionIcon color="red" onClick={() => handleDelete(e)}>
+                <IconTrash />
+              </ActionIcon>
+            </Table.Td>
+          )}
+        </Table.Tr>
+      );
+    });
 
   return (
     <Table>

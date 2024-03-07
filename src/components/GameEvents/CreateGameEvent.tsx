@@ -53,7 +53,14 @@ export const CreateGameEvent = () => {
   // Set initial values with async request
   useEffect(() => {
     if (season) {
-      form.setValues({ season_num: season.order, season_id: season.id });
+      const episode_num = season.episodes.length;
+
+      form.setValues({
+        season_num: season.order,
+        season_id: season.id,
+        episode_num: episode_num,
+        episode_id: `episode_${episode_num}`,
+      });
       form.resetDirty();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

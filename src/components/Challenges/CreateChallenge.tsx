@@ -57,10 +57,13 @@ export const CreateChallenge = () => {
   useEffect(() => {
     if (season && challenges) {
       const order = (last(orderBy(challenges, (x) => x.order))?.order || 0) + 1;
+      const episode_num = season.episodes.length;
 
       form.setValues({
         season_num: season.order,
         season_id: season.id,
+        episode_num: episode_num,
+        episode_id: `episode_${episode_num}`,
         order,
       });
       form.resetDirty();
