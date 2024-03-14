@@ -159,16 +159,16 @@ export const SEASON_46_EPISODES = [
     finale: false,
     merge_occurs: false,
   },
-  // {
-  //   id: "episode_3",
-  //   season_id: "season_46",
-  //   season_num: 46,
-  //   order: 3,
-  //   name: "Wackadoodles Win",
-  //   post_merge: false,
-  //   finale: false,
-  //   merge_occurs: false,
-  // },
+  {
+    id: "episode_3",
+    season_id: "season_46",
+    season_num: 46,
+    order: 3,
+    name: "Wackadoodles Win",
+    post_merge: false,
+    finale: false,
+    merge_occurs: false,
+  },
 ] satisfies Episode<SeasonNumber>[];
 
 export const SEASON_46_CHALLENGES = {

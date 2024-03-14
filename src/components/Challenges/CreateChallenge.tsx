@@ -114,7 +114,7 @@ export const CreateChallenge = () => {
       </Card.Section>
 
       <Card.Section p={"md"}>
-        <SimpleGrid cols={2}>
+        <SimpleGrid cols={{ base: 1, md: 2 }}>
           <Box maw={340} mx="auto">
             <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
               <TextInput
