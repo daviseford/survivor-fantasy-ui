@@ -1,4 +1,4 @@
-import { ActionIcon, Code, Table } from "@mantine/core";
+import { ActionIcon, Code, Table, TableScrollContainer } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconTrash } from "@tabler/icons-react";
 import { doc, setDoc } from "firebase/firestore";
@@ -54,17 +54,19 @@ export const ChallengeCRUDTable = () => {
     });
 
   return (
-    <Table>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>Order</Table.Th>
-          <Table.Th>Variant</Table.Th>
-          <Table.Th>Winning Player(s)</Table.Th>
-          <Table.Th>Episode</Table.Th>
-          {slimUser?.isAdmin && <Table.Th>Delete</Table.Th>}
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>{rows}</Table.Tbody>
-    </Table>
+    <TableScrollContainer minWidth={300}>
+      <Table>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>Order</Table.Th>
+            <Table.Th>Variant</Table.Th>
+            <Table.Th>Winning Player(s)</Table.Th>
+            <Table.Th>Episode</Table.Th>
+            {slimUser?.isAdmin && <Table.Th>Delete</Table.Th>}
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>{rows}</Table.Tbody>
+      </Table>
+    </TableScrollContainer>
   );
 };

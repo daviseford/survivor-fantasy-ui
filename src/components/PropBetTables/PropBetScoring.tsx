@@ -93,7 +93,7 @@ export const PropBetScoring = () => {
   ));
 
   return (
-    <TableScrollContainer minWidth={350}>
+    <TableScrollContainer minWidth={300}>
       <Table>
         <Table.Thead>
           <Table.Tr>
