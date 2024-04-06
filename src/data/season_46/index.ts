@@ -179,6 +179,26 @@ export const SEASON_46_EPISODES = [
     finale: false,
     merge_occurs: false,
   },
+  {
+    id: "episode_5",
+    season_id: "season_46",
+    season_num: 46,
+    order: 5,
+    name: "Tiki Man",
+    post_merge: false,
+    finale: false,
+    merge_occurs: false,
+  },
+  {
+    id: "episode_6",
+    season_id: "season_46",
+    season_num: 46,
+    order: 6,
+    name: "Cancel Christmas",
+    post_merge: false,
+    finale: false,
+    merge_occurs: true,
+  },
 ] satisfies Episode<SeasonNumber>[];
 
 export const SEASON_46_CHALLENGES = {
