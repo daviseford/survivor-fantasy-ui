@@ -81,7 +81,13 @@ export const PropBetScoring = () => {
         }
       />
 
-      <AnswerTd score={s.propbet_medical_evac} />
+      <AnswerTd
+        score={s.propbet_medical_evac}
+        strikethrough={
+          _elims.some((x) => x.variant === "medical") &&
+          !s.propbet_medical_evac.correct
+        }
+      />
 
       <AnswerTd
         score={s.propbet_winner}
