@@ -199,6 +199,16 @@ export const SEASON_46_EPISODES = [
     finale: false,
     merge_occurs: true,
   },
+  {
+    id: "episode_7",
+    season_id: "season_46",
+    season_num: 46,
+    order: 7,
+    name: "Episode Several",
+    post_merge: true,
+    finale: false,
+    merge_occurs: false,
+  },
 ] satisfies Episode<SeasonNumber>[];
 
 export const SEASON_46_CHALLENGES = {

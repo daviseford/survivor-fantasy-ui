@@ -4,13 +4,17 @@ import {
   SimpleGrid,
   Stack,
   StyleProp,
+  Text,
   Title,
 } from "@mantine/core";
 import { useCompetition } from "../../hooks/useCompetition";
+import { useCompetitionMeta } from "../../hooks/useCompetitionMeta";
 import { PlayerGroup } from "./PlayerGroup";
 
 export const PlayerGroupGrid = () => {
   const { data: competition } = useCompetition();
+
+  const { survivorsByUserUid, eliminatedSurvivors } = useCompetitionMeta();
 
   if (!competition) return null;
 
@@ -32,18 +36,38 @@ export const PlayerGroupGrid = () => {
 
   return (
     <SimpleGrid cols={cols}>
-      {competition.participants.map((x) => (
-        <Card shadow="md">
-          <Center>
-            <Stack gap={"xs"}>
-              <Title order={4} ta="center">
-                {x.displayName}
-              </Title>
-              <PlayerGroup uid={x.uid} />
-            </Stack>
-          </Center>
-        </Card>
-      ))}
+      {competition.participants.map((x) => {
+        const userSurvivors = survivorsByUserUid[x.uid];
+
+        const numDrafted = userSurvivors.length;
+        const numEliminated = userSurvivors.filter((s) =>
+          eliminatedSurvivors.includes(s.name),
+        ).length;
+
+        const areAllEliminated = numEliminated === numDrafted;
+        const isOne = numDrafted - numEliminated === 1;
+
+        return (
+          <Card shadow="md">
+            <Center>
+              <Stack gap={"xs"}>
+                <Title order={4} ta="center">
+                  {x.displayName}
+                </Title>
+                <Text
+                  c={areAllEliminated ? "dimmed" : undefined}
+                  size="sm"
+                  ta="center"
+                >
+                  {numDrafted - numEliminated}{" "}
+                  {isOne ? "active player" : "active players"}
+                </Text>
+                <PlayerGroup uid={x.uid} />
+              </Stack>
+            </Center>
+          </Card>
+        );
+      })}
     </SimpleGrid>
   );
 };
