@@ -219,6 +219,16 @@ export const SEASON_46_EPISODES = [
     finale: false,
     merge_occurs: false,
   },
+  {
+    id: "episode_9",
+    season_id: "season_46",
+    season_num: 46,
+    order: 9,
+    name: "Spicy Jeff",
+    post_merge: true,
+    finale: false,
+    merge_occurs: false,
+  },
 ] satisfies Episode<SeasonNumber>[];
 
 export const SEASON_46_CHALLENGES = {
