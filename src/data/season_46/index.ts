@@ -229,6 +229,16 @@ export const SEASON_46_EPISODES = [
     finale: false,
     merge_occurs: false,
   },
+  {
+    id: "episode_10",
+    season_id: "season_46",
+    season_num: 46,
+    order: 10,
+    name: "Run the Red Light",
+    post_merge: true,
+    finale: false,
+    merge_occurs: false,
+  },
 ] satisfies Episode<SeasonNumber>[];
 
 export const SEASON_46_CHALLENGES = {
