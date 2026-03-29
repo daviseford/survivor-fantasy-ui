@@ -24,7 +24,7 @@ export const Seasons = () => {
 
   const { data: seasons } = useFirestoreQueryData<Season[], Season[]>(
     ["seasons"],
-    // @ts-expect-error asd
+    // @ts-expect-error react-query-firebase type mismatch with Firestore ref
     ref,
   );
 
@@ -34,10 +34,9 @@ export const Seasons = () => {
         Pick your favorite season in order to learn more about the contestants
         and start a draft!
       </Title>
-      <SimpleGrid cols={3}>
+      <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
         {seasons?.map((x) => {
-          console.log(x.name);
-          if (x.name !== "Survivor 46" && x.name !== "Survivor 50" && !slimUser?.isAdmin) return null;
+          if (!x.visible && !slimUser?.isAdmin) return null;
 
           return (
             <div key={x.id}>

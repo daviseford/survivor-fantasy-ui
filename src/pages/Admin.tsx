@@ -1,67 +1,37 @@
-import { Button, SimpleGrid } from "@mantine/core";
+import { Alert, Button, SimpleGrid } from "@mantine/core";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import { doc, setDoc } from "firebase/firestore";
+import { useState } from "react";
 import { SEASON_9_CHALLENGES, SEASON_9_ELIMINATIONS } from "../data/season_9";
 import { SEASONS } from "../data/seasons";
 import { db } from "../firebase";
 import { useUser } from "../hooks/useUser";
 
-const uploadS50 = async () => {
-  try {
-    await setDoc(doc(db, "seasons", "season_50"), SEASONS.season_50);
-    console.log("Done!");
-  } catch (err) {
-    console.error(err);
-  }
-};
+const useUploadFeedback = () => {
+  const [status, setStatus] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
-const uploadS9 = async () => {
-  try {
-    await setDoc(doc(db, "seasons", "season_9"), SEASONS.season_9);
-    await setDoc(doc(db, "challenges", "season_9"), SEASON_9_CHALLENGES);
-    await setDoc(doc(db, "eliminations", "season_9"), SEASON_9_ELIMINATIONS);
-    // await setDoc(doc(db, "scoring", "base"), {
-    //   id: "base_scoring",
-    //   scoring: BASE_PLAYER_SCORING,
-    // });
+  const upload = async (label: string, fn: () => Promise<void>) => {
+    setStatus(null);
+    try {
+      await fn();
+      setStatus({ type: "success", message: `${label} uploaded successfully.` });
+    } catch (err) {
+      setStatus({
+        type: "error",
+        message: `${label} failed: ${err instanceof Error ? err.message : "Unknown error"}`,
+      });
+    }
+  };
 
-    console.log("Done!");
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-const uploadS99 = async () => {
-  try {
-    await setDoc(doc(db, "seasons", "season_99"), SEASONS.season_99);
-
-    // Uncomment to reset these (YOU WILL LOSE ALL DB DATA!!!)
-    // await setDoc(doc(db, "challenges", "season_99"), SEASON_99_CHALLENGES);
-    // await setDoc(doc(db, "eliminations", "season_99"), SEASON_99_ELIMINATIONS);
-    // await setDoc(doc(db, "events", "season_99"), SEASON_99_EVENTS);
-
-    console.log("Done!");
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-const uploadS46 = async () => {
-  try {
-    await setDoc(doc(db, "seasons", "season_46"), SEASONS.season_46);
-
-    // Uncomment to reset these (YOU WILL LOSE ALL DB DATA!!!)
-    // await setDoc(doc(db, "challenges", "season_46"), SEASON_46_CHALLENGES);
-    // await setDoc(doc(db, "eliminations", "season_46"), SEASON_46_ELIMINATIONS);
-    // await setDoc(doc(db, "events", "season_46"), SEASON_46_EVENTS);
-
-    console.log("Done!");
-  } catch (err) {
-    console.error(err);
-  }
+  return { status, upload };
 };
 
 export const Admin = () => {
   const { slimUser } = useUser();
+  const { status, upload } = useUploadFeedback();
 
   if (!slimUser?.isAdmin) {
     return <div>Unauthorized</div>;
@@ -69,11 +39,63 @@ export const Admin = () => {
 
   return (
     <div>
+      {status && (
+        <Alert
+          mb="md"
+          color={status.type === "success" ? "green" : "red"}
+          icon={status.type === "success" ? <IconCheck /> : <IconX />}
+          withCloseButton
+          onClose={() => {}}
+        >
+          {status.message}
+        </Alert>
+      )}
+
       <SimpleGrid cols={3}>
-        <Button onClick={() => uploadS9()}>Upload Season 9 Data</Button>
-        <Button onClick={() => uploadS46()}>Upload Season 46 Data</Button>
-        <Button onClick={() => uploadS50()}>Upload Season 50 Data</Button>
-        <Button onClick={() => uploadS99()}>Upload Season 99 Data</Button>
+        <Button
+          onClick={() =>
+            upload("Season 9", async () => {
+              await setDoc(doc(db, "seasons", "season_9"), SEASONS.season_9);
+              await setDoc(
+                doc(db, "challenges", "season_9"),
+                SEASON_9_CHALLENGES,
+              );
+              await setDoc(
+                doc(db, "eliminations", "season_9"),
+                SEASON_9_ELIMINATIONS,
+              );
+            })
+          }
+        >
+          Upload Season 9 Data
+        </Button>
+        <Button
+          onClick={() =>
+            upload("Season 46", async () => {
+              await setDoc(doc(db, "seasons", "season_46"), SEASONS.season_46);
+            })
+          }
+        >
+          Upload Season 46 Data
+        </Button>
+        <Button
+          onClick={() =>
+            upload("Season 50", async () => {
+              await setDoc(doc(db, "seasons", "season_50"), SEASONS.season_50);
+            })
+          }
+        >
+          Upload Season 50 Data
+        </Button>
+        <Button
+          onClick={() =>
+            upload("Season 99", async () => {
+              await setDoc(doc(db, "seasons", "season_99"), SEASONS.season_99);
+            })
+          }
+        >
+          Upload Season 99 Data
+        </Button>
       </SimpleGrid>
     </div>
   );
