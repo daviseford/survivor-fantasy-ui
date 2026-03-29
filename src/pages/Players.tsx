@@ -1,4 +1,5 @@
-import { Avatar, Paper, SimpleGrid, Text } from "@mantine/core";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+import { Card, CardContent } from "../components/ui/card";
 import { useSeason } from "../hooks/useSeason";
 import { Player } from "../types";
 
@@ -8,24 +9,27 @@ export const Players = () => {
   if (!season) return null;
 
   return (
-    <SimpleGrid cols={4}>
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
       {season.players.map((x) => (
         <PlayerCard {...x} key={x.name} />
       ))}
-    </SimpleGrid>
+    </div>
   );
 };
 
 const PlayerCard = (props: Player) => {
   return (
-    <Paper radius="md" withBorder p="lg" bg="var(--mantine-color-body)">
-      <Avatar src={props.img} size={120} radius={120} mx="auto" />
-      <Text ta="center" fz="lg" fw={500} mt="md">
-        {props.name}
-      </Text>
-      <Text ta="center" c="dimmed" fz="sm">
-        Season {props.season_num}
-      </Text>
-    </Paper>
+    <Card>
+      <CardContent className="flex flex-col items-center pt-6">
+        <Avatar className="h-28 w-28">
+          <AvatarImage src={props.img} alt={props.name} />
+          <AvatarFallback>{props.name[0]}</AvatarFallback>
+        </Avatar>
+        <p className="mt-3 text-center text-lg font-medium">{props.name}</p>
+        <p className="text-center text-sm text-muted-foreground">
+          Season {props.season_num}
+        </p>
+      </CardContent>
+    </Card>
   );
 };

@@ -1,8 +1,13 @@
-import { Avatar, Group, Title, Tooltip } from "@mantine/core";
 import { useDraft } from "../../hooks/useDraft";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 export const MyDraftedPlayers = () => {
   const { slimUser } = useUser();
@@ -23,17 +28,23 @@ export const MyDraftedPlayers = () => {
   if (!myPlayerInfo?.length) return null;
 
   return (
-    <>
-      <Group>
-        <Title order={3}>My Players</Title>
-        <Avatar.Group spacing={"lg"}>
-          {myPlayerInfo?.map((p) => (
-            <Tooltip label={p.name}>
-              <Avatar key={p.name} src={p.img} size={isMobile ? "lg" : "xl"} />
-            </Tooltip>
-          ))}
-        </Avatar.Group>
-      </Group>
-    </>
+    <div className="flex items-center gap-4">
+      <h3 className="text-lg font-semibold">My Players</h3>
+      <div className="flex -space-x-2">
+        {myPlayerInfo?.map((p) => (
+          <Tooltip key={p.name}>
+            <TooltipTrigger asChild>
+              <Avatar
+                className={isMobile ? "h-10 w-10" : "h-14 w-14"}
+              >
+                <AvatarImage src={p.img} />
+                <AvatarFallback>{p.name[0]}</AvatarFallback>
+              </Avatar>
+            </TooltipTrigger>
+            <TooltipContent>{p.name}</TooltipContent>
+          </Tooltip>
+        ))}
+      </div>
+    </div>
   );
 };

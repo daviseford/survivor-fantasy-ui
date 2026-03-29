@@ -1,62 +1,49 @@
-import { Button, Container, Group, Text } from "@mantine/core";
-import { IconBrandGithub } from "@tabler/icons-react";
+import { ExternalLink } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import classes from "./Home.module.css";
+import { Button } from "../ui/button";
 
 export const Home = () => {
   const navigate = useNavigate();
   return (
-    <div className={classes.wrapper}>
-      <Container size={700} className={classes.inner}>
-        <h1 className={classes.title}>
-          Live out your{" "}
-          <Text
-            component="span"
-            variant="gradient"
-            gradient={{ from: "blue", to: "cyan" }}
-            inherit
-          >
-            Survivor Fantasy
-          </Text>{" "}
-          from your couch
-        </h1>
+    <div className="mx-auto max-w-2xl py-20 sm:py-32">
+      <h1 className="text-4xl font-black leading-tight sm:text-6xl">
+        Live out your{" "}
+        <span className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
+          Survivor Fantasy
+        </span>{" "}
+        from your couch
+      </h1>
 
-        <Text className={classes.description} c="dimmed">
-          Just like fantasy football, but with a twist, Survivor Fantasy lets
-          you assemble your dream team of Survivor contestants and watch as they
-          outwit, outplay, and outlast their way to victory.
-        </Text>
+      <p className="mt-6 text-lg text-muted-foreground sm:text-2xl">
+        Just like fantasy football, but with a twist, Survivor Fantasy lets you
+        assemble your dream team of Survivor contestants and watch as they
+        outwit, outplay, and outlast their way to victory.
+      </p>
 
-        <Group className={classes.controls}>
-          <Button
-            role="link"
-            size="xl"
-            className={classes.control}
-            variant="gradient"
-            gradient={{ from: "blue", to: "cyan" }}
-            onClick={() => navigate("/seasons")}
-          >
-            Get started
-          </Button>
+      <div className="mt-10 flex flex-wrap gap-4">
+        <Button
+          size="lg"
+          className="bg-gradient-to-r from-blue-500 to-cyan-500 px-8 text-lg text-white"
+          onClick={() => navigate("/seasons")}
+        >
+          Get started
+        </Button>
 
-          <Button
-            component="a"
-            href="https://github.com/mantinedev/mantine"
-            size="xl"
-            variant="default"
-            className={classes.control}
-            leftSection={<IconBrandGithub size={20} />}
-            onClick={() =>
-              window.open(
-                "https://github.com/daviseford/survivor-fantasy-ui/",
-                "_blank",
-              )
-            }
-          >
-            GitHub
-          </Button>
-        </Group>
-      </Container>
+        <Button
+          size="lg"
+          variant="outline"
+          className="px-8 text-lg"
+          onClick={() =>
+            window.open(
+              "https://github.com/daviseford/survivor-fantasy-ui/",
+              "_blank",
+            )
+          }
+        >
+          <ExternalLink className="mr-2 h-5 w-5" />
+          GitHub
+        </Button>
+      </div>
     </div>
   );
 };

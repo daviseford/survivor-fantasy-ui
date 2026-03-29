@@ -1,4 +1,4 @@
-import { Box, Card, SimpleGrid, Text, Title } from "@mantine/core";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { PlayerGroupGrid } from "../components/MyPlayers";
 import { PropBetScoring } from "../components/PropBetTables";
 import {
@@ -18,17 +18,17 @@ export const SingleCompetition = () => {
 
   return (
     <div>
-      <Box p="lg">
-        <Text c="dimmed">Season {competition.season_num}</Text>
-
-        <Title order={2} mb="md">
+      <div className="p-4">
+        <p className="text-muted-foreground">
+          Season {competition.season_num}
+        </p>
+        <h2 className="mb-4 text-2xl font-bold">
           {competition.competition_name}
-        </Title>
-
+        </h2>
         <PlayerGroupGrid />
-      </Box>
+      </div>
 
-      <SimpleGrid cols={1} p={"lg"}>
+      <div className="space-y-4 p-4">
         <GridCard title="Season Scores">
           <PerUserPerEpisodeScoringTable />
         </GridCard>
@@ -46,7 +46,7 @@ export const SingleCompetition = () => {
         <GridCard title="Scoring Values">
           <ScoringLegendTable />
         </GridCard>
-      </SimpleGrid>
+      </div>
     </div>
   );
 };
@@ -56,35 +56,11 @@ const GridCard = ({
   children,
 }: React.PropsWithChildren<{ title: string }>) => {
   return (
-    <Card shadow="sm" p="xl">
-      <Card.Section mb={"xs"}>
-        <Title order={2}>{title}</Title>
-      </Card.Section>
-      <Card.Section>{children}</Card.Section>
+    <Card>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent>{children}</CardContent>
     </Card>
   );
 };
-
-// TODO
-// const StartCompetitionButton = () => {
-//   const { slimUser } = useUser();
-//   const { data: competition } = useCompetition();
-
-//   const ref = doc(db, "competitions", competition?.id || "");
-//   // https://github.com/invertase/react-query-firebase/blob/main/docs/firestore/data-mutation.mdx
-//   const { mutateAsync, isLoading } = useFirestoreDocumentMutation(ref, {});
-
-//   const isCreator = slimUser?.uid === competition?.creator_uid;
-
-//   if (!isCreator || !competition || competition?.started) return null;
-
-//   const handleClick = async () => {
-//     await mutateAsync({ ...competition, started: true });
-//   };
-
-//   return (
-//     <Button onClick={handleClick} disabled={isLoading}>
-//       Start Competition
-//     </Button>
-//   );
-// };

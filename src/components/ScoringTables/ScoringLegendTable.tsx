@@ -1,27 +1,34 @@
-import { Table } from "@mantine/core";
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 export const ScoringLegendTable = () => {
-  const rows = BASE_PLAYER_SCORING.map((x) => (
-    <Table.Tr key={x.action}>
-      <Table.Td>{x.action}</Table.Td>
-      <Table.Td>{x.description}</Table.Td>
-      <Table.Td>{x.fixed_value}</Table.Td>
-    </Table.Tr>
-  ));
-
   return (
-    <Table.ScrollContainer minWidth={300}>
+    <div className="overflow-x-auto">
       <Table>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Action</Table.Th>
-            <Table.Th>Description</Table.Th>
-            <Table.Th>Fixed Value</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Action</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Fixed Value</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {BASE_PLAYER_SCORING.map((x) => (
+            <TableRow key={x.action}>
+              <TableCell>{x.action}</TableCell>
+              <TableCell>{x.description}</TableCell>
+              <TableCell>{x.fixed_value}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
       </Table>
-    </Table.ScrollContainer>
+    </div>
   );
 };

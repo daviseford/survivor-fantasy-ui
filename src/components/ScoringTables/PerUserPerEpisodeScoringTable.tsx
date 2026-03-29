@@ -1,7 +1,14 @@
-import { Table } from "@mantine/core";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 export const PerUserPerEpisodeScoringTable = () => {
   const { data: competition } = useCompetition();
@@ -10,41 +17,43 @@ export const PerUserPerEpisodeScoringTable = () => {
   const { pointsByUserPerEpisodeWithPropBets } = useScoringCalculations();
 
   const rows = Object.entries(pointsByUserPerEpisodeWithPropBets)
-    .sort((a, b) => b[1].total - a[1].total) // sort by highest
+    .sort((a, b) => b[1].total - a[1].total)
     .map(([uid, values], i) => {
       const user = competition?.participants.find((x) => x.uid === uid);
 
       return (
-        <Table.Tr key={uid}>
-          <Table.Td>{i + 1}</Table.Td>
-          <Table.Td>{user?.displayName || user?.email}</Table.Td>
-          <Table.Td>{values.total}</Table.Td>
+        <TableRow key={uid}>
+          <TableCell>{i + 1}</TableCell>
+          <TableCell>{user?.displayName || user?.email}</TableCell>
+          <TableCell>{values.total}</TableCell>
 
-          {values.episodePoints.map((x) => (
-            <Table.Td>{x}</Table.Td>
+          {values.episodePoints.map((x, idx) => (
+            <TableCell key={idx}>{x}</TableCell>
           ))}
 
           {competition?.prop_bets && (
-            <Table.Td>{values.propBetPoints}</Table.Td>
+            <TableCell>{values.propBetPoints}</TableCell>
           )}
-        </Table.Tr>
+        </TableRow>
       );
     });
 
   return (
-    <Table.ScrollContainer minWidth={300}>
-      <Table withColumnBorders>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Rank</Table.Th>
-            <Table.Th>User Name</Table.Th>
-            <Table.Th>Total</Table.Th>
-            {season?.episodes.map((x) => <Table.Th>Ep. {x.order}</Table.Th>)}
-            {competition?.prop_bets && <Table.Th>Prop Bet Points</Table.Th>}
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
+    <div className="overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Rank</TableHead>
+            <TableHead>User Name</TableHead>
+            <TableHead>Total</TableHead>
+            {season?.episodes.map((x) => (
+              <TableHead key={x.id}>Ep. {x.order}</TableHead>
+            ))}
+            {competition?.prop_bets && <TableHead>Prop Bet Points</TableHead>}
+          </TableRow>
+        </TableHeader>
+        <TableBody>{rows}</TableBody>
       </Table>
-    </Table.ScrollContainer>
+    </div>
   );
 };

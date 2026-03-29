@@ -1,25 +1,34 @@
-import { LineChart } from "@mantine/charts";
+import {
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 
 const lineColors = [
-  "red.1",
-  "red.2",
-  "red.3",
-  "grape.1",
-  "grape.2",
-  "grape.3",
-  "violet.1",
-  "violet.2",
-  "violet.3",
-  "pink.1",
-  "pink.2",
-  "pink.3",
-  "cyan.1",
-  "cyan.2",
-  "cyan.3",
-  "lime.1",
-  "lime.2",
-  "lime.3",
+  "#e57373",
+  "#ef5350",
+  "#f44336",
+  "#ba68c8",
+  "#ab47bc",
+  "#9c27b0",
+  "#7986cb",
+  "#5c6bc0",
+  "#3f51b5",
+  "#f06292",
+  "#ec407a",
+  "#e91e63",
+  "#4dd0e1",
+  "#26c6da",
+  "#00bcd4",
+  "#aed581",
+  "#9ccc65",
+  "#8bc34a",
 ];
 
 export const SurvivorPerEpisodeScoringChart = () => {
@@ -45,12 +54,26 @@ export const SurvivorPerEpisodeScoringChart = () => {
     [] as { episode_num: number; [x: string]: number }[],
   );
 
-  const series = Object.keys(survivorPointsByEpisode).map((name, i) => ({
-    name: name,
-    color: lineColors[i],
-  }));
+  const playerNames = Object.keys(survivorPointsByEpisode);
 
   return (
-    <LineChart h={300} data={data} series={series} dataKey="episode_num" />
+    <ResponsiveContainer width="100%" height={300}>
+      <LineChart data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="episode_num" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        {playerNames.map((name, i) => (
+          <Line
+            key={name}
+            type="monotone"
+            dataKey={name}
+            stroke={lineColors[i % lineColors.length]}
+            dot={false}
+          />
+        ))}
+      </LineChart>
+    </ResponsiveContainer>
   );
 };

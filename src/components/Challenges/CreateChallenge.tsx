@@ -1,103 +1,96 @@
-import {
-  Box,
-  Button,
-  Card,
-  Center,
-  Code,
-  Group,
-  Loader,
-  MultiSelect,
-  NumberInput,
-  Select,
-  SimpleGrid,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
-import { hasLength, useForm } from "@mantine/form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { doc, setDoc } from "firebase/firestore";
+import { Loader2 } from "lucide-react";
 import { last, orderBy } from "lodash-es";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { v4 } from "uuid";
+import { z } from "zod";
 import { db } from "../../firebase";
 import { useChallenges } from "../../hooks/useChallenges";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
-import { Challenge, ChallengeWinActions } from "../../types";
+import { Challenge, ChallengeWinAction, ChallengeWinActions } from "../../types";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+
+const challengeSchema = z.object({
+  winning_players: z.array(z.string()).min(1, "Add winning player(s)"),
+});
 
 export const CreateChallenge = () => {
   const { data: season, isLoading } = useSeason();
   const { data: eliminations } = useEliminations(season?.id);
   const { data: challenges } = useChallenges(season?.id);
 
-  const form = useForm<Challenge>({
-    initialValues: {
-      id: `challenge_${v4()}`,
-      season_num: 1,
-      season_id: "season_1",
-      episode_id: "episode_1",
-      episode_num: 1,
-      variant: ChallengeWinActions[0],
-      winning_players: [],
-      order: 0,
-    },
+  const [formId, setFormId] = useState(`challenge_${v4()}`);
+  const [episodeNum, setEpisodeNum] = useState(1);
+  const [order, setOrder] = useState(0);
+  const [variant, setVariant] = useState<ChallengeWinAction>(ChallengeWinActions[0]);
+  const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
 
-    validate: {
-      winning_players: hasLength({ min: 1 }, "Add winning player(s)"),
-    },
-
-    transformValues: (values) => ({
-      ...values,
-      episode_id: `episode_${values.episode_num}`,
-      season_id: `season_${values.season_num}`,
-    }),
+  const {
+    formState: { errors },
+    handleSubmit,
+    setValue,
+  } = useForm({
+    resolver: zodResolver(challengeSchema),
+    defaultValues: { winning_players: [] as string[] },
   });
 
-  // Set initial values with async request
   useEffect(() => {
     if (season && challenges) {
-      const order = (last(orderBy(challenges, (x) => x.order))?.order || 0) + 1;
-      const episode_num = season.episodes.length;
-
-      form.setValues({
-        season_num: season.order,
-        season_id: season.id,
-        episode_num: episode_num,
-        episode_id: `episode_${episode_num}`,
-        order,
-      });
-      form.resetDirty();
+      const nextOrder =
+        (last(orderBy(challenges, (x) => x.order))?.order || 0) + 1;
+      const ep = season.episodes.length;
+      setEpisodeNum(ep);
+      setOrder(nextOrder);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [season, challenges]);
 
   if (isLoading) {
     return (
-      <Center>
-        <Loader size="xl" />
-      </Center>
+      <div className="flex items-center justify-center py-8">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
     );
   }
 
   if (!season?.episodes?.length) {
     return (
-      <Center>
-        <Text>Create an Episode first before adding events</Text>
-      </Center>
+      <p className="py-8 text-center">
+        Create an Episode first before adding events
+      </p>
     );
   }
 
-  const handleSubmit = async (values: Challenge) => {
-    const _validate = form.validate();
-
-    if (_validate.hasErrors) return;
+  const onSubmit = async () => {
+    const values: Challenge = {
+      id: formId as Challenge["id"],
+      season_num: season.order,
+      season_id: season.id,
+      episode_id: `episode_${episodeNum}` as Challenge["episode_id"],
+      episode_num: episodeNum,
+      variant,
+      winning_players: selectedPlayers,
+      order,
+    };
 
     const ref = doc(db, `challenges/${season?.id}`);
-
     await setDoc(ref, { [values.id]: values }, { merge: true });
 
-    // reset id and important form values
-    form.setValues({ id: `challenge_${v4()}`, winning_players: [] });
+    setFormId(`challenge_${v4()}`);
+    setSelectedPlayers([]);
+    setValue("winning_players", []);
   };
 
   const eliminatedPlayers = Object.values(eliminations).map(
@@ -107,65 +100,109 @@ export const CreateChallenge = () => {
     .map((x) => x.name)
     .filter((x) => !eliminatedPlayers.includes(x));
 
+  const formValues: Challenge = {
+    id: formId as Challenge["id"],
+    season_num: season.order,
+    season_id: season.id,
+    episode_id: `episode_${episodeNum}` as Challenge["episode_id"],
+    episode_num: episodeNum,
+    variant,
+    winning_players: selectedPlayers,
+    order,
+  };
+
+  const togglePlayer = (name: string) => {
+    const updated = selectedPlayers.includes(name)
+      ? selectedPlayers.filter((p) => p !== name)
+      : [...selectedPlayers, name];
+    setSelectedPlayers(updated);
+    setValue("winning_players", updated);
+  };
+
   return (
-    <Card withBorder>
-      <Card.Section p={"md"}>
-        <Title order={4}>Create a new Challenge</Title>
-      </Card.Section>
-
-      <Card.Section p={"md"}>
-        <SimpleGrid cols={{ base: 1, md: 2 }}>
-          <Box maw={340} mx="auto">
-            <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-              <TextInput
-                withAsterisk
-                readOnly
-                label="Season #"
-                value={form.values.season_num}
-              />
-
-              <NumberInput
-                withAsterisk
-                label="Episode #"
+    <Card>
+      <CardHeader>
+        <CardTitle>Create a new Challenge</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="mx-auto max-w-sm space-y-4"
+          >
+            <div className="space-y-1">
+              <Label>Season #</Label>
+              <Input readOnly value={season.order} />
+            </div>
+            <div className="space-y-1">
+              <Label>Episode #</Label>
+              <Input
+                type="number"
                 min={1}
-                max={season?.episodes.length}
-                {...form.getInputProps("episode_num")}
+                max={season.episodes.length}
+                value={episodeNum}
+                onChange={(e) => setEpisodeNum(Number(e.target.value))}
               />
-
-              <NumberInput
-                withAsterisk
-                label="Order"
+            </div>
+            <div className="space-y-1">
+              <Label>Order</Label>
+              <Input
+                type="number"
                 min={1}
-                {...form.getInputProps("order")}
+                value={order}
+                onChange={(e) => setOrder(Number(e.target.value))}
               />
-
-              <MultiSelect
-                withAsterisk
-                label="Winning Players"
-                data={playerNames}
-                searchable
-                {...form.getInputProps("winning_players")}
-              />
-
-              <Select
-                withAsterisk
-                label="Challenge Variant"
-                data={ChallengeWinActions}
-                searchable
-                {...form.getInputProps("variant")}
-              />
-
-              <Group justify="flex-end" mt="md">
-                <Button type="submit">Submit</Button>
-              </Group>
-            </form>
-          </Box>
-          <Box>
-            Generated Payload:
-            <Code block>{JSON.stringify(form.values, null, 2)}</Code>
-          </Box>
-        </SimpleGrid>
-      </Card.Section>
+            </div>
+            <div className="space-y-1">
+              <Label>Winning Players</Label>
+              <div className="flex flex-wrap gap-1">
+                {playerNames.map((name) => (
+                  <Button
+                    key={name}
+                    type="button"
+                    size="sm"
+                    variant={
+                      selectedPlayers.includes(name) ? "default" : "outline"
+                    }
+                    onClick={() => togglePlayer(name)}
+                  >
+                    {name}
+                  </Button>
+                ))}
+              </div>
+              {errors.winning_players && (
+                <p className="text-sm text-destructive">
+                  {errors.winning_players.message}
+                </p>
+              )}
+            </div>
+            <div className="space-y-1">
+              <Label>Challenge Variant</Label>
+              <Select value={variant} onValueChange={(v) => setVariant(v as Challenge["variant"])}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {ChallengeWinActions.map((a) => (
+                    <SelectItem key={a} value={a}>
+                      {a}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex justify-end">
+              <Button type="submit">Submit</Button>
+            </div>
+          </form>
+          <div>
+            <p className="mb-1 text-sm">Generated Payload:</p>
+            <pre className="overflow-auto rounded border bg-muted p-3 text-xs">
+              {JSON.stringify(formValues, null, 2)}
+            </pre>
+          </div>
+        </div>
+      </CardContent>
     </Card>
   );
 };

@@ -1,14 +1,11 @@
-import { Stack, Title } from "@mantine/core";
 import { ChallengeCRUDTable, CreateChallenge } from "../components/Challenges";
 
 export const ChallengesAdmin = () => {
   return (
-    <div>
-      <Stack gap={"xl"}>
-        <Title order={2}>Manage Challenges</Title>
-        <CreateChallenge />
-        <ChallengeCRUDTable />
-      </Stack>
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold">Manage Challenges</h2>
+      <CreateChallenge />
+      <ChallengeCRUDTable />
     </div>
   );
 };

@@ -1,14 +1,6 @@
-import {
-  Card,
-  Center,
-  SimpleGrid,
-  Stack,
-  StyleProp,
-  Text,
-  Title,
-} from "@mantine/core";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useCompetitionMeta } from "../../hooks/useCompetitionMeta";
+import { Card, CardContent } from "../ui/card";
 import { PlayerGroup } from "./PlayerGroup";
 
 export const PlayerGroupGrid = () => {
@@ -20,22 +12,13 @@ export const PlayerGroupGrid = () => {
 
   const numParticipants = competition.participant_uids.length;
 
-  const cols = (
-    numParticipants === 3 || numParticipants === 2
-      ? {
-          base: 1,
-          lg: 2,
-        }
-      : {
-          base: 2,
-          md: 3,
-          lg: 4,
-          xl: 6,
-        }
-  ) satisfies StyleProp<number>;
+  const gridClass =
+    numParticipants === 2 || numParticipants === 3
+      ? "grid grid-cols-1 gap-4 lg:grid-cols-2"
+      : "grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6";
 
   return (
-    <SimpleGrid cols={cols}>
+    <div className={gridClass}>
       {competition.participants.map((x) => {
         const userSurvivors = survivorsByUserUid[x.uid];
 
@@ -48,26 +31,20 @@ export const PlayerGroupGrid = () => {
         const isOne = numDrafted - numEliminated === 1;
 
         return (
-          <Card shadow="md">
-            <Center>
-              <Stack gap={"xs"}>
-                <Title order={4} ta="center">
-                  {x.displayName}
-                </Title>
-                <Text
-                  c={areAllEliminated ? "dimmed" : undefined}
-                  size="sm"
-                  ta="center"
-                >
-                  {numDrafted - numEliminated}{" "}
-                  {isOne ? "active player" : "active players"}
-                </Text>
-                <PlayerGroup uid={x.uid} />
-              </Stack>
-            </Center>
+          <Card key={x.uid}>
+            <CardContent className="flex flex-col items-center gap-1 pt-4">
+              <h4 className="text-center font-semibold">{x.displayName}</h4>
+              <p
+                className={`text-center text-sm ${areAllEliminated ? "text-muted-foreground" : ""}`}
+              >
+                {numDrafted - numEliminated}{" "}
+                {isOne ? "active player" : "active players"}
+              </p>
+              <PlayerGroup uid={x.uid} />
+            </CardContent>
           </Card>
         );
       })}
-    </SimpleGrid>
+    </div>
   );
 };

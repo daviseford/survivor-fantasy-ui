@@ -1,10 +1,19 @@
-import { Avatar, Badge, Group, Table, Text } from "@mantine/core";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useEvents } from "../../hooks/useEvents";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
 import { getNumberWithOrdinal } from "../../utils/misc";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Badge } from "../ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 export const SeasonTotalContestantScoringTable = () => {
   const { data: competition } = useCompetition();
@@ -15,7 +24,7 @@ export const SeasonTotalContestantScoringTable = () => {
   const { survivorPointsTotalSeason } = useScoringCalculations();
 
   const rows = Object.entries(survivorPointsTotalSeason)
-    .sort((a, b) => b[1] - a[1]) // sort by highest
+    .sort((a, b) => b[1] - a[1])
     .map(([playerName, seasonScore]) => {
       const playerData = season?.players.find((x) => x.name === playerName);
 
@@ -44,40 +53,35 @@ export const SeasonTotalContestantScoringTable = () => {
         (x) => x.player_name === playerName && x.action === "win_survivor",
       );
 
-      return (
-        <Table.Tr
-          key={playerName}
-          style={{
-            backgroundColor: playerElimination
-              ? "var(--mantine-color-gray-3)"
-              : isWinner
-                ? "var(--mantine-color-green-1)"
-                : "",
-          }}
-        >
-          <Table.Td width={"240px"}>
-            <Group gap="sm">
-              <Avatar size={40} src={playerData?.img} radius={40} />
+      const rowClass = playerElimination
+        ? "bg-muted/50"
+        : isWinner
+          ? "bg-green-50"
+          : "";
 
-              <Text fz="sm" fw={500}>
-                {playerName}
-              </Text>
-            </Group>
-          </Table.Td>
-          <Table.Td width={"40px"}>{seasonScore}</Table.Td>
-          <Table.Td>{draftedBy?.displayName || draftedBy?.email}</Table.Td>
-          <Table.Td>{draftPick?.order}</Table.Td>
-          <Table.Td>
+      return (
+        <TableRow key={playerName} className={rowClass}>
+          <TableCell className="w-60">
+            <div className="flex items-center gap-2">
+              <Avatar className="h-10 w-10">
+                <AvatarImage src={playerData?.img} />
+                <AvatarFallback>{playerName[0]}</AvatarFallback>
+              </Avatar>
+              <span className="text-sm font-medium">{playerName}</span>
+            </div>
+          </TableCell>
+          <TableCell className="w-10">{seasonScore}</TableCell>
+          <TableCell>{draftedBy?.displayName || draftedBy?.email}</TableCell>
+          <TableCell>{draftPick?.order}</TableCell>
+          <TableCell>
             {playerElimination && (
               <Badge
-                color={
+                variant={
                   isFTCEliminated
-                    ? "blue"
+                    ? "default"
                     : isRemovedFromGame
-                      ? "red"
-                      : playerElimination
-                        ? "gray"
-                        : ""
+                      ? "destructive"
+                      : "secondary"
                 }
               >
                 {isFTCEliminated
@@ -90,23 +94,23 @@ export const SeasonTotalContestantScoringTable = () => {
                   : ""}
               </Badge>
             )}
-          </Table.Td>
-        </Table.Tr>
+          </TableCell>
+        </TableRow>
       );
     });
 
   return (
-    <Table highlightOnHover>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>Player Name</Table.Th>
-          <Table.Th>Total</Table.Th>
-          <Table.Th>Drafted By</Table.Th>
-          <Table.Th>Pick #</Table.Th>
-          <Table.Th></Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>{rows}</Table.Tbody>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Player Name</TableHead>
+          <TableHead>Total</TableHead>
+          <TableHead>Drafted By</TableHead>
+          <TableHead>Pick #</TableHead>
+          <TableHead></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>{rows}</TableBody>
     </Table>
   );
 };

@@ -1,72 +1,108 @@
-import { ActionIcon, Code, Table, TableScrollContainer } from "@mantine/core";
-import { modals } from "@mantine/modals";
-import { IconTrash } from "@tabler/icons-react";
 import { doc, setDoc } from "firebase/firestore";
+import { Trash2 } from "lucide-react";
+import { useState } from "react";
 import { db } from "../../firebase";
 import { useEvents } from "../../hooks/useEvents";
 import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
 import { GameEvent } from "../../types";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
+import { Button } from "../ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 export const GameEventsCRUDTable = () => {
   const { data: season } = useSeason();
   const { data: events } = useEvents(season?.id);
-
   const { slimUser } = useUser();
+  const [deleteTarget, setDeleteTarget] = useState<GameEvent | null>(null);
 
-  const handleDelete = async (e: GameEvent) => {
-    if (!slimUser?.isAdmin) return;
+  const handleDelete = async () => {
+    if (!slimUser?.isAdmin || !deleteTarget) return;
 
-    modals.openConfirmModal({
-      title: "Do you want to delete this event?",
-      children: <Code block>{JSON.stringify(e, null, 2)}</Code>,
-      labels: { confirm: "Delete", cancel: "Cancel" },
-      onConfirm: async () => {
-        const ref = doc(db, `events/${season?.id}`);
-
-        const newEvents = { ...events };
-
-        delete newEvents[e.id];
-
-        await setDoc(ref, newEvents);
-      },
-    });
+    const ref = doc(db, `events/${season?.id}`);
+    const newEvents = { ...events };
+    delete newEvents[deleteTarget.id];
+    await setDoc(ref, newEvents);
+    setDeleteTarget(null);
   };
 
-  const rows = Object.values(events || {})
-    .sort((a, b) => b.episode_num - a.episode_num)
-    .map((e) => {
-      return (
-        <Table.Tr key={e.id}>
-          <Table.Td>{e.action}</Table.Td>
-          <Table.Td>{e.multiplier || "-"}</Table.Td>
-          <Table.Td>{e.player_name}</Table.Td>
-          <Table.Td>{e.episode_id}</Table.Td>
-          {slimUser?.isAdmin && (
-            <Table.Td>
-              <ActionIcon color="red" onClick={() => handleDelete(e)}>
-                <IconTrash />
-              </ActionIcon>
-            </Table.Td>
-          )}
-        </Table.Tr>
-      );
-    });
-
   return (
-    <TableScrollContainer minWidth={300}>
-      <Table>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Action</Table.Th>
-            <Table.Th>Multiplier</Table.Th>
-            <Table.Th>Player</Table.Th>
-            <Table.Th>Episode</Table.Th>
-            {slimUser?.isAdmin && <Table.Th>Delete</Table.Th>}
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
-      </Table>
-    </TableScrollContainer>
+    <>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Action</TableHead>
+              <TableHead>Multiplier</TableHead>
+              <TableHead>Player</TableHead>
+              <TableHead>Episode</TableHead>
+              {slimUser?.isAdmin && <TableHead>Delete</TableHead>}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {Object.values(events || {})
+              .sort((a, b) => b.episode_num - a.episode_num)
+              .map((e) => (
+                <TableRow key={e.id}>
+                  <TableCell>{e.action}</TableCell>
+                  <TableCell>{e.multiplier || "-"}</TableCell>
+                  <TableCell>{e.player_name}</TableCell>
+                  <TableCell>{e.episode_id}</TableCell>
+                  {slimUser?.isAdmin && (
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-destructive"
+                        onClick={() => setDeleteTarget(e)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <AlertDialog
+        open={!!deleteTarget}
+        onOpenChange={() => setDeleteTarget(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Do you want to delete this event?
+            </AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <pre className="overflow-auto rounded bg-muted p-3 text-xs">
+                {JSON.stringify(deleteTarget, null, 2)}
+              </pre>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 };

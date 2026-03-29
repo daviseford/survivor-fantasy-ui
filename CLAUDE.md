@@ -19,7 +19,7 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 
 ## Architecture
 
-- **React 18 + TypeScript + Vite** SPA with Mantine v7 UI components
+- **React 18 + TypeScript + Vite** SPA with shadcn/ui components and Tailwind CSS v4
 - **Routing:** react-router-dom v6, routes defined in `src/AppRoutes.tsx`
 - **State/Data:** react-query v3 with `@react-query-firebase/firestore` for Firestore queries; some hooks use raw `onSnapshot` for realtime subscriptions
 - **Firebase backend:** Firestore (seasons, competitions), Realtime Database (live drafts), Firebase Auth, hosted on Firebase Hosting
@@ -30,7 +30,9 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 - **Season data is hardcoded** in `src/data/` (players, episodes per season) and also stored in Firestore. The `SEASONS` map in `src/data/seasons.ts` is the local source of truth for season metadata.
 - **Typed IDs:** Domain types use branded string IDs (`season_${number}`, `draft_${string}`, `episode_${string}`, etc.) defined in `src/types/index.ts`.
 - **Hooks per entity:** Each Firestore/RTDB entity has a dedicated hook (`useSeason`, `useCompetition`, `useDraft`, `useChallenges`, `useEliminations`, `useEvents`). Hooks read route params via `useParams()` with optional ID override.
-- **CSS Modules** for component-scoped styles (`.module.css` files), PostCSS with `postcss-preset-mantine`.
+- **Tailwind CSS v4** for styling via `@tailwindcss/vite` plugin. shadcn/ui components live in `src/components/ui/`. Global CSS variables in `src/index.css`. Path alias `@/` maps to `src/`.
+- **Forms:** react-hook-form + zod for complex forms (Draft, CreateChallenge, CreateElimination, CreateGameEvent). Simple auth forms use controlled inputs.
+- **Icons:** lucide-react (shadcn standard icon set).
 
 ## Deployment
 

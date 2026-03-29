@@ -1,70 +1,52 @@
-import { Stack, Tabs, Text, rem } from "@mantine/core";
-import { IconCalendar, IconKarate, IconUserX } from "@tabler/icons-react";
+import { Calendar, Swords, UserX } from "lucide-react";
 import { ChallengeCRUDTable, CreateChallenge } from "../components/Challenges";
 import {
   CreateElimination,
   EliminationCRUDTable,
 } from "../components/Eliminations";
 import { CreateGameEvent, GameEventsCRUDTable } from "../components/GameEvents";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import { useUser } from "../hooks/useUser";
 
 export const SeasonAdmin = () => {
   const { slimUser } = useUser();
 
-  const iconStyle = { width: rem(12), height: rem(12) };
-
   if (!slimUser?.isAdmin) {
-    return <Text c="red">DENIED!</Text>;
+    return <p className="text-destructive">DENIED!</p>;
   }
 
   return (
     <div>
       <Tabs defaultValue="events">
-        <Tabs.List>
-          <Tabs.Tab
-            value="events"
-            leftSection={<IconCalendar style={iconStyle} />}
-          >
+        <TabsList>
+          <TabsTrigger value="events">
+            <Calendar className="mr-1 h-3 w-3" />
             Events
-          </Tabs.Tab>
-
-          <Tabs.Tab
-            value="challenges"
-            leftSection={<IconKarate style={iconStyle} />}
-          >
+          </TabsTrigger>
+          <TabsTrigger value="challenges">
+            <Swords className="mr-1 h-3 w-3" />
             Challenges
-          </Tabs.Tab>
-          <Tabs.Tab
-            value="eliminations"
-            leftSection={<IconUserX style={iconStyle} />}
-          >
+          </TabsTrigger>
+          <TabsTrigger value="eliminations">
+            <UserX className="mr-1 h-3 w-3" />
             Eliminations
-          </Tabs.Tab>
-        </Tabs.List>
+          </TabsTrigger>
+        </TabsList>
 
-        <Tabs.Panel value="events" pt={"lg"}>
-          <Stack gap={"xl"}>
-            {/* <Title order={2}>Manage Game Events</Title> */}
-            <CreateGameEvent />
-            <GameEventsCRUDTable />
-          </Stack>
-        </Tabs.Panel>
+        <TabsContent value="events" className="space-y-6 pt-4">
+          <CreateGameEvent />
+          <GameEventsCRUDTable />
+        </TabsContent>
 
-        <Tabs.Panel value="challenges" pt={"lg"}>
-          <Stack gap={"xl"}>
-            {/* <Title order={2}>Manage Challenges</Title> */}
-            <CreateChallenge />
-            <ChallengeCRUDTable />
-          </Stack>
-        </Tabs.Panel>
+        <TabsContent value="challenges" className="space-y-6 pt-4">
+          <CreateChallenge />
+          <ChallengeCRUDTable />
+        </TabsContent>
 
-        <Tabs.Panel value="eliminations" pt={"lg"}>
-          <Stack gap={"xl"}>
-            {/* <Title order={2}>Manage Challenges</Title> */}
-            <CreateElimination />
-            <EliminationCRUDTable />
-          </Stack>
-        </Tabs.Panel>
+        <TabsContent value="eliminations" className="space-y-6 pt-4">
+          <CreateElimination />
+          <EliminationCRUDTable />
+        </TabsContent>
       </Tabs>
     </div>
   );

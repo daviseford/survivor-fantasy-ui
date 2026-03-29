@@ -1,10 +1,18 @@
-import { Badge, Group, Table, TableScrollContainer, Text } from "@mantine/core";
 import { PropBetQuestionObj, PropBetsQuestions } from "../../data/propbets";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useEliminations } from "../../hooks/useEliminations";
 import { usePropBetScoring } from "../../hooks/useGetPropBetScoring";
 import { useUser } from "../../hooks/useUser";
 import { PropBetAnswer } from "../../utils/propBetUtils";
+import { Badge } from "../ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 const AnswerTd = ({
   score,
@@ -14,18 +22,18 @@ const AnswerTd = ({
   strikethrough?: boolean;
 }) => {
   return (
-    <Table.Td>
-      <Group gap={"md"}>
-        <Text
-          c={!score.correct ? "dimmed" : ""}
-          fw={score.correct ? "bolder" : ""}
-          td={strikethrough ? "line-through" : ""}
+    <TableCell>
+      <div className="flex items-center gap-3">
+        <span
+          className={`${!score.correct ? "text-muted-foreground" : "font-bold"} ${strikethrough ? "line-through" : ""}`}
         >
           {score.answer}
-        </Text>
-        {score.correct && <Badge color="green">+{score.points_awarded}</Badge>}
-      </Group>
-    </Table.Td>
+        </span>
+        {score.correct && (
+          <Badge className="bg-green-600">+{score.points_awarded}</Badge>
+        )}
+      </div>
+    </TableCell>
   );
 };
 
@@ -44,10 +52,10 @@ export const PropBetScoring = () => {
   const firstElim = _elims.find((x) => x.order === 1)?.player_name;
 
   const rows = Object.entries(scores).map(([uid, s]) => (
-    <Table.Tr key={uid}>
-      <Table.Td>
+    <TableRow key={uid}>
+      <TableCell>
         <strong>{s.propbet_first_vote.user_name}</strong>
-      </Table.Td>
+      </TableCell>
 
       <AnswerTd
         score={s.propbet_first_vote}
@@ -95,39 +103,36 @@ export const PropBetScoring = () => {
           (x) => x.player_name === s.propbet_winner.answer,
         )}
       />
-    </Table.Tr>
+    </TableRow>
   ));
 
   return (
-    <TableScrollContainer minWidth={300}>
+    <div className="overflow-x-auto">
       <Table>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th></Table.Th>
+        <TableHeader>
+          <TableRow>
+            <TableHead></TableHead>
             <Th {...PropBetsQuestions.propbet_first_vote} />
             <Th {...PropBetsQuestions.propbet_ftc} />
             <Th {...PropBetsQuestions.propbet_idols} />
             <Th {...PropBetsQuestions.propbet_immunities} />
             <Th {...PropBetsQuestions.propbet_medical_evac} />
             <Th {...PropBetsQuestions.propbet_winner} />
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
+          </TableRow>
+        </TableHeader>
+        <TableBody>{rows}</TableBody>
       </Table>
-    </TableScrollContainer>
+    </div>
   );
 };
 
 const Th = ({ description, point_value }: PropBetQuestionObj) => {
   return (
-    <Table.Th>
-      <Text fw={700} span>
-        {description}
-        {"  "}
-        <Text c="dimmed" size="xs" span>
-          (+{point_value})
-        </Text>
-      </Text>
-    </Table.Th>
+    <TableHead>
+      <span className="font-bold">
+        {description}{" "}
+        <span className="text-xs text-muted-foreground">(+{point_value})</span>
+      </span>
+    </TableHead>
   );
 };

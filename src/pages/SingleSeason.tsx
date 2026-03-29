@@ -1,13 +1,6 @@
-import {
-  Box,
-  Button,
-  Center,
-  Group,
-  Loader,
-  Stack,
-  Title,
-} from "@mantine/core";
+import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../components/ui/button";
 import { useCreateDraft } from "../hooks/useCreateDraft";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
@@ -32,41 +25,32 @@ export const SingleSeason = () => {
 
   if (isLoading)
     return (
-      <Center>
-        <Loader size={"xl"} />
-      </Center>
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
     );
 
   if (!season) return <div>Error: Missing season data</div>;
 
   return (
-    <Box p={"md"}>
-      <h1>Season {season?.order}</h1>
+    <div className="space-y-6 p-4">
+      <h1 className="text-3xl font-bold">Season {season?.order}</h1>
 
-      <Stack>
-        {slimUser?.isAdmin && (
-          <>
-            <Group>
-              <Title>Admin Controls</Title>
-              <Button onClick={handleManageSeason}>Manage Season</Button>
-            </Group>
-          </>
-        )}
+      {slimUser?.isAdmin && (
+        <div className="flex items-center gap-4">
+          <h2 className="text-2xl font-bold">Admin Controls</h2>
+          <Button onClick={handleManageSeason}>Manage Season</Button>
+        </div>
+      )}
 
-        {slimUser && (
-          <Group pb={"lg"}>
-            <Title order={4}>Want to play along?</Title>
-            <Button
-              onClick={handleCreateDraft}
-              style={{ width: "fit-content" }}
-            >
-              Create a New Draft
-            </Button>
-          </Group>
-        )}
+      {slimUser && (
+        <div className="flex items-center gap-4 pb-4">
+          <h4 className="text-lg font-semibold">Want to play along?</h4>
+          <Button onClick={handleCreateDraft}>Create a New Draft</Button>
+        </div>
+      )}
 
-        <Players />
-      </Stack>
-    </Box>
+      <Players />
+    </div>
   );
 };

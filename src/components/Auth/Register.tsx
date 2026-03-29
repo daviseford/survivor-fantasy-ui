@@ -1,20 +1,13 @@
-import {
-  Button,
-  Container,
-  Paper,
-  PasswordInput,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
-import { modals } from "@mantine/modals";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { auth, db } from "../../firebase";
 import { useUser } from "../../hooks/useUser";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
-export const Register = () => {
+export const Register = ({ onSuccess }: { onSuccess?: () => void }) => {
   const { user } = useUser();
 
   const [displayName, setDisplayName] = useState("");
@@ -24,7 +17,6 @@ export const Register = () => {
 
   const onSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
     setError("");
 
     try {
@@ -34,9 +26,7 @@ export const Register = () => {
         password,
       );
 
-      // Signed in
       const _user = userCredential.user;
-
       console.log({ _user });
 
       if (displayName && auth.currentUser) {
@@ -45,77 +35,81 @@ export const Register = () => {
 
       const { uid } = _user;
 
-      // Create a doc for this user
       await setDoc(doc(db, "users", uid), {
         uid,
         email: _user.email,
         displayName,
       });
 
-      modals.closeAll();
-
+      onSuccess?.();
       window.location.reload();
-      // ...
     } catch (error) {
-      // @ts-expect-error asdas
+      // @ts-expect-error firebase error typing
       const errorCode = error.code;
-      // @ts-expect-error asdasd
+      // @ts-expect-error firebase error typing
       const errorMessage = error.message;
       console.log(errorCode, errorMessage);
       setError(errorMessage);
-      // ..
     }
   };
 
   if (user) {
     return (
-      <Container size={420} my={40}>
-        <Title ta="center">You are already logged in.</Title>
+      <div className="space-y-4 py-8 text-center">
+        <h2 className="text-xl font-semibold">You are already logged in.</h2>
         <Button onClick={() => auth.signOut()}>Logout</Button>
-      </Container>
+      </div>
     );
   }
 
   return (
-    <Container size={420} my={40}>
-      <Title ta="center">Create a new account</Title>
+    <div className="space-y-4 pt-4">
+      <h2 className="text-center text-xl font-semibold">
+        Create a new account
+      </h2>
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="reg-display">Display Name</Label>
+          <Input
+            id="reg-display"
+            placeholder="John Doe"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            required
+          />
+          <p className="text-xs text-muted-foreground">
+            Other users will see this name
+          </p>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="reg-email">Email</Label>
+          <Input
+            id="reg-email"
+            type="email"
+            placeholder="hello@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="reg-password">Password</Label>
+          <Input
+            id="reg-password"
+            type="password"
+            placeholder="Your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
 
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        <TextInput
-          label="Display Name"
-          placeholder="John Doe"
-          description="Other users will see this name"
-          value={displayName}
-          onChange={(e) => setDisplayName(e.target.value)}
-          required
-        />
-        <TextInput
-          label="Email"
-          placeholder="hello@gmail.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          mt="md"
-        />
-        <PasswordInput
-          label="Password"
-          placeholder="Your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          mt="md"
-        />
+        {error && <p className="text-sm text-destructive">{error}</p>}
 
-        {error && (
-          <Text c="red" mt="lg">
-            {error}
-          </Text>
-        )}
-
-        <Button fullWidth mt="xl" onClick={onSubmit}>
+        <Button type="submit" className="w-full">
           Register
         </Button>
-      </Paper>
-    </Container>
+      </form>
+    </div>
   );
 };

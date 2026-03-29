@@ -1,12 +1,3 @@
-import {
-  Avatar,
-  Badge,
-  Group,
-  Stack,
-  Table,
-  Text,
-  Tooltip,
-} from "@mantine/core";
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useEliminations } from "../../hooks/useEliminations";
@@ -15,6 +6,21 @@ import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
 import { PlayerAction } from "../../types";
 import { getNumberWithOrdinal } from "../../utils/misc";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Badge } from "../ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
   const { data: competition } = useCompetition();
@@ -25,11 +31,19 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
   const { survivorPointsByEpisode, survivorPointsTotalSeason } =
     useScoringCalculations();
 
+  const scoringDescriptionLookup = BASE_PLAYER_SCORING.reduce(
+    (accum, score) => {
+      accum[score.action] = score.description;
+      return accum;
+    },
+    {} as Record<PlayerAction, string>,
+  );
+
   const rows = Object.entries(survivorPointsByEpisode)
     .sort(
       (a, b) =>
         survivorPointsTotalSeason[b[0]] - survivorPointsTotalSeason[a[0]],
-    ) // sort by highest
+    )
     .map(([playerName, episodeScores], i) => {
       const playerData = season?.players.find((x) => x.name === playerName);
 
@@ -58,85 +72,73 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
         (x) => x.player_name === playerName && x.action === "win_survivor",
       );
 
-      const trStyle = {
-        backgroundColor: playerElimination
-          ? "var(--mantine-color-gray-2)"
-          : isWinner
-            ? "var(--mantine-color-green-1)"
-            : "",
-      };
-      const avatarStyle = playerElimination ? { filter: "grayscale(1)" } : {};
-
-      const scoringDescriptionLookup = BASE_PLAYER_SCORING.reduce(
-        (accum, score) => {
-          accum[score.action] = score.description;
-
-          return accum;
-        },
-        {} as Record<PlayerAction, string>,
-      );
+      const rowClass = playerElimination
+        ? "bg-muted/50"
+        : isWinner
+          ? "bg-green-50"
+          : "";
 
       return (
-        <Table.Tr key={playerName} style={trStyle}>
-          <Table.Td width={"20px"}>{i + 1}</Table.Td>
-          <Table.Td width={"240px"}>
-            <Group gap="sm">
-              <Avatar
-                size={40}
-                src={playerData?.img}
-                radius={40}
-                style={avatarStyle}
-              />
-
-              <Text fz="sm" fw={500} c={playerElimination ? "dimmed" : ""}>
+        <TableRow key={playerName} className={rowClass}>
+          <TableCell className="w-5">{i + 1}</TableCell>
+          <TableCell className="w-60">
+            <div className="flex items-center gap-2">
+              <Avatar className="h-10 w-10">
+                <AvatarImage
+                  src={playerData?.img}
+                  className={playerElimination ? "grayscale" : ""}
+                />
+                <AvatarFallback>{playerName[0]}</AvatarFallback>
+              </Avatar>
+              <span
+                className={`text-sm font-medium ${playerElimination ? "text-muted-foreground" : ""}`}
+              >
                 {playerName}
-              </Text>
-            </Group>
-          </Table.Td>
-
-          <Table.Td width={"40px"}>
+              </span>
+            </div>
+          </TableCell>
+          <TableCell className="w-10">
             {survivorPointsTotalSeason[playerName]}
-          </Table.Td>
+          </TableCell>
+          {episodeScores.map((s, idx) => (
+            <TableCell key={idx} className="w-30">
+              <div className="flex flex-col gap-1">
+                {s.actions.map((x, actionIdx) => {
+                  const variant =
+                    x.action === "eliminated" ? "destructive" : "secondary";
 
-          {episodeScores.map((s) => {
-            return (
-              <Table.Td width={"120px"}>
-                <Stack gap={"xs"}>
-                  {s.actions.map((x) => {
-                    const badgeColor =
-                      x.action === "eliminated" ? "red" : "dark";
-
-                    return (
-                      <Tooltip label={scoringDescriptionLookup[x.action]}>
+                  return (
+                    <Tooltip key={actionIdx}>
+                      <TooltipTrigger asChild>
                         <Badge
-                          size="sm"
-                          color={badgeColor}
-                          style={{ cursor: "pointer" }}
+                          variant={variant}
+                          className="cursor-pointer text-xs"
                         >
                           {x.action.replace(/_/g, " ")} +{x.points_awarded}
                         </Badge>
-                      </Tooltip>
-                    );
-                  })}
-                </Stack>
-              </Table.Td>
-            );
-          })}
-          <Table.Td width={"150px"}>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        {scoringDescriptionLookup[x.action]}
+                      </TooltipContent>
+                    </Tooltip>
+                  );
+                })}
+              </div>
+            </TableCell>
+          ))}
+          <TableCell className="w-38">
             Drafted {getNumberWithOrdinal(draftPick?.order || 0)} by{" "}
             {draftedBy?.displayName || draftedBy?.email}
-          </Table.Td>
-          <Table.Td>
+          </TableCell>
+          <TableCell>
             {playerElimination && (
               <Badge
-                color={
+                variant={
                   isFTCEliminated
-                    ? "blue"
+                    ? "default"
                     : isRemovedFromGame
-                      ? "red"
-                      : playerElimination
-                        ? "gray"
-                        : ""
+                      ? "destructive"
+                      : "secondary"
                 }
               >
                 {isFTCEliminated
@@ -149,30 +151,28 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                   : ""}
               </Badge>
             )}
-          </Table.Td>
-        </Table.Tr>
+          </TableCell>
+        </TableRow>
       );
     });
 
   return (
-    <Table.ScrollContainer minWidth={300}>
-      <Table
-        highlightOnHover
-        verticalSpacing={"md"}
-        horizontalSpacing={"md"}
-        withColumnBorders
-      >
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Rank</Table.Th>
-            <Table.Th>Player</Table.Th>
-            <Table.Th>Total</Table.Th>
-            {season?.episodes.map((x) => <Table.Th>Ep {x.order}</Table.Th>)}
-            <Table.Th>Draft Pick</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
+    <div className="overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Rank</TableHead>
+            <TableHead>Player</TableHead>
+            <TableHead>Total</TableHead>
+            {season?.episodes.map((x) => (
+              <TableHead key={x.id}>Ep {x.order}</TableHead>
+            ))}
+            <TableHead>Draft Pick</TableHead>
+            <TableHead></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>{rows}</TableBody>
       </Table>
-    </Table.ScrollContainer>
+    </div>
   );
 };

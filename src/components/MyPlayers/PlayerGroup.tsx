@@ -1,11 +1,13 @@
-import { Avatar, Tooltip } from "@mantine/core";
 import { useCompetitionMeta } from "../../hooks/useCompetitionMeta";
-import { useIsMobile } from "../../hooks/useIsMobile";
 import { SlimUser } from "../../types";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 export const PlayerGroup = ({ uid }: { uid: SlimUser["uid"] }) => {
-  const isMobile = useIsMobile();
-
   const { survivorsByUserUid, eliminatedSurvivors } = useCompetitionMeta();
 
   const userSurvivors = survivorsByUserUid[uid];
@@ -13,20 +15,27 @@ export const PlayerGroup = ({ uid }: { uid: SlimUser["uid"] }) => {
   if (!userSurvivors?.length) return null;
 
   return (
-    <Avatar.Group spacing={isMobile ? "xs" : "lg"}>
+    <div className="flex -space-x-2">
       {userSurvivors?.map((p) => {
         const isEliminated = eliminatedSurvivors.includes(p.name);
-
-        const avatarStyle = isEliminated ? { filter: "grayscale(1)" } : {};
 
         const label = `${p.name}${isEliminated ? " (Eliminated)" : ""}`;
 
         return (
-          <Tooltip label={label} key={label}>
-            <Avatar key={label} src={p.img} size={""} style={avatarStyle} />
+          <Tooltip key={label}>
+            <TooltipTrigger asChild>
+              <Avatar className="h-10 w-10">
+                <AvatarImage
+                  src={p.img}
+                  className={isEliminated ? "grayscale" : ""}
+                />
+                <AvatarFallback>{p.name[0]}</AvatarFallback>
+              </Avatar>
+            </TooltipTrigger>
+            <TooltipContent>{label}</TooltipContent>
           </Tooltip>
         );
       })}
-    </Avatar.Group>
+    </div>
   );
 };

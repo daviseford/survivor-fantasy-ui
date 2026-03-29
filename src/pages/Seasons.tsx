@@ -1,17 +1,14 @@
-import {
-  Badge,
-  Box,
-  Button,
-  Card,
-  Group,
-  Image,
-  SimpleGrid,
-  Text,
-  Title,
-} from "@mantine/core";
 import { useFirestoreQueryData } from "@react-query-firebase/firestore";
 import { collection } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "../components/ui/card";
 import { db } from "../firebase";
 import { useUser } from "../hooks/useUser";
 import { Season } from "../types";
@@ -29,42 +26,48 @@ export const Seasons = () => {
   );
 
   return (
-    <Box>
-      <Title order={3} c="dimmed" p="md">
+    <div>
+      <h3 className="p-4 text-lg text-muted-foreground">
         Pick your favorite season in order to learn more about the contestants
         and start a draft!
-      </Title>
-      <SimpleGrid cols={3}>
+      </h3>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {seasons?.map((x) => {
           console.log(x.name);
-          if (x.name !== "Survivor 46" && x.name !== "Survivor 50" && !slimUser?.isAdmin) return null;
+          if (
+            x.name !== "Survivor 46" &&
+            x.name !== "Survivor 50" &&
+            !slimUser?.isAdmin
+          )
+            return null;
 
           return (
-            <div key={x.id}>
-              <Card shadow="sm" padding="lg" radius="md" withBorder>
-                <Card.Section>
-                  <Image src={x.img} height={250} alt={x.name} />
-                </Card.Section>
-
-                <Group justify="space-between" mt="md" mb="xs">
-                  <Text fw={500}>{x.name}</Text>
-                  <Badge color="pink">Season {x.order}</Badge>
-                </Group>
-
+            <Card key={x.id} className="overflow-hidden">
+              <CardHeader className="p-0">
+                <img
+                  src={x.img}
+                  alt={x.name}
+                  className="h-[250px] w-full object-cover"
+                />
+              </CardHeader>
+              <CardContent className="pt-4">
+                <div className="flex items-center justify-between">
+                  <p className="font-medium">{x.name}</p>
+                  <Badge variant="secondary">Season {x.order}</Badge>
+                </div>
+              </CardContent>
+              <CardFooter>
                 <Button
-                  color="blue"
-                  fullWidth
-                  mt="md"
-                  radius="md"
+                  className="w-full"
                   onClick={() => navigate(`/seasons/${x.id}`)}
                 >
                   Select
                 </Button>
-              </Card>
-            </div>
+              </CardFooter>
+            </Card>
           );
         })}
-      </SimpleGrid>
-    </Box>
+      </div>
+    </div>
   );
 };

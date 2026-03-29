@@ -1,22 +1,18 @@
-import "@mantine/charts/styles.css";
-import {
-  Anchor,
-  AppShell,
-  Burger,
-  Group,
-  MantineProvider,
-} from "@mantine/core";
-import "@mantine/core/styles.css";
-import { useDisclosure } from "@mantine/hooks";
-import { ModalsProvider } from "@mantine/modals";
+import { useState } from "react";
 import { QueryClientProvider } from "react-query";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import classes from "./AppRoutes.module.css";
-import { AuthModal } from "./components/Auth/AuthModal";
+import { AppSidebar } from "./components/AppSidebar";
+import { AuthDialog } from "./components/Auth/AuthDialog";
 import { Logout } from "./components/Auth/Logout";
 import { Footer } from "./components/Footer";
 import { Home } from "./components/Home/Home";
-import { Navbar } from "./components/Navbar";
+import { Separator } from "./components/ui/separator";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "./components/ui/sidebar";
+import { TooltipProvider } from "./components/ui/tooltip";
 import { PROJECT_NAME } from "./consts";
 import { Admin } from "./pages/Admin";
 import { Competitions } from "./pages/Competitions";
@@ -26,102 +22,66 @@ import { Seasons } from "./pages/Seasons";
 import { SingleCompetition } from "./pages/SingleCompetition";
 import { SingleSeason } from "./pages/SingleSeason";
 import { queryClient } from "./queryClient";
-import { theme } from "./theme";
-
-const modals = { AuthModal };
-
-declare module "@mantine/modals" {
-  export interface MantineModalsOverride {
-    modals: typeof modals;
-  }
-}
 
 export const AppRoutes = () => {
-  const [opened, { toggle }] = useDisclosure();
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
 
   return (
-    <MantineProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <Router>
-          <ModalsProvider modals={modals}>
-            <AppShell
-              header={{
-                height: {
-                  base: 42,
-                  sm: 55,
-                },
-              }}
-              navbar={{
-                width: 300,
-                breakpoint: "sm",
-                collapsed: { mobile: !opened },
-              }}
-              padding="md"
-            >
-              <AppShell.Header>
-                <Group>
-                  <Burger
-                    opened={opened}
-                    onClick={toggle}
-                    hiddenFrom="sm"
-                    size="sm"
-                  />
-                  <Anchor
-                    className={classes.title}
-                    variant="gradient"
-                    gradient={{ from: "blue", to: "cyan" }}
-                    inherit
-                    href="/"
-                  >
-                    {PROJECT_NAME}
-                  </Anchor>
-                </Group>
-              </AppShell.Header>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <TooltipProvider>
+          <SidebarProvider>
+            <AppSidebar onLoginClick={() => setAuthDialogOpen(true)} />
+            <SidebarInset>
+              <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
+                <SidebarTrigger className="-ml-1" />
+                <Separator
+                  orientation="vertical"
+                  className="mr-2 data-[orientation=vertical]:h-4"
+                />
+                <a
+                  href="/"
+                  className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-lg font-bold text-transparent"
+                >
+                  {PROJECT_NAME}
+                </a>
+              </header>
 
-              <AppShell.Navbar p="md">
-                <Navbar />
-              </AppShell.Navbar>
-
-              <AppShell.Main className={classes.main}>
+              <main className="flex-1 p-4 pb-24">
                 <Routes>
                   <Route path="/" element={<Home />} />
-
-                  {/* User stuff */}
                   <Route path="/logout" element={<Logout />} />
-
-                  {/* Drafting */}
                   <Route
                     path="/seasons/:seasonId/draft/:draftId"
                     element={<DraftComponent />}
                   />
-
-                  {/* Seasons */}
                   <Route
                     path="/seasons/:seasonId/manage"
                     element={<SeasonAdmin />}
                   />
-                  <Route path="/seasons/:seasonId" element={<SingleSeason />} />
+                  <Route
+                    path="/seasons/:seasonId"
+                    element={<SingleSeason />}
+                  />
                   <Route path="/seasons" element={<Seasons />} />
-
-                  {/* Competitions */}
                   <Route
                     path="/competitions/:competitionId"
                     element={<SingleCompetition />}
                   />
                   <Route path="/competitions" element={<Competitions />} />
-
-                  {/* TODO: Protect this */}
                   <Route path="/admin" element={<Admin />} />
                 </Routes>
-              </AppShell.Main>
+              </main>
 
-              <AppShell.Footer>
-                <Footer />
-              </AppShell.Footer>
-            </AppShell>
-          </ModalsProvider>
-        </Router>
-      </QueryClientProvider>
-    </MantineProvider>
+              <Footer />
+            </SidebarInset>
+          </SidebarProvider>
+          <AuthDialog
+            open={authDialogOpen}
+            onOpenChange={setAuthDialogOpen}
+          />
+        </TooltipProvider>
+      </Router>
+    </QueryClientProvider>
   );
 };

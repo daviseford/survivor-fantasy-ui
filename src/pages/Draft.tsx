@@ -1,33 +1,36 @@
-import {
-  Alert,
-  Avatar,
-  Badge,
-  Box,
-  Breadcrumbs,
-  Button,
-  Center,
-  CopyButton,
-  Group,
-  Paper,
-  Select,
-  SimpleGrid,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
-import { isNotEmpty, useForm } from "@mantine/form";
-import { modals } from "@mantine/modals";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ref, update } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
 import { shuffle, uniqBy } from "lodash-es";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
+import { z } from "zod";
 import { DraftTable } from "../components/DraftTable";
 import { MyDraftedPlayers } from "../components/MyPlayers/MyDraftedPlayers";
 import { PostDraftPropBetTable } from "../components/PropBetTables/PostDraftPropBetTable";
 import { ScoringLegendTable } from "../components/ScoringTables";
+import { Alert, AlertDescription } from "../components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
+import { Card, CardContent } from "../components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
 import { PropBetsQuestions } from "../data/propbets";
 import { db, rt_db } from "../firebase";
 import { useCompetition } from "../hooks/useCompetition";
@@ -50,6 +53,11 @@ export const DraftComponent = () => {
 
   const { draft } = useDraft();
   const { data: competition } = useCompetition(draft?.competiton_id);
+
+  const [nameDialogOpen, setNameDialogOpen] = useState(false);
+  const [playerDetailOpen, setPlayerDetailOpen] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
 
   console.log({ slimUser, draft, competition });
 
@@ -87,7 +95,7 @@ export const DraftComponent = () => {
   const createCompetition = async (competition_name: string) => {
     if (!season || !draft) return;
 
-    const competition = {
+    const comp = {
       id: draft.competiton_id,
       competition_name,
       draft_id: draft.id,
@@ -103,8 +111,8 @@ export const DraftComponent = () => {
       current_episode: null,
     } satisfies Competition;
 
-    console.log("CREATING A COMPETITION: ", competition);
-    await setDoc(doc(db, "competitions", competition.id), competition);
+    console.log("CREATING A COMPETITION: ", comp);
+    await setDoc(doc(db, "competitions", comp.id), comp);
   };
 
   const updateDraft = async (_draft: Draft) => {
@@ -151,16 +159,13 @@ export const DraftComponent = () => {
 
     const finished = draft.current_pick_number >= draft.total_players;
 
-    // e.g. 2
     const pickOrderIdxOfLastPicker = draft.pick_order.findIndex(
       (x) => x.uid === draft.current_picker?.uid,
     );
 
     const nextCurrentPicker = finished
       ? null
-      : // The next "current_picker" will either be the next entry in the array
-        // Or, if there isn't a next one, we loop back to the start
-        draft.pick_order?.[pickOrderIdxOfLastPicker + 1] ?? draft.pick_order[0];
+      : draft.pick_order?.[pickOrderIdxOfLastPicker + 1] ?? draft.pick_order[0];
 
     const _draft = {
       ...draft,
@@ -200,31 +205,18 @@ export const DraftComponent = () => {
     )
       return;
 
-    const onClose = async (values: FormData) => {
-      modals.closeAll();
-      // create an entry in our DB
-      await createCompetition(values.name);
-    };
-
-    modals.open({
-      title: "What should we call your Competition?",
-      closeOnClickOutside: false,
-      withCloseButton: false,
-      children: <NameYourCompetition onSubmit={onClose} />,
-    });
-
+    setNameDialogOpen(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [competition, draft, slimUser?.uid]);
 
   useEffect(() => {
     if (competition) {
-      modals.closeAll();
+      setNameDialogOpen(false);
     }
   }, [competition]);
 
   const isPlayerDrafted = (name: string) => {
     if (!draft?.draft_picks) return false;
-
     return draft.draft_picks.some((x) => x.player_name === name);
   };
 
@@ -233,172 +225,185 @@ export const DraftComponent = () => {
     !draft.finished &&
     draft.current_picker?.uid === slimUser?.uid;
 
+  const handleCopyUrl = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Import AuthDialog lazily to avoid circular deps
+  const handleLoginClick = () => {
+    setAuthDialogOpen(true);
+  };
+
   if (!season) return <div>Error: Missing data</div>;
 
+  const selectedPlayer = season.players.find(
+    (p) => p.name === playerDetailOpen,
+  );
+
   return (
-    <div>
-      <Stack>
-        <Group>
-          {season && !slimUser && (
-            <Button
-              onClick={() =>
-                modals.openContextModal({
-                  modal: "AuthModal",
-                  innerProps: {},
-                })
-              }
-            >
-              Log in to join this draft
-            </Button>
-          )}
-
-          {draft && !userIsParticipant && slimUser && (
-            <Button onClick={joinDraft}>Join Draft</Button>
-          )}
-
-          {draft &&
-            !draft?.started &&
-            draft.creator_uid === slimUser?.uid &&
-            !isInvalidNumberOfPlayers && (
-              <Button
-                onClick={startDraft}
-                disabled={draft.participants.length < 2}
-              >
-                Start Draft
-                {draft.participants.length < 2
-                  ? " (waiting for more players)"
-                  : ""}
-              </Button>
-            )}
-
-          {draft && !draft?.started && draft.creator_uid !== slimUser?.uid && (
-            <Button disabled={true}>Waiting for host to start the draft</Button>
-          )}
-
-          {draft && !draft?.started && (
-            <CopyButton value={window.location.href}>
-              {({ copied, copy }) => (
-                <Button
-                  color={copied ? "teal" : "blue"}
-                  onClick={copy}
-                  variant="outline"
-                >
-                  {copied
-                    ? "Copied url"
-                    : "Invite friends to join this draft (send them this url)"}
-                </Button>
-              )}
-            </CopyButton>
-          )}
-
-          {draft?.finished && allPlayersDoneWithPropBets && competition && (
-            <Button
-              onClick={() => navigate(`/competitions/${draft.competiton_id}`)}
-            >
-              Go to your newly created competition to get started
-            </Button>
-          )}
-        </Group>
-
-        {draft && isInvalidNumberOfPlayers && (
-          <Alert color="red">
-            You cannot draft evenly with this number of players. Please invite a
-            friend or start over.
-          </Alert>
+    <div className="space-y-6">
+      {/* Action buttons */}
+      <div className="flex flex-wrap gap-2">
+        {season && !slimUser && (
+          <Button onClick={handleLoginClick}>Log in to join this draft</Button>
         )}
 
-        <Breadcrumbs separator="|">
-          <Title order={3}>Draft ID: ...{draft?.id.slice(-4)}</Title>
-          <Title order={3}>
-            Status:{" "}
-            {!draft
-              ? "Not created"
-              : draft.finished
-                ? "Finished"
-                : draft?.started
-                  ? "Started"
-                  : "Not started"}
-          </Title>
-          <Title order={3}>
-            Participants:{" "}
-            {draft?.participants
-              .map((x) => x.displayName || x.email || x.uid)
-              .join(", ")}
-          </Title>
-        </Breadcrumbs>
+        {draft && !userIsParticipant && slimUser && (
+          <Button onClick={joinDraft}>Join Draft</Button>
+        )}
 
-        <Breadcrumbs separator="|">
-          {Boolean(draft?.current_pick_number) && (
-            <Title order={3}>Current Pick: {draft?.current_pick_number}</Title>
+        {draft &&
+          !draft?.started &&
+          draft.creator_uid === slimUser?.uid &&
+          !isInvalidNumberOfPlayers && (
+            <Button
+              onClick={startDraft}
+              disabled={draft.participants.length < 2}
+            >
+              Start Draft
+              {draft.participants.length < 2
+                ? " (waiting for more players)"
+                : ""}
+            </Button>
           )}
 
-          {draft?.current_picker && (
-            <Title order={3}>
+        {draft && !draft?.started && draft.creator_uid !== slimUser?.uid && (
+          <Button disabled>Waiting for host to start the draft</Button>
+        )}
+
+        {draft && !draft?.started && (
+          <Button variant="outline" onClick={handleCopyUrl}>
+            {copied
+              ? "Copied url"
+              : "Invite friends to join this draft (send them this url)"}
+          </Button>
+        )}
+
+        {draft?.finished && allPlayersDoneWithPropBets && competition && (
+          <Button
+            onClick={() => navigate(`/competitions/${draft.competiton_id}`)}
+          >
+            Go to your newly created competition to get started
+          </Button>
+        )}
+      </div>
+
+      {/* Invalid players warning */}
+      {draft && isInvalidNumberOfPlayers && (
+        <Alert variant="destructive">
+          <AlertDescription>
+            You cannot draft evenly with this number of players. Please invite a
+            friend or start over.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Status breadcrumbs */}
+      <div className="flex flex-wrap items-center gap-2 text-lg font-semibold">
+        <span>Draft ID: ...{draft?.id.slice(-4)}</span>
+        <span className="text-muted-foreground">|</span>
+        <span>
+          Status:{" "}
+          {!draft
+            ? "Not created"
+            : draft.finished
+              ? "Finished"
+              : draft?.started
+                ? "Started"
+                : "Not started"}
+        </span>
+        <span className="text-muted-foreground">|</span>
+        <span>
+          Participants:{" "}
+          {draft?.participants
+            .map((x) => x.displayName || x.email || x.uid)
+            .join(", ")}
+        </span>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2 text-lg font-semibold">
+        {Boolean(draft?.current_pick_number) && (
+          <>
+            <span>Current Pick: {draft?.current_pick_number}</span>
+            <span className="text-muted-foreground">|</span>
+          </>
+        )}
+        {draft?.current_picker && (
+          <>
+            <span>
               Picking:{" "}
               {draft?.current_picker?.displayName ||
                 draft?.current_picker?.email}
-            </Title>
-          )}
-
-          {draft?.draft_picks && (
-            <Title order={3}>
+            </span>
+            <span className="text-muted-foreground">|</span>
+          </>
+        )}
+        {draft?.draft_picks && (
+          <>
+            <span>
               Remaining Picks:{" "}
               {draft?.total_players - (draft?.draft_picks?.length || 0)}
-            </Title>
-          )}
-          {draft?.pick_order && (
-            <Title order={3}>
-              Draft Order:{" "}
-              {draft.pick_order.map((x) => x.displayName || x.email).join(", ")}
-            </Title>
-          )}
-        </Breadcrumbs>
-
-        {Boolean(draft?.draft_picks?.length) && (
-          <Center p="lg">
-            <MyDraftedPlayers />
-          </Center>
+            </span>
+            <span className="text-muted-foreground">|</span>
+          </>
         )}
-
-        {draft?.current_picker && (
-          <Center p={"xl"}>
-            <Title
-              c={draft.current_picker.uid === slimUser?.uid ? "blue" : "gray"}
-            >
-              {draft.current_picker.uid === slimUser?.uid
-                ? "You are up!"
-                : `${draft.current_picker.displayName || draft.current_picker.email} is picking`}{" "}
-            </Title>
-          </Center>
+        {draft?.pick_order && (
+          <span>
+            Draft Order:{" "}
+            {draft.pick_order.map((x) => x.displayName || x.email).join(", ")}
+          </span>
         )}
-        {draft?.finished && (
-          <Center p={"xl"}>
-            <Title c={"blue"}>Finished!</Title>
-          </Center>
-        )}
-      </Stack>
+      </div>
 
+      {/* My drafted players */}
+      {Boolean(draft?.draft_picks?.length) && (
+        <div className="flex justify-center p-4">
+          <MyDraftedPlayers />
+        </div>
+      )}
+
+      {/* Current picker status */}
+      {draft?.current_picker && (
+        <div className="py-6 text-center">
+          <h2
+            className={`text-3xl font-bold ${draft.current_picker.uid === slimUser?.uid ? "text-blue-500" : "text-muted-foreground"}`}
+          >
+            {draft.current_picker.uid === slimUser?.uid
+              ? "You are up!"
+              : `${draft.current_picker.displayName || draft.current_picker.email} is picking`}
+          </h2>
+        </div>
+      )}
+      {draft?.finished && (
+        <div className="py-6 text-center">
+          <h2 className="text-3xl font-bold text-blue-500">Finished!</h2>
+        </div>
+      )}
+
+      {/* Prop bets form */}
       {season && showPropBets && (
-        <Box p="xl">
-          <Title order={3}>Place your bets!</Title>
-          <Text c="dimmed">
+        <div className="space-y-2 p-4">
+          <h3 className="text-lg font-semibold">Place your bets!</h3>
+          <p className="text-muted-foreground">
             You can pick any player for these answers, even ones you haven't
             drafted.
-          </Text>
+          </p>
           <PropBets season={season} onSubmit={addPropBetsToDraft} />
-        </Box>
+        </div>
       )}
 
+      {/* Post-draft prop bets */}
       {draft?.finished && userHasSubmittedPropBets && (
-        <Box p="lg">
-          <Title ta={"center"} order={2}>
-            Prop Bets
-          </Title>
+        <div className="p-4">
+          <h2 className="text-center text-2xl font-bold">Prop Bets</h2>
           <PostDraftPropBetTable />
-        </Box>
+        </div>
       )}
 
-      <SimpleGrid cols={{ base: 2, sm: 4 }}>
+      {/* Player grid */}
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {season.players.map((p) => {
           const isDrafted = isPlayerDrafted(p.name);
 
@@ -406,152 +411,199 @@ export const DraftComponent = () => {
             ? null
             : draft?.draft_picks.find((x) => x.player_name === p.name);
           return (
-            <Paper
-              radius="md"
-              withBorder
-              p="lg"
-              bg={
-                isDrafted
-                  ? "var(--mantine-color-gray-4)"
-                  : "var(--mantine-color-body)"
-              }
+            <Card
               key={p.name + "-grid"}
+              className={isDrafted ? "bg-muted" : ""}
             >
-              <Avatar
-                src={p.img}
-                size={120}
-                radius={120}
-                mx="auto"
-                onClick={() => {
-                  modals.open({
-                    withCloseButton: false,
-                    children: (
-                      <Stack>
-                        <Center>
-                          <Title>{p.name}</Title>
-                        </Center>
-                        <Center>
-                          <Avatar size={"100%"} src={p.img} radius={10} />
-                        </Center>
-
-                        <Center>
-                          {p.description && (
-                            <Text ta="center" fz="lg" c="dimmed">
-                              {p.description.split(" | ").map((x) => (
-                                <>
-                                  {x}
-                                  <br />
-                                </>
-                              ))}
-                            </Text>
-                          )}
-                        </Center>
-                      </Stack>
-                    ),
-                  });
-                }}
-              />
-              <Text ta="center" fz="lg" fw={500} mt="md">
-                {p.name}
-              </Text>
-              {p.description && (
-                <Text ta="center" fz="sm" c="dimmed">
-                  {p.description.split(" | ").map((x) => (
-                    <>
-                      {x}
-                      <br />
-                    </>
-                  ))}
-                </Text>
-              )}
-              <Group justify="space-between" mt="md" mb="xs">
-                <Badge color="pink">Season {season.order}</Badge>
-                {draftedBy && (
-                  <Badge color={"blue"}>Drafted by {draftedBy.user_name}</Badge>
-                )}
-                <Badge color={isDrafted ? "red" : "green"}>
-                  {isDrafted ? "Drafted" : "Available"}
-                </Badge>
-              </Group>
-
-              {!isDrafted && (
-                <Button
-                  fullWidth
-                  onClick={() => draftPlayer(p.name)}
-                  disabled={
-                    !draft?.started ||
-                    draft.finished ||
-                    !isCurrentDrafter ||
-                    isDrafted
-                  }
+              <CardContent className="flex flex-col items-center pt-6">
+                <Avatar
+                  className="h-28 w-28 cursor-pointer"
+                  onClick={() => setPlayerDetailOpen(p.name)}
                 >
-                  Draft Me
-                </Button>
-              )}
-            </Paper>
+                  <AvatarImage src={p.img} />
+                  <AvatarFallback>{p.name[0]}</AvatarFallback>
+                </Avatar>
+                <p className="mt-3 text-center text-lg font-medium">
+                  {p.name}
+                </p>
+                {p.description && (
+                  <p className="text-center text-sm text-muted-foreground">
+                    {p.description.split(" | ").map((x, i) => (
+                      <span key={i}>
+                        {x}
+                        <br />
+                      </span>
+                    ))}
+                  </p>
+                )}
+                <div className="mt-3 flex flex-wrap justify-center gap-1">
+                  <Badge variant="secondary">Season {season.order}</Badge>
+                  {draftedBy && (
+                    <Badge>Drafted by {draftedBy.user_name}</Badge>
+                  )}
+                  <Badge variant={isDrafted ? "destructive" : "outline"}>
+                    {isDrafted ? "Drafted" : "Available"}
+                  </Badge>
+                </div>
+
+                {!isDrafted && (
+                  <Button
+                    className="mt-3 w-full"
+                    onClick={() => draftPlayer(p.name)}
+                    disabled={
+                      !draft?.started ||
+                      draft.finished ||
+                      !isCurrentDrafter ||
+                      isDrafted
+                    }
+                  >
+                    Draft Me
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
           );
         })}
-      </SimpleGrid>
+      </div>
 
+      {/* Draft results table */}
       {draft?.started && (
-        <Box p="lg">
-          <Title ta={"center"} order={2} mb={"md"}>
+        <div className="p-4">
+          <h2 className="mb-4 text-center text-2xl font-bold">
             Draft Results
-          </Title>
+          </h2>
           <DraftTable
             draft_picks={draft.draft_picks}
             participants={draft.participants}
             players={season.players}
           />
-        </Box>
+        </div>
       )}
 
-      <Box p="lg">
-        <Title ta={"center"} order={2} mb={"md"}>
-          Scoring Legend
-        </Title>
+      <div className="p-4">
+        <h2 className="mb-4 text-center text-2xl font-bold">Scoring Legend</h2>
         <ScoringLegendTable />
-      </Box>
+      </div>
+
+      {/* Name your competition dialog */}
+      <Dialog open={nameDialogOpen} onOpenChange={() => {}}>
+        <DialogContent
+          className="sm:max-w-md"
+          onInteractOutside={(e) => e.preventDefault()}
+        >
+          <DialogHeader>
+            <DialogTitle>What should we call your Competition?</DialogTitle>
+          </DialogHeader>
+          <NameYourCompetition
+            onSubmit={async (values) => {
+              setNameDialogOpen(false);
+              await createCompetition(values.name);
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+
+      {/* Player detail dialog */}
+      <Dialog
+        open={!!playerDetailOpen}
+        onOpenChange={() => setPlayerDetailOpen(null)}
+      >
+        <DialogContent>
+          {selectedPlayer && (
+            <div className="flex flex-col items-center gap-4">
+              <h2 className="text-2xl font-bold">{selectedPlayer.name}</h2>
+              <img
+                src={selectedPlayer.img}
+                alt={selectedPlayer.name}
+                className="w-full rounded-lg"
+              />
+              {selectedPlayer.description && (
+                <p className="text-center text-lg text-muted-foreground">
+                  {selectedPlayer.description.split(" | ").map((x, i) => (
+                    <span key={i}>
+                      {x}
+                      <br />
+                    </span>
+                  ))}
+                </p>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Auth dialog for draft page */}
+      {authDialogOpen && (
+        <Dialog open={authDialogOpen} onOpenChange={setAuthDialogOpen}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Log in to join this draft</DialogTitle>
+            </DialogHeader>
+            <AuthDialogInline onSuccess={() => setAuthDialogOpen(false)} />
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };
 
-type FormData = {
-  name: string;
-};
+// Inline auth for the draft page to avoid importing from AppRoutes
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { Login } from "../components/Auth/Login";
+import { Register } from "../components/Auth/Register";
 
-type Props = {
-  onSubmit: (values: FormData) => void;
-};
+const AuthDialogInline = ({ onSuccess }: { onSuccess: () => void }) => (
+  <Tabs defaultValue="login">
+    <TabsList className="grid w-full grid-cols-2">
+      <TabsTrigger value="login">Login</TabsTrigger>
+      <TabsTrigger value="register">Register</TabsTrigger>
+    </TabsList>
+    <TabsContent value="login">
+      <Login onSuccess={onSuccess} />
+    </TabsContent>
+    <TabsContent value="register">
+      <Register onSuccess={onSuccess} />
+    </TabsContent>
+  </Tabs>
+);
 
-const NameYourCompetition = ({ onSubmit }: Props) => {
-  const form = useForm({
-    initialValues: {
-      name: "",
-    },
-    validate: {
-      name: isNotEmpty("Do a fun name :)"),
-    },
+const nameSchema = z.object({
+  name: z.string().min(1, "Do a fun name :)"),
+});
+
+type NameFormData = z.infer<typeof nameSchema>;
+
+const NameYourCompetition = ({
+  onSubmit,
+}: {
+  onSubmit: (values: NameFormData) => void;
+}) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<NameFormData>({
+    resolver: zodResolver(nameSchema),
+    defaultValues: { name: "" },
   });
 
   return (
-    <>
-      <form
-        onSubmit={form.onSubmit((values) => {
-          return onSubmit(values);
-        })}
-      >
-        <TextInput
-          label="Name your competition"
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div className="space-y-2">
+        <Label>Name your competition</Label>
+        <Input
           placeholder="Jeff Probst Lovers"
-          data-autofocus
-          {...form.getInputProps("name")}
+          autoFocus
+          {...register("name")}
         />
-        <Button fullWidth type="submit" mt="md">
-          Submit
-        </Button>
-      </form>
-    </>
+        {errors.name && (
+          <p className="text-sm text-destructive">{errors.name.message}</p>
+        )}
+      </div>
+      <Button type="submit" className="w-full">
+        Submit
+      </Button>
+    </form>
   );
 };
 
@@ -560,9 +612,24 @@ type PropBetsProps = {
   onSubmit: (values: PropBetsFormData) => void;
 };
 
+const propBetsSchema = z.object({
+  propbet_first_vote: z.string().min(1, "Enter an answer"),
+  propbet_ftc: z.string().min(1, "Enter an answer"),
+  propbet_idols: z.string().min(1, "Enter an answer"),
+  propbet_immunities: z.string().min(1, "Enter an answer"),
+  propbet_medical_evac: z.string().min(1, "Enter an answer"),
+  propbet_winner: z.string().min(1, "Enter an answer"),
+});
+
 const PropBets = ({ season, onSubmit }: PropBetsProps) => {
-  const form = useForm<PropBetsFormData>({
-    initialValues: {
+  const {
+    setValue,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<PropBetsFormData>({
+    resolver: zodResolver(propBetsSchema),
+    defaultValues: {
       propbet_first_vote: "",
       propbet_ftc: "",
       propbet_idols: "",
@@ -570,92 +637,49 @@ const PropBets = ({ season, onSubmit }: PropBetsProps) => {
       propbet_medical_evac: "",
       propbet_winner: "",
     },
-    validate: {
-      propbet_first_vote: isNotEmpty("Enter an answer"),
-      propbet_ftc: isNotEmpty("Enter an answer"),
-      propbet_idols: isNotEmpty("Enter an answer"),
-      propbet_immunities: isNotEmpty("Enter an answer"),
-      propbet_medical_evac: isNotEmpty("Enter an answer"),
-      propbet_winner: isNotEmpty("Enter an answer"),
-    },
   });
-
-  console.log({ form });
 
   const players = season?.players.map((x) => x.name);
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | undefined,
-  ) => {
-    e?.preventDefault();
-
-    const _validate = form.validate();
-
-    if (_validate.hasErrors) return;
-
-    onSubmit(form.values);
-  };
+  const propBetFields = [
+    { key: "propbet_winner" as const, data: players },
+    { key: "propbet_first_vote" as const, data: players },
+    { key: "propbet_idols" as const, data: players },
+    { key: "propbet_immunities" as const, data: players },
+    { key: "propbet_ftc" as const, data: players },
+    { key: "propbet_medical_evac" as const, data: ["Yes", "No"] },
+  ];
 
   return (
-    <Box>
-      <form onSubmit={handleSubmit}>
-        <Stack>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {propBetFields.map(({ key, data }) => (
+        <div key={key} className="space-y-1">
+          <Label>{PropBetsQuestions[key].description}</Label>
+          <p className="text-xs text-muted-foreground">
+            {PropBetsQuestions[key].point_value} points
+          </p>
           <Select
-            required
-            label={PropBetsQuestions.propbet_winner.description}
-            description={
-              PropBetsQuestions.propbet_winner.point_value + " points"
-            }
-            data={players}
-            {...form.getInputProps("propbet_winner")}
-          />
-          <Select
-            required
-            label={PropBetsQuestions.propbet_first_vote.description}
-            description={
-              PropBetsQuestions.propbet_first_vote.point_value + " points"
-            }
-            data={players}
-            {...form.getInputProps("propbet_first_vote")}
-          />
-          <Select
-            required
-            label={PropBetsQuestions.propbet_idols.description}
-            description={
-              PropBetsQuestions.propbet_idols.point_value + " points"
-            }
-            data={players}
-            {...form.getInputProps("propbet_idols")}
-          />
-          <Select
-            required
-            label={PropBetsQuestions.propbet_immunities.description}
-            description={
-              PropBetsQuestions.propbet_immunities.point_value + " points"
-            }
-            data={players}
-            {...form.getInputProps("propbet_immunities")}
-          />
-          <Select
-            required
-            label={PropBetsQuestions.propbet_ftc.description}
-            description={PropBetsQuestions.propbet_ftc.point_value + " points"}
-            data={players}
-            {...form.getInputProps("propbet_ftc")}
-          />
-          <Select
-            required
-            label={PropBetsQuestions.propbet_medical_evac.description}
-            description={
-              PropBetsQuestions.propbet_medical_evac.point_value + " points"
-            }
-            data={["Yes", "No"]}
-            {...form.getInputProps("propbet_medical_evac")}
-          />
+            value={watch(key)}
+            onValueChange={(val) => setValue(key, val)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select..." />
+            </SelectTrigger>
+            <SelectContent>
+              {data.map((item) => (
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {errors[key] && (
+            <p className="text-sm text-destructive">{errors[key]?.message}</p>
+          )}
+        </div>
+      ))}
 
-          <Button type="submit">Submit Prop Bets</Button>
-        </Stack>
-      </form>
-    </Box>
+      <Button type="submit">Submit Prop Bets</Button>
+    </form>
   );
 };

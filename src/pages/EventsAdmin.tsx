@@ -1,14 +1,11 @@
-import { Stack, Title } from "@mantine/core";
 import { CreateGameEvent, GameEventsCRUDTable } from "../components/GameEvents";
 
 export const EventsAdmin = () => {
   return (
-    <div>
-      <Stack gap={"xl"}>
-        <Title order={2}>Manage Game Events</Title>
-        <CreateGameEvent />
-        <GameEventsCRUDTable />
-      </Stack>
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold">Manage Game Events</h2>
+      <CreateGameEvent />
+      <GameEventsCRUDTable />
     </div>
   );
 };

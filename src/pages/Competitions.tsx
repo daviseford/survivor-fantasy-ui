@@ -1,5 +1,14 @@
-import { Alert, Center, Loader, Table, Title } from "@mantine/core";
+import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Alert, AlertDescription } from "../components/ui/alert";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../components/ui/table";
 import { useCompetitions } from "../hooks/useCompetitions";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useMyCompetitions } from "../hooks/useMyCompetitions";
@@ -19,62 +28,72 @@ export const Competitions = () => {
   const _comps =
     (allCompetitions?.length ? allCompetitions : competitions) || [];
 
-  const rows = _comps?.map((x) => {
-    return (
-      <Table.Tr onClick={() => navigate(`/competitions/${x.id}`)} key={x.id}>
-        <Table.Td>{x.competition_name}</Table.Td>
-        <Table.Td>{x.season_num}</Table.Td>
-        <Table.Td>
-          {x.participants.map((x) => x.displayName ?? x.email).join(", ")}
-        </Table.Td>
-
-        {!isMobile && (
-          <>
-            <Table.Td>
-              {x.participants.find((p) => p.uid === x.creator_uid)?.displayName}
-            </Table.Td>
-            <Table.Td>{x.draft_id.slice(-4)}</Table.Td>
-          </>
-        )}
-      </Table.Tr>
-    );
-  });
-
   if (!slimUser) {
-    return <Alert>Please register or log in to view your competitions!</Alert>;
+    return (
+      <Alert>
+        <AlertDescription>
+          Please register or log in to view your competitions!
+        </AlertDescription>
+      </Alert>
+    );
   }
 
   return (
     <div>
-      <Title order={2}>Competitions</Title>
+      <h2 className="text-2xl font-bold">Competitions</h2>
 
       {isLoading && (
-        <Center>
-          <Loader size={"xl"} />
-        </Center>
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
       )}
 
       {!isLoading && (
-        <Table.ScrollContainer minWidth={300}>
-          <Table highlightOnHover>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Name</Table.Th>
-                <Table.Th>Season</Table.Th>
-                <Table.Th>Participants</Table.Th>
-
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Season</TableHead>
+                <TableHead>Participants</TableHead>
                 {!isMobile && (
                   <>
-                    <Table.Th>Creator</Table.Th>
-                    <Table.Th>ID</Table.Th>
+                    <TableHead>Creator</TableHead>
+                    <TableHead>ID</TableHead>
                   </>
                 )}
-              </Table.Tr>
-            </Table.Thead>
-
-            <Table.Tbody>{rows}</Table.Tbody>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {_comps?.map((x) => (
+                <TableRow
+                  key={x.id}
+                  className="cursor-pointer hover:bg-muted/50"
+                  onClick={() => navigate(`/competitions/${x.id}`)}
+                >
+                  <TableCell>{x.competition_name}</TableCell>
+                  <TableCell>{x.season_num}</TableCell>
+                  <TableCell>
+                    {x.participants
+                      .map((x) => x.displayName ?? x.email)
+                      .join(", ")}
+                  </TableCell>
+                  {!isMobile && (
+                    <>
+                      <TableCell>
+                        {
+                          x.participants.find((p) => p.uid === x.creator_uid)
+                            ?.displayName
+                        }
+                      </TableCell>
+                      <TableCell>{x.draft_id.slice(-4)}</TableCell>
+                    </>
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
           </Table>
-        </Table.ScrollContainer>
+        </div>
       )}
     </div>
   );
