@@ -19,7 +19,6 @@ export const SEASONS = {
     id: "season_46",
     order: 46,
     name: "Survivor 46",
-    visible: true,
     img: "https://ew.com/thmb/9Vz1wSca_Sp7AvRWlZnisflPW7U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Survivor-45-finale-logo-10-121823-270a7955638f4b23a0d8aa4f98591fbf.jpg",
 
     players: SEASON_46_PLAYERS,
@@ -30,7 +29,6 @@ export const SEASONS = {
     id: "season_50",
     order: 50,
     name: "Survivor 50",
-    visible: true,
     img: "/images/season_50/season-50-logo.webp",
 
     players: SEASON_50_PLAYERS,
