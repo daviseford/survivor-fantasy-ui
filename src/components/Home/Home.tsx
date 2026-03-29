@@ -29,7 +29,6 @@ export const Home = () => {
 
         <Group className={classes.controls}>
           <Button
-            role="link"
             size="xl"
             className={classes.control}
             variant="gradient"
@@ -41,17 +40,12 @@ export const Home = () => {
 
           <Button
             component="a"
-            href="https://github.com/mantinedev/mantine"
+            href="https://github.com/daviseford/survivor-fantasy-ui/"
+            target="_blank"
             size="xl"
             variant="default"
             className={classes.control}
             leftSection={<IconBrandGithub size={20} />}
-            onClick={() =>
-              window.open(
-                "https://github.com/daviseford/survivor-fantasy-ui/",
-                "_blank",
-              )
-            }
           >
             GitHub
           </Button>

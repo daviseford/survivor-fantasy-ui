@@ -1,5 +1,4 @@
 .navbar {
-  /* height: rem(700px); */
   width: rem(300px);
   padding: var(--mantine-spacing-md);
   display: flex;
@@ -35,6 +34,11 @@
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
   border-radius: var(--mantine-radius-sm);
   font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-family: inherit;
 
   @mixin hover {
     background-color: light-dark(
@@ -61,28 +65,11 @@
   }
 }
 
-.link-inactive {
+.userInfo {
   display: flex;
   align-items: center;
-  text-decoration: none;
-  cursor: default;
-  font-size: var(--mantine-font-size-sm);
   color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1));
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
-  border-radius: var(--mantine-radius-sm);
-  font-weight: 500;
-
-  &[data-active] {
-    &,
-    &:hover {
-      background-color: var(--mantine-color-blue-light);
-      color: var(--mantine-color-blue-light-color);
-
-      .linkIcon {
-        color: var(--mantine-color-blue-light-color);
-      }
-    }
-  }
 }
 
 .linkIcon {

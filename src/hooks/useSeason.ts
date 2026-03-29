@@ -10,10 +10,6 @@ export const useSeason = (id?: Season["id"]) => {
   // allow manual override
   const _seasonId = (id ?? seasonId) || "unknown";
 
-  console.log(
-    `Query param seasonId = ${seasonId}, Override param for seasonId = ${id}, _seasonId value = ${_seasonId}`,
-  );
-
   const ref = doc(db, "seasons", _seasonId);
 
   // Query a Firestore document using useQuery

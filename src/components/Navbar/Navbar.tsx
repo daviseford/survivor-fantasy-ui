@@ -8,7 +8,7 @@ import {
   IconSettings,
   IconUser,
 } from "@tabler/icons-react";
-// import { MantineLogo } from '@mantinex/mantine-logo';
+import { Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { useLocation } from "react-router-dom";
 import { auth } from "../../firebase";
@@ -60,47 +60,36 @@ export const Navbar = () => {
 
       <div className={classes.footer}>
         {!slimUser && (
-          <>
-            <a
-              href="#"
-              className={classes.link}
-              onClick={() =>
-                modals.openContextModal({
-                  modal: "AuthModal",
-                  innerProps: {},
-                })
-              }
-            >
-              <IconLogin className={classes.linkIcon} stroke={1.5} />
-              <span>Login</span>
-            </a>
-          </>
+          <button
+            className={classes.link}
+            onClick={() =>
+              modals.openContextModal({
+                modal: "AuthModal",
+                innerProps: {},
+              })
+            }
+          >
+            <IconLogin className={classes.linkIcon} stroke={1.5} />
+            <span>Login</span>
+          </button>
         )}
 
         {slimUser && (
           <>
-            <a
-              href="#"
-              className={classes["link-inactive"]}
-              onClick={(e) => e.preventDefault()}
-            >
+            <Text className={classes.userInfo} size="sm">
               <IconUser className={classes.linkIcon} stroke={1.5} />
               <span>{slimUser.displayName}</span>
-            </a>
+            </Text>
 
-            <a
-              href="#"
-              className={classes["link-inactive"]}
-              onClick={(e) => e.preventDefault()}
-            >
+            <Text className={classes.userInfo} size="sm">
               <IconMail className={classes.linkIcon} stroke={1.5} />
               <span>{slimUser.email}</span>
-            </a>
+            </Text>
 
-            <a href="#" className={classes.link} onClick={() => handleLogout()}>
+            <button className={classes.link} onClick={handleLogout}>
               <IconLogout className={classes.linkIcon} stroke={1.5} />
               <span>Logout</span>
-            </a>
+            </button>
           </>
         )}
       </div>

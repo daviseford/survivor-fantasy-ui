@@ -6,6 +6,7 @@ export type Season = {
   order: number;
   name: string;
   img: string;
+  visible?: boolean;
 
   players: Player[];
   episodes: Episode[];

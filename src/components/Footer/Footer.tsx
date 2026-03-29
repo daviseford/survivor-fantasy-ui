@@ -27,7 +27,7 @@ export const Footer = () => {
   return (
     <div className={classes.footer}>
       <Container className={classes.inner}>
-        <Avatar src={"/icons/probst.svg"} size={28} />
+        <Avatar src={"/icons/probst.svg"} size={28} alt="" />
         <Text c="dimmed" size="sm">
           Created by Davis Ford
         </Text>
