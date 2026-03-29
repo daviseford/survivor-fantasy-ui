@@ -22,10 +22,13 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import {
   IconAlertCircle,
+  IconCheck,
   IconCopy,
   IconDeviceFloppy,
+  IconX,
 } from "@tabler/icons-react";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
@@ -233,11 +236,28 @@ export const TeamPlayerManager = () => {
     if (!season) return;
     setSaving(true);
 
-    const ref = doc(db, `team_assignments/${season.id}`);
-    await setDoc(ref, { [String(episodeNum)]: snapshot }, { merge: true });
+    try {
+      const ref = doc(db, `team_assignments/${season.id}`);
+      await setDoc(ref, { [String(episodeNum)]: snapshot }, { merge: true });
+
+      notifications.show({
+        title: "Team assignments saved",
+        message: `Episode ${episodeNum} assignments updated`,
+        color: "green",
+        icon: <IconCheck size={16} />,
+      });
+
+      setLocalAssignments(null);
+    } catch (err) {
+      notifications.show({
+        title: "Failed to save team assignments",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+        icon: <IconX size={16} />,
+      });
+    }
 
     setSaving(false);
-    setLocalAssignments(null);
   };
 
   const handleCopyPreviousEpisode = () => {
@@ -284,6 +304,9 @@ export const TeamPlayerManager = () => {
     <Card withBorder>
       <Card.Section p="md">
         <Title order={4}>Team Assignments by Episode</Title>
+        <Text size="sm" c="dimmed" mt="xs">
+          Drag players between columns to assign them to teams. Save when done.
+        </Text>
       </Card.Section>
 
       <Card.Section p="md">

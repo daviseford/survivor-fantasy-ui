@@ -41,13 +41,13 @@ export const SingleSeason = () => {
 
   return (
     <Box p={"md"}>
-      <h1>Season {season?.order}</h1>
+      <Title order={2}>Season {season?.order}</Title>
 
       <Stack>
         {slimUser?.isAdmin && (
           <>
             <Group>
-              <Title>Admin Controls</Title>
+              <Title order={3}>Admin Controls</Title>
               <Button onClick={handleManageSeason}>Manage Season</Button>
             </Group>
           </>

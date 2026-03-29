@@ -15,6 +15,8 @@ import {
   Title,
 } from "@mantine/core";
 import { hasLength, useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import { doc, setDoc } from "firebase/firestore";
 import { last, orderBy } from "lodash-es";
 import { useEffect } from "react";
@@ -120,16 +122,31 @@ export const CreateChallenge = () => {
 
     if (_validate.hasErrors) return;
 
-    const ref = doc(db, `challenges/${season?.id}`);
+    try {
+      const ref = doc(db, `challenges/${season?.id}`);
+      await setDoc(ref, { [values.id]: values }, { merge: true });
 
-    await setDoc(ref, { [values.id]: values }, { merge: true });
+      notifications.show({
+        title: "Challenge created successfully",
+        message: `${values.variant} challenge added`,
+        color: "green",
+        icon: <IconCheck size={16} />,
+      });
 
-    // reset id and important form values
-    form.setValues({
-      id: `challenge_${v4()}`,
-      winning_players: [],
-      winning_team_id: null,
-    });
+      // reset id and important form values
+      form.setValues({
+        id: `challenge_${v4()}`,
+        winning_players: [],
+        winning_team_id: null,
+      });
+    } catch (err) {
+      notifications.show({
+        title: "Failed to create challenge",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+        icon: <IconX size={16} />,
+      });
+    }
   };
 
   const teamList = Object.values(teams || {});
