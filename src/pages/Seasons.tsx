@@ -9,22 +9,13 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { useFirestoreQueryData } from "@react-query-firebase/firestore";
-import { collection } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { db } from "../firebase";
-import { Season } from "../types";
+import { useSeasons } from "../hooks/useSeasons";
 
 export const Seasons = () => {
   const navigate = useNavigate();
 
-  const ref = collection(db, "seasons");
-
-  const { data: seasons } = useFirestoreQueryData<Season[], Season[]>(
-    ["seasons"],
-    // @ts-expect-error react-query-firebase type mismatch with Firestore ref
-    ref,
-  );
+  const { data: seasons } = useSeasons();
 
   return (
     <Box>

@@ -7,12 +7,18 @@ import {
   MantineProvider,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { Notifications } from "@mantine/notifications";
-import "@mantine/notifications/styles.css";
 import { useDisclosure } from "@mantine/hooks";
 import { ModalsProvider } from "@mantine/modals";
+import { Notifications } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import { QueryClientProvider } from "react-query";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useParams,
+} from "react-router-dom";
 import classes from "./AppRoutes.module.css";
 import { AuthModal } from "./components/Auth/AuthModal";
 import { Logout } from "./components/Auth/Logout";
@@ -29,6 +35,13 @@ import { SingleCompetition } from "./pages/SingleCompetition";
 import { SingleSeason } from "./pages/SingleSeason";
 import { queryClient } from "./queryClient";
 import { theme } from "./theme";
+
+// Legacy redirect: /seasons/:id/manage -> /admin/:id (safe to remove once old links age out)
+const RedirectToAdmin = () => {
+  const { seasonId } = useParams();
+  if (!seasonId) return <Navigate to="/admin" replace />;
+  return <Navigate to={`/admin/${seasonId}`} replace />;
+};
 
 const modals = { AuthModal };
 
@@ -101,7 +114,7 @@ export const AppRoutes = () => {
                   {/* Seasons */}
                   <Route
                     path="/seasons/:seasonId/manage"
-                    element={<SeasonAdmin />}
+                    element={<RedirectToAdmin />}
                   />
                   <Route path="/seasons/:seasonId" element={<SingleSeason />} />
                   <Route path="/seasons" element={<Seasons />} />
@@ -113,7 +126,8 @@ export const AppRoutes = () => {
                   />
                   <Route path="/competitions" element={<Competitions />} />
 
-                  {/* TODO: Protect this */}
+                  {/* Admin */}
+                  <Route path="/admin/:seasonId" element={<SeasonAdmin />} />
                   <Route path="/admin" element={<Admin />} />
                 </Routes>
               </AppShell.Main>

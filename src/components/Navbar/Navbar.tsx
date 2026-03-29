@@ -1,3 +1,5 @@
+import { Text } from "@mantine/core";
+import { modals } from "@mantine/modals";
 import {
   IconHome,
   IconKarate,
@@ -8,8 +10,6 @@ import {
   IconSettings,
   IconUser,
 } from "@tabler/icons-react";
-import { Text } from "@mantine/core";
-import { modals } from "@mantine/modals";
 import { Link, useLocation } from "react-router-dom";
 import { auth } from "../../firebase";
 import { useUser } from "../../hooks/useUser";
@@ -34,6 +34,7 @@ export const Navbar = () => {
     const isActive =
       (pathname.startsWith("/seasons") && item.link === "/seasons") ||
       (pathname.startsWith("/competitions") && item.link === "/competitions") ||
+      (pathname.startsWith("/admin") && item.link === "/admin") ||
       item.link === pathname ||
       undefined;
 
