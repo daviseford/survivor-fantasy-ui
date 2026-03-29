@@ -1,21 +1,15 @@
 import {
   DndContext,
   DragEndEvent,
-  DragOverEvent,
   DragOverlay,
   DragStartEvent,
   PointerSensor,
-  closestCenter,
+  rectIntersection,
+  useDraggable,
   useDroppable,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import {
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import {
   Alert,
   Box,
@@ -36,6 +30,7 @@ import {
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../../firebase";
+import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
 import { useTeamAssignments } from "../../hooks/useTeamAssignments";
 import { useTeams } from "../../hooks/useTeams";
@@ -43,24 +38,14 @@ import { Team, TeamAssignmentSnapshot } from "../../types";
 
 const NO_TEAM_ID = "__no_team__";
 
-type PlayerCardProps = {
-  playerName: string;
-  isDragOverlay?: boolean;
-};
-
-const SortablePlayerCard = ({ playerName }: PlayerCardProps) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: playerName });
+const DraggablePlayerCard = ({ playerName }: { playerName: string }) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({ id: playerName });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
+    transform: transform
+      ? `translate(${transform.x}px, ${transform.y}px)`
+      : undefined,
     opacity: isDragging ? 0.4 : 1,
   };
 
@@ -83,7 +68,7 @@ const SortablePlayerCard = ({ playerName }: PlayerCardProps) => {
   );
 };
 
-const PlayerDragOverlay = ({ playerName }: PlayerCardProps) => (
+const PlayerDragOverlay = ({ playerName }: { playerName: string }) => (
   <Paper p="xs" withBorder shadow="md">
     <Text size="sm" fw={600}>
       {playerName}
@@ -139,15 +124,9 @@ const DroppableColumn = ({
         </Text>
       </Group>
 
-      <SortableContext
-        items={players}
-        strategy={verticalListSortingStrategy}
-        id={id}
-      >
-        {players.map((name) => (
-          <SortablePlayerCard key={name} playerName={name} />
-        ))}
-      </SortableContext>
+      {players.map((name) => (
+        <DraggablePlayerCard key={name} playerName={name} />
+      ))}
 
       {players.length === 0 && (
         <Text size="xs" c="dimmed" ta="center" py="md">
@@ -162,6 +141,7 @@ export const TeamPlayerManager = () => {
   const { data: season } = useSeason();
   const { data: teams } = useTeams(season?.id);
   const { data: assignments } = useTeamAssignments(season?.id);
+  const { data: eliminations } = useEliminations(season?.id);
 
   const [episodeNum, setEpisodeNum] = useState<number>(1);
   const [localAssignments, setLocalAssignments] =
@@ -174,7 +154,16 @@ export const TeamPlayerManager = () => {
   );
 
   const teamList = Object.values(teams || {});
-  const playerNames = season?.players.map((p) => p.name) ?? [];
+
+  // Filter out players eliminated before or during this episode
+  const eliminatedBefore = new Set(
+    Object.values(eliminations)
+      .filter((e) => e.episode_num <= episodeNum)
+      .map((e) => e.player_name),
+  );
+  const playerNames = (season?.players.map((p) => p.name) ?? []).filter(
+    (name) => !eliminatedBefore.has(name),
+  );
 
   // Build snapshot: prefer local edits, then saved data, then all null
   const getSnapshot = (): TeamAssignmentSnapshot => {
@@ -216,57 +205,28 @@ export const TeamPlayerManager = () => {
 
   const playersByContainer = getPlayersByContainer();
 
-  const findContainerForPlayer = (playerName: string): string | undefined => {
-    for (const [containerId, players] of Object.entries(playersByContainer)) {
-      if (players.includes(playerName)) return containerId;
-    }
-    return undefined;
-  };
-
   const handleDragStart = (event: DragStartEvent) => {
     setActivePlayer(event.active.id as string);
   };
 
-  const handleDragOver = (event: DragOverEvent) => {
-    const { active, over } = event;
-    if (!over) return;
-
-    const activeId = active.id as string;
-    const overId = over.id as string;
-
-    const activeContainer = findContainerForPlayer(activeId);
-    // overId could be a container or another player
-    const overContainer = playersByContainer[overId]
-      ? overId
-      : findContainerForPlayer(overId);
-
-    if (!activeContainer || !overContainer || activeContainer === overContainer)
-      return;
-
-    // Move player to new container
-    const newSnapshot = { ...snapshot };
-    newSnapshot[activeId] =
-      overContainer === NO_TEAM_ID ? null : (overContainer as Team["id"]);
-
-    setLocalAssignments(newSnapshot);
-  };
-
   const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
     setActivePlayer(null);
 
+    const { active, over } = event;
     if (!over) return;
 
     const activeId = active.id as string;
-    const overId = over.id as string;
+    const targetContainer = over.id as string;
 
-    // If dropped on a container directly
-    if (playersByContainer[overId]) {
-      const newSnapshot = { ...snapshot };
-      newSnapshot[activeId] =
-        overId === NO_TEAM_ID ? null : (overId as Team["id"]);
-      setLocalAssignments(newSnapshot);
-    }
+    // over.id is always a droppable container since we only use useDroppable
+    if (!playersByContainer[targetContainer]) return;
+
+    const newSnapshot = { ...snapshot };
+    newSnapshot[activeId] =
+      targetContainer === NO_TEAM_ID
+        ? null
+        : (targetContainer as Team["id"]);
+    setLocalAssignments(newSnapshot);
   };
 
   const handleSave = async () => {
@@ -394,9 +354,8 @@ export const TeamPlayerManager = () => {
 
         <DndContext
           sensors={sensors}
-          collisionDetection={closestCenter}
+          collisionDetection={rectIntersection}
           onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
         >
           <SimpleGrid cols={{ base: 1, sm: 2, md: teamList.length + 1 }}>
