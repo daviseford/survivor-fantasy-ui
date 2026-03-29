@@ -5,6 +5,15 @@ import { SEASONS } from "../data/seasons";
 import { db } from "../firebase";
 import { useUser } from "../hooks/useUser";
 
+const uploadS50 = async () => {
+  try {
+    await setDoc(doc(db, "seasons", "season_50"), SEASONS.season_50);
+    console.log("Done!");
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const uploadS9 = async () => {
   try {
     await setDoc(doc(db, "seasons", "season_9"), SEASONS.season_9);
@@ -63,6 +72,7 @@ export const Admin = () => {
       <SimpleGrid cols={3}>
         <Button onClick={() => uploadS9()}>Upload Season 9 Data</Button>
         <Button onClick={() => uploadS46()}>Upload Season 46 Data</Button>
+        <Button onClick={() => uploadS50()}>Upload Season 50 Data</Button>
         <Button onClick={() => uploadS99()}>Upload Season 99 Data</Button>
       </SimpleGrid>
     </div>

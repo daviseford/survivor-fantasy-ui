@@ -37,7 +37,7 @@ export const Seasons = () => {
       <SimpleGrid cols={3}>
         {seasons?.map((x) => {
           console.log(x.name);
-          if (x.name !== "Survivor 46" && !slimUser?.isAdmin) return null;
+          if (x.name !== "Survivor 46" && x.name !== "Survivor 50" && !slimUser?.isAdmin) return null;
 
           return (
             <div key={x.id}>
