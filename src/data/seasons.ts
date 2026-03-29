@@ -1,5 +1,6 @@
 import { Season } from "../types";
 import { SEASON_46_EPISODES, SEASON_46_PLAYERS } from "./season_46";
+import { SEASON_50_EPISODES, SEASON_50_PLAYERS } from "./season_50";
 import { SEASON_9_EPISODES, SEASON_9_PLAYERS } from "./season_9";
 import { SEASON_99_EPISODES, SEASON_99_PLAYERS } from "./season_99";
 
@@ -22,6 +23,16 @@ export const SEASONS = {
 
     players: SEASON_46_PLAYERS,
     episodes: SEASON_46_EPISODES,
+  },
+
+  season_50: {
+    id: "season_50",
+    order: 50,
+    name: "Survivor 50",
+    img: "",
+
+    players: SEASON_50_PLAYERS,
+    episodes: SEASON_50_EPISODES,
   },
 
   // Fake season for testing
