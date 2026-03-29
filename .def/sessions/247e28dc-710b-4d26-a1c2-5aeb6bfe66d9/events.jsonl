@@ -1,2 +1,0 @@
-{"ts":"2026-03-29T03:08:34.559Z","seq":0,"event":"session.start","phase":"plan","data":{"topic":"redesign the website using shadcn","mode":"edit","max_turns":20}}
-{"ts":"2026-03-29T03:08:34.562Z","seq":1,"event":"attempt.start","turn":1,"agent":"claude","phase":"plan","data":{"attempt_index":0}}
