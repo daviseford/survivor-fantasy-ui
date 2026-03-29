@@ -17,6 +17,9 @@
     "up": "yarn upgrade-interactive --latest"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@mantine/charts": "^7.8.0",
     "@mantine/core": "^7.8.0",
     "@mantine/form": "^7.8.0",

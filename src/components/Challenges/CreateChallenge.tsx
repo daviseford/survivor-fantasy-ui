@@ -23,12 +23,17 @@ import { db } from "../../firebase";
 import { useChallenges } from "../../hooks/useChallenges";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
-import { Challenge, ChallengeWinActions } from "../../types";
+import { useTeamAssignments } from "../../hooks/useTeamAssignments";
+import { useTeams } from "../../hooks/useTeams";
+import { Challenge, ChallengeWinActions, Team } from "../../types";
+import { getPlayersOnTeam } from "../../utils/teamUtils";
 
 export const CreateChallenge = () => {
   const { data: season, isLoading } = useSeason();
   const { data: eliminations } = useEliminations(season?.id);
   const { data: challenges } = useChallenges(season?.id);
+  const { data: teams } = useTeams(season?.id);
+  const { data: teamAssignments } = useTeamAssignments(season?.id);
 
   const form = useForm<Challenge>({
     initialValues: {
@@ -71,6 +76,29 @@ export const CreateChallenge = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [season, challenges]);
 
+  // Recompute winning_players when episode changes while a winning team is selected
+  const currentEpisodeNum = form.values.episode_num;
+  const currentWinningTeamId = form.values.winning_team_id;
+  useEffect(() => {
+    if (!currentWinningTeamId) return;
+
+    const episodeSnapshot = teamAssignments[String(currentEpisodeNum)] ?? {};
+    const hasSnapshot = Object.keys(episodeSnapshot).length > 0;
+
+    if (hasSnapshot) {
+      const playersOnTeam = getPlayersOnTeam(
+        episodeSnapshot,
+        currentWinningTeamId,
+      );
+      form.setFieldValue("winning_players", playersOnTeam);
+    } else {
+      // No snapshot for this episode -- clear team selection and winners
+      form.setFieldValue("winning_team_id", null);
+      form.setFieldValue("winning_players", []);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentEpisodeNum]);
+
   if (isLoading) {
     return (
       <Center>
@@ -97,7 +125,38 @@ export const CreateChallenge = () => {
     await setDoc(ref, { [values.id]: values }, { merge: true });
 
     // reset id and important form values
-    form.setValues({ id: `challenge_${v4()}`, winning_players: [] });
+    form.setValues({
+      id: `challenge_${v4()}`,
+      winning_players: [],
+      winning_team_id: null,
+    });
+  };
+
+  const teamList = Object.values(teams || {});
+  const teamSelectData = teamList.map((t) => ({
+    value: t.id,
+    label: t.name,
+  }));
+  const hasEpisodeSnapshot = Boolean(
+    teamAssignments[String(form.values.episode_num)],
+  );
+
+  const handleWinningTeamChange = (teamId: string | null) => {
+    if (!teamId) {
+      form.setFieldValue("winning_team_id", null);
+      form.setFieldValue("winning_players", []);
+      return;
+    }
+
+    const episodeSnapshot =
+      teamAssignments[String(form.values.episode_num)] ?? {};
+    const playersOnTeam = getPlayersOnTeam(
+      episodeSnapshot,
+      teamId as Team["id"],
+    );
+
+    form.setFieldValue("winning_team_id", teamId as Team["id"]);
+    form.setFieldValue("winning_players", playersOnTeam);
   };
 
   const eliminatedPlayers = Object.values(eliminations).map(
@@ -138,6 +197,28 @@ export const CreateChallenge = () => {
                 min={1}
                 {...form.getInputProps("order")}
               />
+
+              {teamSelectData.length > 0 && (
+                <Select
+                  label="Winning Team (optional)"
+                  placeholder={
+                    hasEpisodeSnapshot
+                      ? "Select a team to auto-fill winners"
+                      : "No team assignments for this episode"
+                  }
+                  description={
+                    !hasEpisodeSnapshot
+                      ? "Assign players to teams for this episode first"
+                      : undefined
+                  }
+                  data={teamSelectData}
+                  clearable
+                  searchable
+                  disabled={!hasEpisodeSnapshot}
+                  value={form.values.winning_team_id ?? null}
+                  onChange={handleWinningTeamChange}
+                />
+              )}
 
               <MultiSelect
                 withAsterisk
