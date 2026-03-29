@@ -25,9 +25,9 @@ export const SingleSeason = () => {
     navigate(`/seasons/${season?.id}/draft/${draftId}`);
   };
 
-  const handleManageSeason = async () => {
-    if (!slimUser?.isAdmin) return;
-    navigate(`/admin/${season?.id}`);
+  const handleManageSeason = () => {
+    if (!slimUser?.isAdmin || !season) return;
+    navigate(`/admin/${season.id}`);
   };
 
   if (isLoading)

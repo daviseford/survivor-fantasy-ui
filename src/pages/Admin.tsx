@@ -11,15 +11,14 @@ import {
   Title,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { useFirestoreQueryData } from "@react-query-firebase/firestore";
 import { IconCheck, IconX } from "@tabler/icons-react";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { SEASON_9_CHALLENGES, SEASON_9_ELIMINATIONS } from "../data/season_9";
 import { SEASONS } from "../data/seasons";
 import { db } from "../firebase";
+import { useSeasons } from "../hooks/useSeasons";
 import { useUser } from "../hooks/useUser";
-import { Season } from "../types";
 
 const upload = async (label: string, fn: () => Promise<void>) => {
   try {
@@ -44,15 +43,7 @@ export const Admin = () => {
   const { slimUser } = useUser();
   const navigate = useNavigate();
 
-  const ref = collection(db, "seasons");
-  const { data: seasons, isLoading } = useFirestoreQueryData<
-    Season[],
-    Season[]
-  >(
-    ["seasons"],
-    // @ts-expect-error react-query-firebase type mismatch with Firestore ref
-    ref,
-  );
+  const { data: seasons, isLoading } = useSeasons();
 
   if (!slimUser?.isAdmin) {
     return <div>Unauthorized</div>;

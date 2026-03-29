@@ -8,7 +8,6 @@ import {
   Title,
   rem,
 } from "@mantine/core";
-import { useFirestoreQueryData } from "@react-query-firebase/firestore";
 import {
   IconCalendar,
   IconKarate,
@@ -16,7 +15,7 @@ import {
   IconUserX,
   IconUsersGroup,
 } from "@tabler/icons-react";
-import { collection } from "firebase/firestore";
+import { useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { ChallengeCRUDTable, CreateChallenge } from "../components/Challenges";
 import {
@@ -30,10 +29,9 @@ import {
   TeamCRUDTable,
   TeamPlayerManager,
 } from "../components/Teams";
-import { db } from "../firebase";
 import { useSeason } from "../hooks/useSeason";
+import { useSeasons } from "../hooks/useSeasons";
 import { useUser } from "../hooks/useUser";
-import { Season } from "../types";
 
 const VALID_TABS = [
   "episodes",
@@ -41,8 +39,11 @@ const VALID_TABS = [
   "challenges",
   "eliminations",
   "teams",
-];
-const DEFAULT_TAB = "episodes";
+] as const;
+type TabValue = (typeof VALID_TABS)[number];
+const DEFAULT_TAB: TabValue = "episodes";
+
+const iconStyle = { width: rem(12), height: rem(12) };
 
 export const SeasonAdmin = () => {
   const { slimUser } = useUser();
@@ -51,19 +52,20 @@ export const SeasonAdmin = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const tabParam = searchParams.get("tab");
-  const activeTab =
-    tabParam && VALID_TABS.includes(tabParam) ? tabParam : DEFAULT_TAB;
+  const activeTab: TabValue =
+    tabParam && (VALID_TABS as readonly string[]).includes(tabParam)
+      ? (tabParam as TabValue)
+      : DEFAULT_TAB;
 
   const { data: season, isLoading: isSeasonLoading } = useSeason();
+  const { data: seasons } = useSeasons();
 
-  const seasonsRef = collection(db, "seasons");
-  const { data: seasons } = useFirestoreQueryData<Season[], Season[]>(
-    ["seasons"],
-    // @ts-expect-error react-query-firebase type mismatch with Firestore ref
-    seasonsRef,
-  );
-
-  const iconStyle = { width: rem(12), height: rem(12) };
+  // Clean up invalid tab values in the URL
+  useEffect(() => {
+    if (tabParam && !(VALID_TABS as readonly string[]).includes(tabParam)) {
+      setSearchParams({ tab: DEFAULT_TAB }, { replace: true });
+    }
+  }, [tabParam, setSearchParams]);
 
   if (!slimUser?.isAdmin) {
     return <Text c="red">DENIED!</Text>;

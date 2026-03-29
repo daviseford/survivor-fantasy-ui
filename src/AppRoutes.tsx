@@ -37,6 +37,7 @@ import { SingleSeason } from "./pages/SingleSeason";
 import { queryClient } from "./queryClient";
 import { theme } from "./theme";
 
+// Legacy redirect: /seasons/:id/manage -> /admin/:id (safe to remove once old links age out)
 const RedirectToAdmin = () => {
   const { seasonId } = useParams();
   const { search } = useLocation();
