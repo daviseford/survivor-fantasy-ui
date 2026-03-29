@@ -1,7 +1,7 @@
 import {
+  Accordion,
   Box,
   Button,
-  Card,
   Center,
   Code,
   Group,
@@ -9,6 +9,7 @@ import {
   NumberInput,
   Select,
   SimpleGrid,
+  Spoiler,
   Text,
   TextInput,
   Title,
@@ -157,64 +158,70 @@ export const CreateElimination = () => {
     .filter((x) => !eliminatedPlayers.includes(x));
 
   return (
-    <Card withBorder>
-      <Card.Section p={"md"}>
-        <Title order={4}>Create a new Elimination</Title>
-      </Card.Section>
+    <Accordion>
+      <Accordion.Item value="create-elimination">
+        <Accordion.Control>
+          <Title order={4}>Create a new Elimination</Title>
+        </Accordion.Control>
+        <Accordion.Panel>
+          <SimpleGrid cols={{ base: 1, md: 2 }}>
+            <Box maw={340} mx="auto">
+              <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+                <TextInput
+                  withAsterisk
+                  readOnly
+                  label="Season #"
+                  value={form.values.season_num}
+                />
 
-      <Card.Section p={"md"}>
-        <SimpleGrid cols={{ base: 1, md: 2 }}>
-          <Box maw={340} mx="auto">
-            <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-              <TextInput
-                withAsterisk
-                readOnly
-                label="Season #"
-                value={form.values.season_num}
-              />
+                <NumberInput
+                  withAsterisk
+                  label="Episode #"
+                  min={1}
+                  max={season?.episodes.length}
+                  {...form.getInputProps("episode_num")}
+                />
 
-              <NumberInput
-                withAsterisk
-                label="Episode #"
-                min={1}
-                max={season?.episodes.length}
-                {...form.getInputProps("episode_num")}
-              />
+                <Select
+                  withAsterisk
+                  label="Elimination Variant"
+                  data={dropdownOptions}
+                  searchable
+                  {...form.getInputProps("variant")}
+                />
 
-              <Select
-                withAsterisk
-                label="Elimination Variant"
-                data={dropdownOptions}
-                searchable
-                {...form.getInputProps("variant")}
-              />
+                <Select
+                  withAsterisk
+                  label="Eliminated Player"
+                  data={playerNames}
+                  searchable
+                  {...form.getInputProps("player_name")}
+                />
 
-              <Select
-                withAsterisk
-                label="Eliminated Player"
-                data={playerNames}
-                searchable
-                {...form.getInputProps("player_name")}
-              />
+                <NumberInput
+                  withAsterisk
+                  label="Order"
+                  min={1}
+                  {...form.getInputProps("order")}
+                />
 
-              <NumberInput
-                withAsterisk
-                label="Order"
-                min={1}
-                {...form.getInputProps("order")}
-              />
-
-              <Group justify="flex-end" mt="md">
-                <Button type="submit">Submit</Button>
-              </Group>
-            </form>
-          </Box>
-          <Box>
-            Generated Payload:
-            <Code block>{JSON.stringify(form.values, null, 2)}</Code>
-          </Box>
-        </SimpleGrid>
-      </Card.Section>
-    </Card>
+                <Group justify="flex-end" mt="md">
+                  <Button type="submit">Submit</Button>
+                </Group>
+              </form>
+            </Box>
+            <Box>
+              <Spoiler
+                maxHeight={0}
+                showLabel="Show payload"
+                hideLabel="Hide payload"
+              >
+                <Code block>{JSON.stringify(form.values, null, 2)}</Code>
+              </Spoiler>
+            </Box>
+          </SimpleGrid>
+        </Accordion.Panel>
+      </Accordion.Item>
+    </Accordion>
   );
 };

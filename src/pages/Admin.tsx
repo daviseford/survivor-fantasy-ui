@@ -1,9 +1,11 @@
 import {
   Accordion,
+  Badge,
   Button,
   Card,
   Center,
   Group,
+  Image,
   Loader,
   SimpleGrid,
   Stack,
@@ -11,7 +13,13 @@ import {
   Title,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import {
+  IconCheck,
+  IconList,
+  IconSettings,
+  IconUsers,
+  IconX,
+} from "@tabler/icons-react";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { SEASON_9_CHALLENGES, SEASON_9_ELIMINATIONS } from "../data/season_9";
@@ -46,12 +54,21 @@ export const Admin = () => {
   const { data: seasons, isLoading } = useSeasons();
 
   if (!slimUser?.isAdmin) {
-    return <div>Unauthorized</div>;
+    return (
+      <Center py="xl">
+        <Text c="red" fw={500}>
+          Unauthorized
+        </Text>
+      </Center>
+    );
   }
 
   return (
     <Stack gap="xl">
-      <Title order={2}>Admin Dashboard</Title>
+      <Group gap="xs">
+        <IconSettings size={28} color="var(--mantine-color-blue-6)" />
+        <Title order={2}>Admin Dashboard</Title>
+      </Group>
 
       <div>
         <Title order={3} mb="md">
@@ -74,15 +91,40 @@ export const Admin = () => {
                   radius="md"
                   withBorder
                 >
-                  <Group justify="space-between" mb="xs">
-                    <Text fw={500}>{season.name}</Text>
-                    <Text size="sm" c="dimmed">
-                      Season {season.order}
-                    </Text>
+                  {season.img && (
+                    <Card.Section>
+                      <Image
+                        src={season.img}
+                        height={120}
+                        alt={season.name}
+                        fit="cover"
+                      />
+                    </Card.Section>
+                  )}
+
+                  <Group justify="space-between" mt="md" mb="xs">
+                    <Text fw={600}>{season.name}</Text>
+                    <Badge color="pink">Season {season.order}</Badge>
                   </Group>
+
+                  <Group gap="lg" mb="md">
+                    <Group gap={4}>
+                      <IconList size={14} color="gray" />
+                      <Text size="sm" c="dimmed">
+                        {season.episodes?.length ?? 0} episodes
+                      </Text>
+                    </Group>
+                    <Group gap={4}>
+                      <IconUsers size={14} color="gray" />
+                      <Text size="sm" c="dimmed">
+                        {season.players?.length ?? 0} players
+                      </Text>
+                    </Group>
+                  </Group>
+
                   <Button
                     fullWidth
-                    mt="md"
+                    variant="light"
                     onClick={() => navigate(`/admin/${season.id}`)}
                   >
                     Manage

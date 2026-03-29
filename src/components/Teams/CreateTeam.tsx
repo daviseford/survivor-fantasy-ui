@@ -1,13 +1,14 @@
 import {
+  Accordion,
   Box,
   Button,
-  Card,
   Center,
   Code,
   ColorInput,
   Group,
   Loader,
   SimpleGrid,
+  Spoiler,
   TextInput,
   Title,
 } from "@mantine/core";
@@ -94,58 +95,64 @@ export const CreateTeam = () => {
   };
 
   return (
-    <Card withBorder>
-      <Card.Section p="md">
-        <Title order={4}>Create a new Team</Title>
-      </Card.Section>
+    <Accordion>
+      <Accordion.Item value="create-team">
+        <Accordion.Control>
+          <Title order={4}>Create a new Team</Title>
+        </Accordion.Control>
+        <Accordion.Panel>
+          <SimpleGrid cols={{ base: 1, md: 2 }}>
+            <Box maw={340} mx="auto">
+              <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+                <TextInput
+                  withAsterisk
+                  readOnly
+                  label="Season"
+                  value={`${season.name} (${season.id})`}
+                />
 
-      <Card.Section p="md">
-        <SimpleGrid cols={{ base: 1, md: 2 }}>
-          <Box maw={340} mx="auto">
-            <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-              <TextInput
-                withAsterisk
-                readOnly
-                label="Season"
-                value={`${season.name} (${season.id})`}
-              />
+                <TextInput
+                  withAsterisk
+                  label="Team Name"
+                  placeholder="e.g. Luvu"
+                  {...form.getInputProps("name")}
+                />
 
-              <TextInput
-                withAsterisk
-                label="Team Name"
-                placeholder="e.g. Luvu"
-                {...form.getInputProps("name")}
-              />
+                <ColorInput
+                  withAsterisk
+                  label="Team Color"
+                  format="hex"
+                  swatches={SURVIVOR_SWATCHES}
+                  {...form.getInputProps("color")}
+                />
 
-              <ColorInput
-                withAsterisk
-                label="Team Color"
-                format="hex"
-                swatches={SURVIVOR_SWATCHES}
-                {...form.getInputProps("color")}
-              />
-
-              <Group justify="flex-end" mt="md">
-                <Button type="submit">Submit</Button>
-              </Group>
-            </form>
-          </Box>
-          <Box>
-            Generated Payload:
-            <Code block>
-              {JSON.stringify(
-                {
-                  ...form.values,
-                  season_id: season.id,
-                  season_num: season.order,
-                },
-                null,
-                2,
-              )}
-            </Code>
-          </Box>
-        </SimpleGrid>
-      </Card.Section>
-    </Card>
+                <Group justify="flex-end" mt="md">
+                  <Button type="submit">Submit</Button>
+                </Group>
+              </form>
+            </Box>
+            <Box>
+              <Spoiler
+                maxHeight={0}
+                showLabel="Show payload"
+                hideLabel="Hide payload"
+              >
+                <Code block>
+                  {JSON.stringify(
+                    {
+                      ...form.values,
+                      season_id: season.id,
+                      season_num: season.order,
+                    },
+                    null,
+                    2,
+                  )}
+                </Code>
+              </Spoiler>
+            </Box>
+          </SimpleGrid>
+        </Accordion.Panel>
+      </Accordion.Item>
+    </Accordion>
   );
 };

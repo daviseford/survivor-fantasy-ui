@@ -1,7 +1,7 @@
 import {
+  Accordion,
   Box,
   Button,
-  Card,
   Center,
   Code,
   Group,
@@ -9,6 +9,7 @@ import {
   NumberInput,
   Select,
   SimpleGrid,
+  Spoiler,
   Text,
   TextInput,
   Title,
@@ -127,66 +128,72 @@ export const CreateGameEvent = () => {
     .filter((x) => !eliminatedPlayers.includes(x));
 
   return (
-    <Card withBorder>
-      <Card.Section p={"md"}>
-        <Title order={4}>Create a new Event</Title>
-      </Card.Section>
+    <Accordion>
+      <Accordion.Item value="create-event">
+        <Accordion.Control>
+          <Title order={4}>Create a new Event</Title>
+        </Accordion.Control>
+        <Accordion.Panel>
+          <SimpleGrid cols={{ base: 1, md: 2 }}>
+            <Box maw={340} mx="auto">
+              <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+                <TextInput
+                  withAsterisk
+                  readOnly
+                  label="Season #"
+                  value={form.values.season_num}
+                />
 
-      <Card.Section p={"md"}>
-        <SimpleGrid cols={{ base: 1, md: 2 }}>
-          <Box maw={340} mx="auto">
-            <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-              <TextInput
-                withAsterisk
-                readOnly
-                label="Season #"
-                value={form.values.season_num}
-              />
-
-              <NumberInput
-                withAsterisk
-                label="Episode #"
-                min={1}
-                max={season?.episodes.length}
-                {...form.getInputProps("episode_num")}
-              />
-
-              <Select
-                withAsterisk
-                label="Player Name"
-                data={playerNames}
-                searchable
-                {...form.getInputProps("player_name")}
-              />
-
-              <Select
-                withAsterisk
-                label="Action"
-                data={GameEventActions}
-                searchable
-                {...form.getInputProps("action")}
-                description={currentAction?.description}
-              />
-
-              {currentAction?.multiplier && (
                 <NumberInput
                   withAsterisk
-                  label="How many?"
-                  {...form.getInputProps("multiplier")}
+                  label="Episode #"
+                  min={1}
+                  max={season?.episodes.length}
+                  {...form.getInputProps("episode_num")}
                 />
-              )}
 
-              <Group justify="flex-end" mt="md">
-                <Button type="submit">Submit</Button>
-              </Group>
-            </form>
-          </Box>
-          <Box>
-            Generated Payload:
-            <Code block>{JSON.stringify(form.values, null, 2)}</Code>
-          </Box>
-        </SimpleGrid>
-      </Card.Section>
-    </Card>
+                <Select
+                  withAsterisk
+                  label="Player Name"
+                  data={playerNames}
+                  searchable
+                  {...form.getInputProps("player_name")}
+                />
+
+                <Select
+                  withAsterisk
+                  label="Action"
+                  data={GameEventActions}
+                  searchable
+                  {...form.getInputProps("action")}
+                  description={currentAction?.description}
+                />
+
+                {currentAction?.multiplier && (
+                  <NumberInput
+                    withAsterisk
+                    label="How many?"
+                    {...form.getInputProps("multiplier")}
+                  />
+                )}
+
+                <Group justify="flex-end" mt="md">
+                  <Button type="submit">Submit</Button>
+                </Group>
+              </form>
+            </Box>
+            <Box>
+              <Spoiler
+                maxHeight={0}
+                showLabel="Show payload"
+                hideLabel="Hide payload"
+              >
+                <Code block>{JSON.stringify(form.values, null, 2)}</Code>
+              </Spoiler>
+            </Box>
+          </SimpleGrid>
+        </Accordion.Panel>
+      </Accordion.Item>
+    </Accordion>
   );
 };
