@@ -1,10 +1,16 @@
 import { Stack, Tabs, Text, rem } from "@mantine/core";
-import { IconCalendar, IconKarate, IconUserX } from "@tabler/icons-react";
+import {
+  IconCalendar,
+  IconKarate,
+  IconList,
+  IconUserX,
+} from "@tabler/icons-react";
 import { ChallengeCRUDTable, CreateChallenge } from "../components/Challenges";
 import {
   CreateElimination,
   EliminationCRUDTable,
 } from "../components/Eliminations";
+import { CreateEpisode } from "../components/Episodes";
 import { CreateGameEvent, GameEventsCRUDTable } from "../components/GameEvents";
 import { useUser } from "../hooks/useUser";
 
@@ -19,8 +25,14 @@ export const SeasonAdmin = () => {
 
   return (
     <div>
-      <Tabs defaultValue="events">
+      <Tabs defaultValue="episodes">
         <Tabs.List>
+          <Tabs.Tab
+            value="episodes"
+            leftSection={<IconList style={iconStyle} />}
+          >
+            Episodes
+          </Tabs.Tab>
           <Tabs.Tab
             value="events"
             leftSection={<IconCalendar style={iconStyle} />}
@@ -41,6 +53,12 @@ export const SeasonAdmin = () => {
             Eliminations
           </Tabs.Tab>
         </Tabs.List>
+
+        <Tabs.Panel value="episodes" pt={"lg"}>
+          <Stack gap={"xl"}>
+            <CreateEpisode />
+          </Stack>
+        </Tabs.Panel>
 
         <Tabs.Panel value="events" pt={"lg"}>
           <Stack gap={"xl"}>
