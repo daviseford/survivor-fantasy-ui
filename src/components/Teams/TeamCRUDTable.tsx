@@ -62,35 +62,71 @@ export const TeamCRUDTable = () => {
   const handleDelete = async (team: Team) => {
     if (!slimUser?.isAdmin) return;
 
-    if (isTeamReferenced(team.id)) {
-      modals.openConfirmModal({
-        title: "Team is in use",
-        children: (
-          <>
-            This team is referenced by episode assignments or challenges.
-            Deleting it will leave dangling references. Are you sure?
-          </>
-        ),
-        labels: { confirm: "Delete anyway", cancel: "Cancel" },
-        confirmProps: { color: "red" },
-        onConfirm: async () => {
-          await deleteTeam(team);
-        },
-      });
-    } else {
-      modals.openConfirmModal({
-        title: "Do you want to delete this team?",
-        children: <Code block>{JSON.stringify(team, null, 2)}</Code>,
-        labels: { confirm: "Delete", cancel: "Cancel" },
-        onConfirm: async () => {
-          await deleteTeam(team);
-        },
-      });
-    }
+    const referenced = isTeamReferenced(team.id);
+
+    modals.openConfirmModal({
+      title: referenced
+        ? "Team is in use -- delete and clean up references?"
+        : "Do you want to delete this team?",
+      children: referenced ? (
+        <>
+          This team is referenced by episode assignments and/or challenges.
+          Deleting it will set those references to &quot;No Team&quot; (null).
+        </>
+      ) : (
+        <Code block>{JSON.stringify(team, null, 2)}</Code>
+      ),
+      labels: {
+        confirm: referenced ? "Delete and clean up" : "Delete",
+        cancel: "Cancel",
+      },
+      confirmProps: { color: "red" },
+      onConfirm: async () => {
+        await deleteTeamWithCascade(team);
+      },
+    });
   };
 
-  const deleteTeam = async (team: Team) => {
-    const ref = doc(db, `teams/${season?.id}`);
+  const deleteTeamWithCascade = async (team: Team) => {
+    if (!season) return;
+
+    // 1. Cascade team_assignments: null out all references to this team
+    const updatedAssignments = { ...assignments };
+    let assignmentsChanged = false;
+    for (const [episodeKey, snapshot] of Object.entries(updatedAssignments)) {
+      const updatedSnapshot = { ...snapshot };
+      for (const [playerName, teamId] of Object.entries(updatedSnapshot)) {
+        if (teamId === team.id) {
+          updatedSnapshot[playerName] = null;
+          assignmentsChanged = true;
+        }
+      }
+      updatedAssignments[episodeKey] = updatedSnapshot;
+    }
+    if (assignmentsChanged) {
+      const assignmentsRef = doc(db, `team_assignments/${season.id}`);
+      await setDoc(assignmentsRef, updatedAssignments);
+    }
+
+    // 2. Cascade challenges: clear winning_team_id where it matches
+    const updatedChallenges = { ...challenges };
+    let challengesChanged = false;
+    for (const challenge of Object.values(updatedChallenges)) {
+      if (challenge.winning_team_id === team.id) {
+        updatedChallenges[challenge.id] = {
+          ...challenge,
+          winning_team_id: null,
+        };
+        challengesChanged = true;
+      }
+    }
+    if (challengesChanged) {
+      const challengesRef = doc(db, `challenges/${season.id}`);
+      await setDoc(challengesRef, updatedChallenges);
+    }
+
+    // 3. Delete the team record itself
+    const ref = doc(db, `teams/${season.id}`);
     const newTeams = { ...teams };
     delete newTeams[team.id];
     await setDoc(ref, newTeams);

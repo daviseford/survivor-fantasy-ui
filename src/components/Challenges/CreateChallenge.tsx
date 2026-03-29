@@ -76,6 +76,29 @@ export const CreateChallenge = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [season, challenges]);
 
+  // Recompute winning_players when episode changes while a winning team is selected
+  const currentEpisodeNum = form.values.episode_num;
+  const currentWinningTeamId = form.values.winning_team_id;
+  useEffect(() => {
+    if (!currentWinningTeamId) return;
+
+    const episodeSnapshot = teamAssignments[String(currentEpisodeNum)] ?? {};
+    const hasSnapshot = Object.keys(episodeSnapshot).length > 0;
+
+    if (hasSnapshot) {
+      const playersOnTeam = getPlayersOnTeam(
+        episodeSnapshot,
+        currentWinningTeamId,
+      );
+      form.setFieldValue("winning_players", playersOnTeam);
+    } else {
+      // No snapshot for this episode -- clear team selection and winners
+      form.setFieldValue("winning_team_id", null);
+      form.setFieldValue("winning_players", []);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentEpisodeNum]);
+
   if (isLoading) {
     return (
       <Center>
