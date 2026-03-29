@@ -87,19 +87,12 @@ export const CreateGameEvent = () => {
   );
 
   const handleSubmit = async (values: GameEvent) => {
-    // e?.preventDefault();
-
     const _validate = form.validate();
     if (_validate.hasErrors) return;
 
-    // const values = { ...form.values };
-
-    // remove any old values if not needed
     if (!currentAction?.multiplier) {
       values.multiplier = null;
     }
-
-    console.log({ values });
 
     const ref = doc(db, `events/${season?.id}`);
 

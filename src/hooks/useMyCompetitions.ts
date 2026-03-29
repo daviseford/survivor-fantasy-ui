@@ -10,7 +10,7 @@ export const useMyCompetitions = () => {
   const ref = collection(db, "competitions");
 
   const _query = query<Competition, Competition>(
-    // @ts-expect-error Dumb
+    // @ts-expect-error react-query-firebase type mismatch with Firestore ref
     ref,
     where("participant_uids", "array-contains", user?.uid || ""),
   );

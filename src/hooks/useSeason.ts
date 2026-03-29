@@ -15,7 +15,7 @@ export const useSeason = (id?: Season["id"]) => {
   // Query a Firestore document using useQuery
   return useFirestoreDocumentData<Season, Season>(
     ["season", _seasonId],
-    // @ts-expect-error TS is dumb here
+    // @ts-expect-error react-query-firebase type mismatch with Firestore ref
     ref,
     {
       // Subscribe to realtime changes

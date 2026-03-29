@@ -51,8 +51,6 @@ export const DraftComponent = () => {
   const { draft } = useDraft();
   const { data: competition } = useCompetition(draft?.competiton_id);
 
-  console.log({ slimUser, draft, competition });
-
   const userHasSubmittedPropBets = Boolean(
     draft?.prop_bets?.find((x) => x.user_uid === slimUser?.uid),
   );
@@ -103,7 +101,6 @@ export const DraftComponent = () => {
       current_episode: null,
     } satisfies Competition;
 
-    console.log("CREATING A COMPETITION: ", competition);
     await setDoc(doc(db, "competitions", competition.id), competition);
   };
 
@@ -126,7 +123,6 @@ export const DraftComponent = () => {
   };
 
   const startDraft = async () => {
-    console.log("START DRAFT");
     if (!draft || !slimUser?.uid) return;
 
     const _draftOrder = shuffle(draft.participants);
@@ -139,14 +135,10 @@ export const DraftComponent = () => {
       pick_order: _draftOrder,
     } satisfies Draft;
 
-    console.log({ _draftOrder, isInvalidNumberOfPlayers, _draft });
-
     await updateDraft(_draft);
   };
 
   const draftPlayer = async (playerName: string) => {
-    console.log("Selected " + playerName);
-
     if (!season || !draft || !slimUser?.uid) return;
 
     const finished = draft.current_pick_number >= draft.total_players;
@@ -185,8 +177,6 @@ export const DraftComponent = () => {
     if (finished) {
       _draft.current_picker = null;
     }
-
-    console.log(_draft);
 
     await updateDraft(_draft);
   };
@@ -579,8 +569,6 @@ const PropBets = ({ season, onSubmit }: PropBetsProps) => {
       propbet_winner: isNotEmpty("Enter an answer"),
     },
   });
-
-  console.log({ form });
 
   const players = season?.players.map((x) => x.name);
 

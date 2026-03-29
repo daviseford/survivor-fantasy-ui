@@ -1,0 +1,36 @@
+{
+  "id": "247e28dc-710b-4d26-a1c2-5aeb6bfe66d9",
+  "topic": "redesign the website using shadcn",
+  "mode": "edit",
+  "max_turns": 20,
+  "target_repo": "D:\\Projects\\survivor-fantasy-ui",
+  "created": "2026-03-29T03:08:34.453Z",
+  "session_status": "active",
+  "current_turn": 0,
+  "next_agent": "claude",
+  "phase": "plan",
+  "impl_model": "claude",
+  "review_turns": 6,
+  "port": null,
+  "pid": 1100,
+  "worktree_path": null,
+  "branch_name": null,
+  "original_repo": null,
+  "base_ref": null,
+  "pr_url": null,
+  "pr_number": null,
+  "roster": [
+    {
+      "id": "claude",
+      "provider": "claude",
+      "role": "implementer",
+      "displayName": "Claude"
+    },
+    {
+      "id": "codex",
+      "provider": "codex",
+      "role": "reviewer",
+      "displayName": "Codex"
+    }
+  ]
+}

@@ -13,12 +13,9 @@ export const useCreateDraft = () => {
   const createDraft = async () => {
     const draftId = `draft_${v4()}` as const;
 
-    if (!slimUser || !season || !season) {
-      console.error("Missing a key prop here...");
+    if (!slimUser || !season) {
       return null;
     }
-
-    console.log(`CREATING DRAFT WITH ID ${draftId}`);
 
     const newDraft = {
       id: draftId,
@@ -36,8 +33,6 @@ export const useCreateDraft = () => {
       started: false,
       finished: false,
     } satisfies Draft;
-
-    console.log(newDraft);
 
     await set(ref(rt_db, "drafts/" + draftId), newDraft);
 

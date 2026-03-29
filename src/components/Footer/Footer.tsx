@@ -16,7 +16,6 @@ export const Footer = () => {
       c="dimmed"
       key={link.label}
       href={link.link}
-      // onClick={(event) => event.preventDefault()}
       size="sm"
       target="_blank"
     >

@@ -21,7 +21,6 @@ export const useDraft = () => {
 
     onValue(draftRef, (snapshot) => {
       const data = snapshot.val();
-      console.log("rt data", data);
       setDraft(data || undefined);
     });
   }, [draftId, season, slimUser]);

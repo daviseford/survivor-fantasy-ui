@@ -23,7 +23,7 @@ export const PlayerGroup = ({ uid }: { uid: SlimUser["uid"] }) => {
 
         return (
           <Tooltip label={label} key={label}>
-            <Avatar key={label} src={p.img} size={""} style={avatarStyle} />
+            <Avatar key={label} src={p.img} size="md" style={avatarStyle} alt={p.name} />
           </Tooltip>
         );
       })}

@@ -17,7 +17,6 @@ export const useCompetitions = () => {
 
     const unsub = onSnapshot(ref, (doc) => {
       const _data = doc.docs.map((x) => x.data() as Competition) ?? [];
-      console.log("Current data: ", _data);
       setData(_data);
     });
 
