@@ -23,12 +23,17 @@ import { db } from "../../firebase";
 import { useChallenges } from "../../hooks/useChallenges";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
-import { Challenge, ChallengeWinActions } from "../../types";
+import { useTeamAssignments } from "../../hooks/useTeamAssignments";
+import { useTeams } from "../../hooks/useTeams";
+import { Challenge, ChallengeWinActions, Team } from "../../types";
+import { getPlayersOnTeam } from "../../utils/teamUtils";
 
 export const CreateChallenge = () => {
   const { data: season, isLoading } = useSeason();
   const { data: eliminations } = useEliminations(season?.id);
   const { data: challenges } = useChallenges(season?.id);
+  const { data: teams } = useTeams(season?.id);
+  const { data: teamAssignments } = useTeamAssignments(season?.id);
 
   const form = useForm<Challenge>({
     initialValues: {
@@ -97,7 +102,36 @@ export const CreateChallenge = () => {
     await setDoc(ref, { [values.id]: values }, { merge: true });
 
     // reset id and important form values
-    form.setValues({ id: `challenge_${v4()}`, winning_players: [] });
+    form.setValues({
+      id: `challenge_${v4()}`,
+      winning_players: [],
+      winning_team_id: null,
+    });
+  };
+
+  const teamList = Object.values(teams || {});
+  const teamSelectData = teamList.map((t) => ({
+    value: t.id,
+    label: t.name,
+  }));
+
+  const handleWinningTeamChange = (teamId: string | null) => {
+    if (!teamId) {
+      form.setFieldValue("winning_team_id", null);
+      return;
+    }
+
+    const episodeSnapshot =
+      teamAssignments[String(form.values.episode_num)] ?? {};
+    const playersOnTeam = getPlayersOnTeam(
+      episodeSnapshot,
+      teamId as Team["id"],
+    );
+
+    form.setFieldValue("winning_team_id", teamId as Team["id"]);
+    if (playersOnTeam.length > 0) {
+      form.setFieldValue("winning_players", playersOnTeam);
+    }
   };
 
   const eliminatedPlayers = Object.values(eliminations).map(
@@ -138,6 +172,18 @@ export const CreateChallenge = () => {
                 min={1}
                 {...form.getInputProps("order")}
               />
+
+              {teamSelectData.length > 0 && (
+                <Select
+                  label="Winning Team (optional)"
+                  placeholder="Select a team to auto-fill winners"
+                  data={teamSelectData}
+                  clearable
+                  searchable
+                  value={form.values.winning_team_id ?? null}
+                  onChange={handleWinningTeamChange}
+                />
+              )}
 
               <MultiSelect
                 withAsterisk

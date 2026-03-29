@@ -4,6 +4,7 @@ import {
   IconKarate,
   IconList,
   IconUserX,
+  IconUsersGroup,
 } from "@tabler/icons-react";
 import { ChallengeCRUDTable, CreateChallenge } from "../components/Challenges";
 import {
@@ -12,6 +13,11 @@ import {
 } from "../components/Eliminations";
 import { CreateEpisode, EpisodeCRUDTable } from "../components/Episodes";
 import { CreateGameEvent, GameEventsCRUDTable } from "../components/GameEvents";
+import {
+  CreateTeam,
+  TeamCRUDTable,
+  TeamPlayerManager,
+} from "../components/Teams";
 import { useUser } from "../hooks/useUser";
 
 export const SeasonAdmin = () => {
@@ -52,6 +58,12 @@ export const SeasonAdmin = () => {
           >
             Eliminations
           </Tabs.Tab>
+          <Tabs.Tab
+            value="teams"
+            leftSection={<IconUsersGroup style={iconStyle} />}
+          >
+            Teams
+          </Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="episodes" pt={"lg"}>
@@ -82,6 +94,14 @@ export const SeasonAdmin = () => {
             {/* <Title order={2}>Manage Challenges</Title> */}
             <CreateElimination />
             <EliminationCRUDTable />
+          </Stack>
+        </Tabs.Panel>
+
+        <Tabs.Panel value="teams" pt={"lg"}>
+          <Stack gap={"xl"}>
+            <CreateTeam />
+            <TeamCRUDTable />
+            <TeamPlayerManager />
           </Stack>
         </Tabs.Panel>
       </Tabs>

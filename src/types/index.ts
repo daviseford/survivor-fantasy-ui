@@ -58,6 +58,26 @@ export type Player<PlayerName = string, SeasonNumber = number> = {
   description?: string;
 };
 
+export type Team = {
+  id: `team_${string}`;
+  season_id: Season["id"];
+  season_num: number;
+  name: string;
+  color: string;
+};
+
+/**
+ * A snapshot of player-to-team assignments for a single episode.
+ * Keys are player names, values are team IDs or null (no team).
+ */
+export type TeamAssignmentSnapshot = Record<string, Team["id"] | null>;
+
+/**
+ * All team assignment snapshots for a season.
+ * Keys are episode numbers (as strings, since Firestore keys are strings).
+ */
+export type TeamAssignments = Record<string, TeamAssignmentSnapshot>;
+
 export type Challenge<PlayerNames = string, SeasonNumber = number> = {
   id: `challenge_${string}`;
 
@@ -74,6 +94,12 @@ export type Challenge<PlayerNames = string, SeasonNumber = number> = {
    * List of player names who won
    */
   winning_players: PlayerNames[];
+
+  /**
+   * Optional: the team that won this challenge.
+   * Audit/display metadata only -- winning_players is the scoring source of truth.
+   */
+  winning_team_id?: Team["id"] | null;
 };
 
 export type SlimUser = Pick<User, "email" | "uid" | "displayName"> & {

@@ -74,7 +74,8 @@ const uploadSXX = async () => {
 In `src/pages/Seasons.tsx`, update the visibility filter to include the new season:
 
 ```ts
-if (x.name !== "Survivor 46" && x.name !== "Survivor XX" && !slimUser?.isAdmin) return null;
+if (x.name !== "Survivor 46" && x.name !== "Survivor XX" && !slimUser?.isAdmin)
+  return null;
 ```
 
 ## 7. Upload to Firestore
