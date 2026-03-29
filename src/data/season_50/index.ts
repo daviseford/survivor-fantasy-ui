@@ -40,12 +40,10 @@ type SeasonNumber = 50;
 const buildPlayer = <T extends PlayerName>(
   name: T,
   img: string,
-  description?: string,
 ): Player<T, SeasonNumber> => {
   return {
     name,
     img,
-    description,
     season_num: 50,
     season_id: "season_50",
   };
