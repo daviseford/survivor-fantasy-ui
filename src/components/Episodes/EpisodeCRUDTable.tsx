@@ -9,6 +9,7 @@ import {
   TextInput,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
 import { IconCheck, IconPencil, IconTrash, IconX } from "@tabler/icons-react";
 import { doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
@@ -31,9 +32,24 @@ export const EpisodeCRUDTable = () => {
       children: <Code block>{JSON.stringify(episode, null, 2)}</Code>,
       labels: { confirm: "Delete", cancel: "Cancel" },
       onConfirm: async () => {
-        const ref = doc(db, "seasons", season.id);
-        const updated = season.episodes.filter((e) => e.id !== episode.id);
-        await updateDoc(ref, { episodes: updated });
+        try {
+          const ref = doc(db, "seasons", season.id);
+          const updated = season.episodes.filter((e) => e.id !== episode.id);
+          await updateDoc(ref, { episodes: updated });
+          notifications.show({
+            title: "Episode deleted",
+            message: `Episode ${episode.order} removed`,
+            color: "green",
+            icon: <IconCheck size={16} />,
+          });
+        } catch (err) {
+          notifications.show({
+            title: "Failed to delete episode",
+            message: err instanceof Error ? err.message : "Unknown error",
+            color: "red",
+            icon: <IconX size={16} />,
+          });
+        }
       },
     });
   };
@@ -51,13 +67,30 @@ export const EpisodeCRUDTable = () => {
   const saveEdit = async () => {
     if (!season || !editValues) return;
 
-    const ref = doc(db, "seasons", season.id);
-    const updated = season.episodes.map((e) =>
-      e.id === editValues.id ? editValues : e,
-    );
-    await updateDoc(ref, { episodes: updated });
-    setEditingId(null);
-    setEditValues(null);
+    try {
+      const ref = doc(db, "seasons", season.id);
+      const updated = season.episodes.map((e) =>
+        e.id === editValues.id ? editValues : e,
+      );
+      await updateDoc(ref, { episodes: updated });
+
+      notifications.show({
+        title: "Episode updated",
+        message: `Episode ${editValues.order} saved`,
+        color: "green",
+        icon: <IconCheck size={16} />,
+      });
+
+      setEditingId(null);
+      setEditValues(null);
+    } catch (err) {
+      notifications.show({
+        title: "Failed to update episode",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+        icon: <IconX size={16} />,
+      });
+    }
   };
 
   const episodes = [...(season?.episodes ?? [])].sort(

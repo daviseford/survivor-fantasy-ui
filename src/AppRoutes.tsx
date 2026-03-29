@@ -7,6 +7,8 @@ import {
   MantineProvider,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
+import { Notifications } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import { useDisclosure } from "@mantine/hooks";
 import { ModalsProvider } from "@mantine/modals";
 import { QueryClientProvider } from "react-query";
@@ -41,6 +43,7 @@ export const AppRoutes = () => {
 
   return (
     <MantineProvider theme={theme}>
+      <Notifications />
       <QueryClientProvider client={queryClient}>
         <Router>
           <ModalsProvider modals={modals}>

@@ -14,6 +14,8 @@ import {
   Title,
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import { doc, setDoc } from "firebase/firestore";
 import { useEffect } from "react";
 import { v4 } from "uuid";
@@ -94,12 +96,27 @@ export const CreateGameEvent = () => {
       values.multiplier = null;
     }
 
-    const ref = doc(db, `events/${season?.id}`);
+    try {
+      const ref = doc(db, `events/${season?.id}`);
+      await setDoc(ref, { [values.id]: values }, { merge: true });
 
-    await setDoc(ref, { [values.id]: values }, { merge: true });
+      notifications.show({
+        title: "Event created successfully",
+        message: `${values.action} for ${values.player_name}`,
+        color: "green",
+        icon: <IconCheck size={16} />,
+      });
 
-    // reset id and important form values
-    form.setValues({ id: `event_${v4()}` });
+      // reset id and important form values
+      form.setValues({ id: `event_${v4()}` });
+    } catch (err) {
+      notifications.show({
+        title: "Failed to create event",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+        icon: <IconX size={16} />,
+      });
+    }
   };
 
   const eliminatedPlayers = Object.values(eliminations).map(

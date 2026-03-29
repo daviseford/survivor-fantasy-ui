@@ -2,10 +2,12 @@ import { Table } from "@mantine/core";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
+import { useUser } from "../../hooks/useUser";
 
 export const PerUserPerEpisodeScoringTable = () => {
   const { data: competition } = useCompetition();
   const { data: season } = useSeason(competition?.season_id);
+  const { slimUser } = useUser();
 
   const { pointsByUserPerEpisodeWithPropBets } = useScoringCalculations();
 
@@ -15,7 +17,14 @@ export const PerUserPerEpisodeScoringTable = () => {
       const user = competition?.participants.find((x) => x.uid === uid);
 
       return (
-        <Table.Tr key={uid}>
+        <Table.Tr
+          key={uid}
+          style={
+            uid === slimUser?.uid
+              ? { backgroundColor: "var(--mantine-color-blue-light)" }
+              : undefined
+          }
+        >
           <Table.Td>{i + 1}</Table.Td>
           <Table.Td>{user?.displayName || user?.email}</Table.Td>
           <Table.Td>{values.total}</Table.Td>

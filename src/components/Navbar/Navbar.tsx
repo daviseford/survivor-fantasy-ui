@@ -10,7 +10,7 @@ import {
 } from "@tabler/icons-react";
 import { Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { auth } from "../../firebase";
 import { useUser } from "../../hooks/useUser";
 import classes from "./Navbar.module.css";
@@ -38,15 +38,15 @@ export const Navbar = () => {
       undefined;
 
     return (
-      <a
+      <Link
         className={classes.link}
         data-active={isActive}
-        href={item.link}
+        to={item.link}
         key={item.label}
       >
         <item.icon className={classes.linkIcon} stroke={1.5} />
         <span>{item.label}</span>
-      </a>
+      </Link>
     );
   });
 

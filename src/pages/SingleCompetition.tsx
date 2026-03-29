@@ -58,7 +58,7 @@ const GridCard = ({
   return (
     <Card shadow="sm" p="xl">
       <Card.Section mb={"xs"}>
-        <Title order={2}>{title}</Title>
+        <Title order={3}>{title}</Title>
       </Card.Section>
       <Card.Section>{children}</Card.Section>
     </Card>

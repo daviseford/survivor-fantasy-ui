@@ -9,6 +9,7 @@ import {
   TextInput,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
 import { IconCheck, IconPencil, IconTrash, IconX } from "@tabler/icons-react";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
@@ -82,7 +83,22 @@ export const TeamCRUDTable = () => {
       },
       confirmProps: { color: "red" },
       onConfirm: async () => {
-        await deleteTeamWithCascade(team);
+        try {
+          await deleteTeamWithCascade(team);
+          notifications.show({
+            title: "Team deleted",
+            message: `Team "${team.name}" removed`,
+            color: "green",
+            icon: <IconCheck size={16} />,
+          });
+        } catch (err) {
+          notifications.show({
+            title: "Failed to delete team",
+            message: err instanceof Error ? err.message : "Unknown error",
+            color: "red",
+            icon: <IconX size={16} />,
+          });
+        }
       },
     });
   };
@@ -145,15 +161,32 @@ export const TeamCRUDTable = () => {
   const saveEdit = async (team: Team) => {
     if (!editValues || !season) return;
 
-    const updated: Team = {
-      ...team,
-      name: editValues.name,
-      color: editValues.color,
-    };
-    const ref = doc(db, `teams/${season.id}`);
-    await setDoc(ref, { [team.id]: updated }, { merge: true });
-    setEditingId(null);
-    setEditValues(null);
+    try {
+      const updated: Team = {
+        ...team,
+        name: editValues.name,
+        color: editValues.color,
+      };
+      const ref = doc(db, `teams/${season.id}`);
+      await setDoc(ref, { [team.id]: updated }, { merge: true });
+
+      notifications.show({
+        title: "Team updated",
+        message: `Team "${editValues.name}" saved`,
+        color: "green",
+        icon: <IconCheck size={16} />,
+      });
+
+      setEditingId(null);
+      setEditValues(null);
+    } catch (err) {
+      notifications.show({
+        title: "Failed to update team",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+        icon: <IconX size={16} />,
+      });
+    }
   };
 
   const rows = Object.values(teams || {}).map((team) => {

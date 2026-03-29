@@ -1,6 +1,7 @@
 import {
   Avatar,
   Badge,
+  Box,
   Group,
   Stack,
   Table,
@@ -155,7 +156,42 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
     });
 
   return (
-    <Table.ScrollContainer minWidth={300}>
+    <>
+      <Group gap="md" mb="xs" px="md">
+        <Group gap={4}>
+          <Box
+            w={12}
+            h={12}
+            style={{
+              backgroundColor: "var(--mantine-color-green-1)",
+              borderRadius: 2,
+            }}
+          />
+          <Text size="xs">Winner</Text>
+        </Group>
+        <Group gap={4}>
+          <Box
+            w={12}
+            h={12}
+            style={{
+              backgroundColor: "var(--mantine-color-gray-2)",
+              borderRadius: 2,
+            }}
+          />
+          <Text size="xs">Eliminated</Text>
+        </Group>
+        <Group gap={4}>
+          <Badge size="xs" color="red">
+            Elimination pts
+          </Badge>
+        </Group>
+        <Group gap={4}>
+          <Badge size="xs" color="dark">
+            Event pts
+          </Badge>
+        </Group>
+      </Group>
+      <Table.ScrollContainer minWidth={300}>
       <Table
         highlightOnHover
         verticalSpacing={"md"}
@@ -174,5 +210,6 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
     </Table.ScrollContainer>
+    </>
   );
 };

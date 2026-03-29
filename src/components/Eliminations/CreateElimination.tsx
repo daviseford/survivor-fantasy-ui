@@ -14,6 +14,8 @@ import {
   Title,
 } from "@mantine/core";
 import { hasLength, useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { last, orderBy } from "lodash-es";
 import { useEffect } from "react";
@@ -93,19 +95,34 @@ export const CreateElimination = () => {
 
     if (_validate.hasErrors) return;
 
-    const ref = doc(db, `eliminations/${season?.id}`);
+    try {
+      const ref = doc(db, `eliminations/${season?.id}`);
+      await setDoc(ref, { [values.id]: values }, { merge: true });
 
-    await setDoc(ref, { [values.id]: values }, { merge: true });
+      // Remove eliminated player from team assignments for this episode onward
+      await removePlayerFromTeams(
+        season!.id,
+        values.player_name,
+        values.episode_num,
+      );
 
-    // Remove eliminated player from team assignments for this episode onward
-    await removePlayerFromTeams(
-      season!.id,
-      values.player_name,
-      values.episode_num,
-    );
+      notifications.show({
+        title: "Elimination created successfully",
+        message: `${values.player_name} eliminated`,
+        color: "green",
+        icon: <IconCheck size={16} />,
+      });
 
-    // reset id and important form values
-    form.setValues({ id: `elimination_${v4()}` });
+      // reset id and important form values
+      form.setValues({ id: `elimination_${v4()}` });
+    } catch (err) {
+      notifications.show({
+        title: "Failed to create elimination",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+        icon: <IconX size={16} />,
+      });
+    }
   };
 
   const removePlayerFromTeams = async (

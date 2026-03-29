@@ -13,6 +13,8 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useSeason } from "../../hooks/useSeason";
@@ -53,17 +55,33 @@ export const CreateEpisode = () => {
       ...values,
     };
 
-    const ref = doc(db, "seasons", season.id);
-    await updateDoc(ref, { episodes: arrayUnion(episode) });
+    try {
+      const ref = doc(db, "seasons", season.id);
+      await updateDoc(ref, { episodes: arrayUnion(episode) });
 
-    // Reset for next episode
-    form.setValues({
-      order: values.order + 1,
-      name: "",
-      finale: false,
-      post_merge: values.post_merge || values.merge_occurs,
-      merge_occurs: false,
-    });
+      notifications.show({
+        title: "Episode created successfully",
+        message: `Episode ${values.order} added`,
+        color: "green",
+        icon: <IconCheck size={16} />,
+      });
+
+      // Reset for next episode
+      form.setValues({
+        order: values.order + 1,
+        name: "",
+        finale: false,
+        post_merge: values.post_merge || values.merge_occurs,
+        merge_occurs: false,
+      });
+    } catch (err) {
+      notifications.show({
+        title: "Failed to create episode",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+        icon: <IconX size={16} />,
+      });
+    }
   };
 
   return (

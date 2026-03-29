@@ -1,37 +1,33 @@
-import { Alert, Button, SimpleGrid } from "@mantine/core";
+import { Button, SimpleGrid } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { doc, setDoc } from "firebase/firestore";
-import { useState } from "react";
 import { SEASON_9_CHALLENGES, SEASON_9_ELIMINATIONS } from "../data/season_9";
 import { SEASONS } from "../data/seasons";
 import { db } from "../firebase";
 import { useUser } from "../hooks/useUser";
 
-const useUploadFeedback = () => {
-  const [status, setStatus] = useState<{
-    type: "success" | "error";
-    message: string;
-  } | null>(null);
-
-  const upload = async (label: string, fn: () => Promise<void>) => {
-    setStatus(null);
-    try {
-      await fn();
-      setStatus({ type: "success", message: `${label} uploaded successfully.` });
-    } catch (err) {
-      setStatus({
-        type: "error",
-        message: `${label} failed: ${err instanceof Error ? err.message : "Unknown error"}`,
-      });
-    }
-  };
-
-  return { status, upload };
+const upload = async (label: string, fn: () => Promise<void>) => {
+  try {
+    await fn();
+    notifications.show({
+      title: `${label} uploaded successfully`,
+      message: "",
+      color: "green",
+      icon: <IconCheck size={16} />,
+    });
+  } catch (err) {
+    notifications.show({
+      title: `${label} failed`,
+      message: err instanceof Error ? err.message : "Unknown error",
+      color: "red",
+      icon: <IconX size={16} />,
+    });
+  }
 };
 
 export const Admin = () => {
   const { slimUser } = useUser();
-  const { status, upload } = useUploadFeedback();
 
   if (!slimUser?.isAdmin) {
     return <div>Unauthorized</div>;
@@ -39,18 +35,6 @@ export const Admin = () => {
 
   return (
     <div>
-      {status && (
-        <Alert
-          mb="md"
-          color={status.type === "success" ? "green" : "red"}
-          icon={status.type === "success" ? <IconCheck /> : <IconX />}
-          withCloseButton
-          onClose={() => {}}
-        >
-          {status.message}
-        </Alert>
-      )}
-
       <SimpleGrid cols={3}>
         <Button
           onClick={() =>
