@@ -128,7 +128,7 @@ export const CreateGameEvent = () => {
     .filter((x) => !eliminatedPlayers.includes(x));
 
   return (
-    <Accordion>
+    <Accordion defaultValue="create-event">
       <Accordion.Item value="create-event">
         <Accordion.Control>
           <Title order={4}>Create a new Event</Title>

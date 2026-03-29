@@ -185,7 +185,7 @@ export const CreateChallenge = () => {
     .filter((x) => !eliminatedPlayers.includes(x));
 
   return (
-    <Accordion>
+    <Accordion defaultValue="create-challenge">
       <Accordion.Item value="create-challenge">
         <Accordion.Control>
           <Title order={4}>Create a new Challenge</Title>

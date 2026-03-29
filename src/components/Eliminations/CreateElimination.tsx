@@ -158,7 +158,7 @@ export const CreateElimination = () => {
     .filter((x) => !eliminatedPlayers.includes(x));
 
   return (
-    <Accordion>
+    <Accordion defaultValue="create-elimination">
       <Accordion.Item value="create-elimination">
         <Accordion.Control>
           <Title order={4}>Create a new Elimination</Title>

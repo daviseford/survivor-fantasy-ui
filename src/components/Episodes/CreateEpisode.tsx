@@ -86,7 +86,7 @@ export const CreateEpisode = () => {
   };
 
   return (
-    <Accordion>
+    <Accordion defaultValue="create-episode">
       <Accordion.Item value="create-episode">
         <Accordion.Control>
           <Title order={4}>Create a new Episode</Title>
