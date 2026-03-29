@@ -57,13 +57,13 @@ export const SeasonAdmin = () => {
       : DEFAULT_TAB;
 
   const { data: season, isLoading: isSeasonLoading } = useSeason();
-  const { data: seasons } = useSeasons();
+  const { data: seasons, isLoading: isSeasonsLoading } = useSeasons();
 
   if (!slimUser?.isAdmin) {
     return <Text c="red">DENIED!</Text>;
   }
 
-  if (isSeasonLoading) {
+  if (isSeasonLoading || isSeasonsLoading) {
     return (
       <Center>
         <Loader size="lg" />

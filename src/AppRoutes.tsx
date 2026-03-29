@@ -39,6 +39,7 @@ import { theme } from "./theme";
 // Legacy redirect: /seasons/:id/manage -> /admin/:id (safe to remove once old links age out)
 const RedirectToAdmin = () => {
   const { seasonId } = useParams();
+  if (!seasonId) return <Navigate to="/admin" replace />;
   return <Navigate to={`/admin/${seasonId}`} replace />;
 };
 
