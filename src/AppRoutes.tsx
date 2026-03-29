@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { QueryClientProvider } from "react-query";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Link, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { AppSidebar } from "./components/AppSidebar";
 import { AuthDialog } from "./components/Auth/AuthDialog";
 import { Logout } from "./components/Auth/Logout";
@@ -39,12 +39,12 @@ export const AppRoutes = () => {
                   orientation="vertical"
                   className="mr-2 data-[orientation=vertical]:h-4"
                 />
-                <a
-                  href="/"
+                <Link
+                  to="/"
                   className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-lg font-bold text-transparent"
                 >
                   {PROJECT_NAME}
-                </a>
+                </Link>
               </header>
 
               <main className="flex-1 p-4 pb-24">

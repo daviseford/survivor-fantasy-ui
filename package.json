@@ -31,7 +31,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.72.0",
     "react-query": "^3.39.3",
-    "recharts": "2.12.5",
+    "recharts": "3.8.0",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.2",
     "uuid": "^9.0.1",
