@@ -114,10 +114,14 @@ export const CreateChallenge = () => {
     value: t.id,
     label: t.name,
   }));
+  const hasEpisodeSnapshot = Boolean(
+    teamAssignments[String(form.values.episode_num)],
+  );
 
   const handleWinningTeamChange = (teamId: string | null) => {
     if (!teamId) {
       form.setFieldValue("winning_team_id", null);
+      form.setFieldValue("winning_players", []);
       return;
     }
 
@@ -129,9 +133,7 @@ export const CreateChallenge = () => {
     );
 
     form.setFieldValue("winning_team_id", teamId as Team["id"]);
-    if (playersOnTeam.length > 0) {
-      form.setFieldValue("winning_players", playersOnTeam);
-    }
+    form.setFieldValue("winning_players", playersOnTeam);
   };
 
   const eliminatedPlayers = Object.values(eliminations).map(
@@ -176,10 +178,20 @@ export const CreateChallenge = () => {
               {teamSelectData.length > 0 && (
                 <Select
                   label="Winning Team (optional)"
-                  placeholder="Select a team to auto-fill winners"
+                  placeholder={
+                    hasEpisodeSnapshot
+                      ? "Select a team to auto-fill winners"
+                      : "No team assignments for this episode"
+                  }
+                  description={
+                    !hasEpisodeSnapshot
+                      ? "Assign players to teams for this episode first"
+                      : undefined
+                  }
                   data={teamSelectData}
                   clearable
                   searchable
+                  disabled={!hasEpisodeSnapshot}
                   value={form.values.winning_team_id ?? null}
                   onChange={handleWinningTeamChange}
                 />
