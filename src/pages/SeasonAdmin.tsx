@@ -15,7 +15,6 @@ import {
   IconUserX,
   IconUsersGroup,
 } from "@tabler/icons-react";
-import { useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { ChallengeCRUDTable, CreateChallenge } from "../components/Challenges";
 import {
@@ -60,13 +59,6 @@ export const SeasonAdmin = () => {
   const { data: season, isLoading: isSeasonLoading } = useSeason();
   const { data: seasons } = useSeasons();
 
-  // Clean up invalid tab values in the URL
-  useEffect(() => {
-    if (tabParam && !(VALID_TABS as readonly string[]).includes(tabParam)) {
-      setSearchParams({ tab: DEFAULT_TAB }, { replace: true });
-    }
-  }, [tabParam, setSearchParams]);
-
   if (!slimUser?.isAdmin) {
     return <Text c="red">DENIED!</Text>;
   }
@@ -85,7 +77,8 @@ export const SeasonAdmin = () => {
 
   const seasonOptions =
     seasons
-      ?.sort((a, b) => b.order - a.order)
+      ?.slice()
+      .sort((a, b) => b.order - a.order)
       .map((s) => ({
         value: s.id,
         label: s.name,

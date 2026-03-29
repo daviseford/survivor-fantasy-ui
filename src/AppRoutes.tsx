@@ -17,7 +17,6 @@ import {
   Route,
   BrowserRouter as Router,
   Routes,
-  useLocation,
   useParams,
 } from "react-router-dom";
 import classes from "./AppRoutes.module.css";
@@ -40,8 +39,7 @@ import { theme } from "./theme";
 // Legacy redirect: /seasons/:id/manage -> /admin/:id (safe to remove once old links age out)
 const RedirectToAdmin = () => {
   const { seasonId } = useParams();
-  const { search } = useLocation();
-  return <Navigate to={`/admin/${seasonId}${search}`} replace />;
+  return <Navigate to={`/admin/${seasonId}`} replace />;
 };
 
 const modals = { AuthModal };

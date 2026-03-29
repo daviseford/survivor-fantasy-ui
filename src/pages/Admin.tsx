@@ -64,7 +64,8 @@ export const Admin = () => {
         ) : (
           <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
             {seasons
-              ?.sort((a, b) => b.order - a.order)
+              ?.slice()
+              .sort((a, b) => b.order - a.order)
               .map((season) => (
                 <Card
                   key={season.id}
