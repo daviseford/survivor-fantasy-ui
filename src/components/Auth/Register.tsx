@@ -34,10 +34,7 @@ export const Register = () => {
         password,
       );
 
-      // Signed in
       const _user = userCredential.user;
-
-      console.log({ _user });
 
       if (displayName && auth.currentUser) {
         await updateProfile(auth.currentUser, { displayName });
@@ -57,13 +54,9 @@ export const Register = () => {
       window.location.reload();
       // ...
     } catch (error) {
-      // @ts-expect-error asdas
-      const errorCode = error.code;
-      // @ts-expect-error asdasd
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
-      setError(errorMessage);
-      // ..
+      setError(
+        error instanceof Error ? error.message : "Registration failed",
+      );
     }
   };
 

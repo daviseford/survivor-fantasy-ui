@@ -1,0 +1,11 @@
+{
+  "turn": 5,
+  "agent": "claude",
+  "attempt_index": 0,
+  "phase": "implement",
+  "elapsed_ms": 900641,
+  "exit_code": 1,
+  "timed_out": true,
+  "cmd": "claude",
+  "cwd": "D:\\Projects\\survivor-fantasy-ui\\.def\\worktrees\\02429619-9af3-470f-b4e6-f8461ac4eef7"
+}

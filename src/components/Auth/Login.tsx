@@ -23,17 +23,11 @@ export const Login = () => {
     setError("");
 
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
+      .then(() => {
         modals.closeAll();
-        console.log(user);
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        setError(errorMessage);
+        setError(error.message);
       });
   };
 

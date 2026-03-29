@@ -12,14 +12,8 @@ export const useUser = () => {
     // https://console.firebase.google.com/project/survivor-fantasy-51c4b/authentication/users
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        console.log({ user });
-
         setUser(user);
       } else {
-        // User is signed out
-        console.log("user is logged out");
         setUser(undefined);
       }
     });

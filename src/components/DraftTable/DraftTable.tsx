@@ -19,7 +19,7 @@ export const DraftTable = ({
           <Table.Tr key={x.player_name + "draft_table"}>
             <Table.Td>
               <Group gap="sm">
-                <Avatar size={40} src={player!.img} radius={40} />
+                <Avatar size={40} src={player!.img} radius={40} alt={x.player_name} />
 
                 <Text fz="sm" fw={500}>
                   {x.player_name}
