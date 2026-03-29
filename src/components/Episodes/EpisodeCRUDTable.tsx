@@ -1,14 +1,17 @@
 import {
   ActionIcon,
   Badge,
+  Checkbox,
   Code,
   Group,
   Table,
   TableScrollContainer,
+  TextInput,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { IconTrash } from "@tabler/icons-react";
+import { IconCheck, IconPencil, IconTrash, IconX } from "@tabler/icons-react";
 import { doc, updateDoc } from "firebase/firestore";
+import { useState } from "react";
 import { db } from "../../firebase";
 import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
@@ -17,6 +20,8 @@ import { Episode } from "../../types";
 export const EpisodeCRUDTable = () => {
   const { data: season } = useSeason();
   const { slimUser } = useUser();
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValues, setEditValues] = useState<Episode | null>(null);
 
   const handleDelete = async (episode: Episode) => {
     if (!slimUser?.isAdmin || !season) return;
@@ -33,30 +38,136 @@ export const EpisodeCRUDTable = () => {
     });
   };
 
+  const startEdit = (episode: Episode) => {
+    setEditingId(episode.id);
+    setEditValues({ ...episode });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditValues(null);
+  };
+
+  const saveEdit = async () => {
+    if (!season || !editValues) return;
+
+    const ref = doc(db, "seasons", season.id);
+    const updated = season.episodes.map((e) =>
+      e.id === editValues.id ? editValues : e,
+    );
+    await updateDoc(ref, { episodes: updated });
+    setEditingId(null);
+    setEditValues(null);
+  };
+
   const episodes = [...(season?.episodes ?? [])].sort(
     (a, b) => a.order - b.order,
   );
 
-  const rows = episodes.map((e) => (
-    <Table.Tr key={e.id}>
-      <Table.Td>{e.order}</Table.Td>
-      <Table.Td>{e.name || "-"}</Table.Td>
-      <Table.Td>
-        <Group gap="xs">
-          {e.merge_occurs && <Badge size="xs" color="orange">Merge</Badge>}
-          {e.post_merge && <Badge size="xs" color="blue">Post-merge</Badge>}
-          {e.finale && <Badge size="xs" color="red">Finale</Badge>}
-        </Group>
-      </Table.Td>
-      {slimUser?.isAdmin && (
+  const rows = episodes.map((e) => {
+    const isEditing = editingId === e.id;
+
+    if (isEditing && editValues) {
+      return (
+        <Table.Tr key={e.id}>
+          <Table.Td>{e.order}</Table.Td>
+          <Table.Td>
+            <TextInput
+              size="xs"
+              value={editValues.name}
+              onChange={(ev) =>
+                setEditValues({ ...editValues, name: ev.target.value })
+              }
+            />
+          </Table.Td>
+          <Table.Td>
+            <Group gap="xs">
+              <Checkbox
+                size="xs"
+                label="Merge"
+                checked={editValues.merge_occurs}
+                onChange={(ev) =>
+                  setEditValues({
+                    ...editValues,
+                    merge_occurs: ev.target.checked,
+                  })
+                }
+              />
+              <Checkbox
+                size="xs"
+                label="Post-merge"
+                checked={editValues.post_merge}
+                onChange={(ev) =>
+                  setEditValues({
+                    ...editValues,
+                    post_merge: ev.target.checked,
+                  })
+                }
+              />
+              <Checkbox
+                size="xs"
+                label="Finale"
+                checked={editValues.finale}
+                onChange={(ev) =>
+                  setEditValues({ ...editValues, finale: ev.target.checked })
+                }
+              />
+            </Group>
+          </Table.Td>
+          {slimUser?.isAdmin && (
+            <Table.Td>
+              <Group gap="xs">
+                <ActionIcon color="green" onClick={saveEdit}>
+                  <IconCheck />
+                </ActionIcon>
+                <ActionIcon color="gray" onClick={cancelEdit}>
+                  <IconX />
+                </ActionIcon>
+              </Group>
+            </Table.Td>
+          )}
+        </Table.Tr>
+      );
+    }
+
+    return (
+      <Table.Tr key={e.id}>
+        <Table.Td>{e.order}</Table.Td>
+        <Table.Td>{e.name || "-"}</Table.Td>
         <Table.Td>
-          <ActionIcon color="red" onClick={() => handleDelete(e)}>
-            <IconTrash />
-          </ActionIcon>
+          <Group gap="xs">
+            {e.merge_occurs && (
+              <Badge size="xs" color="orange">
+                Merge
+              </Badge>
+            )}
+            {e.post_merge && (
+              <Badge size="xs" color="blue">
+                Post-merge
+              </Badge>
+            )}
+            {e.finale && (
+              <Badge size="xs" color="red">
+                Finale
+              </Badge>
+            )}
+          </Group>
         </Table.Td>
-      )}
-    </Table.Tr>
-  ));
+        {slimUser?.isAdmin && (
+          <Table.Td>
+            <Group gap="xs">
+              <ActionIcon color="blue" onClick={() => startEdit(e)}>
+                <IconPencil />
+              </ActionIcon>
+              <ActionIcon color="red" onClick={() => handleDelete(e)}>
+                <IconTrash />
+              </ActionIcon>
+            </Group>
+          </Table.Td>
+        )}
+      </Table.Tr>
+    );
+  });
 
   return (
     <TableScrollContainer minWidth={300}>
@@ -66,7 +177,7 @@ export const EpisodeCRUDTable = () => {
             <Table.Th>Episode #</Table.Th>
             <Table.Th>Name</Table.Th>
             <Table.Th>Flags</Table.Th>
-            {slimUser?.isAdmin && <Table.Th>Delete</Table.Th>}
+            {slimUser?.isAdmin && <Table.Th>Actions</Table.Th>}
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
