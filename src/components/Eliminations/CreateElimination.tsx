@@ -14,14 +14,14 @@ import {
   Title,
 } from "@mantine/core";
 import { hasLength, useForm } from "@mantine/form";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { last, orderBy } from "lodash-es";
 import { useEffect } from "react";
 import { v4 } from "uuid";
 import { db } from "../../firebase";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
-import { Elimination, EliminationVariants } from "../../types";
+import { Elimination, EliminationVariants, TeamAssignments } from "../../types";
 
 const dropdownOptions = EliminationVariants.slice().reverse();
 
@@ -97,8 +97,39 @@ export const CreateElimination = () => {
 
     await setDoc(ref, { [values.id]: values }, { merge: true });
 
+    // Remove eliminated player from team assignments for this episode onward
+    await removePlayerFromTeams(
+      season!.id,
+      values.player_name,
+      values.episode_num,
+    );
+
     // reset id and important form values
     form.setValues({ id: `elimination_${v4()}` });
+  };
+
+  const removePlayerFromTeams = async (
+    seasonId: string,
+    playerName: string,
+    fromEpisode: number,
+  ) => {
+    const assignmentsRef = doc(db, "team_assignments", seasonId);
+    const snap = await getDoc(assignmentsRef);
+    if (!snap.exists()) return;
+
+    const allAssignments = snap.data() as TeamAssignments;
+    let changed = false;
+
+    for (const [epNum, snapshot] of Object.entries(allAssignments)) {
+      if (Number(epNum) >= fromEpisode && snapshot[playerName] !== undefined) {
+        snapshot[playerName] = null;
+        changed = true;
+      }
+    }
+
+    if (changed) {
+      await setDoc(assignmentsRef, allAssignments);
+    }
   };
 
   const eliminatedPlayers = Object.values(eliminations).map(
