@@ -6,7 +6,7 @@ import { Season } from "../types";
 export const useSeasons = () => {
   const ref = collection(db, "seasons");
 
-  return useFirestoreQueryData<Season[], Season[]>(
+  return useFirestoreQueryData<Season, Season[]>(
     ["seasons"],
     // @ts-expect-error react-query-firebase type mismatch with Firestore ref
     ref,
