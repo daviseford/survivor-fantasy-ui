@@ -132,3 +132,9 @@ package-lock.json
 # firebase
 .firebase/
 *.cache
+
+# DEF sessions
+.def/
+
+# MCP config
+.mcp.json
