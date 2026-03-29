@@ -27,7 +27,7 @@ export const SingleSeason = () => {
 
   const handleManageSeason = async () => {
     if (!slimUser?.isAdmin) return;
-    navigate(`/seasons/${season?.id}/manage`);
+    navigate(`/admin/${season?.id}`);
   };
 
   if (isLoading)
