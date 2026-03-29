@@ -10,7 +10,7 @@ import {
   CreateElimination,
   EliminationCRUDTable,
 } from "../components/Eliminations";
-import { CreateEpisode } from "../components/Episodes";
+import { CreateEpisode, EpisodeCRUDTable } from "../components/Episodes";
 import { CreateGameEvent, GameEventsCRUDTable } from "../components/GameEvents";
 import { useUser } from "../hooks/useUser";
 
@@ -57,6 +57,7 @@ export const SeasonAdmin = () => {
         <Tabs.Panel value="episodes" pt={"lg"}>
           <Stack gap={"xl"}>
             <CreateEpisode />
+            <EpisodeCRUDTable />
           </Stack>
         </Tabs.Panel>
 
