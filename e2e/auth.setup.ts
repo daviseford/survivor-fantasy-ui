@@ -1,7 +1,10 @@
 import { expect, test as setup } from "@playwright/test";
 import dotenv from "dotenv";
 
-dotenv.config();
+// Use override: true so .env values take precedence over system env vars.
+// On Windows, USERNAME is a built-in system variable (the Windows login name),
+// which would shadow the email address in .env without override.
+dotenv.config({ override: true });
 
 setup("authenticate as admin", async ({ page }) => {
   const username = process.env.USERNAME;
