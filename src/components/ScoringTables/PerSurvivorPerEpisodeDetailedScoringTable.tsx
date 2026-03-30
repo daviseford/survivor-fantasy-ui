@@ -154,9 +154,6 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
       (playerElimination.variant === "medical" ||
         playerElimination.variant === "quitter");
 
-    const isFTCEliminated =
-      playerElimination && playerElimination.variant === "final_tribal_council";
-
     const isWinner = Object.values(events).some(
       (x) => x.player_name === playerName && x.action === "win_survivor",
     );
@@ -198,27 +195,6 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
 
         <Table.Td>
           {getNumberWithOrdinal(draftOrder)}
-          {playerElimination && (
-            <>
-              {" · "}
-              <Badge
-                size="xs"
-                color={
-                  isFTCEliminated
-                    ? "blue"
-                    : isRemovedFromGame
-                      ? "red"
-                      : "gray"
-                }
-              >
-                {isFTCEliminated
-                  ? "FTC"
-                  : isRemovedFromGame
-                    ? "Removed"
-                    : `Out ${getNumberWithOrdinal(playerElimination.order)}`}
-              </Badge>
-            </>
-          )}
         </Table.Td>
 
         {episodeScores.map((s, idx) => (
@@ -266,6 +242,16 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
             </Stack>
           </Table.Td>
         ))}
+        <Table.Td>
+          {playerElimination && (
+            <Badge
+              size="xs"
+              color={isRemovedFromGame ? "red" : "gray"}
+            >
+              {isRemovedFromGame ? "Removed" : `Out ${getNumberWithOrdinal(playerElimination.order)}`}
+            </Badge>
+          )}
+        </Table.Td>
       </Table.Tr>
     );
   });
@@ -348,6 +334,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
               {season?.episodes.map((x) => (
                 <Table.Th key={x.id}>Ep {x.order}</Table.Th>
               ))}
+              <Table.Th>Status</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>
