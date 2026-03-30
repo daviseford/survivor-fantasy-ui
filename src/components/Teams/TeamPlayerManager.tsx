@@ -101,11 +101,11 @@ const DroppableColumn = ({
       padding="sm"
       style={{
         borderColor: isOver
-          ? "var(--mantine-color-blue-5)"
+          ? "var(--mantine-color-blue-light-color)"
           : color ?? undefined,
         borderWidth: color ? 2 : 1,
         minHeight: 120,
-        backgroundColor: isOver ? "var(--mantine-color-blue-0)" : undefined,
+        backgroundColor: isOver ? "var(--mantine-color-blue-light)" : undefined,
       }}
     >
       <Group gap="xs" mb="sm">

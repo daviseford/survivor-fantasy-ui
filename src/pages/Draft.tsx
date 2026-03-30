@@ -446,12 +446,12 @@ export const DraftComponent = () => {
                     style={{
                       backgroundColor:
                         draft.current_picker.uid === slimUser?.uid
-                          ? "var(--mantine-color-blue-0)"
-                          : "var(--mantine-color-gray-0)",
+                          ? "var(--mantine-color-blue-light)"
+                          : "var(--mantine-color-gray-light)",
                       border:
                         draft.current_picker.uid === slimUser?.uid
-                          ? "2px solid var(--mantine-color-blue-4)"
-                          : "1px solid var(--mantine-color-gray-3)",
+                          ? "2px solid var(--mantine-color-blue-light-color)"
+                          : "1px solid var(--mantine-color-default-border)",
                     }}
                   >
                     <Group justify="space-between" align="center" wrap="wrap">
@@ -461,7 +461,7 @@ export const DraftComponent = () => {
                           color={
                             draft.current_picker.uid === slimUser?.uid
                               ? "var(--mantine-color-blue-6)"
-                              : "var(--mantine-color-gray-5)"
+                              : "var(--mantine-color-dimmed)"
                           }
                         />
                         <Title

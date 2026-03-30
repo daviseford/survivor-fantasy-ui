@@ -178,11 +178,11 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
 
     const trStyle = {
       backgroundColor: isWinner
-        ? "var(--mantine-color-green-0)"
+        ? "var(--mantine-color-green-light)"
         : playerElimination
-          ? "var(--mantine-color-gray-1)"
+          ? "var(--mantine-color-gray-light)"
           : isDraftedByCurrentUser
-            ? "var(--mantine-color-blue-0)"
+            ? "var(--mantine-color-blue-light)"
             : "",
     };
     const avatarStyle = playerElimination ? { filter: "grayscale(1)" } : {};
@@ -304,9 +304,9 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
             w={12}
             h={12}
             style={{
-              backgroundColor: "var(--mantine-color-green-0)",
+              backgroundColor: "var(--mantine-color-green-light)",
               borderRadius: 2,
-              border: "1px solid var(--mantine-color-green-3)",
+              border: "1px solid var(--mantine-color-green-light-color)",
             }}
           />
           <Text size="xs" c="dimmed">
@@ -318,9 +318,9 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
             w={12}
             h={12}
             style={{
-              backgroundColor: "var(--mantine-color-gray-1)",
+              backgroundColor: "var(--mantine-color-gray-light)",
               borderRadius: 2,
-              border: "1px solid var(--mantine-color-gray-3)",
+              border: "1px solid var(--mantine-color-default-border)",
             }}
           />
           <Text size="xs" c="dimmed">

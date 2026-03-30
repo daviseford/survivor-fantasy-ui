@@ -53,7 +53,7 @@ export const AppRoutes = () => {
   const [opened, { toggle, close }] = useDisclosure();
 
   return (
-    <MantineProvider theme={theme}>
+    <MantineProvider theme={theme} defaultColorScheme="auto">
       <Notifications />
       <Router>
         <ModalsProvider modals={modals}>

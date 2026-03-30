@@ -22,9 +22,9 @@ export const PerUserPerEpisodeScoringTable = () => {
     const isLeader = i === 0;
 
     const bgColor = isLeader
-      ? "var(--mantine-color-yellow-0)"
+      ? "var(--mantine-color-yellow-light)"
       : isCurrentUser
-        ? "var(--mantine-color-blue-0)"
+        ? "var(--mantine-color-blue-light)"
         : undefined;
 
     return (

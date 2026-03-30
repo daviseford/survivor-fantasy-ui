@@ -1,4 +1,8 @@
-import { Text } from "@mantine/core";
+import {
+  Text,
+  useComputedColorScheme,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { modals } from "@mantine/modals";
 import {
   IconHome,
@@ -7,7 +11,9 @@ import {
   IconLogin,
   IconLogout,
   IconMail,
+  IconMoon,
   IconSettings,
+  IconSun,
   IconUser,
 } from "@tabler/icons-react";
 import { Link, useLocation } from "react-router-dom";
@@ -52,6 +58,10 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
     );
   });
 
+  const { toggleColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme("light");
+  const isDark = computedColorScheme === "dark";
+
   const handleLogout = () => {
     auth.signOut();
   };
@@ -61,6 +71,19 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
       <div className={classes.navbarMain}>{links}</div>
 
       <div className={classes.footer}>
+        <button
+          className={classes.link}
+          onClick={toggleColorScheme}
+          aria-label="Toggle color scheme"
+        >
+          {isDark ? (
+            <IconSun className={classes.linkIcon} stroke={1.5} />
+          ) : (
+            <IconMoon className={classes.linkIcon} stroke={1.5} />
+          )}
+          <span>{isDark ? "Light mode" : "Dark mode"}</span>
+        </button>
+
         {!slimUser && (
           <button
             className={classes.link}

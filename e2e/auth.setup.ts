@@ -1,7 +1,10 @@
 import { expect, test as setup } from "@playwright/test";
 import dotenv from "dotenv";
 
-dotenv.config();
+// Use override: true so .env values take precedence over system env vars.
+// On Windows, USERNAME is a built-in system variable (the Windows login name),
+// which would shadow the email address in .env without override.
+dotenv.config({ override: true });
 
 setup("authenticate as admin", async ({ page }) => {
   const username = process.env.USERNAME;
@@ -21,13 +24,8 @@ setup("authenticate as admin", async ({ page }) => {
   // Click the Login button in the navbar to open the AuthModal
   await page.locator("nav button", { hasText: "Login" }).click();
 
-  // Wait for the modal to be visible
-  await page.waitForSelector(
-    'input[label="Email"], input[placeholder="hello@gmail.com"]',
-    {
-      timeout: 10_000,
-    },
-  );
+  // Wait for the modal's email input to be visible
+  await page.getByPlaceholder("hello@gmail.com").waitFor({ timeout: 10_000 });
 
   // Fill in the login form
   await page.getByPlaceholder("hello@gmail.com").fill(username);
