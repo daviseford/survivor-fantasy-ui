@@ -21,18 +21,8 @@
   width: rem(18px);
   height: rem(18px);
   opacity: 0.5;
-
-  @media (prefers-color-scheme: dark) {
-    filter: invert(1);
-  }
 }
 
 :global([data-mantine-color-scheme="dark"]) .icon {
   filter: invert(1);
-}
-
-.hideOnMobile {
-  @media (max-width: $mantine-breakpoint-sm) {
-    display: none;
-  }
 }

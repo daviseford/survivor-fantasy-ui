@@ -1,5 +1,4 @@
 import { Anchor, Container, Group, Text } from "@mantine/core";
-import { useLocation } from "react-router-dom";
 
 import classes from "./Footer.module.css";
 
@@ -12,11 +11,8 @@ const links = [
 ];
 
 export const Footer = () => {
-  const { pathname } = useLocation();
-  const isHome = pathname === "/";
-
   return (
-    <div className={`${classes.footer} ${!isHome ? classes.hideOnMobile : ""}`}>
+    <div className={classes.footer}>
       <Container className={classes.inner}>
         <Group gap="xs" wrap="nowrap">
           <img src="/icons/probst.svg" alt="" className={classes.icon} />

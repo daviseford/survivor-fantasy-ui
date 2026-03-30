@@ -10,11 +10,12 @@ import { ALL_ROUTES } from "./helpers";
  */
 for (const route of ALL_ROUTES) {
   test(`screenshot ${route.name} (${route.path})`, async ({ page }) => {
-    await page.goto(route.path);
-    await page.waitForLoadState("networkidle");
+    // Use domcontentloaded instead of networkidle because Firebase
+    // onSnapshot listeners keep the network permanently active
+    await page.goto(route.path, { waitUntil: "domcontentloaded" });
 
-    // Give Mantine transitions and lazy-loaded data a moment to settle
-    await page.waitForTimeout(2_000);
+    // Let Firebase data load and Mantine transitions settle
+    await page.waitForTimeout(3_000);
 
     // Verify the page loaded (didn't get a blank white screen)
     await expect(page.locator("body")).not.toBeEmpty();

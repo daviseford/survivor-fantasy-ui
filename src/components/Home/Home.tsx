@@ -1,16 +1,14 @@
-import { Button, Container, Group, Text } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
-import { IconBrandGithub, IconFlame } from "@tabler/icons-react";
+import { Button, Container, Group, Text, Title } from "@mantine/core";
+import { IconFlame } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import classes from "./Home.module.css";
 
 export const Home = () => {
   const navigate = useNavigate();
-  const isMobile = useMediaQuery("(max-width: 48em)");
   return (
     <div className={classes.wrapper}>
       <Container size={700} className={classes.inner}>
-        <h1 className={classes.title}>
+        <Title order={1} className={classes.title}>
           Live out your{" "}
           <Text
             component="span"
@@ -21,7 +19,7 @@ export const Home = () => {
             Survivor Fantasy
           </Text>{" "}
           from your couch
-        </h1>
+        </Title>
 
         <Text className={classes.description} c="dimmed">
           Draft your dream team of Survivor contestants and compete with friends
@@ -35,21 +33,9 @@ export const Home = () => {
             variant="gradient"
             gradient={{ from: "blue", to: "cyan" }}
             onClick={() => navigate("/seasons")}
-            leftSection={!isMobile ? <IconFlame size={22} /> : undefined}
+            leftSection={<IconFlame size={22} />}
           >
-            Get started
-          </Button>
-
-          <Button
-            component="a"
-            href="https://github.com/daviseford/survivor-fantasy-ui/"
-            target="_blank"
-            size="xl"
-            variant="default"
-            className={classes.control}
-            leftSection={<IconBrandGithub size={20} />}
-          >
-            GitHub
+            Pick your players
           </Button>
         </Group>
       </Container>

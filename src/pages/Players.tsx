@@ -24,7 +24,7 @@ const PlayerCard = (props: Player) => {
       shadow="sm"
       p="md"
       bg="var(--mantine-color-body)"
-      style={{ textAlign: "center" }}
+      ta="center"
     >
       <Avatar
         src={props.img}
@@ -32,6 +32,7 @@ const PlayerCard = (props: Player) => {
         radius={100}
         mx="auto"
         alt={props.name}
+        imageProps={{ loading: "lazy" }}
       />
       <Text ta="center" fw={600} mt="sm" size="sm">
         {props.name}

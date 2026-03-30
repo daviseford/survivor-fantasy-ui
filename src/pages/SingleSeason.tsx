@@ -49,7 +49,7 @@ export const SingleSeason = () => {
           </Group>
           <Title order={2}>{season.name}</Title>
           <Text c="dimmed" size="sm">
-            Browse contestants and start a draft with friends.
+            Check out the cast and start drafting with your crew.
           </Text>
         </div>
 
