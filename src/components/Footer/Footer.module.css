@@ -16,6 +16,12 @@
   }
 }
 
+.hideOnMobile {
+  @media (max-width: $mantine-breakpoint-sm) {
+    display: none;
+  }
+}
+
 .links {
   @media (max-width: $mantine-breakpoint-xs) {
     margin-top: var(--mantine-spacing-md);
