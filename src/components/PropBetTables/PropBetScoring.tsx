@@ -15,15 +15,20 @@ const AnswerTd = ({
 }) => {
   return (
     <Table.Td>
-      <Group gap={"md"}>
+      <Group gap="sm">
         <Text
+          size="sm"
           c={!score.correct ? "dimmed" : ""}
-          fw={score.correct ? "bolder" : ""}
+          fw={score.correct ? 600 : 400}
           td={strikethrough ? "line-through" : ""}
         >
           {score.answer}
         </Text>
-        {score.correct && <Badge color="green">+{score.points_awarded}</Badge>}
+        {score.correct && (
+          <Badge variant="light" color="green" size="sm">
+            +{score.points_awarded}
+          </Badge>
+        )}
       </Group>
     </Table.Td>
   );
@@ -100,7 +105,7 @@ export const PropBetScoring = () => {
 
   return (
     <TableScrollContainer minWidth={300}>
-      <Table>
+      <Table highlightOnHover verticalSpacing="sm">
         <Table.Thead>
           <Table.Tr>
             <Table.Th></Table.Th>

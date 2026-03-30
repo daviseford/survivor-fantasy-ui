@@ -1,6 +1,7 @@
 import {
+  Badge,
   Card,
-  Center,
+  Group,
   SimpleGrid,
   Stack,
   StyleProp,
@@ -43,28 +44,39 @@ export const PlayerGroupGrid = () => {
         const numEliminated = userSurvivors.filter((s) =>
           eliminatedSurvivors.includes(s.name),
         ).length;
+        const numActive = numDrafted - numEliminated;
 
         const areAllEliminated = numEliminated === numDrafted;
-        const isOne = numDrafted - numEliminated === 1;
 
         return (
-          <Card shadow="sm" p="sm" key={x.uid}>
-            <Center>
-              <Stack gap={4}>
-                <Title order={4} ta="center">
-                  {x.displayName}
-                </Title>
-                <Text
-                  c={areAllEliminated ? "dimmed" : undefined}
-                  size="xs"
-                  ta="center"
+          <Card
+            shadow="sm"
+            padding="md"
+            radius="md"
+            withBorder
+            key={x.uid}
+            style={{
+              opacity: areAllEliminated ? 0.6 : 1,
+            }}
+          >
+            <Stack gap="xs">
+              <Group justify="space-between" align="center">
+                <Title order={4}>{x.displayName}</Title>
+                <Badge
+                  variant="light"
+                  color={areAllEliminated ? "red" : "green"}
+                  size="sm"
                 >
-                  {numDrafted - numEliminated}{" "}
-                  {isOne ? "active player" : "active players"}
-                </Text>
-                <PlayerGroup uid={x.uid} />
-              </Stack>
-            </Center>
+                  {numActive} active
+                </Badge>
+              </Group>
+
+              <Text size="xs" c="dimmed">
+                {numDrafted} drafted · {numEliminated} eliminated
+              </Text>
+
+              <PlayerGroup uid={x.uid} />
+            </Stack>
           </Card>
         );
       })}

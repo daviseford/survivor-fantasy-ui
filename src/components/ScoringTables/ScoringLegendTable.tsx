@@ -1,23 +1,41 @@
-import { Table } from "@mantine/core";
+import { Badge, Table, Text } from "@mantine/core";
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
 
 export const ScoringLegendTable = () => {
   const rows = BASE_PLAYER_SCORING.map((x) => (
     <Table.Tr key={x.action}>
-      <Table.Td>{x.action}</Table.Td>
-      <Table.Td>{x.description}</Table.Td>
-      <Table.Td>{x.fixed_value}</Table.Td>
+      <Table.Td>
+        <Badge variant="light" color="gray" size="sm">
+          {x.action.replace(/_/g, " ")}
+        </Badge>
+      </Table.Td>
+      <Table.Td>
+        <Text size="sm">{x.description}</Text>
+      </Table.Td>
+      <Table.Td ta="center">
+        <Text
+          span
+          fw={600}
+          size="sm"
+          c={(x.fixed_value ?? 0) > 0 ? "teal" : "red"}
+        >
+          {(x.fixed_value ?? 0) > 0 ? "+" : ""}
+          {x.fixed_value ?? 0}
+        </Text>
+      </Table.Td>
     </Table.Tr>
   ));
 
   return (
     <Table.ScrollContainer minWidth={300}>
-      <Table>
+      <Table verticalSpacing="xs" highlightOnHover>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Action</Table.Th>
             <Table.Th>Description</Table.Th>
-            <Table.Th>Fixed Value</Table.Th>
+            <Table.Th ta="center" w={80}>
+              Points
+            </Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
