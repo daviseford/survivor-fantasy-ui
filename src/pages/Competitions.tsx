@@ -108,8 +108,7 @@ export const Competitions = () => {
       role="link"
       tabIndex={0}
       onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
+        if (e.key === "Enter") {
           navigate(`/competitions/${x.id}`);
         }
       }}

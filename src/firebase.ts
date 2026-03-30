@@ -3,7 +3,8 @@ import { getAnalytics } from "firebase/analytics";
 import { FirebaseOptions, initializeApp } from "firebase/app";
 import {
   browserLocalPersistence,
-  initializeAuth,
+  getAuth,
+  setPersistence,
 } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 import { getFirestore } from "firebase/firestore";
@@ -33,9 +34,8 @@ export const analytics = getAnalytics(app);
 
 // Initialize Firebase Authentication and get a reference to the service
 // Use localStorage persistence so Playwright storageState can capture auth tokens
-export const auth = initializeAuth(app, {
-  persistence: browserLocalPersistence,
-});
+export const auth = getAuth(app);
+setPersistence(auth, browserLocalPersistence);
 
 // Initialize Cloud Firestore and get a reference to the service
 export const db = getFirestore(app);
