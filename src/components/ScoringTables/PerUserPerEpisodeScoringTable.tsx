@@ -15,22 +15,26 @@ export const PerUserPerEpisodeScoringTable = () => {
     .sort((a, b) => b[1].total - a[1].total) // sort by highest
     .map(([uid, values], i) => {
       const user = competition?.participants.find((x) => x.uid === uid);
+      const isCurrentUser = uid === slimUser?.uid;
+      const isLeader = i === 0;
 
       return (
         <Table.Tr
           key={uid}
           style={
-            uid === slimUser?.uid
+            isCurrentUser
               ? { backgroundColor: "var(--mantine-color-blue-light)" }
               : undefined
           }
         >
-          <Table.Td>{i + 1}</Table.Td>
-          <Table.Td>{user?.displayName || user?.email}</Table.Td>
-          <Table.Td>{values.total}</Table.Td>
+          <Table.Td fw={isLeader ? 700 : undefined}>{i + 1}</Table.Td>
+          <Table.Td fw={isLeader ? 600 : undefined}>
+            {user?.displayName || user?.email}
+          </Table.Td>
+          <Table.Td fw={700}>{values.total}</Table.Td>
 
-          {values.episodePoints.map((x) => (
-            <Table.Td>{x}</Table.Td>
+          {values.episodePoints.map((x, idx) => (
+            <Table.Td key={idx}>{x}</Table.Td>
           ))}
 
           {competition?.prop_bets && (
@@ -42,14 +46,18 @@ export const PerUserPerEpisodeScoringTable = () => {
 
   return (
     <Table.ScrollContainer minWidth={300}>
-      <Table withColumnBorders>
+      <Table withColumnBorders style={{ width: "auto" }}>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>Rank</Table.Th>
+            <Table.Th w={50}>Rank</Table.Th>
             <Table.Th>User Name</Table.Th>
-            <Table.Th>Points</Table.Th>
-            {season?.episodes.map((x) => <Table.Th>Ep. {x.order}</Table.Th>)}
-            {competition?.prop_bets && <Table.Th>Prop Bet Points</Table.Th>}
+            <Table.Th w={70}>Points</Table.Th>
+            {season?.episodes.map((x) => (
+              <Table.Th key={x.id} w={60}>
+                Ep. {x.order}
+              </Table.Th>
+            ))}
+            {competition?.prop_bets && <Table.Th w={80}>Props</Table.Th>}
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>

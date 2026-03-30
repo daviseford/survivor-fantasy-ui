@@ -17,6 +17,7 @@ import { useEliminations } from "../../hooks/useEliminations";
 import { useEvents } from "../../hooks/useEvents";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
+import { useUser } from "../../hooks/useUser";
 import { PlayerAction } from "../../types";
 import { getNumberWithOrdinal } from "../../utils/misc";
 
@@ -58,6 +59,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
   const { data: season } = useSeason(competition?.season_id);
   const { data: eliminations } = useEliminations(competition?.season_id);
   const { data: events } = useEvents(season?.id);
+  const { slimUser } = useUser();
 
   const { survivorPointsByEpisode, survivorPointsTotalSeason } =
     useScoringCalculations();
@@ -158,12 +160,16 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
       (x) => x.player_name === playerName && x.action === "win_survivor",
     );
 
+    const isDraftedByCurrentUser = draftPick?.user_uid === slimUser?.uid;
+
     const trStyle = {
       backgroundColor: playerElimination
         ? "var(--mantine-color-gray-2)"
         : isWinner
           ? "var(--mantine-color-green-1)"
-          : "",
+          : isDraftedByCurrentUser
+            ? "var(--mantine-color-blue-0)"
+            : "",
     };
     const avatarStyle = playerElimination ? { filter: "grayscale(1)" } : {};
 
@@ -328,6 +334,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                 sortField={sortField}
                 sortDir={sortDir}
                 onSort={handleSort}
+                width="70px"
               />
               <SortableHeader
                 label="Pick"
@@ -335,11 +342,14 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                 sortField={sortField}
                 sortDir={sortDir}
                 onSort={handleSort}
+                width="60px"
               />
               {season?.episodes.map((x) => (
-                <Table.Th key={x.id}>Ep {x.order}</Table.Th>
+                <Table.Th key={x.id} w={120}>
+                  Ep {x.order}
+                </Table.Th>
               ))}
-              <Table.Th>Status</Table.Th>
+              <Table.Th w={80}>Status</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>

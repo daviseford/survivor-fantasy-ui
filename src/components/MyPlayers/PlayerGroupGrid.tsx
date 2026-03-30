@@ -48,15 +48,15 @@ export const PlayerGroupGrid = () => {
         const isOne = numDrafted - numEliminated === 1;
 
         return (
-          <Card shadow="md">
+          <Card shadow="sm" p="sm" key={x.uid}>
             <Center>
-              <Stack gap={"xs"}>
+              <Stack gap={4}>
                 <Title order={4} ta="center">
                   {x.displayName}
                 </Title>
                 <Text
                   c={areAllEliminated ? "dimmed" : undefined}
-                  size="sm"
+                  size="xs"
                   ta="center"
                 >
                   {numDrafted - numEliminated}{" "}
