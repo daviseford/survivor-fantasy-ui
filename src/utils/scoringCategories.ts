@@ -65,7 +65,7 @@ export const CategoryLabels: Record<ScoringCategory, string> = {
   combined: "Immunity + Reward",
   idolsAndAdvantages: "Idols & Advantages",
   milestones: "Milestones",
-  eliminations: "Eliminations",
+  eliminations: "Elimination",
   other: "Other",
 };
 
