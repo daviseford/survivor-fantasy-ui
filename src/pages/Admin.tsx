@@ -198,18 +198,6 @@ export const Admin = () => {
               >
                 Upload Season 50 Data
               </Button>
-              <Button
-                onClick={() =>
-                  upload("Season 99", async () => {
-                    await setDoc(
-                      doc(db, "seasons", "season_99"),
-                      SEASONS.season_99,
-                    );
-                  })
-                }
-              >
-                Upload Season 99 Data
-              </Button>
             </SimpleGrid>
           </Accordion.Panel>
         </Accordion.Item>
