@@ -47,7 +47,7 @@ export const PerUserPerEpisodeScoringTable = () => {
           <Table.Tr>
             <Table.Th>Rank</Table.Th>
             <Table.Th>User Name</Table.Th>
-            <Table.Th>Total</Table.Th>
+            <Table.Th>Points</Table.Th>
             {season?.episodes.map((x) => <Table.Th>Ep. {x.order}</Table.Th>)}
             {competition?.prop_bets && <Table.Th>Prop Bet Points</Table.Th>}
           </Table.Tr>
