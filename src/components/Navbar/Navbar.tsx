@@ -78,15 +78,19 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
 
         {slimUser && (
           <>
-            <Text className={classes.userInfo} size="sm">
+            <div className={classes.userInfo}>
               <IconUser className={classes.linkIcon} stroke={1.5} />
-              <span>{slimUser.displayName}</span>
-            </Text>
+              <Text size="sm" fw={500} truncate>
+                {slimUser.displayName}
+              </Text>
+            </div>
 
-            <Text className={classes.userInfo} size="sm">
+            <div className={classes.userInfo}>
               <IconMail className={classes.linkIcon} stroke={1.5} />
-              <span>{slimUser.email}</span>
-            </Text>
+              <Text size="xs" c="dimmed" truncate>
+                {slimUser.email}
+              </Text>
+            </div>
 
             <button className={classes.link} onClick={handleLogout}>
               <IconLogout className={classes.linkIcon} stroke={1.5} />

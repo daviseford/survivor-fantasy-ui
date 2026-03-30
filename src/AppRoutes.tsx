@@ -72,7 +72,7 @@ export const AppRoutes = () => {
             padding="md"
           >
             <AppShell.Header>
-              <Group>
+              <Group h="100%" px="md">
                 <Burger
                   opened={opened}
                   onClick={toggle}
@@ -85,6 +85,7 @@ export const AppRoutes = () => {
                   gradient={{ from: "blue", to: "cyan" }}
                   inherit
                   href="/"
+                  underline="never"
                 >
                   {PROJECT_NAME}
                 </Anchor>
