@@ -25,6 +25,7 @@ import {
   IconCheck,
   IconClipboardList,
   IconCopy,
+  IconCrystalBall,
   IconFlame,
   IconUserPlus,
   IconUsers,
@@ -503,14 +504,25 @@ export const DraftComponent = () => {
               label="Prop Bets"
               description="Place your predictions"
             >
-              <Box p="xl">
-                <Title order={3}>Place Your Bets</Title>
-                <Text c="dimmed" size="sm" mb="md">
-                  Predict what will happen this season. Points are awarded for
-                  correct answers at the end of the season.
-                </Text>
-                <PropBets season={season} onSubmit={addPropBetsToDraft} />
-              </Box>
+              <Paper p="lg" radius="md" withBorder mt="md">
+                <Stack gap="md">
+                  <Group gap="sm" align="center">
+                    <IconCrystalBall
+                      size={22}
+                      color="var(--mantine-color-violet-6)"
+                    />
+                    <div>
+                      <Title order={3}>Place Your Bets</Title>
+                      <Text c="dimmed" size="sm">
+                        Predict what happens this season. Earn bonus points for
+                        correct answers.
+                      </Text>
+                    </div>
+                  </Group>
+                  <Divider />
+                  <PropBets season={season} onSubmit={addPropBetsToDraft} />
+                </Stack>
+              </Paper>
             </Stepper.Step>
 
             {/* ===== STEP 2: SUMMARY ===== */}
@@ -842,7 +854,14 @@ const PropBets = ({ season, onSubmit }: PropBetsProps) => {
             {...form.getInputProps("propbet_medical_evac")}
           />
 
-          <Button type="submit">Submit Prop Bets</Button>
+          <Button
+            type="submit"
+            size="md"
+            variant="gradient"
+            gradient={{ from: "violet", to: "grape" }}
+          >
+            Submit Prop Bets
+          </Button>
         </Stack>
       </form>
     </Box>
