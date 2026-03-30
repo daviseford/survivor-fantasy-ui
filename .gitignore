@@ -139,3 +139,9 @@ package-lock.json
 # MCP config
 .mcp.json
 /docs/plans
+
+# Playwright
+e2e/screenshots/
+e2e/.auth/
+/test-results/
+/playwright-report/
