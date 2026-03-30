@@ -64,6 +64,7 @@
   "resolutions": {
     "rollup": ">=4.59.0",
     "lodash": ">=4.17.23",
+    "vite": "^5.4.21",
     "braces": ">=3.0.3",
     "flatted": ">=3.4.2",
     "js-yaml": ">=4.1.1",
