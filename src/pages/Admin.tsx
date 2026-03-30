@@ -27,7 +27,7 @@ import {
 } from "@tabler/icons-react";
 import { ref, remove } from "firebase/database";
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { SEASON_9_CHALLENGES, SEASON_9_ELIMINATIONS } from "../data/season_9";
 import { SEASONS } from "../data/seasons";
 import { db, rt_db } from "../firebase";
@@ -57,7 +57,6 @@ const upload = async (label: string, fn: () => Promise<void>) => {
 
 export const Admin = () => {
   const { slimUser } = useUser();
-  const navigate = useNavigate();
 
   const { data: seasons, isLoading } = useSeasons();
   const { data: competitions } = useCompetitions();
@@ -93,9 +92,7 @@ export const Admin = () => {
   if (!slimUser?.isAdmin) {
     return (
       <Center py="xl">
-        <Text c="red" fw={500}>
-          Unauthorized
-        </Text>
+        <Text c="dimmed">You need admin access to view this page.</Text>
       </Center>
     );
   }
@@ -127,31 +124,29 @@ export const Admin = () => {
               .sort((a, b) => b.order - a.order)
               .map((season) => (
                 <Card
+                  component={Link}
+                  to={`/admin/${season.id}`}
                   key={season.id}
                   shadow="sm"
                   padding="lg"
                   radius="md"
                   withBorder
-                  style={{ cursor: "pointer" }}
-                  onClick={() => navigate(`/admin/${season.id}`)}
                 >
                   {season.img && (
                     <Card.Section pos="relative">
                       <Image
                         src={season.img}
                         height={100}
-                        alt={season.name}
+                        alt=""
                         fit="cover"
                       />
                       <Badge
                         color="dark"
                         variant="filled"
                         size="sm"
-                        style={{
-                          position: "absolute",
-                          top: 12,
-                          right: 12,
-                        }}
+                        pos="absolute"
+                        top={12}
+                        right={12}
                       >
                         S{season.order}
                       </Badge>
@@ -221,6 +216,7 @@ export const Admin = () => {
                       <ActionIcon
                         color="red"
                         onClick={() => handleDeleteCompetition(c)}
+                        aria-label={`Delete ${c.competition_name}`}
                       >
                         <IconTrash size={16} />
                       </ActionIcon>

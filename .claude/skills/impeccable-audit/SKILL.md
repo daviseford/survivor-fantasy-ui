@@ -8,6 +8,8 @@ user-invocable: true
 
 Automated design audit and improvement loop. Uses Playwright to screenshot every page (light & dark, desktop & mobile), then runs impeccable commands against each screenshot to identify and fix design issues.
 
+**This skill uses subagents heavily to parallelize work. Read the subagent instructions carefully.**
+
 ## Prerequisites
 
 - Dev server running at `http://localhost:5173` (or it will auto-start via `yarn dev`)
@@ -46,31 +48,45 @@ Routes covered (defined in `e2e/helpers.ts`):
 
 All routes render with full auth — admin pages show real data, not "Unauthorized."
 
-### Phase 2: Audit (Diagnostic)
+### Phase 2 & 3: Audit + Critique (Parallel Subagents)
 
-For each **desktop light** screenshot, run `/audit` to get a technical quality report covering:
-- Accessibility issues
-- Performance anti-patterns
-- Theming inconsistencies
-- Responsive design problems
-- Component anti-patterns
+**Launch subagents in parallel** — one per page group. Each subagent reads the relevant screenshots AND source files, then performs both audit and critique analysis for its pages.
 
-Read each screenshot file using the Read tool, then invoke the `/audit` skill. Collect all findings.
+Launch **3 subagents simultaneously** using the Agent tool in a single message:
 
-### Phase 3: Critique (Design Review)
+#### Subagent 1: Public pages (home, seasons, single-season)
+- Read screenshots: `audit-home-desktop-light.png`, `audit-seasons-desktop-light.png`, `audit-single-season-desktop-light.png` (plus dark + mobile variants)
+- Read source: `src/components/Home/Home.tsx`, `Home.module.css`, `src/pages/Seasons.tsx`, `src/pages/SingleSeason.tsx`, `src/pages/Players.tsx`
+- Run both `/audit` and `/critique` analysis
+- Return findings as a structured list with P0-P3 severity
 
-For each **desktop light** screenshot, run `/critique` to get a UX/design review covering:
-- Visual hierarchy
-- Information architecture
-- Cognitive load
-- Emotional resonance
-- Overall design quality
+#### Subagent 2: Auth pages (competitions)
+- Read screenshots: `audit-competitions-desktop-light.png` (plus dark + mobile variants)
+- Read source: `src/pages/Competitions.tsx`
+- Run both `/audit` and `/critique` analysis
+- Return findings as a structured list with P0-P3 severity
 
-Read each screenshot file using the Read tool, then invoke the `/critique` skill. Collect all findings.
+#### Subagent 3: Admin pages (admin dashboard, season admin)
+- Read screenshots: `audit-admin-dashboard-desktop-light.png`, `audit-season-admin-desktop-light.png` (plus dark + mobile variants)
+- Read source: `src/pages/Admin.tsx`, `src/pages/SeasonAdmin.tsx`
+- Run both `/audit` and `/critique` analysis
+- Return findings as a structured list with P0-P3 severity
+
+**Also launch a 4th subagent in parallel** for shared components:
+
+#### Subagent 4: Shared components
+- Read source: `src/components/Navbar/Navbar.tsx`, `Navbar.module.css`, `src/components/Footer/Footer.tsx`, `Footer.module.css`, `src/theme.ts`, `src/AppRoutes.tsx`, `AppRoutes.module.css`
+- Audit for: theming consistency, dark mode correctness, responsive design, a11y of shared chrome
+- Return findings as a structured list with P0-P3 severity
+
+Each subagent should report back:
+1. A health score table (Accessibility, Performance, Theming, Responsive, Anti-Patterns — each 0-4)
+2. Findings list with: `[P?] Issue name | Location (file:line) | Category | Fix suggestion | Impeccable command`
+3. Positive findings worth preserving
 
 ### Phase 4: Triage & Prioritize
 
-After Phases 2-3, compile all findings across all pages into a single prioritized list:
+Merge findings from all 4 subagents. Deduplicate (same issue found by multiple agents). Compile into a single prioritized list:
 - **P0** — Accessibility blockers, broken layouts, critical UX issues
 - **P1** — Significant design inconsistencies, poor contrast, layout problems
 - **P2** — Typography, spacing, color improvements
@@ -83,9 +99,11 @@ Present this list to the user and ask:
 
 Default recommendation: fix P0 and P1 automatically, present P2 for approval.
 
-### Phase 5: Fix
+### Phase 5: Fix (Parallel Where Possible)
 
-For each approved finding, run the appropriate impeccable command to fix it:
+Group approved fixes by file. **Fixes to independent files can be applied in parallel using subagents.** Fixes to the same file must be sequential.
+
+For each approved finding, run the appropriate impeccable command:
 
 | Issue Type | Command |
 |---|---|
@@ -100,24 +118,22 @@ For each approved finding, run the appropriate impeccable command to fix it:
 | Performance issues | `/optimize` |
 | Final polish | `/polish` |
 
-After each fix:
-1. Run `yarn tsc` to verify no type errors
-2. Run `yarn lint` to verify no lint errors
+After all fixes are applied, run `yarn tsc` and `yarn lint` together to verify:
+```bash
+yarn tsc && yarn lint
+```
 
-### Phase 6: Re-screenshot & Compare
+### Phase 6: Re-screenshot & Compare (Parallel Reads)
 
 After all fixes are applied:
 
 1. Run `yarn e2e:audit` again to capture new screenshots
-2. For each page that was modified, read the before and after screenshots
+2. Read before and after screenshots — **use parallel Read calls** to load all screenshots at once
 3. Present a before/after summary to the user
 
 ### Phase 7: Commit
 
-If the user approves the changes, commit them with a message like:
-```
-style: improve UI based on impeccable audit
-```
+If the user approves the changes, commit them following the project's conventional commits style.
 
 ## Important Rules
 
@@ -128,3 +144,4 @@ style: improve UI based on impeccable audit
 - **Desktop-first screenshots for audit** — use desktop light screenshots as the primary audit input, but verify fixes against all viewport/scheme combinations
 - **Ask before P2+ fixes** — only auto-fix P0 and P1; get user approval for lower-severity improvements
 - **Focus on the component/page files** — when an impeccable command suggests changes, apply them to the relevant component in `src/components/` or `src/pages/`, not to global styles (unless the finding is truly global)
+- **Maximize parallelism** — always launch independent subagents in a single message so they run concurrently. Never wait for one subagent to finish before launching another independent one.

@@ -64,9 +64,7 @@ export const SeasonAdmin = () => {
   if (!slimUser?.isAdmin) {
     return (
       <Center py="xl">
-        <Text c="red" fw={500}>
-          Unauthorized
-        </Text>
+        <Text c="dimmed">You need admin access to view this page.</Text>
       </Center>
     );
   }
