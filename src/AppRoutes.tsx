@@ -11,7 +11,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
-import { QueryClientProvider } from "react-query";
 import {
   Navigate,
   Route,
@@ -33,7 +32,6 @@ import { SeasonAdmin } from "./pages/SeasonAdmin";
 import { Seasons } from "./pages/Seasons";
 import { SingleCompetition } from "./pages/SingleCompetition";
 import { SingleSeason } from "./pages/SingleSeason";
-import { queryClient } from "./queryClient";
 import { theme } from "./theme";
 
 // Legacy redirect: /seasons/:id/manage -> /admin/:id (safe to remove once old links age out)
@@ -57,9 +55,8 @@ export const AppRoutes = () => {
   return (
     <MantineProvider theme={theme}>
       <Notifications />
-      <QueryClientProvider client={queryClient}>
-        <Router>
-          <ModalsProvider modals={modals}>
+      <Router>
+        <ModalsProvider modals={modals}>
             <AppShell
               header={{
                 height: {
@@ -137,8 +134,7 @@ export const AppRoutes = () => {
               </AppShell.Footer>
             </AppShell>
           </ModalsProvider>
-        </Router>
-      </QueryClientProvider>
+      </Router>
     </MantineProvider>
   );
 };

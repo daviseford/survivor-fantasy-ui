@@ -1,5 +1,5 @@
-import { useFirestoreQueryData } from "@react-query-firebase/firestore";
-import { collection, query, where } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { Competition } from "../types";
 import { useUser } from "./useUser";
@@ -7,18 +7,32 @@ import { useUser } from "./useUser";
 export const useMyCompetitions = () => {
   const { user } = useUser();
 
-  const ref = collection(db, "competitions");
+  const [data, setData] = useState<Competition[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const _query = query<Competition, Competition>(
-    // @ts-expect-error react-query-firebase type mismatch with Firestore ref
-    ref,
-    where("participant_uids", "array-contains", user?.uid || ""),
-  );
+  useEffect(() => {
+    if (!user?.uid) {
+      setData([]);
+      setIsLoading(false);
+      return;
+    }
 
-  return useFirestoreQueryData(
-    ["competitions", user?.uid],
-    _query,
-    {},
-    { enabled: Boolean(user?.uid) },
-  );
+    setIsLoading(true);
+
+    const ref = collection(db, "competitions");
+    const _query = query(
+      ref,
+      where("participant_uids", "array-contains", user.uid),
+    );
+
+    const unsub = onSnapshot(_query, (snapshot) => {
+      const _data = snapshot.docs.map((x) => x.data() as Competition);
+      setData(_data);
+      setIsLoading(false);
+    });
+
+    return () => unsub();
+  }, [user?.uid]);
+
+  return { data, isLoading };
 };
