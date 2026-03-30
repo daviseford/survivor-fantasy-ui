@@ -15,5 +15,5 @@
 .main {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - var(--app-shell-header-height, 0px));
+  min-height: 100dvh;
 }
