@@ -1,4 +1,9 @@
-import { ActionIcon, Text, Tooltip, useMantineColorScheme } from "@mantine/core";
+import {
+  ActionIcon,
+  Text,
+  Tooltip,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { modals } from "@mantine/modals";
 import {
   IconHome,
@@ -66,7 +71,9 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
       <div className={classes.navbarMain}>{links}</div>
 
       <div className={classes.footer}>
-        <Tooltip label={isDark ? "Switch to light mode" : "Switch to dark mode"}>
+        <Tooltip
+          label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+        >
           <ActionIcon
             variant="default"
             size="lg"
