@@ -28,7 +28,12 @@ const getBadgeColor = (action: string) => {
   if (action === "eliminated") return "red";
   if (action === "win_survivor") return "green";
   if (action.includes("idol") || action.includes("advantage")) return "violet";
-  if (action.includes("immunity") || action.includes("challenge"))
+  if (
+    action.includes("immunity") ||
+    action.includes("challenge") ||
+    action.includes("reward") ||
+    action.includes("combined")
+  )
     return "blue";
   return "gray";
 };
@@ -321,11 +326,6 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
           <Text size="xs" c="dimmed">
             Eliminated
           </Text>
-        </Group>
-        <Group gap={4}>
-          <Badge size="xs" variant="light" color="green">
-            Winner
-          </Badge>
         </Group>
         <Group gap={4}>
           <Badge size="xs" variant="light" color="red">

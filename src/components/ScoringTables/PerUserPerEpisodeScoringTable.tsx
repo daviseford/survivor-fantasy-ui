@@ -1,4 +1,4 @@
-import { Badge, Table, Text } from "@mantine/core";
+import { Table, Text } from "@mantine/core";
 import { IconTrophy } from "@tabler/icons-react";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
@@ -42,18 +42,13 @@ export const PerUserPerEpisodeScoringTable = () => {
             </Text>
           )}
         </Table.Td>
+        <Table.Td ta="center">
+          <Text span fw={700} size="sm">
+            {values.total}
+          </Text>
+        </Table.Td>
         <Table.Td fw={isLeader ? 700 : 500}>
           {user?.displayName || user?.email}
-        </Table.Td>
-        <Table.Td>
-          <Badge
-            variant={isLeader ? "filled" : "light"}
-            color={isLeader ? "yellow" : "gray"}
-            size="lg"
-            fw={700}
-          >
-            {values.total}
-          </Badge>
         </Table.Td>
 
         {values.episodePoints.map((x, idx) => (
@@ -92,10 +87,10 @@ export const PerUserPerEpisodeScoringTable = () => {
             <Table.Th w={50} ta="center">
               #
             </Table.Th>
-            <Table.Th>Participant</Table.Th>
             <Table.Th w={80} ta="center">
               Total
             </Table.Th>
+            <Table.Th>Participant</Table.Th>
             {season?.episodes.map((x) => (
               <Table.Th key={x.id} w={60} ta="center">
                 Ep {x.order}
