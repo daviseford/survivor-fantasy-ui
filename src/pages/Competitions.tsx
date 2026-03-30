@@ -115,8 +115,7 @@ export const Competitions = () => {
         <>
           <Table.Td>
             <Text size="sm" c="dimmed">
-              {x.participants.find((p) => p.uid === x.creator_uid)
-                ?.displayName}
+              {x.participants.find((p) => p.uid === x.creator_uid)?.displayName}
             </Text>
           </Table.Td>
           <Table.Td>

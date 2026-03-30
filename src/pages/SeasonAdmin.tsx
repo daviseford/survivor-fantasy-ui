@@ -113,7 +113,8 @@ export const SeasonAdmin = () => {
           </Badge>
           <Title order={2}>Manage {season.name}</Title>
           <Text c="dimmed" size="sm">
-            {season.players?.length ?? 0} players · {season.episodes?.length ?? 0} episodes
+            {season.players?.length ?? 0} players ·{" "}
+            {season.episodes?.length ?? 0} episodes
           </Text>
         </div>
         <Select

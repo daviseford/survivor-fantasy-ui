@@ -66,7 +66,11 @@ export const PerUserPerEpisodeScoringTable = () => {
 
         {competition?.prop_bets && (
           <Table.Td ta="center">
-            <Text span size="sm" c={values.propBetPoints === 0 ? "dimmed" : undefined}>
+            <Text
+              span
+              size="sm"
+              c={values.propBetPoints === 0 ? "dimmed" : undefined}
+            >
               {values.propBetPoints}
             </Text>
           </Table.Td>
