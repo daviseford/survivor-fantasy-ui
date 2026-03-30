@@ -43,8 +43,9 @@ export const NightingaleRose = ({ data, size }: NightingaleRoseProps) => {
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const labelMargin = data.length <= MAX_LABELED_PETALS ? 40 : 10;
   const center = size / 2;
-  const maxRadius = center - 10; // leave a small margin
+  const maxRadius = center - labelMargin;
 
   // Find the max total score across all entries for scaling
   const maxTotal = Math.max(
