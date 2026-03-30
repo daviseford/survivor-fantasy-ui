@@ -34,16 +34,16 @@ For full-page captures with scrolling:
 
 ## App Routes
 
-| Route | Page | What It Shows |
-|-------|------|---------------|
-| `/` | Home | Landing page with hero section |
-| `/seasons` | Seasons | Grid of all Survivor seasons |
-| `/seasons/:seasonId` | Single Season | Season details, players, episode scores |
-| `/competitions` | Competitions | User's competition list (requires auth) |
-| `/competitions/:competitionId` | Single Competition | Scores, player standings, charts, prop bets |
-| `/admin` | Admin Dashboard | Season management, data upload (admin only) |
-| `/admin/:seasonId` | Season Admin | CRUD for episodes, challenges, eliminations, events, teams |
-| `/seasons/:seasonId/draft/:draftId` | Draft | Live draft flow with stepper (Draft > Prop Bets > Summary) |
+| Route                               | Page               | What It Shows                                              |
+| ----------------------------------- | ------------------ | ---------------------------------------------------------- |
+| `/`                                 | Home               | Landing page with hero section                             |
+| `/seasons`                          | Seasons            | Grid of all Survivor seasons                               |
+| `/seasons/:seasonId`                | Single Season      | Season details, players, episode scores                    |
+| `/competitions`                     | Competitions       | User's competition list (requires auth)                    |
+| `/competitions/:competitionId`      | Single Competition | Scores, player standings, charts, prop bets                |
+| `/admin`                            | Admin Dashboard    | Season management, data upload (admin only)                |
+| `/admin/:seasonId`                  | Season Admin       | CRUD for episodes, challenges, eliminations, events, teams |
+| `/seasons/:seasonId/draft/:draftId` | Draft              | Live draft flow with stepper (Draft > Prop Bets > Summary) |
 
 ## Key Pages for Design Review
 
@@ -72,6 +72,60 @@ The app uses Mantine's responsive breakpoints:
 - **lg:** 75em (1200px)
 
 Test at `sm` breakpoint to see mobile layout changes (hamburger nav, stacked grids).
+
+## Playwright E2E Tests
+
+Playwright is set up for automated browser screenshots and smoke tests.
+
+### One-time setup
+
+1. Ensure your `.env` file at the project root has admin credentials:
+
+```
+USERNAME=your-admin-email@example.com
+PASSWORD=your-admin-password
+```
+
+2. Install the Chromium browser and authenticate:
+
+```
+npx playwright install chromium
+yarn e2e:setup
+```
+
+This runs `e2e/auth.setup.ts`, which logs in via the UI and saves the session to `e2e/.auth/state.json`.
+
+### Screenshot all pages
+
+```
+yarn e2e:screenshot
+```
+
+Screenshots are saved to `e2e/screenshots/` (git-ignored). Each route produces a file like `home.png`, `seasons.png`, `admin-dashboard.png`, etc.
+
+### Re-authentication
+
+If your session expires or screenshots show logged-out pages, re-run:
+
+```
+yarn e2e:setup
+```
+
+### Interactive mode
+
+To run Playwright's interactive UI for debugging tests:
+
+```
+yarn e2e:ui
+```
+
+### Run all e2e tests (all viewports)
+
+```
+yarn e2e
+```
+
+This runs the screenshot tests against both desktop (1280x720) and mobile (375x812) viewports.
 
 ## Dark Mode
 

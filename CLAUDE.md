@@ -35,6 +35,7 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 ## Firebase Documentation
 
 Use the Context7 MCP to fetch up-to-date Firebase documentation when working with Firebase features. Available libraries:
+
 - `/websites/firebase_google` — Full Firebase docs (26k+ snippets)
 - `/firebase/firebase-js-sdk` — Firebase JS SDK source/docs
 

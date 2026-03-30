@@ -1,4 +1,6 @@
 module.exports = {
+  root: true,
+  ignorePatterns: ["e2e/"],
   env: { browser: true, es2020: true },
   extends: [
     "eslint:recommended",
