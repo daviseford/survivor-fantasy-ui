@@ -143,6 +143,7 @@ export const SEASON_9_EPISODES = [
   },
 ] satisfies Episode<SeasonNum>[];
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used only in typeof for type derivation
 const Season_9_Players = [
   "Brady Finta",
   "Brook Geraghty",

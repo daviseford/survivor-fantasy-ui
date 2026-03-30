@@ -6,6 +6,7 @@ import {
   Player,
 } from "../../types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used only in typeof for type derivation
 const Players = [
   "Jenna Lewis-Dougherty",
   "Colby Donaldson",
