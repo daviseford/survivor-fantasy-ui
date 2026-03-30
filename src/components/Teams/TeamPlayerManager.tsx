@@ -158,10 +158,11 @@ export const TeamPlayerManager = () => {
 
   const teamList = Object.values(teams || {});
 
-  // Filter out players eliminated before or during this episode
+  // Filter out players eliminated before this episode (players eliminated
+  // during this episode were still on a team at the start of the episode)
   const eliminatedBefore = new Set(
     Object.values(eliminations)
-      .filter((e) => e.episode_num <= episodeNum)
+      .filter((e) => e.episode_num < episodeNum)
       .map((e) => e.player_name),
   );
   const playerNames = (season?.players.map((p) => p.name) ?? []).filter(

@@ -177,12 +177,15 @@ export const CreateChallenge = () => {
     form.setFieldValue("winning_players", playersOnTeam);
   };
 
-  const eliminatedPlayers = Object.values(eliminations).map(
-    (x) => x.player_name,
+  // Only exclude players eliminated before the selected episode
+  const eliminatedPlayers = new Set(
+    Object.values(eliminations)
+      .filter((x) => x.episode_num < form.values.episode_num)
+      .map((x) => x.player_name),
   );
   const playerNames = season?.players
     .map((x) => x.name)
-    .filter((x) => !eliminatedPlayers.includes(x));
+    .filter((x) => !eliminatedPlayers.has(x));
 
   return (
     <Accordion defaultValue="create-challenge">

@@ -150,12 +150,12 @@ export const CreateElimination = () => {
     }
   };
 
-  const eliminatedPlayers = Object.values(eliminations).map(
-    (x) => x.player_name,
+  const eliminatedPlayers = new Set(
+    Object.values(eliminations).map((x) => x.player_name),
   );
   const playerNames = season?.players
     .map((x) => x.name)
-    .filter((x) => !eliminatedPlayers.includes(x));
+    .filter((x) => !eliminatedPlayers.has(x));
 
   return (
     <Accordion defaultValue="create-elimination">
