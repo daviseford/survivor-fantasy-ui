@@ -18,19 +18,22 @@ export const Players = () => {
 
 const PlayerCard = (props: Player) => {
   return (
-    <Paper radius="md" withBorder p="lg" bg="var(--mantine-color-body)">
+    <Paper
+      radius="md"
+      withBorder
+      p="md"
+      bg="var(--mantine-color-body)"
+      style={{ textAlign: "center" }}
+    >
       <Avatar
         src={props.img}
-        size={120}
-        radius={120}
+        size={100}
+        radius={100}
         mx="auto"
         alt={props.name}
       />
-      <Text ta="center" fz="lg" fw={500} mt="md">
+      <Text ta="center" fw={600} mt="sm" size="sm">
         {props.name}
-      </Text>
-      <Text ta="center" c="dimmed" fz="sm">
-        Season {props.season_num}
       </Text>
     </Paper>
   );

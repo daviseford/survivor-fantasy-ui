@@ -1,4 +1,13 @@
-import { Button, Center, Group, Loader, Stack, Title } from "@mantine/core";
+import {
+  Badge,
+  Button,
+  Center,
+  Group,
+  Loader,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useCreateDraft } from "../hooks/useCreateDraft";
 import { useSeason } from "../hooks/useSeason";
@@ -33,17 +42,32 @@ export const SingleSeason = () => {
 
   return (
     <Stack gap="lg" p="md">
-      <Group justify="space-between" align="flex-end">
-        <Title order={2}>Season {season.order}</Title>
+      <Group justify="space-between" align="flex-start" wrap="wrap">
+        <div>
+          <Group gap="xs" mb={4}>
+            <Badge variant="light" size="sm">
+              Season {season.order}
+            </Badge>
+            <Badge variant="light" color="gray" size="sm">
+              {season.players?.length ?? 0} contestants
+            </Badge>
+          </Group>
+          <Title order={2}>{season.name}</Title>
+          <Text c="dimmed" size="sm">
+            Browse contestants and start a draft with friends.
+          </Text>
+        </div>
 
         <Group>
           {slimUser?.isAdmin && (
-            <Button variant="light" onClick={handleManageSeason}>
+            <Button variant="light" size="sm" onClick={handleManageSeason}>
               Manage Season
             </Button>
           )}
           {slimUser && (
-            <Button onClick={handleCreateDraft}>Create a New Draft</Button>
+            <Button size="sm" onClick={handleCreateDraft}>
+              Create a New Draft
+            </Button>
           )}
         </Group>
       </Group>
