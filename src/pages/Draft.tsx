@@ -631,7 +631,6 @@ export const DraftComponent = () => {
                     key={p.name + "-grid"}
                     style={{
                       opacity: isDrafted ? 0.5 : 1,
-                      cursor: isDrafted ? "default" : "pointer",
                     }}
                   >
                     <Stack gap={6} align="center">
