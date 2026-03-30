@@ -1,11 +1,8 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { doc, setDoc } from "firebase/firestore";
 import { Loader2 } from "lucide-react";
 import { last, orderBy } from "lodash-es";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { FormEvent, useEffect, useState } from "react";
 import { v4 } from "uuid";
-import { z } from "zod";
 import { db } from "../../firebase";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
@@ -24,10 +21,6 @@ import {
 
 const dropdownOptions = EliminationVariants.slice().reverse();
 
-const eliminationSchema = z.object({
-  player_name: z.string().min(1, "Select a player"),
-});
-
 export const CreateElimination = () => {
   const { data: season, isLoading } = useSeason();
   const { data: eliminations } = useEliminations(season?.id);
@@ -36,19 +29,8 @@ export const CreateElimination = () => {
   const [episodeNum, setEpisodeNum] = useState(1);
   const [order, setOrder] = useState(0);
   const [variant, setVariant] = useState<string>(dropdownOptions[0]);
-
-  const {
-    formState: { errors },
-    handleSubmit,
-    setValue,
-    watch,
-    reset,
-  } = useForm({
-    resolver: zodResolver(eliminationSchema),
-    defaultValues: { player_name: "" },
-  });
-
-  const playerName = watch("player_name");
+  const [playerName, setPlayerName] = useState("");
+  const [playerError, setPlayerError] = useState("");
 
   useEffect(() => {
     if (season && eliminations) {
@@ -76,7 +58,14 @@ export const CreateElimination = () => {
     );
   }
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!playerName) {
+      setPlayerError("Select a player");
+      return;
+    }
+    setPlayerError("");
+
     const values: Elimination = {
       id: formId as Elimination["id"],
       season_num: season.order,
@@ -91,9 +80,8 @@ export const CreateElimination = () => {
     const ref = doc(db, `eliminations/${season?.id}`);
     await setDoc(ref, { [values.id]: values }, { merge: true });
 
-    const newId = `elimination_${v4()}`;
-    setFormId(newId);
-    reset({ player_name: "" });
+    setFormId(`elimination_${v4()}`);
+    setPlayerName("");
   };
 
   const eliminatedPlayers = Object.values(eliminations).map(
@@ -122,7 +110,7 @@ export const CreateElimination = () => {
       <CardContent>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={onSubmit}
             className="mx-auto max-w-sm space-y-4"
           >
             <div className="space-y-1">
@@ -158,7 +146,7 @@ export const CreateElimination = () => {
               <Label>Eliminated Player</Label>
               <Select
                 value={playerName}
-                onValueChange={(v) => setValue("player_name", v)}
+                onValueChange={(v) => { setPlayerName(v); setPlayerError(""); }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select player" />
@@ -171,9 +159,9 @@ export const CreateElimination = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {errors.player_name && (
+              {playerError && (
                 <p className="text-sm text-destructive">
-                  {errors.player_name.message}
+                  {playerError}
                 </p>
               )}
             </div>

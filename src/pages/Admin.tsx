@@ -1,4 +1,5 @@
 import { doc, setDoc } from "firebase/firestore";
+import { toast } from "sonner";
 import { SEASON_9_CHALLENGES, SEASON_9_ELIMINATIONS } from "../data/season_9";
 import { SEASONS } from "../data/seasons";
 import { db } from "../firebase";
@@ -8,8 +9,9 @@ import { Button } from "../components/ui/button";
 const uploadS50 = async () => {
   try {
     await setDoc(doc(db, "seasons", "season_50"), SEASONS.season_50);
-    console.log("Done!");
+    toast.success("Season 50 data uploaded");
   } catch (err) {
+    toast.error("Failed to upload Season 50 data");
     console.error(err);
   }
 };
@@ -19,8 +21,9 @@ const uploadS9 = async () => {
     await setDoc(doc(db, "seasons", "season_9"), SEASONS.season_9);
     await setDoc(doc(db, "challenges", "season_9"), SEASON_9_CHALLENGES);
     await setDoc(doc(db, "eliminations", "season_9"), SEASON_9_ELIMINATIONS);
-    console.log("Done!");
+    toast.success("Season 9 data uploaded");
   } catch (err) {
+    toast.error("Failed to upload Season 9 data");
     console.error(err);
   }
 };
@@ -28,8 +31,9 @@ const uploadS9 = async () => {
 const uploadS99 = async () => {
   try {
     await setDoc(doc(db, "seasons", "season_99"), SEASONS.season_99);
-    console.log("Done!");
+    toast.success("Season 99 data uploaded");
   } catch (err) {
+    toast.error("Failed to upload Season 99 data");
     console.error(err);
   }
 };
@@ -37,8 +41,9 @@ const uploadS99 = async () => {
 const uploadS46 = async () => {
   try {
     await setDoc(doc(db, "seasons", "season_46"), SEASONS.season_46);
-    console.log("Done!");
+    toast.success("Season 46 data uploaded");
   } catch (err) {
+    toast.error("Failed to upload Season 46 data");
     console.error(err);
   }
 };

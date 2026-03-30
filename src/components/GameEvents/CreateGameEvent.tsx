@@ -1,10 +1,7 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { doc, setDoc } from "firebase/firestore";
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { FormEvent, useEffect, useState } from "react";
 import { v4 } from "uuid";
-import { z } from "zod";
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { db } from "../../firebase";
 import { useEliminations } from "../../hooks/useEliminations";
@@ -22,10 +19,6 @@ import {
   SelectValue,
 } from "../ui/select";
 
-const gameEventSchema = z.object({
-  player_name: z.string().min(1, "Select a player"),
-});
-
 export const CreateGameEvent = () => {
   const { data: season, isLoading } = useSeason();
   const { data: eliminations } = useEliminations(season?.id);
@@ -34,19 +27,8 @@ export const CreateGameEvent = () => {
   const [episodeNum, setEpisodeNum] = useState(1);
   const [action, setAction] = useState<string>(GameEventActions[0]);
   const [multiplier, setMultiplier] = useState<number | null>(null);
-
-  const {
-    formState: { errors },
-    handleSubmit,
-    setValue,
-    watch,
-    reset,
-  } = useForm({
-    resolver: zodResolver(gameEventSchema),
-    defaultValues: { player_name: "" },
-  });
-
-  const playerName = watch("player_name");
+  const [playerName, setPlayerName] = useState("");
+  const [playerError, setPlayerError] = useState("");
 
   useEffect(() => {
     if (season) {
@@ -73,7 +55,14 @@ export const CreateGameEvent = () => {
 
   const currentAction = BASE_PLAYER_SCORING.find((x) => x.action === action);
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!playerName) {
+      setPlayerError("Select a player");
+      return;
+    }
+    setPlayerError("");
+
     const values: GameEvent = {
       id: formId as GameEvent["id"],
       season_num: season.order,
@@ -90,9 +79,8 @@ export const CreateGameEvent = () => {
     const ref = doc(db, `events/${season?.id}`);
     await setDoc(ref, { [values.id]: values }, { merge: true });
 
-    const newId = `event_${v4()}`;
-    setFormId(newId);
-    reset({ player_name: "" });
+    setFormId(`event_${v4()}`);
+    setPlayerName("");
   };
 
   const eliminatedPlayers = Object.values(eliminations).map(
@@ -121,7 +109,7 @@ export const CreateGameEvent = () => {
       <CardContent>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={onSubmit}
             className="mx-auto max-w-sm space-y-4"
           >
             <div className="space-y-1">
@@ -142,7 +130,7 @@ export const CreateGameEvent = () => {
               <Label>Player Name</Label>
               <Select
                 value={playerName}
-                onValueChange={(v) => setValue("player_name", v)}
+                onValueChange={(v) => { setPlayerName(v); setPlayerError(""); }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select player" />
@@ -155,9 +143,9 @@ export const CreateGameEvent = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {errors.player_name && (
+              {playerError && (
                 <p className="text-sm text-destructive">
-                  {errors.player_name.message}
+                  {playerError}
                 </p>
               )}
             </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { QueryClientProvider } from "react-query";
 import { Link, Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Toaster } from "sonner";
 import { AppSidebar } from "./components/AppSidebar";
 import { AuthDialog } from "./components/Auth/AuthDialog";
 import { Logout } from "./components/Auth/Logout";
@@ -80,6 +81,7 @@ export const AppRoutes = () => {
             open={authDialogOpen}
             onOpenChange={setAuthDialogOpen}
           />
+          <Toaster richColors />
         </TooltipProvider>
       </Router>
     </QueryClientProvider>

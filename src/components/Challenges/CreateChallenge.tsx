@@ -1,11 +1,8 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { doc, setDoc } from "firebase/firestore";
 import { Loader2 } from "lucide-react";
 import { last, orderBy } from "lodash-es";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { FormEvent, useEffect, useState } from "react";
 import { v4 } from "uuid";
-import { z } from "zod";
 import { db } from "../../firebase";
 import { useChallenges } from "../../hooks/useChallenges";
 import { useEliminations } from "../../hooks/useEliminations";
@@ -23,10 +20,6 @@ import {
   SelectValue,
 } from "../ui/select";
 
-const challengeSchema = z.object({
-  winning_players: z.array(z.string()).min(1, "Add winning player(s)"),
-});
-
 export const CreateChallenge = () => {
   const { data: season, isLoading } = useSeason();
   const { data: eliminations } = useEliminations(season?.id);
@@ -37,15 +30,7 @@ export const CreateChallenge = () => {
   const [order, setOrder] = useState(0);
   const [variant, setVariant] = useState<ChallengeWinAction>(ChallengeWinActions[0]);
   const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
-
-  const {
-    formState: { errors },
-    handleSubmit,
-    setValue,
-  } = useForm({
-    resolver: zodResolver(challengeSchema),
-    defaultValues: { winning_players: [] as string[] },
-  });
+  const [playerError, setPlayerError] = useState("");
 
   useEffect(() => {
     if (season && challenges) {
@@ -73,7 +58,14 @@ export const CreateChallenge = () => {
     );
   }
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (selectedPlayers.length === 0) {
+      setPlayerError("Add winning player(s)");
+      return;
+    }
+    setPlayerError("");
+
     const values: Challenge = {
       id: formId as Challenge["id"],
       season_num: season.order,
@@ -90,7 +82,6 @@ export const CreateChallenge = () => {
 
     setFormId(`challenge_${v4()}`);
     setSelectedPlayers([]);
-    setValue("winning_players", []);
   };
 
   const eliminatedPlayers = Object.values(eliminations).map(
@@ -116,7 +107,7 @@ export const CreateChallenge = () => {
       ? selectedPlayers.filter((p) => p !== name)
       : [...selectedPlayers, name];
     setSelectedPlayers(updated);
-    setValue("winning_players", updated);
+    if (updated.length > 0) setPlayerError("");
   };
 
   return (
@@ -127,7 +118,7 @@ export const CreateChallenge = () => {
       <CardContent>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={onSubmit}
             className="mx-auto max-w-sm space-y-4"
           >
             <div className="space-y-1">
@@ -170,9 +161,9 @@ export const CreateChallenge = () => {
                   </Button>
                 ))}
               </div>
-              {errors.winning_players && (
+              {playerError && (
                 <p className="text-sm text-destructive">
-                  {errors.winning_players.message}
+                  {playerError}
                 </p>
               )}
             </div>

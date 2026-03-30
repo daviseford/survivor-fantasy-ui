@@ -1,12 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { ref, update } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
 import { shuffle, uniqBy } from "lodash-es";
-import { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
-import { z } from "zod";
 import { DraftTable } from "../components/DraftTable";
 import { MyDraftedPlayers } from "../components/MyPlayers/MyDraftedPlayers";
 import { PostDraftPropBetTable } from "../components/PropBetTables/PostDraftPropBetTable";
@@ -567,37 +564,36 @@ const AuthDialogInline = ({ onSuccess }: { onSuccess: () => void }) => (
   </Tabs>
 );
 
-const nameSchema = z.object({
-  name: z.string().min(1, "Do a fun name :)"),
-});
-
-type NameFormData = z.infer<typeof nameSchema>;
-
 const NameYourCompetition = ({
   onSubmit,
 }: {
-  onSubmit: (values: NameFormData) => void;
+  onSubmit: (values: { name: string }) => void;
 }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<NameFormData>({
-    resolver: zodResolver(nameSchema),
-    defaultValues: { name: "" },
-  });
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) {
+      setError("Do a fun name :)");
+      return;
+    }
+    setError("");
+    onSubmit({ name });
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label>Name your competition</Label>
         <Input
           placeholder="Jeff Probst Lovers"
           autoFocus
-          {...register("name")}
+          value={name}
+          onChange={(e) => { setName(e.target.value); setError(""); }}
         />
-        {errors.name && (
-          <p className="text-sm text-destructive">{errors.name.message}</p>
+        {error && (
+          <p className="text-sm text-destructive">{error}</p>
         )}
       </div>
       <Button type="submit" className="w-full">
@@ -612,46 +608,58 @@ type PropBetsProps = {
   onSubmit: (values: PropBetsFormData) => void;
 };
 
-const propBetsSchema = z.object({
-  propbet_first_vote: z.string().min(1, "Enter an answer"),
-  propbet_ftc: z.string().min(1, "Enter an answer"),
-  propbet_idols: z.string().min(1, "Enter an answer"),
-  propbet_immunities: z.string().min(1, "Enter an answer"),
-  propbet_medical_evac: z.string().min(1, "Enter an answer"),
-  propbet_winner: z.string().min(1, "Enter an answer"),
-});
+const propBetKeys: (keyof PropBetsFormData)[] = [
+  "propbet_winner",
+  "propbet_first_vote",
+  "propbet_idols",
+  "propbet_immunities",
+  "propbet_ftc",
+  "propbet_medical_evac",
+];
 
 const PropBets = ({ season, onSubmit }: PropBetsProps) => {
-  const {
-    setValue,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<PropBetsFormData>({
-    resolver: zodResolver(propBetsSchema),
-    defaultValues: {
-      propbet_first_vote: "",
-      propbet_ftc: "",
-      propbet_idols: "",
-      propbet_immunities: "",
-      propbet_medical_evac: "",
-      propbet_winner: "",
-    },
+  const [values, setValues] = useState<PropBetsFormData>({
+    propbet_first_vote: "",
+    propbet_ftc: "",
+    propbet_idols: "",
+    propbet_immunities: "",
+    propbet_medical_evac: "",
+    propbet_winner: "",
   });
+  const [errors, setErrors] = useState<Partial<Record<keyof PropBetsFormData, string>>>({});
 
   const players = season?.players.map((x) => x.name);
 
-  const propBetFields = [
-    { key: "propbet_winner" as const, data: players },
-    { key: "propbet_first_vote" as const, data: players },
-    { key: "propbet_idols" as const, data: players },
-    { key: "propbet_immunities" as const, data: players },
-    { key: "propbet_ftc" as const, data: players },
-    { key: "propbet_medical_evac" as const, data: ["Yes", "No"] },
+  const propBetFields: { key: keyof PropBetsFormData; data: string[] }[] = [
+    { key: "propbet_winner", data: players },
+    { key: "propbet_first_vote", data: players },
+    { key: "propbet_idols", data: players },
+    { key: "propbet_immunities", data: players },
+    { key: "propbet_ftc", data: players },
+    { key: "propbet_medical_evac", data: ["Yes", "No"] },
   ];
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const newErrors: Partial<Record<keyof PropBetsFormData, string>> = {};
+    for (const key of propBetKeys) {
+      if (!values[key]) newErrors[key] = "Enter an answer";
+    }
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    setErrors({});
+    onSubmit(values);
+  };
+
+  const updateField = (key: keyof PropBetsFormData, val: string) => {
+    setValues((prev) => ({ ...prev, [key]: val }));
+    setErrors((prev) => ({ ...prev, [key]: undefined }));
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       {propBetFields.map(({ key, data }) => (
         <div key={key} className="space-y-1">
           <Label>{PropBetsQuestions[key].description}</Label>
@@ -659,8 +667,8 @@ const PropBets = ({ season, onSubmit }: PropBetsProps) => {
             {PropBetsQuestions[key].point_value} points
           </p>
           <Select
-            value={watch(key)}
-            onValueChange={(val) => setValue(key, val)}
+            value={values[key]}
+            onValueChange={(val) => updateField(key, val)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select..." />
@@ -674,7 +682,7 @@ const PropBets = ({ season, onSubmit }: PropBetsProps) => {
             </SelectContent>
           </Select>
           {errors[key] && (
-            <p className="text-sm text-destructive">{errors[key]?.message}</p>
+            <p className="text-sm text-destructive">{errors[key]}</p>
           )}
         </div>
       ))}
