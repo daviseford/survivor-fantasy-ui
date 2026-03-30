@@ -1,32 +1,40 @@
 import {
   Accordion,
+  ActionIcon,
   Badge,
   Button,
   Card,
   Center,
+  Code,
   Group,
   Image,
   Loader,
   SimpleGrid,
   Stack,
+  Table,
   Text,
   Title,
 } from "@mantine/core";
+import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import {
   IconCheck,
   IconList,
   IconSettings,
+  IconTrash,
   IconUsers,
   IconX,
 } from "@tabler/icons-react";
-import { doc, setDoc } from "firebase/firestore";
+import { ref, remove } from "firebase/database";
+import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { SEASON_9_CHALLENGES, SEASON_9_ELIMINATIONS } from "../data/season_9";
 import { SEASONS } from "../data/seasons";
-import { db } from "../firebase";
+import { db, rt_db } from "../firebase";
+import { useCompetitions } from "../hooks/useCompetitions";
 import { useSeasons } from "../hooks/useSeasons";
 import { useUser } from "../hooks/useUser";
+import { Competition } from "../types";
 
 const upload = async (label: string, fn: () => Promise<void>) => {
   try {
@@ -52,6 +60,35 @@ export const Admin = () => {
   const navigate = useNavigate();
 
   const { data: seasons, isLoading } = useSeasons();
+  const { data: competitions } = useCompetitions();
+
+  const handleDeleteCompetition = (competition: Competition) => {
+    modals.openConfirmModal({
+      title: "Delete this competition?",
+      children: <Code block>{JSON.stringify(competition, null, 2)}</Code>,
+      labels: { confirm: "Delete", cancel: "Cancel" },
+      confirmProps: { color: "red" },
+      onConfirm: async () => {
+        try {
+          await deleteDoc(doc(db, "competitions", competition.id));
+          await remove(ref(rt_db, `drafts/${competition.draft_id}`));
+          notifications.show({
+            title: "Competition deleted",
+            message: `"${competition.competition_name}" removed`,
+            color: "green",
+            icon: <IconCheck size={16} />,
+          });
+        } catch (err) {
+          notifications.show({
+            title: "Failed to delete competition",
+            message: err instanceof Error ? err.message : "Unknown error",
+            color: "red",
+            icon: <IconX size={16} />,
+          });
+        }
+      },
+    });
+  };
 
   if (!slimUser?.isAdmin) {
     return (
@@ -142,6 +179,57 @@ export const Admin = () => {
                 </Card>
               ))}
           </SimpleGrid>
+        )}
+      </div>
+
+      <div>
+        <Title order={3} mb="md">
+          Competitions
+        </Title>
+        {competitions.length === 0 ? (
+          <Text c="dimmed" size="sm">
+            No competitions found.
+          </Text>
+        ) : (
+          <Table.ScrollContainer minWidth={400}>
+            <Table highlightOnHover verticalSpacing="sm">
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Th>Name</Table.Th>
+                  <Table.Th>Season</Table.Th>
+                  <Table.Th>Participants</Table.Th>
+                  <Table.Th>Actions</Table.Th>
+                </Table.Tr>
+              </Table.Thead>
+              <Table.Tbody>
+                {competitions.map((c) => (
+                  <Table.Tr key={c.id}>
+                    <Table.Td fw={600}>{c.competition_name}</Table.Td>
+                    <Table.Td>
+                      <Badge variant="light" size="sm">
+                        S{c.season_num}
+                      </Badge>
+                    </Table.Td>
+                    <Table.Td>
+                      <Text size="sm">
+                        {c.participants
+                          .map((p) => p.displayName ?? p.email)
+                          .join(", ")}
+                      </Text>
+                    </Table.Td>
+                    <Table.Td>
+                      <ActionIcon
+                        color="red"
+                        onClick={() => handleDeleteCompetition(c)}
+                      >
+                        <IconTrash size={16} />
+                      </ActionIcon>
+                    </Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
+          </Table.ScrollContainer>
         )}
       </div>
 
