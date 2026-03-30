@@ -1,5 +1,5 @@
 import { Button, Container, Group, Text } from "@mantine/core";
-import { IconBrandGithub } from "@tabler/icons-react";
+import { IconBrandGithub, IconFlame } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import classes from "./Home.module.css";
 
@@ -22,9 +22,8 @@ export const Home = () => {
         </h1>
 
         <Text className={classes.description} c="dimmed">
-          Just like fantasy football, but with a twist, Survivor Fantasy lets
-          you assemble your dream team of Survivor contestants and watch as they
-          outwit, outplay, and outlast their way to victory.
+          Draft your dream team of Survivor contestants and compete with friends
+          as they outwit, outplay, and outlast their way to victory.
         </Text>
 
         <Group className={classes.controls}>
@@ -34,6 +33,7 @@ export const Home = () => {
             variant="gradient"
             gradient={{ from: "blue", to: "cyan" }}
             onClick={() => navigate("/seasons")}
+            leftSection={<IconFlame size={22} />}
           >
             Get started
           </Button>
