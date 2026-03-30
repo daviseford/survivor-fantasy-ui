@@ -180,7 +180,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
       backgroundColor: isWinner
         ? "var(--mantine-color-green-light)"
         : playerElimination
-          ? "var(--mantine-color-default-hover)"
+          ? "var(--mantine-color-gray-light)"
           : isDraftedByCurrentUser
             ? "var(--mantine-color-blue-light)"
             : "",
@@ -318,7 +318,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
             w={12}
             h={12}
             style={{
-              backgroundColor: "var(--mantine-color-default-hover)",
+              backgroundColor: "var(--mantine-color-gray-light)",
               borderRadius: 2,
               border: "1px solid var(--mantine-color-default-border)",
             }}

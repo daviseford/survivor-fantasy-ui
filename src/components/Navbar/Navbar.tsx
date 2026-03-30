@@ -2,6 +2,7 @@ import {
   ActionIcon,
   Text,
   Tooltip,
+  useComputedColorScheme,
   useMantineColorScheme,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
@@ -59,8 +60,9 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
     );
   });
 
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const isDark = colorScheme === "dark";
+  const { toggleColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme("light");
+  const isDark = computedColorScheme === "dark";
 
   const handleLogout = () => {
     auth.signOut();

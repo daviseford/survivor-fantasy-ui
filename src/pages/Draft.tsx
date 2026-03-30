@@ -447,7 +447,7 @@ export const DraftComponent = () => {
                       backgroundColor:
                         draft.current_picker.uid === slimUser?.uid
                           ? "var(--mantine-color-blue-light)"
-                          : "var(--mantine-color-default-hover)",
+                          : "var(--mantine-color-gray-light)",
                       border:
                         draft.current_picker.uid === slimUser?.uid
                           ? "2px solid var(--mantine-color-blue-light-color)"
