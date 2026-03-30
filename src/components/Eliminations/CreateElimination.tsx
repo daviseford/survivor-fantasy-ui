@@ -2,6 +2,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { Loader2 } from "lucide-react";
 import { last, orderBy } from "lodash-es";
 import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { v4 } from "uuid";
 import { db } from "../../firebase";
 import { useEliminations } from "../../hooks/useEliminations";
@@ -77,11 +78,18 @@ export const CreateElimination = () => {
       order,
     };
 
-    const ref = doc(db, `eliminations/${season?.id}`);
-    await setDoc(ref, { [values.id]: values }, { merge: true });
+    try {
+      const ref = doc(db, `eliminations/${season?.id}`);
+      await setDoc(ref, { [values.id]: values }, { merge: true });
 
-    setFormId(`elimination_${v4()}`);
-    setPlayerName("");
+      setFormId(`elimination_${v4()}`);
+      setPlayerName("");
+      toast.success("Elimination created");
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "Failed to create elimination",
+      );
+    }
   };
 
   const eliminatedPlayers = Object.values(eliminations).map(

@@ -244,6 +244,7 @@ export const TeamPlayerManager = () => {
   };
 
   const handleEpisodeChange = (val: string) => {
+    if (localAssignments && !confirm("Discard unsaved changes?")) return;
     setEpisodeNum(Number(val));
     setLocalAssignments(null);
   };

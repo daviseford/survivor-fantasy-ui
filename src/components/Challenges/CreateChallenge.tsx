@@ -2,6 +2,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { Loader2 } from "lucide-react";
 import { last, orderBy } from "lodash-es";
 import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { v4 } from "uuid";
 import { db } from "../../firebase";
 import { useChallenges } from "../../hooks/useChallenges";
@@ -77,11 +78,18 @@ export const CreateChallenge = () => {
       order,
     };
 
-    const ref = doc(db, `challenges/${season?.id}`);
-    await setDoc(ref, { [values.id]: values }, { merge: true });
+    try {
+      const ref = doc(db, `challenges/${season?.id}`);
+      await setDoc(ref, { [values.id]: values }, { merge: true });
 
-    setFormId(`challenge_${v4()}`);
-    setSelectedPlayers([]);
+      setFormId(`challenge_${v4()}`);
+      setSelectedPlayers([]);
+      toast.success("Challenge created");
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "Failed to create challenge",
+      );
+    }
   };
 
   const eliminatedPlayers = Object.values(eliminations).map(

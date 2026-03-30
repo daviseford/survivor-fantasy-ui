@@ -1,7 +1,8 @@
 import { Check, Pencil, Trash2, X } from "lucide-react";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, writeBatch } from "firebase/firestore";
 import { useState } from "react";
 import { toast } from "sonner";
+import { SURVIVOR_SWATCHES } from "../../data/colors";
 import { db } from "../../firebase";
 import { useChallenges } from "../../hooks/useChallenges";
 import { useSeason } from "../../hooks/useSeason";
@@ -31,18 +32,6 @@ import {
   TableRow,
 } from "../ui/table";
 
-const SURVIVOR_SWATCHES = [
-  "#3B82F6",
-  "#EF4444",
-  "#22C55E",
-  "#EAB308",
-  "#A855F7",
-  "#F97316",
-  "#EC4899",
-  "#14B8A6",
-  "#000000",
-];
-
 export const TeamCRUDTable = () => {
   const { data: season } = useSeason();
   const { data: teams } = useTeams(season?.id);
@@ -71,6 +60,8 @@ export const TeamCRUDTable = () => {
   const deleteTeamWithCascade = async (team: Team) => {
     if (!season) return;
 
+    const batch = writeBatch(db);
+
     // 1. Cascade team_assignments: null out all references to this team
     const updatedAssignments = { ...assignments };
     let assignmentsChanged = false;
@@ -85,8 +76,7 @@ export const TeamCRUDTable = () => {
       updatedAssignments[episodeKey] = updatedSnapshot;
     }
     if (assignmentsChanged) {
-      const assignmentsRef = doc(db, `team_assignments/${season.id}`);
-      await setDoc(assignmentsRef, updatedAssignments);
+      batch.set(doc(db, `team_assignments/${season.id}`), updatedAssignments);
     }
 
     // 2. Cascade challenges: clear winning_team_id where it matches
@@ -102,15 +92,15 @@ export const TeamCRUDTable = () => {
       }
     }
     if (challengesChanged) {
-      const challengesRef = doc(db, `challenges/${season.id}`);
-      await setDoc(challengesRef, updatedChallenges);
+      batch.set(doc(db, `challenges/${season.id}`), updatedChallenges);
     }
 
     // 3. Delete the team record itself
-    const ref = doc(db, `teams/${season.id}`);
     const newTeams = { ...teams };
     delete newTeams[team.id];
-    await setDoc(ref, newTeams);
+    batch.set(doc(db, `teams/${season.id}`), newTeams);
+
+    await batch.commit();
   };
 
   const handleDelete = async (team: Team) => {

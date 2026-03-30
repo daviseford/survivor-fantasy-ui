@@ -1,6 +1,7 @@
 import { doc, setDoc } from "firebase/firestore";
 import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { v4 } from "uuid";
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { db } from "../../firebase";
@@ -74,13 +75,18 @@ export const CreateGameEvent = () => {
       player_name: playerName,
     };
 
-    console.log({ values });
+    try {
+      const ref = doc(db, `events/${season?.id}`);
+      await setDoc(ref, { [values.id]: values }, { merge: true });
 
-    const ref = doc(db, `events/${season?.id}`);
-    await setDoc(ref, { [values.id]: values }, { merge: true });
-
-    setFormId(`event_${v4()}`);
-    setPlayerName("");
+      setFormId(`event_${v4()}`);
+      setPlayerName("");
+      toast.success("Event created");
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "Failed to create event",
+      );
+    }
   };
 
   const eliminatedPlayers = Object.values(eliminations).map(

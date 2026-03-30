@@ -16,12 +16,15 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 - **Test:** `yarn test` (vitest)
 - **Pre-push check:** `yarn prepush` (format + lint --fix + tsc)
 - **Deploy:** `yarn deploy:local` (prepush + build + firebase deploy)
+- **E2E screenshots:** `yarn e2e:screenshot` (Playwright — screenshots all pages)
+- **E2E auth setup:** `yarn e2e:setup` (login once, save session for reuse)
+- **E2E interactive:** `yarn e2e:ui` (Playwright UI mode)
 
 ## Architecture
 
-- **React 18 + TypeScript + Vite** SPA with shadcn/ui components and Tailwind CSS v4
+- **React 19 + TypeScript + Vite** SPA with shadcn/ui components and Tailwind CSS v4
 - **Routing:** react-router-dom v6, routes defined in `src/AppRoutes.tsx`
-- **State/Data:** react-query v3 with `@react-query-firebase/firestore` for Firestore queries; some hooks use raw `onSnapshot` for realtime subscriptions
+- **State/Data:** All hooks use raw Firebase `onSnapshot` for realtime Firestore/RTDB subscriptions (no react-query)
 - **Firebase backend:** Firestore (seasons, competitions), Realtime Database (live drafts), Firebase Auth, hosted on Firebase Hosting
 - **Dual database pattern:** Firestore for persistent read-heavy data (seasons, competitions, game events), Realtime Database for live collaborative state (drafts in progress)
 
@@ -29,10 +32,21 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 
 - **Season data is hardcoded** in `src/data/` (players, episodes per season) and also stored in Firestore. The `SEASONS` map in `src/data/seasons.ts` is the local source of truth for season metadata.
 - **Typed IDs:** Domain types use branded string IDs (`season_${number}`, `draft_${string}`, `episode_${string}`, etc.) defined in `src/types/index.ts`.
-- **Hooks per entity:** Each Firestore/RTDB entity has a dedicated hook (`useSeason`, `useCompetition`, `useDraft`, `useChallenges`, `useEliminations`, `useEvents`). Hooks read route params via `useParams()` with optional ID override.
+- **Hooks per entity:** Each Firestore/RTDB entity has a dedicated hook (`useSeason`, `useCompetition`, `useDraft`, `useChallenges`, `useEliminations`, `useEvents`). Hooks read route params via `useParams()` with optional ID override. All onSnapshot hooks include error callbacks.
 - **Tailwind CSS v4** for styling via `@tailwindcss/vite` plugin. shadcn/ui components live in `src/components/ui/`. Global CSS variables in `src/index.css`. Path alias `@/` maps to `src/`.
-- **Forms:** react-hook-form + zod for complex forms (Draft, CreateChallenge, CreateElimination, CreateGameEvent). Simple auth forms use controlled inputs.
+- **Forms:** Controlled inputs with manual state validation. Simple forms use `useState` + inline validators.
 - **Icons:** lucide-react (shadcn standard icon set).
+
+## Admin Credentials
+
+The `.env` file contains real admin credentials (USERNAME/PASSWORD). **NEVER use these to modify production season data** (episodes, challenges, eliminations, events, teams). Read-only operations and screenshots are safe. Ask before any write operations.
+
+## Firebase Documentation
+
+Use the Context7 MCP to fetch up-to-date Firebase documentation when working with Firebase features. Available libraries:
+
+- `/websites/firebase_google` — Full Firebase docs (26k+ snippets)
+- `/firebase/firebase-js-sdk` — Firebase JS SDK source/docs
 
 ## Deployment
 

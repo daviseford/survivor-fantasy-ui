@@ -63,7 +63,7 @@ export const CreateEpisode = () => {
       setOrder(order + 1);
       setName("");
       setFinale(false);
-      setPostMerge(postMerge || mergeOccurs);
+      setPostMerge(mergeOccurs);
       setMergeOccurs(false);
     } catch (err) {
       toast.error(

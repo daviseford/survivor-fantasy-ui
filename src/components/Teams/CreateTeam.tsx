@@ -2,6 +2,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { toast } from "sonner";
 import { v4 } from "uuid";
+import { SURVIVOR_SWATCHES } from "../../data/colors";
 import { db } from "../../firebase";
 import { useSeason } from "../../hooks/useSeason";
 import { Team } from "../../types";
@@ -9,18 +10,6 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-
-const SURVIVOR_SWATCHES = [
-  "#3B82F6",
-  "#EF4444",
-  "#22C55E",
-  "#EAB308",
-  "#A855F7",
-  "#F97316",
-  "#EC4899",
-  "#14B8A6",
-  "#000000",
-];
 
 export const CreateTeam = () => {
   const { data: season, isLoading } = useSeason();
