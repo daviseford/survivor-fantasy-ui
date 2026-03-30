@@ -132,3 +132,9 @@ package-lock.json
 # firebase
 .firebase/
 *.cache
+/.def
+/docs/plans
+/e2e/screenshots
+/e2e/.auth
+/playwright-report
+/test-results
