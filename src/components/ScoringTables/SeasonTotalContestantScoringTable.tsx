@@ -49,9 +49,9 @@ export const SeasonTotalContestantScoringTable = () => {
           key={playerName}
           style={{
             backgroundColor: playerElimination
-              ? "var(--mantine-color-gray-3)"
+              ? "var(--mantine-color-default-hover)"
               : isWinner
-                ? "var(--mantine-color-green-1)"
+                ? "var(--mantine-color-green-light)"
                 : "",
           }}
         >
