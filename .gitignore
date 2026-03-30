@@ -146,3 +146,4 @@ e2e/.auth/
 /test-results/
 /playwright-report/
 /docs/brainstorms
+/.claude/worktrees
