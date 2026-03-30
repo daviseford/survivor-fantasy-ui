@@ -24,13 +24,8 @@ setup("authenticate as admin", async ({ page }) => {
   // Click the Login button in the navbar to open the AuthModal
   await page.locator("nav button", { hasText: "Login" }).click();
 
-  // Wait for the modal to be visible
-  await page.waitForSelector(
-    'input[label="Email"], input[placeholder="hello@gmail.com"]',
-    {
-      timeout: 10_000,
-    },
-  );
+  // Wait for the modal's email input to be visible
+  await page.getByPlaceholder("hello@gmail.com").waitFor({ timeout: 10_000 });
 
   // Fill in the login form
   await page.getByPlaceholder("hello@gmail.com").fill(username);

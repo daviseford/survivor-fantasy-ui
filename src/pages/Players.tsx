@@ -21,6 +21,7 @@ const PlayerCard = (props: Player) => {
     <Paper
       radius="md"
       withBorder
+      shadow="sm"
       p="md"
       bg="var(--mantine-color-body)"
       style={{ textAlign: "center" }}

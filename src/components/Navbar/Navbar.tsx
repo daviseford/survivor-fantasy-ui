@@ -1,7 +1,5 @@
 import {
-  ActionIcon,
   Text,
-  Tooltip,
   useComputedColorScheme,
   useMantineColorScheme,
 } from "@mantine/core";
@@ -73,19 +71,18 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
       <div className={classes.navbarMain}>{links}</div>
 
       <div className={classes.footer}>
-        <Tooltip
-          label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+        <button
+          className={classes.link}
+          onClick={toggleColorScheme}
+          aria-label="Toggle color scheme"
         >
-          <ActionIcon
-            variant="default"
-            size="lg"
-            onClick={toggleColorScheme}
-            aria-label="Toggle color scheme"
-            mb="xs"
-          >
-            {isDark ? <IconSun size={18} /> : <IconMoon size={18} />}
-          </ActionIcon>
-        </Tooltip>
+          {isDark ? (
+            <IconSun className={classes.linkIcon} stroke={1.5} />
+          ) : (
+            <IconMoon className={classes.linkIcon} stroke={1.5} />
+          )}
+          <span>{isDark ? "Light mode" : "Dark mode"}</span>
+        </button>
 
         {!slimUser && (
           <button
