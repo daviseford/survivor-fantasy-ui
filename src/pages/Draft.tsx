@@ -423,8 +423,8 @@ export const DraftComponent = () => {
           </Paper>
         </Stack>
       ) : (
-        <>
-          <Stepper active={activeStep} allowNextStepsSelect={false}>
+        <Stack gap="md" p="lg">
+          <Stepper active={activeStep} allowNextStepsSelect={false} color="blue">
             {/* ===== STEP 0: DRAFT ===== */}
             <Stepper.Step label="Draft" description="Pick your players">
               <Stack gap="md" mt="md">
@@ -735,7 +735,7 @@ export const DraftComponent = () => {
               </Stack>
             </Paper>
           )}
-        </>
+        </Stack>
       )}
     </div>
   );
@@ -755,28 +755,39 @@ const NameYourCompetition = ({ onSubmit }: Props) => {
       name: "",
     },
     validate: {
-      name: isNotEmpty("Do a fun name :)"),
+      name: isNotEmpty("Give it a fun name!"),
     },
   });
 
   return (
-    <>
-      <form
-        onSubmit={form.onSubmit((values) => {
-          return onSubmit(values);
-        })}
-      >
+    <form
+      onSubmit={form.onSubmit((values) => {
+        return onSubmit(values);
+      })}
+    >
+      <Stack gap="md">
+        <Text size="sm" c="dimmed">
+          This is how your group will find the competition later.
+        </Text>
         <TextInput
-          label="Name your competition"
-          placeholder="Jeff Probst Lovers"
+          label="Competition name"
+          placeholder="e.g., Jeff Probst Fan Club"
+          size="md"
           data-autofocus
           {...form.getInputProps("name")}
         />
-        <Button fullWidth type="submit" mt="md">
-          Submit
+        <Button
+          fullWidth
+          type="submit"
+          size="md"
+          variant="gradient"
+          gradient={{ from: "blue", to: "cyan" }}
+          leftSection={<IconTrophy size={18} />}
+        >
+          Create Competition
         </Button>
-      </form>
-    </>
+      </Stack>
+    </form>
   );
 };
 
