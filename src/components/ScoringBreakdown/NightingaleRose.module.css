@@ -1,0 +1,25 @@
+.container {
+  position: relative;
+}
+
+.segment {
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.segment:hover {
+  opacity: 0.8;
+}
+
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  z-index: 100;
+  transform: translate(-50%, -100%) translateY(-8px);
+  white-space: nowrap;
+}
+
+.label {
+  pointer-events: none;
+  user-select: none;
+}
