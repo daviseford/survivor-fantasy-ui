@@ -666,26 +666,40 @@ export const DraftComponent = () => {
 
           {/* ===== DRAFT RESULTS (visible during drafting) ===== */}
           {phase === "drafting" && (draft?.draft_picks?.length ?? 0) > 0 && (
-            <Box p="lg">
-              <Title ta="center" order={3} mb="md">
-                Draft Results
-              </Title>
-              <DraftTable
-                draft_picks={draft!.draft_picks}
-                participants={draft!.participants}
-                players={season.players}
-              />
-            </Box>
+            <Paper p="lg" radius="md" withBorder mt="md">
+              <Stack gap="md">
+                <Group gap="sm" align="center">
+                  <IconClipboardList
+                    size={20}
+                    color="var(--mantine-color-blue-6)"
+                  />
+                  <Title order={4}>Draft Results</Title>
+                </Group>
+                <Divider />
+                <DraftTable
+                  draft_picks={draft!.draft_picks}
+                  participants={draft!.participants}
+                  players={season.players}
+                />
+              </Stack>
+            </Paper>
           )}
 
           {/* ===== SCORING LEGEND (visible during drafting) ===== */}
           {phase === "drafting" && (
-            <Box p="lg">
-              <Title ta="center" order={3} mb="md">
-                Scoring Legend
-              </Title>
-              <ScoringLegendTable />
-            </Box>
+            <Paper p="lg" radius="md" withBorder mt="md">
+              <Stack gap="md">
+                <Group gap="sm" align="center">
+                  <IconClipboardList
+                    size={20}
+                    color="var(--mantine-color-teal-6)"
+                  />
+                  <Title order={4}>Scoring Reference</Title>
+                </Group>
+                <Divider />
+                <ScoringLegendTable />
+              </Stack>
+            </Paper>
           )}
         </>
       )}
