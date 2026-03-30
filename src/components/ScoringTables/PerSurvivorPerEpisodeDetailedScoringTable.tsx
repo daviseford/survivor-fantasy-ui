@@ -179,7 +179,13 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
               style={{ ...avatarStyle, flexShrink: 0 }}
             />
             <div style={{ minWidth: 0 }}>
-              <Text fz="sm" fw={500} c={playerElimination ? "dimmed" : ""} lh={1.2} truncate>
+              <Text
+                fz="sm"
+                fw={500}
+                c={playerElimination ? "dimmed" : ""}
+                lh={1.2}
+                truncate
+              >
                 {playerName}
               </Text>
               {draftedBy && (
@@ -193,9 +199,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
 
         <Table.Td>{total}</Table.Td>
 
-        <Table.Td>
-          {getNumberWithOrdinal(draftOrder)}
-        </Table.Td>
+        <Table.Td>{getNumberWithOrdinal(draftOrder)}</Table.Td>
 
         {episodeScores.map((s, idx) => (
           <Table.Td key={idx}>
@@ -232,7 +236,8 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                           {x.action.replace(/_/g, " ")}
                         </span>
                         <span style={{ flexShrink: 0 }}>
-                          {" "}+{x.points_awarded}
+                          {" "}
+                          +{x.points_awarded}
                         </span>
                       </span>
                     </Badge>
@@ -244,11 +249,10 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
         ))}
         <Table.Td>
           {playerElimination && (
-            <Badge
-              size="xs"
-              color={isRemovedFromGame ? "red" : "gray"}
-            >
-              {isRemovedFromGame ? "Removed" : `Out ${getNumberWithOrdinal(playerElimination.order)}`}
+            <Badge size="xs" color={isRemovedFromGame ? "red" : "gray"}>
+              {isRemovedFromGame
+                ? "Removed"
+                : `Out ${getNumberWithOrdinal(playerElimination.order)}`}
             </Badge>
           )}
         </Table.Td>
@@ -309,6 +313,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                 sortField={sortField}
                 sortDir={sortDir}
                 onSort={handleSort}
+                width="70px"
               />
               <SortableHeader
                 label="Player"
