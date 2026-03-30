@@ -1,6 +1,12 @@
 import { useState } from "react";
-import { QueryClientProvider } from "react-query";
-import { Link, Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  Link,
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useParams,
+} from "react-router-dom";
 import { Toaster } from "sonner";
 import { AppSidebar } from "./components/AppSidebar";
 import { AuthDialog } from "./components/Auth/AuthDialog";
@@ -22,68 +28,76 @@ import { SeasonAdmin } from "./pages/SeasonAdmin";
 import { Seasons } from "./pages/Seasons";
 import { SingleCompetition } from "./pages/SingleCompetition";
 import { SingleSeason } from "./pages/SingleSeason";
-import { queryClient } from "./queryClient";
+
+// Legacy redirect: /seasons/:id/manage -> /admin/:id (safe to remove once old links age out)
+const RedirectToAdmin = () => {
+  const { seasonId } = useParams();
+  if (!seasonId) return <Navigate to="/admin" replace />;
+  return <Navigate to={`/admin/${seasonId}`} replace />;
+};
 
 export const AppRoutes = () => {
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <TooltipProvider>
-          <SidebarProvider>
-            <AppSidebar onLoginClick={() => setAuthDialogOpen(true)} />
-            <SidebarInset>
-              <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
-                <SidebarTrigger className="-ml-1" />
-                <Separator
-                  orientation="vertical"
-                  className="mr-2 data-[orientation=vertical]:h-4"
+    <Router>
+      <TooltipProvider>
+        <SidebarProvider>
+          <AppSidebar onLoginClick={() => setAuthDialogOpen(true)} />
+          <SidebarInset>
+            <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
+              <SidebarTrigger className="-ml-1" />
+              <Separator
+                orientation="vertical"
+                className="mr-2 data-[orientation=vertical]:h-4"
+              />
+              <Link
+                to="/"
+                className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-lg font-bold text-transparent"
+              >
+                {PROJECT_NAME}
+              </Link>
+            </header>
+
+            <main className="flex-1 p-4 pb-24">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/logout" element={<Logout />} />
+                <Route
+                  path="/seasons/:seasonId/draft/:draftId"
+                  element={<DraftComponent />}
                 />
-                <Link
-                  to="/"
-                  className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-lg font-bold text-transparent"
-                >
-                  {PROJECT_NAME}
-                </Link>
-              </header>
+                <Route
+                  path="/seasons/:seasonId/manage"
+                  element={<RedirectToAdmin />}
+                />
+                <Route
+                  path="/seasons/:seasonId"
+                  element={<SingleSeason />}
+                />
+                <Route path="/seasons" element={<Seasons />} />
+                <Route
+                  path="/competitions/:competitionId"
+                  element={<SingleCompetition />}
+                />
+                <Route path="/competitions" element={<Competitions />} />
+                <Route
+                  path="/admin/:seasonId"
+                  element={<SeasonAdmin />}
+                />
+                <Route path="/admin" element={<Admin />} />
+              </Routes>
+            </main>
 
-              <main className="flex-1 p-4 pb-24">
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/logout" element={<Logout />} />
-                  <Route
-                    path="/seasons/:seasonId/draft/:draftId"
-                    element={<DraftComponent />}
-                  />
-                  <Route
-                    path="/seasons/:seasonId/manage"
-                    element={<SeasonAdmin />}
-                  />
-                  <Route
-                    path="/seasons/:seasonId"
-                    element={<SingleSeason />}
-                  />
-                  <Route path="/seasons" element={<Seasons />} />
-                  <Route
-                    path="/competitions/:competitionId"
-                    element={<SingleCompetition />}
-                  />
-                  <Route path="/competitions" element={<Competitions />} />
-                  <Route path="/admin" element={<Admin />} />
-                </Routes>
-              </main>
-
-              <Footer />
-            </SidebarInset>
-          </SidebarProvider>
-          <AuthDialog
-            open={authDialogOpen}
-            onOpenChange={setAuthDialogOpen}
-          />
-          <Toaster richColors />
-        </TooltipProvider>
-      </Router>
-    </QueryClientProvider>
+            <Footer />
+          </SidebarInset>
+        </SidebarProvider>
+        <AuthDialog
+          open={authDialogOpen}
+          onOpenChange={setAuthDialogOpen}
+        />
+        <Toaster richColors />
+      </TooltipProvider>
+    </Router>
   );
 };

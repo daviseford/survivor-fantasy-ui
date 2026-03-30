@@ -1,15 +1,15 @@
 import { doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
-import { GameEvent, Season } from "../types";
+import { Season, TeamAssignments } from "../types";
 
-export const useEvents = (seasonId?: Season["id"]) => {
-  const [data, setData] = useState<Record<GameEvent["id"], GameEvent>>({});
+export const useTeamAssignments = (seasonId?: Season["id"]) => {
+  const [data, setData] = useState<TeamAssignments>({});
 
   useEffect(() => {
     if (!seasonId) return;
 
-    const ref = doc(db, "events", seasonId);
+    const ref = doc(db, "team_assignments", seasonId);
 
     const unsub = onSnapshot(
       ref,
@@ -18,7 +18,7 @@ export const useEvents = (seasonId?: Season["id"]) => {
         setData(_data);
       },
       (error) => {
-        console.error("useEvents: onSnapshot error", error);
+        console.error("useTeamAssignments: onSnapshot error", error);
       },
     );
 

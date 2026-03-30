@@ -1,72 +1,62 @@
-import { useFirestoreQueryData } from "@react-query-firebase/firestore";
-import { collection } from "firebase/firestore";
+import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "../components/ui/badge";
-import { Button } from "../components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
 } from "../components/ui/card";
-import { db } from "../firebase";
-import { useUser } from "../hooks/useUser";
-import { Season } from "../types";
+import { useSeasons } from "../hooks/useSeasons";
 
 export const Seasons = () => {
   const navigate = useNavigate();
-  const { slimUser } = useUser();
 
-  const ref = collection(db, "seasons");
-
-  const { data: seasons } = useFirestoreQueryData<Season[], Season[]>(
-    ["seasons"],
-    // @ts-expect-error asd
-    ref,
-  );
+  const { data: seasons } = useSeasons();
 
   return (
-    <div>
-      <h3 className="p-4 text-lg text-muted-foreground">
-        Pick your favorite season in order to learn more about the contestants
-        and start a draft!
-      </h3>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {seasons?.map((x) => {
-          console.log(x.name);
-          if (
-            x.name !== "Survivor 46" &&
-            x.name !== "Survivor 50" &&
-            !slimUser?.isAdmin
-          )
-            return null;
+    <div className="space-y-6 p-4">
+      <div>
+        <h2 className="text-2xl font-bold">Seasons</h2>
+        <p className="text-sm text-muted-foreground">
+          Pick a season to see the contestants and start a draft with friends.
+        </p>
+      </div>
 
-          return (
-            <Card key={x.id} className="overflow-hidden">
-              <CardHeader className="p-0">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {seasons
+          ?.slice()
+          .sort((a, b) => b.order - a.order)
+          .map((x) => (
+            <Card
+              key={x.id}
+              className="cursor-pointer overflow-hidden transition-shadow hover:shadow-lg"
+              onClick={() => navigate(`/seasons/${x.id}`)}
+            >
+              <CardHeader className="relative p-0">
                 <img
                   src={x.img}
                   alt={x.name}
-                  className="h-[250px] w-full object-cover"
+                  className="h-[220px] w-full object-cover"
                 />
+                <Badge className="absolute right-3 top-3" variant="secondary">
+                  Season {x.order}
+                </Badge>
               </CardHeader>
               <CardContent className="pt-4">
                 <div className="flex items-center justify-between">
-                  <p className="font-medium">{x.name}</p>
-                  <Badge variant="secondary">Season {x.order}</Badge>
+                  <div>
+                    <p className="text-lg font-semibold">{x.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {x.players?.length ?? 0} contestants
+                    </p>
+                  </div>
+                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
                 </div>
               </CardContent>
-              <CardFooter>
-                <Button
-                  className="w-full"
-                  onClick={() => navigate(`/seasons/${x.id}`)}
-                >
-                  Select
-                </Button>
-              </CardFooter>
+              <CardFooter />
             </Card>
-          );
-        })}
+          ))}
       </div>
     </div>
   );

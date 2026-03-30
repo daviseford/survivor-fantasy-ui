@@ -4,10 +4,13 @@ import {
   LogIn,
   LogOut,
   Mail,
+  Moon,
   Settings,
+  Sun,
   Swords,
   User,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { auth } from "../firebase";
 import { useUser } from "../hooks/useUser";
@@ -31,12 +34,36 @@ const navItems = [
   { link: "/competitions", label: "Competitions", icon: Swords },
 ];
 
+function useColorScheme() {
+  const [isDark, setIsDark] = useState(() => {
+    const stored = localStorage.getItem("color-scheme");
+    if (stored === "dark") return true;
+    if (stored === "light") return false;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDark) {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+    localStorage.setItem("color-scheme", isDark ? "dark" : "light");
+  }, [isDark]);
+
+  const toggle = () => setIsDark((prev) => !prev);
+
+  return { isDark, toggle };
+}
+
 export function AppSidebar({
   onLoginClick,
   ...props
 }: React.ComponentProps<typeof Sidebar> & { onLoginClick: () => void }) {
   const { pathname } = useLocation();
   const { slimUser } = useUser();
+  const { isDark, toggle: toggleColorScheme } = useColorScheme();
 
   const handleLogout = () => {
     auth.signOut();
@@ -72,6 +99,8 @@ export function AppSidebar({
                     item.link === "/seasons") ||
                   (pathname.startsWith("/competitions") &&
                     item.link === "/competitions") ||
+                  (pathname.startsWith("/admin") &&
+                    item.link === "/admin") ||
                   item.link === pathname;
 
                 return (
@@ -91,6 +120,16 @@ export function AppSidebar({
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={toggleColorScheme}
+              aria-label="Toggle color scheme"
+            >
+              {isDark ? <Sun /> : <Moon />}
+              <span>{isDark ? "Light mode" : "Dark mode"}</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
           {!slimUser && (
             <SidebarMenuItem>
               <SidebarMenuButton onClick={onLoginClick}>
