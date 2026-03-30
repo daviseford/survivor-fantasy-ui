@@ -10,6 +10,7 @@ import {
   Title,
 } from "@mantine/core";
 import {
+  IconChartDonut,
   IconChartLine,
   IconClipboardList,
   IconCrystalBall,
@@ -17,6 +18,7 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 import { PlayerGroupGrid } from "../components/MyPlayers";
+import { ScoringBreakdownSection } from "../components/ScoringBreakdown";
 import { PropBetScoring } from "../components/PropBetTables";
 import {
   PerSurvivorPerEpisodeDetailedScoringTable,
@@ -117,6 +119,16 @@ export const SingleCompetition = () => {
         icon={<IconChartLine size={22} color="var(--mantine-color-teal-6)" />}
       >
         <PerSurvivorPerEpisodeDetailedScoringTable />
+      </Section>
+
+      <Section
+        title="Scoring Breakdown"
+        subtitle="Points by scoring category"
+        icon={
+          <IconChartDonut size={22} color="var(--mantine-color-orange-6)" />
+        }
+      >
+        <ScoringBreakdownSection />
       </Section>
 
       <Accordion variant="subtle" radius="md">
