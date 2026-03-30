@@ -1,7 +1,7 @@
 import {
+  Accordion,
   Box,
   Button,
-  Card,
   Center,
   Code,
   Group,
@@ -10,6 +10,7 @@ import {
   NumberInput,
   Select,
   SimpleGrid,
+  Spoiler,
   Text,
   TextInput,
   Title,
@@ -184,86 +185,92 @@ export const CreateChallenge = () => {
     .filter((x) => !eliminatedPlayers.includes(x));
 
   return (
-    <Card withBorder>
-      <Card.Section p={"md"}>
-        <Title order={4}>Create a new Challenge</Title>
-      </Card.Section>
-
-      <Card.Section p={"md"}>
-        <SimpleGrid cols={{ base: 1, md: 2 }}>
-          <Box maw={340} mx="auto">
-            <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-              <TextInput
-                withAsterisk
-                readOnly
-                label="Season #"
-                value={form.values.season_num}
-              />
-
-              <NumberInput
-                withAsterisk
-                label="Episode #"
-                min={1}
-                max={season?.episodes.length}
-                {...form.getInputProps("episode_num")}
-              />
-
-              <NumberInput
-                withAsterisk
-                label="Order"
-                min={1}
-                {...form.getInputProps("order")}
-              />
-
-              {teamSelectData.length > 0 && (
-                <Select
-                  label="Winning Team (optional)"
-                  placeholder={
-                    hasEpisodeSnapshot
-                      ? "Select a team to auto-fill winners"
-                      : "No team assignments for this episode"
-                  }
-                  description={
-                    !hasEpisodeSnapshot
-                      ? "Assign players to teams for this episode first"
-                      : undefined
-                  }
-                  data={teamSelectData}
-                  clearable
-                  searchable
-                  disabled={!hasEpisodeSnapshot}
-                  value={form.values.winning_team_id ?? null}
-                  onChange={handleWinningTeamChange}
+    <Accordion defaultValue="create-challenge">
+      <Accordion.Item value="create-challenge">
+        <Accordion.Control>
+          <Title order={4}>Create a new Challenge</Title>
+        </Accordion.Control>
+        <Accordion.Panel>
+          <SimpleGrid cols={{ base: 1, md: 2 }}>
+            <Box maw={340} mx="auto">
+              <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+                <TextInput
+                  withAsterisk
+                  readOnly
+                  label="Season #"
+                  value={form.values.season_num}
                 />
-              )}
 
-              <MultiSelect
-                withAsterisk
-                label="Winning Players"
-                data={playerNames}
-                searchable
-                {...form.getInputProps("winning_players")}
-              />
+                <NumberInput
+                  withAsterisk
+                  label="Episode #"
+                  min={1}
+                  max={season?.episodes.length}
+                  {...form.getInputProps("episode_num")}
+                />
 
-              <Select
-                withAsterisk
-                label="Challenge Variant"
-                data={ChallengeWinActions}
-                searchable
-                {...form.getInputProps("variant")}
-              />
+                <NumberInput
+                  withAsterisk
+                  label="Order"
+                  min={1}
+                  {...form.getInputProps("order")}
+                />
 
-              <Group justify="flex-end" mt="md">
-                <Button type="submit">Submit</Button>
-              </Group>
-            </form>
-          </Box>
-          <Box>
-            Generated Payload:
-            <Code block>{JSON.stringify(form.values, null, 2)}</Code>
-          </Box>
-        </SimpleGrid>
-      </Card.Section>
-    </Card>
+                {teamSelectData.length > 0 && (
+                  <Select
+                    label="Winning Team (optional)"
+                    placeholder={
+                      hasEpisodeSnapshot
+                        ? "Select a team to auto-fill winners"
+                        : "No team assignments for this episode"
+                    }
+                    description={
+                      !hasEpisodeSnapshot
+                        ? "Assign players to teams for this episode first"
+                        : undefined
+                    }
+                    data={teamSelectData}
+                    clearable
+                    searchable
+                    disabled={!hasEpisodeSnapshot}
+                    value={form.values.winning_team_id ?? null}
+                    onChange={handleWinningTeamChange}
+                  />
+                )}
+
+                <MultiSelect
+                  withAsterisk
+                  label="Winning Players"
+                  data={playerNames}
+                  searchable
+                  {...form.getInputProps("winning_players")}
+                />
+
+                <Select
+                  withAsterisk
+                  label="Challenge Variant"
+                  data={ChallengeWinActions}
+                  searchable
+                  {...form.getInputProps("variant")}
+                />
+
+                <Group justify="flex-end" mt="md">
+                  <Button type="submit">Submit</Button>
+                </Group>
+              </form>
+            </Box>
+            <Box>
+              <Spoiler
+                maxHeight={0}
+                showLabel="Show payload"
+                hideLabel="Hide payload"
+              >
+                <Code block>{JSON.stringify(form.values, null, 2)}</Code>
+              </Spoiler>
+            </Box>
+          </SimpleGrid>
+        </Accordion.Panel>
+      </Accordion.Item>
+    </Accordion>
   );
 };

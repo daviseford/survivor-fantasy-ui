@@ -1,7 +1,7 @@
 import {
+  Accordion,
   Box,
   Button,
-  Card,
   Center,
   Checkbox,
   Code,
@@ -9,6 +9,7 @@ import {
   Loader,
   NumberInput,
   SimpleGrid,
+  Spoiler,
   TextInput,
   Title,
 } from "@mantine/core";
@@ -85,72 +86,80 @@ export const CreateEpisode = () => {
   };
 
   return (
-    <Card withBorder>
-      <Card.Section p="md">
-        <Title order={4}>Create a new Episode</Title>
-      </Card.Section>
-
-      <Card.Section p="md">
-        <SimpleGrid cols={{ base: 1, md: 2 }}>
-          <Box maw={340} mx="auto">
-            <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-              <TextInput
-                withAsterisk
-                readOnly
-                label="Season"
-                value={`${season.name} (${season.id})`}
-              />
-
-              <NumberInput
-                withAsterisk
-                label="Episode #"
-                min={1}
-                {...form.getInputProps("order")}
-              />
-
-              <TextInput
-                label="Episode Name"
-                placeholder="e.g. The Marooning"
-                {...form.getInputProps("name")}
-              />
-
-              <Group mt="md" gap="lg">
-                <Checkbox
-                  label="Merge occurs"
-                  {...form.getInputProps("merge_occurs", { type: "checkbox" })}
+    <Accordion defaultValue="create-episode">
+      <Accordion.Item value="create-episode">
+        <Accordion.Control>
+          <Title order={4}>Create a new Episode</Title>
+        </Accordion.Control>
+        <Accordion.Panel>
+          <SimpleGrid cols={{ base: 1, md: 2 }}>
+            <Box maw={340} mx="auto">
+              <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+                <TextInput
+                  withAsterisk
+                  readOnly
+                  label="Season"
+                  value={`${season.name} (${season.id})`}
                 />
-                <Checkbox
-                  label="Post-merge"
-                  {...form.getInputProps("post_merge", { type: "checkbox" })}
-                />
-                <Checkbox
-                  label="Finale"
-                  {...form.getInputProps("finale", { type: "checkbox" })}
-                />
-              </Group>
 
-              <Group justify="flex-end" mt="md">
-                <Button type="submit">Submit</Button>
-              </Group>
-            </form>
-          </Box>
-          <Box>
-            Generated Payload:
-            <Code block>
-              {JSON.stringify(
-                {
-                  id: `episode_${form.values.order}`,
-                  season_id: season.id,
-                  season_num: season.order,
-                  ...form.values,
-                },
-                null,
-                2,
-              )}
-            </Code>
-          </Box>
-        </SimpleGrid>
-      </Card.Section>
-    </Card>
+                <NumberInput
+                  withAsterisk
+                  label="Episode #"
+                  min={1}
+                  {...form.getInputProps("order")}
+                />
+
+                <TextInput
+                  label="Episode Name"
+                  placeholder="e.g. The Marooning"
+                  {...form.getInputProps("name")}
+                />
+
+                <Group mt="md" gap="lg">
+                  <Checkbox
+                    label="Merge occurs"
+                    {...form.getInputProps("merge_occurs", {
+                      type: "checkbox",
+                    })}
+                  />
+                  <Checkbox
+                    label="Post-merge"
+                    {...form.getInputProps("post_merge", { type: "checkbox" })}
+                  />
+                  <Checkbox
+                    label="Finale"
+                    {...form.getInputProps("finale", { type: "checkbox" })}
+                  />
+                </Group>
+
+                <Group justify="flex-end" mt="md">
+                  <Button type="submit">Submit</Button>
+                </Group>
+              </form>
+            </Box>
+            <Box>
+              <Spoiler
+                maxHeight={0}
+                showLabel="Show payload"
+                hideLabel="Hide payload"
+              >
+                <Code block>
+                  {JSON.stringify(
+                    {
+                      id: `episode_${form.values.order}`,
+                      season_id: season.id,
+                      season_num: season.order,
+                      ...form.values,
+                    },
+                    null,
+                    2,
+                  )}
+                </Code>
+              </Spoiler>
+            </Box>
+          </SimpleGrid>
+        </Accordion.Panel>
+      </Accordion.Item>
+    </Accordion>
   );
 };

@@ -1,5 +1,6 @@
 import {
   Center,
+  Group,
   Loader,
   Select,
   Stack,
@@ -60,7 +61,13 @@ export const SeasonAdmin = () => {
   const { data: seasons, isLoading: isSeasonsLoading } = useSeasons();
 
   if (!slimUser?.isAdmin) {
-    return <Text c="red">DENIED!</Text>;
+    return (
+      <Center py="xl">
+        <Text c="red" fw={500}>
+          Unauthorized
+        </Text>
+      </Center>
+    );
   }
 
   if (isSeasonLoading || isSeasonsLoading) {
@@ -97,19 +104,19 @@ export const SeasonAdmin = () => {
   };
 
   return (
-    <Stack gap="md">
-      <div>
-        <Title order={2} mb="xs">
-          Manage {season.name}
-        </Title>
+    <Stack gap="md" pt="xs">
+      <Group justify="space-between" align="flex-end">
+        <Title order={2}>Manage {season.name}</Title>
         <Select
-          label="Switch season"
+          placeholder="Switch season"
           data={seasonOptions}
           value={seasonId ?? null}
           onChange={handleSeasonChange}
-          w={300}
+          w={250}
+          size="sm"
+          clearable={false}
         />
-      </div>
+      </Group>
 
       <Tabs value={activeTab} onChange={handleTabChange}>
         <Tabs.List>
