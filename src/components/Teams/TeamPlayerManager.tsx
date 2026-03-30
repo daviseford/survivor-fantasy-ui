@@ -102,7 +102,7 @@ const DroppableColumn = ({
       style={{
         borderColor: isOver
           ? "var(--mantine-color-blue-light-color)"
-          : color ?? undefined,
+          : (color ?? undefined),
         borderWidth: color ? 2 : 1,
         minHeight: 120,
         backgroundColor: isOver ? "var(--mantine-color-blue-light)" : undefined,

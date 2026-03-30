@@ -191,7 +191,8 @@ export const DraftComponent = () => {
 
     const nextCurrentPicker = finished
       ? null
-      : draft.pick_order?.[pickOrderIdxOfLastPicker + 1] ?? draft.pick_order[0];
+      : (draft.pick_order?.[pickOrderIdxOfLastPicker + 1] ??
+        draft.pick_order[0]);
 
     const _draft = {
       ...draft,

@@ -19,11 +19,7 @@ export const Footer = () => {
     <div className={`${classes.footer} ${!isHome ? classes.hideOnMobile : ""}`}>
       <Container className={classes.inner}>
         <Group gap="xs" wrap="nowrap">
-          <img
-            src="/icons/probst.svg"
-            alt=""
-            className={classes.icon}
-          />
+          <img src="/icons/probst.svg" alt="" className={classes.icon} />
           <Text c="dimmed" size="xs">
             Created by Davis Ford
           </Text>
