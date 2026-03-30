@@ -6,6 +6,7 @@ import {
   Button,
   Center,
   CopyButton,
+  Divider,
   Group,
   Paper,
   Select,
@@ -15,11 +16,22 @@ import {
   Text,
   TextInput,
   Title,
+  Tooltip,
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import {
+  IconCheck,
+  IconClipboardList,
+  IconCopy,
+  IconCrystalBall,
+  IconFlame,
+  IconTrophy,
+  IconUserPlus,
+  IconUsers,
+  IconX,
+} from "@tabler/icons-react";
 import { ref, update } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
 import { shuffle, uniqBy } from "lodash-es";
@@ -265,118 +277,238 @@ export const DraftComponent = () => {
   return (
     <div>
       {phase === "pre-draft" ? (
-        <Stack>
+        <Stack gap="lg" p="lg">
           {/* ===== PRE-DRAFT LOBBY ===== */}
-          <Title order={2}>Draft Lobby</Title>
-          <Text c="dimmed" size="sm">
-            Share the link below to invite friends. The host can start the draft
-            once everyone has joined.
-          </Text>
+          <Paper p="lg" radius="md" withBorder>
+            <Stack gap="md">
+              <Group gap="sm" align="center">
+                <IconUsers size={22} color="var(--mantine-color-blue-6)" />
+                <div>
+                  <Title order={3}>Draft Lobby</Title>
+                  <Text size="sm" c="dimmed">
+                    Share the link to invite friends. The host starts the draft
+                    once everyone has joined.
+                  </Text>
+                </div>
+              </Group>
+              <Divider />
 
-          <Group>
-            {!slimUser && (
-              <Button
-                onClick={() =>
-                  modals.openContextModal({
-                    modal: "AuthModal",
-                    innerProps: {},
-                  })
-                }
-              >
-                Log in to join this draft
-              </Button>
-            )}
+              {/* Participants */}
+              <div>
+                <Group gap="xs" mb="xs">
+                  <Text size="sm" fw={600}>
+                    Participants
+                  </Text>
+                  <Badge variant="light" size="sm">
+                    {draft?.participants?.length ?? 0} joined
+                  </Badge>
+                </Group>
+                {draft?.participants?.length ? (
+                  <Group gap="sm">
+                    {draft.participants.map((p) => (
+                      <Tooltip
+                        label={p.displayName || p.email || p.uid}
+                        key={p.uid}
+                      >
+                        <Badge
+                          variant="light"
+                          color="blue"
+                          size="lg"
+                          leftSection={
+                            <Avatar size={20} radius="xl" color="blue">
+                              {(p.displayName ||
+                                p.email ||
+                                "?")[0].toUpperCase()}
+                            </Avatar>
+                          }
+                        >
+                          {p.displayName || p.email || p.uid}
+                        </Badge>
+                      </Tooltip>
+                    ))}
+                  </Group>
+                ) : (
+                  <Text size="sm" c="dimmed">
+                    No one has joined yet.
+                  </Text>
+                )}
+              </div>
 
-            {draft && !userIsParticipant && slimUser && (
-              <Button onClick={joinDraft}>Join Draft</Button>
-            )}
-
-            {draft &&
-              draft.creator_uid === slimUser?.uid &&
-              !isInvalidNumberOfPlayers && (
-                <Button
-                  onClick={startDraft}
-                  disabled={draft.participants.length < 2}
-                >
-                  Start Draft
-                  {draft.participants.length < 2
-                    ? " (waiting for more players)"
-                    : ""}
-                </Button>
+              {draft && isInvalidNumberOfPlayers && (
+                <Alert color="orange" variant="light">
+                  The {season?.players?.length ?? 0} contestants can't be split
+                  evenly among {draft.participants.length} players. Invite
+                  another friend or remove one to continue.
+                </Alert>
               )}
 
-            {draft && draft.creator_uid !== slimUser?.uid && (
-              <Button disabled={true}>
-                Waiting for host to start the draft
-              </Button>
-            )}
+              {/* Actions */}
+              <Group gap="sm">
+                {!slimUser && (
+                  <Button
+                    leftSection={<IconUserPlus size={16} />}
+                    onClick={() =>
+                      modals.openContextModal({
+                        modal: "AuthModal",
+                        innerProps: {},
+                      })
+                    }
+                  >
+                    Log in to join
+                  </Button>
+                )}
 
-            <CopyButton value={window.location.href}>
-              {({ copied, copy }) => (
-                <Button
-                  color={copied ? "teal" : "blue"}
-                  onClick={copy}
-                  variant="outline"
-                >
-                  {copied ? "Copied url" : "Copy invite link"}
-                </Button>
-              )}
-            </CopyButton>
-          </Group>
+                {draft && !userIsParticipant && slimUser && (
+                  <Button
+                    leftSection={<IconUserPlus size={16} />}
+                    onClick={joinDraft}
+                  >
+                    Join Draft
+                  </Button>
+                )}
 
-          {draft && isInvalidNumberOfPlayers && (
-            <Alert color="red">
-              You cannot draft evenly with this number of players. Please invite
-              a friend or start over.
-            </Alert>
-          )}
+                {draft &&
+                  draft.creator_uid === slimUser?.uid &&
+                  !isInvalidNumberOfPlayers && (
+                    <Button
+                      variant="gradient"
+                      gradient={{ from: "blue", to: "cyan" }}
+                      leftSection={<IconFlame size={16} />}
+                      onClick={startDraft}
+                      disabled={draft.participants.length < 2}
+                    >
+                      {draft.participants.length < 2
+                        ? "Waiting for players..."
+                        : "Start Draft"}
+                    </Button>
+                  )}
 
-          <Text size="sm">
-            <strong>Participants:</strong>{" "}
-            {draft?.participants
-              .map((x) => x.displayName || x.email || x.uid)
-              .join(", ") || "None yet"}
-          </Text>
-        </Stack>
-      ) : (
-        <>
-          <Stepper active={activeStep} allowNextStepsSelect={false}>
-            {/* ===== STEP 0: DRAFT ===== */}
-            <Stepper.Step label="Draft" description="Pick your players">
-              <Stack>
-                {draft?.current_picker && (
-                  <Center p="xl">
-                    <Title
-                      order={2}
-                      c={
-                        draft.current_picker.uid === slimUser?.uid
-                          ? "blue"
-                          : "gray"
+                {draft &&
+                  draft.creator_uid !== slimUser?.uid &&
+                  userIsParticipant && (
+                    <Button variant="light" disabled>
+                      Waiting for host to start...
+                    </Button>
+                  )}
+
+                <CopyButton value={window.location.href}>
+                  {({ copied, copy }) => (
+                    <Button
+                      color={copied ? "teal" : "gray"}
+                      onClick={copy}
+                      variant="light"
+                      leftSection={
+                        copied ? (
+                          <IconCheck size={16} />
+                        ) : (
+                          <IconCopy size={16} />
+                        )
                       }
                     >
-                      {draft.current_picker.uid === slimUser?.uid
-                        ? "Your turn to pick!"
-                        : `${draft.current_picker.displayName || draft.current_picker.email} is picking`}
-                    </Title>
-                  </Center>
+                      {copied ? "Link copied!" : "Copy invite link"}
+                    </Button>
+                  )}
+                </CopyButton>
+              </Group>
+            </Stack>
+          </Paper>
+
+          {/* Scoring reference */}
+          <Paper p="lg" radius="md" withBorder>
+            <Stack gap="md">
+              <Group gap="sm" align="center">
+                <IconClipboardList
+                  size={22}
+                  color="var(--mantine-color-teal-6)"
+                />
+                <Title order={3}>Scoring Reference</Title>
+              </Group>
+              <Divider />
+              <ScoringLegendTable />
+            </Stack>
+          </Paper>
+        </Stack>
+      ) : (
+        <Stack gap="md" p="lg">
+          <Stepper
+            active={activeStep}
+            allowNextStepsSelect={false}
+            color="blue"
+          >
+            {/* ===== STEP 0: DRAFT ===== */}
+            <Stepper.Step label="Draft" description="Pick your players">
+              <Stack gap="md" mt="md">
+                {/* Turn banner */}
+                {draft?.current_picker && (
+                  <Paper
+                    p="md"
+                    radius="md"
+                    style={{
+                      backgroundColor:
+                        draft.current_picker.uid === slimUser?.uid
+                          ? "var(--mantine-color-blue-0)"
+                          : "var(--mantine-color-gray-0)",
+                      border:
+                        draft.current_picker.uid === slimUser?.uid
+                          ? "2px solid var(--mantine-color-blue-4)"
+                          : "1px solid var(--mantine-color-gray-3)",
+                    }}
+                  >
+                    <Group justify="space-between" align="center" wrap="wrap">
+                      <Group gap="sm">
+                        <IconFlame
+                          size={24}
+                          color={
+                            draft.current_picker.uid === slimUser?.uid
+                              ? "var(--mantine-color-blue-6)"
+                              : "var(--mantine-color-gray-5)"
+                          }
+                        />
+                        <Title
+                          order={3}
+                          c={
+                            draft.current_picker.uid === slimUser?.uid
+                              ? "blue"
+                              : "dimmed"
+                          }
+                        >
+                          {draft.current_picker.uid === slimUser?.uid
+                            ? "Your turn to pick!"
+                            : `${draft.current_picker.displayName || draft.current_picker.email} is picking...`}
+                        </Title>
+                      </Group>
+                      <Badge variant="light" size="lg">
+                        Pick {draft?.current_pick_number} of{" "}
+                        {draft?.total_players}
+                      </Badge>
+                    </Group>
+                  </Paper>
                 )}
 
-                <Group justify="space-between">
-                  <Text size="sm">
-                    Pick {draft?.current_pick_number} of {draft?.total_players}
-                    {" | "}
-                    Draft Order:{" "}
-                    {draft?.pick_order
-                      .map((x) => x.displayName || x.email)
-                      .join(" | ")}
+                {/* Draft order */}
+                <Group gap="xs" wrap="wrap">
+                  <Text size="xs" c="dimmed" fw={600}>
+                    Order:
                   </Text>
+                  {draft?.pick_order?.map((p, i) => (
+                    <Badge
+                      key={p.uid}
+                      variant={
+                        p.uid === draft?.current_picker?.uid
+                          ? "filled"
+                          : "light"
+                      }
+                      color={
+                        p.uid === draft?.current_picker?.uid ? "blue" : "gray"
+                      }
+                      size="sm"
+                    >
+                      {i + 1}. {p.displayName || p.email}
+                    </Badge>
+                  ))}
                 </Group>
 
-                {Boolean(draft?.draft_picks?.length) && (
-                  <Center>
-                    <MyDraftedPlayers />
-                  </Center>
-                )}
+                {Boolean(draft?.draft_picks?.length) && <MyDraftedPlayers />}
               </Stack>
             </Stepper.Step>
 
@@ -385,24 +517,34 @@ export const DraftComponent = () => {
               label="Prop Bets"
               description="Place your predictions"
             >
-              <Box p="xl">
-                <Title order={3}>Place Your Bets</Title>
-                <Text c="dimmed" size="sm" mb="md">
-                  Predict what will happen this season. Points are awarded for
-                  correct answers at the end of the season.
-                </Text>
-                <PropBets season={season} onSubmit={addPropBetsToDraft} />
-              </Box>
+              <Paper p="lg" radius="md" withBorder mt="md">
+                <Stack gap="md">
+                  <Group gap="sm" align="center">
+                    <IconCrystalBall
+                      size={22}
+                      color="var(--mantine-color-violet-6)"
+                    />
+                    <div>
+                      <Title order={3}>Place Your Bets</Title>
+                      <Text c="dimmed" size="sm">
+                        Predict what happens this season. Earn bonus points for
+                        correct answers.
+                      </Text>
+                    </div>
+                  </Group>
+                  <Divider />
+                  <PropBets season={season} onSubmit={addPropBetsToDraft} />
+                </Stack>
+              </Paper>
             </Stepper.Step>
 
             {/* ===== STEP 2: SUMMARY ===== */}
             <Stepper.Step label="Summary" description="Review & compete">
-              <Stack>
+              <Stack gap="lg" mt="md">
                 {!allPlayersDoneWithPropBets && (
-                  <Alert color="yellow">
-                    Waiting for all participants to submit their prop bets (
-                    {draft?.prop_bets?.length || 0} /{" "}
-                    {draft?.participants?.length})
+                  <Alert color="yellow" variant="light">
+                    Waiting for prop bets — {draft?.prop_bets?.length || 0} of{" "}
+                    {draft?.participants?.length} submitted
                   </Alert>
                 )}
 
@@ -410,6 +552,9 @@ export const DraftComponent = () => {
                   <Center>
                     <Button
                       size="lg"
+                      variant="gradient"
+                      gradient={{ from: "blue", to: "cyan" }}
+                      leftSection={<IconTrophy size={20} />}
                       onClick={() =>
                         navigate(`/competitions/${draft!.competiton_id}`)
                       }
@@ -419,41 +564,60 @@ export const DraftComponent = () => {
                   </Center>
                 )}
 
-                <Center>
-                  <MyDraftedPlayers />
-                </Center>
+                <MyDraftedPlayers />
 
-                <Box p="lg">
-                  <Title ta="center" order={3} mb="md">
-                    Prop Bets
-                  </Title>
-                  <PostDraftPropBetTable />
-                </Box>
+                <Paper p="lg" radius="md" withBorder>
+                  <Stack gap="md">
+                    <Group gap="sm" align="center">
+                      <IconCrystalBall
+                        size={20}
+                        color="var(--mantine-color-violet-6)"
+                      />
+                      <Title order={4}>Prop Bets</Title>
+                    </Group>
+                    <Divider />
+                    <PostDraftPropBetTable />
+                  </Stack>
+                </Paper>
 
-                <Box p="lg">
-                  <Title ta="center" order={3} mb="md">
-                    Draft Results
-                  </Title>
-                  <DraftTable
-                    draft_picks={draft!.draft_picks}
-                    participants={draft!.participants}
-                    players={season.players}
-                  />
-                </Box>
+                <Paper p="lg" radius="md" withBorder>
+                  <Stack gap="md">
+                    <Group gap="sm" align="center">
+                      <IconClipboardList
+                        size={20}
+                        color="var(--mantine-color-blue-6)"
+                      />
+                      <Title order={4}>Draft Results</Title>
+                    </Group>
+                    <Divider />
+                    <DraftTable
+                      draft_picks={draft!.draft_picks}
+                      participants={draft!.participants}
+                      players={season.players}
+                    />
+                  </Stack>
+                </Paper>
 
-                <Box p="lg">
-                  <Title ta="center" order={3} mb="md">
-                    Scoring Legend
-                  </Title>
-                  <ScoringLegendTable />
-                </Box>
+                <Paper p="lg" radius="md" withBorder>
+                  <Stack gap="md">
+                    <Group gap="sm" align="center">
+                      <IconClipboardList
+                        size={20}
+                        color="var(--mantine-color-teal-6)"
+                      />
+                      <Title order={4}>Scoring Reference</Title>
+                    </Group>
+                    <Divider />
+                    <ScoringLegendTable />
+                  </Stack>
+                </Paper>
               </Stack>
             </Stepper.Step>
           </Stepper>
 
           {/* ===== PLAYER GRID (during drafting, full-width below stepper) ===== */}
           {phase === "drafting" && (
-            <SimpleGrid cols={{ base: 2, sm: 4 }} mt="md">
+            <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }} mt="md">
               {season.players.map((p) => {
                 const isDrafted = isPlayerDrafted(p.name);
                 const draftedBy = !isDrafted
@@ -463,39 +627,39 @@ export const DraftComponent = () => {
                   <Paper
                     radius="md"
                     withBorder
-                    p="lg"
-                    bg={
-                      isDrafted
-                        ? "var(--mantine-color-gray-4)"
-                        : "var(--mantine-color-body)"
-                    }
+                    p="sm"
                     key={p.name + "-grid"}
+                    style={{
+                      opacity: isDrafted ? 0.5 : 1,
+                    }}
                   >
-                    <Avatar
-                      src={p.img}
-                      size={120}
-                      radius={120}
-                      mx="auto"
-                      alt={p.name}
-                      onClick={() => {
-                        modals.open({
-                          withCloseButton: false,
-                          children: (
-                            <Stack>
-                              <Center>
-                                <Title order={3}>{p.name}</Title>
-                              </Center>
-                              <Center>
-                                <Avatar
-                                  size={"100%"}
-                                  src={p.img}
-                                  radius={10}
-                                  alt={p.name}
-                                />
-                              </Center>
-                              <Center>
+                    <Stack gap={6} align="center">
+                      <Avatar
+                        src={p.img}
+                        size={80}
+                        radius={80}
+                        alt={p.name}
+                        style={{
+                          filter: isDrafted ? "grayscale(1)" : "none",
+                        }}
+                        onClick={() => {
+                          modals.open({
+                            withCloseButton: false,
+                            children: (
+                              <Stack>
+                                <Center>
+                                  <Title order={3}>{p.name}</Title>
+                                </Center>
+                                <Center>
+                                  <Avatar
+                                    size={"100%"}
+                                    src={p.img}
+                                    radius={10}
+                                    alt={p.name}
+                                  />
+                                </Center>
                                 {p.description && (
-                                  <Text ta="center" fz="lg" c="dimmed">
+                                  <Text ta="center" c="dimmed">
                                     {p.description.split(" | ").map((x, i) => (
                                       <span key={i}>
                                         {x}
@@ -504,51 +668,41 @@ export const DraftComponent = () => {
                                     ))}
                                   </Text>
                                 )}
-                              </Center>
-                            </Stack>
-                          ),
-                        });
-                      }}
-                    />
-                    <Text ta="center" fz="lg" fw={500} mt="md">
-                      {p.name}
-                    </Text>
-                    {p.description && (
-                      <Text ta="center" fz="sm" c="dimmed">
-                        {p.description.split(" | ").map((x, i) => (
-                          <span key={i}>
-                            {x}
-                            <br />
-                          </span>
-                        ))}
-                      </Text>
-                    )}
-                    <Group justify="space-between" mt="md" mb="xs">
-                      <Badge color="pink">Season {season.order}</Badge>
-                      {draftedBy && (
-                        <Badge color="blue">
-                          Drafted by {draftedBy.user_name}
-                        </Badge>
-                      )}
-                      <Badge color={isDrafted ? "red" : "green"}>
-                        {isDrafted ? "Drafted" : "Available"}
-                      </Badge>
-                    </Group>
-
-                    {!isDrafted && (
-                      <Button
-                        fullWidth
-                        onClick={() => draftPlayer(p.name)}
-                        disabled={
-                          !draft?.started ||
-                          draft.finished ||
-                          !isCurrentDrafter ||
-                          isDrafted
-                        }
+                              </Stack>
+                            ),
+                          });
+                        }}
+                      />
+                      <Text
+                        ta="center"
+                        fw={600}
+                        size="sm"
+                        c={isDrafted ? "dimmed" : undefined}
                       >
-                        Draft Me
-                      </Button>
-                    )}
+                        {p.name}
+                      </Text>
+
+                      {isDrafted && draftedBy ? (
+                        <Badge variant="light" color="gray" size="xs">
+                          {draftedBy.user_name}
+                        </Badge>
+                      ) : (
+                        <Button
+                          fullWidth
+                          size="xs"
+                          variant={isCurrentDrafter ? "filled" : "light"}
+                          onClick={() => draftPlayer(p.name)}
+                          disabled={
+                            !draft?.started ||
+                            draft.finished ||
+                            !isCurrentDrafter ||
+                            isDrafted
+                          }
+                        >
+                          Draft
+                        </Button>
+                      )}
+                    </Stack>
                   </Paper>
                 );
               })}
@@ -557,28 +711,42 @@ export const DraftComponent = () => {
 
           {/* ===== DRAFT RESULTS (visible during drafting) ===== */}
           {phase === "drafting" && (draft?.draft_picks?.length ?? 0) > 0 && (
-            <Box p="lg">
-              <Title ta="center" order={3} mb="md">
-                Draft Results
-              </Title>
-              <DraftTable
-                draft_picks={draft!.draft_picks}
-                participants={draft!.participants}
-                players={season.players}
-              />
-            </Box>
+            <Paper p="lg" radius="md" withBorder mt="md">
+              <Stack gap="md">
+                <Group gap="sm" align="center">
+                  <IconClipboardList
+                    size={20}
+                    color="var(--mantine-color-blue-6)"
+                  />
+                  <Title order={4}>Draft Results</Title>
+                </Group>
+                <Divider />
+                <DraftTable
+                  draft_picks={draft!.draft_picks}
+                  participants={draft!.participants}
+                  players={season.players}
+                />
+              </Stack>
+            </Paper>
           )}
 
           {/* ===== SCORING LEGEND (visible during drafting) ===== */}
           {phase === "drafting" && (
-            <Box p="lg">
-              <Title ta="center" order={3} mb="md">
-                Scoring Legend
-              </Title>
-              <ScoringLegendTable />
-            </Box>
+            <Paper p="lg" radius="md" withBorder mt="md">
+              <Stack gap="md">
+                <Group gap="sm" align="center">
+                  <IconClipboardList
+                    size={20}
+                    color="var(--mantine-color-teal-6)"
+                  />
+                  <Title order={4}>Scoring Reference</Title>
+                </Group>
+                <Divider />
+                <ScoringLegendTable />
+              </Stack>
+            </Paper>
           )}
-        </>
+        </Stack>
       )}
     </div>
   );
@@ -598,28 +766,39 @@ const NameYourCompetition = ({ onSubmit }: Props) => {
       name: "",
     },
     validate: {
-      name: isNotEmpty("Do a fun name :)"),
+      name: isNotEmpty("Give it a fun name!"),
     },
   });
 
   return (
-    <>
-      <form
-        onSubmit={form.onSubmit((values) => {
-          return onSubmit(values);
-        })}
-      >
+    <form
+      onSubmit={form.onSubmit((values) => {
+        return onSubmit(values);
+      })}
+    >
+      <Stack gap="md">
+        <Text size="sm" c="dimmed">
+          This is how your group will find the competition later.
+        </Text>
         <TextInput
-          label="Name your competition"
-          placeholder="Jeff Probst Lovers"
+          label="Competition name"
+          placeholder="e.g., Jeff Probst Fan Club"
+          size="md"
           data-autofocus
           {...form.getInputProps("name")}
         />
-        <Button fullWidth type="submit" mt="md">
-          Submit
+        <Button
+          fullWidth
+          type="submit"
+          size="md"
+          variant="gradient"
+          gradient={{ from: "blue", to: "cyan" }}
+          leftSection={<IconTrophy size={18} />}
+        >
+          Create Competition
         </Button>
-      </form>
-    </>
+      </Stack>
+    </form>
   );
 };
 
@@ -719,7 +898,14 @@ const PropBets = ({ season, onSubmit }: PropBetsProps) => {
             {...form.getInputProps("propbet_medical_evac")}
           />
 
-          <Button type="submit">Submit Prop Bets</Button>
+          <Button
+            type="submit"
+            size="md"
+            variant="gradient"
+            gradient={{ from: "violet", to: "grape" }}
+          >
+            Submit Prop Bets
+          </Button>
         </Stack>
       </form>
     </Box>

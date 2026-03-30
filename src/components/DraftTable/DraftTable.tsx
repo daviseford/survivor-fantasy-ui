@@ -1,5 +1,6 @@
 import { Avatar, Group, Table, Text } from "@mantine/core";
 import { DraftPick, Player, SlimUser } from "../../types";
+import { getNumberWithOrdinal } from "../../utils/misc";
 
 export const DraftTable = ({
   draft_picks,
@@ -17,38 +18,45 @@ export const DraftTable = ({
         const user = participants?.find((p) => p.uid === x.user_uid);
         return (
           <Table.Tr key={x.player_name + "draft_table"}>
+            <Table.Td ta="center">
+              <Text span size="sm" c="dimmed">
+                {getNumberWithOrdinal(x.order)}
+              </Text>
+            </Table.Td>
             <Table.Td>
-              <Group gap="sm">
+              <Group gap="sm" wrap="nowrap">
                 <Avatar
-                  size={40}
-                  src={player!.img}
-                  radius={40}
+                  size={32}
+                  src={player?.img}
+                  radius={32}
                   alt={x.player_name}
                 />
-
                 <Text fz="sm" fw={500}>
                   {x.player_name}
                 </Text>
               </Group>
             </Table.Td>
-            <Table.Td>{x.order}</Table.Td>
-            <Table.Td>{user?.displayName || user?.email}</Table.Td>
+            <Table.Td>
+              <Text size="sm">{user?.displayName || user?.email}</Text>
+            </Table.Td>
           </Table.Tr>
         );
       });
 
   return (
-    <div>
-      <Table>
+    <Table.ScrollContainer minWidth={300}>
+      <Table highlightOnHover verticalSpacing="xs">
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>Player Name</Table.Th>
-            <Table.Th>Draft Position</Table.Th>
+            <Table.Th w={60} ta="center">
+              Pick
+            </Table.Th>
+            <Table.Th>Contestant</Table.Th>
             <Table.Th>Drafted By</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
-    </div>
+    </Table.ScrollContainer>
   );
 };

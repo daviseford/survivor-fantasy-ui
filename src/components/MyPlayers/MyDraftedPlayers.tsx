@@ -1,4 +1,4 @@
-import { Avatar, Group, Title, Tooltip } from "@mantine/core";
+import { Avatar, Badge, Group, Paper, Text, Tooltip } from "@mantine/core";
 import { useDraft } from "../../hooks/useDraft";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { useSeason } from "../../hooks/useSeason";
@@ -23,22 +23,22 @@ export const MyDraftedPlayers = () => {
   if (!myPlayerInfo?.length) return null;
 
   return (
-    <>
-      <Group>
-        <Title order={3}>My Players</Title>
-        <Avatar.Group spacing={"lg"}>
-          {myPlayerInfo?.map((p) => (
-            <Tooltip label={p.name}>
-              <Avatar
-                key={p.name}
-                src={p.img}
-                size={isMobile ? "lg" : "xl"}
-                alt={p.name}
-              />
+    <Paper p="sm" radius="md" withBorder>
+      <Group gap="sm" align="center">
+        <Text size="sm" fw={600}>
+          My Team
+        </Text>
+        <Badge variant="light" size="sm" color="blue">
+          {myPlayerInfo.length}
+        </Badge>
+        <Avatar.Group spacing="sm">
+          {myPlayerInfo.map((p) => (
+            <Tooltip label={p.name} key={p.name}>
+              <Avatar src={p.img} size={isMobile ? "md" : "lg"} alt={p.name} />
             </Tooltip>
           ))}
         </Avatar.Group>
       </Group>
-    </>
+    </Paper>
   );
 };
