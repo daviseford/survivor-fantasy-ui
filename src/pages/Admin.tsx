@@ -64,7 +64,7 @@ export const Admin = () => {
   }
 
   return (
-    <Stack gap="xl">
+    <Stack gap="xl" pt="xs">
       <Group gap="xs">
         <IconSettings size={28} color="var(--mantine-color-blue-6)" />
         <Title order={2}>Admin Dashboard</Title>

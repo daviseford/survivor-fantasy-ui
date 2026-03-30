@@ -104,7 +104,7 @@ export const SeasonAdmin = () => {
   };
 
   return (
-    <Stack gap="md">
+    <Stack gap="md" pt="xs">
       <Group justify="space-between" align="flex-end">
         <Title order={2}>Manage {season.name}</Title>
         <Select
@@ -154,37 +154,37 @@ export const SeasonAdmin = () => {
 
         <Tabs.Panel value="episodes" pt="lg">
           <Stack gap="xl">
-            <EpisodeCRUDTable />
             <CreateEpisode />
+            <EpisodeCRUDTable />
           </Stack>
         </Tabs.Panel>
 
         <Tabs.Panel value="events" pt="lg">
           <Stack gap="xl">
-            <GameEventsCRUDTable />
             <CreateGameEvent />
+            <GameEventsCRUDTable />
           </Stack>
         </Tabs.Panel>
 
         <Tabs.Panel value="challenges" pt="lg">
           <Stack gap="xl">
-            <ChallengeCRUDTable />
             <CreateChallenge />
+            <ChallengeCRUDTable />
           </Stack>
         </Tabs.Panel>
 
         <Tabs.Panel value="eliminations" pt="lg">
           <Stack gap="xl">
-            <EliminationCRUDTable />
             <CreateElimination />
+            <EliminationCRUDTable />
           </Stack>
         </Tabs.Panel>
 
         <Tabs.Panel value="teams" pt="lg">
           <Stack gap="xl">
+            <CreateTeam />
             <TeamCRUDTable />
             <TeamPlayerManager />
-            <CreateTeam />
           </Stack>
         </Tabs.Panel>
       </Tabs>
