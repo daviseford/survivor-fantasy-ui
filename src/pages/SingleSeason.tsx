@@ -26,11 +26,6 @@ export const SingleSeason = () => {
     navigate(`/seasons/${season?.id}/draft/${draftId}`);
   };
 
-  const handleManageSeason = () => {
-    if (!slimUser?.isAdmin || !season) return;
-    navigate(`/admin/${season.id}`);
-  };
-
   if (isLoading)
     return (
       <Center py="xl">
@@ -58,18 +53,11 @@ export const SingleSeason = () => {
           </Text>
         </div>
 
-        <Group>
-          {slimUser?.isAdmin && (
-            <Button variant="light" size="sm" onClick={handleManageSeason}>
-              Manage Season
-            </Button>
-          )}
-          {slimUser && (
-            <Button size="sm" onClick={handleCreateDraft}>
-              Create a New Draft
-            </Button>
-          )}
-        </Group>
+        {slimUser && (
+          <Button size="sm" onClick={handleCreateDraft}>
+            Create a New Draft
+          </Button>
+        )}
       </Group>
 
       <Players />
