@@ -1,4 +1,10 @@
-import { Box, Card, SimpleGrid, Text, Title } from "@mantine/core";
+import {
+  Accordion,
+  Divider,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import { PlayerGroupGrid } from "../components/MyPlayers";
 import { PropBetScoring } from "../components/PropBetTables";
 import {
@@ -17,74 +23,60 @@ export const SingleCompetition = () => {
   if (!competition || !season) return null;
 
   return (
-    <div>
-      <Box p="lg">
-        <Text c="dimmed">Season {competition.season_num}</Text>
+    <Stack gap="xl" p="lg">
+      <div>
+        <Text c="dimmed" size="sm">
+          Season {competition.season_num}
+        </Text>
+        <Title order={2}>{competition.competition_name}</Title>
+      </div>
 
-        <Title order={2} mb="md">
-          {competition.competition_name}
+      <PlayerGroupGrid />
+
+      <Divider />
+
+      <section>
+        <Title order={3} mb="sm">
+          Standings
         </Title>
+        <PerUserPerEpisodeScoringTable />
+      </section>
 
-        <PlayerGroupGrid />
-      </Box>
-
-      <SimpleGrid cols={1} p={"lg"}>
-        <GridCard title="Season Scores">
-          <PerUserPerEpisodeScoringTable />
-        </GridCard>
-
-        {competition.prop_bets && (
-          <GridCard title="Prop Bets">
+      {competition.prop_bets && (
+        <>
+          <Divider />
+          <section>
+            <Title order={3} mb="sm">
+              Prop Bets
+            </Title>
             <PropBetScoring />
-          </GridCard>
-        )}
+          </section>
+        </>
+      )}
 
-        <GridCard title="Survivor Scores">
-          <PerSurvivorPerEpisodeDetailedScoringTable />
-        </GridCard>
+      <Divider />
 
-        <GridCard title="Scoring Values">
-          <ScoringLegendTable />
-        </GridCard>
-      </SimpleGrid>
-    </div>
+      <section>
+        <Title order={3} mb="sm">
+          Player Scores
+        </Title>
+        <PerSurvivorPerEpisodeDetailedScoringTable />
+      </section>
+
+      <Divider />
+
+      <Accordion variant="subtle">
+        <Accordion.Item value="scoring-values">
+          <Accordion.Control>
+            <Title order={4} c="dimmed">
+              Scoring Reference
+            </Title>
+          </Accordion.Control>
+          <Accordion.Panel>
+            <ScoringLegendTable />
+          </Accordion.Panel>
+        </Accordion.Item>
+      </Accordion>
+    </Stack>
   );
 };
-
-const GridCard = ({
-  title,
-  children,
-}: React.PropsWithChildren<{ title: string }>) => {
-  return (
-    <Card shadow="sm" p="xl">
-      <Card.Section mb={"xs"}>
-        <Title order={3}>{title}</Title>
-      </Card.Section>
-      <Card.Section>{children}</Card.Section>
-    </Card>
-  );
-};
-
-// TODO
-// const StartCompetitionButton = () => {
-//   const { slimUser } = useUser();
-//   const { data: competition } = useCompetition();
-
-//   const ref = doc(db, "competitions", competition?.id || "");
-//   // https://github.com/invertase/react-query-firebase/blob/main/docs/firestore/data-mutation.mdx
-//   const { mutateAsync, isLoading } = useFirestoreDocumentMutation(ref, {});
-
-//   const isCreator = slimUser?.uid === competition?.creator_uid;
-
-//   if (!isCreator || !competition || competition?.started) return null;
-
-//   const handleClick = async () => {
-//     await mutateAsync({ ...competition, started: true });
-//   };
-
-//   return (
-//     <Button onClick={handleClick} disabled={isLoading}>
-//       Start Competition
-//     </Button>
-//   );
-// };
