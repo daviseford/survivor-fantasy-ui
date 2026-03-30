@@ -1,6 +1,5 @@
 import {
   Badge,
-  Button,
   Card,
   Group,
   Image,
@@ -9,6 +8,7 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import { IconChevronRight } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { useSeasons } from "../hooks/useSeasons";
 
@@ -40,20 +40,36 @@ export const Seasons = () => {
               style={{ cursor: "pointer" }}
               onClick={() => navigate(`/seasons/${x.id}`)}
             >
-              <Card.Section>
-                <Image src={x.img} height={250} alt={x.name} />
-              </Card.Section>
-
-              <Group justify="space-between" mt="md" mb="xs">
-                <Text fw={500}>{x.name}</Text>
-                <Badge color="pink" variant="light">
+              <Card.Section pos="relative">
+                <Image src={x.img} height={220} alt={x.name} />
+                <Badge
+                  color="dark"
+                  variant="filled"
+                  size="lg"
+                  style={{
+                    position: "absolute",
+                    top: 12,
+                    right: 12,
+                  }}
+                >
                   Season {x.order}
                 </Badge>
-              </Group>
+              </Card.Section>
 
-              <Button color="blue" fullWidth mt="md" radius="md">
-                View Season
-              </Button>
+              <Group justify="space-between" mt="md" align="center">
+                <div>
+                  <Text fw={600} size="lg">
+                    {x.name}
+                  </Text>
+                  <Text size="sm" c="dimmed">
+                    {x.players?.length ?? 0} contestants
+                  </Text>
+                </div>
+                <IconChevronRight
+                  size={20}
+                  color="var(--mantine-color-dimmed)"
+                />
+              </Group>
             </Card>
           ))}
       </SimpleGrid>

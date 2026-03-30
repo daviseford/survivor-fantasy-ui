@@ -1,5 +1,6 @@
 import {
   Alert,
+  Badge,
   Center,
   Loader,
   Stack,
@@ -98,18 +99,30 @@ export const Competitions = () => {
       key={x.id}
       style={{ cursor: "pointer" }}
     >
-      <Table.Td fw={500}>{x.competition_name}</Table.Td>
-      <Table.Td>{x.season_num}</Table.Td>
+      <Table.Td fw={600}>{x.competition_name}</Table.Td>
       <Table.Td>
-        {x.participants.map((p) => p.displayName ?? p.email).join(", ")}
+        <Badge variant="light" size="sm">
+          S{x.season_num}
+        </Badge>
+      </Table.Td>
+      <Table.Td>
+        <Text size="sm">
+          {x.participants.map((p) => p.displayName ?? p.email).join(", ")}
+        </Text>
       </Table.Td>
 
       {!isMobile && (
         <>
           <Table.Td>
-            {x.participants.find((p) => p.uid === x.creator_uid)?.displayName}
+            <Text size="sm" c="dimmed">
+              {x.participants.find((p) => p.uid === x.creator_uid)?.displayName}
+            </Text>
           </Table.Td>
-          <Table.Td c="dimmed">{x.draft_id.slice(-4)}</Table.Td>
+          <Table.Td>
+            <Text size="xs" c="dimmed" ff="monospace">
+              {x.draft_id.slice(-6)}
+            </Text>
+          </Table.Td>
         </>
       )}
     </Table.Tr>
@@ -140,9 +153,14 @@ export const Competitions = () => {
 
       {!isLoading && sorted.length === 0 && (
         <Center py="xl">
-          <Text c="dimmed">
-            No competitions yet. Start a draft from a season page to create one.
-          </Text>
+          <Stack align="center" gap="xs">
+            <Text c="dimmed" ta="center">
+              No competitions yet.
+            </Text>
+            <Text size="sm" c="dimmed" ta="center">
+              Start a draft from a season page to create your first competition.
+            </Text>
+          </Stack>
         </Center>
       )}
 

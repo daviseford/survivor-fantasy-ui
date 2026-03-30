@@ -1,4 +1,21 @@
-import { Accordion, Box, Paper, Stack, Text, Title } from "@mantine/core";
+import {
+  Accordion,
+  Badge,
+  Box,
+  Divider,
+  Group,
+  Paper,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
+import {
+  IconChartLine,
+  IconClipboardList,
+  IconCrystalBall,
+  IconTrophy,
+  IconUsers,
+} from "@tabler/icons-react";
 import { PlayerGroupGrid } from "../components/MyPlayers";
 import { PropBetScoring } from "../components/PropBetTables";
 import {
@@ -12,18 +29,27 @@ import { useSeason } from "../hooks/useSeason";
 const Section = ({
   title,
   subtitle,
+  icon,
   children,
-}: React.PropsWithChildren<{ title: string; subtitle?: string }>) => (
+}: React.PropsWithChildren<{
+  title: string;
+  subtitle?: string;
+  icon?: React.ReactNode;
+}>) => (
   <Paper p="lg" radius="md" withBorder>
-    <Stack gap="sm">
-      <div>
-        <Title order={3}>{title}</Title>
-        {subtitle && (
-          <Text size="sm" c="dimmed">
-            {subtitle}
-          </Text>
-        )}
-      </div>
+    <Stack gap="md">
+      <Group gap="sm" align="center">
+        {icon}
+        <div>
+          <Title order={3}>{title}</Title>
+          {subtitle && (
+            <Text size="sm" c="dimmed">
+              {subtitle}
+            </Text>
+          )}
+        </div>
+      </Group>
+      <Divider />
       {children}
     </Stack>
   </Paper>
@@ -36,20 +62,39 @@ export const SingleCompetition = () => {
 
   if (!competition || !season) return null;
 
+  const episodeCount = season.episodes?.length ?? 0;
+
   return (
-    <Stack gap="lg" p="lg">
+    <Stack gap="xl" p="lg">
       <Box>
-        <Text c="dimmed" size="sm" tt="uppercase" fw={600} lh={1.4}>
-          Season {competition.season_num}
-        </Text>
+        <Group gap="xs" mb={4}>
+          <Badge variant="light" size="sm">
+            Season {competition.season_num}
+          </Badge>
+          <Badge variant="light" color="gray" size="sm">
+            {competition.participants.length} players
+          </Badge>
+          {episodeCount > 0 && (
+            <Badge variant="light" color="gray" size="sm">
+              {episodeCount} {episodeCount === 1 ? "episode" : "episodes"}
+            </Badge>
+          )}
+        </Group>
         <Title order={2}>{competition.competition_name}</Title>
       </Box>
 
-      <PlayerGroupGrid />
+      <Section
+        title="Teams"
+        subtitle="Drafted contestants by player"
+        icon={<IconUsers size={22} color="var(--mantine-color-blue-6)" />}
+      >
+        <PlayerGroupGrid />
+      </Section>
 
       <Section
         title="Standings"
         subtitle="Points by player across all episodes"
+        icon={<IconTrophy size={22} color="var(--mantine-color-yellow-6)" />}
       >
         <PerUserPerEpisodeScoringTable />
       </Section>
@@ -58,6 +103,9 @@ export const SingleCompetition = () => {
         <Section
           title="Prop Bets"
           subtitle="Pre-season predictions and results"
+          icon={
+            <IconCrystalBall size={22} color="var(--mantine-color-violet-6)" />
+          }
         >
           <PropBetScoring />
         </Section>
@@ -66,6 +114,7 @@ export const SingleCompetition = () => {
       <Section
         title="Player Scores"
         subtitle="Detailed scoring for each contestant by episode"
+        icon={<IconChartLine size={22} color="var(--mantine-color-teal-6)" />}
       >
         <PerSurvivorPerEpisodeDetailedScoringTable />
       </Section>
@@ -73,9 +122,15 @@ export const SingleCompetition = () => {
       <Accordion variant="subtle" radius="md">
         <Accordion.Item value="scoring-values">
           <Accordion.Control>
-            <Title order={4} c="dimmed">
-              Scoring Reference
-            </Title>
+            <Group gap="sm">
+              <IconClipboardList
+                size={18}
+                color="var(--mantine-color-dimmed)"
+              />
+              <Title order={4} c="dimmed">
+                Scoring Reference
+              </Title>
+            </Group>
           </Accordion.Control>
           <Accordion.Panel>
             <ScoringLegendTable />

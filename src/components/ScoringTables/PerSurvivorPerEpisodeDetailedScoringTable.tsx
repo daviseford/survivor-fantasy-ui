@@ -24,6 +24,15 @@ import { getNumberWithOrdinal } from "../../utils/misc";
 type SortField = "rank" | "player" | "total" | "draft";
 type SortDir = "asc" | "desc";
 
+const getBadgeColor = (action: string) => {
+  if (action === "eliminated") return "red";
+  if (action === "win_survivor") return "green";
+  if (action.includes("idol") || action.includes("advantage")) return "violet";
+  if (action.includes("immunity") || action.includes("challenge"))
+    return "blue";
+  return "gray";
+};
+
 const SortableHeader = ({
   label,
   field,
@@ -163,10 +172,10 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
     const isDraftedByCurrentUser = draftPick?.user_uid === slimUser?.uid;
 
     const trStyle = {
-      backgroundColor: playerElimination
-        ? "var(--mantine-color-gray-2)"
-        : isWinner
-          ? "var(--mantine-color-green-1)"
+      backgroundColor: isWinner
+        ? "var(--mantine-color-green-0)"
+        : playerElimination
+          ? "var(--mantine-color-gray-1)"
           : isDraftedByCurrentUser
             ? "var(--mantine-color-blue-0)"
             : "",
@@ -175,13 +184,17 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
 
     return (
       <Table.Tr key={playerName} style={trStyle}>
-        <Table.Td>{defaultRank}</Table.Td>
+        <Table.Td ta="center">
+          <Text span size="sm" fw={500} c="dimmed">
+            {defaultRank}
+          </Text>
+        </Table.Td>
         <Table.Td style={{ minWidth: 160 }}>
-          <Group gap={6} wrap="nowrap" align="center">
+          <Group gap={8} wrap="nowrap" align="center">
             <Avatar
-              size={26}
+              size={28}
               src={playerData?.img}
-              radius={26}
+              radius={28}
               style={{ ...avatarStyle, flexShrink: 0 }}
             />
             <div style={{ minWidth: 0 }}>
@@ -203,15 +216,22 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
           </Group>
         </Table.Td>
 
-        <Table.Td>{total}</Table.Td>
+        <Table.Td ta="center">
+          <Text span fw={700} size="sm">
+            {total}
+          </Text>
+        </Table.Td>
 
-        <Table.Td>{getNumberWithOrdinal(draftOrder)}</Table.Td>
+        <Table.Td ta="center">
+          <Text span size="sm" c="dimmed">
+            {getNumberWithOrdinal(draftOrder)}
+          </Text>
+        </Table.Td>
 
         {episodeScores.map((s, idx) => (
           <Table.Td key={idx}>
             <Stack gap={2}>
               {s.actions.map((x, actionIdx) => {
-                const badgeColor = x.action === "eliminated" ? "red" : "dark";
                 return (
                   <Tooltip
                     label={scoringDescriptionLookup[x.action]}
@@ -219,7 +239,8 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                   >
                     <Badge
                       size="xs"
-                      color={badgeColor}
+                      variant="light"
+                      color={getBadgeColor(x.action)}
                       style={{
                         cursor: "pointer",
                         maxWidth: "100%",
@@ -253,9 +274,13 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
             </Stack>
           </Table.Td>
         ))}
-        <Table.Td>
+        <Table.Td ta="center">
           {playerElimination && (
-            <Badge size="xs" color={isRemovedFromGame ? "red" : "gray"}>
+            <Badge
+              size="xs"
+              variant="light"
+              color={isRemovedFromGame ? "red" : "gray"}
+            >
               {isRemovedFromGame
                 ? "Removed"
                 : `Out ${getNumberWithOrdinal(playerElimination.order)}`}
@@ -268,37 +293,58 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
 
   return (
     <>
-      <Group gap="md" mb="xs" px="md">
+      <Group gap="md" mb="xs" px="md" wrap="wrap">
         <Group gap={4}>
           <Box
             w={12}
             h={12}
             style={{
-              backgroundColor: "var(--mantine-color-green-1)",
+              backgroundColor: "var(--mantine-color-green-0)",
               borderRadius: 2,
+              border: "1px solid var(--mantine-color-green-3)",
             }}
           />
-          <Text size="xs">Winner</Text>
+          <Text size="xs" c="dimmed">
+            Winner
+          </Text>
         </Group>
         <Group gap={4}>
           <Box
             w={12}
             h={12}
             style={{
-              backgroundColor: "var(--mantine-color-gray-2)",
+              backgroundColor: "var(--mantine-color-gray-1)",
               borderRadius: 2,
+              border: "1px solid var(--mantine-color-gray-3)",
             }}
           />
-          <Text size="xs">Eliminated</Text>
+          <Text size="xs" c="dimmed">
+            Eliminated
+          </Text>
         </Group>
         <Group gap={4}>
-          <Badge size="xs" color="red">
-            Elimination pts
+          <Badge size="xs" variant="light" color="green">
+            Winner
           </Badge>
         </Group>
         <Group gap={4}>
-          <Badge size="xs" color="dark">
-            Event pts
+          <Badge size="xs" variant="light" color="red">
+            Elimination
+          </Badge>
+        </Group>
+        <Group gap={4}>
+          <Badge size="xs" variant="light" color="blue">
+            Challenge
+          </Badge>
+        </Group>
+        <Group gap={4}>
+          <Badge size="xs" variant="light" color="violet">
+            Idol / Advantage
+          </Badge>
+        </Group>
+        <Group gap={4}>
+          <Badge size="xs" variant="light" color="gray">
+            Other
           </Badge>
         </Group>
       </Group>
