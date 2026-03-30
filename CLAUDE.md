@@ -32,6 +32,12 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 - **Hooks per entity:** Each Firestore/RTDB entity has a dedicated hook (`useSeason`, `useCompetition`, `useDraft`, `useChallenges`, `useEliminations`, `useEvents`). Hooks read route params via `useParams()` with optional ID override.
 - **CSS Modules** for component-scoped styles (`.module.css` files), PostCSS with `postcss-preset-mantine`.
 
+## Firebase Documentation
+
+Use the Context7 MCP to fetch up-to-date Firebase documentation when working with Firebase features. Available libraries:
+- `/websites/firebase_google` — Full Firebase docs (26k+ snippets)
+- `/firebase/firebase-js-sdk` — Firebase JS SDK source/docs
+
 ## Deployment
 
 Merges to `main` auto-deploy to Firebase Hosting via GitHub Actions (`.github/workflows/firebase-hosting-merge.yml`). PRs get preview deploys. Firebase project: `survivor-fantasy-51c4b`.
