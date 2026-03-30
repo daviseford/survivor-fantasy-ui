@@ -128,11 +128,8 @@ export const AppRoutes = () => {
                 <Route path="/admin/:seasonId" element={<SeasonAdmin />} />
                 <Route path="/admin" element={<Admin />} />
               </Routes>
-            </AppShell.Main>
-
-            <AppShell.Footer>
               <Footer />
-            </AppShell.Footer>
+            </AppShell.Main>
           </AppShell>
         </ModalsProvider>
       </Router>
