@@ -77,6 +77,9 @@ describe("aggregateByScoringCategory", () => {
     expect(
       result.find((r) => r.category === "idolsAndAdvantages")?.points,
     ).toBe(3);
+    expect(result.find((r) => r.category === "milestones")?.points).toBe(0);
+    expect(result.find((r) => r.category === "eliminations")?.points).toBe(0);
+    expect(result.find((r) => r.category === "other")?.points).toBe(0);
   });
 
   it("returns all categories with 0 points for empty actions", () => {

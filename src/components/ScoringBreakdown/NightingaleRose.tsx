@@ -1,6 +1,6 @@
 import { Box, Group, Paper, Text } from "@mantine/core";
 import { arc as d3Arc } from "d3-shape";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import {
   CategoryBreakdown,
   CategoryColors,
@@ -21,6 +21,13 @@ type TooltipState = {
   points: number;
   x: number;
   y: number;
+};
+
+type ArcSegment = {
+  category: ScoringCategory;
+  points: number;
+  innerRadius: number;
+  outerRadius: number;
 };
 
 type NightingaleRoseProps = {
@@ -49,6 +56,37 @@ export const NightingaleRose = ({ data, size }: NightingaleRoseProps) => {
   const anglePerPetal = (2 * Math.PI) / data.length;
   const arcGenerator = d3Arc();
 
+  // Pre-compute geometry for all petals: category → { innerRadius, outerRadius }
+  const petalGeometry = useMemo(() => {
+    const availableRadius = maxRadius - MIN_RADIUS;
+    return data.map((entry) => {
+      const segments: ArcSegment[] = [];
+      let currentInner = MIN_RADIUS;
+
+      for (const { category, points } of entry.categories) {
+        if (points <= 0) continue;
+        const radialExtent = (points / maxTotal) * availableRadius;
+        segments.push({
+          category,
+          points,
+          innerRadius: currentInner,
+          outerRadius: currentInner + radialExtent,
+        });
+        currentInner += radialExtent;
+      }
+      return segments;
+    });
+  }, [data, maxTotal, maxRadius]);
+
+  const getRelativePos = useCallback(
+    (e: React.MouseEvent) => {
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (!rect) return null;
+      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    },
+    [],
+  );
+
   const handleMouseEnter = useCallback(
     (
       e: React.MouseEvent<SVGPathElement>,
@@ -56,18 +94,11 @@ export const NightingaleRose = ({ data, size }: NightingaleRoseProps) => {
       category: ScoringCategory,
       points: number,
     ) => {
-      const container = containerRef.current;
-      if (!container) return;
-      const rect = container.getBoundingClientRect();
-      setTooltip({
-        name,
-        category,
-        points,
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
+      const pos = getRelativePos(e);
+      if (!pos) return;
+      setTooltip({ name, category, points, ...pos });
     },
-    [],
+    [getRelativePos],
   );
 
   const handleClick = useCallback(
@@ -78,22 +109,15 @@ export const NightingaleRose = ({ data, size }: NightingaleRoseProps) => {
       points: number,
     ) => {
       e.stopPropagation();
-      const container = containerRef.current;
-      if (!container) return;
-      const rect = container.getBoundingClientRect();
+      const pos = getRelativePos(e);
+      if (!pos) return;
       setTooltip((prev) =>
         prev?.name === name && prev?.category === category
           ? null
-          : {
-              name,
-              category,
-              points,
-              x: e.clientX - rect.left,
-              y: e.clientY - rect.top,
-            },
+          : { name, category, points, ...pos },
       );
     },
-    [],
+    [getRelativePos],
   );
 
   const handleDismiss = useCallback(() => setTooltip(null), []);
@@ -120,47 +144,40 @@ export const NightingaleRose = ({ data, size }: NightingaleRoseProps) => {
                 (i + 1) * anglePerPetal -
                 PADDING_ANGLE / 2;
 
-              let currentInnerRadius = MIN_RADIUS;
+              const segments = petalGeometry[i];
 
               return (
                 <g key={entry.name}>
-                  {entry.categories.map(({ category, points }) => {
-                    if (points <= 0) return null;
+                  {segments.map(
+                    ({ category, points, innerRadius, outerRadius }) => {
+                      const path = arcGenerator({
+                        innerRadius,
+                        outerRadius,
+                        startAngle: startAngle + Math.PI / 2,
+                        endAngle: endAngle + Math.PI / 2,
+                      });
 
-                    const radialExtent =
-                      (points / maxTotal) * (maxRadius - MIN_RADIUS);
-                    const outerRadius = currentInnerRadius + radialExtent;
+                      if (!path) return null;
 
-                    const path = arcGenerator({
-                      innerRadius: currentInnerRadius,
-                      outerRadius,
-                      startAngle: startAngle + Math.PI / 2,
-                      endAngle: endAngle + Math.PI / 2,
-                    });
-
-                    const segmentInnerRadius = currentInnerRadius;
-                    currentInnerRadius = outerRadius;
-
-                    if (!path || segmentInnerRadius === outerRadius) return null;
-
-                    return (
-                      <path
-                        key={category}
-                        d={path}
-                        fill={CategoryColors[category]}
-                        stroke="var(--mantine-color-body)"
-                        strokeWidth={1}
-                        className={styles.segment}
-                        onMouseEnter={(e) =>
-                          handleMouseEnter(e, entry.name, category, points)
-                        }
-                        onMouseLeave={handleDismiss}
-                        onClick={(e) =>
-                          handleClick(e, entry.name, category, points)
-                        }
-                      />
-                    );
-                  })}
+                      return (
+                        <path
+                          key={category}
+                          d={path}
+                          fill={CategoryColors[category]}
+                          stroke="var(--mantine-color-body)"
+                          strokeWidth={1}
+                          className={styles.segment}
+                          onMouseEnter={(e) =>
+                            handleMouseEnter(e, entry.name, category, points)
+                          }
+                          onMouseLeave={handleDismiss}
+                          onClick={(e) =>
+                            handleClick(e, entry.name, category, points)
+                          }
+                        />
+                      );
+                    },
+                  )}
                   {/* Name label at the outer edge of the petal */}
                   {data.length <= 10 && (
                     <text

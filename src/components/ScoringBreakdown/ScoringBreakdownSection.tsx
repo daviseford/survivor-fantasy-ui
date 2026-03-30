@@ -30,7 +30,6 @@ export const ScoringBreakdownSection = () => {
           .filter((dp) => dp.user_uid === participant.uid)
           .map((dp) => dp.player_name);
 
-        // Aggregate scoring across all drafted survivors
         const allEpisodeScores = draftedPlayerNames.flatMap(
           (name) => survivorPointsByEpisode[name] || [],
         );
@@ -42,6 +41,7 @@ export const ScoringBreakdownSection = () => {
           categories,
         };
       })
+      .filter((entry) => entry.categories.some((c) => c.points > 0))
       .sort(
         (a, b) =>
           sum(b.categories.map((c) => c.points)) -
