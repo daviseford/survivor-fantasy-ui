@@ -112,8 +112,8 @@ export const Admin = () => {
                         size="sm"
                         style={{
                           position: "absolute",
-                          top: 8,
-                          right: 8,
+                          top: 12,
+                          right: 12,
                         }}
                       >
                         S{season.order}
@@ -121,9 +121,9 @@ export const Admin = () => {
                     </Card.Section>
                   )}
 
-                  <Group justify="space-between" mt="md" mb="xs">
-                    <Text fw={600}>{season.name}</Text>
-                  </Group>
+                  <Text fw={600} mt="md" mb="xs">
+                    {season.name}
+                  </Text>
 
                   <Group gap="lg">
                     <Group gap={4}>

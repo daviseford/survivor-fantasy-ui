@@ -92,7 +92,7 @@ export const PerUserPerEpisodeScoringTable = () => {
             <Table.Th w={50} ta="center">
               #
             </Table.Th>
-            <Table.Th>Player</Table.Th>
+            <Table.Th>Participant</Table.Th>
             <Table.Th w={80} ta="center">
               Total
             </Table.Th>

@@ -24,6 +24,15 @@ import { getNumberWithOrdinal } from "../../utils/misc";
 type SortField = "rank" | "player" | "total" | "draft";
 type SortDir = "asc" | "desc";
 
+const getBadgeColor = (action: string) => {
+  if (action === "eliminated") return "red";
+  if (action === "win_survivor") return "green";
+  if (action.includes("idol") || action.includes("advantage")) return "violet";
+  if (action.includes("immunity") || action.includes("challenge"))
+    return "blue";
+  return "gray";
+};
+
 const SortableHeader = ({
   label,
   field,
@@ -173,16 +182,6 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
     };
     const avatarStyle = playerElimination ? { filter: "grayscale(1)" } : {};
 
-    const getBadgeColor = (action: string) => {
-      if (action === "eliminated") return "red";
-      if (action === "win_survivor") return "green";
-      if (action.includes("idol") || action.includes("advantage"))
-        return "violet";
-      if (action.includes("immunity") || action.includes("challenge"))
-        return "blue";
-      return "gray";
-    };
-
     return (
       <Table.Tr key={playerName} style={trStyle}>
         <Table.Td ta="center">
@@ -322,6 +321,11 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
           <Text size="xs" c="dimmed">
             Eliminated
           </Text>
+        </Group>
+        <Group gap={4}>
+          <Badge size="xs" variant="light" color="green">
+            Winner
+          </Badge>
         </Group>
         <Group gap={4}>
           <Badge size="xs" variant="light" color="red">

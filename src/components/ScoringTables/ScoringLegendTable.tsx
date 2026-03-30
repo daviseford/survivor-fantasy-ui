@@ -13,15 +13,16 @@ export const ScoringLegendTable = () => {
         <Text size="sm">{x.description}</Text>
       </Table.Td>
       <Table.Td ta="center">
-        <Text
-          span
-          fw={600}
-          size="sm"
-          c={(x.fixed_value ?? 0) > 0 ? "teal" : "red"}
-        >
-          {(x.fixed_value ?? 0) > 0 ? "+" : ""}
-          {x.fixed_value ?? 0}
-        </Text>
+        {x.fixed_value != null ? (
+          <Text span fw={600} size="sm" c={x.fixed_value > 0 ? "teal" : "red"}>
+            {x.fixed_value > 0 ? "+" : ""}
+            {x.fixed_value}
+          </Text>
+        ) : (
+          <Text span size="sm" c="dimmed">
+            varies
+          </Text>
+        )}
       </Table.Td>
     </Table.Tr>
   ));
