@@ -24,15 +24,19 @@ setup("authenticate as admin", async ({ page }) => {
   // Click the Login button in the navbar to open the AuthModal
   await page.locator("nav button", { hasText: "Login" }).click();
 
-  // Wait for the modal's email input to be visible
-  await page.getByPlaceholder("hello@gmail.com").waitFor({ timeout: 10_000 });
+  // The AuthModal has Login and Register tabs with identical placeholders.
+  // Target the first (Login) tab panel to avoid strict-mode violations.
+  const loginPanel = page.locator('[role="tabpanel"]').first();
+  await loginPanel
+    .getByPlaceholder("hello@gmail.com")
+    .waitFor({ timeout: 10_000 });
 
   // Fill in the login form
-  await page.getByPlaceholder("hello@gmail.com").fill(username);
-  await page.getByPlaceholder("Your password").fill(password);
+  await loginPanel.getByPlaceholder("hello@gmail.com").fill(username);
+  await loginPanel.getByPlaceholder("Your password").fill(password);
 
   // Submit the form
-  await page.getByRole("button", { name: "Sign in" }).click();
+  await loginPanel.getByRole("button", { name: "Sign in" }).click();
 
   // Wait for auth to settle — the Login button should disappear and be
   // replaced by user info (displayName or email) and a Logout button
