@@ -1,11 +1,11 @@
 import {
   Badge,
-  Box,
   Button,
   Card,
   Group,
   Image,
   SimpleGrid,
+  Stack,
   Text,
   Title,
 } from "@mantine/core";
@@ -18,39 +18,45 @@ export const Seasons = () => {
   const { data: seasons } = useSeasons();
 
   return (
-    <Box>
-      <Title order={3} c="dimmed" p="md">
-        Pick your favorite season in order to learn more about the contestants
-        and start a draft!
-      </Title>
+    <Stack gap="lg" p="md">
+      <div>
+        <Title order={2}>Seasons</Title>
+        <Text c="dimmed" size="sm">
+          Pick a season to see the contestants and start a draft with friends.
+        </Text>
+      </div>
+
       <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
-        {seasons?.map((x) => {
-          return (
-            <div key={x.id}>
-              <Card shadow="sm" padding="lg" radius="md" withBorder>
-                <Card.Section>
-                  <Image src={x.img} height={250} alt={x.name} />
-                </Card.Section>
+        {seasons
+          ?.slice()
+          .sort((a, b) => b.order - a.order)
+          .map((x) => (
+            <Card
+              shadow="sm"
+              padding="lg"
+              radius="md"
+              withBorder
+              key={x.id}
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate(`/seasons/${x.id}`)}
+            >
+              <Card.Section>
+                <Image src={x.img} height={250} alt={x.name} />
+              </Card.Section>
 
-                <Group justify="space-between" mt="md" mb="xs">
-                  <Text fw={500}>{x.name}</Text>
-                  <Badge color="pink">Season {x.order}</Badge>
-                </Group>
+              <Group justify="space-between" mt="md" mb="xs">
+                <Text fw={500}>{x.name}</Text>
+                <Badge color="pink" variant="light">
+                  Season {x.order}
+                </Badge>
+              </Group>
 
-                <Button
-                  color="blue"
-                  fullWidth
-                  mt="md"
-                  radius="md"
-                  onClick={() => navigate(`/seasons/${x.id}`)}
-                >
-                  Select
-                </Button>
-              </Card>
-            </div>
-          );
-        })}
+              <Button color="blue" fullWidth mt="md" radius="md">
+                View Season
+              </Button>
+            </Card>
+          ))}
       </SimpleGrid>
-    </Box>
+    </Stack>
   );
 };
