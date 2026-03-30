@@ -147,7 +147,7 @@ export const NightingaleRose = ({ data, size }: NightingaleRoseProps) => {
               const segments = petalGeometry[i];
 
               return (
-                <g key={entry.name}>
+                <g key={i}>
                   {segments.map(
                     ({ category, points, innerRadius, outerRadius }) => {
                       const path = arcGenerator({
