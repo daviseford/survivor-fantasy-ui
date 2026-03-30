@@ -316,7 +316,9 @@ export const DraftComponent = () => {
                           size="lg"
                           leftSection={
                             <Avatar size={20} radius="xl" color="blue">
-                              {(p.displayName || p.email || "?")[0].toUpperCase()}
+                              {(p.displayName ||
+                                p.email ||
+                                "?")[0].toUpperCase()}
                             </Avatar>
                           }
                         >
@@ -396,7 +398,11 @@ export const DraftComponent = () => {
                       onClick={copy}
                       variant="light"
                       leftSection={
-                        copied ? <IconCheck size={16} /> : <IconCopy size={16} />
+                        copied ? (
+                          <IconCheck size={16} />
+                        ) : (
+                          <IconCopy size={16} />
+                        )
                       }
                     >
                       {copied ? "Link copied!" : "Copy invite link"}
@@ -424,7 +430,11 @@ export const DraftComponent = () => {
         </Stack>
       ) : (
         <Stack gap="md" p="lg">
-          <Stepper active={activeStep} allowNextStepsSelect={false} color="blue">
+          <Stepper
+            active={activeStep}
+            allowNextStepsSelect={false}
+            color="blue"
+          >
             {/* ===== STEP 0: DRAFT ===== */}
             <Stepper.Step label="Draft" description="Pick your players">
               <Stack gap="md" mt="md">
@@ -484,7 +494,9 @@ export const DraftComponent = () => {
                     <Badge
                       key={p.uid}
                       variant={
-                        p.uid === draft?.current_picker?.uid ? "filled" : "light"
+                        p.uid === draft?.current_picker?.uid
+                          ? "filled"
+                          : "light"
                       }
                       color={
                         p.uid === draft?.current_picker?.uid ? "blue" : "gray"

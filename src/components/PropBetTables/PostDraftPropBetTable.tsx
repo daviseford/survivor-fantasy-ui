@@ -52,9 +52,7 @@ export const PostDraftPropBetTable = () => {
             <Table.Th>
               {PropBetsQuestions.propbet_medical_evac.description}
             </Table.Th>
-            <Table.Th>
-              {PropBetsQuestions.propbet_winner.description}
-            </Table.Th>
+            <Table.Th>{PropBetsQuestions.propbet_winner.description}</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
