@@ -86,7 +86,7 @@ export const ScoringBreakdownSection = () => {
         mb="md"
       />
       {chartData.length > 0 ? (
-        <NightingaleRose data={chartData} size={chartSize} />
+        <NightingaleRose key={viewMode} data={chartData} size={chartSize} />
       ) : (
         <Text c="dimmed" ta="center" py="xl">
           No data for this view
