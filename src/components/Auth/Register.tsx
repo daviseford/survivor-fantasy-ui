@@ -54,9 +54,7 @@ export const Register = () => {
       window.location.reload();
       // ...
     } catch (error) {
-      setError(
-        error instanceof Error ? error.message : "Registration failed",
-      );
+      setError(error instanceof Error ? error.message : "Registration failed");
     }
   };
 

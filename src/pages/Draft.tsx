@@ -260,8 +260,7 @@ export const DraftComponent = () => {
         ? "prop-bets"
         : "completed";
 
-  const activeStep =
-    phase === "drafting" ? 0 : phase === "prop-bets" ? 1 : 2;
+  const activeStep = phase === "drafting" ? 0 : phase === "prop-bets" ? 1 : 2;
 
   return (
     <div>
@@ -270,8 +269,8 @@ export const DraftComponent = () => {
           {/* ===== PRE-DRAFT LOBBY ===== */}
           <Title order={2}>Draft Lobby</Title>
           <Text c="dimmed" size="sm">
-            Share the link below to invite friends. The host can start the
-            draft once everyone has joined.
+            Share the link below to invite friends. The host can start the draft
+            once everyone has joined.
           </Text>
 
           <Group>
@@ -327,8 +326,8 @@ export const DraftComponent = () => {
 
           {draft && isInvalidNumberOfPlayers && (
             <Alert color="red">
-              You cannot draft evenly with this number of players. Please
-              invite a friend or start over.
+              You cannot draft evenly with this number of players. Please invite
+              a friend or start over.
             </Alert>
           )}
 
@@ -382,7 +381,10 @@ export const DraftComponent = () => {
             </Stepper.Step>
 
             {/* ===== STEP 1: PROP BETS ===== */}
-            <Stepper.Step label="Prop Bets" description="Place your predictions">
+            <Stepper.Step
+              label="Prop Bets"
+              description="Place your predictions"
+            >
               <Box p="xl">
                 <Title order={3}>Place Your Bets</Title>
                 <Text c="dimmed" size="sm" mb="md">

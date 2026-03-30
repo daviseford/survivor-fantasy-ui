@@ -19,7 +19,13 @@ export const Players = () => {
 const PlayerCard = (props: Player) => {
   return (
     <Paper radius="md" withBorder p="lg" bg="var(--mantine-color-body)">
-      <Avatar src={props.img} size={120} radius={120} mx="auto" alt={props.name} />
+      <Avatar
+        src={props.img}
+        size={120}
+        radius={120}
+        mx="auto"
+        alt={props.name}
+      />
       <Text ta="center" fz="lg" fw={500} mt="md">
         {props.name}
       </Text>

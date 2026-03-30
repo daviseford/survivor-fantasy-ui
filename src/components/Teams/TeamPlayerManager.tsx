@@ -226,9 +226,7 @@ export const TeamPlayerManager = () => {
 
     const newSnapshot = { ...snapshot };
     newSnapshot[activeId] =
-      targetContainer === NO_TEAM_ID
-        ? null
-        : (targetContainer as Team["id"]);
+      targetContainer === NO_TEAM_ID ? null : (targetContainer as Team["id"]);
     setLocalAssignments(newSnapshot);
   };
 

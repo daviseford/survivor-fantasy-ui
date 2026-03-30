@@ -138,3 +138,4 @@ package-lock.json
 
 # MCP config
 .mcp.json
+/docs/plans
