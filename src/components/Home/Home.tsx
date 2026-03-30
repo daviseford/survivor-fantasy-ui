@@ -1,10 +1,12 @@
 import { Button, Container, Group, Text } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { IconBrandGithub, IconFlame } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import classes from "./Home.module.css";
 
 export const Home = () => {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width: 48em)");
   return (
     <div className={classes.wrapper}>
       <Container size={700} className={classes.inner}>
@@ -33,7 +35,7 @@ export const Home = () => {
             variant="gradient"
             gradient={{ from: "blue", to: "cyan" }}
             onClick={() => navigate("/seasons")}
-            leftSection={<IconFlame size={22} />}
+            leftSection={!isMobile ? <IconFlame size={22} /> : undefined}
           >
             Get started
           </Button>

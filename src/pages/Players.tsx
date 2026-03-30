@@ -8,7 +8,7 @@ export const Players = () => {
   if (!season) return null;
 
   return (
-    <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }}>
+    <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }}>
       {season.players.map((x) => (
         <PlayerCard {...x} key={x.name} />
       ))}
