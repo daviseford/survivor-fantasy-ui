@@ -70,7 +70,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
       setSortDir((d) => (d === "asc" ? "desc" : "asc"));
     } else {
       setSortField(field);
-      setSortDir(field === "rank" || field === "total" ? "asc" : "asc");
+      setSortDir(field === "total" ? "desc" : "asc");
     }
   };
 
