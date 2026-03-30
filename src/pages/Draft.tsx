@@ -6,6 +6,7 @@ import {
   Button,
   Center,
   CopyButton,
+  Divider,
   Group,
   Paper,
   Select,
@@ -15,11 +16,20 @@ import {
   Text,
   TextInput,
   Title,
+  Tooltip,
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import {
+  IconCheck,
+  IconClipboardList,
+  IconCopy,
+  IconFlame,
+  IconUserPlus,
+  IconUsers,
+  IconX,
+} from "@tabler/icons-react";
 import { ref, update } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
 import { shuffle, uniqBy } from "lodash-es";
@@ -265,78 +275,150 @@ export const DraftComponent = () => {
   return (
     <div>
       {phase === "pre-draft" ? (
-        <Stack>
+        <Stack gap="lg" p="lg">
           {/* ===== PRE-DRAFT LOBBY ===== */}
-          <Title order={2}>Draft Lobby</Title>
-          <Text c="dimmed" size="sm">
-            Share the link below to invite friends. The host can start the draft
-            once everyone has joined.
-          </Text>
+          <Paper p="lg" radius="md" withBorder>
+            <Stack gap="md">
+              <Group gap="sm" align="center">
+                <IconUsers size={22} color="var(--mantine-color-blue-6)" />
+                <div>
+                  <Title order={3}>Draft Lobby</Title>
+                  <Text size="sm" c="dimmed">
+                    Share the link to invite friends. The host starts the draft
+                    once everyone has joined.
+                  </Text>
+                </div>
+              </Group>
+              <Divider />
 
-          <Group>
-            {!slimUser && (
-              <Button
-                onClick={() =>
-                  modals.openContextModal({
-                    modal: "AuthModal",
-                    innerProps: {},
-                  })
-                }
-              >
-                Log in to join this draft
-              </Button>
-            )}
+              {/* Participants */}
+              <div>
+                <Group gap="xs" mb="xs">
+                  <Text size="sm" fw={600}>
+                    Participants
+                  </Text>
+                  <Badge variant="light" size="sm">
+                    {draft?.participants?.length ?? 0} joined
+                  </Badge>
+                </Group>
+                {draft?.participants?.length ? (
+                  <Group gap="sm">
+                    {draft.participants.map((p) => (
+                      <Tooltip
+                        label={p.displayName || p.email || p.uid}
+                        key={p.uid}
+                      >
+                        <Badge
+                          variant="light"
+                          color="blue"
+                          size="lg"
+                          leftSection={
+                            <Avatar size={20} radius="xl" color="blue">
+                              {(p.displayName || p.email || "?")[0].toUpperCase()}
+                            </Avatar>
+                          }
+                        >
+                          {p.displayName || p.email || p.uid}
+                        </Badge>
+                      </Tooltip>
+                    ))}
+                  </Group>
+                ) : (
+                  <Text size="sm" c="dimmed">
+                    No one has joined yet.
+                  </Text>
+                )}
+              </div>
 
-            {draft && !userIsParticipant && slimUser && (
-              <Button onClick={joinDraft}>Join Draft</Button>
-            )}
-
-            {draft &&
-              draft.creator_uid === slimUser?.uid &&
-              !isInvalidNumberOfPlayers && (
-                <Button
-                  onClick={startDraft}
-                  disabled={draft.participants.length < 2}
-                >
-                  Start Draft
-                  {draft.participants.length < 2
-                    ? " (waiting for more players)"
-                    : ""}
-                </Button>
+              {draft && isInvalidNumberOfPlayers && (
+                <Alert color="orange" variant="light">
+                  The {season?.players?.length ?? 0} contestants can't be split
+                  evenly among {draft.participants.length} players. Invite
+                  another friend or remove one to continue.
+                </Alert>
               )}
 
-            {draft && draft.creator_uid !== slimUser?.uid && (
-              <Button disabled={true}>
-                Waiting for host to start the draft
-              </Button>
-            )}
+              {/* Actions */}
+              <Group gap="sm">
+                {!slimUser && (
+                  <Button
+                    leftSection={<IconUserPlus size={16} />}
+                    onClick={() =>
+                      modals.openContextModal({
+                        modal: "AuthModal",
+                        innerProps: {},
+                      })
+                    }
+                  >
+                    Log in to join
+                  </Button>
+                )}
 
-            <CopyButton value={window.location.href}>
-              {({ copied, copy }) => (
-                <Button
-                  color={copied ? "teal" : "blue"}
-                  onClick={copy}
-                  variant="outline"
-                >
-                  {copied ? "Copied url" : "Copy invite link"}
-                </Button>
-              )}
-            </CopyButton>
-          </Group>
+                {draft && !userIsParticipant && slimUser && (
+                  <Button
+                    leftSection={<IconUserPlus size={16} />}
+                    onClick={joinDraft}
+                  >
+                    Join Draft
+                  </Button>
+                )}
 
-          {draft && isInvalidNumberOfPlayers && (
-            <Alert color="red">
-              You cannot draft evenly with this number of players. Please invite
-              a friend or start over.
-            </Alert>
-          )}
+                {draft &&
+                  draft.creator_uid === slimUser?.uid &&
+                  !isInvalidNumberOfPlayers && (
+                    <Button
+                      variant="gradient"
+                      gradient={{ from: "blue", to: "cyan" }}
+                      leftSection={<IconFlame size={16} />}
+                      onClick={startDraft}
+                      disabled={draft.participants.length < 2}
+                    >
+                      {draft.participants.length < 2
+                        ? "Waiting for players..."
+                        : "Start Draft"}
+                    </Button>
+                  )}
 
-          <Text size="sm">
-            <strong>Participants:</strong>{" "}
-            {draft?.participants
-              .map((x) => x.displayName || x.email || x.uid)
-              .join(", ") || "None yet"}
-          </Text>
+                {draft &&
+                  draft.creator_uid !== slimUser?.uid &&
+                  userIsParticipant && (
+                    <Button variant="light" disabled>
+                      Waiting for host to start...
+                    </Button>
+                  )}
+
+                <CopyButton value={window.location.href}>
+                  {({ copied, copy }) => (
+                    <Button
+                      color={copied ? "teal" : "gray"}
+                      onClick={copy}
+                      variant="light"
+                      leftSection={
+                        copied ? <IconCheck size={16} /> : <IconCopy size={16} />
+                      }
+                    >
+                      {copied ? "Link copied!" : "Copy invite link"}
+                    </Button>
+                  )}
+                </CopyButton>
+              </Group>
+            </Stack>
+          </Paper>
+
+          {/* Scoring reference */}
+          <Paper p="lg" radius="md" withBorder>
+            <Stack gap="md">
+              <Group gap="sm" align="center">
+                <IconClipboardList
+                  size={22}
+                  color="var(--mantine-color-teal-6)"
+                />
+                <Title order={3}>Scoring Reference</Title>
+              </Group>
+              <Divider />
+              <ScoringLegendTable />
+            </Stack>
+          </Paper>
         </Stack>
       ) : (
         <>
