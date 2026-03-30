@@ -425,40 +425,76 @@ export const DraftComponent = () => {
           <Stepper active={activeStep} allowNextStepsSelect={false}>
             {/* ===== STEP 0: DRAFT ===== */}
             <Stepper.Step label="Draft" description="Pick your players">
-              <Stack>
+              <Stack gap="md" mt="md">
+                {/* Turn banner */}
                 {draft?.current_picker && (
-                  <Center p="xl">
-                    <Title
-                      order={2}
-                      c={
+                  <Paper
+                    p="md"
+                    radius="md"
+                    style={{
+                      backgroundColor:
                         draft.current_picker.uid === slimUser?.uid
-                          ? "blue"
-                          : "gray"
-                      }
-                    >
-                      {draft.current_picker.uid === slimUser?.uid
-                        ? "Your turn to pick!"
-                        : `${draft.current_picker.displayName || draft.current_picker.email} is picking`}
-                    </Title>
-                  </Center>
+                          ? "var(--mantine-color-blue-0)"
+                          : "var(--mantine-color-gray-0)",
+                      border:
+                        draft.current_picker.uid === slimUser?.uid
+                          ? "2px solid var(--mantine-color-blue-4)"
+                          : "1px solid var(--mantine-color-gray-3)",
+                    }}
+                  >
+                    <Group justify="space-between" align="center" wrap="wrap">
+                      <Group gap="sm">
+                        <IconFlame
+                          size={24}
+                          color={
+                            draft.current_picker.uid === slimUser?.uid
+                              ? "var(--mantine-color-blue-6)"
+                              : "var(--mantine-color-gray-5)"
+                          }
+                        />
+                        <Title
+                          order={3}
+                          c={
+                            draft.current_picker.uid === slimUser?.uid
+                              ? "blue"
+                              : "dimmed"
+                          }
+                        >
+                          {draft.current_picker.uid === slimUser?.uid
+                            ? "Your turn to pick!"
+                            : `${draft.current_picker.displayName || draft.current_picker.email} is picking...`}
+                        </Title>
+                      </Group>
+                      <Badge variant="light" size="lg">
+                        Pick {draft?.current_pick_number} of{" "}
+                        {draft?.total_players}
+                      </Badge>
+                    </Group>
+                  </Paper>
                 )}
 
-                <Group justify="space-between">
-                  <Text size="sm">
-                    Pick {draft?.current_pick_number} of {draft?.total_players}
-                    {" | "}
-                    Draft Order:{" "}
-                    {draft?.pick_order
-                      .map((x) => x.displayName || x.email)
-                      .join(" | ")}
+                {/* Draft order */}
+                <Group gap="xs" wrap="wrap">
+                  <Text size="xs" c="dimmed" fw={600}>
+                    Order:
                   </Text>
+                  {draft?.pick_order?.map((p, i) => (
+                    <Badge
+                      key={p.uid}
+                      variant={
+                        p.uid === draft?.current_picker?.uid ? "filled" : "light"
+                      }
+                      color={
+                        p.uid === draft?.current_picker?.uid ? "blue" : "gray"
+                      }
+                      size="sm"
+                    >
+                      {i + 1}. {p.displayName || p.email}
+                    </Badge>
+                  ))}
                 </Group>
 
-                {Boolean(draft?.draft_picks?.length) && (
-                  <Center>
-                    <MyDraftedPlayers />
-                  </Center>
-                )}
+                {Boolean(draft?.draft_picks?.length) && <MyDraftedPlayers />}
               </Stack>
             </Stepper.Step>
 
@@ -535,7 +571,7 @@ export const DraftComponent = () => {
 
           {/* ===== PLAYER GRID (during drafting, full-width below stepper) ===== */}
           {phase === "drafting" && (
-            <SimpleGrid cols={{ base: 2, sm: 4 }} mt="md">
+            <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }} mt="md">
               {season.players.map((p) => {
                 const isDrafted = isPlayerDrafted(p.name);
                 const draftedBy = !isDrafted
@@ -545,39 +581,40 @@ export const DraftComponent = () => {
                   <Paper
                     radius="md"
                     withBorder
-                    p="lg"
-                    bg={
-                      isDrafted
-                        ? "var(--mantine-color-gray-4)"
-                        : "var(--mantine-color-body)"
-                    }
+                    p="sm"
                     key={p.name + "-grid"}
+                    style={{
+                      opacity: isDrafted ? 0.5 : 1,
+                      cursor: isDrafted ? "default" : "pointer",
+                    }}
                   >
-                    <Avatar
-                      src={p.img}
-                      size={120}
-                      radius={120}
-                      mx="auto"
-                      alt={p.name}
-                      onClick={() => {
-                        modals.open({
-                          withCloseButton: false,
-                          children: (
-                            <Stack>
-                              <Center>
-                                <Title order={3}>{p.name}</Title>
-                              </Center>
-                              <Center>
-                                <Avatar
-                                  size={"100%"}
-                                  src={p.img}
-                                  radius={10}
-                                  alt={p.name}
-                                />
-                              </Center>
-                              <Center>
+                    <Stack gap={6} align="center">
+                      <Avatar
+                        src={p.img}
+                        size={80}
+                        radius={80}
+                        alt={p.name}
+                        style={{
+                          filter: isDrafted ? "grayscale(1)" : "none",
+                        }}
+                        onClick={() => {
+                          modals.open({
+                            withCloseButton: false,
+                            children: (
+                              <Stack>
+                                <Center>
+                                  <Title order={3}>{p.name}</Title>
+                                </Center>
+                                <Center>
+                                  <Avatar
+                                    size={"100%"}
+                                    src={p.img}
+                                    radius={10}
+                                    alt={p.name}
+                                  />
+                                </Center>
                                 {p.description && (
-                                  <Text ta="center" fz="lg" c="dimmed">
+                                  <Text ta="center" c="dimmed">
                                     {p.description.split(" | ").map((x, i) => (
                                       <span key={i}>
                                         {x}
@@ -586,51 +623,41 @@ export const DraftComponent = () => {
                                     ))}
                                   </Text>
                                 )}
-                              </Center>
-                            </Stack>
-                          ),
-                        });
-                      }}
-                    />
-                    <Text ta="center" fz="lg" fw={500} mt="md">
-                      {p.name}
-                    </Text>
-                    {p.description && (
-                      <Text ta="center" fz="sm" c="dimmed">
-                        {p.description.split(" | ").map((x, i) => (
-                          <span key={i}>
-                            {x}
-                            <br />
-                          </span>
-                        ))}
-                      </Text>
-                    )}
-                    <Group justify="space-between" mt="md" mb="xs">
-                      <Badge color="pink">Season {season.order}</Badge>
-                      {draftedBy && (
-                        <Badge color="blue">
-                          Drafted by {draftedBy.user_name}
-                        </Badge>
-                      )}
-                      <Badge color={isDrafted ? "red" : "green"}>
-                        {isDrafted ? "Drafted" : "Available"}
-                      </Badge>
-                    </Group>
-
-                    {!isDrafted && (
-                      <Button
-                        fullWidth
-                        onClick={() => draftPlayer(p.name)}
-                        disabled={
-                          !draft?.started ||
-                          draft.finished ||
-                          !isCurrentDrafter ||
-                          isDrafted
-                        }
+                              </Stack>
+                            ),
+                          });
+                        }}
+                      />
+                      <Text
+                        ta="center"
+                        fw={600}
+                        size="sm"
+                        c={isDrafted ? "dimmed" : undefined}
                       >
-                        Draft Me
-                      </Button>
-                    )}
+                        {p.name}
+                      </Text>
+
+                      {isDrafted && draftedBy ? (
+                        <Badge variant="light" color="gray" size="xs">
+                          {draftedBy.user_name}
+                        </Badge>
+                      ) : (
+                        <Button
+                          fullWidth
+                          size="xs"
+                          variant={isCurrentDrafter ? "filled" : "light"}
+                          onClick={() => draftPlayer(p.name)}
+                          disabled={
+                            !draft?.started ||
+                            draft.finished ||
+                            !isCurrentDrafter ||
+                            isDrafted
+                          }
+                        >
+                          Draft
+                        </Button>
+                      )}
+                    </Stack>
                   </Paper>
                 );
               })}
