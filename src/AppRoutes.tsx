@@ -11,7 +11,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
-import { QueryClientProvider } from "react-query";
 import {
   Navigate,
   Route,
@@ -33,7 +32,6 @@ import { SeasonAdmin } from "./pages/SeasonAdmin";
 import { Seasons } from "./pages/Seasons";
 import { SingleCompetition } from "./pages/SingleCompetition";
 import { SingleSeason } from "./pages/SingleSeason";
-import { queryClient } from "./queryClient";
 import { theme } from "./theme";
 
 // Legacy redirect: /seasons/:id/manage -> /admin/:id (safe to remove once old links age out)
@@ -57,88 +55,86 @@ export const AppRoutes = () => {
   return (
     <MantineProvider theme={theme}>
       <Notifications />
-      <QueryClientProvider client={queryClient}>
-        <Router>
-          <ModalsProvider modals={modals}>
-            <AppShell
-              header={{
-                height: {
-                  base: 42,
-                  sm: 55,
-                },
-              }}
-              navbar={{
-                width: 300,
-                breakpoint: "sm",
-                collapsed: { mobile: !opened },
-              }}
-              padding="md"
-            >
-              <AppShell.Header>
-                <Group>
-                  <Burger
-                    opened={opened}
-                    onClick={toggle}
-                    hiddenFrom="sm"
-                    size="sm"
-                  />
-                  <Anchor
-                    className={classes.title}
-                    variant="gradient"
-                    gradient={{ from: "blue", to: "cyan" }}
-                    inherit
-                    href="/"
-                  >
-                    {PROJECT_NAME}
-                  </Anchor>
-                </Group>
-              </AppShell.Header>
+      <Router>
+        <ModalsProvider modals={modals}>
+          <AppShell
+            header={{
+              height: {
+                base: 42,
+                sm: 55,
+              },
+            }}
+            navbar={{
+              width: 300,
+              breakpoint: "sm",
+              collapsed: { mobile: !opened },
+            }}
+            padding="md"
+          >
+            <AppShell.Header>
+              <Group>
+                <Burger
+                  opened={opened}
+                  onClick={toggle}
+                  hiddenFrom="sm"
+                  size="sm"
+                />
+                <Anchor
+                  className={classes.title}
+                  variant="gradient"
+                  gradient={{ from: "blue", to: "cyan" }}
+                  inherit
+                  href="/"
+                >
+                  {PROJECT_NAME}
+                </Anchor>
+              </Group>
+            </AppShell.Header>
 
-              <AppShell.Navbar p="md">
-                <Navbar />
-              </AppShell.Navbar>
+            <AppShell.Navbar p="md">
+              <Navbar />
+            </AppShell.Navbar>
 
-              <AppShell.Main className={classes.main}>
-                <Routes>
-                  <Route path="/" element={<Home />} />
+            <AppShell.Main className={classes.main}>
+              <Routes>
+                <Route path="/" element={<Home />} />
 
-                  {/* User stuff */}
-                  <Route path="/logout" element={<Logout />} />
+                {/* User stuff */}
+                <Route path="/logout" element={<Logout />} />
 
-                  {/* Drafting */}
-                  <Route
-                    path="/seasons/:seasonId/draft/:draftId"
-                    element={<DraftComponent />}
-                  />
+                {/* Drafting */}
+                <Route
+                  path="/seasons/:seasonId/draft/:draftId"
+                  element={<DraftComponent />}
+                />
 
-                  {/* Seasons */}
-                  <Route
-                    path="/seasons/:seasonId/manage"
-                    element={<RedirectToAdmin />}
-                  />
-                  <Route path="/seasons/:seasonId" element={<SingleSeason />} />
-                  <Route path="/seasons" element={<Seasons />} />
+                {/* Seasons */}
+                <Route
+                  path="/seasons/:seasonId/manage"
+                  element={<RedirectToAdmin />}
+                />
+                <Route path="/seasons/:seasonId" element={<SingleSeason />} />
+                <Route path="/seasons" element={<Seasons />} />
 
-                  {/* Competitions */}
-                  <Route
-                    path="/competitions/:competitionId"
-                    element={<SingleCompetition />}
-                  />
-                  <Route path="/competitions" element={<Competitions />} />
+                {/* Competitions */}
+                <Route
+                  path="/competitions/:competitionId"
+                  element={<SingleCompetition />}
+                />
+                <Route path="/competitions" element={<Competitions />} />
 
-                  {/* Admin */}
-                  <Route path="/admin/:seasonId" element={<SeasonAdmin />} />
-                  <Route path="/admin" element={<Admin />} />
-                </Routes>
-              </AppShell.Main>
+                {/* Admin */}
+                <Route path="/admin/:seasonId" element={<SeasonAdmin />} />
+                <Route path="/admin" element={<Admin />} />
+              </Routes>
+            </AppShell.Main>
 
-              <AppShell.Footer>
-                <Footer />
-              </AppShell.Footer>
-            </AppShell>
-          </ModalsProvider>
-        </Router>
-      </QueryClientProvider>
+            <AppShell.Footer>
+              <Footer />
+            </AppShell.Footer>
+          </AppShell>
+        </ModalsProvider>
+      </Router>
     </MantineProvider>
   );
 };

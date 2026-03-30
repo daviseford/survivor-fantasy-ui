@@ -1,14 +1,30 @@
-import { useFirestoreQueryData } from "@react-query-firebase/firestore";
-import { collection } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { Season } from "../types";
 
 export const useSeasons = () => {
-  const ref = collection(db, "seasons");
+  const [data, setData] = useState<Season[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  return useFirestoreQueryData<Season, Season[]>(
-    ["seasons"],
-    // @ts-expect-error react-query-firebase type mismatch with Firestore ref
-    ref,
-  );
+  useEffect(() => {
+    const ref = collection(db, "seasons");
+
+    const unsub = onSnapshot(
+      ref,
+      (snapshot) => {
+        const _data = snapshot.docs.map((x) => x.data() as Season);
+        setData(_data);
+        setIsLoading(false);
+      },
+      (error) => {
+        console.error("useSeasons: onSnapshot error", error);
+        setIsLoading(false);
+      },
+    );
+
+    return () => unsub();
+  }, []);
+
+  return { data, isLoading };
 };

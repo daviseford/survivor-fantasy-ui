@@ -10,15 +10,20 @@ export const useCompetitions = () => {
   const [data, setData] = useState<Competition[]>([]);
 
   useEffect(() => {
-    // only run for davis
     if (!slimUser?.isAdmin) return;
 
     const ref = collection(db, "competitions");
 
-    const unsub = onSnapshot(ref, (doc) => {
-      const _data = doc.docs.map((x) => x.data() as Competition) ?? [];
-      setData(_data);
-    });
+    const unsub = onSnapshot(
+      ref,
+      (snapshot) => {
+        const _data = snapshot.docs.map((x) => x.data() as Competition);
+        setData(_data);
+      },
+      (error) => {
+        console.error("useCompetitions: onSnapshot error", error);
+      },
+    );
 
     return () => unsub();
   }, [slimUser?.isAdmin]);
