@@ -2,7 +2,9 @@ import { PlayerAction } from "../types";
 import { EnhancedScores } from "./scoringUtils";
 
 export type ScoringCategory =
-  | "challenges"
+  | "immunity"
+  | "reward"
+  | "combined"
   | "idolsAndAdvantages"
   | "milestones"
   | "eliminations"
@@ -15,9 +17,9 @@ export type CategoryBreakdown = {
 
 export const ScoringCategoryMap: Record<PlayerAction, ScoringCategory> = {
   // Challenges
-  reward: "challenges",
-  combined: "challenges",
-  immunity: "challenges",
+  reward: "reward",
+  combined: "combined",
+  immunity: "immunity",
 
   // Idols & Advantages
   find_idol: "idolsAndAdvantages",
@@ -48,7 +50,9 @@ export const ScoringCategoryMap: Record<PlayerAction, ScoringCategory> = {
 };
 
 export const CategoryColors: Record<ScoringCategory, string> = {
-  challenges: "var(--mantine-color-blue-6)",
+  immunity: "var(--mantine-color-blue-6)",
+  reward: "var(--mantine-color-cyan-6)",
+  combined: "var(--mantine-color-indigo-6)",
   idolsAndAdvantages: "var(--mantine-color-violet-6)",
   milestones: "var(--mantine-color-green-6)",
   eliminations: "var(--mantine-color-red-6)",
@@ -56,7 +60,9 @@ export const CategoryColors: Record<ScoringCategory, string> = {
 };
 
 export const CategoryLabels: Record<ScoringCategory, string> = {
-  challenges: "Challenges",
+  immunity: "Immunity",
+  reward: "Reward",
+  combined: "Immunity + Reward",
   idolsAndAdvantages: "Idols & Advantages",
   milestones: "Milestones",
   eliminations: "Eliminations",
@@ -64,7 +70,9 @@ export const CategoryLabels: Record<ScoringCategory, string> = {
 };
 
 export const ScoringCategories: ScoringCategory[] = [
-  "challenges",
+  "immunity",
+  "reward",
+  "combined",
   "idolsAndAdvantages",
   "milestones",
   "eliminations",
@@ -75,7 +83,9 @@ export const aggregateByScoringCategory = (
   enhancedScores: EnhancedScores[],
 ): CategoryBreakdown[] => {
   const totals: Record<ScoringCategory, number> = {
-    challenges: 0,
+    immunity: 0,
+    reward: 0,
+    combined: 0,
     idolsAndAdvantages: 0,
     milestones: 0,
     eliminations: 0,

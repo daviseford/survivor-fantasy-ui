@@ -25,13 +25,15 @@ describe("ScoringCategoryMap", () => {
 });
 
 describe("aggregateByScoringCategory", () => {
-  it("aggregates actions across all 5 categories", () => {
+  it("aggregates actions across all 7 categories", () => {
     const scores: EnhancedScores[] = [
       {
         episode_num: 1,
-        total: 10,
+        total: 12.5,
         actions: [
           { action: "immunity", points_awarded: 2 },
+          { action: "reward", points_awarded: 1 },
+          { action: "combined", points_awarded: 3 },
           { action: "find_idol", points_awarded: 1 },
           { action: "make_merge", points_awarded: 2 },
           { action: "eliminated", points_awarded: 3 },
@@ -43,7 +45,9 @@ describe("aggregateByScoringCategory", () => {
     const result = aggregateByScoringCategory(scores);
 
     expect(result).toEqual([
-      { category: "challenges", points: 2 },
+      { category: "immunity", points: 2 },
+      { category: "reward", points: 1 },
+      { category: "combined", points: 3 },
       { category: "idolsAndAdvantages", points: 1 },
       { category: "milestones", points: 2 },
       { category: "eliminations", points: 3 },
@@ -73,10 +77,12 @@ describe("aggregateByScoringCategory", () => {
 
     const result = aggregateByScoringCategory(scores);
 
-    expect(result.find((r) => r.category === "challenges")?.points).toBe(4);
+    expect(result.find((r) => r.category === "reward")?.points).toBe(1);
+    expect(result.find((r) => r.category === "combined")?.points).toBe(3);
     expect(
       result.find((r) => r.category === "idolsAndAdvantages")?.points,
     ).toBe(3);
+    expect(result.find((r) => r.category === "immunity")?.points).toBe(0);
     expect(result.find((r) => r.category === "milestones")?.points).toBe(0);
     expect(result.find((r) => r.category === "eliminations")?.points).toBe(0);
     expect(result.find((r) => r.category === "other")?.points).toBe(0);
@@ -89,7 +95,7 @@ describe("aggregateByScoringCategory", () => {
 
     const result = aggregateByScoringCategory(scores);
 
-    expect(result).toHaveLength(5);
+    expect(result).toHaveLength(7);
     for (const breakdown of result) {
       expect(breakdown.points).toBe(0);
     }
@@ -98,7 +104,7 @@ describe("aggregateByScoringCategory", () => {
   it("returns all categories with 0 points for empty array", () => {
     const result = aggregateByScoringCategory([]);
 
-    expect(result).toHaveLength(5);
+    expect(result).toHaveLength(7);
     for (const breakdown of result) {
       expect(breakdown.points).toBe(0);
     }
@@ -115,7 +121,9 @@ describe("aggregateByScoringCategory", () => {
 
     const result = aggregateByScoringCategory(scores);
 
-    expect(result.find((r) => r.category === "challenges")?.points).toBe(2);
+    expect(result.find((r) => r.category === "immunity")?.points).toBe(2);
+    expect(result.find((r) => r.category === "reward")?.points).toBe(0);
+    expect(result.find((r) => r.category === "combined")?.points).toBe(0);
     expect(
       result.find((r) => r.category === "idolsAndAdvantages")?.points,
     ).toBe(0);
