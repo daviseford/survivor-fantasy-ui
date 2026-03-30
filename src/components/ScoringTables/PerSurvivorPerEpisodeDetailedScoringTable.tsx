@@ -280,7 +280,9 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
           </Badge>
         </Group>
       </Group>
-      <Table.ScrollContainer minWidth={300}>
+      <Table.ScrollContainer
+        minWidth={500 + (season?.episodes?.length ?? 0) * 130}
+      >
         <Table
           highlightOnHover
           verticalSpacing="md"

@@ -50,7 +50,7 @@ declare module "@mantine/modals" {
 }
 
 export const AppRoutes = () => {
-  const [opened, { toggle }] = useDisclosure();
+  const [opened, { toggle, close }] = useDisclosure();
 
   return (
     <MantineProvider theme={theme}>
@@ -92,7 +92,7 @@ export const AppRoutes = () => {
             </AppShell.Header>
 
             <AppShell.Navbar p="md">
-              <Navbar />
+              <Navbar onNavigate={close} />
             </AppShell.Navbar>
 
             <AppShell.Main className={classes.main}>

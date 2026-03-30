@@ -22,7 +22,7 @@ const data = [
   { link: "/competitions", label: "Competitions", icon: IconKarate },
 ];
 
-export const Navbar = () => {
+export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
   const { pathname } = useLocation();
 
   const { slimUser } = useUser();
@@ -44,6 +44,7 @@ export const Navbar = () => {
         data-active={isActive}
         to={item.link}
         key={item.label}
+        onClick={onNavigate}
       >
         <item.icon className={classes.linkIcon} stroke={1.5} />
         <span>{item.label}</span>
