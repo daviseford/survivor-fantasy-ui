@@ -1,4 +1,5 @@
 import { Anchor, Avatar, Container, Group, Text } from "@mantine/core";
+import { useLocation } from "react-router-dom";
 
 import classes from "./Footer.module.css";
 
@@ -11,6 +12,9 @@ const links = [
 ];
 
 export const Footer = () => {
+  const { pathname } = useLocation();
+  const isHome = pathname === "/";
+
   const items = links.map((link) => (
     <Anchor
       c="dimmed"
@@ -24,7 +28,7 @@ export const Footer = () => {
   ));
 
   return (
-    <div className={classes.footer}>
+    <div className={`${classes.footer} ${!isHome ? classes.hideOnMobile : ""}`}>
       <Container className={classes.inner}>
         <Avatar src={"/icons/probst.svg"} size={28} alt="" />
         <Text c="dimmed" size="sm">

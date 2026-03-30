@@ -173,20 +173,20 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
     return (
       <Table.Tr key={playerName} style={trStyle}>
         <Table.Td>{defaultRank}</Table.Td>
-        <Table.Td>
-          <Group gap={6} wrap="nowrap">
+        <Table.Td style={{ minWidth: 160 }}>
+          <Group gap={6} wrap="nowrap" align="center">
             <Avatar
               size={26}
               src={playerData?.img}
               radius={26}
-              style={avatarStyle}
+              style={{ ...avatarStyle, flexShrink: 0 }}
             />
-            <div>
-              <Text fz="sm" fw={500} c={playerElimination ? "dimmed" : ""} lh={1.2}>
+            <div style={{ minWidth: 0 }}>
+              <Text fz="sm" fw={500} c={playerElimination ? "dimmed" : ""} lh={1.2} truncate>
                 {playerName}
               </Text>
               {draftedBy && (
-                <Text fz="xs" c="dimmed" lh={1.2}>
+                <Text fz="xs" c="dimmed" lh={1.2} truncate>
                   {draftedBy.displayName || draftedBy.email}
                 </Text>
               )}
@@ -234,9 +234,31 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                     <Badge
                       size="xs"
                       color={badgeColor}
-                      style={{ cursor: "pointer" }}
+                      style={{
+                        cursor: "pointer",
+                        maxWidth: "100%",
+                      }}
                     >
-                      {x.action.replace(/_/g, " ")} +{x.points_awarded}
+                      <span
+                        style={{
+                          display: "inline-flex",
+                          maxWidth: "100%",
+                        }}
+                      >
+                        <span
+                          style={{
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            minWidth: 0,
+                          }}
+                        >
+                          {x.action.replace(/_/g, " ")}
+                        </span>
+                        <span style={{ flexShrink: 0 }}>
+                          {" "}+{x.points_awarded}
+                        </span>
+                      </span>
                     </Badge>
                   </Tooltip>
                 );
