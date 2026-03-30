@@ -2,7 +2,9 @@ import {
   Alert,
   Center,
   Loader,
+  Stack,
   Table,
+  Text,
   Title,
   UnstyledButton,
 } from "@mantine/core";
@@ -66,7 +68,6 @@ export const Competitions = () => {
     }
   };
 
-  // prefer all comps if admin has access
   const _comps = useMemo(
     () => (allCompetitions?.length ? allCompetitions : competitions) || [],
     [allCompetitions, competitions],
@@ -92,8 +93,12 @@ export const Competitions = () => {
   }, [_comps, sortField, sortDir]);
 
   const rows = sorted.map((x) => (
-    <Table.Tr onClick={() => navigate(`/competitions/${x.id}`)} key={x.id}>
-      <Table.Td>{x.competition_name}</Table.Td>
+    <Table.Tr
+      onClick={() => navigate(`/competitions/${x.id}`)}
+      key={x.id}
+      style={{ cursor: "pointer" }}
+    >
+      <Table.Td fw={500}>{x.competition_name}</Table.Td>
       <Table.Td>{x.season_num}</Table.Td>
       <Table.Td>
         {x.participants.map((p) => p.displayName ?? p.email).join(", ")}
@@ -104,29 +109,46 @@ export const Competitions = () => {
           <Table.Td>
             {x.participants.find((p) => p.uid === x.creator_uid)?.displayName}
           </Table.Td>
-          <Table.Td>{x.draft_id.slice(-4)}</Table.Td>
+          <Table.Td c="dimmed">{x.draft_id.slice(-4)}</Table.Td>
         </>
       )}
     </Table.Tr>
   ));
 
   if (!slimUser) {
-    return <Alert>Please register or log in to view your competitions!</Alert>;
+    return (
+      <Center py="xl">
+        <Alert>Please register or log in to view your competitions.</Alert>
+      </Center>
+    );
   }
 
   return (
-    <div>
-      <Title order={2}>Competitions</Title>
+    <Stack gap="lg" p="md">
+      <div>
+        <Title order={2}>Competitions</Title>
+        <Text c="dimmed" size="sm">
+          Your active and past competitions.
+        </Text>
+      </div>
 
       {isLoading && (
-        <Center>
-          <Loader size="xl" />
+        <Center py="xl">
+          <Loader size="lg" />
         </Center>
       )}
 
-      {!isLoading && (
+      {!isLoading && sorted.length === 0 && (
+        <Center py="xl">
+          <Text c="dimmed">
+            No competitions yet. Start a draft from a season page to create one.
+          </Text>
+        </Center>
+      )}
+
+      {!isLoading && sorted.length > 0 && (
         <Table.ScrollContainer minWidth={300}>
-          <Table highlightOnHover>
+          <Table highlightOnHover verticalSpacing="sm">
             <Table.Thead>
               <Table.Tr>
                 <SortableHeader
@@ -164,6 +186,6 @@ export const Competitions = () => {
           </Table>
         </Table.ScrollContainer>
       )}
-    </div>
+    </Stack>
   );
 };
