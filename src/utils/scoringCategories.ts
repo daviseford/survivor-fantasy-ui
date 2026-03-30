@@ -52,7 +52,7 @@ export const ScoringCategoryMap: Record<PlayerAction, ScoringCategory> = {
 export const CategoryColors: Record<ScoringCategory, string> = {
   immunity: "var(--mantine-color-blue-6)",
   reward: "var(--mantine-color-yellow-6)",
-  combined: "var(--mantine-color-cyan-6)",
+  combined: "var(--mantine-color-orange-6)",
   idolsAndAdvantages: "var(--mantine-color-violet-6)",
   milestones: "var(--mantine-color-lime-6)",
   eliminations: "var(--mantine-color-red-6)",
