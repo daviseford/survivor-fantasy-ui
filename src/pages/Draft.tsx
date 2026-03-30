@@ -27,6 +27,7 @@ import {
   IconCopy,
   IconCrystalBall,
   IconFlame,
+  IconTrophy,
   IconUserPlus,
   IconUsers,
   IconX,
@@ -527,12 +528,11 @@ export const DraftComponent = () => {
 
             {/* ===== STEP 2: SUMMARY ===== */}
             <Stepper.Step label="Summary" description="Review & compete">
-              <Stack>
+              <Stack gap="lg" mt="md">
                 {!allPlayersDoneWithPropBets && (
-                  <Alert color="yellow">
-                    Waiting for all participants to submit their prop bets (
-                    {draft?.prop_bets?.length || 0} /{" "}
-                    {draft?.participants?.length})
+                  <Alert color="yellow" variant="light">
+                    Waiting for prop bets — {draft?.prop_bets?.length || 0} of{" "}
+                    {draft?.participants?.length} submitted
                   </Alert>
                 )}
 
@@ -540,6 +540,9 @@ export const DraftComponent = () => {
                   <Center>
                     <Button
                       size="lg"
+                      variant="gradient"
+                      gradient={{ from: "blue", to: "cyan" }}
+                      leftSection={<IconTrophy size={20} />}
                       onClick={() =>
                         navigate(`/competitions/${draft!.competiton_id}`)
                       }
@@ -549,34 +552,53 @@ export const DraftComponent = () => {
                   </Center>
                 )}
 
-                <Center>
-                  <MyDraftedPlayers />
-                </Center>
+                <MyDraftedPlayers />
 
-                <Box p="lg">
-                  <Title ta="center" order={3} mb="md">
-                    Prop Bets
-                  </Title>
-                  <PostDraftPropBetTable />
-                </Box>
+                <Paper p="lg" radius="md" withBorder>
+                  <Stack gap="md">
+                    <Group gap="sm" align="center">
+                      <IconCrystalBall
+                        size={20}
+                        color="var(--mantine-color-violet-6)"
+                      />
+                      <Title order={4}>Prop Bets</Title>
+                    </Group>
+                    <Divider />
+                    <PostDraftPropBetTable />
+                  </Stack>
+                </Paper>
 
-                <Box p="lg">
-                  <Title ta="center" order={3} mb="md">
-                    Draft Results
-                  </Title>
-                  <DraftTable
-                    draft_picks={draft!.draft_picks}
-                    participants={draft!.participants}
-                    players={season.players}
-                  />
-                </Box>
+                <Paper p="lg" radius="md" withBorder>
+                  <Stack gap="md">
+                    <Group gap="sm" align="center">
+                      <IconClipboardList
+                        size={20}
+                        color="var(--mantine-color-blue-6)"
+                      />
+                      <Title order={4}>Draft Results</Title>
+                    </Group>
+                    <Divider />
+                    <DraftTable
+                      draft_picks={draft!.draft_picks}
+                      participants={draft!.participants}
+                      players={season.players}
+                    />
+                  </Stack>
+                </Paper>
 
-                <Box p="lg">
-                  <Title ta="center" order={3} mb="md">
-                    Scoring Legend
-                  </Title>
-                  <ScoringLegendTable />
-                </Box>
+                <Paper p="lg" radius="md" withBorder>
+                  <Stack gap="md">
+                    <Group gap="sm" align="center">
+                      <IconClipboardList
+                        size={20}
+                        color="var(--mantine-color-teal-6)"
+                      />
+                      <Title order={4}>Scoring Reference</Title>
+                    </Group>
+                    <Divider />
+                    <ScoringLegendTable />
+                  </Stack>
+                </Paper>
               </Stack>
             </Stepper.Step>
           </Stepper>
