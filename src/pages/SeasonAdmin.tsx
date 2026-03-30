@@ -1,4 +1,5 @@
 import {
+  Badge,
   Center,
   Group,
   Loader,
@@ -104,9 +105,17 @@ export const SeasonAdmin = () => {
   };
 
   return (
-    <Stack gap="md" pt="xs">
-      <Group justify="space-between" align="flex-end">
-        <Title order={2}>Manage {season.name}</Title>
+    <Stack gap="md" p="md">
+      <Group justify="space-between" align="flex-start" wrap="wrap">
+        <div>
+          <Badge variant="light" size="sm" mb={4}>
+            Season {season.order}
+          </Badge>
+          <Title order={2}>Manage {season.name}</Title>
+          <Text c="dimmed" size="sm">
+            {season.players?.length ?? 0} players · {season.episodes?.length ?? 0} episodes
+          </Text>
+        </div>
         <Select
           placeholder="Switch season"
           data={seasonOptions}

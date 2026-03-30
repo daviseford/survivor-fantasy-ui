@@ -64,15 +64,20 @@ export const Admin = () => {
   }
 
   return (
-    <Stack gap="xl" pt="xs">
-      <Group gap="xs">
-        <IconSettings size={28} color="var(--mantine-color-blue-6)" />
-        <Title order={2}>Admin Dashboard</Title>
-      </Group>
+    <Stack gap="xl" p="md">
+      <div>
+        <Group gap="xs" mb={4}>
+          <IconSettings size={22} color="var(--mantine-color-blue-6)" />
+          <Title order={2}>Admin Dashboard</Title>
+        </Group>
+        <Text c="dimmed" size="sm">
+          Manage seasons, episodes, and game data.
+        </Text>
+      </div>
 
       <div>
         <Title order={3} mb="md">
-          Manage Seasons
+          Seasons
         </Title>
         {isLoading ? (
           <Center>
@@ -90,55 +95,62 @@ export const Admin = () => {
                   padding="lg"
                   radius="md"
                   withBorder
+                  style={{ cursor: "pointer" }}
+                  onClick={() => navigate(`/admin/${season.id}`)}
                 >
                   {season.img && (
-                    <Card.Section>
+                    <Card.Section pos="relative">
                       <Image
                         src={season.img}
-                        height={120}
+                        height={100}
                         alt={season.name}
                         fit="cover"
                       />
+                      <Badge
+                        color="dark"
+                        variant="filled"
+                        size="sm"
+                        style={{
+                          position: "absolute",
+                          top: 8,
+                          right: 8,
+                        }}
+                      >
+                        S{season.order}
+                      </Badge>
                     </Card.Section>
                   )}
 
                   <Group justify="space-between" mt="md" mb="xs">
                     <Text fw={600}>{season.name}</Text>
-                    <Badge color="pink">Season {season.order}</Badge>
                   </Group>
 
-                  <Group gap="lg" mb="md">
+                  <Group gap="lg">
                     <Group gap={4}>
                       <IconList size={14} color="gray" />
-                      <Text size="sm" c="dimmed">
+                      <Text size="xs" c="dimmed">
                         {season.episodes?.length ?? 0} episodes
                       </Text>
                     </Group>
                     <Group gap={4}>
                       <IconUsers size={14} color="gray" />
-                      <Text size="sm" c="dimmed">
+                      <Text size="xs" c="dimmed">
                         {season.players?.length ?? 0} players
                       </Text>
                     </Group>
                   </Group>
-
-                  <Button
-                    fullWidth
-                    variant="light"
-                    onClick={() => navigate(`/admin/${season.id}`)}
-                  >
-                    Manage
-                  </Button>
                 </Card>
               ))}
           </SimpleGrid>
         )}
       </div>
 
-      <Accordion>
+      <Accordion variant="subtle">
         <Accordion.Item value="data-tools">
           <Accordion.Control>
-            <Title order={4}>Data Tools</Title>
+            <Title order={4} c="dimmed">
+              Data Tools
+            </Title>
           </Accordion.Control>
           <Accordion.Panel>
             <SimpleGrid cols={3}>
