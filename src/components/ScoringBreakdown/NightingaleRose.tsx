@@ -1,6 +1,6 @@
 import { Box, Group, Paper, Text } from "@mantine/core";
 import { arc as d3Arc } from "d3-shape";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   CategoryBreakdown,
   CategoryColors,
@@ -37,6 +37,7 @@ type NightingaleRoseProps = {
 
 const PADDING_ANGLE = 0.02; // radians (~1.1 degrees)
 const MIN_RADIUS = 20; // minimum inner radius for visual clarity
+const MAX_LABELED_PETALS = 10; // labels get too cramped beyond this
 
 export const NightingaleRose = ({ data, size }: NightingaleRoseProps) => {
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
@@ -122,6 +123,14 @@ export const NightingaleRose = ({ data, size }: NightingaleRoseProps) => {
 
   const handleDismiss = useCallback(() => setTooltip(null), []);
 
+  // Dismiss tooltip on scroll so it doesn't detach from its segment
+  useEffect(() => {
+    if (!tooltip) return;
+    const dismiss = () => setTooltip(null);
+    window.addEventListener("scroll", dismiss, true);
+    return () => window.removeEventListener("scroll", dismiss, true);
+  }, [tooltip]);
+
   return (
     <div>
       <div
@@ -179,7 +188,7 @@ export const NightingaleRose = ({ data, size }: NightingaleRoseProps) => {
                     },
                   )}
                   {/* Name label at the outer edge of the petal */}
-                  {data.length <= 10 && (
+                  {data.length <= MAX_LABELED_PETALS && (
                     <text
                       x={
                         (maxRadius + 8) *

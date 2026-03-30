@@ -9,6 +9,14 @@ import { NightingaleRose, RoseDataEntry } from "./NightingaleRose";
 
 type ViewMode = "participant" | "survivor";
 
+const totalPoints = (entry: RoseDataEntry) =>
+  sum(entry.categories.map((c) => c.points));
+
+const filterAndSort = (entries: RoseDataEntry[]): RoseDataEntry[] =>
+  entries
+    .filter((entry) => entry.categories.some((c) => c.points > 0))
+    .sort((a, b) => totalPoints(b) - totalPoints(a));
+
 export const ScoringBreakdownSection = () => {
   const [viewMode, setViewMode] = useState<ViewMode>("participant");
   const { data: competition } = useCompetition();
@@ -24,43 +32,35 @@ export const ScoringBreakdownSection = () => {
   const participantData: RoseDataEntry[] = useMemo(() => {
     if (!competition) return [];
 
-    return competition.participants
-      .map((participant) => {
-        const draftedPlayerNames = competition.draft_picks
-          .filter((dp) => dp.user_uid === participant.uid)
-          .map((dp) => dp.player_name);
+    const entries = competition.participants.map((participant) => {
+      const draftedPlayerNames = competition.draft_picks
+        .filter((dp) => dp.user_uid === participant.uid)
+        .map((dp) => dp.player_name);
 
-        const allEpisodeScores = draftedPlayerNames.flatMap(
-          (name) => survivorPointsByEpisode[name] || [],
-        );
-
-        const categories = aggregateByScoringCategory(allEpisodeScores);
-
-        return {
-          name: participant.displayName || "Unknown",
-          categories,
-        };
-      })
-      .filter((entry) => entry.categories.some((c) => c.points > 0))
-      .sort(
-        (a, b) =>
-          sum(b.categories.map((c) => c.points)) -
-          sum(a.categories.map((c) => c.points)),
+      const allEpisodeScores = draftedPlayerNames.flatMap(
+        (name) => survivorPointsByEpisode[name] || [],
       );
+
+      const categories = aggregateByScoringCategory(allEpisodeScores);
+
+      return {
+        name: participant.displayName || "Unknown",
+        categories,
+      };
+    });
+
+    return filterAndSort(entries);
   }, [competition, survivorPointsByEpisode]);
 
   const survivorData: RoseDataEntry[] = useMemo(() => {
-    return Object.entries(survivorPointsByEpisode)
-      .map(([name, episodes]) => ({
+    const entries = Object.entries(survivorPointsByEpisode).map(
+      ([name, episodes]) => ({
         name,
         categories: aggregateByScoringCategory(episodes),
-      }))
-      .filter((entry) => entry.categories.some((c) => c.points > 0))
-      .sort(
-        (a, b) =>
-          sum(b.categories.map((c) => c.points)) -
-          sum(a.categories.map((c) => c.points)),
-      );
+      }),
+    );
+
+    return filterAndSort(entries);
   }, [survivorPointsByEpisode]);
 
   if (!hasData) {
