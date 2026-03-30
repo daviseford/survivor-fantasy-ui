@@ -11,10 +11,16 @@ export const useEvents = (seasonId?: Season["id"]) => {
 
     const ref = doc(db, "events", seasonId);
 
-    const unsub = onSnapshot(ref, (doc) => {
-      const _data = doc.data() ?? {};
-      setData(_data);
-    });
+    const unsub = onSnapshot(
+      ref,
+      (doc) => {
+        const _data = doc.data() ?? {};
+        setData(_data);
+      },
+      (error) => {
+        console.error("useEvents: onSnapshot error", error);
+      },
+    );
 
     return () => unsub();
   }, [seasonId]);

@@ -10,11 +10,18 @@ export const useSeasons = () => {
   useEffect(() => {
     const ref = collection(db, "seasons");
 
-    const unsub = onSnapshot(ref, (snapshot) => {
-      const _data = snapshot.docs.map((x) => x.data() as Season);
-      setData(_data);
-      setIsLoading(false);
-    });
+    const unsub = onSnapshot(
+      ref,
+      (snapshot) => {
+        const _data = snapshot.docs.map((x) => x.data() as Season);
+        setData(_data);
+        setIsLoading(false);
+      },
+      (error) => {
+        console.error("useSeasons: onSnapshot error", error);
+        setIsLoading(false);
+      },
+    );
 
     return () => unsub();
   }, []);

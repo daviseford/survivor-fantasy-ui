@@ -10,19 +10,30 @@ export const useSeason = (id?: Season["id"]) => {
   const _seasonId = (id ?? seasonId) || "unknown";
 
   const [data, setData] = useState<Season>();
+  const [isLoading, setIsLoading] = useState(_seasonId !== "unknown");
 
   useEffect(() => {
     if (_seasonId === "unknown") return;
 
+    setIsLoading(true);
+
     const ref = doc(db, "seasons", _seasonId);
 
-    const unsub = onSnapshot(ref, (doc) => {
-      const _data = doc.data() as Season | undefined;
-      setData(_data);
-    });
+    const unsub = onSnapshot(
+      ref,
+      (doc) => {
+        const _data = doc.data() as Season | undefined;
+        setData(_data);
+        setIsLoading(false);
+      },
+      (error) => {
+        console.error("useSeason: onSnapshot error", error);
+        setIsLoading(false);
+      },
+    );
 
     return () => unsub();
   }, [_seasonId]);
 
-  return { data, isLoading: !data && _seasonId !== "unknown" };
+  return { data, isLoading };
 };

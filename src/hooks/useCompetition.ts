@@ -16,10 +16,16 @@ export const useCompetition = (id?: Competition["id"]) => {
 
     const ref = doc(db, "competitions", key);
 
-    const unsub = onSnapshot(ref, (doc) => {
-      const _data = doc.data() as Competition | undefined;
-      setData(_data);
-    });
+    const unsub = onSnapshot(
+      ref,
+      (doc) => {
+        const _data = doc.data() as Competition | undefined;
+        setData(_data);
+      },
+      (error) => {
+        console.error("useCompetition: onSnapshot error", error);
+      },
+    );
 
     return () => unsub();
   }, [key]);

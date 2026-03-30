@@ -25,11 +25,18 @@ export const useMyCompetitions = () => {
       where("participant_uids", "array-contains", user.uid),
     );
 
-    const unsub = onSnapshot(_query, (snapshot) => {
-      const _data = snapshot.docs.map((x) => x.data() as Competition);
-      setData(_data);
-      setIsLoading(false);
-    });
+    const unsub = onSnapshot(
+      _query,
+      (snapshot) => {
+        const _data = snapshot.docs.map((x) => x.data() as Competition);
+        setData(_data);
+        setIsLoading(false);
+      },
+      (error) => {
+        console.error("useMyCompetitions: onSnapshot error", error);
+        setIsLoading(false);
+      },
+    );
 
     return () => unsub();
   }, [user?.uid]);

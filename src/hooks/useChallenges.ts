@@ -11,10 +11,16 @@ export const useChallenges = (seasonId?: Season["id"]) => {
 
     const ref = doc(db, "challenges", seasonId);
 
-    const unsub = onSnapshot(ref, (doc) => {
-      const _data = doc.data() ?? {};
-      setData(_data);
-    });
+    const unsub = onSnapshot(
+      ref,
+      (doc) => {
+        const _data = doc.data() ?? {};
+        setData(_data);
+      },
+      (error) => {
+        console.error("useChallenges: onSnapshot error", error);
+      },
+    );
 
     return () => unsub();
   }, [seasonId]);
