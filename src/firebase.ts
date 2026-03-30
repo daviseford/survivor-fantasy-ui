@@ -1,7 +1,10 @@
 // Import the functions you need from the SDKs you need
 import { getAnalytics } from "firebase/analytics";
 import { FirebaseOptions, initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import {
+  browserLocalPersistence,
+  initializeAuth,
+} from "firebase/auth";
 import { getDatabase } from "firebase/database";
 import { getFirestore } from "firebase/firestore";
 
@@ -29,7 +32,10 @@ const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
 
 // Initialize Firebase Authentication and get a reference to the service
-export const auth = getAuth(app);
+// Use localStorage persistence so Playwright storageState can capture auth tokens
+export const auth = initializeAuth(app, {
+  persistence: browserLocalPersistence,
+});
 
 // Initialize Cloud Firestore and get a reference to the service
 export const db = getFirestore(app);

@@ -1,30 +1,36 @@
 import {
   Badge,
   Card,
+  Center,
   Group,
   Image,
+  Loader,
   SimpleGrid,
   Stack,
   Text,
   Title,
 } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSeasons } from "../hooks/useSeasons";
 
 export const Seasons = () => {
-  const navigate = useNavigate();
-
-  const { data: seasons } = useSeasons();
+  const { data: seasons, isLoading } = useSeasons();
 
   return (
     <Stack gap="lg" p="md">
       <div>
         <Title order={2}>Seasons</Title>
         <Text c="dimmed" size="sm">
-          Pick a season to see the contestants and start a draft with friends.
+          Pick a season, check out the cast, and start drafting with friends.
         </Text>
       </div>
+
+      {isLoading && (
+        <Center py="xl">
+          <Loader size="lg" />
+        </Center>
+      )}
 
       <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
         {seasons
@@ -32,25 +38,23 @@ export const Seasons = () => {
           .sort((a, b) => b.order - a.order)
           .map((x) => (
             <Card
+              component={Link}
+              to={`/seasons/${x.id}`}
               shadow="sm"
               padding="lg"
               radius="md"
               withBorder
               key={x.id}
-              style={{ cursor: "pointer" }}
-              onClick={() => navigate(`/seasons/${x.id}`)}
             >
               <Card.Section pos="relative">
-                <Image src={x.img} height={220} alt={x.name} />
+                <Image src={x.img} height={220} alt="" />
                 <Badge
                   color="dark"
                   variant="filled"
                   size="lg"
-                  style={{
-                    position: "absolute",
-                    top: 12,
-                    right: 12,
-                  }}
+                  pos="absolute"
+                  top={12}
+                  right={12}
                 >
                   Season {x.order}
                 </Badge>

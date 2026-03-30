@@ -1,6 +1,7 @@
 import {
   Alert,
   Badge,
+  Button,
   Center,
   Loader,
   Stack,
@@ -9,7 +10,12 @@ import {
   Title,
   UnstyledButton,
 } from "@mantine/core";
-import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
+import {
+  IconChevronDown,
+  IconChevronUp,
+  IconLogin,
+} from "@tabler/icons-react";
+import { modals } from "@mantine/modals";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCompetitions } from "../hooks/useCompetitions";
@@ -41,6 +47,7 @@ const SortableHeader = ({
       <UnstyledButton
         onClick={() => onSort(field)}
         style={{ display: "flex", alignItems: "center", gap: 4 }}
+        aria-label={`Sort by ${label}`}
       >
         {label}
         {isActive && <Icon size={14} />}
@@ -98,6 +105,14 @@ export const Competitions = () => {
       onClick={() => navigate(`/competitions/${x.id}`)}
       key={x.id}
       style={{ cursor: "pointer" }}
+      role="link"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          navigate(`/competitions/${x.id}`);
+        }
+      }}
     >
       <Table.Td fw={600}>{x.competition_name}</Table.Td>
       <Table.Td>
@@ -131,7 +146,23 @@ export const Competitions = () => {
   if (!slimUser) {
     return (
       <Center py="xl">
-        <Alert>Please register or log in to view your competitions.</Alert>
+        <Stack align="center" gap="md">
+          <Alert title="Sign in to see your competitions">
+            Competitions track your draft scores against friends across a whole
+            season. Log in to view yours or start a new one.
+          </Alert>
+          <Button
+            leftSection={<IconLogin size={18} />}
+            onClick={() =>
+              modals.openContextModal({
+                modal: "AuthModal",
+                innerProps: {},
+              })
+            }
+          >
+            Log in
+          </Button>
+        </Stack>
       </Center>
     );
   }

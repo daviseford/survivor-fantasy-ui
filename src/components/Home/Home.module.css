@@ -2,6 +2,8 @@
   position: relative;
   box-sizing: border-box;
   flex: 1;
+  display: flex;
+  align-items: center;
   background-color: light-dark(
     var(--mantine-color-white),
     var(--mantine-color-dark-8)
@@ -10,13 +12,8 @@
 
 .inner {
   position: relative;
-  padding-top: rem(200px);
-  padding-bottom: rem(120px);
-
-  @media (max-width: $mantine-breakpoint-sm) {
-    padding-bottom: rem(120px);
-    padding-top: rem(80px);
-  }
+  padding-top: var(--mantine-spacing-xl);
+  padding-bottom: var(--mantine-spacing-xl);
 }
 
 .title {
