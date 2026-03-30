@@ -172,26 +172,58 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
 
     return (
       <Table.Tr key={playerName} style={trStyle}>
-        <Table.Td width="20px">{defaultRank}</Table.Td>
-        <Table.Td width="240px">
-          <Group gap="sm">
+        <Table.Td>{defaultRank}</Table.Td>
+        <Table.Td>
+          <Group gap={6} wrap="nowrap">
             <Avatar
-              size={40}
+              size={26}
               src={playerData?.img}
-              radius={40}
+              radius={26}
               style={avatarStyle}
             />
-            <Text fz="sm" fw={500} c={playerElimination ? "dimmed" : ""}>
-              {playerName}
-            </Text>
+            <div>
+              <Text fz="sm" fw={500} c={playerElimination ? "dimmed" : ""} lh={1.2}>
+                {playerName}
+              </Text>
+              {draftedBy && (
+                <Text fz="xs" c="dimmed" lh={1.2}>
+                  {draftedBy.displayName || draftedBy.email}
+                </Text>
+              )}
+            </div>
           </Group>
         </Table.Td>
 
-        <Table.Td width="40px">{total}</Table.Td>
+        <Table.Td>{total}</Table.Td>
+
+        <Table.Td>
+          {getNumberWithOrdinal(draftOrder)}
+          {playerElimination && (
+            <>
+              {" · "}
+              <Badge
+                size="xs"
+                color={
+                  isFTCEliminated
+                    ? "blue"
+                    : isRemovedFromGame
+                      ? "red"
+                      : "gray"
+                }
+              >
+                {isFTCEliminated
+                  ? "FTC"
+                  : isRemovedFromGame
+                    ? "Removed"
+                    : `Out ${getNumberWithOrdinal(playerElimination.order)}`}
+              </Badge>
+            </>
+          )}
+        </Table.Td>
 
         {episodeScores.map((s, idx) => (
-          <Table.Td width="120px" key={idx}>
-            <Stack gap="xs">
+          <Table.Td key={idx}>
+            <Stack gap={2}>
               {s.actions.map((x, actionIdx) => {
                 const badgeColor = x.action === "eliminated" ? "red" : "dark";
                 return (
@@ -200,7 +232,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                     key={actionIdx}
                   >
                     <Badge
-                      size="sm"
+                      size="xs"
                       color={badgeColor}
                       style={{ cursor: "pointer" }}
                     >
@@ -212,34 +244,6 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
             </Stack>
           </Table.Td>
         ))}
-        <Table.Td width="150px">
-          Drafted {getNumberWithOrdinal(draftOrder)} by{" "}
-          {draftedBy?.displayName || draftedBy?.email}
-        </Table.Td>
-        <Table.Td>
-          {playerElimination && (
-            <Badge
-              color={
-                isFTCEliminated
-                  ? "blue"
-                  : isRemovedFromGame
-                    ? "red"
-                    : playerElimination
-                      ? "gray"
-                      : ""
-              }
-            >
-              {isFTCEliminated
-                ? "Final Tribal"
-                : isRemovedFromGame
-                  ? "Removed"
-                  : "Eliminated"}{" "}
-              {!isFTCEliminated
-                ? getNumberWithOrdinal(playerElimination.order)
-                : ""}
-            </Badge>
-          )}
-        </Table.Td>
       </Table.Tr>
     );
   });
@@ -283,8 +287,8 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
       <Table.ScrollContainer minWidth={300}>
         <Table
           highlightOnHover
-          verticalSpacing="md"
-          horizontalSpacing="md"
+          verticalSpacing="xs"
+          horizontalSpacing="sm"
           withColumnBorders
         >
           <Table.Thead>
@@ -310,17 +314,16 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                 sortDir={sortDir}
                 onSort={handleSort}
               />
-              {season?.episodes.map((x) => (
-                <Table.Th key={x.id}>Ep {x.order}</Table.Th>
-              ))}
               <SortableHeader
-                label="Draft Pick"
+                label="Pick"
                 field="draft"
                 sortField={sortField}
                 sortDir={sortDir}
                 onSort={handleSort}
-                width="150px"
               />
+              {season?.episodes.map((x) => (
+                <Table.Th key={x.id}>Ep {x.order}</Table.Th>
+              ))}
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>

@@ -55,40 +55,44 @@ export const SeasonTotalContestantScoringTable = () => {
                 : "",
           }}
         >
-          <Table.Td width={"240px"}>
-            <Group gap="sm">
-              <Avatar size={40} src={playerData?.img} radius={40} />
-
-              <Text fz="sm" fw={500}>
-                {playerName}
-              </Text>
+          <Table.Td>
+            <Group gap={6} wrap="nowrap">
+              <Avatar size={26} src={playerData?.img} radius={26} />
+              <div>
+                <Text fz="sm" fw={500} lh={1.2}>
+                  {playerName}
+                </Text>
+                {draftedBy && (
+                  <Text fz="xs" c="dimmed" lh={1.2}>
+                    {draftedBy.displayName || draftedBy.email}
+                  </Text>
+                )}
+              </div>
             </Group>
           </Table.Td>
-          <Table.Td width={"40px"}>{seasonScore}</Table.Td>
-          <Table.Td>{draftedBy?.displayName || draftedBy?.email}</Table.Td>
-          <Table.Td>{draftPick?.order}</Table.Td>
+          <Table.Td>{seasonScore}</Table.Td>
           <Table.Td>
+            {draftPick?.order ? getNumberWithOrdinal(draftPick.order) : ""}
             {playerElimination && (
-              <Badge
-                color={
-                  isFTCEliminated
-                    ? "blue"
+              <>
+                {" · "}
+                <Badge
+                  size="xs"
+                  color={
+                    isFTCEliminated
+                      ? "blue"
+                      : isRemovedFromGame
+                        ? "red"
+                        : "gray"
+                  }
+                >
+                  {isFTCEliminated
+                    ? "FTC"
                     : isRemovedFromGame
-                      ? "red"
-                      : playerElimination
-                        ? "gray"
-                        : ""
-                }
-              >
-                {isFTCEliminated
-                  ? "Final Tribal"
-                  : isRemovedFromGame
-                    ? "Removed"
-                    : "Eliminated"}{" "}
-                {!isFTCEliminated
-                  ? getNumberWithOrdinal(playerElimination.order)
-                  : ""}
-              </Badge>
+                      ? "Removed"
+                      : `Out ${getNumberWithOrdinal(playerElimination.order)}`}
+                </Badge>
+              </>
             )}
           </Table.Td>
         </Table.Tr>
@@ -96,14 +100,12 @@ export const SeasonTotalContestantScoringTable = () => {
     });
 
   return (
-    <Table highlightOnHover>
+    <Table highlightOnHover verticalSpacing="xs">
       <Table.Thead>
         <Table.Tr>
-          <Table.Th>Player Name</Table.Th>
+          <Table.Th>Player</Table.Th>
           <Table.Th>Total</Table.Th>
-          <Table.Th>Drafted By</Table.Th>
-          <Table.Th>Pick #</Table.Th>
-          <Table.Th></Table.Th>
+          <Table.Th>Pick / Status</Table.Th>
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>{rows}</Table.Tbody>
