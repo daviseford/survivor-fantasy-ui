@@ -1,5 +1,5 @@
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { db } from "../../firebase";
 import { useSeason } from "../../hooks/useSeason";
@@ -16,6 +16,14 @@ export const CreateEpisode = () => {
 
   const [order, setOrder] = useState(nextOrder);
   const [name, setName] = useState("");
+  const userEdited = useRef(false);
+
+  // Sync order from season data when it loads, unless the user manually edited it
+  useEffect(() => {
+    if (!userEdited.current) {
+      setOrder(nextOrder);
+    }
+  }, [nextOrder]);
   const [finale, setFinale] = useState(false);
   const [postMerge, setPostMerge] = useState(false);
   const [mergeOccurs, setMergeOccurs] = useState(false);
@@ -51,6 +59,7 @@ export const CreateEpisode = () => {
       toast.success(`Episode ${order} added`);
 
       // Reset for next episode
+      userEdited.current = false;
       setOrder(order + 1);
       setName("");
       setFinale(false);
@@ -85,7 +94,10 @@ export const CreateEpisode = () => {
               min={1}
               required
               value={order}
-              onChange={(e) => setOrder(Number(e.target.value))}
+              onChange={(e) => {
+                userEdited.current = true;
+                setOrder(Number(e.target.value));
+              }}
             />
           </div>
 

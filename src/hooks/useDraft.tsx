@@ -19,10 +19,12 @@ export const useDraft = () => {
 
     const draftRef = ref(rt_db, "drafts/" + draftId);
 
-    onValue(draftRef, (snapshot) => {
+    const unsubscribe = onValue(draftRef, (snapshot) => {
       const data = snapshot.val();
       setDraft(data || undefined);
     });
+
+    return unsubscribe;
   }, [draftId, season, slimUser]);
 
   return { draft };
