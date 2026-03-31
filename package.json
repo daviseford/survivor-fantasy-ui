@@ -21,6 +21,7 @@
     "e2e:audit": "playwright test audit-all --project=setup --project=chromium-desktop --project=chromium-mobile",
     "e2e:ui": "playwright test --ui",
     "scrape": "tsx scripts/scrape.ts",
+    "init-season": "tsx scripts/init-season.ts",
     "backfill": "tsx scripts/backfill.ts",
     "tsc:scripts": "tsc -p scripts/tsconfig.json --noEmit"
   },

@@ -57,8 +57,19 @@ async function scrape(seasonNum: number): Promise<void> {
     process.exit(1);
   }
 
-  // Step 3: Resolve names
-  const nameMatches = resolveNames(localNames, castEntries);
+  // Step 3: Resolve names (or discover names from wiki if no local data)
+  let nameMatches;
+  if (localNames.length === 0) {
+    // Discovery mode: use wiki display names as canonical names
+    console.log("No local data found — using wiki names directly\n");
+    nameMatches = castEntries.map((entry) => ({
+      localName: entry.displayName,
+      wikiPageTitle: entry.wikiPageTitle,
+      matchStatus: "exact" as const,
+    }));
+  } else {
+    nameMatches = resolveNames(localNames, castEntries);
+  }
 
   // Step 4: Fetch individual player pages
   const players: ScrapedPlayer[] = [];
