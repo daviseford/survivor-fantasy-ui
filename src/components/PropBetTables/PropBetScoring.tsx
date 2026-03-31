@@ -17,24 +17,22 @@ import { PropBetAnswer } from "../../utils/propBetUtils";
 const AnswerTd = ({
   score,
   strikethrough = false,
-  hideResult = false,
 }: {
   score: PropBetAnswer;
   strikethrough?: boolean;
-  hideResult?: boolean;
 }) => {
   return (
     <Table.Td>
       <Group gap="sm">
         <Text
           size="sm"
-          c={hideResult || !score.correct ? "dimmed" : ""}
-          fw={!hideResult && score.correct ? 600 : 400}
-          td={!hideResult && strikethrough ? "line-through" : ""}
+          c={!score.correct ? "dimmed" : ""}
+          fw={score.correct ? 600 : 400}
+          td={strikethrough ? "line-through" : ""}
         >
           {score.answer}
         </Text>
-        {!hideResult && score.correct && (
+        {score.correct && (
           <Badge variant="light" color="green" size="sm">
             +{score.points_awarded}
           </Badge>

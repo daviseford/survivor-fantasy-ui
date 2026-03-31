@@ -146,6 +146,8 @@ export const useScoringCalculations = () => {
 
   return {
     filteredEpisodes,
+    filteredEliminations,
+    filteredEvents,
     survivorPointsTotalSeason,
     survivorPointsByEpisode,
     pointsByUserPerEpisode,

@@ -39,10 +39,3 @@ export function filterRecordByEpisode<T extends HasEpisodeNum>(
   );
 }
 
-export function filterArrayByEpisode<T extends HasEpisodeNum>(
-  data: T[],
-  maxEpisode: number | null,
-): T[] {
-  if (maxEpisode === null) return data;
-  return data.filter((item) => item.episode_num <= maxEpisode);
-}

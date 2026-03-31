@@ -13,13 +13,10 @@ import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { useCompetition } from "../../hooks/useCompetition";
-import { useEliminations } from "../../hooks/useEliminations";
-import { useEvents } from "../../hooks/useEvents";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
 import { PlayerAction } from "../../types";
-import { filterRecordByEpisode } from "../../utils/episodeFilter";
 import { getNumberWithOrdinal } from "../../utils/misc";
 
 type SortField = "rank" | "player" | "total" | "draft";
@@ -72,27 +69,15 @@ const SortableHeader = ({
 export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
   const { data: competition } = useCompetition();
   const { data: season } = useSeason(competition?.season_id);
-  const { data: rawEliminations } = useEliminations(competition?.season_id);
-  const { data: rawEvents } = useEvents(season?.id);
   const { slimUser } = useUser();
 
   const {
     filteredEpisodes,
+    filteredEliminations: eliminations,
+    filteredEvents: events,
     survivorPointsByEpisode,
     survivorPointsTotalSeason,
   } = useScoringCalculations();
-
-  const maxEpisode = competition?.current_episode ?? null;
-
-  const eliminations = useMemo(
-    () => filterRecordByEpisode(rawEliminations || {}, maxEpisode),
-    [rawEliminations, maxEpisode],
-  );
-
-  const events = useMemo(
-    () => filterRecordByEpisode(rawEvents || {}, maxEpisode),
-    [rawEvents, maxEpisode],
-  );
 
   const [sortField, setSortField] = useState<SortField>("rank");
   const [sortDir, setSortDir] = useState<SortDir>("asc");

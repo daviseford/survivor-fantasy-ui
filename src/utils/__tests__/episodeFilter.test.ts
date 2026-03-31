@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Challenge, Elimination, Episode, GameEvent } from "../../types";
 import {
-  filterArrayByEpisode,
   filterEpisodesByMax,
   filterRecordByEpisode,
   shouldSuppressPropBets,
@@ -134,27 +133,6 @@ describe("filterRecordByEpisode", () => {
 
   it("returns empty record for empty input", () => {
     expect(filterRecordByEpisode({}, 3)).toEqual({});
-  });
-});
-
-describe("filterArrayByEpisode", () => {
-  const challenges = [
-    makeChallenge("1", 1),
-    makeChallenge("2", 2),
-    makeChallenge("3", 3),
-  ];
-
-  it("returns all items when maxEpisode is null", () => {
-    expect(filterArrayByEpisode(challenges, null)).toEqual(challenges);
-  });
-
-  it("filters items by episode_num", () => {
-    const result = filterArrayByEpisode(challenges, 2);
-    expect(result).toHaveLength(2);
-  });
-
-  it("returns empty array when maxEpisode is 0", () => {
-    expect(filterArrayByEpisode(challenges, 0)).toEqual([]);
   });
 });
 

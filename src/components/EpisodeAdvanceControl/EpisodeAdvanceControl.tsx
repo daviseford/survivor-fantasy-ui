@@ -8,6 +8,7 @@ import {
   Title,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
 import {
   IconChevronLeft,
   IconChevronRight,
@@ -39,11 +40,22 @@ export const EpisodeAdvanceControl = ({
   const canAdvance = currentEpisode < totalEpisodes;
   const canGoBack = currentEpisode > 0;
 
-  const advanceEpisode = async () => {
-    const newValue = Math.min(totalEpisodes, currentEpisode + 1);
-    await updateDoc(doc(db, "competitions", competition.id), {
-      current_episode: newValue,
-    });
+  const updateEpisode = async (newValue: number) => {
+    try {
+      await updateDoc(doc(db, "competitions", competition.id), {
+        current_episode: newValue,
+      });
+    } catch (err) {
+      notifications.show({
+        title: "Failed to update episode",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+      });
+    }
+  };
+
+  const advanceEpisode = () => {
+    updateEpisode(Math.min(totalEpisodes, currentEpisode + 1));
   };
 
   const goBackEpisode = () => {
@@ -57,11 +69,8 @@ export const EpisodeAdvanceControl = ({
       ),
       labels: { confirm: "Go Back", cancel: "Cancel" },
       confirmProps: { color: "orange" },
-      onConfirm: async () => {
-        const newValue = Math.max(0, currentEpisode - 1);
-        await updateDoc(doc(db, "competitions", competition.id), {
-          current_episode: newValue,
-        });
+      onConfirm: () => {
+        updateEpisode(Math.max(0, currentEpisode - 1));
       },
     });
   };
