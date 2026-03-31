@@ -21,6 +21,10 @@ const s9Epguide = fs.readFileSync(
   path.join(fixturesDir, "s9-epguide.txt"),
   "utf-8",
 );
+const s50Epguide = fs.readFileSync(
+  path.join(fixturesDir, "s50-epguide.txt"),
+  "utf-8",
+);
 const s46Votetable = fs.readFileSync(
   path.join(fixturesDir, "s46-votetable.txt"),
   "utf-8",
@@ -355,6 +359,119 @@ describe("parseEpisodeGuide", () => {
       const names = ep3Elims.map((e) => e.playerName).sort();
       expect(names).toContain("John P.");
       expect(names).toContain("Mia");
+    });
+  });
+
+  describe("Season 50 (extra Exiled + Journey columns)", () => {
+    it("parses 6 episodes", () => {
+      const result = parseEpisodeGuide(s50Epguide, 50);
+      expect(result.episodes).toHaveLength(6);
+    });
+
+    it("Ep 1: Jenna eliminated (7-1) tribal + Kyle evacuated (no vote) medical", () => {
+      const result = parseEpisodeGuide(s50Epguide, 50);
+      const ep1Elims = result.eliminations.filter((e) => e.episodeNum === 1);
+      expect(ep1Elims).toHaveLength(2);
+
+      const jenna = ep1Elims.find((e) => e.playerName === "Jenna");
+      expect(jenna).toBeDefined();
+      expect(jenna!.voteString).toBe("7-1");
+      expect(jenna!.variant).toBe("tribal");
+
+      const kyle = ep1Elims.find((e) => e.playerName === "Kyle");
+      expect(kyle).toBeDefined();
+      expect(kyle!.voteString).toBe("no vote");
+      expect(kyle!.variant).toBe("medical");
+    });
+
+    it("Ep 2: Savannah eliminated (6-1) tribal", () => {
+      const result = parseEpisodeGuide(s50Epguide, 50);
+      const savannah = result.eliminations.find(
+        (e) => e.playerName === "Savannah" && e.episodeNum === 2,
+      );
+      expect(savannah).toBeDefined();
+      expect(savannah!.voteString).toBe("6-1");
+      expect(savannah!.variant).toBe("tribal");
+    });
+
+    it("Ep 3: Q eliminated (5-1) tribal", () => {
+      const result = parseEpisodeGuide(s50Epguide, 50);
+      const q = result.eliminations.find(
+        (e) => e.playerName === "Q" && e.episodeNum === 3,
+      );
+      expect(q).toBeDefined();
+      expect(q!.voteString).toBe("5-1");
+      expect(q!.variant).toBe("tribal");
+    });
+
+    it("Ep 4: Mike eliminated (3-2-1) tribal", () => {
+      const result = parseEpisodeGuide(s50Epguide, 50);
+      const mike = result.eliminations.find(
+        (e) => e.playerName === "Mike" && e.episodeNum === 4,
+      );
+      expect(mike).toBeDefined();
+      expect(mike!.voteString).toBe("3-2-1");
+      expect(mike!.variant).toBe("tribal");
+    });
+
+    it("Ep 5: double elimination — Angelina (4-1) + Charlie (4-3)", () => {
+      const result = parseEpisodeGuide(s50Epguide, 50);
+      const ep5Elims = result.eliminations.filter((e) => e.episodeNum === 5);
+      expect(ep5Elims).toHaveLength(2);
+
+      const angelina = ep5Elims.find((e) => e.playerName === "Angelina");
+      expect(angelina).toBeDefined();
+      expect(angelina!.voteString).toBe("4-1");
+      expect(angelina!.variant).toBe("tribal");
+
+      const charlie = ep5Elims.find((e) => e.playerName === "Charlie");
+      expect(charlie).toBeDefined();
+      expect(charlie!.voteString).toBe("4-3");
+      expect(charlie!.variant).toBe("tribal");
+    });
+
+    it("Ep 1 combined challenge detected", () => {
+      const result = parseEpisodeGuide(s50Epguide, 50);
+      const ep1 = result.episodes.find((e) => e.order === 1);
+      expect(ep1).toBeDefined();
+      expect(ep1!.isCombinedChallenge).toBe(true);
+    });
+
+    it("Ep 3 combined challenge detected", () => {
+      const result = parseEpisodeGuide(s50Epguide, 50);
+      const ep3 = result.episodes.find((e) => e.order === 3);
+      expect(ep3).toBeDefined();
+      expect(ep3!.isCombinedChallenge).toBe(true);
+    });
+
+    it("does not misidentify journey participants as eliminations", () => {
+      const result = parseEpisodeGuide(s50Epguide, 50);
+      // Savannah, Mike, Colby appear in the Journey column for Ep 1
+      // but should NOT be listed as Ep 1 eliminations
+      const ep1Elims = result.eliminations.filter((e) => e.episodeNum === 1);
+      const names = ep1Elims.map((e) => e.playerName);
+      expect(names).not.toContain("Colby");
+      // Savannah is eliminated in Ep 2, not Ep 1
+      expect(names).not.toContain("Savannah");
+      // Mike goes on journey in Ep 1, eliminated in Ep 4
+      expect(
+        result.eliminations.find(
+          (e) => e.playerName === "Mike" && e.episodeNum === 1,
+        ),
+      ).toBeUndefined();
+    });
+
+    it("Ep 4 tribecolor style detected as challenge win", () => {
+      const result = parseEpisodeGuide(s50Epguide, 50);
+      const ep4Challenges = result.challenges.filter(
+        (c) => c.episodeNum === 4,
+      );
+      // Ep 4 has a combined challenge won by kalo
+      expect(ep4Challenges.length).toBeGreaterThanOrEqual(1);
+      const kaloChallenge = ep4Challenges.find(
+        (c) => c.winnerTribe === "kalo",
+      );
+      expect(kaloChallenge).toBeDefined();
     });
   });
 });

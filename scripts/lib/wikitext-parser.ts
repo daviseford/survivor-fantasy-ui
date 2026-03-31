@@ -369,7 +369,16 @@ function parseChallengeWinners(cellText: string): {
   names: string[];
 } | null {
   const tb = parseTribebox(cellText);
-  if (!tb) return null;
+  if (!tb) {
+    // Fallback: handle style="{{tribecolor|tribe}}" pattern (e.g., S50 Episode 4)
+    const tribecolorMatch = cellText.match(
+      /\{\{tribecolor\|([^|}]+)\}\}/i,
+    );
+    if (tribecolorMatch) {
+      return { tribe: tribecolorMatch[1].trim().toLowerCase(), names: [] };
+    }
+    return null;
+  }
 
   if (!tb.content) {
     // Tribal win — no individual names
@@ -431,8 +440,29 @@ export function parseEpisodeGuide(
   // Check if there's a "combined" footnote in the whole text
   const globalCombined = hasCombinedFootnote(wikitext);
 
-  // Detect whether this table has a Journey column
-  const hasJourneyColumn = /!\s*rowspan.*Journey/i.test(wikitext);
+  // Dynamically detect extra columns between "Challenges" and "Eliminated" in the header.
+  // S9 has 0 extras, S46 has 1 (Journey), S50 has 2 (Exiled + Journey).
+  // We count rowspan header cells that appear between "Challenges" and "Eliminated".
+  let extraColumnsBeforeEliminated = 0;
+  {
+    const headerLines = wikitext.split("\n");
+    let seenChallengesHeader = false;
+    for (const hl of headerLines) {
+      const trimmedH = hl.trim();
+      if (!trimmedH.startsWith("!")) continue;
+      if (/Challenges/i.test(trimmedH)) {
+        seenChallengesHeader = true;
+        continue;
+      }
+      if (seenChallengesHeader) {
+        if (/Eliminated/i.test(trimmedH)) break;
+        // Count rowspan="2" header cells (these are extra columns like Exiled, Journey)
+        if (/rowspan/i.test(trimmedH)) {
+          extraColumnsBeforeEliminated++;
+        }
+      }
+    }
+  }
 
   // Split the wikitext into rows by |- delimiters
   const lines = wikitext.split("\n");
@@ -479,12 +509,13 @@ export function parseEpisodeGuide(
   // Each data row in the episode guide has these columns (0-indexed):
   // [0] Episode number, [1] Episode title, [2] Air date,
   // [3] Reward winner, [4] Immunity winner,
-  // [5] Journey (if present), [6] Eliminated, [7] Finish, [8] Viewers, [9] Ratings
+  // [5..5+N-1] Extra columns (e.g. Exiled, Journey),
+  // [5+N] Eliminated, [6+N] Finish, [7+N] Viewers, [8+N] Ratings
   //
-  // Without Journey column:
-  // [0] Episode number, [1] Episode title, [2] Air date,
-  // [3] Reward winner, [4] Immunity winner,
-  // [5] Eliminated, [6] Finish, [7] Viewers, [8] Ratings
+  // N = extraColumnsBeforeEliminated:
+  //   S9:  N=0  → Eliminated at col 5
+  //   S46: N=1  → Journey at col 5, Eliminated at col 6
+  //   S50: N=2  → Exiled at col 5, Journey at col 6, Eliminated at col 7
 
   // Track rowspan: for each column index, how many more rows it spans
   const rowspanRemaining: number[] = new Array(12).fill(0);
@@ -512,9 +543,11 @@ export function parseEpisodeGuide(
   // Track all tribes seen per episode to detect merge
   const tribesByEpisode = new Map<number, Set<string>>();
 
-  // Determine column count for this table
-  const eliminatedCol = hasJourneyColumn ? 6 : 5;
-  const finishCol = hasJourneyColumn ? 7 : 6;
+  // Determine column indices based on how many extra columns exist.
+  // Base layout: [0]EpNum [1]Title [2]AirDate [3]Reward [4]Immunity [5]Eliminated [6]Finish ...
+  // With extras: Exiled/Journey columns insert between Immunity(4) and Eliminated.
+  const eliminatedCol = 5 + extraColumnsBeforeEliminated;
+  const finishCol = 6 + extraColumnsBeforeEliminated;
 
   // Parse each data row
   // Skip header rows — look for rows that start with episode numbers
@@ -649,16 +682,25 @@ export function parseEpisodeGuide(
 
     const epData = episodeMap.get(epNum)!;
 
+    // Detect gray-background rows (journey/exile formatting, not challenge data)
+    const isGrayRow =
+      rewardCell.includes("background-color") &&
+      /rgb\s*\(\s*166\s*,\s*166\s*,\s*166\s*\)|#a6a6a6|gray/i.test(
+        rewardCell,
+      );
+
     // Track combined status — if any row for this episode uses colspan=2 with combined footnote
+    // but skip gray formatting rows which use colspan=2 for layout, not for combined challenges
     if (
+      !isGrayRow &&
       globalCombined &&
       (isCombinedCell(rewardCell) || isCombinedCell(immunityCell))
     ) {
       epData.isCombined = true;
     }
 
-    // Parse challenge cells (only non-jury-vote rows)
-    if (!isJuryVoteRow) {
+    // Parse challenge cells (only non-jury-vote rows, skip gray formatting rows)
+    if (!isJuryVoteRow && !isGrayRow) {
       if (rewardCell && !rewardCell.includes("None") && !rewardCell.includes("Jury Vote")) {
         const rewardWinners = parseChallengeWinners(rewardCell);
         if (rewardWinners) {

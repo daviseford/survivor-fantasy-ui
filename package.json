@@ -22,6 +22,7 @@
     "e2e:ui": "playwright test --ui",
     "scrape": "tsx scripts/scrape.ts",
     "scrape-results": "tsx scripts/scrape-results.ts",
+    "scrape-recap": "tsx scripts/scrape-recap.ts",
     "init-season": "tsx scripts/init-season.ts",
     "backfill": "tsx scripts/backfill.ts",
     "new-season": "tsx scripts/new-season.ts",
