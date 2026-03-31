@@ -255,11 +255,9 @@ function parseEpTemplate(text: string): string {
   const m = text.match(/\{\{Ep\|(\d{4,5})\}\}/);
   if (!m) return "";
   // The template encodes season + episode as e.g. 4601 = S46E01, 0903 = S09E03
+  // Always take the last 2 digits as the episode number
   const code = m[1];
-  const epNum =
-    code.length === 5
-      ? parseInt(code.slice(2), 10)
-      : parseInt(code.slice(2), 10);
+  const epNum = parseInt(code.slice(code.length - 2), 10);
   return `Episode ${epNum}`;
 }
 
@@ -520,10 +518,10 @@ export function parseEpisodeGuide(
 
   // Parse each data row
   // Skip header rows — look for rows that start with episode numbers
-  let skipUntilNotes = false;
+  let doneParsingRows = false;
 
   for (const row of tableRows) {
-    if (skipUntilNotes) continue;
+    if (doneParsingRows) continue;
 
     // Build the effective cells for this row by accounting for rowspans
     const effectiveCells: string[] = [];
@@ -581,13 +579,16 @@ export function parseEpisodeGuide(
       epNum = parseInt(epNumMatch[1], 10);
     }
 
-    // Check if this is a notes row
-    if (
+    // Check if this is a notes/footnotes row (typically at the end of the table)
+    // Only treat as notes if there's no episode number AND the row contains Notes text
+    // or a very wide colspan (8+) that blanks out all data columns
+    const isNotesRow =
       firstCell.includes("Notes:") ||
-      firstCell.includes("colspan") ||
-      row.some((c) => c.includes("Notes:"))
-    ) {
-      // Notes row — check for combined footnote marker at end
+      row.some((c) => c.includes("Notes:")) ||
+      (!epNumMatch && /colspan\s*=\s*"?(\d+)"?/.test(firstCell) &&
+        parseInt(firstCell.match(/colspan\s*=\s*"?(\d+)"?/)?.[1] || "0", 10) >= 8);
+    if (isNotesRow) {
+      // Notes row — check for combined footnote marker
       if (
         row.some(
           (c) =>
@@ -595,7 +596,7 @@ export function parseEpisodeGuide(
             c.includes("Notes:"),
         )
       ) {
-        skipUntilNotes = true;
+        doneParsingRows = true;
       }
       continue;
     }
@@ -1054,10 +1055,8 @@ export function parseVotingHistory(
 
   // Step 2: Find the "Voted Out" section and parse eliminated player names.
   for (const section of sections) {
-    const hasVotedOut = section.some(
-      (line) =>
-        /!\s*colspan="2"\|\s*Voted\s*Out/i.test(line) ||
-        /!\s*colspan="2"\|\s*Voted Out/i.test(line),
+    const hasVotedOut = section.some((line) =>
+      /!\s*colspan="2"\|\s*Voted\s*Out/i.test(line),
     );
     if (!hasVotedOut) continue;
 
