@@ -1,0 +1,116 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--mantine-spacing-md);
+  padding: var(--mantine-spacing-xl) var(--mantine-spacing-md);
+}
+
+.title {
+  margin-bottom: var(--mantine-spacing-sm);
+}
+
+.slotList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-xs);
+  width: 100%;
+  max-width: 400px;
+}
+
+.slot {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md);
+  border-radius: var(--mantine-radius-md);
+  border: 1px solid var(--mantine-color-default-border);
+  background: var(--mantine-color-body);
+  min-height: 52px;
+  transition:
+    transform 200ms ease,
+    border-color 200ms ease,
+    background 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.slot.shuffling {
+  border-color: var(--mantine-color-blue-light-color);
+}
+
+.slot.locked {
+  transform: scale(1.03);
+  border-color: var(--mantine-color-blue-6);
+  background: var(--mantine-color-blue-light);
+  animation: lockPop 300ms ease-out;
+}
+
+.slot.firstPicker {
+  border-color: var(--mantine-color-yellow-6);
+  background: linear-gradient(
+    135deg,
+    var(--mantine-color-yellow-1),
+    var(--mantine-color-orange-1)
+  );
+  box-shadow: 0 0 12px rgba(255, 193, 7, 0.3);
+  transform: scale(1.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .slot.firstPicker {
+    background: linear-gradient(
+      135deg,
+      var(--mantine-color-yellow-9),
+      var(--mantine-color-orange-9)
+    );
+  }
+}
+
+.slotNumber {
+  flex-shrink: 0;
+}
+
+.slotName {
+  flex: 1;
+  font-weight: 600;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.slotName.shufflingText {
+  opacity: 0.7;
+  color: var(--mantine-color-dimmed);
+}
+
+.slotName.lockedText {
+  opacity: 1;
+}
+
+@keyframes lockPop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1.03);
+  }
+}
+
+@keyframes firstPickerPop {
+  0% {
+    transform: scale(1.03);
+  }
+  40% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+.slot.firstPicker {
+  animation: firstPickerPop 400ms ease-out;
+}

@@ -28,6 +28,7 @@ import {
   IconClipboardList,
   IconCopy,
   IconCrystalBall,
+  IconDice5,
   IconFlame,
   IconTargetArrow,
   IconTrophy,
@@ -38,9 +39,10 @@ import {
 import { ref, set } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
 import { shuffle, uniqBy } from "lodash-es";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
+import { DraftOrderReveal } from "../components/DraftOrderReveal";
 import { DraftTable } from "../components/DraftTable";
 import { MyDraftedPlayers } from "../components/MyPlayers/MyDraftedPlayers";
 import { PostDraftPropBetTable } from "../components/PropBetTables/PostDraftPropBetTable";
@@ -67,6 +69,26 @@ export const DraftComponent = () => {
 
   const { draft } = useDraft();
   const { data: competition } = useCompetition(draft?.competiton_id);
+
+  // Track draft.started transitions to trigger the reveal animation.
+  // If the component mounts with started already true (late joiner), skip animation.
+  const prevStartedRef = useRef(draft?.started ?? false);
+  const [isRevealing, setIsRevealing] = useState(false);
+
+  useEffect(() => {
+    const wasStarted = prevStartedRef.current;
+    const isStarted = draft?.started ?? false;
+
+    if (!wasStarted && isStarted) {
+      setIsRevealing(true);
+    }
+
+    prevStartedRef.current = isStarted;
+  }, [draft?.started]);
+
+  const handleRevealComplete = useCallback(() => {
+    setIsRevealing(false);
+  }, []);
 
   const userHasSubmittedPropBets = Boolean(
     draft?.prop_bets?.find((x) => x.user_uid === slimUser?.uid),
@@ -273,11 +295,13 @@ export const DraftComponent = () => {
   // Determine current phase
   const phase = !draft?.started
     ? "pre-draft"
-    : !draft?.finished
-      ? "drafting"
-      : !userHasSubmittedPropBets
-        ? "prop-bets"
-        : "completed";
+    : isRevealing
+      ? "revealing"
+      : !draft?.finished
+        ? "drafting"
+        : !userHasSubmittedPropBets
+          ? "prop-bets"
+          : "completed";
 
   const activeStep = phase === "drafting" ? 0 : phase === "prop-bets" ? 1 : 2;
 
@@ -478,10 +502,27 @@ export const DraftComponent = () => {
                 </Stack>
                 <Stack gap={6} align="center">
                   <ThemeIcon size={40} radius="xl" variant="light" color="cyan">
+                    <IconDice5 size={20} />
+                  </ThemeIcon>
+                  <Text size="sm" fw={600} ta="center">
+                    2. Random Order
+                  </Text>
+                  <Text size="xs" c="dimmed" ta="center">
+                    Pick order is randomly shuffled when the draft starts — no
+                    peeking!
+                  </Text>
+                </Stack>
+                <Stack gap={6} align="center">
+                  <ThemeIcon
+                    size={40}
+                    radius="xl"
+                    variant="light"
+                    color="grape"
+                  >
                     <IconTargetArrow size={20} />
                   </ThemeIcon>
                   <Text size="sm" fw={600} ta="center">
-                    2. Draft Players
+                    3. Draft Players
                   </Text>
                   <Text size="xs" c="dimmed" ta="center">
                     Take turns picking Survivor contestants for your team.
@@ -492,7 +533,7 @@ export const DraftComponent = () => {
                     <IconTrophy size={20} />
                   </ThemeIcon>
                   <Text size="sm" fw={600} ta="center">
-                    3. Earn Points
+                    4. Earn Points
                   </Text>
                   <Text size="xs" c="dimmed" ta="center">
                     Score points as your players win challenges, find idols, and
@@ -521,6 +562,13 @@ export const DraftComponent = () => {
               </Accordion.Panel>
             </Accordion.Item>
           </Accordion>
+        </Stack>
+      ) : phase === "revealing" ? (
+        <Stack gap="lg" p="lg">
+          <DraftOrderReveal
+            pickOrder={draft!.pick_order}
+            onComplete={handleRevealComplete}
+          />
         </Stack>
       ) : (
         <Stack gap="md" p="lg">
