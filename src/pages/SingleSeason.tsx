@@ -4,10 +4,13 @@ import {
   Center,
   Group,
   Loader,
+  Paper,
   Stack,
   Text,
   Title,
 } from "@mantine/core";
+import { modals } from "@mantine/modals";
+import { IconLogin, IconUserPlus } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { useCreateDraft } from "../hooks/useCreateDraft";
 import { useSeason } from "../hooks/useSeason";
@@ -49,14 +52,53 @@ export const SingleSeason = () => {
           </Group>
           <Title order={2}>{season.name}</Title>
           <Text c="dimmed" size="sm">
-            Check out the cast and start drafting with your crew.
+            Meet the cast. When you're ready, start a draft and invite your
+            friends to pick teams.
           </Text>
         </div>
 
-        {slimUser && (
-          <Button size="sm" onClick={handleCreateDraft}>
-            Create a New Draft
-          </Button>
+        {slimUser ? (
+          <Stack gap={4} align="flex-end">
+            <Button
+              size="sm"
+              onClick={handleCreateDraft}
+              leftSection={<IconUserPlus size={16} />}
+            >
+              Start a draft
+            </Button>
+            <Text size="xs" c="dimmed">
+              You'll get a link to share with friends
+            </Text>
+          </Stack>
+        ) : (
+          <Paper
+            p="md"
+            radius="md"
+            style={{
+              background:
+                "linear-gradient(135deg, var(--mantine-color-blue-6), var(--mantine-color-cyan-6))",
+            }}
+          >
+            <Group gap="md" align="center" wrap="wrap">
+              <Text size="sm" c="white" fw={500}>
+                Log in to start a draft with friends
+              </Text>
+              <Button
+                size="sm"
+                variant="white"
+                color="blue"
+                leftSection={<IconLogin size={16} />}
+                onClick={() =>
+                  modals.openContextModal({
+                    modal: "AuthModal",
+                    innerProps: {},
+                  })
+                }
+              >
+                Log in
+              </Button>
+            </Group>
+          </Paper>
         )}
       </Group>
 

@@ -60,3 +60,8 @@
     flex: 1;
   }
 }
+
+.howItWorks {
+  padding-top: calc(var(--mantine-spacing-xl) * 2);
+  padding-bottom: calc(var(--mantine-spacing-xl) * 2);
+}

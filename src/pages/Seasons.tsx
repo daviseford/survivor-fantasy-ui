@@ -20,9 +20,10 @@ export const Seasons = () => {
   return (
     <Stack gap="lg" p="md">
       <div>
-        <Title order={2}>Seasons</Title>
+        <Title order={2}>Pick a season</Title>
         <Text c="dimmed" size="sm">
-          Pick a season, check out the cast, and start drafting with friends.
+          Every draft starts here. Choose a season, scout the contestants, and
+          get a draft going with your friends.
         </Text>
       </div>
 
