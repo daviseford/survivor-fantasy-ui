@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { PlayerActions } from "../../types";
-import { EnhancedScores } from "../scoringUtils";
 import {
-  ScoringCategoryMap,
   ScoringCategories,
+  ScoringCategoryMap,
   aggregateByScoringCategory,
 } from "../scoringCategories";
+import { EnhancedScores } from "../scoringUtils";
 
 describe("ScoringCategoryMap", () => {
   it("maps every PlayerAction to exactly one category", () => {

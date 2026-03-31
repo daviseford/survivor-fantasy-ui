@@ -2,10 +2,7 @@ import { describe, expect, it } from "vitest";
 import { resolveNames } from "../name-resolver";
 import { CastTableEntry } from "../wikitext-parser";
 
-function entry(
-  wikiPageTitle: string,
-  displayName?: string,
-): CastTableEntry {
+function entry(wikiPageTitle: string, displayName?: string): CastTableEntry {
   return {
     wikiPageTitle,
     displayName: displayName ?? wikiPageTitle,

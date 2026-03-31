@@ -10,12 +10,8 @@ import {
   Title,
   UnstyledButton,
 } from "@mantine/core";
-import {
-  IconChevronDown,
-  IconChevronUp,
-  IconLogin,
-} from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
+import { IconChevronDown, IconChevronUp, IconLogin } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCompetitions } from "../hooks/useCompetitions";
