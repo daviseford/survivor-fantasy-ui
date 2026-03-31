@@ -1,4 +1,6 @@
 import { Challenge, Elimination, Episode, Player } from "../../types";
+import { formatDescription } from "../../utils/playerMeta";
+import { SEASON_9_PLAYER_META } from "./playerMeta";
 
 export const SEASON_9_EPISODES = [
   {
@@ -173,11 +175,14 @@ const buildPlayer = <T extends S9_Players>(
   name: T,
   img = "",
 ): Player<T, SeasonNum> => {
+  const meta = SEASON_9_PLAYER_META[name];
   return {
     name,
     img,
     season_id: "season_9",
     season_num: 9,
+    ...meta,
+    description: meta ? formatDescription(meta) : undefined,
   };
 };
 

@@ -5,6 +5,8 @@ import {
   GameEvent,
   Player,
 } from "../../types";
+import { formatDescription } from "../../utils/playerMeta";
+import { SEASON_50_PLAYER_META } from "./playerMeta";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used only in typeof for type derivation
 const Players = [
@@ -42,11 +44,14 @@ const buildPlayer = <T extends PlayerName>(
   name: T,
   img: string,
 ): Player<T, SeasonNumber> => {
+  const meta = SEASON_50_PLAYER_META[name];
   return {
     name,
     img,
     season_num: 50,
     season_id: "season_50",
+    ...meta,
+    description: meta ? formatDescription(meta) : undefined,
   };
 };
 

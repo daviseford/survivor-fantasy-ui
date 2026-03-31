@@ -50,13 +50,22 @@ export type Elimination<PlayerName = string, SeasonNumber = number> = {
   votes_received?: number;
 };
 
+export type PlayerMeta = {
+  ageOnSeason?: number;
+  hometown?: string;
+  profession?: string;
+  bio?: string;
+  previousSeasons?: number[];
+  sourceUrl?: string;
+};
+
 export type Player<PlayerName = string, SeasonNumber = number> = {
   season_id: Season["id"];
   season_num: SeasonNumber;
   name: PlayerName;
   img: string;
   description?: string;
-};
+} & Partial<PlayerMeta>;
 
 export type Team = {
   id: `team_${string}`;

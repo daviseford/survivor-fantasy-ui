@@ -18,8 +18,8 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 import { PlayerGroupGrid } from "../components/MyPlayers";
-import { ScoringBreakdownSection } from "../components/ScoringBreakdown";
 import { PropBetScoring } from "../components/PropBetTables";
+import { ScoringBreakdownSection } from "../components/ScoringBreakdown";
 import {
   PerSurvivorPerEpisodeDetailedScoringTable,
   PerUserPerEpisodeScoringTable,
