@@ -150,6 +150,7 @@ const Players = [
   "John Palyok",
   "Mia Galeotalanza",
   "Brady Finta",
+  'Travis "Bubba" Sampson',
   "Lisa Keiffer",
   "John Kenney",
   "Rory Freeman",
@@ -162,7 +163,6 @@ const Players = [
   "Scout Cloud Lee",
   "Twila Tanner",
   "Chris Daugherty",
-  "Bubba Sampson",
 ] as const;
 
 type PlayerName = (typeof Players)[number];
@@ -226,6 +226,15 @@ export const SEASON_9_PLAYERS = [
     age: 55,
     profession: "FBI Agent",
     hometown: "Huntington Beach, California",
+  }),
+  buildPlayer({
+    name: 'Travis "Bubba" Sampson',
+    img: "https://static.wikia.nocookie.net/survivor/images/d/df/S9_travis_t.png",
+    description:
+      "Age: 55 | Hometown: Johnson City, Tennessee | Occupation: Security Officer",
+    age: 55,
+    profession: "Security Officer",
+    hometown: "Johnson City, Tennessee",
   }),
   buildPlayer({
     name: "Lisa Keiffer",
@@ -334,10 +343,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Highway Construction Worker",
     hometown: "South Vienna, Ohio",
   }),
-  buildPlayer({
-    name: "Bubba Sampson",
-    img: "https://static.wikia.nocookie.net/survivor/images/d/df/S9_travis_t.png",
-  }),
 ] satisfies Player<PlayerName, SeasonNumber>[];
 
 export const SEASON_9_CHALLENGES = {
@@ -394,7 +399,7 @@ export const SEASON_9_CHALLENGES = {
 
     winning_players: [
       "Brady Finta",
-      "Bubba Sampson",
+      'Travis "Bubba" Sampson',
       "Chad Crittenden",
       "Chris Daugherty",
       "John Kenney",
@@ -414,7 +419,7 @@ export const SEASON_9_CHALLENGES = {
 
     winning_players: [
       "Brady Finta",
-      "Bubba Sampson",
+      'Travis "Bubba" Sampson',
       "Chad Crittenden",
       "Chris Daugherty",
       "John Kenney",
@@ -795,7 +800,7 @@ export const SEASON_9_ELIMINATIONS = {
     episode_id: "episode_5",
     episode_num: 5,
     order: 6,
-    player_name: "Bubba Sampson",
+    player_name: 'Travis "Bubba" Sampson',
     votes_received: 6,
     variant: "tribal",
   },
