@@ -406,6 +406,12 @@ function parseChallengeWinners(cellText: string): {
     return { tribe: tb.tribe, names: [] };
   }
 
+  // If content is entirely within brackets (e.g., [Ami]), it's a non-challenge entry
+  // (journey/summit win). Skip it.
+  if (/^\s*\[[^\]]*\]\s*$/.test(tb.content)) {
+    return null;
+  }
+
   // Parse individual names from content — may be comma-separated
   let content = tb.content;
   // Remove {{sup|...}}
