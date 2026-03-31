@@ -1385,10 +1385,9 @@ export function buildTribeRosters(
   }
 
   for (const ep of episodes) {
-    // Skip post-merge episodes (tribe resolution not needed)
+    // Skip post-merge episodes (tribe resolution not needed for individual challenges)
     if (mergeEpisode !== null && ep.order > mergeEpisode) continue;
-    // Also skip the merge episode itself (individual challenges begin)
-    if (mergeEpisode !== null && ep.order === mergeEpisode) continue;
+    // Include the merge episode — it may still have a tribal challenge before merge
 
     const tribeMap = new Map<string, string[]>();
     const useSwapRoster =
