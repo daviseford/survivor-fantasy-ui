@@ -58,7 +58,15 @@ export const Home = () => {
 
       <div className={classes.howItWorksWrapper}>
         <Container size={700} className={classes.howItWorks}>
-          <Text size="sm" fw={600} c="dimmed" ta="center" mb="md" tt="uppercase" lts={1}>
+          <Text
+            size="sm"
+            fw={600}
+            c="dimmed"
+            ta="center"
+            mb="md"
+            tt="uppercase"
+            lts={1}
+          >
             How it works
           </Text>
           <SimpleGrid cols={{ base: 1, sm: 3 }}>
