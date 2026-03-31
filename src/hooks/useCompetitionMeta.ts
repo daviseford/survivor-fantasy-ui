@@ -1,4 +1,6 @@
+import { useMemo } from "react";
 import { Player } from "../types";
+import { filterRecordByEpisode } from "../utils/episodeFilter";
 import { useCompetition } from "./useCompetition";
 import { useEliminations } from "./useEliminations";
 import { useSeason } from "./useSeason";
@@ -10,6 +12,13 @@ export const useCompetitionMeta = () => {
   const { data: competition } = useCompetition();
   const { data: season } = useSeason(competition?.season_id);
   const { data: eliminations } = useEliminations(competition?.season_id);
+
+  const maxEpisode = competition?.current_episode ?? null;
+
+  const filteredEliminations = useMemo(
+    () => filterRecordByEpisode(eliminations || {}, maxEpisode),
+    [eliminations, maxEpisode],
+  );
 
   const survivorsByUserUid = (competition?.participants || []).reduce<
     Record<string, Player[]>
@@ -33,7 +42,7 @@ export const useCompetitionMeta = () => {
     ? survivorsByUserUid[slimUser?.uid]?.map((x) => x.name)
     : [];
 
-  const eliminatedSurvivors = Object.values(eliminations).map(
+  const eliminatedSurvivors = Object.values(filteredEliminations).map(
     (x) => x.player_name,
   );
 

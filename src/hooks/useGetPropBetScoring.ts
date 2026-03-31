@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Competition } from "../types";
+import { shouldSuppressPropBets } from "../utils/episodeFilter";
 import { getPropBetScoresByUser } from "../utils/propBetUtils";
 import { useChallenges } from "./useChallenges";
 import { useCompetition } from "./useCompetition";
@@ -14,17 +15,35 @@ export const usePropBetScoring = (competition_id?: Competition["id"]) => {
   const { data: eliminations } = useEliminations(competition?.season_id);
   const { data: events } = useEvents(season?.id);
 
-  const data = useMemo(
-    () =>
-      getPropBetScoresByUser(
-        events,
-        eliminations,
-        challenges,
-        competition,
-        season,
-      ),
-    [challenges, competition, eliminations, events, season],
+  const maxEpisode = competition?.current_episode ?? null;
+  const episodes = season?.episodes || [];
+  const finaleOrder =
+    episodes.length > 0 ? episodes[episodes.length - 1].order : 0;
+  const isWatchAlongBeforeFinale = shouldSuppressPropBets(
+    maxEpisode,
+    finaleOrder,
   );
 
-  return { data };
+  const data = useMemo(
+    () =>
+      isWatchAlongBeforeFinale
+        ? {}
+        : getPropBetScoresByUser(
+            events,
+            eliminations,
+            challenges,
+            competition,
+            season,
+          ),
+    [
+      challenges,
+      competition,
+      eliminations,
+      events,
+      isWatchAlongBeforeFinale,
+      season,
+    ],
+  );
+
+  return { data, isWatchAlongBeforeFinale };
 };

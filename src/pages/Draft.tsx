@@ -14,6 +14,7 @@ import {
   SimpleGrid,
   Stack,
   Stepper,
+  Switch,
   Text,
   TextInput,
   ThemeIcon,
@@ -111,7 +112,10 @@ export const DraftComponent = () => {
     }
   };
 
-  const createCompetition = async (competition_name: string) => {
+  const createCompetition = async (
+    competition_name: string,
+    watchAlong: boolean,
+  ) => {
     if (!season || !draft) return;
 
     const competition = {
@@ -127,7 +131,7 @@ export const DraftComponent = () => {
       prop_bets: draft.prop_bets,
       finished: false,
       started: false,
-      current_episode: null,
+      current_episode: watchAlong ? 0 : null,
     } satisfies Competition;
 
     try {
@@ -234,7 +238,7 @@ export const DraftComponent = () => {
 
     const onClose = async (values: FormData) => {
       modals.closeAll();
-      await createCompetition(values.name);
+      await createCompetition(values.name, values.watchAlong);
     };
 
     modals.open({
@@ -857,6 +861,7 @@ export const DraftComponent = () => {
 
 type FormData = {
   name: string;
+  watchAlong: boolean;
 };
 
 type Props = {
@@ -867,6 +872,7 @@ const NameYourCompetition = ({ onSubmit }: Props) => {
   const form = useForm({
     initialValues: {
       name: "",
+      watchAlong: false,
     },
     validate: {
       name: isNotEmpty("Give it a fun name!"),
@@ -889,6 +895,11 @@ const NameYourCompetition = ({ onSubmit }: Props) => {
           size="md"
           data-autofocus
           {...form.getInputProps("name")}
+        />
+        <Switch
+          label="Watch-along mode"
+          description="Reveal episodes one at a time to prevent spoilers. You control when the next episode is revealed."
+          {...form.getInputProps("watchAlong", { type: "checkbox" })}
         />
         <Button
           fullWidth

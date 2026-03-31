@@ -1,5 +1,10 @@
 import { sum } from "lodash-es";
 import { useMemo } from "react";
+import { Episode } from "../types";
+import {
+  filterEpisodesByMax,
+  filterRecordByEpisode,
+} from "../utils/episodeFilter";
 import {
   EnhancedScores,
   getEnhancedSurvivorPoints,
@@ -20,16 +25,38 @@ export const useScoringCalculations = () => {
 
   const { data: propBetScores } = usePropBetScoring();
 
+  const maxEpisode = competition?.current_episode ?? null;
+
+  const filteredEpisodes: Episode[] = useMemo(
+    () => filterEpisodesByMax(season?.episodes || [], maxEpisode),
+    [season?.episodes, maxEpisode],
+  );
+
+  const filteredChallenges = useMemo(
+    () => filterRecordByEpisode(challenges || {}, maxEpisode),
+    [challenges, maxEpisode],
+  );
+
+  const filteredEliminations = useMemo(
+    () => filterRecordByEpisode(eliminations || {}, maxEpisode),
+    [eliminations, maxEpisode],
+  );
+
+  const filteredEvents = useMemo(
+    () => filterRecordByEpisode(events || {}, maxEpisode),
+    [events, maxEpisode],
+  );
+
   const survivorPointsByEpisode = useMemo(() => {
     if (!season?.players) return {};
 
     return season?.players.reduce<Record<string, EnhancedScores[]>>(
       (accum, player) => {
-        const p = (season?.episodes || []).map((e) =>
+        const p = filteredEpisodes.map((e) =>
           getEnhancedSurvivorPoints(
-            Object.values(challenges || {}),
-            Object.values(eliminations || {}),
-            Object.values(events || {}),
+            Object.values(filteredChallenges),
+            Object.values(filteredEliminations),
+            Object.values(filteredEvents),
             e.order,
             player.name,
           ),
@@ -41,7 +68,13 @@ export const useScoringCalculations = () => {
       },
       {},
     );
-  }, [challenges, eliminations, events, season?.episodes, season?.players]);
+  }, [
+    filteredChallenges,
+    filteredEliminations,
+    filteredEvents,
+    filteredEpisodes,
+    season?.players,
+  ]);
 
   const pointsByUserPerEpisode = useMemo(
     () =>
@@ -53,7 +86,7 @@ export const useScoringCalculations = () => {
             .filter((x) => x.user_uid === uid)
             .map((x) => x.player_name);
 
-          const playerPointsPerEpisode = (season?.episodes || []).map((e) => {
+          const playerPointsPerEpisode = filteredEpisodes.map((e) => {
             return sum(
               myPlayerNames.flatMap(
                 (p) =>
@@ -72,7 +105,7 @@ export const useScoringCalculations = () => {
     [
       competition?.draft_picks,
       competition?.participants,
-      season?.episodes,
+      filteredEpisodes,
       survivorPointsByEpisode,
     ],
   );
@@ -112,6 +145,9 @@ export const useScoringCalculations = () => {
   );
 
   return {
+    filteredEpisodes,
+    filteredEliminations,
+    filteredEvents,
     survivorPointsTotalSeason,
     survivorPointsByEpisode,
     pointsByUserPerEpisode,
