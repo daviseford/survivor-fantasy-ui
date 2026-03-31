@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Competition } from "../types";
+import { shouldSuppressPropBets } from "../utils/episodeFilter";
 import { getPropBetScoresByUser } from "../utils/propBetUtils";
 import { useChallenges } from "./useChallenges";
 import { useCompetition } from "./useCompetition";
@@ -16,9 +17,12 @@ export const usePropBetScoring = (competition_id?: Competition["id"]) => {
 
   const maxEpisode = competition?.current_episode ?? null;
   const episodes = season?.episodes || [];
-  const finaleOrder = episodes.length > 0 ? episodes[episodes.length - 1].order : 0;
-  const isWatchAlongBeforeFinale =
-    maxEpisode !== null && maxEpisode < finaleOrder;
+  const finaleOrder =
+    episodes.length > 0 ? episodes[episodes.length - 1].order : 0;
+  const isWatchAlongBeforeFinale = shouldSuppressPropBets(
+    maxEpisode,
+    finaleOrder,
+  );
 
   const data = useMemo(
     () =>

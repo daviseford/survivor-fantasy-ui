@@ -4,6 +4,7 @@ import {
   filterArrayByEpisode,
   filterEpisodesByMax,
   filterRecordByEpisode,
+  shouldSuppressPropBets,
 } from "../episodeFilter";
 
 const makeEpisode = (order: number): Episode => ({
@@ -83,6 +84,13 @@ describe("filterEpisodesByMax", () => {
   it("returns empty array for empty input", () => {
     expect(filterEpisodesByMax([], 3)).toEqual([]);
   });
+
+  it("handles non-sequential order values", () => {
+    const gapped = [makeEpisode(1), makeEpisode(3), makeEpisode(5)];
+    const result = filterEpisodesByMax(gapped, 3);
+    expect(result).toHaveLength(2);
+    expect(result.map((e) => e.order)).toEqual([1, 3]);
+  });
 });
 
 describe("filterRecordByEpisode", () => {
@@ -147,5 +155,37 @@ describe("filterArrayByEpisode", () => {
 
   it("returns empty array when maxEpisode is 0", () => {
     expect(filterArrayByEpisode(challenges, 0)).toEqual([]);
+  });
+});
+
+describe("shouldSuppressPropBets", () => {
+  const FINALE_ORDER = 13;
+
+  it("returns false when currentEpisode is null (live mode)", () => {
+    expect(shouldSuppressPropBets(null, FINALE_ORDER)).toBe(false);
+  });
+
+  it("returns true when currentEpisode is 0 (no episodes revealed)", () => {
+    expect(shouldSuppressPropBets(0, FINALE_ORDER)).toBe(true);
+  });
+
+  it("returns true when mid-season (before finale)", () => {
+    expect(shouldSuppressPropBets(5, FINALE_ORDER)).toBe(true);
+  });
+
+  it("returns true when one episode before finale", () => {
+    expect(shouldSuppressPropBets(12, FINALE_ORDER)).toBe(true);
+  });
+
+  it("returns false when currentEpisode equals finale order", () => {
+    expect(shouldSuppressPropBets(13, FINALE_ORDER)).toBe(false);
+  });
+
+  it("returns false when currentEpisode exceeds finale order", () => {
+    expect(shouldSuppressPropBets(14, FINALE_ORDER)).toBe(false);
+  });
+
+  it("returns false when finaleOrder is 0 (no episodes)", () => {
+    expect(shouldSuppressPropBets(0, 0)).toBe(false);
   });
 });
