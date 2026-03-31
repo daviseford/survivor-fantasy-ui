@@ -581,8 +581,10 @@ export function parseEpisodeGuide(
   // Parse each data row
   // Skip header rows — look for rows that start with episode numbers
   let doneParsingRows = false;
+  let physicalRowIdx = 0;
 
   for (const row of tableRows) {
+    physicalRowIdx++;
     if (doneParsingRows) continue;
 
     // Build the effective cells for this row by accounting for rowspans
@@ -724,10 +726,11 @@ export function parseEpisodeGuide(
     const isSkippableCell = (cell: string) =>
       /border-top\s*:\s*none/i.test(cell) || /tribebox2/i.test(cell);
 
-    // Helper to add a challenge entry (deduplicates by cell+variant)
+    // Helper to add a challenge entry (deduplicates by cell+variant+row)
     const addChallenge = (
       cell: string,
       variant: "reward" | "immunity" | "combined",
+      rowIdx: number,
     ) => {
       const winners = parseChallengeWinners(cell);
       if (winners) {
@@ -735,12 +738,13 @@ export function parseEpisodeGuide(
           tribesByEpisode.set(epNum, new Set());
         }
         tribesByEpisode.get(epNum)!.add(winners.tribe);
-        // Deduplicate: same cell text + variant = same challenge (from rowspan)
+        // Deduplicate: same cell text + variant + row = same challenge (from rowspan reuse).
+        // Different rows with identical cell text are genuinely separate challenges.
         const isDup = epData.challengeEntries.some(
-          (e) => e.cell === cell && e.variant === variant,
+          (e) => e.cell === cell && e.variant === variant && e.row === rowIdx,
         );
         if (!isDup) {
-          epData.challengeEntries.push({ cell, variant });
+          epData.challengeEntries.push({ cell, variant, row: rowIdx });
         }
       }
     };
@@ -751,7 +755,7 @@ export function parseEpisodeGuide(
         // Combined reward+immunity — single challenge
         const cell = rewardCell || immunityCell;
         if (cell && !cell.includes("None") && !isSkippableCell(cell)) {
-          addChallenge(cell, "combined");
+          addChallenge(cell, "combined", physicalRowIdx);
         }
       } else {
         // Separate reward and immunity columns
@@ -770,7 +774,7 @@ export function parseEpisodeGuide(
             (e) => e.variant === "reward",
           );
           if (!(immunityIsSkippable && alreadyHasReward)) {
-            addChallenge(rewardCell, "reward");
+            addChallenge(rewardCell, "reward", physicalRowIdx);
           }
         }
 
@@ -780,7 +784,7 @@ export function parseEpisodeGuide(
           !immunityCell.includes("Jury Vote") &&
           !isSkippableCell(immunityCell)
         ) {
-          addChallenge(immunityCell, "immunity");
+          addChallenge(immunityCell, "immunity", physicalRowIdx);
         }
       }
     }
@@ -958,14 +962,19 @@ export function parseEpisodeGuide(
         // but they're all from the same challenge (e.g., S9 Ep12 with 3 reward winners).
         const prevChallenge =
           challenges.length > 0 ? challenges[challenges.length - 1] : null;
+        const newNamesOverlap =
+          prevChallenge &&
+          winners.names.length > 0 &&
+          winners.names.some((n) => prevChallenge.winnerNames.includes(n));
         if (
           prevChallenge &&
           prevChallenge.episodeNum === epNum &&
           prevChallenge.variant === entry.variant &&
           prevChallenge.winnerNames.length > 0 &&
-          winners.names.length > 0
+          winners.names.length > 0 &&
+          !newNamesOverlap // Don't merge if same person won again (separate challenge)
         ) {
-          // Merge winners into the previous challenge
+          // Merge different winners into the previous challenge
           prevChallenge.winnerNames.push(...winners.names);
         } else {
           challenges.push({
