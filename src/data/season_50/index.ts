@@ -293,7 +293,58 @@ export const SEASON_50_PLAYERS = [
   }),
 ] satisfies Player<PlayerName, SeasonNumber>[];
 
-export const SEASON_50_EPISODES = [] satisfies Episode<SeasonNumber>[];
+export const SEASON_50_EPISODES = [
+  {
+    id: "episode_1",
+    season_id: "season_50",
+    season_num: 50 as SeasonNumber,
+    order: 1,
+    name: "Epic Party",
+    finale: false,
+    post_merge: false,
+    merge_occurs: false,
+  },
+  {
+    id: "episode_2",
+    season_id: "season_50",
+    season_num: 50 as SeasonNumber,
+    order: 2,
+    name: "Therapy Carousel",
+    finale: false,
+    post_merge: false,
+    merge_occurs: false,
+  },
+  {
+    id: "episode_3",
+    season_id: "season_50",
+    season_num: 50 as SeasonNumber,
+    order: 3,
+    name: "Did You Vote For a Swap?",
+    finale: false,
+    post_merge: false,
+    merge_occurs: false,
+  },
+  {
+    id: "episode_4",
+    season_id: "season_50",
+    season_num: 50 as SeasonNumber,
+    order: 4,
+    name: "Knife to the Heart",
+    finale: false,
+    post_merge: false,
+    merge_occurs: false,
+  },
+  {
+    id: "episode_5",
+    season_id: "season_50",
+    season_num: 50 as SeasonNumber,
+    order: 5,
+    name: "Open Wounds",
+    finale: false,
+    post_merge: false,
+    merge_occurs: false,
+  },
+] satisfies Episode<SeasonNumber>[];
 
 export const SEASON_50_CHALLENGES = {} satisfies Record<
   Challenge["id"],
