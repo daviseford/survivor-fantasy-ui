@@ -755,7 +755,17 @@ export function parseEpisodeGuide(
           !rewardCell.includes("Jury Vote") &&
           !isSkippableCell(rewardCell)
         ) {
-          addChallenge(rewardCell, "reward");
+          // Skip continuation reward entries in multi-tribe premieres:
+          // when immunity cell is skippable (tribebox2|out) and episode already has a reward,
+          // this row shows another tribe's outcome from the same challenge
+          const immunityIsSkippable =
+            immunityCell && isSkippableCell(immunityCell);
+          const alreadyHasReward = epData.challengeEntries.some(
+            (e) => e.variant === "reward",
+          );
+          if (!(immunityIsSkippable && alreadyHasReward)) {
+            addChallenge(rewardCell, "reward");
+          }
         }
 
         if (
