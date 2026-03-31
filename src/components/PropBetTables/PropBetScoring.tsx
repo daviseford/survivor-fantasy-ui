@@ -1,30 +1,40 @@
-import { Badge, Group, Table, TableScrollContainer, Text } from "@mantine/core";
+import {
+  Badge,
+  Group,
+  Table,
+  TableScrollContainer,
+  Text,
+} from "@mantine/core";
+import { useMemo } from "react";
 import { PropBetQuestionObj, PropBetsQuestions } from "../../data/propbets";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useEliminations } from "../../hooks/useEliminations";
 import { usePropBetScoring } from "../../hooks/useGetPropBetScoring";
 import { useUser } from "../../hooks/useUser";
+import { filterRecordByEpisode } from "../../utils/episodeFilter";
 import { PropBetAnswer } from "../../utils/propBetUtils";
 
 const AnswerTd = ({
   score,
   strikethrough = false,
+  hideResult = false,
 }: {
   score: PropBetAnswer;
   strikethrough?: boolean;
+  hideResult?: boolean;
 }) => {
   return (
     <Table.Td>
       <Group gap="sm">
         <Text
           size="sm"
-          c={!score.correct ? "dimmed" : ""}
-          fw={score.correct ? 600 : 400}
-          td={strikethrough ? "line-through" : ""}
+          c={hideResult || !score.correct ? "dimmed" : ""}
+          fw={!hideResult && score.correct ? 600 : 400}
+          td={!hideResult && strikethrough ? "line-through" : ""}
         >
           {score.answer}
         </Text>
-        {score.correct && (
+        {!hideResult && score.correct && (
           <Badge variant="light" color="green" size="sm">
             +{score.points_awarded}
           </Badge>
@@ -37,14 +47,29 @@ const AnswerTd = ({
 export const PropBetScoring = () => {
   const { slimUser } = useUser();
 
-  const { data: scores } = usePropBetScoring();
+  const { data: scores, isWatchAlongBeforeFinale } = usePropBetScoring();
 
   const { data: competition } = useCompetition();
-  const { data: eliminations } = useEliminations(competition?.season_id);
+  const { data: rawEliminations } = useEliminations(competition?.season_id);
 
-  const _elims = Object.values(eliminations);
+  const maxEpisode = competition?.current_episode ?? null;
+
+  const filteredEliminations = useMemo(
+    () => filterRecordByEpisode(rawEliminations || {}, maxEpisode),
+    [rawEliminations, maxEpisode],
+  );
+
+  const _elims = Object.values(filteredEliminations);
 
   if (!slimUser) return null;
+
+  if (isWatchAlongBeforeFinale) {
+    return (
+      <Text size="sm" c="dimmed" ta="center" py="md">
+        Prop bet results will be revealed after the finale.
+      </Text>
+    );
+  }
 
   const firstElim = _elims.find((x) => x.order === 1)?.player_name;
 
