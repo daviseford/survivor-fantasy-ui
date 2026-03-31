@@ -125,13 +125,18 @@ async function main() {
   // TypeScript output
   if (dryRun) {
     console.log("\n--- Generated playerMeta.ts (dry run) ---\n");
-    console.log(generatePlayerMetaSource(season, report.matched));
+    console.log(generatePlayerMetaSource(season, report.matched, appNames));
     return;
   }
 
   // Write mode
   const projectRoot = resolve(import.meta.dirname, "..");
-  const filePath = writePlayerMeta(season, report.matched, projectRoot);
+  const filePath = writePlayerMeta(
+    season,
+    report.matched,
+    appNames,
+    projectRoot,
+  );
   console.log(`\nWrote: ${filePath}`);
   console.log(
     "Next: run `yarn format` to format the generated file, then use Admin upload to push to Firestore.",

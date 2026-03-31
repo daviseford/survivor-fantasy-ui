@@ -31,6 +31,7 @@ function serializeEntry(meta: PlayerMetaEntry, indent: string): string {
 export function generatePlayerMetaSource(
   seasonNum: number,
   matches: MatchResult[],
+  appPlayerNames: string[],
 ): string {
   const constName = `SEASON_${seasonNum}_PLAYER_META`;
 
@@ -38,7 +39,17 @@ export function generatePlayerMetaSource(
   lines.push(`import type { PlayerMeta } from "../../types";`);
   lines.push(``);
   lines.push(
-    `export const ${constName}: Partial<Record<string, PlayerMeta>> = {`,
+    `// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used only in typeof for type derivation`,
+  );
+  lines.push(`const _playerNames = [`);
+  for (const name of appPlayerNames) {
+    lines.push(`  ${JSON.stringify(name)},`);
+  }
+  lines.push(`] as const;`);
+  lines.push(`type PlayerName = (typeof _playerNames)[number];`);
+  lines.push(``);
+  lines.push(
+    `export const ${constName}: Partial<Record<PlayerName, PlayerMeta>> = {`,
   );
 
   for (const match of matches) {
@@ -59,9 +70,10 @@ export function generatePlayerMetaSource(
 export function writePlayerMeta(
   seasonNum: number,
   matches: MatchResult[],
+  appPlayerNames: string[],
   projectRoot: string,
 ): string {
-  const content = generatePlayerMetaSource(seasonNum, matches);
+  const content = generatePlayerMetaSource(seasonNum, matches, appPlayerNames);
   const filePath = resolve(
     projectRoot,
     `src/data/season_${seasonNum}/playerMeta.ts`,
