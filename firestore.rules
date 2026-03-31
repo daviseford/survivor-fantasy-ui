@@ -27,35 +27,38 @@ service cloud.firestore {
     match /competitions/{competitionId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated() && request.resource.data.creator_uid == request.auth.uid;
-      allow update: if isAdmin() || (isAuthenticated() && request.auth.uid == resource.data.creator_uid);
+      allow update: if isAdmin() || (isAuthenticated() && request.auth.uid == resource.data.creator_uid && request.resource.data.creator_uid == resource.data.creator_uid);
       allow delete: if isAdmin();
     }
 
-    // Teams: authenticated read, admin-only write
+    // Season-data collections: all share authenticated-read / admin-write. Keep in sync.
+
+    // Teams
+
     match /teams/{seasonId} {
       allow read: if isAuthenticated();
       allow write: if isAdmin();
     }
 
-    // Team assignments: authenticated read, admin-only write
+    // Team assignments
     match /team_assignments/{seasonId} {
       allow read: if isAuthenticated();
       allow write: if isAdmin();
     }
 
-    // Challenges: authenticated read, admin-only write
+    // Challenges
     match /challenges/{seasonId} {
       allow read: if isAuthenticated();
       allow write: if isAdmin();
     }
 
-    // Eliminations: authenticated read, admin-only write
+    // Eliminations
     match /eliminations/{seasonId} {
       allow read: if isAuthenticated();
       allow write: if isAdmin();
     }
 
-    // Events: authenticated read, admin-only write
+    // Events
     match /events/{seasonId} {
       allow read: if isAuthenticated();
       allow write: if isAdmin();

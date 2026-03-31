@@ -9,12 +9,12 @@ export const useUser = () => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      let cancelled = false;
+    let cancelled = false;
 
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
-        getIdTokenResult(user, true)
+        getIdTokenResult(user)
           .then((tokenResult) => {
             if (!cancelled) {
               setIsAdmin(!!tokenResult.claims.admin);
@@ -29,13 +29,12 @@ export const useUser = () => {
         setUser(undefined);
         setIsAdmin(false);
       }
-
-      return () => {
-        cancelled = true;
-      };
     });
 
-    return unsubscribe;
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
   }, []);
 
   const slimUser: SlimUser | undefined = useMemo(() => {

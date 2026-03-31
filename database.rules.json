@@ -1,7 +1,8 @@
 {
   "rules": {
-    ".read": "auth.token.admin === true",
-    ".write": "auth.token.admin === true",
+    // Default: admin-only. Each new RTDB path must explicitly grant access to non-admin users.
+    ".read": "auth.token.admin == true",
+    ".write": "auth.token.admin == true",
 
     "drafts": {
       "$draftId": {
