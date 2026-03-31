@@ -1,6 +1,6 @@
 {
   "seasonNum": 49,
-  "scrapedAt": "2026-03-31T23:45:06.188Z",
+  "scrapedAt": "2026-03-31T23:57:50.868Z",
   "episodes": [
     {
       "order": 1,
@@ -247,8 +247,6 @@
       "episodeNum": 6,
       "variant": "reward",
       "winnerNames": [
-        "Jawan Pitts",
-        "Nate Moore",
         "Rizo Velovic",
         "Savannah Louie",
         "Sophi Balerdi"
@@ -259,7 +257,12 @@
     {
       "episodeNum": 6,
       "variant": "reward",
-      "winnerNames": [],
+      "winnerNames": [
+        "Alex Moore",
+        "Kristina Mills",
+        "Nate Moore",
+        "Sophie Segreti"
+      ],
       "winnerTribe": "uli",
       "order": 11
     },
@@ -267,8 +270,6 @@
       "episodeNum": 6,
       "variant": "immunity",
       "winnerNames": [
-        "Jawan Pitts",
-        "Nate Moore",
         "Rizo Velovic",
         "Savannah Louie",
         "Sophi Balerdi"
@@ -279,7 +280,12 @@
     {
       "episodeNum": 6,
       "variant": "immunity",
-      "winnerNames": [],
+      "winnerNames": [
+        "Alex Moore",
+        "Kristina Mills",
+        "Nate Moore",
+        "Sophie Segreti"
+      ],
       "winnerTribe": "uli",
       "order": 13
     },

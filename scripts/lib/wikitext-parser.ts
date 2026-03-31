@@ -1325,80 +1325,48 @@ export function buildTribeRosters(
   eliminations: ScrapedElimination[],
   mergeEpisode: number | null,
 ): Map<number, Map<string, string[]>> {
-  // Step 1: Determine original tribe per player
-  const originalTribes = new Map<string, string>();
-  for (const [name, hist] of tribeHistories) {
-    if (hist.tribeicons.length > 0) {
-      originalTribes.set(name, hist.tribeicons[0]); // 1st = original
-    } else {
-      originalTribes.set(name, hist.tribebox2);
-    }
-  }
-
-  // Step 2: Detect if a swap occurred (any player has 2+ tribeicon1 entries)
-  const hasSwap = [...tribeHistories.values()].some(
-    (h) => h.tribeicons.length >= 2,
+  // Step 1: Determine the number of tribe phases (original + N swaps).
+  // Players with N tribeicons survived through N tribe phases.
+  // Max tribeicon count = total phases before merge.
+  const maxIcons = Math.max(
+    0,
+    ...[...tribeHistories.values()].map((h) => h.tribeicons.length),
   );
+  const numPhases = Math.max(1, maxIcons); // At least 1 phase (original)
 
-  // Step 3: If swap, determine post-swap tribe per player
-  const swapTribes = new Map<string, string>();
-  if (hasSwap) {
+  // Step 2: Build tribe assignment per player per phase.
+  // Phase 0 = original tribe, Phase 1 = after swap1, Phase 2 = after swap2, etc.
+  // tribeicons are chronological: [0]=original, [1]=swap1, [2]=swap2, ...
+  const phaseTribes: Map<string, string>[] = [];
+  for (let phase = 0; phase < numPhases; phase++) {
+    const tribes = new Map<string, string>();
     for (const [name, hist] of tribeHistories) {
-      if (hist.tribeicons.length >= 2) {
-        // 2nd tribeicon = post-swap tribe
-        swapTribes.set(name, hist.tribeicons[1]);
-      } else if (
-        hist.tribeicons.length === 1 &&
-        hist.tribebox2 !== hist.tribeicons[0]
-      ) {
-        // Swapped, eliminated pre-merge: tribebox2 is post-swap tribe
-        swapTribes.set(name, hist.tribebox2);
+      if (hist.tribeicons.length > phase) {
+        // Player has data for this phase
+        tribes.set(name, hist.tribeicons[phase]);
+      } else if (hist.tribeicons.length === 0) {
+        // 0 tribeicons — use tribebox2 (original tribe, eliminated before any change)
+        tribes.set(name, hist.tribebox2);
       } else {
-        // Not swapped or eliminated before swap: use original
-        swapTribes.set(name, originalTribes.get(name)!);
+        // Player was eliminated during or after this phase but doesn't have a tribeicon for it.
+        // Use tribebox2 (their tribe at elimination) which reflects their actual tribe.
+        // Exception: if tribebox2 is a merge tribe, use their last tribeicon instead.
+        const lastIcon = hist.tribeicons[hist.tribeicons.length - 1];
+        const isMergeTribe =
+          mergeEpisode !== null &&
+          hist.tribebox2 !== lastIcon &&
+          hist.tribeicons.length < phase;
+        tribes.set(name, isMergeTribe ? lastIcon : hist.tribebox2);
       }
     }
+    phaseTribes.push(tribes);
   }
 
-  // Step 4: Find swap episode boundary (if swap occurred)
-  let swapEpisode: number | null = null;
-  if (hasSwap) {
-    // Strategy: the swap happens after the last player with 0 tribeicons is eliminated.
-    // Players with 0 tribeicons never experienced any tribe change (eliminated before swap).
-    let lastPreSwapElimEp = 0;
-    for (const elim of eliminations) {
-      const hist = tribeHistories.get(elim.playerName);
-      if (hist && hist.tribeicons.length === 0 && elim.episodeNum > lastPreSwapElimEp) {
-        lastPreSwapElimEp = elim.episodeNum;
-      }
-    }
+  // Step 3: Determine the starting episode of each phase.
+  // Phase N starts after the last elimination of a player with exactly N tribeicons.
+  // Players with N tribeicons survived through N-1 tribe changes but not through change N.
+  const phaseBoundaries: number[] = [1]; // Phase 0 starts at episode 1
 
-    if (lastPreSwapElimEp > 0) {
-      swapEpisode = lastPreSwapElimEp + 1;
-    } else {
-      // Fallback: earliest elimination of a swapped player
-      for (const elim of eliminations) {
-        const original = originalTribes.get(elim.playerName);
-        const postSwap = swapTribes.get(elim.playerName);
-        if (original && postSwap && original !== postSwap) {
-          if (swapEpisode === null || elim.episodeNum < swapEpisode) {
-            swapEpisode = elim.episodeNum;
-          }
-        }
-      }
-    }
-
-    if (swapEpisode === null) {
-      throw new Error(
-        "Swap detected but cannot determine swap episode boundary.",
-      );
-    }
-  }
-
-  // Step 5: Build per-episode rosters
-  const result = new Map<number, Map<string, string[]>>();
-
-  // Track eliminated players and their elimination episodes
   const eliminatedAt = new Map<string, number>();
   for (const elim of eliminations) {
     if (!eliminatedAt.has(elim.playerName)) {
@@ -1406,24 +1374,59 @@ export function buildTribeRosters(
     }
   }
 
+  for (let phase = 1; phase < numPhases; phase++) {
+    // Find the last elimination of a player with exactly (phase - 1) tribeicons
+    // (if phase=1, look for 0-icon players; if phase=2, look for 1-icon players)
+    const targetIcons = phase - 1;
+    let lastElimEp = 0;
+    for (const elim of eliminations) {
+      const hist = tribeHistories.get(elim.playerName);
+      if (
+        hist &&
+        hist.tribeicons.length === targetIcons &&
+        elim.episodeNum > lastElimEp
+      ) {
+        lastElimEp = elim.episodeNum;
+      }
+    }
+
+    if (lastElimEp > 0) {
+      phaseBoundaries.push(lastElimEp + 1);
+    } else {
+      // Fallback: if no player with exactly targetIcons was eliminated,
+      // use the previous boundary + 1 (conservative estimate)
+      phaseBoundaries.push(
+        (phaseBoundaries[phaseBoundaries.length - 1] ?? 1) + 1,
+      );
+    }
+  }
+
+  // Step 4: Build per-episode rosters
+  const result = new Map<number, Map<string, string[]>>();
+
   for (const ep of episodes) {
     // Skip post-merge episodes (tribe resolution not needed for individual challenges)
     if (mergeEpisode !== null && ep.order > mergeEpisode) continue;
-    // Include the merge episode — it may still have a tribal challenge before merge
+
+    // Determine which phase this episode belongs to
+    let currentPhase = 0;
+    for (let p = numPhases - 1; p >= 0; p--) {
+      if (ep.order >= phaseBoundaries[p]) {
+        currentPhase = p;
+        break;
+      }
+    }
 
     const tribeMap = new Map<string, string[]>();
-    const useSwapRoster =
-      hasSwap && swapEpisode !== null && ep.order >= swapEpisode;
+    const phaseRoster = phaseTribes[currentPhase];
 
     for (const [name] of tribeHistories) {
-      // Skip players eliminated in prior episodes (they still play challenges
-      // in their elimination episode since challenges happen before tribal)
+      // Skip players eliminated in prior episodes
       const elimEp = eliminatedAt.get(name);
       if (elimEp !== undefined && ep.order > elimEp) continue;
 
-      const tribe = useSwapRoster
-        ? (swapTribes.get(name) ?? originalTribes.get(name)!)
-        : originalTribes.get(name)!;
+      const tribe = phaseRoster.get(name);
+      if (!tribe) continue;
 
       if (!tribeMap.has(tribe)) tribeMap.set(tribe, []);
       tribeMap.get(tribe)!.push(name);

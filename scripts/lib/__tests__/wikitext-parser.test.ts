@@ -668,8 +668,9 @@ describe("buildTribeRosters", () => {
       );
 
       // Post-merge episodes should not have roster entries
+      // (merge episode itself IS included for last tribal challenge)
       for (const [epNum] of rosters) {
-        expect(epNum).toBeLessThan(mergeEp!.order);
+        expect(epNum).toBeLessThanOrEqual(mergeEp!.order);
       }
     });
 
