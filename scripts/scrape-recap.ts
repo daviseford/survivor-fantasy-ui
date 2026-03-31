@@ -1,8 +1,9 @@
 /**
- * Scrape a recap article and use Claude CLI to extract structured game events.
+ * Scrape recap articles and use Claude CLI to extract structured game events.
  *
  * Usage:
- *   yarn scrape-recap <season_number> <url>
+ *   yarn scrape-recap <season_number>              # auto-discover all recaps via WordPress API
+ *   yarn scrape-recap <season_number> <url>         # scrape a single recap URL
  *
  * Requires `claude` CLI to be installed and authenticated.
  * Outputs JSON to data/scraped/season_N_recap_events.json.
@@ -13,10 +14,10 @@ import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
 import type { ScrapedGameEvent } from "./lib/types.js";
+import { delay } from "./lib/wiki-api.js";
 
 // --- HTML → text extraction ---
 
-/** Strip HTML tags and collapse whitespace to extract readable text. */
 function htmlToText(html: string): string {
   let text = html;
   text = text.replace(/<script[\s\S]*?<\/script>/gi, "");
@@ -53,6 +54,73 @@ const GAME_EVENT_ACTIONS = [
   "win_advantage",
   "win_survivor",
 ] as const;
+
+// --- Inside Survivor WordPress API ---
+
+interface WPTag {
+  id: number;
+  slug: string;
+  count: number;
+}
+
+interface WPPost {
+  id: number;
+  link: string;
+  title: { rendered: string };
+  date: string;
+}
+
+async function discoverRecapUrls(
+  seasonNum: number,
+): Promise<{ url: string; title: string }[]> {
+  const tagSlug = `survivor-${seasonNum}-recaps`;
+  console.log(`Looking up tag: ${tagSlug}`);
+
+  const tagRes = await fetch(
+    `https://insidesurvivor.com/wp-json/wp/v2/tags?slug=${tagSlug}&_fields=id,slug,count`,
+  );
+  if (!tagRes.ok) {
+    throw new Error(`WordPress API error (${tagRes.status}) fetching tag`);
+  }
+
+  const tags = (await tagRes.json()) as WPTag[];
+  if (tags.length === 0) {
+    throw new Error(
+      `No recap tag found for "${tagSlug}". ` +
+        `Inside Survivor may not have recaps for Season ${seasonNum}, ` +
+        `or the tag format may differ. Try passing a URL directly.`,
+    );
+  }
+
+  const tagId = tags[0].id;
+  console.log(
+    `Found tag "${tags[0].slug}" (id: ${tagId}, ${tags[0].count} posts)`,
+  );
+
+  // Fetch all posts with this tag
+  const postsRes = await fetch(
+    `https://insidesurvivor.com/wp-json/wp/v2/posts?tags=${tagId}&per_page=100&_fields=id,link,title,date&orderby=date&order=asc`,
+  );
+  if (!postsRes.ok) {
+    throw new Error(`WordPress API error (${postsRes.status}) fetching posts`);
+  }
+
+  const posts = (await postsRes.json()) as WPPost[];
+
+  // Filter to only recap articles (exclude power rankings, analysis, etc.)
+  const recaps = posts.filter(
+    (p) =>
+      p.link.includes("recap") ||
+      p.title.rendered.toLowerCase().includes("recap"),
+  );
+
+  return recaps.map((p) => ({
+    url: p.link,
+    title: p.title.rendered.replace(/&#8217;/g, "'").replace(/&#8211;/g, "–"),
+  }));
+}
+
+// --- Claude CLI ---
 
 function buildPrompt(seasonNum: number, recapText: string): string {
   return `You are extracting structured game events from a Survivor Season ${seasonNum} recap article.
@@ -91,17 +159,44 @@ If no game events are found, return an empty array: []
 ${recapText}`;
 }
 
-// --- Main ---
+function callClaude(prompt: string, tmpDir: string, label: string): string {
+  const promptPath = path.join(tmpDir, `.recap-prompt-${label}.txt`);
+  fs.writeFileSync(promptPath, prompt);
 
-async function scrapeRecap(
+  try {
+    return execSync(`claude --print < "${promptPath}"`, {
+      encoding: "utf-8",
+      maxBuffer: 10 * 1024 * 1024,
+      timeout: 120_000,
+    }).trim();
+  } finally {
+    if (fs.existsSync(promptPath)) {
+      fs.unlinkSync(promptPath);
+    }
+  }
+}
+
+function parseClaudeResponse(responseText: string): ScrapedGameEvent[] {
+  let jsonStr = responseText;
+  if (jsonStr.startsWith("```")) {
+    jsonStr = jsonStr.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
+  }
+  const arrayMatch = jsonStr.match(/\[[\s\S]*\]/);
+  if (arrayMatch) {
+    jsonStr = arrayMatch[0];
+  }
+  return JSON.parse(jsonStr) as ScrapedGameEvent[];
+}
+
+// --- Single URL scrape ---
+
+async function scrapeOneRecap(
   seasonNum: number,
   url: string,
+  tmpDir: string,
+  label: string,
 ): Promise<ScrapedGameEvent[]> {
-  console.log(`\nScraping recap for Season ${seasonNum}...`);
-  console.log(`URL: ${url}\n`);
-
-  // Step 1: Fetch the page
-  console.log("Fetching page...");
+  // Fetch the page
   const response = await fetch(url, {
     headers: {
       "User-Agent": "Mozilla/5.0 (compatible; SurvivorFantasyScraper/1.0)",
@@ -113,78 +208,106 @@ async function scrapeRecap(
   }
 
   const html = await response.text();
-  console.log(`  Fetched ${html.length} bytes of HTML`);
-
-  // Step 2: Extract text content
   const recapText = htmlToText(html);
-  console.log(`  Extracted ${recapText.length} chars of text`);
 
-  // Truncate if too long
   const maxChars = 80_000;
   const truncatedText =
     recapText.length > maxChars
       ? recapText.slice(0, maxChars) + "\n\n[TRUNCATED]"
       : recapText;
 
-  // Step 3: Write prompt to temp file and pipe to claude --print
+  // Call Claude
   const prompt = buildPrompt(seasonNum, truncatedText);
-  const tmpDir = path.resolve(import.meta.dirname, "..", "data", "scraped");
-  if (!fs.existsSync(tmpDir)) {
-    fs.mkdirSync(tmpDir, { recursive: true });
-  }
-  const promptPath = path.join(tmpDir, `.recap-prompt-${seasonNum}.txt`);
-  fs.writeFileSync(promptPath, prompt);
+  const responseText = callClaude(prompt, tmpDir, label);
 
-  console.log("\nSending to Claude CLI (--print)...");
-  let responseText: string;
-  try {
-    responseText = execSync(`claude --print < "${promptPath}"`, {
-      encoding: "utf-8",
-      maxBuffer: 10 * 1024 * 1024,
-      timeout: 120_000,
-    }).trim();
-  } finally {
-    // Clean up prompt file
-    if (fs.existsSync(promptPath)) {
-      fs.unlinkSync(promptPath);
-    }
-  }
-
-  // Step 4: Parse the JSON response
+  // Parse response
   let events: ScrapedGameEvent[];
   try {
-    let jsonStr = responseText;
-    // Handle possible markdown code fences
-    if (jsonStr.startsWith("```")) {
-      jsonStr = jsonStr.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
-    }
-    // Find the JSON array in the response if there's surrounding text
-    const arrayMatch = jsonStr.match(/\[[\s\S]*\]/);
-    if (arrayMatch) {
-      jsonStr = arrayMatch[0];
-    }
-    events = JSON.parse(jsonStr) as ScrapedGameEvent[];
+    events = parseClaudeResponse(responseText);
   } catch (e) {
-    console.error("Failed to parse Claude response as JSON:");
-    console.error(responseText.slice(0, 500));
-    throw new Error(`JSON parse error: ${e}`);
+    console.error("  Failed to parse Claude response:");
+    console.error("  " + responseText.slice(0, 200));
+    return [];
   }
 
-  // Validate events
+  // Validate
   const validActions = new Set<string>(GAME_EVENT_ACTIONS);
-  const validEvents = events.filter((ev) => {
+  return events.filter((ev) => {
     if (!validActions.has(ev.action)) {
-      console.warn(
-        `  Warning: Skipping event with invalid action "${ev.action}" for ${ev.playerName}`,
-      );
+      console.warn(`  Warning: Skipping invalid action "${ev.action}"`);
       return false;
     }
     return true;
   });
+}
 
-  console.log(`\nExtracted ${validEvents.length} game events`);
+// --- Main ---
 
-  // Step 5: Write output
+async function scrapeRecap(
+  seasonNum: number,
+  singleUrl?: string,
+): Promise<ScrapedGameEvent[]> {
+  const tmpDir = path.resolve(import.meta.dirname, "..", "data", "scraped");
+  if (!fs.existsSync(tmpDir)) {
+    fs.mkdirSync(tmpDir, { recursive: true });
+  }
+
+  let urls: { url: string; title: string }[];
+
+  if (singleUrl) {
+    urls = [{ url: singleUrl, title: singleUrl }];
+  } else {
+    // Auto-discover recaps from Inside Survivor
+    console.log(`\nDiscovering recaps for Season ${seasonNum}...\n`);
+    urls = await discoverRecapUrls(seasonNum);
+    console.log(`Found ${urls.length} recap articles:\n`);
+    for (const { title, url } of urls) {
+      console.log(`  ${title}`);
+      console.log(`  ${url}\n`);
+    }
+  }
+
+  const allEvents: ScrapedGameEvent[] = [];
+
+  for (let i = 0; i < urls.length; i++) {
+    const { url, title } = urls[i];
+    console.log(
+      `\n[${i + 1}/${urls.length}] Scraping: ${singleUrl ? url : title}`,
+    );
+    console.log("  Fetching page...");
+
+    const events = await scrapeOneRecap(
+      seasonNum,
+      url,
+      tmpDir,
+      `${seasonNum}-${i}`,
+    );
+
+    console.log(`  Extracted ${events.length} events`);
+    for (const ev of events) {
+      console.log(
+        `    Ep ${ev.episodeNum}: ${ev.playerName} — ${ev.action}${ev.multiplier ? ` x${ev.multiplier}` : ""}`,
+      );
+    }
+
+    allEvents.push(...events);
+
+    // Rate limit between requests
+    if (i < urls.length - 1) {
+      await delay(1000);
+    }
+  }
+
+  // Deduplicate events (same episode + player + action)
+  const seen = new Set<string>();
+  const deduped = allEvents.filter((ev) => {
+    const key = `${ev.episodeNum}-${ev.playerName}-${ev.action}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  // Write output
   const outputPath = path.join(
     tmpDir,
     `season_${seasonNum}_recap_events.json`,
@@ -193,23 +316,19 @@ async function scrapeRecap(
   const output = {
     seasonNum,
     scrapedAt: new Date().toISOString(),
-    sourceUrl: url,
-    events: validEvents,
+    sourceUrls: urls.map((u) => u.url),
+    events: deduped,
   };
 
   fs.writeFileSync(outputPath, JSON.stringify(output, null, 2) + "\n");
 
   console.log(`\n${"=".repeat(50)}`);
   console.log(`Recap scrape complete for Season ${seasonNum}`);
-  console.log(`  Events: ${validEvents.length}`);
-  for (const ev of validEvents) {
-    console.log(
-      `    Ep ${ev.episodeNum}: ${ev.playerName} — ${ev.action}${ev.multiplier ? ` x${ev.multiplier}` : ""}`,
-    );
-  }
+  console.log(`  Articles scraped: ${urls.length}`);
+  console.log(`  Total events: ${deduped.length}`);
   console.log(`\nOutput: ${outputPath}`);
 
-  return validEvents;
+  return deduped;
 }
 
 // --- CLI entry point ---
@@ -220,12 +339,15 @@ const isDirectRun =
 
 if (isDirectRun) {
   const seasonNum = Number(process.argv[2]);
-  const url = process.argv[3];
+  const url = process.argv[3]; // optional
 
-  if (!seasonNum || isNaN(seasonNum) || !url) {
-    console.error("Usage: yarn scrape-recap <season_number> <url>");
+  if (!seasonNum || isNaN(seasonNum)) {
+    console.error("Usage:");
     console.error(
-      'Example: yarn scrape-recap 50 "https://insidesurvivor.com/survivor-50-episode-1-recap-..."',
+      "  yarn scrape-recap <season_number>              # auto-discover all recaps",
+    );
+    console.error(
+      "  yarn scrape-recap <season_number> <url>         # scrape a single recap",
     );
     process.exit(1);
   }
