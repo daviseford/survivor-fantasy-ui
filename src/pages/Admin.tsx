@@ -239,14 +239,17 @@ export const Admin = () => {
                     await setDoc(
                       doc(db, "seasons", "season_9"),
                       SEASONS.season_9,
+                      { merge: true },
                     );
                     await setDoc(
                       doc(db, "challenges", "season_9"),
                       SEASON_9_CHALLENGES,
+                      { merge: true },
                     );
                     await setDoc(
                       doc(db, "eliminations", "season_9"),
                       SEASON_9_ELIMINATIONS,
+                      { merge: true },
                     );
                   })
                 }
@@ -259,6 +262,7 @@ export const Admin = () => {
                     await setDoc(
                       doc(db, "seasons", "season_46"),
                       SEASONS.season_46,
+                      { merge: true },
                     );
                   })
                 }
@@ -271,6 +275,7 @@ export const Admin = () => {
                     await setDoc(
                       doc(db, "seasons", "season_50"),
                       SEASONS.season_50,
+                      { merge: true },
                     );
                   })
                 }
