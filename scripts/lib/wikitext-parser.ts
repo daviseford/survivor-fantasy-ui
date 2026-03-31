@@ -1331,22 +1331,34 @@ export function buildTribeRosters(
   // Step 4: Find swap episode boundary (if swap occurred)
   let swapEpisode: number | null = null;
   if (hasSwap) {
-    // Find the earliest elimination of a swapped player
+    // Strategy: the swap happens after the last player with 0 tribeicons is eliminated.
+    // Players with 0 tribeicons never experienced any tribe change (eliminated before swap).
+    let lastPreSwapElimEp = 0;
     for (const elim of eliminations) {
-      const original = originalTribes.get(elim.playerName);
-      const postSwap = swapTribes.get(elim.playerName);
-      if (original && postSwap && original !== postSwap) {
-        // This player was swapped — their elimination episode is at or after the swap
-        if (swapEpisode === null || elim.episodeNum < swapEpisode) {
-          swapEpisode = elim.episodeNum;
+      const hist = tribeHistories.get(elim.playerName);
+      if (hist && hist.tribeicons.length === 0 && elim.episodeNum > lastPreSwapElimEp) {
+        lastPreSwapElimEp = elim.episodeNum;
+      }
+    }
+
+    if (lastPreSwapElimEp > 0) {
+      swapEpisode = lastPreSwapElimEp + 1;
+    } else {
+      // Fallback: earliest elimination of a swapped player
+      for (const elim of eliminations) {
+        const original = originalTribes.get(elim.playerName);
+        const postSwap = swapTribes.get(elim.playerName);
+        if (original && postSwap && original !== postSwap) {
+          if (swapEpisode === null || elim.episodeNum < swapEpisode) {
+            swapEpisode = elim.episodeNum;
+          }
         }
       }
     }
+
     if (swapEpisode === null) {
-      // No swapped player eliminated pre-merge — shouldn't happen in real seasons
       throw new Error(
-        "Swap detected but no swapped player was eliminated before merge. " +
-          "Cannot determine swap episode boundary.",
+        "Swap detected but cannot determine swap episode boundary.",
       );
     }
   }
