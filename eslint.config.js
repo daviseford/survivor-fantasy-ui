@@ -11,6 +11,7 @@ export default tseslint.config(
       "e2e/",
       ".claude/",
       ".def/",
+      "scripts/",
       "**/*.js",
       "**/*.cjs",
       "**/*.mjs",

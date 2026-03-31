@@ -8,24 +8,24 @@ import {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used only in typeof for type derivation
 const Players = [
-  "Ben Katzman",
-  "Bhanu Gopal",
-  "Charlie Davis",
   "David Jelinsky",
-  "Hunter McKnight",
-  "Jem Hussain-Adams",
   "Jess Chong",
-  "Kenzie Petty",
-  "Liz Wilcox",
-  "Maria Shrime Gonzalez",
-  "Moriah Gaynor",
-  "Q Burdette",
   "Randen Montalvo",
+  "Bhanu Gopal",
+  "Jem Hussain-Adams",
+  "Moriah Gaynor",
+  "Tim Spicer",
   "Soda Thompson",
   "Tevin Davis",
-  "Tim Spicer",
-  "Venus Vafa",
+  "Hunter McKnight",
   "Tiffany Nicole Ervin",
+  "Venus Vafa",
+  "Q Burdette",
+  "Maria Shrime Gonzalez",
+  "Liz Wilcox",
+  "Ben Katzman",
+  "Charlie Davis",
+  "Kenzie Petty",
 ] as const;
 
 type PlayerName = (typeof Players)[number];
@@ -33,110 +33,177 @@ type PlayerName = (typeof Players)[number];
 type SeasonNumber = 46;
 
 const buildPlayer = <T extends PlayerName>(
-  name: T,
-  img: string,
-  description: string,
+  p: { name: T; img: string } & Partial<
+    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "name" | "img">
+  >,
 ): Player<T, SeasonNumber> => {
   return {
-    name,
-    img,
-    description,
+    ...p,
     season_num: 46,
     season_id: "season_46",
   };
 };
 
 export const SEASON_46_PLAYERS = [
-  buildPlayer(
-    "Ben Katzman",
-    "https://static.wikia.nocookie.net/survivor/images/3/34/S46_ben_t.png",
-    "Age: 31 | Hometown: Miami, Florida | Occupation: Musician",
-  ),
-  buildPlayer(
-    "Bhanu Gopal",
-    "https://static.wikia.nocookie.net/survivor/images/4/4d/S46_bhanu_t.png",
-    "Age: 41 | Hometown: Visakhapatnam, India | Occupation: IT Quality Analyst",
-  ),
-  buildPlayer(
-    "Charlie Davis",
-    "https://static.wikia.nocookie.net/survivor/images/5/5a/S46_charlie_t.png",
-    "Age: 25 | Hometown: Manchester-by-the-Sea, Massachusetts | Occupation: Law Student",
-  ),
-  buildPlayer(
-    "David Jelinsky",
-    "https://static.wikia.nocookie.net/survivor/images/1/11/S46_jelinsky_t.png",
-    "Age: 22 | Hometown: Las Vegas, Nevada | Occupation: Slot Machine Salesman",
-  ),
-  buildPlayer(
-    "Hunter McKnight",
-    "https://static.wikia.nocookie.net/survivor/images/9/90/S46_hunter_t.png",
-    "Age: 28 | Hometown: French Camp, Mississippi | Occupation: Science Teacher",
-  ),
-  buildPlayer(
-    "Jem Hussain-Adams",
-    "https://static.wikia.nocookie.net/survivor/images/1/14/S46_jem_t.png",
-    "Age: 32 | Hometown: Berbice, Guyana (South America) | Occupation: International Brand Mentor",
-  ),
-  buildPlayer(
-    "Jess Chong",
-    "https://static.wikia.nocookie.net/survivor/images/2/2a/S46_jess_t.png",
-    "Age: 37 | Hometown: Hong Kong/Toronto | Occupation: Software Engineer",
-  ),
-  buildPlayer(
-    "Kenzie Petty",
-    "https://static.wikia.nocookie.net/survivor/images/a/aa/S46_kenzie_t.png",
-    "Age: 29 | Hometown: Gibraltar, Michigan | Occupation: Salon Owner",
-  ),
-  buildPlayer(
-    "Liz Wilcox",
-    "https://static.wikia.nocookie.net/survivor/images/9/93/S46_liz_t.png",
-    "Age: 35 | Hometown: Luther, Michigan | Occupation: Marketing Strategist",
-  ),
-  buildPlayer(
-    "Maria Shrime Gonzalez",
-    "https://static.wikia.nocookie.net/survivor/images/6/65/S46_maria_t.png",
-    "Age: 48 | Hometown: Dallas, Texas | Occupation: Parent Coach",
-  ),
-  buildPlayer(
-    "Moriah Gaynor",
-    "https://static.wikia.nocookie.net/survivor/images/f/f0/S46_moriah_t.png",
-    "Age: 28 | Hometown: Boca Raton, Florida | Occupation: Program Coordinator",
-  ),
-  buildPlayer(
-    "Q Burdette",
-    "https://static.wikia.nocookie.net/survivor/images/f/f2/S46_q_t.png",
-    "Age: 29 | Hometown: Senatobia, Mississippi | Occupation: Real Estate Agent",
-  ),
-  buildPlayer(
-    "Randen Montalvo",
-    "https://static.wikia.nocookie.net/survivor/images/4/4b/S46_randen_t.png",
-    "Age: 41 | Hometown: Brooklyn, New York | Occupation: Aerospace Technician",
-  ),
-  buildPlayer(
-    "Soda Thompson",
-    "https://static.wikia.nocookie.net/survivor/images/5/58/S46_soda_t.png",
-    "Age: 27 | Hometown: Long Island, New York | Occupation: Special Ed Teacher",
-  ),
-  buildPlayer(
-    "Tevin Davis",
-    "https://static.wikia.nocookie.net/survivor/images/e/e2/S46_tevin_t.png",
-    "Age: 24 | Hometown: Goochland, Virginia | Occupation: Actor",
-  ),
-  buildPlayer(
-    "Tiffany Nicole Ervin",
-    "https://static.wikia.nocookie.net/survivor/images/8/84/S46_tiffany_t.png",
-    "Age: 33 | Hometown:  Franklin Township, New Jersey | Occupation: Artist",
-  ),
-  buildPlayer(
-    "Tim Spicer",
-    "https://static.wikia.nocookie.net/survivor/images/e/ec/S46_tim_t.png",
-    "Age: 31 | Hometown: Arlington, Virginia | Occupation: College Coach",
-  ),
-  buildPlayer(
-    "Venus Vafa",
-    "https://static.wikia.nocookie.net/survivor/images/9/9b/S46_venus_t.png",
-    "Age: 24 | Hometown: Hill, Ontario (Canada) | Occupation: Data Analyst",
-  ),
+  buildPlayer({
+    name: "David Jelinsky",
+    img: "https://static.wikia.nocookie.net/survivor/images/1/11/S46_jelinsky_t.png",
+    description:
+      "Age: 24 | Hometown: Las Vegas, Nevada | Occupation: Slot Machine Salesman",
+    age: 24,
+    profession: "Slot Machine Salesman",
+    hometown: "Las Vegas, Nevada",
+  }),
+  buildPlayer({
+    name: "Jess Chong",
+    img: "https://static.wikia.nocookie.net/survivor/images/2/2a/S46_jess_t.png",
+    description:
+      "Age: 40 | Hometown: San Francisco, California | Occupation: Software Engineer",
+    age: 40,
+    profession: "Software Engineer",
+    hometown: "San Francisco, California",
+  }),
+  buildPlayer({
+    name: "Randen Montalvo",
+    img: "https://static.wikia.nocookie.net/survivor/images/4/4b/S46_randen_t.png",
+    description:
+      "Age: 43 | Hometown: Orlando, Florida | Occupation: Aerospace Tech",
+    age: 43,
+    profession: "Aerospace Tech",
+    hometown: "Orlando, Florida",
+  }),
+  buildPlayer({
+    name: "Bhanu Gopal",
+    img: "https://static.wikia.nocookie.net/survivor/images/4/4d/S46_bhanu_t.png",
+    description:
+      "Age: 43 | Hometown: Acton, Massachusetts | Occupation: IT Quality Analyst",
+    age: 43,
+    profession: "IT Quality Analyst",
+    hometown: "Acton, Massachusetts",
+  }),
+  buildPlayer({
+    name: "Jem Hussain-Adams",
+    img: "https://static.wikia.nocookie.net/survivor/images/1/14/S46_jem_t.png",
+    description:
+      "Age: 34 | Hometown: Chicago, Illinois | Occupation: International Brand Mentor",
+    age: 34,
+    profession: "International Brand Mentor",
+    hometown: "Chicago, Illinois",
+  }),
+  buildPlayer({
+    name: "Moriah Gaynor",
+    img: "https://static.wikia.nocookie.net/survivor/images/f/f0/S46_moriah_t.png",
+    description:
+      "Age: 31 | Hometown: San Diego, California | Occupation: Program Coordinator",
+    age: 31,
+    profession: "Program Coordinator",
+    hometown: "San Diego, California",
+  }),
+  buildPlayer({
+    name: "Tim Spicer",
+    img: "https://static.wikia.nocookie.net/survivor/images/e/ec/S46_tim_t.png",
+    description:
+      "Age: 33 | Hometown: Atlanta, Georgia | Occupation: College Coach",
+    age: 33,
+    profession: "College Coach",
+    hometown: "Atlanta, Georgia",
+  }),
+  buildPlayer({
+    name: "Soda Thompson",
+    img: "https://static.wikia.nocookie.net/survivor/images/5/58/S46_soda_t.png",
+    description:
+      "Age: 29 | Hometown: Lake Hopatcong, New Jersey | Occupation: Special Ed Teacher",
+    age: 29,
+    profession: "Special Ed Teacher",
+    hometown: "Lake Hopatcong, New Jersey",
+  }),
+  buildPlayer({
+    name: "Tevin Davis",
+    img: "https://static.wikia.nocookie.net/survivor/images/e/e2/S46_tevin_t.png",
+    description: "Age: 26 | Hometown: Richmond, Virginia | Occupation: Actor",
+    age: 26,
+    profession: "Actor",
+    hometown: "Richmond, Virginia",
+  }),
+  buildPlayer({
+    name: "Hunter McKnight",
+    img: "https://static.wikia.nocookie.net/survivor/images/9/90/S46_hunter_t.png",
+    description:
+      "Age: 30 | Hometown: French Camp, Mississippi | Occupation: Science Teacher",
+    age: 30,
+    profession: "Science Teacher",
+    hometown: "French Camp, Mississippi",
+  }),
+  buildPlayer({
+    name: "Tiffany Nicole Ervin",
+    img: "https://static.wikia.nocookie.net/survivor/images/8/84/S46_tiffany_t.png",
+    description:
+      "Age: 35 | Hometown: Elizabeth, New Jersey | Occupation: Artist",
+    age: 35,
+    profession: "Artist",
+    hometown: "Elizabeth, New Jersey",
+  }),
+  buildPlayer({
+    name: "Venus Vafa",
+    img: "https://static.wikia.nocookie.net/survivor/images/9/9b/S46_venus_t.png",
+    description:
+      "Age: 27 | Hometown: Toronto, Ontario | Occupation: Data Analyst",
+    age: 27,
+    profession: "Data Analyst",
+    hometown: "Toronto, Ontario",
+  }),
+  buildPlayer({
+    name: "Q Burdette",
+    img: "https://static.wikia.nocookie.net/survivor/images/f/f2/S46_q_t.png",
+    description:
+      "Age: 32 | Hometown: Memphis, Tennessee | Occupation: Real Estate Agent",
+    age: 32,
+    profession: "Real Estate Agent",
+    hometown: "Memphis, Tennessee",
+  }),
+  buildPlayer({
+    name: "Maria Shrime Gonzalez",
+    img: "https://static.wikia.nocookie.net/survivor/images/6/65/S46_maria_t.png",
+    description: "Age: 50 | Hometown: Dallas, Texas | Occupation: Parent Coach",
+    age: 50,
+    profession: "Parent Coach",
+    hometown: "Dallas, Texas",
+  }),
+  buildPlayer({
+    name: "Liz Wilcox",
+    img: "https://static.wikia.nocookie.net/survivor/images/9/93/S46_liz_t.png",
+    description:
+      "Age: 38 | Hometown: Orlando, Florida | Occupation: Marketing Strategist",
+    age: 38,
+    profession: "Marketing Strategist",
+    hometown: "Orlando, Florida",
+  }),
+  buildPlayer({
+    name: "Ben Katzman",
+    img: "https://static.wikia.nocookie.net/survivor/images/3/34/S46_ben_t.png",
+    description: "Age: 34 | Hometown: Miami, Florida | Occupation: Musician",
+    age: 34,
+    profession: "Musician",
+    hometown: "Miami, Florida",
+  }),
+  buildPlayer({
+    name: "Charlie Davis",
+    img: "https://static.wikia.nocookie.net/survivor/images/5/5a/S46_charlie_t.png",
+    description:
+      "Age: 28 | Hometown: Boston, Massachusetts | Occupation: Law Student",
+    age: 28,
+    profession: "Law Student",
+    hometown: "Boston, Massachusetts",
+  }),
+  buildPlayer({
+    name: "Kenzie Petty",
+    img: "https://static.wikia.nocookie.net/survivor/images/a/aa/S46_kenzie_t.png",
+    description:
+      "Age: 31 | Hometown: Charlotte, North Carolina | Occupation: Salon Owner",
+    age: 31,
+    profession: "Salon Owner",
+    hometown: "Charlotte, North Carolina",
+  }),
 ] satisfies Player<PlayerName, SeasonNumber>[];
 
 export const SEASON_46_EPISODES = [

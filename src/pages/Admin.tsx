@@ -134,12 +134,7 @@ export const Admin = () => {
                 >
                   {season.img && (
                     <Card.Section pos="relative">
-                      <Image
-                        src={season.img}
-                        height={100}
-                        alt=""
-                        fit="cover"
-                      />
+                      <Image src={season.img} height={100} alt="" fit="cover" />
                       <Badge
                         color="dark"
                         variant="filled"

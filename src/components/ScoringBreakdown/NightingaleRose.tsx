@@ -80,14 +80,11 @@ export const NightingaleRose = ({ data, size }: NightingaleRoseProps) => {
     });
   }, [data, maxTotal, maxRadius]);
 
-  const getRelativePos = useCallback(
-    (e: React.MouseEvent) => {
-      const rect = containerRef.current?.getBoundingClientRect();
-      if (!rect) return null;
-      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-    },
-    [],
-  );
+  const getRelativePos = useCallback((e: React.MouseEvent) => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return null;
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  }, []);
 
   const handleMouseEnter = useCallback(
     (
@@ -150,9 +147,7 @@ export const NightingaleRose = ({ data, size }: NightingaleRoseProps) => {
               const startAngle =
                 -Math.PI / 2 + i * anglePerPetal + PADDING_ANGLE / 2;
               const endAngle =
-                -Math.PI / 2 +
-                (i + 1) * anglePerPetal -
-                PADDING_ANGLE / 2;
+                -Math.PI / 2 + (i + 1) * anglePerPetal - PADDING_ANGLE / 2;
 
               const segments = petalGeometry[i];
 
@@ -192,12 +187,10 @@ export const NightingaleRose = ({ data, size }: NightingaleRoseProps) => {
                   {data.length <= MAX_LABELED_PETALS && (
                     <text
                       x={
-                        (maxRadius + 8) *
-                        Math.cos((startAngle + endAngle) / 2)
+                        (maxRadius + 8) * Math.cos((startAngle + endAngle) / 2)
                       }
                       y={
-                        (maxRadius + 8) *
-                        Math.sin((startAngle + endAngle) / 2)
+                        (maxRadius + 8) * Math.sin((startAngle + endAngle) / 2)
                       }
                       textAnchor="middle"
                       dominantBaseline="middle"

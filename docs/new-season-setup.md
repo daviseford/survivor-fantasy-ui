@@ -2,31 +2,39 @@
 
 This guide covers every step required to get a new season visible and functional on the site. Replace `XX` with the season number throughout.
 
-## 1. Gather Assets
+## 1. Scrape Contestant Data
 
-- **Player names** — full list of contestant names (save to `data/names.txt` or similar)
-- **Player images** — one headshot per player as `.jpg` (naming convention: `Survivor-XX-Cast-Firstname-Lastname.jpg`)
-- **Season logo** — the official season logo image (`.webp` or `.jpg`)
+Run the scraper to pull contestant names and metadata from the Survivor Wiki:
 
-## 2. Create the Season Data File
+```bash
+yarn scrape XX
+```
 
-Create `src/data/season_XX/index.ts` following the pattern in `src/data/season_46/index.ts`:
+This fetches the season's cast table and each contestant's wiki page. Output is saved to `data/scraped/season_XX.json` with names, ages, hometowns, occupations, and previous season appearances.
 
-1. Define a `Players` const array with all contestant names (`as const`)
-2. Define `PlayerName` and `SeasonNumber` types
-3. Create a `buildPlayer` helper with `season_num: XX` and `season_id: "season_XX"`
-4. Export these (all empty to start except players):
-   - `SEASON_XX_PLAYERS` — array of `buildPlayer()` calls with name, image path, and optional description
-   - `SEASON_XX_EPISODES` — empty array, fill in as episodes air
-   - `SEASON_XX_CHALLENGES` — empty record
-   - `SEASON_XX_ELIMINATIONS` — empty record
-   - `SEASON_XX_EVENTS` — empty record
+No local data file is needed — the scraper discovers contestant names directly from the wiki.
+
+## 2. Generate the Season Data File
+
+```bash
+yarn init-season XX
+```
+
+This reads the scraped JSON and creates `src/data/season_XX/index.ts` with:
+
+- `Players` const array with all contestant names
+- `PlayerName` and `SeasonNumber` types
+- `buildPlayer` helper
+- `SEASON_XX_PLAYERS` with scraped metadata (age, hometown, profession, previous seasons)
+- Empty `SEASON_XX_EPISODES`, `SEASON_XX_CHALLENGES`, `SEASON_XX_ELIMINATIONS`, `SEASON_XX_EVENTS`
 
 ## 3. Add Images to Public Directory
 
-1. Copy player images into `public/images/season_XX/`
-2. Copy the season logo into `public/images/season_XX/season-XX-logo.webp`
-3. Reference images in `buildPlayer()` calls as `/images/season_XX/Survivor-XX-Cast-Firstname-Lastname.jpg`
+1. Get player headshots as `.jpg` (naming convention: `Survivor-XX-Cast-Firstname-Lastname.jpg`)
+2. Get the official season logo (`.webp` or `.jpg`)
+3. Copy player images into `public/images/season_XX/`
+4. Copy the season logo into `public/images/season_XX/season-XX-logo.webp`
+5. Update image paths in the generated `src/data/season_XX/index.ts`
 
 ## 4. Register the Season
 
@@ -92,3 +100,14 @@ As episodes air, fill in the following in `src/data/season_XX/index.ts`:
 - **Game events** — add entries to `SEASON_XX_EVENTS` for idol finds, advantage plays, etc.
 
 After updating, re-click the upload button on `/admin` to sync changes to Firestore.
+
+## Re-scraping
+
+If you need to update contestant metadata after the initial setup (e.g., wiki data was updated), use the backfill command:
+
+```bash
+yarn scrape XX    # re-scrape latest data
+yarn backfill XX  # merge into existing season file
+```
+
+This preserves your image paths and episode data while updating player metadata.
