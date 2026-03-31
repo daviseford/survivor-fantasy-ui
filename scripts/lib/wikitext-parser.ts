@@ -329,12 +329,13 @@ function classifyElimination(
   voteString: string,
 ): ScrapedElimination["variant"] {
   const lower = finishText.toLowerCase();
-  // Sole Survivor is the winner — classify as FTC (filtered out of eliminations later)
-  if (lower.includes("sole survivor")) {
+  if (
+    lower.includes("sole survivor") ||
+    lower.includes("runner-up") ||
+    lower.includes("second runner-up")
+  ) {
     return "final_tribal_council";
   }
-  // Runner-ups are voted out at FTC — classify as tribal (matching Firestore convention)
-  // The make_final_tribal_council event is generated separately in scrape-results.ts
   if (lower.includes("evacuated") || lower.includes("medevac")) {
     return "medical";
   }
