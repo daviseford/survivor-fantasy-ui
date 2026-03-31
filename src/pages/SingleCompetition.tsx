@@ -17,6 +17,7 @@ import {
   IconTrophy,
   IconUsers,
 } from "@tabler/icons-react";
+import { EpisodeAdvanceControl } from "../components/EpisodeAdvanceControl";
 import { PlayerGroupGrid } from "../components/MyPlayers";
 import { PropBetScoring } from "../components/PropBetTables";
 import { ScoringBreakdownSection } from "../components/ScoringBreakdown";
@@ -27,6 +28,7 @@ import {
 } from "../components/ScoringTables";
 import { useCompetition } from "../hooks/useCompetition";
 import { useSeason } from "../hooks/useSeason";
+import { useUser } from "../hooks/useUser";
 
 const Section = ({
   title,
@@ -59,12 +61,15 @@ const Section = ({
 
 export const SingleCompetition = () => {
   const { data: competition } = useCompetition();
+  const { slimUser } = useUser();
 
   const { data: season } = useSeason(competition?.season_id);
 
   if (!competition || !season) return null;
 
   const episodeCount = season.episodes?.length ?? 0;
+  const isCreator = slimUser?.uid === competition.creator_uid;
+  const isWatchAlong = competition.current_episode !== null;
 
   return (
     <Stack gap="xl" p="lg">
@@ -76,7 +81,7 @@ export const SingleCompetition = () => {
           <Badge variant="light" color="gray" size="sm">
             {competition.participants.length} players
           </Badge>
-          {episodeCount > 0 && (
+          {episodeCount > 0 && !isWatchAlong && (
             <Badge variant="light" color="gray" size="sm">
               {episodeCount} {episodeCount === 1 ? "episode" : "episodes"}
             </Badge>
@@ -84,6 +89,12 @@ export const SingleCompetition = () => {
         </Group>
         <Title order={2}>{competition.competition_name}</Title>
       </Box>
+
+      <EpisodeAdvanceControl
+        competition={competition}
+        season={season}
+        isCreator={isCreator}
+      />
 
       <Section
         title="Teams"
