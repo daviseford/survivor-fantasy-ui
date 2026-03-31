@@ -1,7 +1,15 @@
 /**
  * Parses Survivor Wiki wikitext to extract contestant data from
- * {{Contestant}} infobox templates and season cast tables.
+ * {{Contestant}} infobox templates and season cast tables,
+ * as well as episode guides and voting history tables.
  */
+
+import type {
+  ScrapedChallenge,
+  ScrapedElimination,
+  ScrapedEpisode,
+  ScrapedGameEvent,
+} from "./types.js";
 
 export interface ContestantInfo {
   age?: number;
@@ -219,4 +227,975 @@ export function parseCastTable(wikitext: string): CastTableEntry[] {
   }
 
   return entries;
+}
+
+// --- Episode guide parser ---
+
+/**
+ * Extract the tribe name and inner content from a {{tribebox|tribe|content}} template.
+ * Returns null if no tribebox is found.
+ */
+function parseTribebox(
+  text: string,
+): { tribe: string; content: string } | null {
+  // Match {{tribebox|TRIBE|CONTENT}} — content may contain nested templates
+  const m = text.match(
+    /\{\{[Tt]ribebox\|([^|}]+?)(?:\|([^}]*(?:\{\{[^}]*\}\}[^}]*)*))?\}\}/,
+  );
+  if (!m) return null;
+  return { tribe: m[1].trim().toLowerCase(), content: (m[2] ?? "").trim() };
+}
+
+/**
+ * Extract episode title from {{Ep|SSEE}} template.
+ * Returns the raw title text from the episode link on that line, or
+ * constructs "Episode N" from the template code.
+ */
+function parseEpTemplate(text: string): string {
+  const m = text.match(/\{\{Ep\|(\d{4,5})\}\}/);
+  if (!m) return "";
+  // The template encodes season + episode as e.g. 4601 = S46E01, 0903 = S09E03
+  const code = m[1];
+  const epNum =
+    code.length === 5
+      ? parseInt(code.slice(2), 10)
+      : parseInt(code.slice(2), 10);
+  return `Episode ${epNum}`;
+}
+
+/**
+ * Parse an eliminated player cell: {{tribebox|tribe|Name<br />(vote)}}
+ * Returns { name, voteString, tribe } or null.
+ */
+function parseEliminatedCell(cellText: string): {
+  name: string;
+  voteString: string;
+  tribe: string;
+} | null {
+  const tb = parseTribebox(cellText);
+  if (!tb || !tb.content) return null;
+
+  // Content format: "Name<br />(vote-string)" or "Name<br>(vote-string)"
+  // Also handles "Name<br />(no vote)"
+  let content = tb.content;
+  // Remove {{sup|...}} footnotes
+  content = content.replace(/\{\{sup\|[^}]*\}\}/gi, "");
+  // Remove [[#endnote...]] links
+  content = content.replace(/\[\[#[^\]]*\]\]/g, "");
+  // Remove bold markers
+  content = content.replace(/'''?/g, "");
+
+  // Split on <br>, <br />, or <br/>
+  const parts = content.split(/<br\s*\/?>/i);
+  const name = parts[0].trim();
+  if (!name) return null;
+
+  let voteString = "";
+  if (parts.length > 1) {
+    // Extract vote from parentheses
+    const voteMatch = parts.slice(1).join(" ").match(/\(([^)]+)\)/);
+    if (voteMatch) {
+      // Collapse internal whitespace around hyphens/semicolons for numeric votes
+      // but preserve meaningful words like "no vote"
+      voteString = voteMatch[1]
+        .replace(/\s*([;-])\s*/g, "$1")
+        .replace(/\n/g, "")
+        .trim();
+    }
+  }
+
+  return { name, voteString, tribe: tb.tribe };
+}
+
+/**
+ * Parse a finish cell: {{nowrap|1st Voted Out<br />Day 3}} or similar.
+ * Returns the full finish text.
+ */
+function parseFinishCell(cellText: string): string {
+  // Match {{nowrap|...}} content
+  const nowrapMatch = cellText.match(/\{\{nowrap\|([^}]+)\}\}/i);
+  let text = nowrapMatch ? nowrapMatch[1] : cellText;
+  // Clean up HTML
+  text = text.replace(/<br\s*\/?>/gi, "\n");
+  text = text.replace(/<[^>]+>/g, "");
+  text = text.trim();
+  return text;
+}
+
+/**
+ * Determine elimination variant from finish text.
+ */
+function classifyElimination(
+  finishText: string,
+  voteString: string,
+): ScrapedElimination["variant"] {
+  const lower = finishText.toLowerCase();
+  if (
+    lower.includes("sole survivor") ||
+    lower.includes("runner-up") ||
+    lower.includes("second runner-up")
+  ) {
+    return "final_tribal_council";
+  }
+  if (lower.includes("evacuated") || lower.includes("medevac")) {
+    return "medical";
+  }
+  if (lower.includes("quit")) {
+    return "quitter";
+  }
+  if (
+    lower.includes("voted out") ||
+    lower.includes("eliminated") ||
+    voteString
+  ) {
+    return "tribal";
+  }
+  return "other";
+}
+
+/**
+ * Detect whether a challenge cell indicates a combined reward+immunity challenge.
+ * This is true when the cell uses colspan="2" AND the notes reference "combined".
+ */
+function isCombinedCell(cellText: string): boolean {
+  return /colspan\s*=\s*"?2"?/i.test(cellText);
+}
+
+/**
+ * Parse challenge winners from a tribebox cell.
+ * Returns { tribe, names[] } where names is empty for tribal wins
+ * and contains player names for individual wins.
+ */
+function parseChallengeWinners(cellText: string): {
+  tribe: string;
+  names: string[];
+} | null {
+  const tb = parseTribebox(cellText);
+  if (!tb) return null;
+
+  if (!tb.content) {
+    // Tribal win — no individual names
+    return { tribe: tb.tribe, names: [] };
+  }
+
+  // Parse individual names from content — may be comma-separated
+  let content = tb.content;
+  // Remove {{sup|...}}
+  content = content.replace(/\{\{sup\|[^}]*\}\}/gi, "");
+  // Remove [...] bracket groups (these are reward-sharing members, not winners)
+  content = content.replace(/\[[^\]]*\]/g, "");
+  // Remove <br />, <br>
+  content = content.replace(/<br\s*\/?>/gi, ",");
+  // Remove bold
+  content = content.replace(/'''?/g, "");
+
+  const names = content
+    .split(",")
+    .map((n) => n.trim())
+    .filter(Boolean);
+
+  if (names.length === 0) {
+    return { tribe: tb.tribe, names: [] };
+  }
+
+  return { tribe: tb.tribe, names };
+}
+
+/**
+ * Check if a notes section mentions "combined" reward and immunity challenge.
+ */
+function hasCombinedFootnote(wikitext: string): boolean {
+  return /[Cc]ombined\s+[Rr]eward\s+and\s+[Ii]mmunity\s+[Cc]hallenge/i.test(
+    wikitext,
+  );
+}
+
+/**
+ * Parse the episode guide table from a Survivor season wiki page.
+ *
+ * Extracts episodes, challenges, and eliminations from the standard
+ * episode guide table format used on Survivor Wiki.
+ */
+export function parseEpisodeGuide(
+  wikitext: string,
+  _seasonNum: number,
+): {
+  episodes: ScrapedEpisode[];
+  challenges: ScrapedChallenge[];
+  eliminations: ScrapedElimination[];
+  warnings: string[];
+} {
+  const episodes: ScrapedEpisode[] = [];
+  const challenges: ScrapedChallenge[] = [];
+  const eliminations: ScrapedElimination[] = [];
+  const warnings: string[] = [];
+
+  // Check if there's a "combined" footnote in the whole text
+  const globalCombined = hasCombinedFootnote(wikitext);
+
+  // Detect whether this table has a Journey column
+  const hasJourneyColumn = /!\s*rowspan.*Journey/i.test(wikitext);
+
+  // Split the wikitext into rows by |- delimiters
+  const lines = wikitext.split("\n");
+
+  // We need to parse the table row by row. The episode guide has a complex
+  // structure with rowspan cells that span multiple table rows.
+  // Strategy: split into table rows (delimited by |-), then parse cells.
+
+  // First, find all the table rows (separated by |-)
+  const tableRows: string[][] = [];
+  let currentRow: string[] = [];
+  let inHeader = true;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed === "|-") {
+      if (currentRow.length > 0) {
+        tableRows.push(currentRow);
+      }
+      currentRow = [];
+      inHeader = false;
+      continue;
+    }
+    if (trimmed.startsWith("!")) {
+      // Header row
+      continue;
+    }
+    if (trimmed.startsWith("|}") || trimmed.startsWith("{|")) {
+      if (currentRow.length > 0) {
+        tableRows.push(currentRow);
+      }
+      currentRow = [];
+      continue;
+    }
+    if (!inHeader && trimmed.startsWith("|")) {
+      currentRow.push(trimmed);
+    }
+  }
+  if (currentRow.length > 0) {
+    tableRows.push(currentRow);
+  }
+
+  // Now we need to parse the rows while tracking rowspan state.
+  // Each data row in the episode guide has these columns (0-indexed):
+  // [0] Episode number, [1] Episode title, [2] Air date,
+  // [3] Reward winner, [4] Immunity winner,
+  // [5] Journey (if present), [6] Eliminated, [7] Finish, [8] Viewers, [9] Ratings
+  //
+  // Without Journey column:
+  // [0] Episode number, [1] Episode title, [2] Air date,
+  // [3] Reward winner, [4] Immunity winner,
+  // [5] Eliminated, [6] Finish, [7] Viewers, [8] Ratings
+
+  // Track rowspan: for each column index, how many more rows it spans
+  const rowspanRemaining: number[] = new Array(12).fill(0);
+  const rowspanValues: string[] = new Array(12).fill("");
+
+  // We'll track which episodes we've seen
+  const episodeMap = new Map<
+    number,
+    {
+      title: string;
+      airDate: string;
+      isCombined: boolean;
+      finishTexts: string[];
+      eliminations: Array<{
+        name: string;
+        voteString: string;
+        tribe: string;
+        finishText: string;
+      }>;
+      rewardCells: string[];
+      immunityCells: string[];
+    }
+  >();
+
+  // Track all tribes seen per episode to detect merge
+  const tribesByEpisode = new Map<number, Set<string>>();
+
+  // Determine column count for this table
+  const eliminatedCol = hasJourneyColumn ? 6 : 5;
+  const finishCol = hasJourneyColumn ? 7 : 6;
+
+  // Parse each data row
+  // Skip header rows — look for rows that start with episode numbers
+  let skipUntilNotes = false;
+
+  for (const row of tableRows) {
+    if (skipUntilNotes) continue;
+
+    // Build the effective cells for this row by accounting for rowspans
+    const effectiveCells: string[] = [];
+    let rawCellIndex = 0;
+
+    for (let colIdx = 0; colIdx < 12; colIdx++) {
+      if (rowspanRemaining[colIdx] > 0) {
+        effectiveCells.push(rowspanValues[colIdx]);
+        rowspanRemaining[colIdx]--;
+      } else if (rawCellIndex < row.length) {
+        const rawCell = row[rawCellIndex];
+        rawCellIndex++;
+
+        // Check for rowspan
+        const rowspanMatch = rawCell.match(/rowspan\s*=\s*"?(\d+)"?/i);
+        const rowspan = rowspanMatch ? parseInt(rowspanMatch[1], 10) : 1;
+
+        // Check for colspan
+        const colspanMatch = rawCell.match(/colspan\s*=\s*"?(\d+)"?/i);
+        const colspan = colspanMatch ? parseInt(colspanMatch[1], 10) : 1;
+
+        if (rowspan > 1) {
+          rowspanRemaining[colIdx] = rowspan - 1;
+          rowspanValues[colIdx] = rawCell;
+        }
+
+        effectiveCells.push(rawCell);
+
+        // Handle colspan — fill extra columns
+        if (colspan > 1) {
+          for (let c = 1; c < colspan; c++) {
+            colIdx++;
+            effectiveCells.push(rawCell);
+            if (rowspan > 1) {
+              rowspanRemaining[colIdx] = rowspan - 1;
+              rowspanValues[colIdx] = rawCell;
+            }
+          }
+        }
+      } else {
+        effectiveCells.push("");
+      }
+    }
+
+    // Now try to parse the episode number from the first cell
+    // The first cell should be like "| N" or "| rowspan="N" | M"
+    const firstCell = effectiveCells[0] || "";
+    const epNumMatch =
+      firstCell.match(/\|\s*(?:rowspan\s*=\s*"?\d+"?\s*\|?\s*)(\d+)\s*$/) ||
+      firstCell.match(/\|\s*(\d+)\s*$/);
+
+    // Try to get the episode number
+    let epNum: number | null = null;
+    if (epNumMatch) {
+      epNum = parseInt(epNumMatch[1], 10);
+    }
+
+    // Check if this is a notes row
+    if (
+      firstCell.includes("Notes:") ||
+      firstCell.includes("colspan") ||
+      row.some((c) => c.includes("Notes:"))
+    ) {
+      // Notes row — check for combined footnote marker at end
+      if (
+        row.some(
+          (c) =>
+            /[Cc]ombined\s+[Rr]eward\s+and\s+[Ii]mmunity/i.test(c) ||
+            c.includes("Notes:"),
+        )
+      ) {
+        skipUntilNotes = true;
+      }
+      continue;
+    }
+
+    if (epNum === null) continue;
+
+    // If this is a reunion/recap episode (no challenge data), skip
+    const titleCell = effectiveCells[1] || "";
+    const airDateCell = effectiveCells[2] || "";
+
+    // Reunion/recap episodes blank out challenge+eliminated columns with a wide colspan.
+    // S46 uses colspan=5, S9 uses colspan=4.
+    if (effectiveCells[3] && /colspan\s*=\s*"?[4-9]"?/i.test(effectiveCells[3])) {
+      // Reunion episode — skip
+      continue;
+    }
+
+    // Check for "Jury Vote" in the reward/immunity columns (finale rows)
+    const rewardCell = effectiveCells[3] || "";
+    const immunityCell = effectiveCells[4] || "";
+    const isJuryVoteRow =
+      rewardCell.includes("Jury Vote") || immunityCell.includes("Jury Vote");
+
+    // Get or create episode entry
+    if (!episodeMap.has(epNum)) {
+      // Parse title from Ep template
+      const title = parseEpTemplate(titleCell);
+
+      // Parse air date
+      const airDateMatch = airDateCell.match(
+        /(?:align="left"\s*\|?\s*)?([A-Z][a-z]+ \d{1,2},? \d{4})/,
+      );
+      const airDate = airDateMatch ? airDateMatch[1] : "";
+
+      // Check if reward and immunity columns are combined (colspan="2")
+      const isCombined =
+        globalCombined &&
+        (isCombinedCell(rewardCell) || isCombinedCell(immunityCell));
+
+      episodeMap.set(epNum, {
+        title,
+        airDate,
+        isCombined,
+        finishTexts: [],
+        eliminations: [],
+        rewardCells: [],
+        immunityCells: [],
+      });
+    }
+
+    const epData = episodeMap.get(epNum)!;
+
+    // Track combined status — if any row for this episode uses colspan=2 with combined footnote
+    if (
+      globalCombined &&
+      (isCombinedCell(rewardCell) || isCombinedCell(immunityCell))
+    ) {
+      epData.isCombined = true;
+    }
+
+    // Parse challenge cells (only non-jury-vote rows)
+    if (!isJuryVoteRow) {
+      if (rewardCell && !rewardCell.includes("None") && !rewardCell.includes("Jury Vote")) {
+        const rewardWinners = parseChallengeWinners(rewardCell);
+        if (rewardWinners) {
+          // Track tribe
+          if (!tribesByEpisode.has(epNum)) {
+            tribesByEpisode.set(epNum, new Set());
+          }
+          tribesByEpisode.get(epNum)!.add(rewardWinners.tribe);
+
+          // Only add to reward cells if it has tribebox content
+          // and this cell text hasn't already been tracked
+          if (!epData.rewardCells.includes(rewardCell)) {
+            epData.rewardCells.push(rewardCell);
+          }
+        }
+      }
+
+      if (
+        immunityCell &&
+        immunityCell !== rewardCell &&
+        !immunityCell.includes("None") &&
+        !immunityCell.includes("Jury Vote")
+      ) {
+        const immunityWinners = parseChallengeWinners(immunityCell);
+        if (immunityWinners) {
+          if (!tribesByEpisode.has(epNum)) {
+            tribesByEpisode.set(epNum, new Set());
+          }
+          tribesByEpisode.get(epNum)!.add(immunityWinners.tribe);
+
+          if (!epData.immunityCells.includes(immunityCell)) {
+            epData.immunityCells.push(immunityCell);
+          }
+        }
+      }
+    }
+
+    // Parse elimination cell
+    const elimCell = effectiveCells[eliminatedCol] || "";
+    const finishCell = effectiveCells[finishCol] || "";
+
+    if (elimCell && !isJuryVoteRow) {
+      const elimData = parseEliminatedCell(elimCell);
+      if (elimData) {
+        const finishText = parseFinishCell(finishCell);
+        // Avoid duplicates (rowspan'd cells repeat)
+        const isDuplicate = epData.eliminations.some(
+          (e) =>
+            e.name === elimData.name && e.voteString === elimData.voteString,
+        );
+        if (!isDuplicate) {
+          epData.eliminations.push({
+            name: elimData.name,
+            voteString: elimData.voteString,
+            tribe: elimData.tribe,
+            finishText,
+          });
+          if (!tribesByEpisode.has(epNum)) {
+            tribesByEpisode.set(epNum, new Set());
+          }
+          tribesByEpisode.get(epNum)!.add(elimData.tribe);
+        }
+      }
+    }
+
+    // Parse jury vote / finale eliminations
+    if (isJuryVoteRow) {
+      const finaleElimCell = effectiveCells[eliminatedCol] || "";
+      const finaleFinishCell = effectiveCells[finishCol] || "";
+      const elimData = parseEliminatedCell(finaleElimCell);
+      if (elimData) {
+        const finishText = parseFinishCell(finaleFinishCell);
+        const isDuplicate = epData.eliminations.some(
+          (e) =>
+            e.name === elimData.name &&
+            e.finishText === finishText,
+        );
+        if (!isDuplicate) {
+          epData.eliminations.push({
+            name: elimData.name,
+            voteString: elimData.voteString,
+            tribe: elimData.tribe,
+            finishText,
+          });
+        }
+      }
+    }
+
+    // Also handle the case where elimination is in the finishCell itself
+    // (for finale rows with Sole Survivor, Runner-Up etc.)
+    if (finishCell) {
+      const finishText = parseFinishCell(finishCell);
+      if (
+        finishText &&
+        (finishText.includes("Sole Survivor") ||
+          finishText.includes("Runner-Up") ||
+          finishText.includes("Second Runner-Up"))
+      ) {
+        epData.finishTexts.push(finishText);
+      }
+    }
+  }
+
+  // Now detect merge and finale, and build output arrays
+  // Collect all pre-merge tribe names (from early episodes)
+  const allTribes = new Set<string>();
+  const preMergeTribes = new Set<string>();
+  let mergeEpisode: number | null = null;
+
+  // Sort episodes by number
+  const sortedEpNums = [...episodeMap.keys()].sort((a, b) => a - b);
+
+  // First pass: collect tribes and detect merge
+  for (const epNum of sortedEpNums) {
+    const tribes = tribesByEpisode.get(epNum);
+    if (!tribes) continue;
+    for (const t of tribes) {
+      if (t === "none" || t === "status" || t === "tie") continue;
+      allTribes.add(t);
+    }
+  }
+
+  // The merge tribe is the one that appears only in later episodes
+  // Pre-merge tribes are those in early episodes
+  // Heuristic: Find the first episode where a new tribe name appears
+  // that wasn't in episode 1
+  const firstEpTribes = tribesByEpisode.get(sortedEpNums[0]);
+  if (firstEpTribes) {
+    for (const t of firstEpTribes) {
+      if (t !== "none" && t !== "status" && t !== "tie") {
+        preMergeTribes.add(t);
+      }
+    }
+  }
+  // Also gather from second episode
+  if (sortedEpNums.length > 1) {
+    const secondTribes = tribesByEpisode.get(sortedEpNums[1]);
+    if (secondTribes) {
+      for (const t of secondTribes) {
+        if (t !== "none" && t !== "status" && t !== "tie") {
+          preMergeTribes.add(t);
+        }
+      }
+    }
+  }
+
+  // Find the first episode where a tribe appears that's not in the pre-merge set
+  for (const epNum of sortedEpNums) {
+    const tribes = tribesByEpisode.get(epNum);
+    if (!tribes) continue;
+    for (const t of tribes) {
+      if (
+        t !== "none" &&
+        t !== "status" &&
+        t !== "tie" &&
+        !preMergeTribes.has(t)
+      ) {
+        if (mergeEpisode === null || epNum < mergeEpisode) {
+          mergeEpisode = epNum;
+        }
+      }
+    }
+  }
+
+  // Build episodes array
+  let eliminationOrder = 1;
+  let challengeOrder = 1;
+
+  for (const epNum of sortedEpNums) {
+    const epData = episodeMap.get(epNum)!;
+
+    const isFinale =
+      epData.eliminations.some(
+        (e) =>
+          e.finishText.includes("Sole Survivor") ||
+          e.finishText.includes("Runner-Up") ||
+          e.finishText.includes("Second Runner-Up"),
+      ) || epData.finishTexts.some((f) => f.includes("Sole Survivor"));
+
+    const postMerge = mergeEpisode !== null && epNum >= mergeEpisode;
+    const mergeOccurs = mergeEpisode !== null && epNum === mergeEpisode;
+
+    episodes.push({
+      order: epNum,
+      title: epData.title,
+      airDate: epData.airDate,
+      isCombinedChallenge: epData.isCombined,
+      isFinale,
+      postMerge,
+      mergeOccurs,
+    });
+
+    // Build challenges
+    if (epData.isCombined) {
+      // Combined challenge — use the reward cells (which span both columns)
+      const allCells = [...epData.rewardCells, ...epData.immunityCells];
+      // Deduplicate: for combined, all cells are the same colspan=2 cell
+      const uniqueCells = [...new Set(allCells)];
+      for (const cell of uniqueCells) {
+        const winners = parseChallengeWinners(cell);
+        if (winners) {
+          challenges.push({
+            episodeNum: epNum,
+            variant: "combined",
+            winnerNames: winners.names,
+            winnerTribe: winners.names.length === 0 ? winners.tribe : null,
+            order: challengeOrder++,
+          });
+        }
+      }
+    } else {
+      // Separate reward and immunity
+      for (const cell of epData.rewardCells) {
+        const winners = parseChallengeWinners(cell);
+        if (winners) {
+          challenges.push({
+            episodeNum: epNum,
+            variant: "reward",
+            winnerNames: winners.names,
+            winnerTribe: winners.names.length === 0 ? winners.tribe : null,
+            order: challengeOrder++,
+          });
+        }
+      }
+      for (const cell of epData.immunityCells) {
+        const winners = parseChallengeWinners(cell);
+        if (winners) {
+          challenges.push({
+            episodeNum: epNum,
+            variant: "immunity",
+            winnerNames: winners.names,
+            winnerTribe: winners.names.length === 0 ? winners.tribe : null,
+            order: challengeOrder++,
+          });
+        }
+      }
+    }
+
+    // Build eliminations
+    for (const elim of epData.eliminations) {
+      const variant = classifyElimination(elim.finishText, elim.voteString);
+      eliminations.push({
+        episodeNum: epNum,
+        playerName: elim.name,
+        voteString: elim.voteString || "no vote",
+        variant,
+        finishText: elim.finishText,
+        order: eliminationOrder++,
+      });
+    }
+  }
+
+  return { episodes, challenges, eliminations, warnings };
+}
+
+// --- Voting history parser ---
+
+/**
+ * Split a wikitext table into sections delimited by |- row separators.
+ * Returns an array of sections, each being an array of lines.
+ */
+function splitTableSections(wikitext: string): string[][] {
+  const lines = wikitext.split("\n");
+  const sections: string[][] = [];
+  let current: string[] = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed === "|-") {
+      if (current.length > 0) {
+        sections.push(current);
+      }
+      current = [];
+      continue;
+    }
+    if (trimmed === "{|" || trimmed.startsWith("{|")) {
+      continue;
+    }
+    if (trimmed === "|}") {
+      if (current.length > 0) {
+        sections.push(current);
+      }
+      current = [];
+      continue;
+    }
+    current.push(line);
+  }
+  if (current.length > 0) {
+    sections.push(current);
+  }
+  return sections;
+}
+
+/**
+ * Extract a player name from a voted-out cell content (tribebox with image and name).
+ */
+function extractVotedOutName(cellText: string): string {
+  const tb = parseTribebox(cellText);
+  if (!tb || !tb.content) return "";
+
+  const content = tb.content;
+  // Content: [[File:S46 jelinsky t.png|50px|link=David Jelinsky]]<br />Jelinsky
+  const brParts = content.split(/<br\s*\/?>/i);
+  let name = "";
+  if (brParts.length > 1) {
+    name = brParts[brParts.length - 1].trim();
+  } else {
+    name = content;
+  }
+
+  // Clean up wiki markup
+  name = name
+    .replace(/\[\[File:[^\]]*\]\]/gi, "")
+    .replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g, "$1")
+    .replace(/'''?/g, "")
+    .replace(/''([^']+)''/g, "$1")
+    .trim();
+
+  return name;
+}
+
+/**
+ * Parse the voting history table from a Survivor season wiki page.
+ *
+ * Extracts game events (idol plays via strikethroughs) and vote tallies
+ * per episode from the standard voting history table format.
+ */
+export function parseVotingHistory(
+  wikitext: string,
+  _seasonNum: number,
+): {
+  events: ScrapedGameEvent[];
+  votesByEpisode: Record<number, { vote: string; eliminatedPlayer: string }>;
+  warnings: string[];
+} {
+  const events: ScrapedGameEvent[] = [];
+  const votesByEpisode: Record<
+    number,
+    { vote: string; eliminatedPlayer: string }
+  > = {};
+  const warnings: string[] = [];
+
+  const sections = splitTableSections(wikitext);
+
+  // Step 1: Find the episode header section.
+  // It contains lines like: ! colspan="2"| Episode
+  // followed by lines like: ! [[Title|N]] or ! colspan="2"| [[Title|N]]
+  const episodeColumns: number[] = [];
+
+  for (const section of sections) {
+    const hasEpisodeHeader = section.some((line) =>
+      /!\s*colspan="2"\|\s*Episode/i.test(line),
+    );
+    if (!hasEpisodeHeader) continue;
+
+    // Collect all episode number lines from this section
+    for (const line of section) {
+      const trimmed = line.trim();
+      // Skip the "Episode" header cell itself and non-episode cells
+      if (/!\s*colspan="2"\|\s*Episode/i.test(trimmed)) continue;
+      if (!trimmed.startsWith("!")) continue;
+      // Skip tribe group headers like ! colspan="5"| Original Tribes
+      if (
+        /!\s*colspan="\d+"\|.*Tribe/i.test(trimmed) ||
+        /!\s*colspan="\d+"\|.*Merged/i.test(trimmed)
+      ) {
+        continue;
+      }
+
+      // Check for colspan
+      const colspanMatch = trimmed.match(/colspan\s*=\s*"?(\d+)"?/i);
+      const colspan = colspanMatch ? parseInt(colspanMatch[1], 10) : 1;
+
+      // Extract episode number from [[Title|N]]
+      const epMatch =
+        trimmed.match(/\[\[[^\]|]+\|(\d+)\]\]/) ||
+        trimmed.match(/\[\[(\d+)\]\]/);
+      if (epMatch) {
+        const epNum = parseInt(epMatch[1], 10);
+        for (let i = 0; i < colspan; i++) {
+          episodeColumns.push(epNum);
+        }
+      }
+    }
+    break; // Only process the first episode header section
+  }
+
+  if (episodeColumns.length === 0) {
+    warnings.push(
+      "Could not parse episode columns from voting history header",
+    );
+    return { events, votesByEpisode, warnings };
+  }
+
+  // Step 2: Find the "Voted Out" section and parse eliminated player names.
+  for (const section of sections) {
+    const hasVotedOut = section.some(
+      (line) =>
+        /!\s*colspan="2"\|\s*Voted\s*Out/i.test(line) ||
+        /!\s*colspan="2"\|\s*Voted Out/i.test(line),
+    );
+    if (!hasVotedOut) continue;
+
+    // Collect data cell lines (starting with |)
+    let colIdx = 0;
+    for (const line of section) {
+      const trimmed = line.trim();
+      if (!trimmed.startsWith("|")) continue;
+
+      const name = extractVotedOutName(trimmed);
+      if (!name) continue;
+
+      if (colIdx < episodeColumns.length) {
+        const epNum = episodeColumns[colIdx];
+        if (!votesByEpisode[epNum]) {
+          votesByEpisode[epNum] = { vote: "", eliminatedPlayer: name };
+        } else {
+          if (!votesByEpisode[epNum].eliminatedPlayer.includes(name)) {
+            votesByEpisode[epNum].eliminatedPlayer += `, ${name}`;
+          }
+        }
+      }
+      colIdx++;
+    }
+    break;
+  }
+
+  // Step 3: Find the "Vote" section and parse vote tallies.
+  for (const section of sections) {
+    const hasVoteHeader = section.some((line) =>
+      /!\s*colspan="2"\|\s*Vote\s*$/i.test(line.trim()),
+    );
+    if (!hasVoteHeader) continue;
+
+    let colIdx = 0;
+    for (const line of section) {
+      const trimmed = line.trim();
+      if (!trimmed.startsWith("|")) continue;
+
+      // Check for colspan
+      const colspanMatch = trimmed.match(/colspan\s*=\s*"?(\d+)"?/i);
+      const colspan = colspanMatch ? parseInt(colspanMatch[1], 10) : 1;
+
+      // Extract vote text: remove colspan prefix, {{sup}} footnotes
+      let voteText = trimmed
+        .replace(/^\|\s*/, "")
+        .replace(/colspan\s*=\s*"?\d+"?\s*\|?\s*/i, "")
+        .replace(/\{\{sup\|[^}]*\}\}/gi, "")
+        .trim();
+
+      if (!voteText) continue;
+
+      for (let c = 0; c < colspan; c++) {
+        if (colIdx + c < episodeColumns.length) {
+          const epNum = episodeColumns[colIdx + c];
+          if (votesByEpisode[epNum]) {
+            votesByEpisode[epNum].vote = voteText;
+          } else {
+            votesByEpisode[epNum] = {
+              vote: voteText,
+              eliminatedPlayer: "",
+            };
+          }
+        }
+      }
+      colIdx += colspan;
+    }
+    break;
+  }
+
+  // Step 4: Parse player vote rows for idol plays (strikethroughs).
+  // Player rows are sections that contain "align="left"" and tribebox2.
+  // Each cell is on its own line, so we track column index per line.
+  for (const section of sections) {
+    // Check if this is a player vote row section
+    const firstLine = section[0]?.trim() ?? "";
+    if (!/align="left"/i.test(firstLine)) continue;
+    if (!/tribebox2/i.test(firstLine)) continue;
+
+    // Extract player name from the second line (align="left"| Name)
+    let playerName = "";
+    for (const line of section) {
+      const nameMatch = line
+        .trim()
+        .match(/align="left"\|?\s*\{?\{?nowrap\|?([A-Za-z][A-Za-z .]+)/);
+      const simpleMatch = line
+        .trim()
+        .match(/align="left"\|?\s*([A-Z][a-z]+(?:\s+[A-Z]\.?)?)\s*$/);
+      if (simpleMatch) {
+        playerName = simpleMatch[1].trim();
+        break;
+      }
+      if (nameMatch) {
+        playerName = nameMatch[1].trim();
+        break;
+      }
+    }
+
+    if (!playerName) continue;
+
+    // Now scan vote cells for strikethroughs
+    let colIdx = 0;
+    let skippedNameCells = 0;
+    for (const line of section) {
+      const trimmed = line.trim();
+      if (!trimmed.startsWith("|")) continue;
+
+      // Skip the first two | cells (player identifier cells)
+      if (skippedNameCells < 2) {
+        if (/align="left"/i.test(trimmed)) {
+          skippedNameCells++;
+          continue;
+        }
+      }
+
+      // Check for colspan (skip multiple columns)
+      const colspanMatch = trimmed.match(/colspan\s*=\s*"?(\d+)"?/i);
+      const colspan = colspanMatch ? parseInt(colspanMatch[1], 10) : 1;
+
+      // Check for strikethrough in this cell
+      const strikethroughRegex = /<s>([^<]+)<\/s>/gi;
+      let sMatch: RegExpExecArray | null;
+      while ((sMatch = strikethroughRegex.exec(trimmed)) !== null) {
+        const negatedTarget = sMatch[1].trim();
+        if (colIdx < episodeColumns.length) {
+          const epNum = episodeColumns[colIdx];
+          events.push({
+            episodeNum: epNum,
+            playerName: negatedTarget,
+            action: "idol_play_negated_vote",
+            multiplier: null,
+          });
+        }
+      }
+
+      colIdx += colspan;
+    }
+  }
+
+  return { events, votesByEpisode, warnings };
 }

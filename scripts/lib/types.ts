@@ -17,3 +17,54 @@ export interface ScrapeResult {
   players: ScrapedPlayer[];
   unmatched: ScrapedPlayer[];
 }
+
+// --- Gameplay scrape types ---
+
+export interface ScrapedEpisode {
+  order: number;
+  title: string;
+  airDate: string;
+  isCombinedChallenge: boolean;
+  isFinale: boolean;
+  postMerge: boolean;
+  mergeOccurs: boolean;
+}
+
+export interface ScrapedChallenge {
+  episodeNum: number;
+  variant: "reward" | "immunity" | "combined";
+  winnerNames: string[];
+  winnerTribe: string | null;
+  order: number;
+}
+
+export interface ScrapedElimination {
+  episodeNum: number;
+  playerName: string;
+  voteString: string;
+  variant:
+    | "tribal"
+    | "medical"
+    | "quitter"
+    | "final_tribal_council"
+    | "other";
+  finishText: string;
+  order: number;
+}
+
+export interface ScrapedGameEvent {
+  episodeNum: number;
+  playerName: string;
+  action: string;
+  multiplier: number | null;
+}
+
+export interface ScrapeResultsOutput {
+  seasonNum: number;
+  scrapedAt: string;
+  episodes: ScrapedEpisode[];
+  challenges: ScrapedChallenge[];
+  eliminations: ScrapedElimination[];
+  events: ScrapedGameEvent[];
+  warnings: string[];
+}
