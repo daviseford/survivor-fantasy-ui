@@ -11,6 +11,7 @@ import {
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconLogin, IconUserPlus } from "@tabler/icons-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreateDraft } from "../hooks/useCreateDraft";
 import { useSeason } from "../hooks/useSeason";
@@ -23,8 +24,11 @@ export const SingleSeason = () => {
   const { data: season, isLoading } = useSeason();
   const { slimUser } = useUser();
   const { createDraft } = useCreateDraft();
+  const [isCreating, setIsCreating] = useState(false);
 
   const handleCreateDraft = async () => {
+    if (isCreating) return;
+    setIsCreating(true);
     const draftId = await createDraft();
     navigate(`/seasons/${season?.id}/draft/${draftId}`);
   };
@@ -62,6 +66,7 @@ export const SingleSeason = () => {
             <Button
               size="sm"
               onClick={handleCreateDraft}
+              loading={isCreating}
               leftSection={<IconUserPlus size={16} />}
             >
               Start a draft
@@ -110,6 +115,7 @@ export const SingleSeason = () => {
             <Button
               size="md"
               onClick={handleCreateDraft}
+              loading={isCreating}
               leftSection={<IconUserPlus size={18} />}
             >
               Start a draft with {season.name}
