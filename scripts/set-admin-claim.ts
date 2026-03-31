@@ -16,6 +16,9 @@ async function main() {
 
   console.log(`Successfully set custom claims for ${user.email} (${uid}):`);
   console.log(JSON.stringify(newClaims, null, 2));
+  console.log(
+    "\nThe user must sign out and back in for the new claims to take effect.",
+  );
 }
 
 main().catch((err) => {
