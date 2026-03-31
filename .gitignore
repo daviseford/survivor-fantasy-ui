@@ -147,3 +147,6 @@ e2e/.auth/
 /playwright-report/
 /docs/brainstorms
 /.claude/worktrees
+
+# Scraped data (ephemeral working output)
+data/scraped/*.json
