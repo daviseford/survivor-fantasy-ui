@@ -953,13 +953,29 @@ export function parseEpisodeGuide(
     for (const entry of sortedEntries) {
       const winners = parseChallengeWinners(entry.cell);
       if (winners) {
-        challenges.push({
-          episodeNum: epNum,
-          variant: entry.variant,
-          winnerNames: winners.names,
-          winnerTribe: winners.names.length === 0 ? winners.tribe : null,
-          order: challengeOrder++,
-        });
+        // Merge consecutive individual winners of the same variant into one challenge.
+        // This handles multi-row episodes where each row has a different reward winner
+        // but they're all from the same challenge (e.g., S9 Ep12 with 3 reward winners).
+        const prevChallenge =
+          challenges.length > 0 ? challenges[challenges.length - 1] : null;
+        if (
+          prevChallenge &&
+          prevChallenge.episodeNum === epNum &&
+          prevChallenge.variant === entry.variant &&
+          prevChallenge.winnerNames.length > 0 &&
+          winners.names.length > 0
+        ) {
+          // Merge winners into the previous challenge
+          prevChallenge.winnerNames.push(...winners.names);
+        } else {
+          challenges.push({
+            episodeNum: epNum,
+            variant: entry.variant,
+            winnerNames: winners.names,
+            winnerTribe: winners.names.length === 0 ? winners.tribe : null,
+            order: challengeOrder++,
+          });
+        }
       }
     }
 
