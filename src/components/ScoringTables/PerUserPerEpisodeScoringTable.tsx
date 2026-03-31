@@ -2,15 +2,14 @@ import { Table, Text } from "@mantine/core";
 import { IconTrophy } from "@tabler/icons-react";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
-import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
 
 export const PerUserPerEpisodeScoringTable = () => {
   const { data: competition } = useCompetition();
-  const { data: season } = useSeason(competition?.season_id);
   const { slimUser } = useUser();
 
-  const { pointsByUserPerEpisodeWithPropBets } = useScoringCalculations();
+  const { filteredEpisodes, pointsByUserPerEpisodeWithPropBets } =
+    useScoringCalculations();
 
   const sortedEntries = Object.entries(pointsByUserPerEpisodeWithPropBets).sort(
     (a, b) => b[1].total - a[1].total,
@@ -91,7 +90,7 @@ export const PerUserPerEpisodeScoringTable = () => {
               Total
             </Table.Th>
             <Table.Th>Participant</Table.Th>
-            {season?.episodes.map((x) => (
+            {filteredEpisodes.map((x) => (
               <Table.Th key={x.id} w={60} ta="center">
                 Ep {x.order}
               </Table.Th>

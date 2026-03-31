@@ -13,8 +13,6 @@ import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { useCompetition } from "../../hooks/useCompetition";
-import { useEliminations } from "../../hooks/useEliminations";
-import { useEvents } from "../../hooks/useEvents";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
@@ -71,12 +69,15 @@ const SortableHeader = ({
 export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
   const { data: competition } = useCompetition();
   const { data: season } = useSeason(competition?.season_id);
-  const { data: eliminations } = useEliminations(competition?.season_id);
-  const { data: events } = useEvents(season?.id);
   const { slimUser } = useUser();
 
-  const { survivorPointsByEpisode, survivorPointsTotalSeason } =
-    useScoringCalculations();
+  const {
+    filteredEpisodes,
+    filteredEliminations: eliminations,
+    filteredEvents: events,
+    survivorPointsByEpisode,
+    survivorPointsTotalSeason,
+  } = useScoringCalculations();
 
   const [sortField, setSortField] = useState<SortField>("rank");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
@@ -349,7 +350,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
         </Group>
       </Group>
       <Table.ScrollContainer
-        minWidth={500 + (season?.episodes?.length ?? 0) * 130}
+        minWidth={500 + filteredEpisodes.length * 130}
       >
         <Table
           highlightOnHover
@@ -390,7 +391,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                 onSort={handleSort}
                 width="60px"
               />
-              {season?.episodes.map((x) => (
+              {filteredEpisodes.map((x) => (
                 <Table.Th key={x.id} w={120}>
                   Ep {x.order}
                 </Table.Th>

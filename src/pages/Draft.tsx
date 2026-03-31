@@ -14,6 +14,7 @@ import {
   SimpleGrid,
   Stack,
   Stepper,
+  Switch,
   Text,
   TextInput,
   ThemeIcon,
@@ -34,7 +35,7 @@ import {
   IconUsers,
   IconX,
 } from "@tabler/icons-react";
-import { ref, update } from "firebase/database";
+import { ref, set } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
 import { shuffle, uniqBy } from "lodash-es";
 import { useEffect, useMemo } from "react";
@@ -111,7 +112,10 @@ export const DraftComponent = () => {
     }
   };
 
-  const createCompetition = async (competition_name: string) => {
+  const createCompetition = async (
+    competition_name: string,
+    watchAlong: boolean,
+  ) => {
     if (!season || !draft) return;
 
     const competition = {
@@ -127,7 +131,7 @@ export const DraftComponent = () => {
       prop_bets: draft.prop_bets,
       finished: false,
       started: false,
-      current_episode: null,
+      current_episode: watchAlong ? 0 : null,
     } satisfies Competition;
 
     try {
@@ -150,7 +154,7 @@ export const DraftComponent = () => {
 
   const updateDraft = async (_draft: Draft) => {
     if (!draft?.id) return;
-    await update(ref(rt_db), { ["drafts/" + draft.id]: _draft });
+    await set(ref(rt_db, "drafts/" + draft.id), _draft);
   };
 
   const userIsParticipant = useMemo(() => {
@@ -234,7 +238,7 @@ export const DraftComponent = () => {
 
     const onClose = async (values: FormData) => {
       modals.closeAll();
-      await createCompetition(values.name);
+      await createCompetition(values.name, values.watchAlong);
     };
 
     modals.open({
@@ -385,9 +389,7 @@ export const DraftComponent = () => {
                         style={{ minWidth: 64 }}
                       >
                         <Avatar size={48} radius="xl" color="blue">
-                          {(p.displayName ||
-                            p.email ||
-                            "?")[0].toUpperCase()}
+                          {(p.displayName || p.email || "?")[0].toUpperCase()}
                         </Avatar>
                         <Text size="xs" fw={500} ta="center">
                           {p.displayName || p.email || p.uid}
@@ -439,7 +441,7 @@ export const DraftComponent = () => {
                 <CopyButton value={window.location.href}>
                   {({ copied, copy }) => (
                     <Button
-                      color={copied ? "teal" : "gray"}
+                      color={copied ? "teal" : "blue"}
                       onClick={copy}
                       variant="light"
                       leftSection={
@@ -464,12 +466,7 @@ export const DraftComponent = () => {
               <Title order={4}>How it works</Title>
               <Group grow gap="md" align="flex-start">
                 <Stack gap={6} align="center">
-                  <ThemeIcon
-                    size={40}
-                    radius="xl"
-                    variant="light"
-                    color="blue"
-                  >
+                  <ThemeIcon size={40} radius="xl" variant="light" color="blue">
                     <IconUserPlus size={20} />
                   </ThemeIcon>
                   <Text size="sm" fw={600} ta="center">
@@ -480,12 +477,7 @@ export const DraftComponent = () => {
                   </Text>
                 </Stack>
                 <Stack gap={6} align="center">
-                  <ThemeIcon
-                    size={40}
-                    radius="xl"
-                    variant="light"
-                    color="cyan"
-                  >
+                  <ThemeIcon size={40} radius="xl" variant="light" color="cyan">
                     <IconTargetArrow size={20} />
                   </ThemeIcon>
                   <Text size="sm" fw={600} ta="center">
@@ -496,12 +488,7 @@ export const DraftComponent = () => {
                   </Text>
                 </Stack>
                 <Stack gap={6} align="center">
-                  <ThemeIcon
-                    size={40}
-                    radius="xl"
-                    variant="light"
-                    color="teal"
-                  >
+                  <ThemeIcon size={40} radius="xl" variant="light" color="teal">
                     <IconTrophy size={20} />
                   </ThemeIcon>
                   <Text size="sm" fw={600} ta="center">
@@ -789,12 +776,7 @@ export const DraftComponent = () => {
                         {p.name}
                       </Text>
                       {(p.age || p.profession || p.hometown) && (
-                        <Text
-                          ta="center"
-                          size="xs"
-                          c="dimmed"
-                          lh={1.3}
-                        >
+                        <Text ta="center" size="xs" c="dimmed" lh={1.3}>
                           {p.age && <>{p.age}</>}
                           {p.age && p.profession && " · "}
                           {p.profession && <>{p.profession}</>}
@@ -879,6 +861,7 @@ export const DraftComponent = () => {
 
 type FormData = {
   name: string;
+  watchAlong: boolean;
 };
 
 type Props = {
@@ -889,6 +872,7 @@ const NameYourCompetition = ({ onSubmit }: Props) => {
   const form = useForm({
     initialValues: {
       name: "",
+      watchAlong: false,
     },
     validate: {
       name: isNotEmpty("Give it a fun name!"),
@@ -911,6 +895,11 @@ const NameYourCompetition = ({ onSubmit }: Props) => {
           size="md"
           data-autofocus
           {...form.getInputProps("name")}
+        />
+        <Switch
+          label="Watch-along mode"
+          description="Reveal episodes one at a time to prevent spoilers. You control when the next episode is revealed."
+          {...form.getInputProps("watchAlong", { type: "checkbox" })}
         />
         <Button
           fullWidth

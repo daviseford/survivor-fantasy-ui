@@ -25,7 +25,8 @@
     "init-season": "tsx scripts/init-season.ts",
     "backfill": "tsx scripts/backfill.ts",
     "new-season": "tsx scripts/new-season.ts",
-    "tsc:scripts": "tsc -p scripts/tsconfig.json --noEmit"
+    "tsc:scripts": "tsc -p scripts/tsconfig.json --noEmit",
+    "set-admin": "tsx scripts/set-admin-claim.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
