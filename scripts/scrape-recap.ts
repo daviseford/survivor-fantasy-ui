@@ -19,16 +19,7 @@ import { delay } from "./lib/wiki-api.js";
 // --- HTML → text extraction ---
 
 function htmlToText(html: string): string {
-  // Try to extract just the article body content (strip sidebar, nav, footer)
-  let content = html;
-  const entryMatch = html.match(
-    /<div[^>]*class="[^"]*entry-content[^"]*"[^>]*>([\s\S]*?)<\/div>\s*(?:<div|<footer|<aside|<section|<\/article)/i,
-  );
-  if (entryMatch) {
-    content = entryMatch[1];
-  }
-
-  let text = content;
+  let text = html;
   text = text.replace(/<script[\s\S]*?<\/script>/gi, "");
   text = text.replace(/<style[\s\S]*?<\/style>/gi, "");
   text = text.replace(/<br\s*\/?>/gi, "\n");
