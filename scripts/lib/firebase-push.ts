@@ -1,23 +1,20 @@
 /**
  * Push generated season data to Firestore using Firebase Admin SDK.
+ * Reuses the shared admin init from ./admin.ts.
  */
 
+import { getFirestore } from "firebase-admin/firestore";
 import * as fs from "fs";
 import * as path from "path";
+
+// Import to trigger shared Firebase Admin initialization
+import "./admin.js";
 
 export async function pushSeasonToFirestore(
   seasonNum: number,
   dryRun = false,
 ): Promise<void> {
   const projectRoot = path.resolve(import.meta.dirname, "..", "..");
-  const keyPath = path.join(projectRoot, "firebase-private-key.json");
-
-  if (!fs.existsSync(keyPath)) {
-    throw new Error(
-      `Firebase service account key not found at ${keyPath}.\n` +
-        `Download it from the Firebase console and save it as firebase-private-key.json in the project root.`,
-    );
-  }
 
   const seasonKey = `season_${seasonNum}`;
   const seasonDataPath = path.resolve(
@@ -94,18 +91,7 @@ export async function pushSeasonToFirestore(
     return;
   }
 
-  // Initialize Firebase Admin
-  const { default: admin } = await import("firebase-admin");
-  const serviceAccount = JSON.parse(fs.readFileSync(keyPath, "utf-8"));
-
-  // Only initialize if not already initialized
-  if (admin.apps.length === 0) {
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-    });
-  }
-
-  const db = admin.firestore();
+  const db = getFirestore();
 
   console.log(`\nUploading season ${seasonNum} data to Firestore...\n`);
 
