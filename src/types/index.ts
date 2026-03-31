@@ -60,7 +60,6 @@ export type Player<PlayerName = string, SeasonNumber = number> = {
   profession?: string;
   hometown?: string;
   tribes?: string[];
-  finishPlacement?: string;
   daysLasted?: string;
   previousSeasons?: number[];
   bio?: string;

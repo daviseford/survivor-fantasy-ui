@@ -125,7 +125,6 @@ function formatPlayerCall(
     profession?: string;
     hometown?: string;
     tribes?: string[];
-    finishPlacement?: string;
     daysLasted?: string;
     previousSeasons?: number[];
     bio?: string;
@@ -161,9 +160,6 @@ function formatPlayerCall(
       `    tribes: [${player.tribes.map((t) => escapeString(t)).join(", ")}],`,
     );
   }
-  if (player.finishPlacement) {
-    lines.push(`    finishPlacement: ${escapeString(player.finishPlacement)},`);
-  }
   if (player.daysLasted) {
     lines.push(`    daysLasted: ${escapeString(player.daysLasted)},`);
   }
@@ -196,7 +192,6 @@ export function generatePlayerSection(
     profession?: string;
     hometown?: string;
     tribes?: string[];
-    finishPlacement?: string;
     daysLasted?: string;
     previousSeasons?: number[];
     description?: string;
@@ -225,7 +220,6 @@ export function generatePlayerSection(
       profession: scraped.profession,
       hometown: scraped.hometown,
       tribes: scraped.tribes,
-      finishPlacement: scraped.finishPlacement,
       daysLasted: scraped.daysLasted,
       previousSeasons: scraped.previousSeasons,
       description,
@@ -384,4 +378,3 @@ export function generateSeasonFile(
 
   return beforePlayers + playerSection + afterPlayers;
 }
-

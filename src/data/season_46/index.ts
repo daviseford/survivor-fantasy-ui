@@ -54,7 +54,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Slot Machine Salesman",
     hometown: "Las Vegas, Nevada",
     tribes: ["yanu"],
-    finishPlacement: "18/18",
     daysLasted: "3/26",
   }),
   buildPlayer({
@@ -66,7 +65,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Software Engineer",
     hometown: "San Francisco, California",
     tribes: ["yanu"],
-    finishPlacement: "17/18",
     daysLasted: "5/26",
   }),
   buildPlayer({
@@ -78,7 +76,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Aerospace Tech",
     hometown: "Orlando, Florida",
     tribes: ["nami"],
-    finishPlacement: "16/18",
     daysLasted: "7/26",
   }),
   buildPlayer({
@@ -90,7 +87,6 @@ export const SEASON_46_PLAYERS = [
     profession: "IT Quality Analyst",
     hometown: "Acton, Massachusetts",
     tribes: ["yanu"],
-    finishPlacement: "15/18",
     daysLasted: "9/26",
   }),
   buildPlayer({
@@ -102,7 +98,6 @@ export const SEASON_46_PLAYERS = [
     profession: "International Brand Mentor",
     hometown: "Chicago, Illinois",
     tribes: ["siga"],
-    finishPlacement: "14/18",
     daysLasted: "11/26",
   }),
   buildPlayer({
@@ -114,7 +109,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Program Coordinator",
     hometown: "San Diego, California",
     tribes: ["siga"],
-    finishPlacement: "13/18",
     daysLasted: "13/26",
   }),
   buildPlayer({
@@ -126,7 +120,6 @@ export const SEASON_46_PLAYERS = [
     profession: "College Coach",
     hometown: "Atlanta, Georgia",
     tribes: ["siga", "nuinui"],
-    finishPlacement: "12/18",
     daysLasted: "14/26",
   }),
   buildPlayer({
@@ -138,7 +131,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Special Ed Teacher",
     hometown: "Lake Hopatcong, New Jersey",
     tribes: ["nami", "nuinui"],
-    finishPlacement: "11/18",
     daysLasted: "14/26",
   }),
   buildPlayer({
@@ -149,7 +141,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Actor",
     hometown: "Richmond, Virginia",
     tribes: ["nami", "nuinui"],
-    finishPlacement: "10/18",
     daysLasted: "16/26",
   }),
   buildPlayer({
@@ -161,7 +152,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Science Teacher",
     hometown: "French Camp, Mississippi",
     tribes: ["nami", "nuinui"],
-    finishPlacement: "9/18",
     daysLasted: "17/26",
   }),
   buildPlayer({
@@ -173,7 +163,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Artist",
     hometown: "Elizabeth, New Jersey",
     tribes: ["yanu", "nuinui"],
-    finishPlacement: "8/18",
     daysLasted: "19/26",
   }),
   buildPlayer({
@@ -185,7 +174,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Data Analyst",
     hometown: "Toronto, Ontario",
     tribes: ["nami", "nuinui"],
-    finishPlacement: "7/18",
     daysLasted: "21/26",
   }),
   buildPlayer({
@@ -197,7 +185,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Real Estate Agent",
     hometown: "Memphis, Tennessee",
     tribes: ["yanu", "nuinui"],
-    finishPlacement: "6/18",
     daysLasted: "23/26",
   }),
   buildPlayer({
@@ -208,7 +195,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Parent Coach",
     hometown: "Dallas, Texas",
     tribes: ["siga", "nuinui"],
-    finishPlacement: "5/18",
     daysLasted: "24/26",
   }),
   buildPlayer({
@@ -220,7 +206,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Marketing Strategist",
     hometown: "Orlando, Florida",
     tribes: ["nami", "nuinui"],
-    finishPlacement: "4/18",
     daysLasted: "25/26",
   }),
   buildPlayer({
@@ -231,7 +216,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Musician",
     hometown: "Miami, Florida",
     tribes: ["siga", "nuinui"],
-    finishPlacement: "Second Runner-Up (3/18)",
     daysLasted: "26/26",
   }),
   buildPlayer({
@@ -243,7 +227,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Law Student",
     hometown: "Boston, Massachusetts",
     tribes: ["siga", "nuinui"],
-    finishPlacement: "Runner-Up (2/18)",
     daysLasted: "26/26",
   }),
   buildPlayer({
@@ -255,7 +238,6 @@ export const SEASON_46_PLAYERS = [
     profession: "Salon Owner",
     hometown: "Charlotte, North Carolina",
     tribes: ["yanu", "nuinui"],
-    finishPlacement: "Winner",
     daysLasted: "26/26}}",
   }),
 ] satisfies Player<PlayerName, SeasonNumber>[];

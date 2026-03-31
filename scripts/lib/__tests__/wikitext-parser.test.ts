@@ -102,9 +102,7 @@ const CAST_TABLE_WIKITEXT = `{| class="wikitable sortable"
 
 describe("parseBirthDate", () => {
   it("parses a standard birthdate template", () => {
-    const result = parseBirthDate(
-      "{{Birth date and age|1992|3|25|mf=yes}}",
-    );
+    const result = parseBirthDate("{{Birth date and age|1992|3|25|mf=yes}}");
     expect(result).not.toBeNull();
     expect(result!.year).toBe(1992);
     expect(result!.month).toBe(3);
@@ -127,16 +125,12 @@ describe("parseBirthDate", () => {
 
 describe("parseTribes", () => {
   it("parses multiple tribeicon templates", () => {
-    const result = parseTribes(
-      "{{tribeicon|siga}}<br />{{tribeicon|nuinui}}",
-    );
+    const result = parseTribes("{{tribeicon|siga}}<br />{{tribeicon|nuinui}}");
     expect(result).toEqual(["siga", "nuinui"]);
   });
 
   it("handles tribeicon4 variant", () => {
-    const result = parseTribes(
-      "{{tribeicon|vatu}}<br/>{{tribeicon4|kalo}}",
-    );
+    const result = parseTribes("{{tribeicon|vatu}}<br/>{{tribeicon4|kalo}}");
     expect(result).toEqual(["vatu", "kalo"]);
   });
 
@@ -181,7 +175,9 @@ describe("parseInfoboxFields", () => {
   });
 
   it("returns null when no Contestant template found", () => {
-    expect(parseInfoboxFields("some random text without a template")).toBeNull();
+    expect(
+      parseInfoboxFields("some random text without a template"),
+    ).toBeNull();
   });
 });
 
@@ -193,7 +189,6 @@ describe("parseContestantPage", () => {
     expect(info!.hometown).toBe("Miami, Florida");
     expect(info!.occupation).toBe("Musician");
     expect(info!.tribes).toEqual(["siga", "nuinui"]);
-    expect(info!.finishPlacement).toBe("Second Runner-Up (3/18)");
     expect(info!.daysLasted).toBe("26/26");
     expect(info!.previousSeasons).toEqual([]);
     expect(info!.allSeasons).toEqual([46]);
@@ -205,7 +200,6 @@ describe("parseContestantPage", () => {
     expect(info!.hometown).toBe("South Vienna, Ohio");
     expect(info!.occupation).toBe("Highway Construction Worker");
     expect(info!.tribes).toEqual(["lopevi", "alinta"]);
-    expect(info!.finishPlacement).toBe("Winner");
     expect(info!.daysLasted).toBe("39/39");
     expect(info!.previousSeasons).toEqual([]);
   });
@@ -223,7 +217,6 @@ describe("parseContestantPage", () => {
     const info = parseContestantPage(COLBY_DONALDSON_WIKITEXT, 2);
     expect(info).not.toBeNull();
     expect(info!.tribes).toEqual(["ogakor", "barramundi"]);
-    expect(info!.finishPlacement).toBe("Runner-Up (2/16)");
     expect(info!.daysLasted).toBe("42/42");
     expect(info!.previousSeasons).toEqual([]);
   });
@@ -236,12 +229,6 @@ describe("parseContestantPage", () => {
   it("handles semicolon-separated occupation (returning player)", () => {
     const info = parseContestantPage(COLBY_DONALDSON_WIKITEXT, 50);
     expect(info!.occupation).toBe("Auto Customizer");
-  });
-
-  it("handles blank place field (season still airing)", () => {
-    const info = parseContestantPage(COLBY_DONALDSON_WIKITEXT, 50);
-    // place4 is empty in the wikitext — field is undefined since value is empty
-    expect(info!.finishPlacement).toBeUndefined();
   });
 
   it("handles blank days field", () => {

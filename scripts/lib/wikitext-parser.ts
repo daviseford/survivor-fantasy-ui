@@ -8,7 +8,6 @@ export interface ContestantInfo {
   hometown?: string;
   occupation?: string;
   tribes?: string[];
-  finishPlacement?: string;
   daysLasted?: string;
   previousSeasons?: number[];
   /** All season numbers this player appeared in (including the target season) */
@@ -67,13 +66,6 @@ export function parseSeasonNumber(value: string): number | null {
 
 /** Parse days field "X/Y" → "X/Y" string, or null if empty */
 export function parseDays(value: string): string | null {
-  const trimmed = value.trim();
-  if (!trimmed) return null;
-  return trimmed;
-}
-
-/** Parse place field — returns the raw string or null if empty */
-export function parsePlace(value: string): string | null {
   const trimmed = value.trim();
   if (!trimmed) return null;
   return trimmed;
@@ -197,14 +189,10 @@ export function parseContestantPage(
     const suffix = seasonIndex <= 0 ? "" : String(seasonIndex + 1);
 
     const tribesKey = `tribes${suffix}`;
-    const placeKey = `place${suffix}`;
     const daysKey = `days${suffix}`;
 
     if (fields[tribesKey]) {
       info.tribes = parseTribes(fields[tribesKey]);
-    }
-    if (fields[placeKey]) {
-      info.finishPlacement = parsePlace(fields[placeKey]);
     }
     if (fields[daysKey]) {
       info.daysLasted = parseDays(fields[daysKey]);
@@ -213,9 +201,6 @@ export function parseContestantPage(
     // Single-season player: use the base fields
     if (fields.tribes) {
       info.tribes = parseTribes(fields.tribes);
-    }
-    if (fields.place) {
-      info.finishPlacement = parsePlace(fields.place);
     }
     if (fields.days) {
       info.daysLasted = parseDays(fields.days);

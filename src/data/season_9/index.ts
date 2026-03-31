@@ -191,7 +191,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Document Manager",
     hometown: "Winthrop, Massachusetts",
     tribes: ["lopevi"],
-    finishPlacement: "18/18",
     daysLasted: "3/39",
   }),
   buildPlayer({
@@ -203,7 +202,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Sheep Farmer",
     hometown: "Mercer, Pennsylvania",
     tribes: ["yasur"],
-    finishPlacement: "17/18",
     daysLasted: "6/39",
   }),
   buildPlayer({
@@ -215,7 +213,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Sales Manager",
     hometown: "Los Angeles, California",
     tribes: ["lopevi"],
-    finishPlacement: "16/18",
     daysLasted: "7/39",
   }),
   buildPlayer({
@@ -227,7 +224,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Bookkeeper",
     hometown: "Boston, Massachusetts",
     tribes: ["yasur"],
-    finishPlacement: "15/18",
     daysLasted: "7/39",
   }),
   buildPlayer({
@@ -239,7 +235,6 @@ export const SEASON_9_PLAYERS = [
     profession: "FBI Agent",
     hometown: "Huntington Beach, California",
     tribes: ["lopevi"],
-    finishPlacement: "14/18",
     daysLasted: "10/39",
   }),
   buildPlayer({
@@ -251,7 +246,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Real Estate Agent",
     hometown: "Mandeville, Louisiana",
     tribes: ["yasur"],
-    finishPlacement: "12/18",
     daysLasted: "15/39",
   }),
   buildPlayer({
@@ -263,7 +257,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Mechanical Bull Operator",
     hometown: "Los Angeles, California",
     tribes: ["lopevi"],
-    finishPlacement: "11/18",
     daysLasted: "18/39",
   }),
   buildPlayer({
@@ -275,7 +268,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Housing Case Manager",
     hometown: "Des Moines, Iowa",
     tribes: ["lopevi", "yasur", "alinta"],
-    finishPlacement: "10/18",
     daysLasted: "21/39",
   }),
   buildPlayer({
@@ -287,7 +279,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Drill Sergeant",
     hometown: "Columbia, South Carolina",
     tribes: ["lopevi", "alinta"],
-    finishPlacement: "9/18",
     daysLasted: "24/39",
   }),
   buildPlayer({
@@ -299,7 +290,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Teacher",
     hometown: "Oakland, California",
     tribes: ["lopevi", "alinta"],
-    finishPlacement: "8/18",
     daysLasted: "27/39",
   }),
   buildPlayer({
@@ -311,7 +301,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Equity Research Assistant",
     hometown: "Kansasville, Wisconsin",
     tribes: ["yasur", "alinta"],
-    finishPlacement: "7/18",
     daysLasted: "30/39",
   }),
   buildPlayer({
@@ -323,7 +312,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Coffee Barista",
     hometown: "Lakewood, Colorado",
     tribes: ["yasur", "alinta"],
-    finishPlacement: "6/18",
     daysLasted: "33/39",
   }),
   buildPlayer({
@@ -334,7 +322,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Youth Mentor",
     hometown: "Gorham, Maine",
     tribes: ["yasur", "lopevi", "alinta"],
-    finishPlacement: "5/18",
     daysLasted: "36/39",
   }),
   buildPlayer({
@@ -346,7 +333,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Pre-Law Student",
     hometown: "Syracuse, New York",
     tribes: ["yasur", "alinta"],
-    finishPlacement: "4/18",
     daysLasted: "37/39",
   }),
   buildPlayer({
@@ -358,7 +344,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Rancher",
     hometown: "Stillwater, Oklahoma",
     tribes: ["yasur", "alinta"],
-    finishPlacement: "3/18",
     daysLasted: "38/39",
   }),
   buildPlayer({
@@ -370,7 +355,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Highway Repair Worker",
     hometown: "Marshall, Missouri",
     tribes: ["yasur", "lopevi", "alinta"],
-    finishPlacement: "Runner-Up (2/18)",
     daysLasted: "39/39",
   }),
   buildPlayer({
@@ -382,7 +366,6 @@ export const SEASON_9_PLAYERS = [
     profession: "Highway Construction Worker",
     hometown: "South Vienna, Ohio",
     tribes: ["lopevi", "alinta"],
-    finishPlacement: "Winner",
     daysLasted: "39/39",
   }),
   buildPlayer({
