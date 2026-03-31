@@ -56,6 +56,14 @@ export type Player<PlayerName = string, SeasonNumber = number> = {
   name: PlayerName;
   img: string;
   description?: string;
+  age?: number;
+  profession?: string;
+  hometown?: string;
+  tribes?: string[];
+  finishPlacement?: string;
+  daysLasted?: string;
+  previousSeasons?: number[];
+  bio?: string;
 };
 
 export type Team = {
