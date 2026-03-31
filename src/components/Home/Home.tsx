@@ -56,44 +56,50 @@ export const Home = () => {
         </Container>
       </div>
 
-      <Container size={700} className={classes.howItWorks}>
-        <SimpleGrid cols={{ base: 1, sm: 3 }}>
-          <Stack gap={6} align="center">
-            <ThemeIcon size={40} radius="xl" variant="light" color="blue">
-              <IconSearch size={20} />
-            </ThemeIcon>
-            <Text size="sm" fw={600} ta="center">
-              Pick a season
-            </Text>
-            <Text size="xs" c="dimmed" ta="center">
-              Browse seasons and check out the cast before you commit.
-            </Text>
-          </Stack>
-          <Stack gap={6} align="center">
-            <ThemeIcon size={40} radius="xl" variant="light" color="cyan">
-              <IconTargetArrow size={20} />
-            </ThemeIcon>
-            <Text size="sm" fw={600} ta="center">
-              Draft your team
-            </Text>
-            <Text size="xs" c="dimmed" ta="center">
-              Invite friends, take turns picking players, and build your roster.
-            </Text>
-          </Stack>
-          <Stack gap={6} align="center">
-            <ThemeIcon size={40} radius="xl" variant="light" color="teal">
-              <IconTrophy size={20} />
-            </ThemeIcon>
-            <Text size="sm" fw={600} ta="center">
-              Compete for points
-            </Text>
-            <Text size="xs" c="dimmed" ta="center">
-              Earn points as your players win challenges, find idols, and
-              survive.
-            </Text>
-          </Stack>
-        </SimpleGrid>
-      </Container>
+      <div className={classes.howItWorksWrapper}>
+        <Container size={700} className={classes.howItWorks}>
+          <Text size="sm" fw={600} c="dimmed" ta="center" mb="md" tt="uppercase" lts={1}>
+            How it works
+          </Text>
+          <SimpleGrid cols={{ base: 1, sm: 3 }}>
+            <Stack gap={6} align="center">
+              <ThemeIcon size={44} radius="xl" variant="light" color="blue">
+                <IconSearch size={22} />
+              </ThemeIcon>
+              <Text fw={600} ta="center">
+                Pick a season
+              </Text>
+              <Text size="sm" c="dimmed" ta="center">
+                Browse seasons and check out the cast before you commit.
+              </Text>
+            </Stack>
+            <Stack gap={6} align="center">
+              <ThemeIcon size={44} radius="xl" variant="light" color="cyan">
+                <IconTargetArrow size={22} />
+              </ThemeIcon>
+              <Text fw={600} ta="center">
+                Draft your team
+              </Text>
+              <Text size="sm" c="dimmed" ta="center">
+                Invite friends, take turns picking players, and build your
+                roster.
+              </Text>
+            </Stack>
+            <Stack gap={6} align="center">
+              <ThemeIcon size={44} radius="xl" variant="light" color="teal">
+                <IconTrophy size={22} />
+              </ThemeIcon>
+              <Text fw={600} ta="center">
+                Compete for points
+              </Text>
+              <Text size="sm" c="dimmed" ta="center">
+                Earn points as your players win challenges, find idols, and
+                survive.
+              </Text>
+            </Stack>
+          </SimpleGrid>
+        </Container>
+      </div>
     </>
   );
 };

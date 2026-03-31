@@ -103,6 +103,23 @@ export const SingleSeason = () => {
       </Group>
 
       <Players />
+
+      {slimUser && (
+        <Center>
+          <Stack gap={4} align="center">
+            <Button
+              size="md"
+              onClick={handleCreateDraft}
+              leftSection={<IconUserPlus size={18} />}
+            >
+              Start a draft with {season.name}
+            </Button>
+            <Text size="xs" c="dimmed">
+              You'll get a shareable link to invite friends
+            </Text>
+          </Stack>
+        </Center>
+      )}
     </Stack>
   );
 };
