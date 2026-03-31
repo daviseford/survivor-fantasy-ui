@@ -124,8 +124,6 @@ function formatPlayerCall(
     age?: number;
     profession?: string;
     hometown?: string;
-    tribes?: string[];
-    daysLasted?: string;
     previousSeasons?: number[];
     bio?: string;
     description?: string;
@@ -155,14 +153,6 @@ function formatPlayerCall(
   if (player.hometown) {
     lines.push(`    hometown: ${escapeString(player.hometown)},`);
   }
-  if (player.tribes && player.tribes.length > 0) {
-    lines.push(
-      `    tribes: [${player.tribes.map((t) => escapeString(t)).join(", ")}],`,
-    );
-  }
-  if (player.daysLasted) {
-    lines.push(`    daysLasted: ${escapeString(player.daysLasted)},`);
-  }
   if (player.previousSeasons && player.previousSeasons.length > 0) {
     lines.push(`    previousSeasons: [${player.previousSeasons.join(", ")}],`);
   }
@@ -191,8 +181,6 @@ export function generatePlayerSection(
     age?: number;
     profession?: string;
     hometown?: string;
-    tribes?: string[];
-    daysLasted?: string;
     previousSeasons?: number[];
     description?: string;
   }> = [];
@@ -219,8 +207,6 @@ export function generatePlayerSection(
       age: scraped.age,
       profession: scraped.profession,
       hometown: scraped.hometown,
-      tribes: scraped.tribes,
-      daysLasted: scraped.daysLasted,
       previousSeasons: scraped.previousSeasons,
       description,
     });

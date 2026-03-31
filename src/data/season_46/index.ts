@@ -53,8 +53,6 @@ export const SEASON_46_PLAYERS = [
     age: 24,
     profession: "Slot Machine Salesman",
     hometown: "Las Vegas, Nevada",
-    tribes: ["yanu"],
-    daysLasted: "3/26",
   }),
   buildPlayer({
     name: "Jess Chong",
@@ -64,8 +62,6 @@ export const SEASON_46_PLAYERS = [
     age: 40,
     profession: "Software Engineer",
     hometown: "San Francisco, California",
-    tribes: ["yanu"],
-    daysLasted: "5/26",
   }),
   buildPlayer({
     name: "Randen Montalvo",
@@ -75,8 +71,6 @@ export const SEASON_46_PLAYERS = [
     age: 43,
     profession: "Aerospace Tech",
     hometown: "Orlando, Florida",
-    tribes: ["nami"],
-    daysLasted: "7/26",
   }),
   buildPlayer({
     name: "Bhanu Gopal",
@@ -86,8 +80,6 @@ export const SEASON_46_PLAYERS = [
     age: 43,
     profession: "IT Quality Analyst",
     hometown: "Acton, Massachusetts",
-    tribes: ["yanu"],
-    daysLasted: "9/26",
   }),
   buildPlayer({
     name: "Jem Hussain-Adams",
@@ -97,8 +89,6 @@ export const SEASON_46_PLAYERS = [
     age: 34,
     profession: "International Brand Mentor",
     hometown: "Chicago, Illinois",
-    tribes: ["siga"],
-    daysLasted: "11/26",
   }),
   buildPlayer({
     name: "Moriah Gaynor",
@@ -108,8 +98,6 @@ export const SEASON_46_PLAYERS = [
     age: 31,
     profession: "Program Coordinator",
     hometown: "San Diego, California",
-    tribes: ["siga"],
-    daysLasted: "13/26",
   }),
   buildPlayer({
     name: "Tim Spicer",
@@ -119,8 +107,6 @@ export const SEASON_46_PLAYERS = [
     age: 33,
     profession: "College Coach",
     hometown: "Atlanta, Georgia",
-    tribes: ["siga", "nuinui"],
-    daysLasted: "14/26",
   }),
   buildPlayer({
     name: "Soda Thompson",
@@ -130,8 +116,6 @@ export const SEASON_46_PLAYERS = [
     age: 29,
     profession: "Special Ed Teacher",
     hometown: "Lake Hopatcong, New Jersey",
-    tribes: ["nami", "nuinui"],
-    daysLasted: "14/26",
   }),
   buildPlayer({
     name: "Tevin Davis",
@@ -140,8 +124,6 @@ export const SEASON_46_PLAYERS = [
     age: 26,
     profession: "Actor",
     hometown: "Richmond, Virginia",
-    tribes: ["nami", "nuinui"],
-    daysLasted: "16/26",
   }),
   buildPlayer({
     name: "Hunter McKnight",
@@ -151,8 +133,6 @@ export const SEASON_46_PLAYERS = [
     age: 30,
     profession: "Science Teacher",
     hometown: "French Camp, Mississippi",
-    tribes: ["nami", "nuinui"],
-    daysLasted: "17/26",
   }),
   buildPlayer({
     name: "Tiffany Nicole Ervin",
@@ -162,8 +142,6 @@ export const SEASON_46_PLAYERS = [
     age: 35,
     profession: "Artist",
     hometown: "Elizabeth, New Jersey",
-    tribes: ["yanu", "nuinui"],
-    daysLasted: "19/26",
   }),
   buildPlayer({
     name: "Venus Vafa",
@@ -173,8 +151,6 @@ export const SEASON_46_PLAYERS = [
     age: 27,
     profession: "Data Analyst",
     hometown: "Toronto, Ontario",
-    tribes: ["nami", "nuinui"],
-    daysLasted: "21/26",
   }),
   buildPlayer({
     name: "Q Burdette",
@@ -184,8 +160,6 @@ export const SEASON_46_PLAYERS = [
     age: 32,
     profession: "Real Estate Agent",
     hometown: "Memphis, Tennessee",
-    tribes: ["yanu", "nuinui"],
-    daysLasted: "23/26",
   }),
   buildPlayer({
     name: "Maria Shrime Gonzalez",
@@ -194,8 +168,6 @@ export const SEASON_46_PLAYERS = [
     age: 50,
     profession: "Parent Coach",
     hometown: "Dallas, Texas",
-    tribes: ["siga", "nuinui"],
-    daysLasted: "24/26",
   }),
   buildPlayer({
     name: "Liz Wilcox",
@@ -205,8 +177,6 @@ export const SEASON_46_PLAYERS = [
     age: 38,
     profession: "Marketing Strategist",
     hometown: "Orlando, Florida",
-    tribes: ["nami", "nuinui"],
-    daysLasted: "25/26",
   }),
   buildPlayer({
     name: "Ben Katzman",
@@ -215,8 +185,6 @@ export const SEASON_46_PLAYERS = [
     age: 34,
     profession: "Musician",
     hometown: "Miami, Florida",
-    tribes: ["siga", "nuinui"],
-    daysLasted: "26/26",
   }),
   buildPlayer({
     name: "Charlie Davis",
@@ -226,8 +194,6 @@ export const SEASON_46_PLAYERS = [
     age: 28,
     profession: "Law Student",
     hometown: "Boston, Massachusetts",
-    tribes: ["siga", "nuinui"],
-    daysLasted: "26/26",
   }),
   buildPlayer({
     name: "Kenzie Petty",
@@ -237,8 +203,6 @@ export const SEASON_46_PLAYERS = [
     age: 31,
     profession: "Salon Owner",
     hometown: "Charlotte, North Carolina",
-    tribes: ["yanu", "nuinui"],
-    daysLasted: "26/26}}",
   }),
 ] satisfies Player<PlayerName, SeasonNumber>[];
 

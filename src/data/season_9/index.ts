@@ -190,8 +190,6 @@ export const SEASON_9_PLAYERS = [
     age: 49,
     profession: "Document Manager",
     hometown: "Winthrop, Massachusetts",
-    tribes: ["lopevi"],
-    daysLasted: "3/39",
   }),
   buildPlayer({
     name: "Dolly Neely",
@@ -201,8 +199,6 @@ export const SEASON_9_PLAYERS = [
     age: 47,
     profession: "Sheep Farmer",
     hometown: "Mercer, Pennsylvania",
-    tribes: ["yasur"],
-    daysLasted: "6/39",
   }),
   buildPlayer({
     name: "John Palyok",
@@ -212,8 +208,6 @@ export const SEASON_9_PLAYERS = [
     age: 52,
     profession: "Sales Manager",
     hometown: "Los Angeles, California",
-    tribes: ["lopevi"],
-    daysLasted: "7/39",
   }),
   buildPlayer({
     name: "Mia Galeotalanza",
@@ -223,8 +217,6 @@ export const SEASON_9_PLAYERS = [
     age: 51,
     profession: "Bookkeeper",
     hometown: "Boston, Massachusetts",
-    tribes: ["yasur"],
-    daysLasted: "7/39",
   }),
   buildPlayer({
     name: "Brady Finta",
@@ -234,8 +226,6 @@ export const SEASON_9_PLAYERS = [
     age: 55,
     profession: "FBI Agent",
     hometown: "Huntington Beach, California",
-    tribes: ["lopevi"],
-    daysLasted: "10/39",
   }),
   buildPlayer({
     name: "Lisa Keiffer",
@@ -245,8 +235,6 @@ export const SEASON_9_PLAYERS = [
     age: 65,
     profession: "Real Estate Agent",
     hometown: "Mandeville, Louisiana",
-    tribes: ["yasur"],
-    daysLasted: "15/39",
   }),
   buildPlayer({
     name: "John Kenney",
@@ -256,8 +244,6 @@ export const SEASON_9_PLAYERS = [
     age: 44,
     profession: "Mechanical Bull Operator",
     hometown: "Los Angeles, California",
-    tribes: ["lopevi"],
-    daysLasted: "18/39",
   }),
   buildPlayer({
     name: "Rory Freeman",
@@ -267,8 +253,6 @@ export const SEASON_9_PLAYERS = [
     age: 57,
     profession: "Housing Case Manager",
     hometown: "Des Moines, Iowa",
-    tribes: ["lopevi", "yasur", "alinta"],
-    daysLasted: "21/39",
   }),
   buildPlayer({
     name: "Lea Masters",
@@ -278,8 +262,6 @@ export const SEASON_9_PLAYERS = [
     age: 62,
     profession: "Drill Sergeant",
     hometown: "Columbia, South Carolina",
-    tribes: ["lopevi", "alinta"],
-    daysLasted: "24/39",
   }),
   buildPlayer({
     name: "Chad Crittenden",
@@ -289,8 +271,6 @@ export const SEASON_9_PLAYERS = [
     age: 56,
     profession: "Teacher",
     hometown: "Oakland, California",
-    tribes: ["lopevi", "alinta"],
-    daysLasted: "27/39",
   }),
   buildPlayer({
     name: "Leann Slaby",
@@ -300,8 +280,6 @@ export const SEASON_9_PLAYERS = [
     age: 56,
     profession: "Equity Research Assistant",
     hometown: "Kansasville, Wisconsin",
-    tribes: ["yasur", "alinta"],
-    daysLasted: "30/39",
   }),
   buildPlayer({
     name: "Ami Cusack",
@@ -311,8 +289,6 @@ export const SEASON_9_PLAYERS = [
     age: 53,
     profession: "Coffee Barista",
     hometown: "Lakewood, Colorado",
-    tribes: ["yasur", "alinta"],
-    daysLasted: "33/39",
   }),
   buildPlayer({
     name: "Julie Berry",
@@ -321,8 +297,6 @@ export const SEASON_9_PLAYERS = [
     age: 45,
     profession: "Youth Mentor",
     hometown: "Gorham, Maine",
-    tribes: ["yasur", "lopevi", "alinta"],
-    daysLasted: "36/39",
   }),
   buildPlayer({
     name: "Eliza Orlins",
@@ -332,8 +306,6 @@ export const SEASON_9_PLAYERS = [
     age: 43,
     profession: "Pre-Law Student",
     hometown: "Syracuse, New York",
-    tribes: ["yasur", "alinta"],
-    daysLasted: "37/39",
   }),
   buildPlayer({
     name: "Scout Cloud Lee",
@@ -343,8 +315,6 @@ export const SEASON_9_PLAYERS = [
     age: 81,
     profession: "Rancher",
     hometown: "Stillwater, Oklahoma",
-    tribes: ["yasur", "alinta"],
-    daysLasted: "38/39",
   }),
   buildPlayer({
     name: "Twila Tanner",
@@ -354,8 +324,6 @@ export const SEASON_9_PLAYERS = [
     age: 63,
     profession: "Highway Repair Worker",
     hometown: "Marshall, Missouri",
-    tribes: ["yasur", "lopevi", "alinta"],
-    daysLasted: "39/39",
   }),
   buildPlayer({
     name: "Chris Daugherty",
@@ -365,8 +333,6 @@ export const SEASON_9_PLAYERS = [
     age: 55,
     profession: "Highway Construction Worker",
     hometown: "South Vienna, Ohio",
-    tribes: ["lopevi", "alinta"],
-    daysLasted: "39/39",
   }),
   buildPlayer({
     name: "Bubba Sampson",

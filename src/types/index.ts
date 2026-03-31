@@ -59,8 +59,6 @@ export type Player<PlayerName = string, SeasonNumber = number> = {
   age?: number;
   profession?: string;
   hometown?: string;
-  tribes?: string[];
-  daysLasted?: string;
   previousSeasons?: number[];
   bio?: string;
 };

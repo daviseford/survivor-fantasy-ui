@@ -7,8 +7,6 @@ export interface ContestantInfo {
   age?: number;
   hometown?: string;
   occupation?: string;
-  tribes?: string[];
-  daysLasted?: string;
   previousSeasons?: number[];
   /** All season numbers this player appeared in (including the target season) */
   allSeasons?: number[];
@@ -52,23 +50,10 @@ export function parseBirthDate(value: string): {
   return { year, month, day, age };
 }
 
-/** Parse {{tribeicon|name}} or {{tribeicon4|name}} entries → array of tribe names */
-export function parseTribes(value: string): string[] {
-  const matches = value.matchAll(/\{\{tribeicon\d*\|([^|}]+)/gi);
-  return [...matches].map((m) => m[1].trim());
-}
-
 /** Parse {{S2|N}} → season number */
 export function parseSeasonNumber(value: string): number | null {
   const match = value.match(/\{\{S2?\|(\d+)\}\}/);
   return match ? Number(match[1]) : null;
-}
-
-/** Parse days field "X/Y" → "X/Y" string, or null if empty */
-export function parseDays(value: string): string | null {
-  const trimmed = value.trim();
-  if (!trimmed) return null;
-  return trimmed;
 }
 
 // --- Infobox parser ---
@@ -177,34 +162,6 @@ export function parseContestantPage(
   } else if (allSeasons.length > 1) {
     // If no target specified, all but the last are "previous"
     info.previousSeasons = allSeasons.slice(0, -1);
-  }
-
-  // Find the tribes/place/days for the target season
-  if (targetSeasonNum && allSeasons.length > 0) {
-    const seasonIndex = allSeasons.indexOf(targetSeasonNum);
-    if (seasonIndex === -1) {
-      // Target season not listed — skip tribes/place/days
-      return info;
-    }
-    const suffix = seasonIndex <= 0 ? "" : String(seasonIndex + 1);
-
-    const tribesKey = `tribes${suffix}`;
-    const daysKey = `days${suffix}`;
-
-    if (fields[tribesKey]) {
-      info.tribes = parseTribes(fields[tribesKey]);
-    }
-    if (fields[daysKey]) {
-      info.daysLasted = parseDays(fields[daysKey]);
-    }
-  } else {
-    // Single-season player: use the base fields
-    if (fields.tribes) {
-      info.tribes = parseTribes(fields.tribes);
-    }
-    if (fields.days) {
-      info.daysLasted = parseDays(fields.days);
-    }
   }
 
   return info;

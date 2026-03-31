@@ -6,7 +6,6 @@ import {
   parseContestantPage,
   parseInfoboxFields,
   parseSeasonNumber,
-  parseTribes,
 } from "../wikitext-parser";
 
 // Real wikitext samples from the Survivor Wiki
@@ -123,23 +122,6 @@ describe("parseBirthDate", () => {
   });
 });
 
-describe("parseTribes", () => {
-  it("parses multiple tribeicon templates", () => {
-    const result = parseTribes("{{tribeicon|siga}}<br />{{tribeicon|nuinui}}");
-    expect(result).toEqual(["siga", "nuinui"]);
-  });
-
-  it("handles tribeicon4 variant", () => {
-    const result = parseTribes("{{tribeicon|vatu}}<br/>{{tribeicon4|kalo}}");
-    expect(result).toEqual(["vatu", "kalo"]);
-  });
-
-  it("parses a single tribe", () => {
-    const result = parseTribes("{{tribeicon|mogomogo}}");
-    expect(result).toEqual(["mogomogo"]);
-  });
-});
-
 describe("parseSeasonNumber", () => {
   it("parses {{S2|46}}", () => {
     expect(parseSeasonNumber("{{S2|46}}")).toBe(46);
@@ -188,8 +170,6 @@ describe("parseContestantPage", () => {
     expect(info!.age).toBeGreaterThanOrEqual(33);
     expect(info!.hometown).toBe("Miami, Florida");
     expect(info!.occupation).toBe("Musician");
-    expect(info!.tribes).toEqual(["siga", "nuinui"]);
-    expect(info!.daysLasted).toBe("26/26");
     expect(info!.previousSeasons).toEqual([]);
     expect(info!.allSeasons).toEqual([46]);
   });
@@ -199,8 +179,6 @@ describe("parseContestantPage", () => {
     expect(info).not.toBeNull();
     expect(info!.hometown).toBe("South Vienna, Ohio");
     expect(info!.occupation).toBe("Highway Construction Worker");
-    expect(info!.tribes).toEqual(["lopevi", "alinta"]);
-    expect(info!.daysLasted).toBe("39/39");
     expect(info!.previousSeasons).toEqual([]);
   });
 
@@ -209,15 +187,11 @@ describe("parseContestantPage", () => {
     expect(info).not.toBeNull();
     expect(info!.allSeasons).toEqual([2, 8, 20, 50]);
     expect(info!.previousSeasons).toEqual([2, 8, 20]);
-    // Should get S50 tribes (season4 suffix)
-    expect(info!.tribes).toEqual(["vatu", "kalo"]);
   });
 
   it("parses a returning player for their first season (Colby for S2)", () => {
     const info = parseContestantPage(COLBY_DONALDSON_WIKITEXT, 2);
     expect(info).not.toBeNull();
-    expect(info!.tribes).toEqual(["ogakor", "barramundi"]);
-    expect(info!.daysLasted).toBe("42/42");
     expect(info!.previousSeasons).toEqual([]);
   });
 
@@ -229,12 +203,6 @@ describe("parseContestantPage", () => {
   it("handles semicolon-separated occupation (returning player)", () => {
     const info = parseContestantPage(COLBY_DONALDSON_WIKITEXT, 50);
     expect(info!.occupation).toBe("Auto Customizer");
-  });
-
-  it("handles blank days field", () => {
-    const info = parseContestantPage(COLBY_DONALDSON_WIKITEXT, 50);
-    // days4 is empty in the wikitext — field is undefined since value is empty
-    expect(info!.daysLasted).toBeUndefined();
   });
 
   it("returns null for wikitext without Contestant template", () => {

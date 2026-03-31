@@ -7,8 +7,6 @@ export interface ScrapedPlayer {
   age?: number;
   profession?: string;
   hometown?: string;
-  tribes?: string[];
-  daysLasted?: string;
   previousSeasons?: number[];
   bio?: string;
 }

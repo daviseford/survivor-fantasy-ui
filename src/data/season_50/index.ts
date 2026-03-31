@@ -61,8 +61,6 @@ export const SEASON_50_PLAYERS = [
     age: 48,
     profession: "Student",
     hometown: "Franklin, New Hampshire",
-    tribes: ["cila"],
-    daysLasted: "3/26",
     previousSeasons: [1, 8],
   }),
   buildPlayer({
@@ -73,8 +71,6 @@ export const SEASON_50_PLAYERS = [
     age: 32,
     profession: "Attorney",
     hometown: "Brooklyn, New York",
-    tribes: ["vatu"],
-    daysLasted: "4/26",
     previousSeasons: [48],
   }),
   buildPlayer({
@@ -85,8 +81,6 @@ export const SEASON_50_PLAYERS = [
     age: 32,
     profession: "Former Reporter",
     hometown: "Atlanta, Georgia",
-    tribes: ["cila"],
-    daysLasted: "6/26",
     previousSeasons: [49],
   }),
   buildPlayer({
@@ -97,8 +91,6 @@ export const SEASON_50_PLAYERS = [
     age: 32,
     profession: "Real Estate Agent",
     hometown: "Memphis, Tennessee",
-    tribes: ["vatu"],
-    daysLasted: "8/26",
     previousSeasons: [46],
   }),
   buildPlayer({
@@ -109,8 +101,6 @@ export const SEASON_50_PLAYERS = [
     age: 55,
     profession: "Filmmaker",
     hometown: "Los Angeles, California",
-    tribes: ["kalo", "vatu"],
-    daysLasted: "9/26",
     previousSeasons: [37],
   }),
   buildPlayer({
@@ -121,8 +111,6 @@ export const SEASON_50_PLAYERS = [
     age: 36,
     profession: "Financial Consultant",
     hometown: "San Clemente, California",
-    tribes: ["vatu"],
-    daysLasted: "11/26",
     previousSeasons: [37],
   }),
   buildPlayer({
@@ -133,8 +121,6 @@ export const SEASON_50_PLAYERS = [
     age: 28,
     profession: "Law Student",
     hometown: "Boston, Massachusetts",
-    tribes: ["kalo", "cila"],
-    daysLasted: "11/26",
     previousSeasons: [46],
   }),
   buildPlayer({
@@ -145,7 +131,6 @@ export const SEASON_50_PLAYERS = [
     age: 40,
     profession: "Social Media Marketer",
     hometown: "Cambridge, Massachusetts",
-    tribes: ["vatu", "kalo"],
     previousSeasons: [32, 34, 38],
   }),
   buildPlayer({
@@ -156,7 +141,6 @@ export const SEASON_50_PLAYERS = [
     age: 55,
     profession: "Actuary",
     hometown: "Lebanon Township, New Jersey",
-    tribes: ["kalo"],
     previousSeasons: [35],
   }),
   buildPlayer({
@@ -167,7 +151,6 @@ export const SEASON_50_PLAYERS = [
     age: 40,
     profession: "Robotics Scientist",
     hometown: "Tallahassee, Florida",
-    tribes: ["cila", "vatu"],
     previousSeasons: [37],
   }),
   buildPlayer({
@@ -178,8 +161,6 @@ export const SEASON_50_PLAYERS = [
     age: 55,
     profession: "Nurse",
     hometown: "Walterboro, South Carolina",
-    tribes: ["world", "moorditj"],
-    daysLasted: "15/16",
     previousSeasons: [12, 16, 20, 34],
   }),
   buildPlayer({
@@ -190,7 +171,6 @@ export const SEASON_50_PLAYERS = [
     age: 54,
     profession: "Soccer Coach",
     hometown: "Bolivar, Missouri",
-    tribes: ["kalo"],
     previousSeasons: [18, 20, 23],
   }),
   buildPlayer({
@@ -201,7 +181,6 @@ export const SEASON_50_PLAYERS = [
     age: 51,
     profession: "Auto Customizer",
     hometown: "Dallas, Texas",
-    tribes: ["vatu", "kalo"],
     previousSeasons: [2, 8, 20],
   }),
   buildPlayer({
@@ -212,7 +191,6 @@ export const SEASON_50_PLAYERS = [
     age: 29,
     profession: "Entrepreneur",
     hometown: "Miami, Florida",
-    tribes: ["kalo", "cila"],
     previousSeasons: [45],
   }),
   buildPlayer({
@@ -223,7 +201,6 @@ export const SEASON_50_PLAYERS = [
     age: 31,
     profession: "Investment Analyst",
     hometown: "Laurel, Maryland",
-    tribes: ["cila", "vatu"],
     previousSeasons: [45],
   }),
   buildPlayer({
@@ -234,7 +211,6 @@ export const SEASON_50_PLAYERS = [
     age: 34,
     profession: "Corporate Lawyer",
     hometown: "Winnipeg, Manitoba",
-    tribes: ["vatu", "kalo"],
     previousSeasons: [47],
   }),
   buildPlayer({
@@ -245,7 +221,6 @@ export const SEASON_50_PLAYERS = [
     age: 46,
     profession: "Fire Captain",
     hometown: "West Sacramento, California",
-    tribes: ["cila", "kalo"],
     previousSeasons: [48],
   }),
   buildPlayer({
@@ -256,7 +231,6 @@ export const SEASON_50_PLAYERS = [
     age: 33,
     profession: "Beach Service Company Owner",
     hometown: "Gulf Shores, Alabama",
-    tribes: ["kalo", "cila"],
     previousSeasons: [42],
   }),
   buildPlayer({
@@ -267,7 +241,6 @@ export const SEASON_50_PLAYERS = [
     age: 32,
     profession: "Software Engineer",
     hometown: "Foster City, California",
-    tribes: ["kalo", "cila"],
     previousSeasons: [48],
   }),
   buildPlayer({
@@ -277,7 +250,6 @@ export const SEASON_50_PLAYERS = [
     age: 44,
     profession: "Waiter",
     hometown: "Venice, California",
-    tribes: ["cila", "vatu"],
     previousSeasons: [13, 16, 23, 34],
   }),
   buildPlayer({
@@ -287,7 +259,6 @@ export const SEASON_50_PLAYERS = [
     age: 41,
     profession: "News Anchor",
     hometown: "Macon, Georgia",
-    tribes: ["cila"],
     previousSeasons: [38],
   }),
   buildPlayer({
@@ -298,7 +269,6 @@ export const SEASON_50_PLAYERS = [
     age: 26,
     profession: "Tech Sales",
     hometown: "Yonkers, New York",
-    tribes: ["vatu", "cila"],
     previousSeasons: [49],
   }),
   buildPlayer({
@@ -309,7 +279,6 @@ export const SEASON_50_PLAYERS = [
     age: 46,
     profession: "Pharmaceutical Sales Representative",
     hometown: "Toms River, New Jersey",
-    tribes: ["vatu"],
     previousSeasons: [10, 11, 20],
   }),
   buildPlayer({
@@ -320,7 +289,6 @@ export const SEASON_50_PLAYERS = [
     age: 35,
     profession: "Artist",
     hometown: "Elizabeth, New Jersey",
-    tribes: ["kalo"],
     previousSeasons: [46],
   }),
 ] satisfies Player<PlayerName, SeasonNumber>[];

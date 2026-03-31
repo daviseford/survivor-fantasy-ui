@@ -86,8 +86,6 @@ async function scrape(seasonNum: number): Promise<void> {
       age: info?.age ?? castEntry.age,
       profession: info?.occupation ?? castEntry.occupation,
       hometown: info?.hometown ?? castEntry.location,
-      tribes: info?.tribes,
-      daysLasted: info?.daysLasted ?? undefined,
       previousSeasons:
         info?.previousSeasons && info.previousSeasons.length > 0
           ? info.previousSeasons
