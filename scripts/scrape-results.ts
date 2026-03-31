@@ -227,9 +227,17 @@ export async function scrapeResults(
   }
 
   // Step 8: Resolve tribe-level challenge wins to player names using wiki tribe data
+  // Resolve votetable short names → full names in tribeHistories before building rosters,
+  // because eliminations (used for swap detection and roster building) are already resolved
+  const resolvedTribeHistories = new Map(
+    [...voteResult.tribeHistories.entries()].map(([shortName, hist]) => [
+      resolvePlayerName(shortName),
+      hist,
+    ]),
+  );
   const mergeEpNum = mergeEpisode ? mergeEpisode.order : null;
   const tribeRoster = buildTribeRosters(
-    voteResult.tribeHistories,
+    resolvedTribeHistories,
     epguideResult.episodes,
     epguideResult.eliminations,
     mergeEpNum,
@@ -247,6 +255,7 @@ export async function scrapeResults(
 
     const tribePlayers = tribeMap.get(challenge.winnerTribe.toLowerCase());
     if (tribePlayers && tribePlayers.length > 0) {
+      // Names in tribeRoster are already resolved to full names
       challenge.winnerNames = [...tribePlayers].sort();
       resolved++;
     }

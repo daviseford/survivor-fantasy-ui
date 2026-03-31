@@ -334,8 +334,13 @@ describe("parseEpisodeGuide", () => {
       // S46 merge tribe is nuinui, first appears episode 6
       const ep6 = result.episodes.find((e) => e.order === 6);
       expect(ep6).toBeDefined();
-      expect(ep6!.postMerge).toBe(true);
+      // The merge episode itself has postMerge: false (postMerge means "after the merge episode")
+      expect(ep6!.postMerge).toBe(false);
       expect(ep6!.mergeOccurs).toBe(true);
+
+      // Episode after merge
+      const ep7 = result.episodes.find((e) => e.order === 7);
+      expect(ep7!.postMerge).toBe(true);
 
       // Pre-merge episodes
       const ep5 = result.episodes.find((e) => e.order === 5);
