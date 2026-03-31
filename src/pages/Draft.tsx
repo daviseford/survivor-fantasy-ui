@@ -437,7 +437,7 @@ export const DraftComponent = () => {
                 <CopyButton value={window.location.href}>
                   {({ copied, copy }) => (
                     <Button
-                      color={copied ? "teal" : "gray"}
+                      color={copied ? "teal" : "blue"}
                       onClick={copy}
                       variant="light"
                       leftSection={
