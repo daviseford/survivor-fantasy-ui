@@ -1,0 +1,143 @@
+{
+  "seasonNum": 49,
+  "scrapedAt": "2026-03-31T23:44:44.663Z",
+  "players": [
+    {
+      "wikiPageTitle": "Nicole Mazullo",
+      "localName": "Nicole Mazullo",
+      "matchStatus": "exact",
+      "age": 26,
+      "profession": "Financial Crime Consultant",
+      "hometown": "Philadelphia, PA"
+    },
+    {
+      "wikiPageTitle": "Annie Davis",
+      "localName": "Annie Davis",
+      "matchStatus": "exact",
+      "age": 50,
+      "profession": "Musician",
+      "hometown": "Austin, Texas"
+    },
+    {
+      "wikiPageTitle": "Jake Latimer",
+      "localName": "Jake Latimer",
+      "matchStatus": "exact",
+      "age": 36,
+      "profession": "Correctional Officer",
+      "hometown": "St. Albert, Alberta"
+    },
+    {
+      "wikiPageTitle": "Jeremiah Ing",
+      "localName": "Jeremiah Ing",
+      "matchStatus": "exact",
+      "age": 39,
+      "profession": "Global Events Manager",
+      "hometown": "Toronto, Ontario"
+    },
+    {
+      "wikiPageTitle": "Matt Williams",
+      "localName": "Matt Williams",
+      "matchStatus": "exact",
+      "age": 53,
+      "profession": "Airport Ramp Agent",
+      "hometown": "St. George, Utah"
+    },
+    {
+      "wikiPageTitle": "Jason Treul",
+      "localName": "Jason Treul",
+      "matchStatus": "exact",
+      "age": 33,
+      "profession": "Law Clerk",
+      "hometown": "Santa Ana, California"
+    },
+    {
+      "wikiPageTitle": "Nate Moore",
+      "localName": "Nate Moore",
+      "matchStatus": "exact",
+      "age": 47,
+      "profession": "Film Producer",
+      "hometown": "Hermosa Beach, California"
+    },
+    {
+      "wikiPageTitle": "MC Chukwujekwu",
+      "localName": "MC Chukwujekwu",
+      "matchStatus": "exact",
+      "age": 30,
+      "profession": "Fitness Trainer",
+      "hometown": "San Diego, California"
+    },
+    {
+      "wikiPageTitle": "Alex Moore",
+      "localName": "Alex Moore",
+      "matchStatus": "exact",
+      "age": 27,
+      "profession": "Political Communications Director",
+      "hometown": "Washington, District of Columbia"
+    },
+    {
+      "wikiPageTitle": "Jawan Pitts",
+      "localName": "Jawan Pitts",
+      "matchStatus": "exact",
+      "age": 28,
+      "profession": "Video Editor",
+      "hometown": "Los Angeles, California"
+    },
+    {
+      "wikiPageTitle": "Sophie Segreti",
+      "localName": "Sophie Segreti",
+      "matchStatus": "exact",
+      "age": 32,
+      "profession": "Strategy Associate",
+      "hometown": "New York, New York"
+    },
+    {
+      "wikiPageTitle": "Steven Ramm",
+      "localName": "Steven Ramm",
+      "matchStatus": "exact",
+      "age": 36,
+      "profession": "Rocket Scientist",
+      "hometown": "Denver, Colorado"
+    },
+    {
+      "wikiPageTitle": "Kristina Mills",
+      "localName": "Kristina Mills",
+      "matchStatus": "exact",
+      "age": 36,
+      "profession": "MBA Career Coach",
+      "hometown": "Edmond, Oklahoma"
+    },
+    {
+      "wikiPageTitle": "Rizo Velovic",
+      "localName": "Rizo Velovic",
+      "matchStatus": "exact",
+      "age": 26,
+      "profession": "Tech Sales",
+      "hometown": "Yonkers, New York"
+    },
+    {
+      "wikiPageTitle": "Sage Ahrens-Nichols",
+      "localName": "Sage Ahrens-Nichols",
+      "matchStatus": "exact",
+      "age": 31,
+      "profession": "Clinical Social Worker",
+      "hometown": "Olympia, Washington"
+    },
+    {
+      "wikiPageTitle": "Sophi Balerdi",
+      "localName": "Sophi Balerdi",
+      "matchStatus": "exact",
+      "age": 28,
+      "profession": "Entrepreneur",
+      "hometown": "Miami, Florida"
+    },
+    {
+      "wikiPageTitle": "Savannah Louie",
+      "localName": "Savannah Louie",
+      "matchStatus": "exact",
+      "age": 32,
+      "profession": "Former Reporter",
+      "hometown": "Atlanta, Georgia"
+    }
+  ],
+  "unmatched": []
+}

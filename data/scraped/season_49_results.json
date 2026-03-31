@@ -1,0 +1,642 @@
+{
+  "seasonNum": 49,
+  "scrapedAt": "2026-03-31T23:45:06.188Z",
+  "episodes": [
+    {
+      "order": 1,
+      "title": "Act One of a Horror Film",
+      "airDate": "September 24, 2025",
+      "isCombinedChallenge": true,
+      "isFinale": false,
+      "postMerge": false,
+      "mergeOccurs": false
+    },
+    {
+      "order": 2,
+      "title": "Cinema",
+      "airDate": "October 1, 2025",
+      "isCombinedChallenge": true,
+      "isFinale": false,
+      "postMerge": false,
+      "mergeOccurs": false
+    },
+    {
+      "order": 3,
+      "title": "Lovable Losers",
+      "airDate": "October 8, 2025",
+      "isCombinedChallenge": true,
+      "isFinale": false,
+      "postMerge": false,
+      "mergeOccurs": false
+    },
+    {
+      "order": 4,
+      "title": "Go Kick Rocks, Bro",
+      "airDate": "October 15, 2025",
+      "isCombinedChallenge": true,
+      "isFinale": false,
+      "postMerge": false,
+      "mergeOccurs": false
+    },
+    {
+      "order": 5,
+      "title": "I'm a Wolf, Baby",
+      "airDate": "October 22, 2025",
+      "isCombinedChallenge": true,
+      "isFinale": false,
+      "postMerge": false,
+      "mergeOccurs": false
+    },
+    {
+      "order": 6,
+      "title": "The Devil's Shoes",
+      "airDate": "October 29, 2025",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": false,
+      "mergeOccurs": false
+    },
+    {
+      "order": 7,
+      "title": "Blood Will Be Drawn",
+      "airDate": "November 5, 2025",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": false,
+      "mergeOccurs": true
+    },
+    {
+      "order": 8,
+      "title": "Hot Grim Reaper",
+      "airDate": "November 12, 2025",
+      "isCombinedChallenge": true,
+      "isFinale": false,
+      "postMerge": true,
+      "mergeOccurs": false
+    },
+    {
+      "order": 9,
+      "title": "If You're Loyal to All, You're Loyal to None",
+      "airDate": "November 19, 2025",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": true,
+      "mergeOccurs": false
+    },
+    {
+      "order": 10,
+      "title": "Huge Dose of Bamboozle",
+      "airDate": "November 26, 2025",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": true,
+      "mergeOccurs": false
+    },
+    {
+      "order": 11,
+      "title": "Cherry On Top",
+      "airDate": "December 3, 2025",
+      "isCombinedChallenge": true,
+      "isFinale": false,
+      "postMerge": true,
+      "mergeOccurs": false
+    },
+    {
+      "order": 12,
+      "title": "The Die Is Cast",
+      "airDate": "December 10, 2025",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": true,
+      "mergeOccurs": false
+    },
+    {
+      "order": 13,
+      "title": "A Fever Dream",
+      "airDate": "December 17, 2025",
+      "isCombinedChallenge": true,
+      "isFinale": true,
+      "postMerge": true,
+      "mergeOccurs": false
+    }
+  ],
+  "challenges": [
+    {
+      "episodeNum": 1,
+      "variant": "reward",
+      "winnerNames": [
+        "Jason Treul",
+        "Kristina Mills",
+        "Matt Williams",
+        "Sophie Segreti",
+        "Steven Ramm"
+      ],
+      "winnerTribe": "hina",
+      "order": 1
+    },
+    {
+      "episodeNum": 1,
+      "variant": "combined",
+      "winnerNames": [
+        "Jason Treul",
+        "Kristina Mills",
+        "Matt Williams",
+        "Sophie Segreti",
+        "Steven Ramm"
+      ],
+      "winnerTribe": "hina",
+      "order": 2
+    },
+    {
+      "episodeNum": 1,
+      "variant": "combined",
+      "winnerNames": [
+        "Jawan Pitts",
+        "Nate Moore",
+        "Rizo Velovic",
+        "Sage Ahrens-Nichols",
+        "Savannah Louie",
+        "Shannon"
+      ],
+      "winnerTribe": "uli",
+      "order": 3
+    },
+    {
+      "episodeNum": 2,
+      "variant": "combined",
+      "winnerNames": [
+        "Jason Treul",
+        "Kristina Mills",
+        "Matt Williams",
+        "Sophie Segreti",
+        "Steven Ramm"
+      ],
+      "winnerTribe": "hina",
+      "order": 4
+    },
+    {
+      "episodeNum": 2,
+      "variant": "combined",
+      "winnerNames": [
+        "Jawan Pitts",
+        "Nate Moore",
+        "Rizo Velovic",
+        "Sage Ahrens-Nichols",
+        "Savannah Louie",
+        "Shannon"
+      ],
+      "winnerTribe": "uli",
+      "order": 5
+    },
+    {
+      "episodeNum": 3,
+      "variant": "combined",
+      "winnerNames": [
+        "Jason Treul",
+        "Kristina Mills",
+        "Matt Williams",
+        "Sophie Segreti",
+        "Steven Ramm"
+      ],
+      "winnerTribe": "hina",
+      "order": 6
+    },
+    {
+      "episodeNum": 3,
+      "variant": "combined",
+      "winnerNames": [
+        "Jawan Pitts",
+        "Nate Moore",
+        "Rizo Velovic",
+        "Sage Ahrens-Nichols",
+        "Savannah Louie",
+        "Shannon"
+      ],
+      "winnerTribe": "uli",
+      "order": 7
+    },
+    {
+      "episodeNum": 4,
+      "variant": "combined",
+      "winnerNames": [
+        "Alex Moore",
+        "Kristina Mills",
+        "Sage Ahrens-Nichols",
+        "Shannon",
+        "Sophie Segreti",
+        "Steven Ramm"
+      ],
+      "winnerTribe": "kele",
+      "order": 8
+    },
+    {
+      "episodeNum": 5,
+      "variant": "combined",
+      "winnerNames": [
+        "Alex Moore",
+        "Kristina Mills",
+        "Sage Ahrens-Nichols",
+        "Shannon",
+        "Sophie Segreti",
+        "Steven Ramm"
+      ],
+      "winnerTribe": "kele",
+      "order": 9
+    },
+    {
+      "episodeNum": 6,
+      "variant": "reward",
+      "winnerNames": [
+        "Jawan Pitts",
+        "Nate Moore",
+        "Rizo Velovic",
+        "Savannah Louie",
+        "Sophi Balerdi"
+      ],
+      "winnerTribe": "hina",
+      "order": 10
+    },
+    {
+      "episodeNum": 6,
+      "variant": "reward",
+      "winnerNames": [],
+      "winnerTribe": "uli",
+      "order": 11
+    },
+    {
+      "episodeNum": 6,
+      "variant": "immunity",
+      "winnerNames": [
+        "Jawan Pitts",
+        "Nate Moore",
+        "Rizo Velovic",
+        "Savannah Louie",
+        "Sophi Balerdi"
+      ],
+      "winnerTribe": "hina",
+      "order": 12
+    },
+    {
+      "episodeNum": 6,
+      "variant": "immunity",
+      "winnerNames": [],
+      "winnerTribe": "uli",
+      "order": 13
+    },
+    {
+      "episodeNum": 7,
+      "variant": "reward",
+      "winnerNames": [
+        "Nate Moore",
+        "Rizo Velovic",
+        "Sophi Balerdi",
+        "Sophie Segreti",
+        "Steven Ramm"
+      ],
+      "winnerTribe": null,
+      "order": 14
+    },
+    {
+      "episodeNum": 7,
+      "variant": "immunity",
+      "winnerNames": [
+        "Sophie Segreti"
+      ],
+      "winnerTribe": null,
+      "order": 15
+    },
+    {
+      "episodeNum": 8,
+      "variant": "combined",
+      "winnerNames": [
+        "Alex Moore",
+        "Kristina Mills",
+        "Savannah Louie",
+        "Sophi Balerdi",
+        "Steven Ramm"
+      ],
+      "winnerTribe": null,
+      "order": 16
+    },
+    {
+      "episodeNum": 9,
+      "variant": "reward",
+      "winnerNames": [
+        "Alex Moore",
+        "<s>Kristina</s>",
+        "Savannah Louie",
+        "Sophie Segreti",
+        "(Jawan)"
+      ],
+      "winnerTribe": null,
+      "order": 17
+    },
+    {
+      "episodeNum": 9,
+      "variant": "immunity",
+      "winnerNames": [
+        "Steven Ramm",
+        "Savannah Louie"
+      ],
+      "winnerTribe": null,
+      "order": 18
+    },
+    {
+      "episodeNum": 10,
+      "variant": "reward",
+      "winnerNames": [
+        "Sage Ahrens-Nichols",
+        "Sophi Balerdi",
+        "Sophie Segreti",
+        "Steven Ramm"
+      ],
+      "winnerTribe": null,
+      "order": 19
+    },
+    {
+      "episodeNum": 10,
+      "variant": "immunity",
+      "winnerNames": [
+        "Sophie Segreti"
+      ],
+      "winnerTribe": null,
+      "order": 20
+    },
+    {
+      "episodeNum": 11,
+      "variant": "combined",
+      "winnerNames": [
+        "Steven Ramm"
+      ],
+      "winnerTribe": null,
+      "order": 21
+    },
+    {
+      "episodeNum": 12,
+      "variant": "reward",
+      "winnerNames": [
+        "Savannah Louie"
+      ],
+      "winnerTribe": null,
+      "order": 22
+    },
+    {
+      "episodeNum": 12,
+      "variant": "immunity",
+      "winnerNames": [
+        "Savannah Louie"
+      ],
+      "winnerTribe": null,
+      "order": 23
+    },
+    {
+      "episodeNum": 13,
+      "variant": "combined",
+      "winnerNames": [
+        "Savannah Louie"
+      ],
+      "winnerTribe": null,
+      "order": 24
+    },
+    {
+      "episodeNum": 13,
+      "variant": "immunity",
+      "winnerNames": [
+        "Sophi Balerdi"
+      ],
+      "winnerTribe": null,
+      "order": 25
+    }
+  ],
+  "eliminations": [
+    {
+      "episodeNum": 1,
+      "playerName": "Nicole Mazullo",
+      "voteString": "5-1",
+      "variant": "tribal",
+      "finishText": "1st Voted Out\nDay 3",
+      "order": 1
+    },
+    {
+      "episodeNum": 2,
+      "playerName": "Annie Davis",
+      "voteString": "4-1",
+      "variant": "tribal",
+      "finishText": "2nd Voted Out\nDay 5",
+      "order": 2
+    },
+    {
+      "episodeNum": 3,
+      "playerName": "Jake Latimer",
+      "voteString": "no vote",
+      "variant": "medical",
+      "finishText": "Evacuated\nDay 6",
+      "order": 3
+    },
+    {
+      "episodeNum": 3,
+      "playerName": "Jeremiah Ing",
+      "voteString": "2-0",
+      "variant": "tribal",
+      "finishText": "3rd Voted Out\nDay 6",
+      "order": 4
+    },
+    {
+      "episodeNum": 4,
+      "playerName": "Matt Williams",
+      "voteString": "4-2-1",
+      "variant": "tribal",
+      "finishText": "4th Voted Out\nDay 8",
+      "order": 5
+    },
+    {
+      "episodeNum": 5,
+      "playerName": "Jason Treul",
+      "voteString": "5-1",
+      "variant": "tribal",
+      "finishText": "5th Voted Out\nDay 10",
+      "order": 6
+    },
+    {
+      "episodeNum": 6,
+      "playerName": "Shannon",
+      "voteString": "3-1",
+      "variant": "tribal",
+      "finishText": "6th Voted Out\nDay 12",
+      "order": 7
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Nate Moore",
+      "voteString": "7-4",
+      "variant": "tribal",
+      "finishText": "7th Voted Out\n1st Jury Member\nDay 14",
+      "order": 8
+    },
+    {
+      "episodeNum": 8,
+      "playerName": "MC Chukwujekwu",
+      "voteString": "4-1",
+      "variant": "tribal",
+      "finishText": "8th Voted Out\n2nd Jury Member\nDay 15",
+      "order": 9
+    },
+    {
+      "episodeNum": 9,
+      "playerName": "Alex Moore",
+      "voteString": "6-2-1",
+      "variant": "tribal",
+      "finishText": "9th Voted Out\n3rd Jury Member\nDay 17",
+      "order": 10
+    },
+    {
+      "episodeNum": 10,
+      "playerName": "Jawan Pitts",
+      "voteString": "5-3-1",
+      "variant": "tribal",
+      "finishText": "10th Voted Out\n4th Jury Member\nDay 19",
+      "order": 11
+    },
+    {
+      "episodeNum": 11,
+      "playerName": "Sophie Segreti",
+      "voteString": "6-1",
+      "variant": "tribal",
+      "finishText": "11th Voted Out\n5th Jury Member\nDay 21",
+      "order": 12
+    },
+    {
+      "episodeNum": 12,
+      "playerName": "Steven Ramm",
+      "voteString": "4-1",
+      "variant": "tribal",
+      "finishText": "12th Voted Out\n6th Jury Member\nDay 23",
+      "order": 13
+    },
+    {
+      "episodeNum": 13,
+      "playerName": "Kristina Mills",
+      "voteString": "4-1",
+      "variant": "tribal",
+      "finishText": "13th Voted Out\n7th Jury Member\nDay 24",
+      "order": 14
+    },
+    {
+      "episodeNum": 13,
+      "playerName": "Rizo Velovic",
+      "voteString": "no vote",
+      "variant": "tribal",
+      "finishText": "Eliminated\n8th Jury Member\nDay 25",
+      "order": 15
+    },
+    {
+      "episodeNum": 13,
+      "playerName": "Sage Ahrens-Nichols",
+      "voteString": "5-2-1",
+      "variant": "final_tribal_council",
+      "finishText": "| Second Runner-Up",
+      "order": 16
+    },
+    {
+      "episodeNum": 13,
+      "playerName": "Sophi Balerdi",
+      "voteString": "5-2-1",
+      "variant": "final_tribal_council",
+      "finishText": "| Runner-Up",
+      "order": 17
+    }
+  ],
+  "events": [
+    {
+      "episodeNum": 3,
+      "playerName": "Alex Moore",
+      "action": "votes_negated_by_idol",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "MC Chukwujekwu",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Alex Moore",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Jawan Pitts",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Sophie Segreti",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Steven Ramm",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Kristina Mills",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Rizo Velovic",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Sage Ahrens-Nichols",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Sophi Balerdi",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Savannah Louie",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 13,
+      "playerName": "Savannah Louie",
+      "action": "win_survivor",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 13,
+      "playerName": "Sage Ahrens-Nichols",
+      "action": "make_final_tribal_council",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 13,
+      "playerName": "Sophi Balerdi",
+      "action": "make_final_tribal_council",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 13,
+      "playerName": "Savannah Louie",
+      "action": "make_final_tribal_council",
+      "multiplier": null
+    }
+  ],
+  "warnings": []
+}
