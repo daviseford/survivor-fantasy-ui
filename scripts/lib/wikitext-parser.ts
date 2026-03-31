@@ -1434,3 +1434,46 @@ export function buildTribeRosters(
 
   return result;
 }
+
+/**
+ * Parse tribe assignments from a season page's Castaways table.
+ * Fallback for older seasons where the votetable doesn't have tribebox2/tribeicon1 patterns.
+ * Returns a Map of player name → original tribe key (lowercase).
+ */
+export function parseCastawayTribes(
+  seasonPageWikitext: string,
+): Map<string, string> {
+  const result = new Map<string, string>();
+
+  // Find the Castaways section
+  const lines = seasonPageWikitext.split("\n");
+  let inCastaways = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+
+    if (/==\s*Castaways\s*==/i.test(line)) {
+      inCastaways = true;
+      continue;
+    }
+    if (inCastaways && /^==\s*[^=]/.test(line)) {
+      break; // Next section
+    }
+    if (!inCastaways) continue;
+
+    // Look for tribebox2|TRIBE followed by a player link on the same line
+    // Pattern: {{tribebox2|TRIBE}}[[Image:...|link=PLAYER_NAME]]
+    const tribePlayerMatch = line.match(
+      /\{\{tribebox2\|([^}]+)\}\}.*\[\[(?:Image|File):[^|]*\|[^|]*\|link=([^\]]+)\]\]/i,
+    );
+    if (tribePlayerMatch) {
+      const tribe = tribePlayerMatch[1].toLowerCase();
+      const playerName = tribePlayerMatch[2].trim();
+      if (tribe !== "out" && tribe !== "none") {
+        result.set(playerName, tribe);
+      }
+    }
+  }
+
+  return result;
+}

@@ -2,12 +2,18 @@ import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
 import type { ScrapeResultsOutput } from "./lib/types.js";
-import { fetchEpisodeTitles, fetchWikitext } from "./lib/wiki-api.js";
+import {
+  fetchEpisodeTitles,
+  fetchWikitext,
+  getSeasonPageName,
+} from "./lib/wiki-api.js";
 import {
   buildTribeRosters,
+  parseCastawayTribes,
   parseEpisodeGuide,
   parseVotingHistory,
 } from "./lib/wikitext-parser.js";
+import type { PlayerTribeHistory } from "./lib/types.js";
 
 export async function scrapeResults(
   seasonNum: number,
@@ -227,14 +233,44 @@ export async function scrapeResults(
   }
 
   // Step 8: Resolve tribe-level challenge wins to player names using wiki tribe data
-  // Resolve votetable short names → full names in tribeHistories before building rosters,
-  // because eliminations (used for swap detection and roster building) are already resolved
-  const resolvedTribeHistories = new Map(
-    [...voteResult.tribeHistories.entries()].map(([shortName, hist]) => [
-      resolvePlayerName(shortName),
-      hist,
-    ]),
-  );
+  let resolvedTribeHistories: Map<string, PlayerTribeHistory>;
+
+  if (voteResult.tribeHistories.size > 0) {
+    // Modern seasons: resolve votetable short names → full names
+    resolvedTribeHistories = new Map(
+      [...voteResult.tribeHistories.entries()].map(([shortName, hist]) => [
+        resolvePlayerName(shortName),
+        hist,
+      ]),
+    );
+  } else {
+    // Older seasons: votetable doesn't have tribebox2 patterns.
+    // Fallback: fetch tribe data from the season page's Castaways table.
+    console.log(
+      `\nVotetable has no tribe data — fetching from season page...`,
+    );
+    const seasonPageName = getSeasonPageName(seasonNum);
+    const seasonPageWikitext = await fetchWikitext(seasonPageName);
+    if (seasonPageWikitext) {
+      const castawayTribes = parseCastawayTribes(seasonPageWikitext);
+      console.log(
+        `  Parsed ${castawayTribes.size} player tribe assignments from ${seasonPageName}`,
+      );
+      // Convert to PlayerTribeHistory format (original tribe only, no swaps)
+      resolvedTribeHistories = new Map<string, PlayerTribeHistory>();
+      for (const [wikiName, tribe] of castawayTribes) {
+        const fullName = resolvePlayerName(wikiName);
+        resolvedTribeHistories.set(fullName, {
+          tribebox2: tribe,
+          tribeicons: [],
+        });
+      }
+    } else {
+      console.warn(`  Could not fetch season page — tribe resolution skipped`);
+      resolvedTribeHistories = new Map();
+    }
+  }
+
   const mergeEpNum = mergeEpisode ? mergeEpisode.order : null;
   const tribeRoster = buildTribeRosters(
     resolvedTribeHistories,
