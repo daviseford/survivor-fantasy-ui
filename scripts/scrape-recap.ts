@@ -141,32 +141,57 @@ function buildPrompt(
   seasonNum: number,
   recapText: string,
   playerNames: string[],
+  articleTitle?: string,
 ): string {
   const playerSection =
     playerNames.length > 0
       ? `\nThe players this season are (use these EXACT names in your output):\n${playerNames.map((n) => `- "${n}"`).join("\n")}\n\nWhen the article refers to a player by first name, nickname, or last name, match them to the correct full name from this list. For example, if the article says "Coach" and the list has "Benjamin \\"Coach\\" Wade", use "Benjamin \\"Coach\\" Wade". If the article says "Ozzy", use "Ozzy Lusth". Always use the exact name from the list above.\n`
       : "";
 
+  // Extract episode number from article title (e.g., "Episode 1 Recap — ...")
+  let episodeHint = "";
+  if (articleTitle) {
+    const epMatch = articleTitle.match(/Episode\s+(\d+)/i);
+    if (epMatch) {
+      const epNum = parseInt(epMatch[1], 10);
+      episodeHint = `\nThis article is a recap of Episode ${epNum}. Use episode number ${epNum} for events that happen in this episode.`;
+      // For premiere episodes (ep 1), note that 2-hour premieres span 2 episodes
+      if (epNum === 1) {
+        episodeHint += `\nIMPORTANT: Season premieres are often 2-hour episodes covering Episodes 1 AND 2. If the article describes events happening after the first tribal council/elimination (e.g., "Day 4" or later, or a second camp scene after someone was voted out), those events belong to Episode 2, not Episode 1. Pay careful attention to day numbers and tribal council boundaries to assign the correct episode.`;
+      }
+      // For finale episodes, note they may span multiple episodes
+      if (articleTitle.toLowerCase().includes("finale")) {
+        episodeHint += `\nNote: Finale episodes may cover multiple episodes. Assign events to the specific episode number where they occur if the article provides that detail.`;
+      }
+    }
+  }
+
   return `You are extracting structured game events from a Survivor Season ${seasonNum} recap article.
-${playerSection}
+${playerSection}${episodeHint}
+
 Read the following recap text and extract every game event you can identify. Each event must use one of these action values:
 
 ${GAME_EVENT_ACTIONS.map((a) => `- "${a}"`).join("\n")}
 
 For each event, output a JSON object with these fields:
-- "episodeNum": number (the episode number if mentioned, or your best estimate)
+- "episodeNum": number (the episode number — pay attention to day numbers and tribal council boundaries)
 - "playerName": string (the player's full name from the player list above, or their commonly used name if no player list is available)
 - "action": string (one of the values above)
 - "multiplier": number | null (null unless the event has a specific multiplier, e.g. votes_negated_by_idol where multiplier = number of votes negated)
 
 Important rules:
 - Only include events where the article EXPLICITLY states who performed the action. Do not infer or guess.
-- For idol finds, use "find_idol". For idol plays, use "use_idol"
-- For advantage finds, use "find_advantage" or "win_advantage" (if won in a challenge/game)
-- For advantage uses, use "use_advantage"
-- For Shot in the Dark, use "use_shot_in_the_dark_successfully" or "use_shot_in_the_dark_unsuccessfully"
-- For journey events, use "go_on_journey"
-- If votes were negated by an idol, create a "votes_negated_by_idol" event with multiplier = number of votes negated
+- "find_idol" = a player discovers a hidden immunity idol at camp or on an island
+- "find_advantage" = a player discovers an advantage (NOT an idol) — e.g., found on the ground, in a tree, at camp
+- "win_advantage" = a player WINS an advantage through a game or competition (e.g., journey game, auction, challenge reward)
+- "find_beware_advantage" = a player finds a Beware Advantage specifically
+- "accept_beware_advantage" = a player accepts/opens a Beware Advantage after finding it
+- "fulfill_beware_advantage" = a player completes the Beware Advantage conditions (e.g., says the secret phrase)
+- "use_idol" = a player plays a hidden immunity idol at tribal council
+- "use_advantage" = a player uses an advantage (steal-a-vote, extra vote, etc.)
+- "go_on_journey" = a player is selected/sent on a journey or trek away from camp
+- "use_shot_in_the_dark_successfully" or "use_shot_in_the_dark_unsuccessfully" = Shot in the Dark
+- "votes_negated_by_idol" = votes were cancelled by an idol play. Set multiplier = number of votes negated
 - Do not include challenge wins, eliminations, or vote-outs — those are tracked separately
 - Set multiplier to null for all events unless explicitly applicable
 - Pay close attention to WHO actually won/found/used something. Articles often mention multiple players in the same paragraph — only attribute the action to the player who actually did it.
@@ -227,6 +252,7 @@ async function scrapeOneRecap(
   tmpDir: string,
   label: string,
   playerNames: string[],
+  articleTitle?: string,
 ): Promise<ScrapedGameEvent[]> {
   // Fetch the page
   const response = await fetch(url, {
@@ -249,7 +275,7 @@ async function scrapeOneRecap(
       : recapText;
 
   // Call Claude (with one retry on failure)
-  const prompt = buildPrompt(seasonNum, truncatedText, playerNames);
+  const prompt = buildPrompt(seasonNum, truncatedText, playerNames, articleTitle);
   let responseText: string;
   try {
     responseText = callClaude(prompt, tmpDir, label);
@@ -334,6 +360,7 @@ async function scrapeRecap(
         tmpDir,
         `${seasonNum}-${i}`,
         playerNames,
+        title,
       );
 
       console.log(`  Extracted ${events.length} events`);
