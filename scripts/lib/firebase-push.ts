@@ -109,6 +109,7 @@ export async function pushSeasonToFirestore(
 
   console.log(`\nUploading season ${seasonNum} data to Firestore...\n`);
 
+  const failures: string[] = [];
   for (const doc of documents) {
     try {
       const [collection, docId] = doc.path.split("/");
@@ -116,7 +117,14 @@ export async function pushSeasonToFirestore(
       console.log(`  [OK] ${doc.path}`);
     } catch (err) {
       console.error(`  [FAIL] ${doc.path}:`, err);
+      failures.push(doc.path);
     }
+  }
+
+  if (failures.length > 0) {
+    throw new Error(
+      `Firestore upload partially failed. ${failures.length} document(s) failed: ${failures.join(", ")}`,
+    );
   }
 
   console.log(`\nFirestore upload complete.`);

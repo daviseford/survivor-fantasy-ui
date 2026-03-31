@@ -1186,7 +1186,7 @@ export function parseVotingHistory(
           events.push({
             episodeNum: epNum,
             playerName: negatedTarget,
-            action: "idol_play_negated_vote",
+            action: "votes_negated_by_idol",
             multiplier: null,
           });
         }
