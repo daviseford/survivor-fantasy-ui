@@ -157,7 +157,7 @@ function buildPrompt(
       episodeHint = `\nThis article is a recap of Episode ${epNum}. Use episode number ${epNum} for events that happen in this episode.`;
       // For premiere episodes (ep 1), note that 2-hour premieres span 2 episodes
       if (epNum === 1) {
-        episodeHint += `\nIMPORTANT: Season premieres are often 2-hour episodes covering Episodes 1 AND 2. If the article describes events happening after the first tribal council/elimination (e.g., "Day 4" or later, or a second camp scene after someone was voted out), those events belong to Episode 2, not Episode 1. Pay careful attention to day numbers and tribal council boundaries to assign the correct episode.`;
+        episodeHint += `\nNote: Season premieres may be 2-hour episodes covering Episodes 1 AND 2. Most events in this article belong to Episode 1. However, if the article clearly describes a SECOND round of gameplay after the first tribal council (e.g., "the next day", "Day 4", a new immunity challenge after someone was already voted out), only THOSE later events belong to Episode 2. When in doubt, use Episode 1.`;
       }
       // For finale episodes, note they may span multiple episodes
       if (articleTitle.toLowerCase().includes("finale")) {
