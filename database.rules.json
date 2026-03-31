@@ -1,0 +1,13 @@
+{
+  "rules": {
+    ".read": "auth.token.admin === true",
+    ".write": "auth.token.admin === true",
+
+    "drafts": {
+      "$draftId": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    }
+  }
+}

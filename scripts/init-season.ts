@@ -45,9 +45,7 @@ const outputPath = path.join(outputDir, "index.ts");
 
 if (fs.existsSync(outputPath)) {
   console.error(`Season data file already exists: ${outputPath}`);
-  console.error(
-    `Use 'yarn backfill ${seasonNum}' to update an existing file.`,
-  );
+  console.error(`Use 'yarn backfill ${seasonNum}' to update an existing file.`);
   process.exit(1);
 }
 
@@ -85,7 +83,9 @@ lines.push(
   `export const SEASON_${seasonNum}_EPISODES = [] satisfies Episode<SeasonNumber>[];`,
 );
 lines.push("");
-lines.push(`export const SEASON_${seasonNum}_CHALLENGES = {} satisfies Record<`);
+lines.push(
+  `export const SEASON_${seasonNum}_CHALLENGES = {} satisfies Record<`,
+);
 lines.push(`  Challenge["id"],`);
 lines.push(`  Challenge<PlayerName, SeasonNumber>`);
 lines.push(`>;`);
