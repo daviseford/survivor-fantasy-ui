@@ -37,6 +37,19 @@ const PlayerCard = (props: Player) => {
       <Text ta="center" fw={600} mt="sm" size="sm">
         {props.name}
       </Text>
+      {(props.age || props.profession || props.hometown) && (
+        <Text ta="center" size="xs" c="dimmed" lh={1.3} mt={4}>
+          {props.age && <>{props.age}</>}
+          {props.age && props.profession && " · "}
+          {props.profession && <>{props.profession}</>}
+          {(props.age || props.profession) && props.hometown && (
+            <>
+              <br />
+            </>
+          )}
+          {props.hometown && <>{props.hometown}</>}
+        </Text>
+      )}
     </Paper>
   );
 };

@@ -65,7 +65,7 @@ export const AppRoutes = () => {
             }}
             navbar={{
               width: 300,
-              breakpoint: "sm",
+              breakpoint: "md",
               collapsed: { mobile: !opened },
             }}
             padding="md"
@@ -75,7 +75,7 @@ export const AppRoutes = () => {
                 <Burger
                   opened={opened}
                   onClick={toggle}
-                  hiddenFrom="sm"
+                  hiddenFrom="md"
                   size="sm"
                 />
                 <Anchor
