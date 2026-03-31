@@ -5,27 +5,7 @@
  */
 
 import * as fs from "fs";
-
-interface ScrapedPlayer {
-  wikiPageTitle: string;
-  localName: string;
-  matchStatus: "exact" | "fuzzy" | "unmatched";
-  age?: number;
-  profession?: string;
-  hometown?: string;
-  tribes?: string[];
-  finishPlacement?: string;
-  daysLasted?: string;
-  previousSeasons?: number[];
-  bio?: string;
-}
-
-interface ScrapeResult {
-  seasonNum: number;
-  scrapedAt: string;
-  players: ScrapedPlayer[];
-  unmatched: ScrapedPlayer[];
-}
+import type { ScrapedPlayer, ScrapeResult } from "./types.js";
 
 interface ExistingPlayerData {
   name: string;
@@ -92,7 +72,6 @@ export function findPlayerSectionEnd(
   // Look for the satisfies line that ends the players array
   const patterns = [
     `] satisfies Player<PlayerName, SeasonNumber>[];`,
-    `] satisfies Player<S9_Players, SeasonNum>[];`, // Season 9 variant
     `] satisfies Player<PlayerName, ${seasonNum}>[];`,
   ];
 
@@ -203,7 +182,6 @@ export function generatePlayerSection(
   scrapedPlayers: ScrapedPlayer[],
   existingPlayers: ExistingPlayerData[],
   imgConstant: { constLine: string; prefix: string } | null,
-  includeImports = true,
 ): string {
   // Build a map of existing players for img lookup
   const existingMap = new Map(existingPlayers.map((p) => [p.name, p]));
@@ -271,18 +249,6 @@ export function generatePlayerSection(
 
   // Build the output
   const lines: string[] = [];
-
-  // Imports (only if generating a standalone section)
-  if (includeImports) {
-    lines.push(`import {`);
-    lines.push(`  Challenge,`);
-    lines.push(`  Elimination,`);
-    lines.push(`  Episode,`);
-    lines.push(`  GameEvent,`);
-    lines.push(`  Player,`);
-    lines.push(`} from "../../types";`);
-    lines.push(``);
-  }
 
   // Player names array
   lines.push(
@@ -414,13 +380,8 @@ export function generateSeasonFile(
     scrapeData.players,
     existingPlayers,
     imgConstant,
-    false, // don't include imports
   );
 
   return beforePlayers + playerSection + afterPlayers;
 }
 
-// Utility for standalone testing
-export function readScrapeResult(filePath: string): ScrapeResult {
-  return JSON.parse(fs.readFileSync(filePath, "utf-8"));
-}

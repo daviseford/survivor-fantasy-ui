@@ -26,7 +26,10 @@ function normalize(name: string): string {
 
 /** Extract the last name (last space-separated word) */
 function lastName(name: string): string {
-  const cleaned = name.replace(/_/g, " ").replace(/['""\u201C\u201D\u2018\u2019]/g, "").trim();
+  const cleaned = name
+    .replace(/_/g, " ")
+    .replace(/['""\u201C\u201D\u2018\u2019]/g, "")
+    .trim();
   const parts = cleaned.split(/\s+/);
   return parts[parts.length - 1].toLowerCase();
 }
@@ -63,7 +66,9 @@ export function resolveNames(
 
     // Strategy 1: Exact match after normalization
     let matched = localNames.find(
-      (local) => normalize(local) === wikiNorm || normalize(local) === displayNorm,
+      (local) =>
+        !matchedLocalNames.has(local) &&
+        (normalize(local) === wikiNorm || normalize(local) === displayNorm),
     );
 
     // Strategy 2: Last name match + first name overlap

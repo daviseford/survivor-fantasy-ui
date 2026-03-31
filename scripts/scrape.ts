@@ -1,33 +1,13 @@
 import * as fs from "fs";
 import * as path from "path";
 import { resolveNames } from "./lib/name-resolver.js";
+import type { ScrapedPlayer, ScrapeResult } from "./lib/types.js";
 import { delay, fetchWikitext, getSeasonPageName } from "./lib/wiki-api.js";
 import {
+  ContestantInfo,
   parseCastTable,
   parseContestantPage,
-  ContestantInfo,
 } from "./lib/wikitext-parser.js";
-
-interface ScrapedPlayer {
-  wikiPageTitle: string;
-  localName: string;
-  matchStatus: "exact" | "fuzzy" | "unmatched";
-  age?: number;
-  profession?: string;
-  hometown?: string;
-  tribes?: string[];
-  finishPlacement?: string;
-  daysLasted?: string;
-  previousSeasons?: number[];
-  bio?: string;
-}
-
-interface ScrapeResult {
-  seasonNum: number;
-  scrapedAt: string;
-  players: ScrapedPlayer[];
-  unmatched: ScrapedPlayer[];
-}
 
 async function getLocalPlayers(seasonNum: number): Promise<string[]> {
   // Dynamically import the season data to get local player names
@@ -71,7 +51,9 @@ async function scrape(seasonNum: number): Promise<void> {
   console.log(`Found ${castEntries.length} contestants in cast table\n`);
 
   if (castEntries.length === 0) {
-    console.error("No contestants found in cast table. Check season page name.");
+    console.error(
+      "No contestants found in cast table. Check season page name.",
+    );
     process.exit(1);
   }
 

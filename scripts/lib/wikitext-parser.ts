@@ -4,9 +4,6 @@
  */
 
 export interface ContestantInfo {
-  birthYear?: number;
-  birthMonth?: number;
-  birthDay?: number;
   age?: number;
   hometown?: string;
   occupation?: string;
@@ -135,9 +132,6 @@ export function parseContestantPage(
   if (fields.birthdate) {
     const birth = parseBirthDate(fields.birthdate);
     if (birth) {
-      info.birthYear = birth.year;
-      info.birthMonth = birth.month;
-      info.birthDay = birth.day;
       info.age = birth.age;
     }
   }
@@ -172,8 +166,6 @@ export function parseContestantPage(
     if (fields[key]) {
       const sn = parseSeasonNumber(fields[key]);
       if (sn) allSeasons.push(sn);
-    } else {
-      break;
     }
   }
 
@@ -182,8 +174,14 @@ export function parseContestantPage(
   // previousSeasons = seasons that appear BEFORE the target season in the list
   if (targetSeasonNum && allSeasons.length > 0) {
     const targetIndex = allSeasons.indexOf(targetSeasonNum);
-    info.previousSeasons =
-      targetIndex > 0 ? allSeasons.slice(0, targetIndex) : [];
+    if (targetIndex === -1) {
+      // Target season not listed on wiki yet — all known seasons are previous
+      info.previousSeasons = [...allSeasons];
+    } else if (targetIndex > 0) {
+      info.previousSeasons = allSeasons.slice(0, targetIndex);
+    } else {
+      info.previousSeasons = [];
+    }
   } else if (allSeasons.length > 1) {
     // If no target specified, all but the last are "previous"
     info.previousSeasons = allSeasons.slice(0, -1);
@@ -192,6 +190,10 @@ export function parseContestantPage(
   // Find the tribes/place/days for the target season
   if (targetSeasonNum && allSeasons.length > 0) {
     const seasonIndex = allSeasons.indexOf(targetSeasonNum);
+    if (seasonIndex === -1) {
+      // Target season not listed — skip tribes/place/days
+      return info;
+    }
     const suffix = seasonIndex <= 0 ? "" : String(seasonIndex + 1);
 
     const tribesKey = `tribes${suffix}`;
