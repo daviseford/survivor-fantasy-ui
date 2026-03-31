@@ -5,7 +5,15 @@
  */
 
 import * as fs from "fs";
-import type { ScrapedPlayer, ScrapeResult } from "./types.js";
+import type {
+  ScrapedChallenge,
+  ScrapedElimination,
+  ScrapedEpisode,
+  ScrapedGameEvent,
+  ScrapedPlayer,
+  ScrapeResult,
+  ScrapeResultsOutput,
+} from "./types.js";
 
 interface ExistingPlayerData {
   name: string;
@@ -363,4 +371,338 @@ export function generateSeasonFile(
   );
 
   return beforePlayers + playerSection + afterPlayers;
+}
+
+// ---------------------------------------------------------------------------
+// Gameplay data generation
+// ---------------------------------------------------------------------------
+
+/**
+ * Parse a vote string like "5-3" or "7-2-1" to extract the first number
+ * (votes received by the eliminated player).
+ */
+function parseVotesReceived(voteString: string): number | undefined {
+  const match = voteString.match(/^(\d+)/);
+  if (match) return Number(match[1]);
+  return undefined;
+}
+
+/**
+ * Generate the SEASON_N_EPISODES export array.
+ */
+export function generateEpisodeSection(
+  episodes: ScrapedEpisode[],
+  seasonNum: number,
+): string {
+  const lines: string[] = [];
+  lines.push(`export const SEASON_${seasonNum}_EPISODES = [`);
+
+  for (const ep of episodes) {
+    lines.push(`  {`);
+    lines.push(`    id: "episode_${ep.order}",`);
+    lines.push(`    season_id: "season_${seasonNum}",`);
+    lines.push(`    season_num: ${seasonNum},`);
+    lines.push(`    order: ${ep.order},`);
+    lines.push(`    name: ${escapeString(ep.title)},`);
+    lines.push(`    post_merge: ${ep.postMerge},`);
+    lines.push(`    finale: ${ep.isFinale},`);
+    lines.push(`    merge_occurs: ${ep.mergeOccurs},`);
+    lines.push(`  },`);
+  }
+
+  lines.push(`] satisfies Episode<SeasonNumber>[];`);
+  return lines.join("\n");
+}
+
+/**
+ * Generate the SEASON_N_CHALLENGES export Record.
+ */
+export function generateChallengeSection(
+  challenges: ScrapedChallenge[],
+  seasonNum: number,
+  playerNames: string[],
+): string {
+  const lines: string[] = [];
+  const playerNameSet = new Set(playerNames);
+
+  lines.push(`export const SEASON_${seasonNum}_CHALLENGES = {`);
+
+  for (const ch of challenges) {
+    const id = `challenge_${ch.order}`;
+    // Filter winners to only those in playerNames (handles tribe names vs player names)
+    const validWinners = ch.winnerNames.filter((n) => playerNameSet.has(n));
+
+    lines.push(`  ${id}: {`);
+    lines.push(`    id: "${id}",`);
+    lines.push(`    season_id: "season_${seasonNum}",`);
+    lines.push(`    season_num: ${seasonNum},`);
+    lines.push(`    episode_id: "episode_${ch.episodeNum}",`);
+    lines.push(`    episode_num: ${ch.episodeNum},`);
+    lines.push(`    variant: "${ch.variant}",`);
+    lines.push(`    order: ${ch.order},`);
+
+    if (validWinners.length === 0) {
+      // All winners were tribe names — emit empty array with TODO
+      lines.push(`    // TODO: resolve tribe winners to player names`);
+      lines.push(`    winning_players: [],`);
+    } else {
+      lines.push(`    winning_players: [`);
+      for (const name of validWinners) {
+        lines.push(`      ${escapeString(name)},`);
+      }
+      lines.push(`    ],`);
+    }
+
+    lines.push(`  },`);
+  }
+
+  lines.push(
+    `} satisfies Record<Challenge["id"], Challenge<PlayerName, SeasonNumber>>;`,
+  );
+  return lines.join("\n");
+}
+
+/**
+ * Generate the SEASON_N_ELIMINATIONS export Record.
+ */
+export function generateEliminationSection(
+  eliminations: ScrapedElimination[],
+  seasonNum: number,
+  playerNames: string[],
+): string {
+  const lines: string[] = [];
+  const playerNameSet = new Set(playerNames);
+
+  lines.push(`export const SEASON_${seasonNum}_ELIMINATIONS = {`);
+
+  for (const elim of eliminations) {
+    const id = `elimination_${elim.order}`;
+    const nameValid = playerNameSet.has(elim.playerName);
+    const votesReceived = parseVotesReceived(elim.voteString);
+
+    lines.push(`  ${id}: {`);
+    lines.push(`    id: "${id}",`);
+    lines.push(`    season_id: "season_${seasonNum}",`);
+    lines.push(`    season_num: ${seasonNum},`);
+    lines.push(`    episode_id: "episode_${elim.episodeNum}",`);
+    lines.push(`    episode_num: ${elim.episodeNum},`);
+    lines.push(`    order: ${elim.order},`);
+
+    if (nameValid) {
+      lines.push(`    player_name: ${escapeString(elim.playerName)},`);
+    } else {
+      lines.push(
+        `    // TODO: resolve player name "${elim.playerName}" to a known player`,
+      );
+      lines.push(`    player_name: ${escapeString(elim.playerName)},`);
+    }
+
+    if (votesReceived !== undefined) {
+      lines.push(`    votes_received: ${votesReceived},`);
+    }
+    lines.push(`    variant: "${elim.variant}",`);
+    lines.push(`  },`);
+  }
+
+  lines.push(
+    `} satisfies Record<Elimination["id"], Elimination<PlayerName, SeasonNumber>>;`,
+  );
+  return lines.join("\n");
+}
+
+/**
+ * Generate the SEASON_N_EVENTS export Record.
+ */
+export function generateEventSection(
+  events: ScrapedGameEvent[],
+  seasonNum: number,
+  playerNames: string[],
+): string {
+  const lines: string[] = [];
+  const playerNameSet = new Set(playerNames);
+
+  lines.push(`export const SEASON_${seasonNum}_EVENTS = {`);
+
+  for (let i = 0; i < events.length; i++) {
+    const ev = events[i];
+    const id = `event_${i + 1}`;
+    const nameValid = playerNameSet.has(ev.playerName);
+
+    lines.push(`  ${id}: {`);
+    lines.push(`    id: "${id}",`);
+    lines.push(`    season_id: "season_${seasonNum}",`);
+    lines.push(`    season_num: ${seasonNum},`);
+    lines.push(`    episode_id: "episode_${ev.episodeNum}",`);
+    lines.push(`    episode_num: ${ev.episodeNum},`);
+
+    if (nameValid) {
+      lines.push(`    player_name: ${escapeString(ev.playerName)},`);
+    } else {
+      lines.push(
+        `    // TODO: resolve player name "${ev.playerName}" to a known player`,
+      );
+      lines.push(`    player_name: ${escapeString(ev.playerName)},`);
+    }
+
+    lines.push(`    action: "${ev.action}",`);
+    lines.push(`    multiplier: ${ev.multiplier === null ? "null" : ev.multiplier},`);
+    lines.push(`  },`);
+  }
+
+  lines.push(
+    `} satisfies Record<GameEvent["id"], GameEvent<PlayerName, SeasonNumber>>;`,
+  );
+  return lines.join("\n");
+}
+
+/**
+ * Generate a complete season file from both player scrape and results scrape data.
+ * Produces the full TypeScript file ready to write to disk.
+ */
+export function generateFullSeasonFile(
+  playerData: ScrapeResult,
+  resultsData: ScrapeResultsOutput,
+  seasonNum: number,
+): string {
+  // Generate the player section (no existing players, no IMG constant for new seasons)
+  const playerSection = generatePlayerSection(
+    seasonNum,
+    playerData.players,
+    [],
+    null,
+  );
+
+  // Extract player names for cross-referencing in gameplay sections
+  const playerNames = playerData.players
+    .filter((p) => p.localName)
+    .map((p) => p.localName);
+
+  const episodeSection = generateEpisodeSection(
+    resultsData.episodes,
+    seasonNum,
+  );
+  const challengeSection = generateChallengeSection(
+    resultsData.challenges,
+    seasonNum,
+    playerNames,
+  );
+  const eliminationSection = generateEliminationSection(
+    resultsData.eliminations,
+    seasonNum,
+    playerNames,
+  );
+  const eventSection = generateEventSection(
+    resultsData.events,
+    seasonNum,
+    playerNames,
+  );
+
+  // Compose the full file
+  const parts: string[] = [];
+
+  // Imports
+  parts.push(
+    `import {\n  Challenge,\n  Elimination,\n  Episode,\n  GameEvent,\n  Player,\n} from "../../types";`,
+  );
+  parts.push("");
+
+  // Player section (const Players, types, buildPlayer, SEASON_XX_PLAYERS)
+  parts.push(playerSection);
+  parts.push("");
+
+  // Gameplay sections
+  parts.push(episodeSection);
+  parts.push("");
+  parts.push(challengeSection);
+  parts.push("");
+  parts.push(eliminationSection);
+  parts.push("");
+  parts.push(eventSection);
+  parts.push("");
+
+  return parts.join("\n");
+}
+
+/**
+ * Register a season in src/data/seasons.ts.
+ * Adds the import and SEASONS entry if not already present.
+ */
+export function registerSeason(
+  seasonNum: number,
+  seasonsFilePath: string,
+): void {
+  const content = fs.readFileSync(seasonsFilePath, "utf-8");
+  const seasonKey = `season_${seasonNum}`;
+
+  // Check if already registered
+  if (content.includes(`${seasonKey}:`)) {
+    console.log(
+      `Season ${seasonNum} is already registered in ${seasonsFilePath}`,
+    );
+    return;
+  }
+
+  // Add import line
+  const importLine = `import { SEASON_${seasonNum}_EPISODES, SEASON_${seasonNum}_PLAYERS } from "./${seasonKey}";`;
+
+  // Find the last import line and insert after it
+  const importRegex = /^import .+ from ".\/season_\d+";$/gm;
+  let lastImportMatch: RegExpExecArray | null = null;
+  let match: RegExpExecArray | null;
+  while ((match = importRegex.exec(content)) !== null) {
+    lastImportMatch = match;
+  }
+
+  let newContent: string;
+  if (lastImportMatch) {
+    const insertPos = lastImportMatch.index + lastImportMatch[0].length;
+    newContent =
+      content.slice(0, insertPos) +
+      "\n" +
+      importLine +
+      content.slice(insertPos);
+  } else {
+    // No existing season imports — add after the types import
+    const typesImportRegex = /^import .+ from "\.\.\/types";$/m;
+    const typesMatch = typesImportRegex.exec(content);
+    if (typesMatch) {
+      const insertPos = typesMatch.index + typesMatch[0].length;
+      newContent =
+        content.slice(0, insertPos) +
+        "\n" +
+        importLine +
+        content.slice(insertPos);
+    } else {
+      // Fallback: prepend
+      newContent = importLine + "\n" + content;
+    }
+  }
+
+  // Add SEASONS entry before the closing `} satisfies`
+  const seasonsEntry =
+    `\n  ${seasonKey}: {\n` +
+    `    id: "${seasonKey}" as const,\n` +
+    `    order: ${seasonNum},\n` +
+    `    name: "Survivor ${seasonNum}",\n` +
+    `    img: "",\n` +
+    `    players: SEASON_${seasonNum}_PLAYERS,\n` +
+    `    episodes: SEASON_${seasonNum}_EPISODES,\n` +
+    `  },\n`;
+
+  const satisfiesPattern = /\n} satisfies Record<Season\["id"\], Season>;/;
+  const satisfiesMatch = satisfiesPattern.exec(newContent);
+  if (satisfiesMatch) {
+    const insertPos = satisfiesMatch.index;
+    newContent =
+      newContent.slice(0, insertPos) +
+      seasonsEntry +
+      newContent.slice(insertPos);
+  } else {
+    throw new Error(
+      `Could not find SEASONS closing satisfies in ${seasonsFilePath}`,
+    );
+  }
+
+  fs.writeFileSync(seasonsFilePath, newContent);
+  console.log(`Registered season ${seasonNum} in ${seasonsFilePath}`);
 }

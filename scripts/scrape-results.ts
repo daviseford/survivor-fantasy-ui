@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import { fileURLToPath } from "url";
 import type { ScrapeResultsOutput } from "./lib/types.js";
 import { fetchWikitext } from "./lib/wiki-api.js";
 import {
@@ -150,15 +151,22 @@ export async function scrapeResults(
 }
 
 // --- CLI entry point ---
-const seasonNum = Number(process.argv[2]);
+const isDirectRun =
+  process.argv[1] &&
+  fileURLToPath(import.meta.url).replace(/\\/g, "/") ===
+    process.argv[1].replace(/\\/g, "/");
 
-if (!seasonNum || isNaN(seasonNum)) {
-  console.error("Usage: yarn scrape-results <season_number>");
-  console.error("Example: yarn scrape-results 46");
-  process.exit(1);
+if (isDirectRun) {
+  const seasonNum = Number(process.argv[2]);
+
+  if (!seasonNum || isNaN(seasonNum)) {
+    console.error("Usage: yarn scrape-results <season_number>");
+    console.error("Example: yarn scrape-results 46");
+    process.exit(1);
+  }
+
+  scrapeResults(seasonNum).catch((err) => {
+    console.error("Results scrape failed:", err);
+    process.exit(1);
+  });
 }
-
-scrapeResults(seasonNum).catch((err) => {
-  console.error("Results scrape failed:", err);
-  process.exit(1);
-});

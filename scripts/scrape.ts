@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import { fileURLToPath } from "url";
 import { resolveNames } from "./lib/name-resolver.js";
 import type { ScrapedPlayer, ScrapeResult } from "./lib/types.js";
 import { delay, fetchWikitext, getSeasonPageName } from "./lib/wiki-api.js";
@@ -29,7 +30,7 @@ async function getLocalPlayers(seasonNum: number): Promise<string[]> {
   }
 }
 
-async function scrape(seasonNum: number): Promise<void> {
+export async function scrape(seasonNum: number): Promise<ScrapeResult> {
   console.log(`\nScraping Season ${seasonNum}...\n`);
 
   // Step 1: Get local player names
@@ -43,18 +44,16 @@ async function scrape(seasonNum: number): Promise<void> {
   console.log(`Fetching season page: ${seasonPageName}`);
   const seasonWikitext = await fetchWikitext(seasonPageName);
   if (!seasonWikitext) {
-    console.error(`Failed to fetch season page: ${seasonPageName}`);
-    process.exit(1);
+    throw new Error(`Failed to fetch season page: ${seasonPageName}`);
   }
 
   const castEntries = parseCastTable(seasonWikitext);
   console.log(`Found ${castEntries.length} contestants in cast table\n`);
 
   if (castEntries.length === 0) {
-    console.error(
+    throw new Error(
       "No contestants found in cast table. Check season page name.",
     );
-    process.exit(1);
   }
 
   // Step 3: Resolve names (or discover names from wiki if no local data)
@@ -148,18 +147,27 @@ async function scrape(seasonNum: number): Promise<void> {
     }
   }
   console.log(`\nOutput: ${outputPath}`);
+
+  return result;
 }
 
-// --- Main ---
-const seasonNum = Number(process.argv[2]);
+// --- CLI entry point ---
+const isDirectRun =
+  process.argv[1] &&
+  fileURLToPath(import.meta.url).replace(/\\/g, "/") ===
+    process.argv[1].replace(/\\/g, "/");
 
-if (!seasonNum || isNaN(seasonNum)) {
-  console.error("Usage: yarn scrape <season_number>");
-  console.error("Example: yarn scrape 46");
-  process.exit(1);
+if (isDirectRun) {
+  const seasonNum = Number(process.argv[2]);
+
+  if (!seasonNum || isNaN(seasonNum)) {
+    console.error("Usage: yarn scrape <season_number>");
+    console.error("Example: yarn scrape 46");
+    process.exit(1);
+  }
+
+  scrape(seasonNum).catch((err) => {
+    console.error("Scrape failed:", err);
+    process.exit(1);
+  });
 }
-
-scrape(seasonNum).catch((err) => {
-  console.error("Scrape failed:", err);
-  process.exit(1);
-});
