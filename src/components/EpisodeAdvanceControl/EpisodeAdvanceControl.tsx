@@ -31,7 +31,7 @@ export const EpisodeAdvanceControl = ({
 }: Props) => {
   const currentEpisode = competition.current_episode;
 
-  if (currentEpisode === null) return null;
+  if (currentEpisode == null) return null;
 
   const totalEpisodes = season.episodes?.length ?? 0;
   const currentEpisodeData = season.episodes?.find(

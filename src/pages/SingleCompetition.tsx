@@ -69,7 +69,7 @@ export const SingleCompetition = () => {
 
   const episodeCount = season.episodes?.length ?? 0;
   const isCreator = slimUser?.uid === competition.creator_uid;
-  const isWatchAlong = competition.current_episode !== null;
+  const isWatchAlong = competition.current_episode != null;
 
   return (
     <Stack gap="xl" p="lg">
