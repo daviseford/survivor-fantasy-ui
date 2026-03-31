@@ -1,6 +1,6 @@
 {
   "seasonNum": 46,
-  "scrapedAt": "2026-03-31T21:56:17.999Z",
+  "scrapedAt": "2026-03-31T23:28:37.003Z",
   "episodes": [
     {
       "order": 1,
@@ -646,7 +646,7 @@
     },
     {
       "episodeNum": 1,
-      "playerName": "David Jelinsky",
+      "playerName": "Tevin Davis",
       "action": "go_on_journey",
       "multiplier": null
     },
@@ -658,7 +658,7 @@
     },
     {
       "episodeNum": 1,
-      "playerName": "Tevin Davis",
+      "playerName": "David Jelinsky",
       "action": "go_on_journey",
       "multiplier": null
     },
@@ -702,12 +702,6 @@
       "episodeNum": 3,
       "playerName": "Jem Hussain-Adams",
       "action": "find_beware_advantage",
-      "multiplier": null
-    },
-    {
-      "episodeNum": 3,
-      "playerName": "Jem Hussain-Adams",
-      "action": "accept_beware_advantage",
       "multiplier": null
     },
     {

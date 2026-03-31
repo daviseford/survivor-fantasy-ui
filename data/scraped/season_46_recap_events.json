@@ -1,6 +1,6 @@
 {
   "seasonNum": 46,
-  "scrapedAt": "2026-03-31T21:56:03.036Z",
+  "scrapedAt": "2026-03-31T23:24:58.785Z",
   "sourceUrls": [
     "https://insidesurvivor.com/survivor-46-episode-1-recap-a-legend-in-name-only-56619",
     "https://insidesurvivor.com/survivor-46-episode-2-recap-dancing-on-my-own-56732",
@@ -19,7 +19,7 @@
   "events": [
     {
       "episodeNum": 1,
-      "playerName": "David Jelinsky",
+      "playerName": "Tevin Davis",
       "action": "go_on_journey",
       "multiplier": null
     },
@@ -31,7 +31,7 @@
     },
     {
       "episodeNum": 1,
-      "playerName": "Tevin Davis",
+      "playerName": "David Jelinsky",
       "action": "go_on_journey",
       "multiplier": null
     },
@@ -75,12 +75,6 @@
       "episodeNum": 3,
       "playerName": "Jem Hussain-Adams",
       "action": "find_beware_advantage",
-      "multiplier": null
-    },
-    {
-      "episodeNum": 3,
-      "playerName": "Jem Hussain-Adams",
-      "action": "accept_beware_advantage",
       "multiplier": null
     },
     {
@@ -135,12 +129,6 @@
       "episodeNum": 5,
       "playerName": "Maria Shrime Gonzalez",
       "action": "use_advantage",
-      "multiplier": null
-    },
-    {
-      "episodeNum": 6,
-      "playerName": "Tiffany Nicole Ervin",
-      "action": "make_merge",
       "multiplier": null
     },
     {
@@ -217,6 +205,12 @@
     },
     {
       "episodeNum": 6,
+      "playerName": "Tiffany Nicole Ervin",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 6,
       "playerName": "Moriah Gaynor",
       "action": "use_shot_in_the_dark_unsuccessfully",
       "multiplier": null
@@ -241,13 +235,13 @@
     },
     {
       "episodeNum": 13,
-      "playerName": "Charlie Davis",
+      "playerName": "Ben Katzman",
       "action": "make_final_tribal_council",
       "multiplier": null
     },
     {
       "episodeNum": 13,
-      "playerName": "Ben Katzman",
+      "playerName": "Charlie Davis",
       "action": "make_final_tribal_council",
       "multiplier": null
     },

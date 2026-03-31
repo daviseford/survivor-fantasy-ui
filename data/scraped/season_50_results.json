@@ -1,6 +1,6 @@
 {
   "seasonNum": 50,
-  "scrapedAt": "2026-03-31T21:56:15.868Z",
+  "scrapedAt": "2026-03-31T23:28:39.060Z",
   "episodes": [
     {
       "order": 1,
@@ -430,31 +430,31 @@
       "multiplier": null
     },
     {
-      "episodeNum": 1,
+      "episodeNum": 2,
       "playerName": "Genevieve Mushaluk",
       "action": "find_idol",
       "multiplier": null
     },
     {
-      "episodeNum": 1,
+      "episodeNum": 2,
       "playerName": "Mike White",
       "action": "go_on_journey",
       "multiplier": null
     },
     {
-      "episodeNum": 1,
+      "episodeNum": 2,
       "playerName": "Colby Donaldson",
       "action": "go_on_journey",
       "multiplier": null
     },
     {
-      "episodeNum": 1,
+      "episodeNum": 2,
       "playerName": "Savannah Louie",
       "action": "go_on_journey",
       "multiplier": null
     },
     {
-      "episodeNum": 1,
+      "episodeNum": 2,
       "playerName": "Savannah Louie",
       "action": "win_advantage",
       "multiplier": null
