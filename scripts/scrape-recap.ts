@@ -1,14 +1,14 @@
 /**
- * Scrape a recap article and use Claude to extract structured game events.
+ * Scrape a recap article and use Claude CLI to extract structured game events.
  *
  * Usage:
  *   yarn scrape-recap <season_number> <url>
  *
- * Requires ANTHROPIC_API_KEY environment variable (or in .env file).
+ * Requires `claude` CLI to be installed and authenticated.
  * Outputs JSON to data/scraped/season_N_recap_events.json.
  */
 
-import "dotenv/config";
+import { execSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
@@ -19,28 +19,21 @@ import type { ScrapedGameEvent } from "./lib/types.js";
 /** Strip HTML tags and collapse whitespace to extract readable text. */
 function htmlToText(html: string): string {
   let text = html;
-  // Remove script/style blocks
   text = text.replace(/<script[\s\S]*?<\/script>/gi, "");
   text = text.replace(/<style[\s\S]*?<\/style>/gi, "");
-  // Convert <br>, <p>, <div>, <li> to newlines
   text = text.replace(/<br\s*\/?>/gi, "\n");
   text = text.replace(/<\/?(p|div|li|h[1-6]|tr|blockquote)[^>]*>/gi, "\n");
-  // Remove all remaining tags
   text = text.replace(/<[^>]+>/g, "");
-  // Decode common HTML entities
   text = text.replace(/&amp;/g, "&");
   text = text.replace(/&lt;/g, "<");
   text = text.replace(/&gt;/g, ">");
   text = text.replace(/&quot;/g, '"');
   text = text.replace(/&#39;/g, "'");
   text = text.replace(/&nbsp;/g, " ");
-  // Collapse whitespace
   text = text.replace(/[ \t]+/g, " ");
   text = text.replace(/\n{3,}/g, "\n\n");
   return text.trim();
 }
-
-// --- Anthropic API call ---
 
 const GAME_EVENT_ACTIONS = [
   "accept_beware_advantage",
@@ -61,47 +54,6 @@ const GAME_EVENT_ACTIONS = [
   "win_survivor",
 ] as const;
 
-interface AnthropicMessage {
-  role: "user" | "assistant";
-  content: string;
-}
-
-interface AnthropicResponse {
-  content: Array<{ type: string; text?: string }>;
-}
-
-async function callClaude(
-  prompt: string,
-  apiKey: string,
-): Promise<string> {
-  const messages: AnthropicMessage[] = [{ role: "user", content: prompt }];
-
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 4096,
-      messages,
-    }),
-  });
-
-  if (!response.ok) {
-    const body = await response.text();
-    throw new Error(
-      `Anthropic API error ${response.status}: ${body}`,
-    );
-  }
-
-  const data = (await response.json()) as AnthropicResponse;
-  const textBlock = data.content.find((c) => c.type === "text");
-  return textBlock?.text ?? "";
-}
-
 function buildPrompt(seasonNum: number, recapText: string): string {
   return `You are extracting structured game events from a Survivor Season ${seasonNum} recap article.
 
@@ -113,7 +65,7 @@ For each event, output a JSON object with these fields:
 - "episodeNum": number (the episode number if mentioned, or your best estimate)
 - "playerName": string (the player's first name or commonly used name)
 - "action": string (one of the values above)
-- "multiplier": number | null (null unless the event has a specific multiplier)
+- "multiplier": number | null (null unless the event has a specific multiplier, e.g. votes_negated_by_idol where multiplier = number of votes negated)
 
 Important rules:
 - Only include events you are confident actually happened based on the text
@@ -123,9 +75,9 @@ Important rules:
 - For advantage uses, use "use_advantage"
 - For Shot in the Dark, use "use_shot_in_the_dark_successfully" or "use_shot_in_the_dark_unsuccessfully"
 - For journey events, use "go_on_journey"
-- If votes were negated by an idol, create a "votes_negated_by_idol" event for each player whose votes were negated
+- If votes were negated by an idol, create a "votes_negated_by_idol" event with multiplier = number of votes negated
 - Do not include challenge wins, eliminations, or vote-outs — those are tracked separately
-- Set multiplier to null for all events unless the text explicitly mentions a multiplier
+- Set multiplier to null for all events unless explicitly applicable
 
 Return ONLY a JSON array, no other text. Example:
 [
@@ -145,15 +97,6 @@ async function scrapeRecap(
   seasonNum: number,
   url: string,
 ): Promise<ScrapedGameEvent[]> {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    console.error(
-      "Error: ANTHROPIC_API_KEY environment variable is required.\n" +
-        "Set it in your .env file or export it in your shell.",
-    );
-    process.exit(1);
-  }
-
   console.log(`\nScraping recap for Season ${seasonNum}...`);
   console.log(`URL: ${url}\n`);
 
@@ -161,8 +104,7 @@ async function scrapeRecap(
   console.log("Fetching page...");
   const response = await fetch(url, {
     headers: {
-      "User-Agent":
-        "Mozilla/5.0 (compatible; SurvivorFantasyScraper/1.0)",
+      "User-Agent": "Mozilla/5.0 (compatible; SurvivorFantasyScraper/1.0)",
     },
   });
 
@@ -177,25 +119,49 @@ async function scrapeRecap(
   const recapText = htmlToText(html);
   console.log(`  Extracted ${recapText.length} chars of text`);
 
-  // Truncate if too long (Claude has context limits)
+  // Truncate if too long
   const maxChars = 80_000;
   const truncatedText =
     recapText.length > maxChars
       ? recapText.slice(0, maxChars) + "\n\n[TRUNCATED]"
       : recapText;
 
-  // Step 3: Call Claude API
-  console.log("\nCalling Claude API to extract game events...");
+  // Step 3: Write prompt to temp file and pipe to claude --print
   const prompt = buildPrompt(seasonNum, truncatedText);
-  const responseText = await callClaude(prompt, apiKey);
+  const tmpDir = path.resolve(import.meta.dirname, "..", "data", "scraped");
+  if (!fs.existsSync(tmpDir)) {
+    fs.mkdirSync(tmpDir, { recursive: true });
+  }
+  const promptPath = path.join(tmpDir, `.recap-prompt-${seasonNum}.txt`);
+  fs.writeFileSync(promptPath, prompt);
+
+  console.log("\nSending to Claude CLI (--print)...");
+  let responseText: string;
+  try {
+    responseText = execSync(`claude --print < "${promptPath}"`, {
+      encoding: "utf-8",
+      maxBuffer: 10 * 1024 * 1024,
+      timeout: 120_000,
+    }).trim();
+  } finally {
+    // Clean up prompt file
+    if (fs.existsSync(promptPath)) {
+      fs.unlinkSync(promptPath);
+    }
+  }
 
   // Step 4: Parse the JSON response
   let events: ScrapedGameEvent[];
   try {
-    // Handle possible markdown code fences in the response
-    let jsonStr = responseText.trim();
+    let jsonStr = responseText;
+    // Handle possible markdown code fences
     if (jsonStr.startsWith("```")) {
       jsonStr = jsonStr.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
+    }
+    // Find the JSON array in the response if there's surrounding text
+    const arrayMatch = jsonStr.match(/\[[\s\S]*\]/);
+    if (arrayMatch) {
+      jsonStr = arrayMatch[0];
     }
     events = JSON.parse(jsonStr) as ScrapedGameEvent[];
   } catch (e) {
@@ -219,13 +185,8 @@ async function scrapeRecap(
   console.log(`\nExtracted ${validEvents.length} game events`);
 
   // Step 5: Write output
-  const outputDir = path.resolve(import.meta.dirname, "..", "data", "scraped");
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-  }
-
   const outputPath = path.join(
-    outputDir,
+    tmpDir,
     `season_${seasonNum}_recap_events.json`,
   );
 
@@ -241,6 +202,11 @@ async function scrapeRecap(
   console.log(`\n${"=".repeat(50)}`);
   console.log(`Recap scrape complete for Season ${seasonNum}`);
   console.log(`  Events: ${validEvents.length}`);
+  for (const ev of validEvents) {
+    console.log(
+      `    Ep ${ev.episodeNum}: ${ev.playerName} — ${ev.action}${ev.multiplier ? ` x${ev.multiplier}` : ""}`,
+    );
+  }
   console.log(`\nOutput: ${outputPath}`);
 
   return validEvents;
@@ -259,7 +225,7 @@ if (isDirectRun) {
   if (!seasonNum || isNaN(seasonNum) || !url) {
     console.error("Usage: yarn scrape-recap <season_number> <url>");
     console.error(
-      'Example: yarn scrape-recap 50 "https://example.com/survivor-s50-recap"',
+      'Example: yarn scrape-recap 50 "https://insidesurvivor.com/survivor-50-episode-1-recap-..."',
     );
     process.exit(1);
   }
