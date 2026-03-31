@@ -1,4 +1,5 @@
 import {
+  Accordion,
   Alert,
   Avatar,
   Badge,
@@ -15,8 +16,8 @@ import {
   Stepper,
   Text,
   TextInput,
+  ThemeIcon,
   Title,
-  Tooltip,
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
@@ -27,6 +28,7 @@ import {
   IconCopy,
   IconCrystalBall,
   IconFlame,
+  IconTargetArrow,
   IconTrophy,
   IconUserPlus,
   IconUsers,
@@ -279,6 +281,75 @@ export const DraftComponent = () => {
     <div>
       {phase === "pre-draft" ? (
         <Stack gap="lg" p="lg">
+          {/* ===== JOIN CTA (non-participant, logged in) ===== */}
+          {draft && slimUser && !userIsParticipant && (
+            <Paper
+              p="lg"
+              radius="md"
+              style={{
+                background:
+                  "linear-gradient(135deg, var(--mantine-color-blue-6), var(--mantine-color-cyan-6))",
+              }}
+            >
+              <Group justify="space-between" align="center" wrap="wrap">
+                <Stack gap={4}>
+                  <Title order={3} c="white">
+                    You're invited to this draft!
+                  </Title>
+                  <Text size="sm" c="rgba(255,255,255,0.85)">
+                    Join now so you're in the pool when the host starts.
+                  </Text>
+                </Stack>
+                <Button
+                  size="lg"
+                  variant="white"
+                  color="blue"
+                  leftSection={<IconUserPlus size={20} />}
+                  onClick={joinDraft}
+                >
+                  Join Draft
+                </Button>
+              </Group>
+            </Paper>
+          )}
+
+          {/* ===== JOIN CTA (not logged in) ===== */}
+          {!slimUser && (
+            <Paper
+              p="lg"
+              radius="md"
+              style={{
+                background:
+                  "linear-gradient(135deg, var(--mantine-color-blue-6), var(--mantine-color-cyan-6))",
+              }}
+            >
+              <Group justify="space-between" align="center" wrap="wrap">
+                <Stack gap={4}>
+                  <Title order={3} c="white">
+                    You're invited to this draft!
+                  </Title>
+                  <Text size="sm" c="rgba(255,255,255,0.85)">
+                    Log in to join the draft and start picking players.
+                  </Text>
+                </Stack>
+                <Button
+                  size="lg"
+                  variant="white"
+                  color="blue"
+                  leftSection={<IconUserPlus size={20} />}
+                  onClick={() =>
+                    modals.openContextModal({
+                      modal: "AuthModal",
+                      innerProps: {},
+                    })
+                  }
+                >
+                  Log in to join
+                </Button>
+              </Group>
+            </Paper>
+          )}
+
           {/* ===== PRE-DRAFT LOBBY ===== */}
           <Paper p="lg" radius="md" withBorder>
             <Stack gap="md">
@@ -296,7 +367,7 @@ export const DraftComponent = () => {
 
               {/* Participants */}
               <div>
-                <Group gap="xs" mb="xs">
+                <Group gap="xs" mb="sm">
                   <Text size="sm" fw={600}>
                     Participants
                   </Text>
@@ -305,32 +376,28 @@ export const DraftComponent = () => {
                   </Badge>
                 </Group>
                 {draft?.participants?.length ? (
-                  <Group gap="sm">
+                  <Group gap="md">
                     {draft.participants.map((p) => (
-                      <Tooltip
-                        label={p.displayName || p.email || p.uid}
+                      <Stack
                         key={p.uid}
+                        gap={6}
+                        align="center"
+                        style={{ minWidth: 64 }}
                       >
-                        <Badge
-                          variant="light"
-                          color="blue"
-                          size="lg"
-                          leftSection={
-                            <Avatar size={20} radius="xl" color="blue">
-                              {(p.displayName ||
-                                p.email ||
-                                "?")[0].toUpperCase()}
-                            </Avatar>
-                          }
-                        >
+                        <Avatar size={48} radius="xl" color="blue">
+                          {(p.displayName ||
+                            p.email ||
+                            "?")[0].toUpperCase()}
+                        </Avatar>
+                        <Text size="xs" fw={500} ta="center">
                           {p.displayName || p.email || p.uid}
-                        </Badge>
-                      </Tooltip>
+                        </Text>
+                      </Stack>
                     ))}
                   </Group>
                 ) : (
                   <Text size="sm" c="dimmed">
-                    No one has joined yet.
+                    No one has joined yet. Share the invite link to get started.
                   </Text>
                 )}
               </div>
@@ -345,29 +412,6 @@ export const DraftComponent = () => {
 
               {/* Actions */}
               <Group gap="sm">
-                {!slimUser && (
-                  <Button
-                    leftSection={<IconUserPlus size={16} />}
-                    onClick={() =>
-                      modals.openContextModal({
-                        modal: "AuthModal",
-                        innerProps: {},
-                      })
-                    }
-                  >
-                    Log in to join
-                  </Button>
-                )}
-
-                {draft && !userIsParticipant && slimUser && (
-                  <Button
-                    leftSection={<IconUserPlus size={16} />}
-                    onClick={joinDraft}
-                  >
-                    Join Draft
-                  </Button>
-                )}
-
                 {draft &&
                   draft.creator_uid === slimUser?.uid &&
                   !isInvalidNumberOfPlayers && (
@@ -414,20 +458,82 @@ export const DraftComponent = () => {
             </Stack>
           </Paper>
 
-          {/* Scoring reference */}
+          {/* ===== HOW IT WORKS ===== */}
           <Paper p="lg" radius="md" withBorder>
             <Stack gap="md">
-              <Group gap="sm" align="center">
-                <IconClipboardList
-                  size={22}
-                  color="var(--mantine-color-teal-6)"
-                />
-                <Title order={3}>Scoring Reference</Title>
+              <Title order={4}>How it works</Title>
+              <Group grow gap="md" align="flex-start">
+                <Stack gap={6} align="center">
+                  <ThemeIcon
+                    size={40}
+                    radius="xl"
+                    variant="light"
+                    color="blue"
+                  >
+                    <IconUserPlus size={20} />
+                  </ThemeIcon>
+                  <Text size="sm" fw={600} ta="center">
+                    1. Join & Invite
+                  </Text>
+                  <Text size="xs" c="dimmed" ta="center">
+                    Everyone joins the lobby, then the host starts the draft.
+                  </Text>
+                </Stack>
+                <Stack gap={6} align="center">
+                  <ThemeIcon
+                    size={40}
+                    radius="xl"
+                    variant="light"
+                    color="cyan"
+                  >
+                    <IconTargetArrow size={20} />
+                  </ThemeIcon>
+                  <Text size="sm" fw={600} ta="center">
+                    2. Draft Players
+                  </Text>
+                  <Text size="xs" c="dimmed" ta="center">
+                    Take turns picking Survivor contestants for your team.
+                  </Text>
+                </Stack>
+                <Stack gap={6} align="center">
+                  <ThemeIcon
+                    size={40}
+                    radius="xl"
+                    variant="light"
+                    color="teal"
+                  >
+                    <IconTrophy size={20} />
+                  </ThemeIcon>
+                  <Text size="sm" fw={600} ta="center">
+                    3. Earn Points
+                  </Text>
+                  <Text size="xs" c="dimmed" ta="center">
+                    Score points as your players win challenges, find idols, and
+                    survive.
+                  </Text>
+                </Stack>
               </Group>
-              <Divider />
-              <ScoringLegendTable />
             </Stack>
           </Paper>
+
+          {/* ===== SCORING REFERENCE (collapsible) ===== */}
+          <Accordion variant="contained" radius="md">
+            <Accordion.Item value="scoring">
+              <Accordion.Control
+                icon={
+                  <IconClipboardList
+                    size={22}
+                    color="var(--mantine-color-teal-6)"
+                  />
+                }
+              >
+                <Text fw={600}>Scoring Reference</Text>
+              </Accordion.Control>
+              <Accordion.Panel>
+                <ScoringLegendTable />
+              </Accordion.Panel>
+            </Accordion.Item>
+          </Accordion>
         </Stack>
       ) : (
         <Stack gap="md" p="lg">
@@ -682,6 +788,24 @@ export const DraftComponent = () => {
                       >
                         {p.name}
                       </Text>
+                      {(p.age || p.profession || p.hometown) && (
+                        <Text
+                          ta="center"
+                          size="xs"
+                          c="dimmed"
+                          lh={1.3}
+                        >
+                          {p.age && <>{p.age}</>}
+                          {p.age && p.profession && " · "}
+                          {p.profession && <>{p.profession}</>}
+                          {(p.age || p.profession) && p.hometown && (
+                            <>
+                              <br />
+                            </>
+                          )}
+                          {p.hometown && <>{p.hometown}</>}
+                        </Text>
+                      )}
 
                       {isDrafted && draftedBy ? (
                         <Badge variant="light" color="gray" size="xs">
