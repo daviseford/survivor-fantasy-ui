@@ -371,12 +371,32 @@ function parseChallengeWinners(cellText: string): {
 } | null {
   const tb = parseTribebox(cellText);
   if (!tb) {
-    // Fallback: handle style="{{tribecolor|tribe}}" pattern (e.g., S50 Episode 4)
+    // Fallback: handle style="{{tribecolor|tribe}}" pattern (e.g., post-merge individual challenges)
     const tribecolorMatch = cellText.match(
       /\{\{tribecolor\|([^|}]+)\}\}/i,
     );
     if (tribecolorMatch) {
-      return { tribe: tribecolorMatch[1].trim().toLowerCase(), names: [] };
+      const tribe = tribecolorMatch[1].trim().toLowerCase();
+      // Extract content after the style pipe: ...;"| Maria{{sup|...}}
+      // Look for content AFTER the style closing: border-bottom:none;"| NAME
+      const styleContentMatch = cellText.match(
+        /;\s*border-[^"]*"\|\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]*)*)/,
+      );
+      if (styleContentMatch) {
+        let content = styleContentMatch[1];
+        content = content.replace(/\{\{sup\|[^}]*\}\}/gi, "").trim();
+        // If the extracted name matches the tribe key, it's a tribe win (not a player)
+        if (content.toLowerCase() !== tribe) {
+          const names = content
+            .split(",")
+            .map((n) => n.trim())
+            .filter(Boolean);
+          if (names.length > 0) {
+            return { tribe, names };
+          }
+        }
+      }
+      return { tribe, names: [] };
     }
     return null;
   }
