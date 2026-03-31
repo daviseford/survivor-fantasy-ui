@@ -941,9 +941,16 @@ export function parseEpisodeGuide(
     // Build challenges — group by variant: reward → combined → immunity.
     // This matches Survivor episode structure (reward challenge before immunity).
     const variantOrder = { reward: 0, combined: 1, immunity: 2 };
-    const sortedEntries = [...epData.challengeEntries].sort(
-      (a, b) => variantOrder[a.variant] - variantOrder[b.variant],
-    );
+    const sortedEntries = [...epData.challengeEntries].sort((a, b) => {
+      const vDiff = variantOrder[a.variant] - variantOrder[b.variant];
+      if (vDiff !== 0) return vDiff;
+      // Secondary sort by tribe name within same variant (for multi-tribe episodes)
+      const aWin = parseChallengeWinners(a.cell);
+      const bWin = parseChallengeWinners(b.cell);
+      const aTribe = aWin?.tribe ?? "";
+      const bTribe = bWin?.tribe ?? "";
+      return aTribe.localeCompare(bTribe);
+    });
     for (const entry of sortedEntries) {
       const winners = parseChallengeWinners(entry.cell);
       if (winners) {
