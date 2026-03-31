@@ -63,19 +63,6 @@ export function matchContestants(
       appName = normalizedAppMap.get(normalized);
     }
 
-    // 4. Last-name match as final fallback (only if unique)
-    if (!appName) {
-      const scrapedParts = contestant.scrapedName.split(/\s+/);
-      const scrapedLast = scrapedParts[scrapedParts.length - 1].toLowerCase();
-      const lastNameMatches = appNames.filter((n) => {
-        const parts = n.split(/\s+/);
-        return parts[parts.length - 1].toLowerCase() === scrapedLast;
-      });
-      if (lastNameMatches.length === 1) {
-        appName = lastNameMatches[0];
-      }
-    }
-
     if (appName && !matchedAppNames.has(appName)) {
       matchedAppNames.add(appName);
       const meta: PlayerMetaEntry = {

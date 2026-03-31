@@ -36,7 +36,7 @@ export interface ContestantSource {
   /** Human-readable name for logging */
   name: string;
   /** Scrape all contestants for a given season number */
-  scrapeseason(seasonNum: number): Promise<ScrapedContestant[]>;
+  scrapeSeason(seasonNum: number): Promise<ScrapedContestant[]>;
 }
 
 export type MatchResult = {

@@ -129,7 +129,7 @@ async function scrapePlayerPage(
 export const fandomSource: ContestantSource = {
   name: "Survivor Wiki (Fandom)",
 
-  async scrapeseason(seasonNum: number): Promise<ScrapedContestant[]> {
+  async scrapeSeason(seasonNum: number): Promise<ScrapedContestant[]> {
     const seasonUrl = `${BASE_URL}/wiki/Survivor_${seasonNum}`;
     console.log(`Fetching season page: ${seasonUrl}`);
 

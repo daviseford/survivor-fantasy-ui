@@ -20,6 +20,7 @@ import { fandomSource } from "./scraper/sources/fandom.js";
 function parseArgs(args: string[]) {
   let season: number | undefined;
   let dryRun = false;
+  let force = false;
   let format: "ts" | "json" = "ts";
 
   for (let i = 0; i < args.length; i++) {
@@ -34,21 +35,24 @@ function parseArgs(args: string[]) {
       case "--write":
         dryRun = false;
         break;
+      case "--force":
+        force = true;
+        break;
       case "--format":
         format = args[++i] as "ts" | "json";
         break;
     }
   }
 
-  return { season, dryRun, format };
+  return { season, dryRun, force, format };
 }
 
 async function main() {
-  const { season, dryRun, format } = parseArgs(process.argv.slice(2));
+  const { season, dryRun, force, format } = parseArgs(process.argv.slice(2));
 
   if (!season) {
     console.error(
-      "Usage: yarn scrape:contestants --season <number> [--dry-run] [--write] [--format json|ts]",
+      "Usage: yarn scrape:contestants --season <number> [--dry-run] [--write] [--force] [--format json|ts]",
     );
     console.error("\nAvailable seasons:", Object.keys(APP_PLAYERS).join(", "));
     process.exit(1);
@@ -68,7 +72,7 @@ async function main() {
   console.log();
 
   // Scrape
-  const scraped = await fandomSource.scrapeseason(season);
+  const scraped = await fandomSource.scrapeSeason(season);
   console.log(`\nScraped ${scraped.length} contestants from wiki.\n`);
 
   // Match
@@ -93,6 +97,19 @@ async function main() {
     for (const name of report.unmatchedAppNames) {
       console.log(`  - "${name}"`);
     }
+  }
+
+  // Fail closed: exit non-zero if matching is incomplete
+  const hasUnmatched =
+    report.unmatched.length > 0 || report.unmatchedAppNames.length > 0;
+  if (hasUnmatched && !force) {
+    console.error(
+      "\n[ERROR] Matching is incomplete. Fix overrides in scripts/scraper/overrides.ts or use --force to proceed anyway.",
+    );
+    process.exit(1);
+  }
+  if (hasUnmatched && force) {
+    console.log("\n[WARN] Proceeding with incomplete matches (--force).");
   }
 
   // Output

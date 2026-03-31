@@ -37,7 +37,9 @@ export function generatePlayerMetaSource(
   const lines: string[] = [];
   lines.push(`import type { PlayerMeta } from "../../types";`);
   lines.push(``);
-  lines.push(`export const ${constName}: Record<string, PlayerMeta> = {`);
+  lines.push(
+    `export const ${constName}: Partial<Record<string, PlayerMeta>> = {`,
+  );
 
   for (const match of matches) {
     lines.push(

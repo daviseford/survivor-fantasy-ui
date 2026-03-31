@@ -47,7 +47,7 @@ const buildPlayer = <T extends PlayerName>(
     season_id: "season_46",
     ...meta,
     // Prefer derived description from metadata when available, fall back to hardcoded
-    description: meta ? formatDescription(meta) : description,
+    description: (meta ? formatDescription(meta) : undefined) ?? description,
   };
 };
 
