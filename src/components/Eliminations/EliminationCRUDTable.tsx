@@ -15,7 +15,7 @@ import {
   IconTrash,
   IconX,
 } from "@tabler/icons-react";
-import { doc, setDoc } from "firebase/firestore";
+import { deleteField, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../../firebase";
 import { useEliminations } from "../../hooks/useEliminations";
@@ -83,14 +83,17 @@ export const EliminationCRUDTable = () => {
     if (!editValues || !season) return;
 
     try {
-      const updated: Elimination = {
+      const updated = {
         ...e,
         order: editValues.order,
         variant: editValues.variant,
         player_name: editValues.player_name,
         episode_num: editValues.episode_num,
         episode_id: `episode_${editValues.episode_num}`,
-        votes_received: editValues.votes_received,
+        votes_received:
+          editValues.votes_received !== undefined
+            ? editValues.votes_received
+            : deleteField(),
       };
       const ref = doc(db, `eliminations/${season.id}`);
       await setDoc(ref, { [e.id]: updated }, { merge: true });
