@@ -120,24 +120,47 @@ async function discoverRecapUrls(
   }));
 }
 
+// --- Player list loader ---
+
+async function getLocalPlayers(seasonNum: number): Promise<string[]> {
+  const seasonKey = `season_${seasonNum}`;
+  try {
+    const mod = await import(`../src/data/${seasonKey}/index.ts`);
+    const playersKey = `SEASON_${seasonNum}_PLAYERS`;
+    const players = mod[playersKey] as Array<{ name: string }>;
+    if (!players) return [];
+    return players.map((p) => p.name);
+  } catch {
+    return [];
+  }
+}
+
 // --- Claude CLI ---
 
-function buildPrompt(seasonNum: number, recapText: string): string {
-  return `You are extracting structured game events from a Survivor Season ${seasonNum} recap article.
+function buildPrompt(
+  seasonNum: number,
+  recapText: string,
+  playerNames: string[],
+): string {
+  const playerSection =
+    playerNames.length > 0
+      ? `\nThe players this season are (use these EXACT names in your output):\n${playerNames.map((n) => `- "${n}"`).join("\n")}\n\nWhen the article refers to a player by first name, nickname, or last name, match them to the correct full name from this list. For example, if the article says "Coach" and the list has "Benjamin \\"Coach\\" Wade", use "Benjamin \\"Coach\\" Wade". If the article says "Ozzy", use "Ozzy Lusth". Always use the exact name from the list above.\n`
+      : "";
 
+  return `You are extracting structured game events from a Survivor Season ${seasonNum} recap article.
+${playerSection}
 Read the following recap text and extract every game event you can identify. Each event must use one of these action values:
 
 ${GAME_EVENT_ACTIONS.map((a) => `- "${a}"`).join("\n")}
 
 For each event, output a JSON object with these fields:
 - "episodeNum": number (the episode number if mentioned, or your best estimate)
-- "playerName": string (the player's first name or commonly used name)
+- "playerName": string (the player's full name from the player list above, or their commonly used name if no player list is available)
 - "action": string (one of the values above)
 - "multiplier": number | null (null unless the event has a specific multiplier, e.g. votes_negated_by_idol where multiplier = number of votes negated)
 
 Important rules:
-- Only include events you are confident actually happened based on the text
-- Use the player's short/common name (e.g., "Ozzy" not "Ozzy Lusth")
+- Only include events where the article EXPLICITLY states who performed the action. Do not infer or guess.
 - For idol finds, use "find_idol". For idol plays, use "use_idol"
 - For advantage finds, use "find_advantage" or "win_advantage" (if won in a challenge/game)
 - For advantage uses, use "use_advantage"
@@ -146,11 +169,12 @@ Important rules:
 - If votes were negated by an idol, create a "votes_negated_by_idol" event with multiplier = number of votes negated
 - Do not include challenge wins, eliminations, or vote-outs — those are tracked separately
 - Set multiplier to null for all events unless explicitly applicable
+- Pay close attention to WHO actually won/found/used something. Articles often mention multiple players in the same paragraph — only attribute the action to the player who actually did it.
 
 Return ONLY a JSON array, no other text. Example:
 [
-  { "episodeNum": 1, "playerName": "Ozzy", "action": "find_idol", "multiplier": null },
-  { "episodeNum": 2, "playerName": "Coach", "action": "go_on_journey", "multiplier": null }
+  { "episodeNum": 1, "playerName": "Ozzy Lusth", "action": "find_idol", "multiplier": null },
+  { "episodeNum": 2, "playerName": "Benjamin \\"Coach\\" Wade", "action": "go_on_journey", "multiplier": null }
 ]
 
 If no game events are found, return an empty array: []
@@ -195,6 +219,7 @@ async function scrapeOneRecap(
   url: string,
   tmpDir: string,
   label: string,
+  playerNames: string[],
 ): Promise<ScrapedGameEvent[]> {
   // Fetch the page
   const response = await fetch(url, {
@@ -217,7 +242,7 @@ async function scrapeOneRecap(
       : recapText;
 
   // Call Claude
-  const prompt = buildPrompt(seasonNum, truncatedText);
+  const prompt = buildPrompt(seasonNum, truncatedText, playerNames);
   const responseText = callClaude(prompt, tmpDir, label);
 
   // Parse response
@@ -252,6 +277,16 @@ async function scrapeRecap(
     fs.mkdirSync(tmpDir, { recursive: true });
   }
 
+  // Load player names for accurate attribution
+  const playerNames = await getLocalPlayers(seasonNum);
+  if (playerNames.length > 0) {
+    console.log(`Loaded ${playerNames.length} player names for Season ${seasonNum}`);
+  } else {
+    console.log(
+      `No local player data found for Season ${seasonNum} — Claude will use names from the article`,
+    );
+  }
+
   let urls: { url: string; title: string }[];
 
   if (singleUrl) {
@@ -281,6 +316,7 @@ async function scrapeRecap(
       url,
       tmpDir,
       `${seasonNum}-${i}`,
+      playerNames,
     );
 
     console.log(`  Extracted ${events.length} events`);
