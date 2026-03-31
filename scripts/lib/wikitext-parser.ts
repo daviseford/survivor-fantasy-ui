@@ -5,6 +5,7 @@
  */
 
 import type {
+  PlayerTribeHistory,
   ScrapedChallenge,
   ScrapedElimination,
   ScrapedEpisode,
@@ -527,7 +528,6 @@ export function parseEpisodeGuide(
     {
       title: string;
       airDate: string;
-      isCombined: boolean;
       finishTexts: string[];
       eliminations: Array<{
         name: string;
@@ -535,8 +535,11 @@ export function parseEpisodeGuide(
         tribe: string;
         finishText: string;
       }>;
-      rewardCells: string[];
-      immunityCells: string[];
+      /** Ordered list of challenges as they appear in the wiki table */
+      challengeEntries: Array<{
+        cell: string;
+        variant: "reward" | "immunity" | "combined";
+      }>;
     }
   >();
 
@@ -664,19 +667,12 @@ export function parseEpisodeGuide(
       );
       const airDate = airDateMatch ? airDateMatch[1] : "";
 
-      // Check if reward and immunity columns are combined (colspan="2")
-      const isCombined =
-        globalCombined &&
-        (isCombinedCell(rewardCell) || isCombinedCell(immunityCell));
-
       episodeMap.set(epNum, {
         title,
         airDate,
-        isCombined,
         finishTexts: [],
         eliminations: [],
-        rewardCells: [],
-        immunityCells: [],
+        challengeEntries: [],
       });
     }
 
@@ -689,51 +685,66 @@ export function parseEpisodeGuide(
         rewardCell,
       );
 
-    // Track combined status — if any row for this episode uses colspan=2 with combined footnote
-    // but skip gray formatting rows which use colspan=2 for layout, not for combined challenges
-    if (
+    // Determine if THIS ROW is a combined challenge (colspan=2) vs separate reward/immunity.
+    // Gray rows use colspan=2 for layout, not for combined challenges — skip those.
+    const isRowCombined =
       !isGrayRow &&
       globalCombined &&
-      (isCombinedCell(rewardCell) || isCombinedCell(immunityCell))
-    ) {
-      epData.isCombined = true;
-    }
+      (isCombinedCell(rewardCell) || isCombinedCell(immunityCell));
+
+    // Skip cells that are not real challenge data:
+    // - "border-top:none" = visual continuation of colspan row above (e.g., S50 Ep4 row 2)
+    // - "tribebox2" = non-win marker (e.g., "out" tribe = lost the challenge)
+    const isSkippableCell = (cell: string) =>
+      /border-top\s*:\s*none/i.test(cell) || /tribebox2/i.test(cell);
+
+    // Helper to add a challenge entry (deduplicates by cell+variant)
+    const addChallenge = (
+      cell: string,
+      variant: "reward" | "immunity" | "combined",
+    ) => {
+      const winners = parseChallengeWinners(cell);
+      if (winners) {
+        if (!tribesByEpisode.has(epNum)) {
+          tribesByEpisode.set(epNum, new Set());
+        }
+        tribesByEpisode.get(epNum)!.add(winners.tribe);
+        // Deduplicate: same cell text + variant = same challenge (from rowspan)
+        const isDup = epData.challengeEntries.some(
+          (e) => e.cell === cell && e.variant === variant,
+        );
+        if (!isDup) {
+          epData.challengeEntries.push({ cell, variant });
+        }
+      }
+    };
 
     // Parse challenge cells (only non-jury-vote rows, skip gray formatting rows)
     if (!isJuryVoteRow && !isGrayRow) {
-      if (rewardCell && !rewardCell.includes("None") && !rewardCell.includes("Jury Vote")) {
-        const rewardWinners = parseChallengeWinners(rewardCell);
-        if (rewardWinners) {
-          // Track tribe
-          if (!tribesByEpisode.has(epNum)) {
-            tribesByEpisode.set(epNum, new Set());
-          }
-          tribesByEpisode.get(epNum)!.add(rewardWinners.tribe);
-
-          // Only add to reward cells if it has tribebox content
-          // and this cell text hasn't already been tracked
-          if (!epData.rewardCells.includes(rewardCell)) {
-            epData.rewardCells.push(rewardCell);
-          }
+      if (isRowCombined) {
+        // Combined reward+immunity — single challenge
+        const cell = rewardCell || immunityCell;
+        if (cell && !cell.includes("None") && !isSkippableCell(cell)) {
+          addChallenge(cell, "combined");
         }
-      }
+      } else {
+        // Separate reward and immunity columns
+        if (
+          rewardCell &&
+          !rewardCell.includes("None") &&
+          !rewardCell.includes("Jury Vote") &&
+          !isSkippableCell(rewardCell)
+        ) {
+          addChallenge(rewardCell, "reward");
+        }
 
-      if (
-        immunityCell &&
-        immunityCell !== rewardCell &&
-        !immunityCell.includes("None") &&
-        !immunityCell.includes("Jury Vote")
-      ) {
-        const immunityWinners = parseChallengeWinners(immunityCell);
-        if (immunityWinners) {
-          if (!tribesByEpisode.has(epNum)) {
-            tribesByEpisode.set(epNum, new Set());
-          }
-          tribesByEpisode.get(epNum)!.add(immunityWinners.tribe);
-
-          if (!epData.immunityCells.includes(immunityCell)) {
-            epData.immunityCells.push(immunityCell);
-          }
+        if (
+          immunityCell &&
+          !immunityCell.includes("None") &&
+          !immunityCell.includes("Jury Vote") &&
+          !isSkippableCell(immunityCell)
+        ) {
+          addChallenge(immunityCell, "immunity");
         }
       }
     }
@@ -880,62 +891,39 @@ export function parseEpisodeGuide(
           e.finishText.includes("Second Runner-Up"),
       ) || epData.finishTexts.some((f) => f.includes("Sole Survivor"));
 
-    const postMerge = mergeEpisode !== null && epNum >= mergeEpisode;
     const mergeOccurs = mergeEpisode !== null && epNum === mergeEpisode;
+    const postMerge = mergeEpisode !== null && epNum > mergeEpisode;
+
+    const hasCombined = epData.challengeEntries.some(
+      (e) => e.variant === "combined",
+    );
 
     episodes.push({
       order: epNum,
       title: epData.title,
       airDate: epData.airDate,
-      isCombinedChallenge: epData.isCombined,
+      isCombinedChallenge: hasCombined,
       isFinale,
       postMerge,
       mergeOccurs,
     });
 
-    // Build challenges
-    if (epData.isCombined) {
-      // Combined challenge — use the reward cells (which span both columns)
-      const allCells = [...epData.rewardCells, ...epData.immunityCells];
-      // Deduplicate: for combined, all cells are the same colspan=2 cell
-      const uniqueCells = [...new Set(allCells)];
-      for (const cell of uniqueCells) {
-        const winners = parseChallengeWinners(cell);
-        if (winners) {
-          challenges.push({
-            episodeNum: epNum,
-            variant: "combined",
-            winnerNames: winners.names,
-            winnerTribe: winners.names.length === 0 ? winners.tribe : null,
-            order: challengeOrder++,
-          });
-        }
-      }
-    } else {
-      // Separate reward and immunity
-      for (const cell of epData.rewardCells) {
-        const winners = parseChallengeWinners(cell);
-        if (winners) {
-          challenges.push({
-            episodeNum: epNum,
-            variant: "reward",
-            winnerNames: winners.names,
-            winnerTribe: winners.names.length === 0 ? winners.tribe : null,
-            order: challengeOrder++,
-          });
-        }
-      }
-      for (const cell of epData.immunityCells) {
-        const winners = parseChallengeWinners(cell);
-        if (winners) {
-          challenges.push({
-            episodeNum: epNum,
-            variant: "immunity",
-            winnerNames: winners.names,
-            winnerTribe: winners.names.length === 0 ? winners.tribe : null,
-            order: challengeOrder++,
-          });
-        }
+    // Build challenges — group by variant: reward → combined → immunity.
+    // This matches Survivor episode structure (reward challenge before immunity).
+    const variantOrder = { reward: 0, combined: 1, immunity: 2 };
+    const sortedEntries = [...epData.challengeEntries].sort(
+      (a, b) => variantOrder[a.variant] - variantOrder[b.variant],
+    );
+    for (const entry of sortedEntries) {
+      const winners = parseChallengeWinners(entry.cell);
+      if (winners) {
+        challenges.push({
+          episodeNum: epNum,
+          variant: entry.variant,
+          winnerNames: winners.names,
+          winnerTribe: winners.names.length === 0 ? winners.tribe : null,
+          order: challengeOrder++,
+        });
       }
     }
 
@@ -1034,6 +1022,7 @@ export function parseVotingHistory(
 ): {
   events: ScrapedGameEvent[];
   votesByEpisode: Record<number, { vote: string; eliminatedPlayer: string }>;
+  tribeHistories: Map<string, PlayerTribeHistory>;
   warnings: string[];
 } {
   const events: ScrapedGameEvent[] = [];
@@ -1041,6 +1030,7 @@ export function parseVotingHistory(
     number,
     { vote: string; eliminatedPlayer: string }
   > = {};
+  const tribeHistories = new Map<string, PlayerTribeHistory>();
   const warnings: string[] = [];
 
   const sections = splitTableSections(wikitext);
@@ -1092,7 +1082,7 @@ export function parseVotingHistory(
     warnings.push(
       "Could not parse episode columns from voting history header",
     );
-    return { events, votesByEpisode, warnings };
+    return { events, votesByEpisode, tribeHistories, warnings };
   }
 
   // Step 2: Find the "Voted Out" section and parse eliminated player names.
@@ -1181,14 +1171,23 @@ export function parseVotingHistory(
     // Extract player name from the second line (align="left"| Name)
     let playerName = "";
     for (const line of section) {
-      const nameMatch = line
-        .trim()
-        .match(/align="left"\|?\s*\{?\{?nowrap\|?([A-Za-z][A-Za-z .]+)/);
-      const simpleMatch = line
-        .trim()
-        .match(/align="left"\|?\s*([A-Z][a-z]+(?:\s+[A-Z]\.?)?)\s*$/);
+      const trimmedLine = line.trim();
+      const nameMatch = trimmedLine.match(
+        /align="left"\|?\s*\{?\{?nowrap\|?([A-Za-z][A-Za-z .]+)/,
+      );
+      const simpleMatch = trimmedLine.match(
+        /align="left"\|?\s*([A-Z][a-z]+(?:\s+[A-Z]\.?)?)\s*$/,
+      );
+      // Handle single-character names like "Q"
+      const singleCharMatch = trimmedLine.match(
+        /align="left"\|?\s*([A-Z])\s*$/,
+      );
       if (simpleMatch) {
         playerName = simpleMatch[1].trim();
+        break;
+      }
+      if (singleCharMatch) {
+        playerName = singleCharMatch[1].trim();
         break;
       }
       if (nameMatch) {
@@ -1198,6 +1197,28 @@ export function parseVotingHistory(
     }
 
     if (!playerName) continue;
+
+    // Extract tribe data from the first line (tribebox2 + tribeicon1 patterns)
+    const tb2Match = firstLine.match(/\{\{tribebox2\|([^}]+)\}\}/i);
+    if (tb2Match) {
+      const tb2Value = tb2Match[1].toLowerCase();
+      // Skip jury voting rows (tribebox2|out) and bare tribebox2|none
+      if (tb2Value !== "out") {
+        const iconRegex = /\{\{tribeicon1\|([^}]+)\}\}/gi;
+        const tribeicons: string[] = [];
+        let iconMatch: RegExpExecArray | null;
+        while ((iconMatch = iconRegex.exec(firstLine)) !== null) {
+          tribeicons.push(iconMatch[1].toLowerCase());
+        }
+        // Skip tribebox2|none only when there are no tribeicon entries
+        if (tb2Value !== "none" || tribeicons.length > 0) {
+          tribeHistories.set(playerName, {
+            tribebox2: tb2Value,
+            tribeicons,
+          });
+        }
+      }
+    }
 
     // Now scan vote cells for strikethroughs
     let colIdx = 0;
@@ -1238,5 +1259,115 @@ export function parseVotingHistory(
     }
   }
 
-  return { events, votesByEpisode, warnings };
+  return { events, votesByEpisode, tribeHistories, warnings };
+}
+
+/**
+ * Build per-episode tribe rosters from votetable tribe histories and episode guide data.
+ * Returns the same Map<episodeNum, Map<tribeKey, playerNames[]>> shape as the old
+ * Firestore-based loadTribeRoster().
+ */
+export function buildTribeRosters(
+  tribeHistories: Map<string, PlayerTribeHistory>,
+  episodes: ScrapedEpisode[],
+  eliminations: ScrapedElimination[],
+  mergeEpisode: number | null,
+): Map<number, Map<string, string[]>> {
+  // Step 1: Determine original tribe per player
+  const originalTribes = new Map<string, string>();
+  for (const [name, hist] of tribeHistories) {
+    if (hist.tribeicons.length > 0) {
+      originalTribes.set(name, hist.tribeicons[0]); // 1st = original
+    } else {
+      originalTribes.set(name, hist.tribebox2);
+    }
+  }
+
+  // Step 2: Detect if a swap occurred (any player has 2+ tribeicon1 entries)
+  const hasSwap = [...tribeHistories.values()].some(
+    (h) => h.tribeicons.length >= 2,
+  );
+
+  // Step 3: If swap, determine post-swap tribe per player
+  const swapTribes = new Map<string, string>();
+  if (hasSwap) {
+    for (const [name, hist] of tribeHistories) {
+      if (hist.tribeicons.length >= 2) {
+        // 2nd tribeicon = post-swap tribe
+        swapTribes.set(name, hist.tribeicons[1]);
+      } else if (
+        hist.tribeicons.length === 1 &&
+        hist.tribebox2 !== hist.tribeicons[0]
+      ) {
+        // Swapped, eliminated pre-merge: tribebox2 is post-swap tribe
+        swapTribes.set(name, hist.tribebox2);
+      } else {
+        // Not swapped or eliminated before swap: use original
+        swapTribes.set(name, originalTribes.get(name)!);
+      }
+    }
+  }
+
+  // Step 4: Find swap episode boundary (if swap occurred)
+  let swapEpisode: number | null = null;
+  if (hasSwap) {
+    // Find the earliest elimination of a swapped player
+    for (const elim of eliminations) {
+      const original = originalTribes.get(elim.playerName);
+      const postSwap = swapTribes.get(elim.playerName);
+      if (original && postSwap && original !== postSwap) {
+        // This player was swapped — their elimination episode is at or after the swap
+        if (swapEpisode === null || elim.episodeNum < swapEpisode) {
+          swapEpisode = elim.episodeNum;
+        }
+      }
+    }
+    if (swapEpisode === null) {
+      // No swapped player eliminated pre-merge — shouldn't happen in real seasons
+      throw new Error(
+        "Swap detected but no swapped player was eliminated before merge. " +
+          "Cannot determine swap episode boundary.",
+      );
+    }
+  }
+
+  // Step 5: Build per-episode rosters
+  const result = new Map<number, Map<string, string[]>>();
+
+  // Track eliminated players and their elimination episodes
+  const eliminatedAt = new Map<string, number>();
+  for (const elim of eliminations) {
+    if (!eliminatedAt.has(elim.playerName)) {
+      eliminatedAt.set(elim.playerName, elim.episodeNum);
+    }
+  }
+
+  for (const ep of episodes) {
+    // Skip post-merge episodes (tribe resolution not needed)
+    if (mergeEpisode !== null && ep.order > mergeEpisode) continue;
+    // Also skip the merge episode itself (individual challenges begin)
+    if (mergeEpisode !== null && ep.order === mergeEpisode) continue;
+
+    const tribeMap = new Map<string, string[]>();
+    const useSwapRoster =
+      hasSwap && swapEpisode !== null && ep.order >= swapEpisode;
+
+    for (const [name] of tribeHistories) {
+      // Skip players eliminated in prior episodes (they still play challenges
+      // in their elimination episode since challenges happen before tribal)
+      const elimEp = eliminatedAt.get(name);
+      if (elimEp !== undefined && ep.order > elimEp) continue;
+
+      const tribe = useSwapRoster
+        ? (swapTribes.get(name) ?? originalTribes.get(name)!)
+        : originalTribes.get(name)!;
+
+      if (!tribeMap.has(tribe)) tribeMap.set(tribe, []);
+      tribeMap.get(tribe)!.push(name);
+    }
+
+    result.set(ep.order, tribeMap);
+  }
+
+  return result;
 }

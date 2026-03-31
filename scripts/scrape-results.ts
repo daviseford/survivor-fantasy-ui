@@ -2,8 +2,9 @@ import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
 import type { ScrapeResultsOutput } from "./lib/types.js";
-import { fetchWikitext } from "./lib/wiki-api.js";
+import { fetchEpisodeTitles, fetchWikitext } from "./lib/wiki-api.js";
 import {
+  buildTribeRosters,
   parseEpisodeGuide,
   parseVotingHistory,
 } from "./lib/wikitext-parser.js";
@@ -33,8 +34,10 @@ export async function scrapeResults(
   const votetableWikitext = await fetchWikitext(votetablePage);
 
   if (!votetableWikitext) {
-    warnings.push(`Failed to fetch voting history: ${votetablePage}`);
-    console.warn(`Warning: ${warnings[warnings.length - 1]}`);
+    throw new Error(
+      `Failed to fetch voting history: ${votetablePage}. ` +
+        `Tribe data is required for challenge resolution.`,
+    );
   }
 
   // Step 3: Parse episode guide
@@ -46,14 +49,84 @@ export async function scrapeResults(
   console.log(`  Challenges: ${epguideResult.challenges.length}`);
   console.log(`  Eliminations: ${epguideResult.eliminations.length}`);
 
-  // Step 4: Parse voting history (if available)
-  let voteEvents: ScrapeResultsOutput["events"] = [];
-  if (votetableWikitext) {
-    console.log(`\nParsing voting history...`);
-    const voteResult = parseVotingHistory(votetableWikitext, seasonNum);
-    voteEvents = voteResult.events;
-    warnings.push(...voteResult.warnings);
-    console.log(`  Game events (idol plays, etc): ${voteEvents.length}`);
+  // Step 3b: Resolve episode titles from {{Ep|SSEE}} templates
+  console.log(`\nResolving episode titles...`);
+  const episodeTitles = await fetchEpisodeTitles(
+    seasonNum,
+    epguideResult.episodes.length,
+  );
+  for (const ep of epguideResult.episodes) {
+    const resolvedTitle = episodeTitles.get(ep.order);
+    if (resolvedTitle) {
+      ep.title = resolvedTitle;
+    }
+  }
+  console.log(`  Resolved ${episodeTitles.size} episode titles`);
+
+  // Step 3c: Load local player data for name resolution
+  let playerNames: string[] = [];
+  try {
+    const mod = await import(`../src/data/season_${seasonNum}/index.ts`);
+    const playersKey = `SEASON_${seasonNum}_PLAYERS`;
+    const players = mod[playersKey] as Array<{ name: string }> | undefined;
+    if (players) {
+      playerNames = players.map((p) => p.name);
+      console.log(`  Loaded ${playerNames.length} player names`);
+    }
+  } catch {
+    // No local season data — skip name resolution
+  }
+
+  // Step 4: Parse voting history
+  console.log(`\nParsing voting history...`);
+  const voteResult = parseVotingHistory(votetableWikitext, seasonNum);
+  const voteEvents = voteResult.events;
+  warnings.push(...voteResult.warnings);
+  console.log(`  Game events (idol plays, etc): ${voteEvents.length}`);
+  console.log(`  Tribe histories: ${voteResult.tribeHistories.size} players`);
+
+  // Step 4b: Resolve elimination + challenge player names BEFORE event generation
+  const resolvePlayerName = (shortName: string): string => {
+    if (playerNames.length === 0) return shortName;
+    if (playerNames.includes(shortName)) return shortName;
+    // First name match
+    const byFirst = playerNames.find(
+      (full) =>
+        full.split(" ")[0] === shortName || full.startsWith(shortName + " "),
+    );
+    if (byFirst) return byFirst;
+    // Nickname match — e.g., "Q" matches 'Quintavius "Q" Burdette'
+    const byNickname = playerNames.find((full) =>
+      full.includes(`"${shortName}"`),
+    );
+    if (byNickname) return byNickname;
+    // Last name match
+    const byLast = playerNames.find((full) =>
+      full.endsWith(` ${shortName}`),
+    );
+    if (byLast) return byLast;
+    // Abbreviated name match — "John K." → "John Kenney" (first name + last initial with period)
+    const abbrMatch = shortName.match(/^(\w+)\s+(\w)\.\s*$/);
+    if (abbrMatch) {
+      const [, firstName, lastInitial] = abbrMatch;
+      const byAbbr = playerNames.find((full) => {
+        const parts = full.split(" ");
+        const fullFirst = parts[0];
+        const fullLast = parts[parts.length - 1];
+        return fullFirst === firstName && fullLast.startsWith(lastInitial);
+      });
+      if (byAbbr) return byAbbr;
+    }
+    return shortName;
+  };
+
+  if (playerNames.length > 0) {
+    for (const elim of epguideResult.eliminations) {
+      elim.playerName = resolvePlayerName(elim.playerName);
+    }
+    for (const challenge of epguideResult.challenges) {
+      challenge.winnerNames = challenge.winnerNames.map(resolvePlayerName);
+    }
   }
 
   // Step 5: Merge events from both sources
@@ -61,12 +134,31 @@ export async function scrapeResults(
 
   // Add milestone events from episode guide data
   const mergeEpisode = epguideResult.episodes.find((e) => e.mergeOccurs);
-  if (mergeEpisode) {
-    // make_merge events require knowing all player names, which the episode guide alone
-    // does not provide. The orchestrator should generate these from player data.
+  if (mergeEpisode && playerNames.length > 0) {
+    // Generate make_merge events — exclude players eliminated in or before the merge episode
+    const eliminatedBefore = new Set(
+      epguideResult.eliminations
+        .filter((e) => e.episodeNum <= mergeEpisode.order)
+        .map((e) => e.playerName),
+    );
+    const mergePlayers = playerNames.filter(
+      (name) => !eliminatedBefore.has(name),
+    );
+    for (const name of mergePlayers) {
+      allEvents.push({
+        episodeNum: mergeEpisode.order,
+        playerName: name,
+        action: "make_merge",
+        multiplier: null,
+      });
+    }
+    console.log(
+      `  Generated ${mergePlayers.length} make_merge events for episode ${mergeEpisode.order}`,
+    );
+  } else if (mergeEpisode) {
     warnings.push(
       `Merge detected at episode ${mergeEpisode.order}. ` +
-        `make_merge events should be generated by the orchestrator using player data.`,
+        `make_merge events could not be generated (no player data).`,
     );
   }
 
@@ -99,14 +191,91 @@ export async function scrapeResults(
     });
   }
 
+  // Step 6: Merge recap events if available
+  const recapPath = path.resolve(
+    import.meta.dirname,
+    "..",
+    "data",
+    "scraped",
+    `season_${seasonNum}_recap_events.json`,
+  );
+  if (fs.existsSync(recapPath)) {
+    console.log(`\nMerging recap events from ${path.basename(recapPath)}...`);
+    const recapData = JSON.parse(fs.readFileSync(recapPath, "utf-8"));
+    const recapEvents: ScrapeResultsOutput["events"] = recapData.events || [];
+    // Deduplicate against existing events
+    for (const re of recapEvents) {
+      const isDup = allEvents.some(
+        (e) =>
+          e.episodeNum === re.episodeNum &&
+          e.playerName === re.playerName &&
+          e.action === re.action,
+      );
+      if (!isDup) {
+        allEvents.push(re);
+      }
+    }
+    console.log(`  Merged ${recapEvents.length} recap events (${allEvents.length} total)`);
+  }
+
+  // Step 7: Resolve event player names to full names
+  if (playerNames.length > 0) {
+    console.log(`\nResolving player names (${playerNames.length} players)...`);
+    for (const evt of allEvents) {
+      evt.playerName = resolvePlayerName(evt.playerName);
+    }
+  }
+
+  // Step 8: Resolve tribe-level challenge wins to player names using wiki tribe data
+  const mergeEpNum = mergeEpisode ? mergeEpisode.order : null;
+  const tribeRoster = buildTribeRosters(
+    voteResult.tribeHistories,
+    epguideResult.episodes,
+    epguideResult.eliminations,
+    mergeEpNum,
+  );
+  console.log(
+    `\nResolving challenge winners from wiki tribe data (${tribeRoster.size} episodes)...`,
+  );
+  let resolved = 0;
+  for (const challenge of epguideResult.challenges) {
+    // Only resolve tribe-level wins (no individual names yet)
+    if (challenge.winnerNames.length > 0 || !challenge.winnerTribe) continue;
+
+    const tribeMap = tribeRoster.get(challenge.episodeNum);
+    if (!tribeMap) continue;
+
+    const tribePlayers = tribeMap.get(challenge.winnerTribe.toLowerCase());
+    if (tribePlayers && tribePlayers.length > 0) {
+      challenge.winnerNames = [...tribePlayers].sort();
+      resolved++;
+    }
+  }
+  console.log(`  Resolved ${resolved} challenges to player names`);
+
+  // Filter out TBD/placeholder data from future episodes
+  const filteredEpisodes = epguideResult.episodes.filter(
+    (e) => !e.title.includes("TBD"),
+  );
+  const filteredChallenges = epguideResult.challenges.filter(
+    (c) => !c.winnerNames.some((n) => n === "TBD"),
+  );
+  // Filter out TBD players and the Sole Survivor (winner is not an elimination)
+  const filteredEliminations = epguideResult.eliminations.filter(
+    (e) =>
+      e.playerName !== "TBD" &&
+      !e.finishText.toLowerCase().includes("sole survivor"),
+  );
+  const filteredEvents = allEvents.filter((e) => e.playerName !== "TBD");
+
   // Build output
   const result: ScrapeResultsOutput = {
     seasonNum,
     scrapedAt: new Date().toISOString(),
-    episodes: epguideResult.episodes,
-    challenges: epguideResult.challenges,
-    eliminations: epguideResult.eliminations,
-    events: allEvents,
+    episodes: filteredEpisodes,
+    challenges: filteredChallenges,
+    eliminations: filteredEliminations,
+    events: filteredEvents,
     warnings,
   };
 

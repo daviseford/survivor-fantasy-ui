@@ -191,11 +191,18 @@ function callClaude(prompt: string, tmpDir: string, label: string): string {
     return execSync(`claude --print < "${promptPath}"`, {
       encoding: "utf-8",
       maxBuffer: 10 * 1024 * 1024,
-      timeout: 120_000,
+      timeout: 900_000,
     }).trim();
   } finally {
-    if (fs.existsSync(promptPath)) {
-      fs.unlinkSync(promptPath);
+    // On Windows, the child process may still hold the file — retry with delay
+    try {
+      if (fs.existsSync(promptPath)) fs.unlinkSync(promptPath);
+    } catch {
+      setTimeout(() => {
+        try {
+          if (fs.existsSync(promptPath)) fs.unlinkSync(promptPath);
+        } catch { /* ignore */ }
+      }, 1000);
     }
   }
 }
@@ -241,9 +248,17 @@ async function scrapeOneRecap(
       ? recapText.slice(0, maxChars) + "\n\n[TRUNCATED]"
       : recapText;
 
-  // Call Claude
+  // Call Claude (with one retry on failure)
   const prompt = buildPrompt(seasonNum, truncatedText, playerNames);
-  const responseText = callClaude(prompt, tmpDir, label);
+  let responseText: string;
+  try {
+    responseText = callClaude(prompt, tmpDir, label);
+  } catch (err) {
+    console.error(`  Claude call failed: ${err instanceof Error ? err.message : err}`);
+    console.log("  Retrying in 5 seconds...");
+    await delay(5000);
+    responseText = callClaude(prompt, tmpDir, `${label}-retry`);
+  }
 
   // Parse response
   let events: ScrapedGameEvent[];
@@ -303,6 +318,7 @@ async function scrapeRecap(
   }
 
   const allEvents: ScrapedGameEvent[] = [];
+  const results: { url: string; title: string; status: "success" | "failed"; eventCount: number; error?: string }[] = [];
 
   for (let i = 0; i < urls.length; i++) {
     const { url, title } = urls[i];
@@ -311,22 +327,29 @@ async function scrapeRecap(
     );
     console.log("  Fetching page...");
 
-    const events = await scrapeOneRecap(
-      seasonNum,
-      url,
-      tmpDir,
-      `${seasonNum}-${i}`,
-      playerNames,
-    );
-
-    console.log(`  Extracted ${events.length} events`);
-    for (const ev of events) {
-      console.log(
-        `    Ep ${ev.episodeNum}: ${ev.playerName} — ${ev.action}${ev.multiplier ? ` x${ev.multiplier}` : ""}`,
+    try {
+      const events = await scrapeOneRecap(
+        seasonNum,
+        url,
+        tmpDir,
+        `${seasonNum}-${i}`,
+        playerNames,
       );
-    }
 
-    allEvents.push(...events);
+      console.log(`  Extracted ${events.length} events`);
+      for (const ev of events) {
+        console.log(
+          `    Ep ${ev.episodeNum}: ${ev.playerName} — ${ev.action}${ev.multiplier ? ` x${ev.multiplier}` : ""}`,
+        );
+      }
+
+      allEvents.push(...events);
+      results.push({ url, title, status: "success", eventCount: events.length });
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : String(err);
+      console.error(`  FAILED: ${errorMsg}`);
+      results.push({ url, title, status: "failed", eventCount: 0, error: errorMsg });
+    }
 
     // Rate limit between requests
     if (i < urls.length - 1) {
@@ -358,11 +381,30 @@ async function scrapeRecap(
 
   fs.writeFileSync(outputPath, JSON.stringify(output, null, 2) + "\n");
 
-  console.log(`\n${"=".repeat(50)}`);
+  // Print summary table
+  console.log(`\n${"=".repeat(60)}`);
   console.log(`Recap scrape complete for Season ${seasonNum}`);
-  console.log(`  Articles scraped: ${urls.length}`);
+  console.log(`${"=".repeat(60)}`);
+  console.log("");
+  const successCount = results.filter((r) => r.status === "success").length;
+  const failedCount = results.filter((r) => r.status === "failed").length;
+  for (const r of results) {
+    const icon = r.status === "success" ? "[OK]" : "[FAIL]";
+    const events = r.status === "success" ? `${r.eventCount} events` : r.error ?? "unknown error";
+    console.log(`  ${icon} ${r.title}`);
+    console.log(`       ${events}`);
+  }
+  console.log("");
+  console.log(`  Articles: ${successCount} succeeded, ${failedCount} failed, ${urls.length} total`);
   console.log(`  Total events: ${deduped.length}`);
   console.log(`\nOutput: ${outputPath}`);
+
+  if (failedCount > 0) {
+    console.log(`\nSome articles failed. To retry them individually, run:`);
+    for (const r of results.filter((r) => r.status === "failed")) {
+      console.log(`  yarn scrape-recap ${seasonNum} "${r.url}"`);
+    }
+  }
 
   return deduped;
 }

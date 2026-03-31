@@ -3,6 +3,7 @@ import * as path from "path";
 import { describe, expect, it } from "vitest";
 import {
   CastTableEntry,
+  buildTribeRosters,
   parseBirthDate,
   parseCastTable,
   parseContestantPage,
@@ -31,6 +32,10 @@ const s46Votetable = fs.readFileSync(
 );
 const s9Votetable = fs.readFileSync(
   path.join(fixturesDir, "s9-votetable.txt"),
+  "utf-8",
+);
+const s50Votetable = fs.readFileSync(
+  path.join(fixturesDir, "s50-votetable.txt"),
   "utf-8",
 );
 
@@ -506,6 +511,208 @@ describe("parseVotingHistory", () => {
       const result = parseVotingHistory(s9Votetable, 9);
       expect(result.votesByEpisode[1]).toBeDefined();
       expect(result.votesByEpisode[1].eliminatedPlayer).toBe("Brook");
+    });
+  });
+
+  // --- Tribe history extraction tests (Unit 1) ---
+
+  describe("tribeHistories", () => {
+    describe("Season 46 (no swap)", () => {
+      it("parses all 18 players with tribe data", () => {
+        const result = parseVotingHistory(s46Votetable, 46);
+        // S46 has 18 contestants + Moriah (tribebox2|none with tribeicon)
+        expect(result.tribeHistories.size).toBeGreaterThanOrEqual(18);
+      });
+
+      it("parses players with 0 tribeicons (pre-merge boots)", () => {
+        const result = parseVotingHistory(s46Votetable, 46);
+        const jelinsky = result.tribeHistories.get("Jelinsky");
+        expect(jelinsky).toBeDefined();
+        expect(jelinsky!.tribebox2).toBe("yanu");
+        expect(jelinsky!.tribeicons).toEqual([]);
+      });
+
+      it("parses players with 1 tribeicon (reached merge)", () => {
+        const result = parseVotingHistory(s46Votetable, 46);
+        const kenzie = result.tribeHistories.get("Kenzie");
+        expect(kenzie).toBeDefined();
+        expect(kenzie!.tribebox2).toBe("nuinui");
+        expect(kenzie!.tribeicons).toEqual(["yanu"]);
+      });
+
+      it("skips tribebox2|out rows (jury phase markers)", () => {
+        const result = parseVotingHistory(s46Votetable, 46);
+        // tribebox2|out rows should not appear in tribeHistories
+        for (const [, hist] of result.tribeHistories) {
+          expect(hist.tribebox2).not.toBe("out");
+        }
+      });
+
+      it("handles tribebox2|none WITH tribeicon1 (Moriah)", () => {
+        const result = parseVotingHistory(s46Votetable, 46);
+        const moriah = result.tribeHistories.get("Moriah");
+        expect(moriah).toBeDefined();
+        expect(moriah!.tribebox2).toBe("none");
+        expect(moriah!.tribeicons).toEqual(["siga"]);
+      });
+    });
+
+    describe("Season 9 (tribe swap)", () => {
+      it("parses players with 2 tribeicons (survived swap + merge)", () => {
+        const result = parseVotingHistory(s9Votetable, 9);
+        // Rory: original Lopevi, swapped to Yasur
+        const rory = result.tribeHistories.get("Rory");
+        expect(rory).toBeDefined();
+        expect(rory!.tribebox2).toBe("alinta");
+        expect(rory!.tribeicons).toEqual(["lopevi", "yasur"]);
+      });
+
+      it("parses players who stayed on same tribe through swap", () => {
+        const result = parseVotingHistory(s9Votetable, 9);
+        // Chris: original Lopevi, stayed Lopevi
+        const chris = result.tribeHistories.get("Chris");
+        expect(chris).toBeDefined();
+        expect(chris!.tribebox2).toBe("alinta");
+        expect(chris!.tribeicons).toEqual(["lopevi", "lopevi"]);
+      });
+
+      it("parses pre-swap eliminees with 0 tribeicons", () => {
+        const result = parseVotingHistory(s9Votetable, 9);
+        const brady = result.tribeHistories.get("Brady");
+        expect(brady).toBeDefined();
+        expect(brady!.tribebox2).toBe("lopevi");
+        expect(brady!.tribeicons).toEqual([]);
+      });
+    });
+
+    describe("Season 50 (3 tribes + swap, capital Tribeicon1)", () => {
+      it("handles case-insensitive Tribeicon1 matching", () => {
+        const result = parseVotingHistory(s50Votetable, 50);
+        // S50 uses {{Tribeicon1|...}} with capital T
+        const aubry = result.tribeHistories.get("Aubry");
+        expect(aubry).toBeDefined();
+        expect(aubry!.tribeicons).toEqual(["vatu", "kalo"]);
+      });
+
+      it("parses pre-swap eliminees with 0 tribeicons", () => {
+        const result = parseVotingHistory(s50Votetable, 50);
+        const savannah = result.tribeHistories.get("Savannah");
+        expect(savannah).toBeDefined();
+        expect(savannah!.tribebox2).toBe("cila");
+        expect(savannah!.tribeicons).toEqual([]);
+      });
+    });
+  });
+});
+
+// --- Tribe roster builder tests (Unit 2) ---
+
+describe("buildTribeRosters", () => {
+  describe("Season 46 (no swap)", () => {
+    it("builds correct tribe rosters for episode 1", () => {
+      const voteResult = parseVotingHistory(s46Votetable, 46);
+      const epResult = parseEpisodeGuide(s46Epguide, 46);
+      const mergeEp = epResult.episodes.find((e) => e.mergeOccurs);
+      const rosters = buildTribeRosters(
+        voteResult.tribeHistories,
+        epResult.episodes,
+        epResult.eliminations,
+        mergeEp ? mergeEp.order : null,
+      );
+
+      const ep1 = rosters.get(1);
+      expect(ep1).toBeDefined();
+      // S46 has 3 tribes of 6 players each
+      const yanu = ep1!.get("yanu") ?? [];
+      const nami = ep1!.get("nami") ?? [];
+      const siga = ep1!.get("siga") ?? [];
+      expect(yanu.length).toBe(6);
+      expect(nami.length).toBe(6);
+      expect(siga.length).toBe(6);
+    });
+
+    it("excludes eliminated players from subsequent episodes", () => {
+      const voteResult = parseVotingHistory(s46Votetable, 46);
+      const epResult = parseEpisodeGuide(s46Epguide, 46);
+      const mergeEp = epResult.episodes.find((e) => e.mergeOccurs);
+      const rosters = buildTribeRosters(
+        voteResult.tribeHistories,
+        epResult.episodes,
+        epResult.eliminations,
+        mergeEp ? mergeEp.order : null,
+      );
+
+      // Jelinsky was eliminated in episode 1 — should not be in episode 2 roster
+      const ep2 = rosters.get(2);
+      if (ep2) {
+        const yanu2 = ep2.get("yanu") ?? [];
+        expect(yanu2).not.toContain("Jelinsky");
+      }
+    });
+
+    it("does not include post-merge episodes", () => {
+      const voteResult = parseVotingHistory(s46Votetable, 46);
+      const epResult = parseEpisodeGuide(s46Epguide, 46);
+      const mergeEp = epResult.episodes.find((e) => e.mergeOccurs);
+      expect(mergeEp).toBeDefined();
+      const rosters = buildTribeRosters(
+        voteResult.tribeHistories,
+        epResult.episodes,
+        epResult.eliminations,
+        mergeEp!.order,
+      );
+
+      // Post-merge episodes should not have roster entries
+      for (const [epNum] of rosters) {
+        expect(epNum).toBeLessThan(mergeEp!.order);
+      }
+    });
+
+    it("includes Moriah (tribebox2|none + tribeicon1|siga) in Siga roster", () => {
+      const voteResult = parseVotingHistory(s46Votetable, 46);
+      const epResult = parseEpisodeGuide(s46Epguide, 46);
+      const mergeEp = epResult.episodes.find((e) => e.mergeOccurs);
+      const rosters = buildTribeRosters(
+        voteResult.tribeHistories,
+        epResult.episodes,
+        epResult.eliminations,
+        mergeEp ? mergeEp.order : null,
+      );
+
+      // Moriah should be in the Siga roster for episode 1
+      const ep1 = rosters.get(1);
+      expect(ep1).toBeDefined();
+      const siga = ep1!.get("siga") ?? [];
+      expect(siga).toContain("Moriah");
+    });
+  });
+
+  describe("Season 9 (tribe swap)", () => {
+    it("detects swap and builds different pre/post-swap rosters", () => {
+      const voteResult = parseVotingHistory(s9Votetable, 9);
+      const epResult = parseEpisodeGuide(s9Epguide, 9);
+      const mergeEp = epResult.episodes.find((e) => e.mergeOccurs);
+      const rosters = buildTribeRosters(
+        voteResult.tribeHistories,
+        epResult.episodes,
+        epResult.eliminations,
+        mergeEp ? mergeEp.order : null,
+      );
+
+      // Pre-swap: Rory should be on Lopevi (original tribe)
+      const ep1 = rosters.get(1);
+      expect(ep1).toBeDefined();
+      const lopevi1 = ep1!.get("lopevi") ?? [];
+      expect(lopevi1).toContain("Rory");
+
+      // Post-swap: Rory should be on Yasur
+      // Find a post-swap episode (any episode after the swap but before merge)
+      const lastPreMergeEp = mergeEp ? mergeEp.order - 1 : 7;
+      const postSwapRoster = rosters.get(lastPreMergeEp);
+      if (postSwapRoster) {
+        const yasurLate = postSwapRoster.get("yasur") ?? [];
+        expect(yasurLate).toContain("Rory");
+      }
     });
   });
 });

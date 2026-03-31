@@ -59,6 +59,12 @@ export interface ScrapedGameEvent {
   multiplier: number | null;
 }
 
+/** Raw tribe history parsed from votetable tribebox2/tribeicon1 patterns */
+export interface PlayerTribeHistory {
+  tribebox2: string;
+  tribeicons: string[];
+}
+
 export interface ScrapeResultsOutput {
   seasonNum: number;
   scrapedAt: string;
