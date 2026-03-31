@@ -141,120 +141,255 @@ export const SEASON_9_EPISODES = [
     finale: true,
     merge_occurs: false,
   },
-] satisfies Episode<SeasonNum>[];
+] satisfies Episode<SeasonNumber>[];
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used only in typeof for type derivation
-const Season_9_Players = [
-  "Brady Finta",
+const Players = [
   "Brook Geraghty",
-  "Bubba Sampson",
-  "Chad Crittenden",
-  "Chris Daugherty",
-  "John Kenney",
-  "John Palyok",
-  "Lea Masters",
-  "Rory Freeman",
-  "Ami Cusack",
   "Dolly Neely",
-  "Eliza Orlins",
-  "Julie Berry",
-  "Leann Slaby",
-  "Lisa Keiffer",
+  "John Palyok",
   "Mia Galeotalanza",
+  "Brady Finta",
+  "Lisa Keiffer",
+  "John Kenney",
+  "Rory Freeman",
+  "Lea Masters",
+  "Chad Crittenden",
+  "Leann Slaby",
+  "Ami Cusack",
+  "Julie Berry",
+  "Eliza Orlins",
   "Scout Cloud Lee",
   "Twila Tanner",
+  "Chris Daugherty",
+  "Bubba Sampson",
 ] as const;
 
-type S9_Players = (typeof Season_9_Players)[number];
+type PlayerName = (typeof Players)[number];
 
-type SeasonNum = 9;
+type SeasonNumber = 9;
 
-const buildPlayer = <T extends S9_Players>(
-  name: T,
-  img = "",
-): Player<T, SeasonNum> => {
+const buildPlayer = <T extends PlayerName>(
+  p: { name: T; img: string } & Partial<
+    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "name" | "img">
+  >,
+): Player<T, SeasonNumber> => {
   return {
-    name,
-    img,
-    season_id: "season_9",
+    ...p,
     season_num: 9,
+    season_id: "season_9",
   };
 };
 
 export const SEASON_9_PLAYERS = [
-  buildPlayer(
-    "Brady Finta",
-    "https://static.wikia.nocookie.net/survivor/images/c/c5/S9_brady_t.png",
-  ),
-  buildPlayer(
-    "Brook Geraghty",
-    "https://static.wikia.nocookie.net/survivor/images/b/bb/S9_brook_t.png",
-  ),
-  buildPlayer(
-    "Bubba Sampson",
-    "https://static.wikia.nocookie.net/survivor/images/d/df/S9_travis_t.png",
-  ),
-  buildPlayer(
-    "Chad Crittenden",
-    "https://static.wikia.nocookie.net/survivor/images/5/57/S9_chad_t.png",
-  ),
-  buildPlayer(
-    "Chris Daugherty",
-    "https://static.wikia.nocookie.net/survivor/images/c/c1/S9_chris_t.png",
-  ),
-  buildPlayer(
-    "John Kenney",
-    "https://static.wikia.nocookie.net/survivor/images/e/e0/S9_johnk_t.png",
-  ),
-  buildPlayer(
-    "John Palyok",
-    "https://static.wikia.nocookie.net/survivor/images/8/85/S9_johnp_t.png",
-  ),
-  buildPlayer(
-    "Lea Masters",
-    "https://static.wikia.nocookie.net/survivor/images/6/62/S9_lea_t.png",
-  ),
-  buildPlayer(
-    "Rory Freeman",
-    "https://static.wikia.nocookie.net/survivor/images/0/0f/S9_rory_t.png",
-  ),
-  buildPlayer(
-    "Ami Cusack",
-    "https://static.wikia.nocookie.net/survivor/images/b/ba/S9_ami_t.png",
-  ),
-  buildPlayer(
-    "Dolly Neely",
-    "https://static.wikia.nocookie.net/survivor/images/5/5a/S9_dolly_t.png",
-  ),
-  buildPlayer(
-    "Eliza Orlins",
-    "https://static.wikia.nocookie.net/survivor/images/0/09/S9_eliza_t.png",
-  ),
-  buildPlayer(
-    "Julie Berry",
-    "https://static.wikia.nocookie.net/survivor/images/2/2e/S9_julie_t.png",
-  ),
-  buildPlayer(
-    "Leann Slaby",
-    "https://static.wikia.nocookie.net/survivor/images/1/1d/S9_leann_t.png",
-  ),
-  buildPlayer(
-    "Lisa Keiffer",
-    "https://static.wikia.nocookie.net/survivor/images/c/c3/S9_lisa_t.png",
-  ),
-  buildPlayer(
-    "Mia Galeotalanza",
-    "https://static.wikia.nocookie.net/survivor/images/1/1d/S9_mia_t.png",
-  ),
-  buildPlayer(
-    "Scout Cloud Lee",
-    "https://static.wikia.nocookie.net/survivor/images/d/d7/S9_scout_t.png",
-  ),
-  buildPlayer(
-    "Twila Tanner",
-    "https://static.wikia.nocookie.net/survivor/images/3/3f/S9_twila_t.png",
-  ),
-] satisfies Player<S9_Players, SeasonNum>[];
+  buildPlayer({
+    name: "Brook Geraghty",
+    img: "https://static.wikia.nocookie.net/survivor/images/b/bb/S9_brook_t.png",
+    description:
+      "Age: 49 | Hometown: Winthrop, Massachusetts | Occupation: Document Manager",
+    age: 49,
+    profession: "Document Manager",
+    hometown: "Winthrop, Massachusetts",
+    tribes: ["lopevi"],
+    finishPlacement: "18/18",
+    daysLasted: "3/39",
+  }),
+  buildPlayer({
+    name: "Dolly Neely",
+    img: "https://static.wikia.nocookie.net/survivor/images/5/5a/S9_dolly_t.png",
+    description:
+      "Age: 47 | Hometown: Mercer, Pennsylvania | Occupation: Sheep Farmer",
+    age: 47,
+    profession: "Sheep Farmer",
+    hometown: "Mercer, Pennsylvania",
+    tribes: ["yasur"],
+    finishPlacement: "17/18",
+    daysLasted: "6/39",
+  }),
+  buildPlayer({
+    name: "John Palyok",
+    img: "https://static.wikia.nocookie.net/survivor/images/8/85/S9_johnp_t.png",
+    description:
+      "Age: 52 | Hometown: Los Angeles, California | Occupation: Sales Manager",
+    age: 52,
+    profession: "Sales Manager",
+    hometown: "Los Angeles, California",
+    tribes: ["lopevi"],
+    finishPlacement: "16/18",
+    daysLasted: "7/39",
+  }),
+  buildPlayer({
+    name: "Mia Galeotalanza",
+    img: "https://static.wikia.nocookie.net/survivor/images/1/1d/S9_mia_t.png",
+    description:
+      "Age: 51 | Hometown: Boston, Massachusetts | Occupation: Bookkeeper",
+    age: 51,
+    profession: "Bookkeeper",
+    hometown: "Boston, Massachusetts",
+    tribes: ["yasur"],
+    finishPlacement: "15/18",
+    daysLasted: "7/39",
+  }),
+  buildPlayer({
+    name: "Brady Finta",
+    img: "https://static.wikia.nocookie.net/survivor/images/c/c5/S9_brady_t.png",
+    description:
+      "Age: 55 | Hometown: Huntington Beach, California | Occupation: FBI Agent",
+    age: 55,
+    profession: "FBI Agent",
+    hometown: "Huntington Beach, California",
+    tribes: ["lopevi"],
+    finishPlacement: "14/18",
+    daysLasted: "10/39",
+  }),
+  buildPlayer({
+    name: "Lisa Keiffer",
+    img: "https://static.wikia.nocookie.net/survivor/images/c/c3/S9_lisa_t.png",
+    description:
+      "Age: 65 | Hometown: Mandeville, Louisiana | Occupation: Real Estate Agent",
+    age: 65,
+    profession: "Real Estate Agent",
+    hometown: "Mandeville, Louisiana",
+    tribes: ["yasur"],
+    finishPlacement: "12/18",
+    daysLasted: "15/39",
+  }),
+  buildPlayer({
+    name: "John Kenney",
+    img: "https://static.wikia.nocookie.net/survivor/images/e/e0/S9_johnk_t.png",
+    description:
+      "Age: 44 | Hometown: Los Angeles, California | Occupation: Mechanical Bull Operator",
+    age: 44,
+    profession: "Mechanical Bull Operator",
+    hometown: "Los Angeles, California",
+    tribes: ["lopevi"],
+    finishPlacement: "11/18",
+    daysLasted: "18/39",
+  }),
+  buildPlayer({
+    name: "Rory Freeman",
+    img: "https://static.wikia.nocookie.net/survivor/images/0/0f/S9_rory_t.png",
+    description:
+      "Age: 57 | Hometown: Des Moines, Iowa | Occupation: Housing Case Manager",
+    age: 57,
+    profession: "Housing Case Manager",
+    hometown: "Des Moines, Iowa",
+    tribes: ["lopevi", "yasur", "alinta"],
+    finishPlacement: "10/18",
+    daysLasted: "21/39",
+  }),
+  buildPlayer({
+    name: "Lea Masters",
+    img: "https://static.wikia.nocookie.net/survivor/images/6/62/S9_lea_t.png",
+    description:
+      "Age: 62 | Hometown: Columbia, South Carolina | Occupation: Drill Sergeant",
+    age: 62,
+    profession: "Drill Sergeant",
+    hometown: "Columbia, South Carolina",
+    tribes: ["lopevi", "alinta"],
+    finishPlacement: "9/18",
+    daysLasted: "24/39",
+  }),
+  buildPlayer({
+    name: "Chad Crittenden",
+    img: "https://static.wikia.nocookie.net/survivor/images/5/57/S9_chad_t.png",
+    description:
+      "Age: 56 | Hometown: Oakland, California | Occupation: Teacher",
+    age: 56,
+    profession: "Teacher",
+    hometown: "Oakland, California",
+    tribes: ["lopevi", "alinta"],
+    finishPlacement: "8/18",
+    daysLasted: "27/39",
+  }),
+  buildPlayer({
+    name: "Leann Slaby",
+    img: "https://static.wikia.nocookie.net/survivor/images/1/1d/S9_leann_t.png",
+    description:
+      "Age: 56 | Hometown: Kansasville, Wisconsin | Occupation: Equity Research Assistant",
+    age: 56,
+    profession: "Equity Research Assistant",
+    hometown: "Kansasville, Wisconsin",
+    tribes: ["yasur", "alinta"],
+    finishPlacement: "7/18",
+    daysLasted: "30/39",
+  }),
+  buildPlayer({
+    name: "Ami Cusack",
+    img: "https://static.wikia.nocookie.net/survivor/images/b/ba/S9_ami_t.png",
+    description:
+      "Age: 53 | Hometown: Lakewood, Colorado | Occupation: Coffee Barista",
+    age: 53,
+    profession: "Coffee Barista",
+    hometown: "Lakewood, Colorado",
+    tribes: ["yasur", "alinta"],
+    finishPlacement: "6/18",
+    daysLasted: "33/39",
+  }),
+  buildPlayer({
+    name: "Julie Berry",
+    img: "https://static.wikia.nocookie.net/survivor/images/2/2e/S9_julie_t.png",
+    description: "Age: 45 | Hometown: Gorham, Maine | Occupation: Youth Mentor",
+    age: 45,
+    profession: "Youth Mentor",
+    hometown: "Gorham, Maine",
+    tribes: ["yasur", "lopevi", "alinta"],
+    finishPlacement: "5/18",
+    daysLasted: "36/39",
+  }),
+  buildPlayer({
+    name: "Eliza Orlins",
+    img: "https://static.wikia.nocookie.net/survivor/images/0/09/S9_eliza_t.png",
+    description:
+      "Age: 43 | Hometown: Syracuse, New York | Occupation: Pre-Law Student",
+    age: 43,
+    profession: "Pre-Law Student",
+    hometown: "Syracuse, New York",
+    tribes: ["yasur", "alinta"],
+    finishPlacement: "4/18",
+    daysLasted: "37/39",
+  }),
+  buildPlayer({
+    name: "Scout Cloud Lee",
+    img: "https://static.wikia.nocookie.net/survivor/images/d/d7/S9_scout_t.png",
+    description:
+      "Age: 81 | Hometown: Stillwater, Oklahoma | Occupation: Rancher",
+    age: 81,
+    profession: "Rancher",
+    hometown: "Stillwater, Oklahoma",
+    tribes: ["yasur", "alinta"],
+    finishPlacement: "3/18",
+    daysLasted: "38/39",
+  }),
+  buildPlayer({
+    name: "Twila Tanner",
+    img: "https://static.wikia.nocookie.net/survivor/images/3/3f/S9_twila_t.png",
+    description:
+      "Age: 63 | Hometown: Marshall, Missouri | Occupation: Highway Repair Worker",
+    age: 63,
+    profession: "Highway Repair Worker",
+    hometown: "Marshall, Missouri",
+    tribes: ["yasur", "lopevi", "alinta"],
+    finishPlacement: "Runner-Up (2/18)",
+    daysLasted: "39/39",
+  }),
+  buildPlayer({
+    name: "Chris Daugherty",
+    img: "https://static.wikia.nocookie.net/survivor/images/c/c1/S9_chris_t.png",
+    description:
+      "Age: 55 | Hometown: South Vienna, Ohio | Occupation: Highway Construction Worker",
+    age: 55,
+    profession: "Highway Construction Worker",
+    hometown: "South Vienna, Ohio",
+    tribes: ["lopevi", "alinta"],
+    finishPlacement: "Winner",
+    daysLasted: "39/39",
+  }),
+  buildPlayer({
+    name: "Bubba Sampson",
+    img: "https://static.wikia.nocookie.net/survivor/images/d/df/S9_travis_t.png",
+  }),
+] satisfies Player<PlayerName, SeasonNumber>[];
 
 export const SEASON_9_CHALLENGES = {
   challenge_1: {
@@ -646,7 +781,7 @@ export const SEASON_9_CHALLENGES = {
     order: 27,
     winning_players: ["Chris Daugherty"],
   },
-} satisfies Record<Challenge["id"], Challenge<S9_Players, SeasonNum>>;
+} satisfies Record<Challenge["id"], Challenge<PlayerName, SeasonNumber>>;
 
 export const SEASON_9_ELIMINATIONS = {
   elimination_1: {
@@ -836,4 +971,4 @@ export const SEASON_9_ELIMINATIONS = {
     votes_received: 5,
     variant: "tribal",
   },
-} satisfies Record<Elimination["id"], Elimination<S9_Players, SeasonNum>>;
+} satisfies Record<Elimination["id"], Elimination<PlayerName, SeasonNumber>>;
