@@ -4,6 +4,7 @@ import {
   parseContestantPage,
   parseInfoboxFields,
   parseNickname,
+  parseSeasonInfobox,
   parseSeasonNumber,
 } from "../wikitext-parser";
 
@@ -251,5 +252,83 @@ ${COLBY_DONALDSON_WIKITEXT.replace("{{Spoiler}}", "")}`;
     const info = parseContestantPage(BEN_KATZMAN_WIKITEXT, 46);
     expect(info).not.toBeNull();
     expect(info!.nickname).toBeUndefined();
+  });
+});
+
+// Real wikitext samples from season pages
+
+const SEASON_50_INFOBOX = `{{Season
+| image           = <center><tabber>Updated=[[File:In the Hands of the Fans Logo.png|center|200px]]</tabber></center>
+| version           = {{version|us}}
+| location          = {{wp|Mamanuca Islands}}, {{wp|Fiji}}
+| filmingdates      = June 5, 2025 - June 30, 2025<ref>https://example.com</ref>
+| seasonrun         = February 25, 2026<ref>https://example.com</ref> - May 20, 2026<ref>https://example.com</ref>
+| episodes          =
+| season            = 50
+| days              = 26
+| survivors         = 24
+| winner            =
+| runnerup          =
+| tribes            = {{tribeicon|cila}}
+| previous          = {{S2|49}}
+| next              =
+}}`;
+
+const SEASON_1_INFOBOX = `{{Season
+| image        = <center><tabber>Updated=[[File:Borneo.png|center|200px]]</tabber></center>
+| version      = {{version|us}}
+| season       = 1
+| location     = {{wp|Tiga Island, Malaysia|Pulau Tiga}}, {{wp|Sabah}}, {{wp|Borneo}}, {{wp|Malaysia}}
+| filmingdates = March 13, 2000 - April 20, 2000
+| seasonrun    = May 31, 2000 - August 23, 2000
+| episodes     = 14
+| days         = 39
+| survivors    = 16
+| winner       = [[Richard Hatch]]
+| tribes       = {{tribeicon|pagong}}
+| next         = {{S2|2}}
+}}`;
+
+describe("parseSeasonInfobox", () => {
+  it("extracts location from a modern season (S50)", () => {
+    const info = parseSeasonInfobox(SEASON_50_INFOBOX);
+    expect(info).not.toBeNull();
+    expect(info!.location).toBe("Mamanuca Islands, Fiji");
+  });
+
+  it("extracts filming dates and strips ref tags (S50)", () => {
+    const info = parseSeasonInfobox(SEASON_50_INFOBOX);
+    expect(info!.filmingDates).toBe("June 5, 2025 - June 30, 2025");
+  });
+
+  it("extracts season run and strips ref tags (S50)", () => {
+    const info = parseSeasonInfobox(SEASON_50_INFOBOX);
+    expect(info!.seasonRun).toBe("February 25, 2026 - May 20, 2026");
+  });
+
+  it("extracts location with multiple wiki links (S1)", () => {
+    const info = parseSeasonInfobox(SEASON_1_INFOBOX);
+    expect(info).not.toBeNull();
+    expect(info!.location).toBe("Pulau Tiga, Sabah, Borneo, Malaysia");
+  });
+
+  it("extracts filming dates without ref tags (S1)", () => {
+    const info = parseSeasonInfobox(SEASON_1_INFOBOX);
+    expect(info!.filmingDates).toBe("March 13, 2000 - April 20, 2000");
+  });
+
+  it("returns null for wikitext without Season template", () => {
+    expect(parseSeasonInfobox("no template here")).toBeNull();
+  });
+
+  it("returns empty fields for missing location/dates", () => {
+    const info = parseSeasonInfobox(`{{Season
+| version = {{version|us}}
+| season  = 99
+}}`);
+    expect(info).not.toBeNull();
+    expect(info!.location).toBeUndefined();
+    expect(info!.filmingDates).toBeUndefined();
+    expect(info!.seasonRun).toBeUndefined();
   });
 });

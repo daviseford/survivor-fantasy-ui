@@ -228,3 +228,86 @@ export function parseContestantPage(
 
   return info;
 }
+
+// --- Season infobox parser ---
+
+export interface SeasonInfobox {
+  /** Filming location (e.g., "Mamanuca Islands, Fiji") — wiki markup stripped */
+  location?: string;
+  /** Filming dates (e.g., "June 5, 2025 - June 30, 2025") */
+  filmingDates?: string;
+  /** Season air date range (e.g., "February 25, 2026 - May 20, 2026") */
+  seasonRun?: string;
+}
+
+/**
+ * Extract season metadata from the {{Season ...}} infobox on a season wiki page.
+ * Uses the same pipe-delimited key=value format as {{Contestant}} but with a
+ * different template name.
+ */
+export function parseSeasonInfobox(wikitext: string): SeasonInfobox | null {
+  // Find the {{Season block
+  const startMatch = wikitext.match(/\{\{Season\s*\n/i);
+  if (!startMatch) return null;
+
+  const blockStart = startMatch.index! + startMatch[0].length;
+  let depth = 1;
+  let blockEnd = -1;
+  for (let i = blockStart; i < wikitext.length - 1; i++) {
+    if (wikitext[i] === "{" && wikitext[i + 1] === "{") {
+      depth++;
+      i++;
+    } else if (wikitext[i] === "}" && wikitext[i + 1] === "}") {
+      depth--;
+      if (depth === 0) {
+        blockEnd = i;
+        break;
+      }
+      i++;
+    }
+  }
+  if (blockEnd === -1) return null;
+
+  const block = wikitext.substring(blockStart, blockEnd);
+  const fields: Record<string, string> = {};
+
+  for (const line of block.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed.startsWith("|")) continue;
+    const eqIndex = trimmed.indexOf("=");
+    if (eqIndex === -1) continue;
+    const key = trimmed.substring(1, eqIndex).trim();
+    const value = trimmed.substring(eqIndex + 1).trim();
+    if (/^\w+$/.test(key)) {
+      fields[key] = value;
+    }
+  }
+
+  const result: SeasonInfobox = {};
+
+  if (fields.location) {
+    // Strip wiki markup: {{wp|Page|Display}} → Display, {{wp|Page}} → Page
+    let loc = fields.location;
+    loc = loc.replace(
+      /\{\{wp\|([^}|]+)(?:\|([^}]+))?\}\}/g,
+      (_m, page, display) => display ?? page,
+    );
+    loc = loc.replace(/\[\[([^\]|]+\|)?([^\]]+)\]\]/g, "$2");
+    loc = loc.replace(/<[^>]+>/g, "").trim();
+    if (loc) result.location = loc;
+  }
+
+  if (fields.filmingdates) {
+    let dates = fields.filmingdates;
+    dates = dates.replace(/<ref>[^<]*<\/ref>/g, "").trim();
+    if (dates) result.filmingDates = dates;
+  }
+
+  if (fields.seasonrun) {
+    let run = fields.seasonrun;
+    run = run.replace(/<ref>[^<]*<\/ref>/g, "").trim();
+    if (run) result.seasonRun = run;
+  }
+
+  return result;
+}

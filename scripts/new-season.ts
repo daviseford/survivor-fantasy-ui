@@ -25,11 +25,15 @@ import type { ScrapedPlayer } from "./lib/types.js";
 import {
   delay,
   downloadImage,
+  fetchImageUrl,
   fetchImageUrls,
-  fetchSeasonLogoUrl,
   fetchWikitext,
+  getSeasonPageName,
 } from "./lib/wiki-api.js";
-import { parseContestantPage } from "./lib/wikitext-parser.js";
+import {
+  parseContestantPage,
+  parseSeasonInfobox,
+} from "./lib/wikitext-parser.js";
 
 /**
  * Fetch player images and bios from the Survivor Wiki as a supplemental step
@@ -184,36 +188,92 @@ async function main(): Promise<void> {
   fs.writeFileSync(outputPath, fileContent);
   console.log(`  Created: ${outputPath}`);
 
-  // Step 5: Register in seasons.ts (with logo from wiki)
+  // Step 5: Fetch season page for logo + season info
   console.log(`\n${"=".repeat(60)}`);
-  console.log(`Step 5/6: Registering season in seasons.ts`);
+  console.log(`Step 5/7: Fetching season logo and info from wiki`);
   console.log(`${"=".repeat(60)}`);
 
-  console.log(`  Fetching season logo from wiki...`);
-  const logoUrl = await fetchSeasonLogoUrl(seasonNum);
-  let localLogoPath = "";
-  if (logoUrl) {
-    const imgDir = path.join(projectRoot, "public", "images", seasonKey);
-    const ext = path.extname(new URL(logoUrl).pathname) || ".png";
-    const logoFileName = `season-${seasonNum}-logo${ext}`;
-    const destPath = path.join(imgDir, logoFileName);
-    const ok = await downloadImage(logoUrl, destPath);
-    if (ok) {
-      localLogoPath = `/images/${seasonKey}/${logoFileName}`;
-      console.log(`  Downloaded logo: ${localLogoPath}`);
+  const seasonPageName = getSeasonPageName(seasonNum);
+  const seasonWikitext = await fetchWikitext(seasonPageName);
+
+  // Extract season info (filming location, dates)
+  if (seasonWikitext) {
+    const seasonInfo = parseSeasonInfobox(seasonWikitext);
+    if (seasonInfo) {
+      if (seasonInfo.location)
+        console.log(`  Location: ${seasonInfo.location}`);
+      if (seasonInfo.filmingDates)
+        console.log(`  Filming: ${seasonInfo.filmingDates}`);
+      if (seasonInfo.seasonRun) console.log(`  Aired: ${seasonInfo.seasonRun}`);
     } else {
-      console.log(`  Found logo URL but download failed`);
+      console.log(`  No {{Season}} infobox found on wiki page`);
     }
-  } else {
+  }
+
+  // Extract logo from the season page wikitext (avoids a duplicate fetch)
+  let localLogoPath = "";
+  if (seasonWikitext) {
+    const fieldMatch = seasonWikitext.match(
+      /\|\s*(?:image|logo)\s*=\s*([\s\S]*?)(?=\n\s*\||\n\}\})/i,
+    );
+    if (fieldMatch) {
+      const fileMatch = fieldMatch[1].match(/\[\[File:([^\]|]+)/i);
+      if (fileMatch) {
+        const logoUrl = await fetchImageUrl(fileMatch[1].trim());
+        if (logoUrl) {
+          const imgDir = path.join(projectRoot, "public", "images", seasonKey);
+          const ext = path.extname(new URL(logoUrl).pathname) || ".png";
+          const logoFileName = `season-${seasonNum}-logo${ext}`;
+          const destPath = path.join(imgDir, logoFileName);
+          const ok = await downloadImage(logoUrl, destPath);
+          if (ok) {
+            localLogoPath = `/images/${seasonKey}/${logoFileName}`;
+            console.log(`  Downloaded logo: ${localLogoPath}`);
+          } else {
+            console.log(`  Found logo URL but download failed`);
+          }
+        }
+      }
+    }
+  }
+
+  if (!localLogoPath) {
+    // Fallback: try common filename patterns
+    for (const candidate of [
+      `US S${seasonNum} logo.png`,
+      `Survivor ${seasonNum} Logo.png`,
+    ]) {
+      const url = await fetchImageUrl(candidate);
+      if (url) {
+        const imgDir = path.join(projectRoot, "public", "images", seasonKey);
+        const ext = path.extname(new URL(url).pathname) || ".png";
+        const logoFileName = `season-${seasonNum}-logo${ext}`;
+        const destPath = path.join(imgDir, logoFileName);
+        const ok = await downloadImage(url, destPath);
+        if (ok) {
+          localLogoPath = `/images/${seasonKey}/${logoFileName}`;
+          console.log(`  Downloaded logo (fallback): ${localLogoPath}`);
+          break;
+        }
+      }
+    }
+  }
+
+  if (!localLogoPath) {
     console.log(`  No logo found — img will be empty`);
   }
 
+  // Step 6: Register in seasons.ts
+  console.log(`\n${"=".repeat(60)}`);
+  console.log(`Step 6/7: Registering season in seasons.ts`);
+  console.log(`${"=".repeat(60)}`);
+
   registerSeason(seasonNum, seasonsFilePath, localLogoPath);
 
-  // Step 6: Push to Firestore (optional)
+  // Step 7: Push to Firestore (optional)
   if (push) {
     console.log(`\n${"=".repeat(60)}`);
-    console.log(`Step 6/6: Pushing to Firestore`);
+    console.log(`Step 7/7: Pushing to Firestore`);
     console.log(`${"=".repeat(60)}`);
     await pushSeasonToFirestore(seasonNum, dryRun, localLogoPath);
   } else {
