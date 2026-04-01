@@ -2,17 +2,32 @@ import { Badge, Group, Table, TableScrollContainer, Text } from "@mantine/core";
 import { PropBetQuestionObj, PropBetsQuestions } from "../../data/propbets";
 import { useCompetition } from "../../hooks/useCompetition";
 import { usePropBetScoring } from "../../hooks/useGetPropBetScoring";
+import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
+import type { CastawayId, CastawayLookup } from "../../types";
 import { PropBetAnswer } from "../../utils/propBetUtils";
 
-const AnswerTd = ({ score }: { score: PropBetAnswer }) => {
+/** Resolve a prop bet answer to a display name if it's a castaway ID. */
+const resolveAnswer = (answer: string, lookup?: CastawayLookup): string => {
+  if (!answer || !lookup) return answer;
+  return lookup[answer as CastawayId]?.full_name ?? answer;
+};
+
+const AnswerTd = ({
+  score,
+  lookup,
+}: {
+  score: PropBetAnswer;
+  lookup?: CastawayLookup;
+}) => {
+  const display = resolveAnswer(score.answer, lookup);
   return (
     <Table.Td>
       <Group gap="sm">
         {score.status === "definitive_correct" && (
           <>
             <Text size="sm" fw={600}>
-              {score.answer}
+              {display}
             </Text>
             <Badge variant="light" color="green" size="sm">
               +{score.points_awarded}
@@ -22,14 +37,14 @@ const AnswerTd = ({ score }: { score: PropBetAnswer }) => {
 
         {score.status === "definitive_incorrect" && (
           <Text size="sm" c="red.4" td="line-through">
-            {score.answer}
+            {display}
           </Text>
         )}
 
         {score.status === "leading" && (
           <>
             <Text size="sm" fw={500} c="yellow.6">
-              {score.answer}
+              {display}
             </Text>
             <Badge variant="outline" color="yellow" size="xs">
               Leading
@@ -39,7 +54,7 @@ const AnswerTd = ({ score }: { score: PropBetAnswer }) => {
 
         {score.status === "pending" && (
           <Text size="sm" c="dimmed">
-            {score.answer}
+            {display}
           </Text>
         )}
       </Group>
@@ -51,8 +66,11 @@ export const PropBetScoring = () => {
   const { slimUser } = useUser();
   const { data: scores } = usePropBetScoring();
   const { data: competition } = useCompetition();
+  const { data: season } = useSeason(competition?.season_id);
 
   if (!slimUser || !competition) return null;
+
+  const lookup = season?.castawayLookup;
 
   const rows = Object.entries(scores).map(([uid, s]) => (
     <Table.Tr key={uid}>
@@ -60,12 +78,12 @@ export const PropBetScoring = () => {
         <strong>{s.propbet_first_vote.user_name}</strong>
       </Table.Td>
 
-      <AnswerTd score={s.propbet_first_vote} />
-      <AnswerTd score={s.propbet_ftc} />
-      <AnswerTd score={s.propbet_idols} />
-      <AnswerTd score={s.propbet_immunities} />
+      <AnswerTd score={s.propbet_first_vote} lookup={lookup} />
+      <AnswerTd score={s.propbet_ftc} lookup={lookup} />
+      <AnswerTd score={s.propbet_idols} lookup={lookup} />
+      <AnswerTd score={s.propbet_immunities} lookup={lookup} />
       <AnswerTd score={s.propbet_medical_evac} />
-      <AnswerTd score={s.propbet_winner} />
+      <AnswerTd score={s.propbet_winner} lookup={lookup} />
     </Table.Tr>
   ));
 

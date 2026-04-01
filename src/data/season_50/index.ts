@@ -83,7 +83,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0009",
     full_name: "Jenna Lewis-Dougherty",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Jenna-Lewis-Dougherty.jpg",
     description: "Age: 47 | Hometown: Woodland, California",
     age: 47,
     hometown: "Woodland, California",
@@ -91,7 +91,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0726",
     full_name: "Kyle Fraser",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Kyle-Fraser.jpg",
     description: "Age: 31 | Hometown: Brooklyn, New York",
     age: 31,
     hometown: "Brooklyn, New York",
@@ -99,7 +99,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0747",
     full_name: "Savannah Louie",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Savannah-Louie.jpg",
     description: "Age: 31 | Hometown: Atlanta, Georgia",
     age: 31,
     hometown: "Atlanta, Georgia",
@@ -107,7 +107,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0691",
     full_name: "Q Burdette",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Q-Burdette.jpg",
     description: "Age: 31 | Hometown: Germantown, Tennessee",
     age: 31,
     hometown: "Germantown, Tennessee",
@@ -115,7 +115,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0555",
     full_name: "Mike White",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Mike-White.jpg",
     description: "Age: 54 | Hometown: Hanalei, Hawaii",
     age: 54,
     hometown: "Hanalei, Hawaii",
@@ -123,7 +123,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0554",
     full_name: "Angelina Keeley",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Angelina-Keeley.jpg",
     description: "Age: 35 | Hometown: San Diego, California",
     age: 35,
     hometown: "San Diego, California",
@@ -131,7 +131,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0682",
     full_name: "Charlie Davis",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Charlie-Davis.jpg",
     description: "Age: 27 | Hometown: Boston, Massachusetts",
     age: 27,
     hometown: "Boston, Massachusetts",
@@ -139,7 +139,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0477",
     full_name: "Aubry Bracco",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Aubry-Bracco.jpg",
     description: "Age: 39 | Hometown: Hampton Falls, New Hampshire",
     age: 39,
     hometown: "Hampton Falls, New Hampshire",
@@ -147,7 +147,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0515",
     full_name: "Chrissy Hofbeck",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Chrissy-Hofbeck.jpg",
     description: "Age: 54 | Hometown: The Villages, Florida",
     age: 54,
     hometown: "The Villages, Florida",
@@ -155,7 +155,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0550",
     full_name: "Christian Hubicki",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Christian-Hubicki.jpg",
     description: "Age: 39 | Hometown: Tallahassee, Florida",
     age: 39,
     hometown: "Tallahassee, Florida",
@@ -163,7 +163,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0179",
     full_name: "Cirie Fields",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Cirie-Fields.jpg",
     description: "Age: 54 | Hometown: Jersey City, New Jersey",
     age: 54,
     hometown: "Jersey City, New Jersey",
@@ -171,7 +171,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0277",
     full_name: "Coach Wade",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Benjamin-Coach-Wade.jpg",
     description: "Age: 53 | Hometown: Susanville, California",
     age: 53,
     hometown: "Susanville, California",
@@ -179,7 +179,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0031",
     full_name: "Colby Donaldson",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Colby-Donaldson.jpg",
     description: "Age: 51 | Hometown: Austin, Texas",
     age: 51,
     hometown: "Austin, Texas",
@@ -187,7 +187,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0666",
     full_name: "Dee Valladares",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Dee-Valladres.jpg",
     description: "Age: 28 | Hometown: Miami, Florida",
     age: 28,
     hometown: "Miami, Florida",
@@ -195,7 +195,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0668",
     full_name: "Emily Flippen",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Emily-Flippen.jpg",
     description: "Age: 30 | Hometown: Laurel, Maryland",
     age: 30,
     hometown: "Laurel, Maryland",
@@ -203,7 +203,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0703",
     full_name: "Genevieve Mushaluk",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Genevieve-Mushaluk.jpg",
     description: "Age: 34 | Hometown: Winnipeg, Manitoba",
     age: 34,
     hometown: "Winnipeg, Manitoba",
@@ -211,7 +211,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0722",
     full_name: "Joe Hunter",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Joe-Hunter.jpg",
     description: "Age: 45 | Hometown: West Sacramento, California",
     age: 45,
     hometown: "West Sacramento, California",
@@ -219,7 +219,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0615",
     full_name: "Jonathan Young",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Jonathan-Young.jpg",
     description: "Age: 32 | Hometown: Gulf Shores, Alabama",
     age: 32,
     hometown: "Gulf Shores, Alabama",
@@ -227,7 +227,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0724",
     full_name: "Kamilla Karthigesu",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Kamilla-Karthigesu.jpg",
     description: "Age: 31 | Hometown: Foster City, California",
     age: 31,
     hometown: "Foster City, California",
@@ -235,7 +235,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0201",
     full_name: "Oscar Lusth",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Ozzy-Lusth.jpg",
     description: "Age: 43 | Hometown: Guanajuato, Guanajuato",
     age: 43,
     hometown: "Guanajuato, Guanajuato",
@@ -243,7 +243,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0560",
     full_name: "Rick Devens",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Rick-Devens.jpg",
     description: "Age: 41 | Hometown: Macon, Georgia",
     age: 41,
     hometown: "Macon, Georgia",
@@ -251,7 +251,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0745",
     full_name: "Rizo Velovic",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Rizo-Velovic.jpg",
     description: "Age: 25 | Hometown: Yonkers, New York",
     age: 25,
     hometown: "Yonkers, New York",
@@ -259,7 +259,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0144",
     full_name: "Stephenie LaGrossa Kendrick",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Stephenie-Lagrossa-Kendrick.jpg",
     description: "Age: 45 | Hometown: Dunedin, Florida",
     age: 45,
     hometown: "Dunedin, Florida",
@@ -267,7 +267,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0695",
     full_name: "Tiffany Ervin",
-    img: "",
+    img: "/images/season_50/Survivor-50-Cast-Tiffany-Ervin.jpg",
     description: "Age: 34 | Hometown: Los Angeles, California",
     age: 34,
     hometown: "Los Angeles, California",

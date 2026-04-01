@@ -71,7 +71,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0732",
     full_name: "Stephanie Berger",
-    img: "",
+    img: "/images/season_48/Stephanie-Berger.jpg",
     description: "Age: 37 | Hometown: Brooklyn, New York",
     age: 37,
     hometown: "Brooklyn, New York",
@@ -79,7 +79,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0725",
     full_name: "Kevin Leung",
-    img: "",
+    img: "/images/season_48/Kevin-Leung.jpg",
     description: "Age: 33 | Hometown: Livermore, California",
     age: 33,
     hometown: "Livermore, California",
@@ -87,7 +87,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0723",
     full_name: "Justin Pioppi",
-    img: "",
+    img: "/images/season_48/Justin-Pioppi.jpg",
     description: "Age: 29 | Hometown: Winthrop, Massachusetts",
     age: 29,
     hometown: "Winthrop, Massachusetts",
@@ -95,7 +95,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0733",
     full_name: "Thomas Krottinger",
-    img: "",
+    img: "/images/season_48/Thomas-Krottinger.jpg",
     description: "Age: 34 | Hometown: Los Angeles, California",
     age: 34,
     hometown: "Los Angeles, California",
@@ -103,7 +103,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0716",
     full_name: "Bianca Roses",
-    img: "",
+    img: "/images/season_48/Bianca-Roses.jpg",
     description: "Age: 32 | Hometown: Arlington, Virginia",
     age: 32,
     hometown: "Arlington, Virginia",
@@ -111,7 +111,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0718",
     full_name: "Charity Nelms",
-    img: "",
+    img: "/images/season_48/Charity-Nelms.jpg",
     description: "Age: 33 | Hometown: St. Petersburg, Florida",
     age: 33,
     hometown: "St. Petersburg, Florida",
@@ -119,7 +119,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0729",
     full_name: "Sai Hughley",
-    img: "",
+    img: "/images/season_48/Saiounia-Hughley.jpg",
     description: "Age: 29 | Hometown: Simi Valley, California",
     age: 29,
     hometown: "Simi Valley, California",
@@ -127,7 +127,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0717",
     full_name: "Cedrek McFadden",
-    img: "",
+    img: "/images/season_48/Cedrek-McFadden.jpg",
     description: "Age: 45 | Hometown: Greenville, South Carolina",
     age: 45,
     hometown: "Greenville, South Carolina",
@@ -135,7 +135,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0719",
     full_name: "Chrissy Sarnowsky",
-    img: "",
+    img: "/images/season_48/Chrissy-Sarnowsky.jpg",
     description: "Age: 54 | Hometown: Chicago, Illinois",
     age: 54,
     hometown: "Chicago, Illinois",
@@ -143,7 +143,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0720",
     full_name: "David Kinne",
-    img: "",
+    img: "/images/season_48/David-Kinne.jpg",
     description: "Age: 38 | Hometown: Buena Park, California",
     age: 38,
     hometown: "Buena Park, California",
@@ -151,7 +151,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0731",
     full_name: "Star Toomey",
-    img: "",
+    img: "/images/season_48/Star-Toomey.jpg",
     description: "Age: 27 | Hometown: Augusta, Georgia",
     age: 27,
     hometown: "Augusta, Georgia",
@@ -159,7 +159,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0727",
     full_name: "Mary Zheng",
-    img: "",
+    img: "/images/season_48/Mary-Zheng.jpg",
     description: "Age: 30 | Hometown: Philadelphia, Pennsylvania",
     age: 30,
     hometown: "Philadelphia, Pennsylvania",
@@ -167,7 +167,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0730",
     full_name: "Shauhin Davari",
-    img: "",
+    img: "/images/season_48/Shauhin-Davari.jpg",
     description: "Age: 37 | Hometown: Costa Mesa, California",
     age: 37,
     hometown: "Costa Mesa, California",
@@ -175,7 +175,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0728",
     full_name: "Mitch Guerra",
-    img: "",
+    img: "/images/season_48/Mitch-Guerra.jpg",
     description: "Age: 34 | Hometown: Waco, Texas",
     age: 34,
     hometown: "Waco, Texas",
@@ -183,7 +183,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0724",
     full_name: "Kamilla Karthigesu",
-    img: "",
+    img: "/images/season_48/Kamilla-Karthigesu.jpg",
     description: "Age: 30 | Hometown: Foster City, California",
     age: 30,
     hometown: "Foster City, California",
@@ -191,7 +191,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0722",
     full_name: "Joe Hunter",
-    img: "",
+    img: "/images/season_48/Joe-Hunter.jpg",
     description: "Age: 45 | Hometown: West Sacramento, California",
     age: 45,
     hometown: "West Sacramento, California",
@@ -199,7 +199,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0721",
     full_name: "Eva Erickson",
-    img: "",
+    img: "/images/season_48/Eva-Erickson.jpg",
     description: "Age: 23 | Hometown: Providence, Rhode Island",
     age: 23,
     hometown: "Providence, Rhode Island",
@@ -207,7 +207,7 @@ export const SEASON_48_PLAYERS = [
   buildPlayer({
     castaway_id: "US0726",
     full_name: "Kyle Fraser",
-    img: "",
+    img: "/images/season_48/Kyle-Fraser.jpg",
     description: "Age: 30 | Hometown: Brooklyn, New York",
     age: 30,
     hometown: "Brooklyn, New York",
