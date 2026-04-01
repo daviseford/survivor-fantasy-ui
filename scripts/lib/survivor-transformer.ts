@@ -10,6 +10,7 @@ import type {
   SurvivorCastaway,
   SurvivorChallengeResult,
   SurvivorEpisode,
+  SurvivorJourney,
   SurvivorTribeMapping,
 } from "./survivor-types.js";
 import type {
@@ -106,6 +107,7 @@ export function transformResults(
   const eliminations = transformEliminations(data.castaways);
   const events = transformEvents(
     data.advantageMovement,
+    data.journeys,
     data.castaways,
     data.tribeMapping,
     nameMap,
@@ -290,8 +292,25 @@ function mapResultToVariant(
 
 // --- Event transformation ---
 
+/** Journey rewards that represent gaining an advantage. */
+const ADVANTAGE_REWARDS = new Set([
+  "extra vote",
+  "block a vote",
+  "steal a vote",
+  "idol",
+  "hidden immunity idol",
+  "advantage",
+]);
+
+/** Returns true if a journey reward represents winning an advantage. */
+function isAdvantageReward(reward: string | null): boolean {
+  if (!reward) return false;
+  return ADVANTAGE_REWARDS.has(reward.toLowerCase());
+}
+
 function transformEvents(
   advantageMovement: SurvivorAdvantageMovement[],
+  journeys: SurvivorJourney[],
   castaways: SurvivorCastaway[],
   tribeMapping: SurvivorTribeMapping[],
   nameMap: Map<string, string>,
@@ -320,6 +339,29 @@ function transformEvents(
         multiplier: null,
       });
     } else if (event === "Received" || event === "Recieved") {
+      events.push({
+        episodeNum: epNum,
+        playerName,
+        action: "win_advantage",
+        multiplier: null,
+      });
+    }
+  }
+
+  // Journey events (S41+) — each player who goes on a journey gets go_on_journey,
+  // and players who gain an advantage also get win_advantage
+  for (const j of journeys) {
+    const epNum = Math.round(j.episode);
+    const playerName = resolveFullName(j.castaway, nameMap);
+
+    events.push({
+      episodeNum: epNum,
+      playerName,
+      action: "go_on_journey",
+      multiplier: null,
+    });
+
+    if (isAdvantageReward(j.reward)) {
       events.push({
         episodeNum: epNum,
         playerName,

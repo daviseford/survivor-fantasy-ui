@@ -10,6 +10,7 @@ import type {
   SurvivorCastaway,
   SurvivorChallengeResult,
   SurvivorEpisode,
+  SurvivorJourney,
   SurvivorTable,
   SurvivorTribeMapping,
   SurvivorVoteHistory,
@@ -64,6 +65,7 @@ export interface SurvivorSeasonData {
   voteHistory: SurvivorVoteHistory[];
   advantageMovement: SurvivorAdvantageMovement[];
   tribeMapping: SurvivorTribeMapping[];
+  journeys: SurvivorJourney[];
 }
 
 /**
@@ -83,6 +85,7 @@ export async function fetchSeasonData(
     allVoteHistory,
     allAdvantageMovement,
     allTribeMapping,
+    allJourneys,
   ] = await Promise.all([
     fetchTable<SurvivorCastaway>("castaways"),
     fetchTable<SurvivorEpisode>("episodes"),
@@ -90,6 +93,7 @@ export async function fetchSeasonData(
     fetchTable<SurvivorVoteHistory>("vote_history"),
     fetchTable<SurvivorAdvantageMovement>("advantage_movement"),
     fetchTable<SurvivorTribeMapping>("tribe_mapping"),
+    fetchTable<SurvivorJourney>("journeys"),
   ]);
 
   // Filter to the requested season
@@ -99,6 +103,7 @@ export async function fetchSeasonData(
   const voteHistory = filterBySeason(allVoteHistory, seasonNum);
   const advantageMovement = filterBySeason(allAdvantageMovement, seasonNum);
   const tribeMapping = filterBySeason(allTribeMapping, seasonNum);
+  const journeys = filterBySeason(allJourneys, seasonNum);
 
   if (castaways.length === 0) {
     console.log(
@@ -119,5 +124,6 @@ export async function fetchSeasonData(
     voteHistory,
     advantageMovement,
     tribeMapping,
+    journeys,
   };
 }

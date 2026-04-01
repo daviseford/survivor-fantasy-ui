@@ -117,6 +117,19 @@ export interface SurvivorTribeMapping {
   tribe_status: string; // "Original", "Swapped", "Merged"
 }
 
+/** journeys.json — one row per castaway per journey (S41+) */
+export interface SurvivorJourney {
+  version: string;
+  version_season: string;
+  season: number;
+  episode: number;
+  sog_id: number;
+  castaway_id: string;
+  castaway: string;
+  reward: string | null; // "Extra vote", "Block a Vote", "Lost vote", etc.
+  lost_vote: boolean;
+}
+
 /** Table names available from survivoR */
 export type SurvivorTable =
   | "castaways"
@@ -124,4 +137,5 @@ export type SurvivorTable =
   | "challenge_results"
   | "vote_history"
   | "advantage_movement"
-  | "tribe_mapping";
+  | "tribe_mapping"
+  | "journeys";

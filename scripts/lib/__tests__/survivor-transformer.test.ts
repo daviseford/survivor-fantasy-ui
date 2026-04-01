@@ -121,11 +121,28 @@ describe("transformResults", { timeout: 60000 }, () => {
     expect(ftc.length).toBeGreaterThanOrEqual(2); // at least winner + runner-up
   });
 
-  it("transforms Season 46 events (advantages, merge, winner)", async () => {
+  it("transforms Season 46 events (advantages, journeys, merge, winner)", async () => {
     const data = await fetchSeasonData(46);
     const result = transformResults(data, 46);
 
     expect(result.events.length).toBeGreaterThan(0);
+
+    // Should have journey events (S46 has 9 journey records)
+    const journeyEvents = result.events.filter(
+      (e) => e.action === "go_on_journey",
+    );
+    expect(journeyEvents.length).toBe(9);
+
+    // Journey advantage winners should also get win_advantage
+    // S46: Maria and Tevin got Extra vote on Ep1
+    const journeyAdvantages = result.events.filter(
+      (e) =>
+        e.action === "win_advantage" &&
+        journeyEvents.some(
+          (j) => j.playerName === e.playerName && j.episodeNum === e.episodeNum,
+        ),
+    );
+    expect(journeyAdvantages.length).toBeGreaterThan(0);
 
     // Should detect merge event
     const mergeEvents = result.events.filter((e) => e.action === "make_merge");
