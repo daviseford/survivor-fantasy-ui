@@ -36,9 +36,9 @@ import {
   IconUsers,
   IconX,
 } from "@tabler/icons-react";
-import { ref, set } from "firebase/database";
+import { ref, set, update } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
-import { shuffle, uniqBy } from "lodash-es";
+import { shuffle } from "lodash-es";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
@@ -61,6 +61,10 @@ import {
   PropBetsFormData,
   Season,
 } from "../types";
+import {
+  buildPickOrderUidMap,
+  buildTurnsMap,
+} from "../utils/draftRealtime";
 
 export const DraftComponent = () => {
   const navigate = useNavigate();
@@ -113,12 +117,11 @@ export const DraftComponent = () => {
       values,
     } satisfies PropBetsEntry;
 
-    const _propBets = [...(draft?.prop_bets || []), propBetEntry];
-
-    const _draft = { ...draft, prop_bets: _propBets } satisfies Draft;
-
     try {
-      await updateDraft(_draft);
+      await set(
+        ref(rt_db, `drafts/${draft.id}/prop_bets/${slimUser.uid}`),
+        propBetEntry,
+      );
       notifications.show({
         title: "Prop bets submitted",
         message: "Good luck!",
@@ -175,38 +178,29 @@ export const DraftComponent = () => {
     }
   };
 
-  const updateDraft = async (_draft: Draft) => {
-    if (!draft?.id) return;
-    await set(ref(rt_db, "drafts/" + draft.id), _draft);
-  };
-
   const userIsParticipant = useMemo(() => {
     if (!slimUser || !draft?.participants) return false;
     return draft?.participants.some((x) => x.uid === slimUser?.uid);
   }, [draft, slimUser]);
 
   const joinDraft = async () => {
-    if (!draft || !slimUser?.uid) return;
-    await updateDraft({
-      ...draft,
-      participants: uniqBy([...draft.participants, slimUser], (x) => x.uid),
-    });
+    if (!draft || !slimUser) return;
+    await set(ref(rt_db, `drafts/${draft.id}/participants/${slimUser.uid}`), slimUser);
   };
 
   const startDraft = async () => {
     if (!draft || !slimUser?.uid) return;
 
-    const _draftOrder = shuffle(draft.participants);
+    const draftOrder = shuffle(draft.participants);
+    const turns = buildTurnsMap(draftOrder, draft.total_players);
 
-    const _draft = {
-      ...draft,
-      started: true,
-      current_pick_number: 1,
-      current_picker: _draftOrder[0],
-      pick_order: _draftOrder,
-    } satisfies Draft;
-
-    await updateDraft(_draft);
+    await update(ref(rt_db, `drafts/${draft.id}`), {
+      pick_order_uids: buildPickOrderUidMap(draftOrder),
+      turns,
+      "state/started": true,
+      "state/finished": false,
+      "state/current_pick_number": 1,
+    });
   };
 
   const draftPlayer = async (player: {
@@ -215,43 +209,24 @@ export const DraftComponent = () => {
   }) => {
     if (!season || !draft || !slimUser?.uid) return;
 
-    const finished = draft.current_pick_number >= draft.total_players;
+    const isFinalPick = draft.current_pick_number >= draft.total_players;
+    const nextPickNumber = draft.current_pick_number + 1;
 
-    const pickOrderIdxOfLastPicker = draft.pick_order.findIndex(
-      (x) => x.uid === draft.current_picker?.uid,
-    );
+    const draftPick = {
+      season_id: season.id,
+      season_num: season.order,
+      order: draft.current_pick_number,
+      user_uid: slimUser.uid,
+      user_name: slimUser.displayName || slimUser.email || slimUser.uid,
+      castaway_id: player.castaway_id,
+      player_name: player.full_name,
+    } satisfies Draft["draft_picks"][number];
 
-    const nextCurrentPicker = finished
-      ? null
-      : (draft.pick_order?.[pickOrderIdxOfLastPicker + 1] ??
-        draft.pick_order[0]);
-
-    const _draft = {
-      ...draft,
-      finished,
-      current_pick_number: finished
-        ? draft?.current_pick_number
-        : draft?.current_pick_number + 1,
-      current_picker: nextCurrentPicker,
-      draft_picks: [
-        ...(draft?.draft_picks || []),
-        {
-          season_id: season.id,
-          season_num: season.order,
-          order: draft.current_pick_number,
-          user_uid: slimUser.uid,
-          user_name: slimUser.displayName || slimUser.email || slimUser.uid,
-          castaway_id: player.castaway_id,
-          player_name: player.full_name,
-        },
-      ],
-    } satisfies Draft;
-
-    if (finished) {
-      _draft.current_picker = null;
-    }
-
-    await updateDraft(_draft);
+    await update(ref(rt_db, `drafts/${draft.id}`), {
+      [`draft_picks/${draft.current_pick_number}`]: draftPick,
+      "state/current_pick_number": nextPickNumber,
+      ...(isFinalPick ? { "state/finished": true } : {}),
+    });
   };
 
   useEffect(() => {

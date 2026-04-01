@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { rt_db } from "../firebase";
 import { Draft } from "../types";
+import { normalizeDraft, type RealtimeDraft } from "../utils/draftRealtime";
 import { useSeason } from "./useSeason";
 import { useUser } from "./useUser";
 
@@ -20,8 +21,8 @@ export const useDraft = () => {
     const draftRef = ref(rt_db, "drafts/" + draftId);
 
     onValue(draftRef, (snapshot) => {
-      const data = snapshot.val();
-      setDraft(data || undefined);
+      const data = snapshot.val() as RealtimeDraft | null;
+      setDraft(normalizeDraft(data));
     });
   }, [draftId, season, slimUser]);
 

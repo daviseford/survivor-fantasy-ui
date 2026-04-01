@@ -1,13 +1,82 @@
 {
   "rules": {
-    // Default: admin-only. Each new RTDB path must explicitly grant access to non-admin users.
+    // Default: admin-only. Each new RTDB path must explicitly grant access.
     ".read": "auth.token.admin == true",
     ".write": "auth.token.admin == true",
 
     "drafts": {
       "$draftId": {
-        ".read": "auth != null",
-        ".write": "auth != null"
+        ".read": "auth != null && (auth.token.admin == true || data.child('creator_uid').val() == auth.uid || data.child('participants').child(auth.uid).exists())",
+        ".write": "auth.token.admin == true || (!data.exists() && auth != null && newData.child('id').val() == $draftId && newData.child('creator_uid').val() == auth.uid && newData.child('participants').childrenCount() == 1 && newData.child('participants').child(auth.uid).exists())",
+
+        "id": {
+          ".validate": "newData.isString() && newData.val() == $draftId"
+        },
+        "season_id": {
+          ".validate": "newData.isString()"
+        },
+        "season_num": {
+          ".validate": "newData.isNumber()"
+        },
+        "competiton_id": {
+          ".validate": "newData.isString()"
+        },
+        "creator_uid": {
+          ".validate": "newData.isString()"
+        },
+        "total_players": {
+          ".validate": "newData.isNumber() && newData.val() > 0"
+        },
+
+        "participants": {
+          "$uid": {
+            ".write": "auth.token.admin == true || (auth != null && auth.uid == $uid && root.child('drafts').child($draftId).child('state').child('started').val() != true)",
+            ".validate": "newData.hasChild('uid') && newData.child('uid').val() == $uid"
+          }
+        },
+
+        "prop_bets": {
+          "$uid": {
+            ".write": "auth.token.admin == true || (auth != null && auth.uid == $uid && root.child('drafts').child($draftId).child('participants').child(auth.uid).exists() && root.child('drafts').child($draftId).child('state').child('finished').val() == true && !data.exists())",
+            ".validate": "newData.hasChildren(['id', 'user_uid', 'user_name', 'values']) && newData.child('user_uid').val() == $uid"
+          }
+        },
+
+        "pick_order_uids": {
+          ".write": "auth.token.admin == true || (auth != null && root.child('drafts').child($draftId).child('creator_uid').val() == auth.uid && root.child('drafts').child($draftId).child('state').child('started').val() != true)",
+          "$index": {
+            ".validate": "newData.isString() && root.child('drafts').child($draftId).child('participants').child(newData.val()).exists()"
+          }
+        },
+
+        "turns": {
+          ".write": "auth.token.admin == true || (auth != null && root.child('drafts').child($draftId).child('creator_uid').val() == auth.uid && root.child('drafts').child($draftId).child('state').child('started').val() != true)",
+          "$pickNumber": {
+            ".validate": "newData.isString() && root.child('drafts').child($draftId).child('participants').child(newData.val()).exists()"
+          }
+        },
+
+        "draft_picks": {
+          "$pickNumber": {
+            ".write": "auth.token.admin == true || (auth != null && root.child('drafts').child($draftId).child('participants').child(auth.uid).exists() && root.child('drafts').child($draftId).child('state').child('started').val() == true && root.child('drafts').child($draftId).child('state').child('finished').val() != true && !data.exists() && root.child('drafts').child($draftId).child('state').child('current_pick_number').val() == $pickNumber + 0 && root.child('drafts').child($draftId).child('turns').child($pickNumber).val() == auth.uid)",
+            ".validate": "newData.hasChildren(['season_id', 'season_num', 'order', 'user_uid', 'user_name', 'castaway_id', 'player_name']) && newData.child('order').val() == $pickNumber + 0 && newData.child('user_uid').val() == auth.uid"
+          }
+        },
+
+        "state": {
+          "started": {
+            ".write": "auth.token.admin == true || (auth != null && root.child('drafts').child($draftId).child('creator_uid').val() == auth.uid && data.val() != true && newData.val() == true && root.child('drafts').child($draftId).child('participants').childrenCount() >= 2)",
+            ".validate": "newData.isBoolean()"
+          },
+          "finished": {
+            ".write": "auth.token.admin == true || (auth != null && data.val() != true && newData.val() == true && root.child('drafts').child($draftId).child('state').child('started').val() == true && root.child('drafts').child($draftId).child('turns').child(root.child('drafts').child($draftId).child('state').child('current_pick_number').val() + '').val() == auth.uid && root.child('drafts').child($draftId).child('state').child('current_pick_number').val() == root.child('drafts').child($draftId).child('total_players').val())",
+            ".validate": "newData.isBoolean()"
+          },
+          "current_pick_number": {
+            ".write": "auth.token.admin == true || (auth != null && ((root.child('drafts').child($draftId).child('creator_uid').val() == auth.uid && root.child('drafts').child($draftId).child('state').child('started').val() != true && data.val() == 0 && newData.val() == 1) || (root.child('drafts').child($draftId).child('state').child('started').val() == true && root.child('drafts').child($draftId).child('state').child('finished').val() != true && root.child('drafts').child($draftId).child('turns').child(data.val() + '').val() == auth.uid && newData.val() == data.val() + 1 && newData.parent().parent().child('draft_picks').child(data.val() + '').exists())))",
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          }
+        }
       }
     }
   }

@@ -4,7 +4,7 @@ import { ref, set } from "firebase/database";
 import { v4 } from "uuid";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
-import { Draft } from "../types";
+import { buildParticipantMap, type RealtimeDraft } from "../utils/draftRealtime";
 
 export const useCreateDraft = () => {
   const { slimUser } = useUser();
@@ -23,16 +23,18 @@ export const useCreateDraft = () => {
       season_num: season.order,
       competiton_id: `competition_${v4()}` as const,
       creator_uid: slimUser.uid,
-      participants: [slimUser],
+      participants: buildParticipantMap([slimUser]),
       total_players: season?.players.length,
-      pick_order: [],
-      draft_picks: [],
-      prop_bets: [],
-      current_pick_number: 0,
-      current_picker: null,
-      started: false,
-      finished: false,
-    } satisfies Draft;
+      pick_order_uids: {},
+      turns: {},
+      draft_picks: {},
+      prop_bets: {},
+      state: {
+        current_pick_number: 0,
+        started: false,
+        finished: false,
+      },
+    } satisfies RealtimeDraft;
 
     await set(ref(rt_db, "drafts/" + draftId), newDraft);
 
