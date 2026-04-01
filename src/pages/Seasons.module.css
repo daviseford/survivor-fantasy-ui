@@ -1,6 +1,10 @@
+/* ── Hero (Marquee) Cards ── */
+
 .heroCard {
   overflow: hidden;
-  transition: transform 150ms ease, box-shadow 150ms ease;
+  transition:
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out;
 
   &:hover {
     transform: translateY(-4px);
@@ -11,24 +15,35 @@
 .heroImageFallback {
   height: 200px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    135deg,
-    light-dark(var(--mantine-color-green-6), var(--mantine-color-green-8)),
-    light-dark(var(--mantine-color-teal-6), var(--mantine-color-teal-8))
-  );
+  gap: rem(4px);
 }
 
 .heroSeasonNumber {
-  font-size: rem(72px);
+  font-size: rem(64px);
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
+.heroSubtitle {
+  font-size: rem(14px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Compact (Browse Grid) Cards ── */
+
 .compactCard {
-  transition: transform 150ms ease, box-shadow 150ms ease;
+  transition:
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out;
 
   &:hover {
     transform: translateY(-2px);
@@ -39,22 +54,87 @@
 .compactImageFallback {
   height: 100px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    135deg,
-    light-dark(var(--mantine-color-green-7), var(--mantine-color-green-9)),
-    light-dark(var(--mantine-color-teal-7), var(--mantine-color-teal-9))
-  );
+  gap: rem(2px);
 }
 
 .compactSeasonNumber {
-  font-size: rem(36px);
+  font-size: rem(32px);
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 }
+
+.compactSubtitle {
+  font-size: rem(10px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  max-width: 90%;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Era Color Gradients ── */
+
+.eraClassic {
+  background: linear-gradient(
+    135deg,
+    light-dark(#b8860b, #8b6914),
+    light-dark(#d4a017, #a67c00)
+  );
+}
+
+.eraMiddle {
+  background: linear-gradient(
+    135deg,
+    light-dark(#1a6b8a, #124e6a),
+    light-dark(#2196a8, #1a7a8a)
+  );
+}
+
+.eraModern {
+  background: linear-gradient(
+    135deg,
+    light-dark(#6a3d9a, #4e2d73),
+    light-dark(#8e5cbf, #6b44a0)
+  );
+}
+
+.eraNew {
+  background: linear-gradient(
+    135deg,
+    light-dark(#0d8a6a, #0a6b52),
+    light-dark(#14a882, #0d8a6a)
+  );
+}
+
+/* ── Era Chips ── */
 
 .eraChip {
   cursor: pointer;
+}
+
+/* ── Section Divider ── */
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+}
+
+.sectionLine {
+  flex: 1;
+  height: 1px;
+  background: light-dark(
+    var(--mantine-color-gray-3),
+    var(--mantine-color-dark-4)
+  );
 }

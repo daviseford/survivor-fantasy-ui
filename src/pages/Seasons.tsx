@@ -24,6 +24,13 @@ const ERAS = [
   { label: "New Era (34–50)", min: 34, max: 50 },
 ] as const;
 
+function getEraClass(order: number): string {
+  if (order <= 8) return classes.eraClassic;
+  if (order <= 20) return classes.eraMiddle;
+  if (order <= 33) return classes.eraModern;
+  return classes.eraNew;
+}
+
 function matchesSearch(meta: SeasonMeta, query: string): boolean {
   const q = query.toLowerCase();
   return (
@@ -57,8 +64,13 @@ function HeroCard({ meta }: { meta: SeasonMeta }) {
         {meta.img ? (
           <Image src={meta.img} height={200} alt={meta.name} />
         ) : (
-          <div className={classes.heroImageFallback}>
+          <div
+            className={`${classes.heroImageFallback} ${getEraClass(meta.order)}`}
+          >
             <span className={classes.heroSeasonNumber}>{meta.order}</span>
+            {meta.subtitle && (
+              <span className={classes.heroSubtitle}>{meta.subtitle}</span>
+            )}
           </div>
         )}
         <Badge
@@ -75,18 +87,15 @@ function HeroCard({ meta }: { meta: SeasonMeta }) {
 
       <Group justify="space-between" mt="md" align="flex-start">
         <div style={{ flex: 1 }}>
-          <Text fw={700} size="xl">
+          <Text fw={700} size="lg">
             {meta.subtitle ? `Survivor: ${meta.subtitle}` : meta.name}
           </Text>
           <Text size="sm" c="dimmed">
             {meta.location} &middot; {meta.year}
           </Text>
-          <Text size="sm" c="dimmed">
-            {meta.contestantCount} contestants
-          </Text>
         </div>
         <IconChevronRight
-          size={20}
+          size={18}
           color="var(--mantine-color-dimmed)"
           style={{ marginTop: 4 }}
         />
@@ -110,8 +119,13 @@ function CompactCard({ meta }: { meta: SeasonMeta }) {
         {meta.img ? (
           <Image src={meta.img} height={100} alt={meta.name} />
         ) : (
-          <div className={classes.compactImageFallback}>
+          <div
+            className={`${classes.compactImageFallback} ${getEraClass(meta.order)}`}
+          >
             <span className={classes.compactSeasonNumber}>{meta.order}</span>
+            {meta.subtitle && (
+              <span className={classes.compactSubtitle}>{meta.subtitle}</span>
+            )}
           </div>
         )}
       </Card.Section>
@@ -123,9 +137,6 @@ function CompactCard({ meta }: { meta: SeasonMeta }) {
         <Text size="xs" c="dimmed" lineClamp={1}>
           {meta.location} &middot; {meta.year}
         </Text>
-        <Badge size="xs" variant="light" color="gray" w="fit-content">
-          {meta.contestantCount} contestants
-        </Badge>
       </Stack>
     </Card>
   );
@@ -136,8 +147,7 @@ export const Seasons = () => {
   const [selectedEras, setSelectedEras] = useState<string[]>([]);
 
   const allSeasons = useMemo(
-    () =>
-      Object.values(SEASON_METADATA).sort((a, b) => b.order - a.order),
+    () => Object.values(SEASON_METADATA).sort((a, b) => b.order - a.order),
     [],
   );
 
@@ -163,8 +173,8 @@ export const Seasons = () => {
       <div>
         <Title order={2}>Pick a season</Title>
         <Text c="dimmed" size="sm">
-          Every draft starts here. Choose a season, scout the contestants, and
-          get a draft going with your friends.
+          Choose a season, scout the contestants, and get a draft going with
+          your friends.
         </Text>
       </div>
 
@@ -177,7 +187,10 @@ export const Seasons = () => {
 
       {/* Browse — search + era filters + compact grid */}
       <Stack gap="sm">
-        <Title order={4}>All Seasons</Title>
+        <div className={classes.sectionHeader}>
+          <Title order={4}>All Seasons</Title>
+          <div className={classes.sectionLine} />
+        </div>
 
         <TextInput
           placeholder="Search by name, number, or location..."
@@ -207,7 +220,7 @@ export const Seasons = () => {
             <Text c="dimmed">No seasons match your search.</Text>
           </Center>
         ) : (
-          <SimpleGrid cols={{ base: 1, xs: 2, sm: 3, md: 4, lg: 5 }}>
+          <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4, lg: 5 }}>
             {browseSeasons.map((meta) => (
               <CompactCard key={meta.id} meta={meta} />
             ))}
