@@ -76,11 +76,16 @@ describe("transformResults", { timeout: 60000 }, () => {
 
     expect(result.challenges.length).toBeGreaterThan(0);
 
-    // Challenges should have winning players (not empty arrays)
-    const withWinners = result.challenges.filter(
-      (c) => c.winnerNames.length > 0,
+    // Tribal challenges should have winning tribe set and reasonable winner counts
+    const tribalChallenges = result.challenges.filter(
+      (c) => c.winnerTribe !== null,
     );
-    expect(withWinners.length).toBeGreaterThan(0);
+    expect(tribalChallenges.length).toBeGreaterThan(0);
+    for (const c of tribalChallenges) {
+      // Each tribal challenge entry should have 4-8 winners (one tribe), not 12+
+      expect(c.winnerNames.length).toBeLessThanOrEqual(8);
+      expect(c.winnerNames.length).toBeGreaterThan(0);
+    }
 
     // Should have immunity challenges
     const immunities = result.challenges.filter(

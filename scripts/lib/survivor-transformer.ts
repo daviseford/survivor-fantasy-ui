@@ -218,24 +218,42 @@ function transformChallenges(
 
     // Find winners — survivoR uses "Won", "Won (immunity only)", "Won (reward only)", etc.
     const winners = entries.filter((e) => e.result.startsWith("Won"));
-    const winnerNames = winners.map((w) =>
-      resolveFullName(w.castaway, nameMap),
-    );
 
-    // Determine winning tribe (for tribal challenges)
-    let winnerTribe: string | null = null;
     if (first.outcome_type === "Tribal" && winners.length > 0) {
-      winnerTribe = winners[0].tribe;
-    }
+      // Tribal challenges: group winners by tribe, one entry per winning tribe
+      const winnersByTribe = new Map<string, SurvivorChallengeResult[]>();
+      for (const w of winners) {
+        if (!winnersByTribe.has(w.tribe)) winnersByTribe.set(w.tribe, []);
+        winnersByTribe.get(w.tribe)!.push(w);
+      }
 
-    order++;
-    challenges.push({
-      episodeNum: epNum,
-      variant,
-      winnerNames,
-      winnerTribe,
-      order,
-    });
+      for (const [tribe, tribeWinners] of winnersByTribe) {
+        order++;
+        challenges.push({
+          episodeNum: epNum,
+          variant,
+          winnerNames: tribeWinners.map((w) =>
+            resolveFullName(w.castaway, nameMap),
+          ),
+          winnerTribe: tribe,
+          order,
+        });
+      }
+    } else {
+      // Individual/Team challenges: list individual winners
+      const winnerNames = winners.map((w) =>
+        resolveFullName(w.castaway, nameMap),
+      );
+
+      order++;
+      challenges.push({
+        episodeNum: epNum,
+        variant,
+        winnerNames,
+        winnerTribe: null,
+        order,
+      });
+    }
   }
 
   return challenges;
