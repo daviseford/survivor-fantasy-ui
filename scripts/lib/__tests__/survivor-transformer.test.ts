@@ -87,11 +87,20 @@ describe("transformResults", { timeout: 60000 }, () => {
       expect(c.winnerNames.length).toBeGreaterThan(0);
     }
 
-    // Should have immunity challenges
+    // Combined challenges should be split — no "combined" variant in output
+    const combined = result.challenges.filter(
+      (c) => c.variant === "combined",
+    );
+    expect(combined.length).toBe(0);
+
+    // Should have both immunity and reward challenges
     const immunities = result.challenges.filter(
-      (c) => c.variant === "immunity" || c.variant === "combined",
+      (c) => c.variant === "immunity",
     );
     expect(immunities.length).toBeGreaterThan(0);
+
+    const rewards = result.challenges.filter((c) => c.variant === "reward");
+    expect(rewards.length).toBeGreaterThan(0);
   });
 
   it("uses full names (not short names) for challenge winners and events", async () => {

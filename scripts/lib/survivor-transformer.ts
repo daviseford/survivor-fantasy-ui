@@ -205,10 +205,11 @@ function transformChallenges(
     const first = entries[0];
     const epNum = Math.round(first.episode);
 
-    // Determine variant
+    // Determine base variant
     const type = first.challenge_type.toLowerCase();
+    const isCombined = type.includes("immunity") && type.includes("reward");
     let variant: "reward" | "immunity" | "combined";
-    if (type.includes("immunity") && type.includes("reward")) {
+    if (isCombined) {
       variant = "combined";
     } else if (type.includes("immunity")) {
       variant = "immunity";
@@ -216,47 +217,104 @@ function transformChallenges(
       variant = "reward";
     }
 
-    // Find winners — survivoR uses "Won", "Won (immunity only)", "Won (reward only)", etc.
-    const winners = entries.filter((e) => e.result.startsWith("Won"));
-
-    if (first.outcome_type === "Tribal" && winners.length > 0) {
-      // Tribal challenges: group winners by tribe, one entry per winning tribe
-      const winnersByTribe = new Map<string, SurvivorChallengeResult[]>();
-      for (const w of winners) {
-        if (!winnersByTribe.has(w.tribe)) winnersByTribe.set(w.tribe, []);
-        winnersByTribe.get(w.tribe)!.push(w);
-      }
-
-      for (const [tribe, tribeWinners] of winnersByTribe) {
-        order++;
-        challenges.push({
-          episodeNum: epNum,
-          variant,
-          winnerNames: tribeWinners.map((w) =>
-            resolveFullName(w.castaway, nameMap),
-          ),
-          winnerTribe: tribe,
-          order,
-        });
-      }
-    } else {
-      // Individual/Team challenges: list individual winners
-      const winnerNames = winners.map((w) =>
-        resolveFullName(w.castaway, nameMap),
+    if (isCombined) {
+      // Split combined challenges into separate immunity + reward entries
+      const immunityWinners = entries.filter(
+        (e) =>
+          e.won_tribal_immunity === 1 || e.won_individual_immunity === 1 || e.won_team_immunity === 1,
+      );
+      const rewardWinners = entries.filter(
+        (e) =>
+          e.won_tribal_reward === 1 || e.won_individual_reward === 1 || e.won_team_reward === 1,
       );
 
-      order++;
-      challenges.push({
-        episodeNum: epNum,
-        variant,
-        winnerNames,
-        winnerTribe: null,
+      // Emit immunity entry (split by tribe if tribal)
+      emitChallengeEntries(
+        immunityWinners,
+        first,
+        epNum,
+        "immunity",
+        nameMap,
+        challenges,
         order,
-      });
+      );
+      order += first.outcome_type === "Tribal" && immunityWinners.length > 0
+        ? new Set(immunityWinners.map((w) => w.tribe)).size
+        : 1;
+
+      // Emit reward entry (split by tribe if tribal)
+      emitChallengeEntries(
+        rewardWinners,
+        first,
+        epNum,
+        "reward",
+        nameMap,
+        challenges,
+        order,
+      );
+      order += first.outcome_type === "Tribal" && rewardWinners.length > 0
+        ? new Set(rewardWinners.map((w) => w.tribe)).size
+        : 1;
+    } else {
+      // Non-combined challenge
+      const winners = entries.filter((e) => e.result.startsWith("Won"));
+      emitChallengeEntries(
+        winners,
+        first,
+        epNum,
+        variant,
+        nameMap,
+        challenges,
+        order,
+      );
+      order += first.outcome_type === "Tribal" && winners.length > 0
+        ? new Set(winners.map((w) => w.tribe)).size
+        : 1;
     }
   }
 
   return challenges;
+}
+
+/** Emit challenge entries, splitting tribal challenges by tribe. */
+function emitChallengeEntries(
+  winners: SurvivorChallengeResult[],
+  first: SurvivorChallengeResult,
+  epNum: number,
+  variant: "reward" | "immunity" | "combined",
+  nameMap: Map<string, string>,
+  challenges: ScrapedChallenge[],
+  startOrder: number,
+): void {
+  if (first.outcome_type === "Tribal" && winners.length > 0) {
+    const winnersByTribe = new Map<string, SurvivorChallengeResult[]>();
+    for (const w of winners) {
+      if (!winnersByTribe.has(w.tribe)) winnersByTribe.set(w.tribe, []);
+      winnersByTribe.get(w.tribe)!.push(w);
+    }
+
+    let idx = 0;
+    for (const [tribe, tribeWinners] of winnersByTribe) {
+      challenges.push({
+        episodeNum: epNum,
+        variant,
+        winnerNames: tribeWinners.map((w) =>
+          resolveFullName(w.castaway, nameMap),
+        ),
+        winnerTribe: tribe,
+        order: startOrder + idx,
+      });
+      idx++;
+    }
+  } else {
+    challenges.push({
+      episodeNum: epNum,
+      variant,
+      winnerNames: winners.map((w) => resolveFullName(w.castaway, nameMap)),
+      winnerTribe: null,
+      order: startOrder,
+    });
+  }
 }
 
 // --- Elimination transformation ---

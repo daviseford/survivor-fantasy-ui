@@ -64,6 +64,14 @@ export interface SurvivorChallengeResult {
   sit_out: boolean;
   order_of_finish: number | null;
   sog_id: number;
+  won: number; // 1/0 binary
+  won_tribal_reward: number;
+  won_tribal_immunity: number;
+  won_team_reward: number;
+  won_team_immunity: number;
+  won_individual_reward: number;
+  won_individual_immunity: number;
+  won_duel: number;
 }
 
 /** vote_history.json — one row per vote cast */
