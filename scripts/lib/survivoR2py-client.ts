@@ -187,15 +187,27 @@ export async function fetchSeasonData(
   console.log(`  Fetching survivor data for Season ${seasonNum}...`);
 
   // Fetch each table with dual-source fallback, in parallel
-  const [castaways, episodes, challengeResults, voteHistory, advantageMovement, tribeMapping] =
-    await Promise.all([
-      fetchTableForSeason<SurvivorCastaway>("castaways", seasonNum),
-      fetchTableForSeason<SurvivorEpisode>("episodes", seasonNum),
-      fetchTableForSeason<SurvivorChallengeResult>("challenge_results", seasonNum),
-      fetchTableForSeason<SurvivorVoteHistory>("vote_history", seasonNum),
-      fetchTableForSeason<SurvivorAdvantageMovement>("advantage_movement", seasonNum),
-      fetchTableForSeason<SurvivorTribeMapping>("tribe_mapping", seasonNum),
-    ]);
+  const [
+    castaways,
+    episodes,
+    challengeResults,
+    voteHistory,
+    advantageMovement,
+    tribeMapping,
+  ] = await Promise.all([
+    fetchTableForSeason<SurvivorCastaway>("castaways", seasonNum),
+    fetchTableForSeason<SurvivorEpisode>("episodes", seasonNum),
+    fetchTableForSeason<SurvivorChallengeResult>(
+      "challenge_results",
+      seasonNum,
+    ),
+    fetchTableForSeason<SurvivorVoteHistory>("vote_history", seasonNum),
+    fetchTableForSeason<SurvivorAdvantageMovement>(
+      "advantage_movement",
+      seasonNum,
+    ),
+    fetchTableForSeason<SurvivorTribeMapping>("tribe_mapping", seasonNum),
+  ]);
 
   if (castaways.length === 0) {
     console.log(
