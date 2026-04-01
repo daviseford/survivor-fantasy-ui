@@ -141,22 +141,18 @@ function transformEpisodes(
   episodes: SurvivorEpisode[],
   tribeMapping: SurvivorTribeMapping[],
 ): ScrapedEpisode[] {
-  // Detect merge episode: when tribe_status becomes "Merged"
+  // Detect merge episode: "Mergatory" (S46+) marks the actual merge episode;
+  // for older seasons, the first "Merged" status IS the merge episode.
+  const mergeEp = detectMergeEpisode(tribeMapping);
   const mergeEpisodes = new Set<number>();
   const postMergeEpisodes = new Set<number>();
-  let mergeFound = false;
-  const episodeNums = [
-    ...new Set(tribeMapping.map((t) => Math.round(t.episode))),
-  ].sort((a, b) => a - b);
-  for (const ep of episodeNums) {
-    const tribes = tribeMapping.filter((t) => Math.round(t.episode) === ep);
-    const hasMerged = tribes.some((t) => t.tribe_status === "Merged");
-    if (hasMerged && !mergeFound) {
-      mergeEpisodes.add(ep);
-      mergeFound = true;
-    }
-    if (mergeFound) {
-      postMergeEpisodes.add(ep);
+  if (mergeEp !== null) {
+    mergeEpisodes.add(mergeEp);
+    const episodeNums = [
+      ...new Set(tribeMapping.map((t) => Math.round(t.episode))),
+    ].sort((a, b) => a - b);
+    for (const ep of episodeNums) {
+      if (ep >= mergeEp) postMergeEpisodes.add(ep);
     }
   }
 
@@ -375,9 +371,12 @@ function transformEvents(
   const mergeEp = detectMergeEpisode(tribeMapping);
   if (mergeEp !== null) {
     // All players still in the game at merge — resolve to full names
+    // "Mergatory" (S46+) or "Merged" (older seasons) both indicate merged players
     const mergedPlayers = tribeMapping
       .filter(
-        (t) => Math.round(t.episode) === mergeEp && t.tribe_status === "Merged",
+        (t) =>
+          Math.round(t.episode) === mergeEp &&
+          (t.tribe_status === "Merged" || t.tribe_status === "Mergatory"),
       )
       .map((t) => resolveFullName(t.castaway, nameMap));
 
@@ -421,6 +420,13 @@ function transformEvents(
 function detectMergeEpisode(
   tribeMapping: SurvivorTribeMapping[],
 ): number | null {
+  // "Mergatory" (S46+) marks the actual merge episode
+  for (const t of tribeMapping) {
+    if (t.tribe_status === "Mergatory") {
+      return Math.round(t.episode);
+    }
+  }
+  // Older seasons: first "Merged" status IS the merge episode
   for (const t of tribeMapping) {
     if (t.tribe_status === "Merged") {
       return Math.round(t.episode);

@@ -60,9 +60,14 @@ describe("transformResults", { timeout: 60000 }, () => {
     const finale = result.episodes.find((e) => e.isFinale);
     expect(finale).toBeDefined();
 
-    // Should detect merge
+    // Should detect merge at episode 6 (Mergatory), not 7 (Merged)
     const mergeEp = result.episodes.find((e) => e.mergeOccurs);
     expect(mergeEp).toBeDefined();
+    expect(mergeEp!.order).toBe(6);
+
+    // Episodes 6-13 should be post-merge
+    const postMerge = result.episodes.filter((e) => e.postMerge);
+    expect(postMerge.length).toBe(8); // episodes 6-13
   });
 
   it("transforms Season 46 challenges with winning players", async () => {
@@ -155,9 +160,12 @@ describe("transformResults", { timeout: 60000 }, () => {
     );
     expect(journeyAdvantages.length).toBeGreaterThan(0);
 
-    // Should detect merge event
+    // Should detect merge event on episode 6 (not 7)
     const mergeEvents = result.events.filter((e) => e.action === "make_merge");
     expect(mergeEvents.length).toBeGreaterThan(0);
+    for (const e of mergeEvents) {
+      expect(e.episodeNum).toBe(6);
+    }
 
     // Should detect winner
     const winEvents = result.events.filter((e) => e.action === "win_survivor");
