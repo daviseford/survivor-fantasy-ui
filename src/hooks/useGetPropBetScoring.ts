@@ -1,9 +1,6 @@
 import { useMemo } from "react";
 import { Competition } from "../types";
-import {
-  filterEpisodesByMax,
-  filterRecordByEpisode,
-} from "../utils/episodeFilter";
+import { filterRecordByEpisode } from "../utils/episodeFilter";
 import {
   getPropBetScoresByUser,
   PropBetScoresByUser,
@@ -38,13 +35,13 @@ export const usePropBetScoring = (competition_id?: Competition["id"]) => {
     [events, maxEpisode],
   );
 
-  const hasFinaleOccurred = useMemo(() => {
-    const filteredEpisodes = filterEpisodesByMax(
-      season?.episodes || [],
-      maxEpisode,
-    );
-    return filteredEpisodes.some((e) => e.finale);
-  }, [season?.episodes, maxEpisode]);
+  const hasFinaleOccurred = useMemo(
+    () =>
+      Object.values(filteredEvents).some(
+        (e) => e.action === "win_survivor",
+      ),
+    [filteredEvents],
+  );
 
   const data: PropBetScoresByUser = useMemo(
     () =>
