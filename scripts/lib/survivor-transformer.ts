@@ -6,6 +6,7 @@
 
 import type { SurvivorSeasonData } from "./survivor-client.js";
 import type {
+  SurvivorAdvantageDetail,
   SurvivorAdvantageMovement,
   SurvivorCastaway,
   SurvivorChallengeResult,
@@ -107,6 +108,7 @@ export function transformResults(
   const eliminations = transformEliminations(data.castaways);
   const events = transformEvents(
     data.advantageMovement,
+    data.advantageDetails,
     data.journeys,
     data.castaways,
     data.tribeMapping,
@@ -380,8 +382,17 @@ function isAdvantageReward(reward: string | null): boolean {
   return ADVANTAGE_REWARDS.has(reward.toLowerCase());
 }
 
+/** Advantage types that are idols (for use_idol vs use_advantage distinction). */
+const IDOL_TYPES = new Set([
+  "Hidden Immunity Idol",
+  "Hidden Immunity Idol Half",
+  "Preventative Hidden Immunity Idol",
+  "Super Idol",
+]);
+
 function transformEvents(
   advantageMovement: SurvivorAdvantageMovement[],
+  advantageDetails: SurvivorAdvantageDetail[],
   journeys: SurvivorJourney[],
   castaways: SurvivorCastaway[],
   tribeMapping: SurvivorTribeMapping[],
@@ -390,24 +401,61 @@ function transformEvents(
 ): ScrapedGameEvent[] {
   const events: ScrapedGameEvent[] = [];
 
-  // Advantage events — resolve short names to full names
+  // Build advantage_id → detail lookup for type-aware event mapping
+  const detailById = new Map<number, SurvivorAdvantageDetail>();
+  for (const d of advantageDetails) {
+    detailById.set(d.advantage_id, d);
+  }
+
+  // Track beware advantage_ids that have been "Found (beware)" to detect fulfill
+  const bewareFoundIds = new Set<number>();
+
+  // Advantage events — type-aware mapping using advantage_details
   for (const adv of advantageMovement) {
     const epNum = Math.round(adv.episode);
     const playerName = resolveFullName(adv.castaway, nameMap);
     const event = adv.event;
+    const detail = detailById.get(adv.advantage_id);
+    const isIdol = detail ? IDOL_TYPES.has(detail.advantage_type) : true; // default to idol if unknown
+    const isBeware = detail?.conditions === "Beware advantage";
 
-    if (event.startsWith("Found")) {
+    if (event === "Found (beware)") {
+      // Beware advantage found — emit find + accept (taking it implies acceptance)
+      bewareFoundIds.add(adv.advantage_id);
       events.push({
         episodeNum: epNum,
         playerName,
-        action: "find_idol",
+        action: "find_beware_advantage",
+        multiplier: null,
+      });
+      events.push({
+        episodeNum: epNum,
+        playerName,
+        action: "accept_beware_advantage",
+        multiplier: null,
+      });
+    } else if (event.startsWith("Found")) {
+      if (bewareFoundIds.has(adv.advantage_id)) {
+        // Same advantage_id was previously "Found (beware)" → beware condition fulfilled
+        events.push({
+          episodeNum: epNum,
+          playerName,
+          action: "fulfill_beware_advantage",
+          multiplier: null,
+        });
+      }
+      // The advantage/idol is now active
+      events.push({
+        episodeNum: epNum,
+        playerName,
+        action: isIdol ? "find_idol" : "find_advantage",
         multiplier: null,
       });
     } else if (event === "Played") {
       events.push({
         episodeNum: epNum,
         playerName,
-        action: "use_idol",
+        action: isIdol ? "use_idol" : "use_advantage",
         multiplier: null,
       });
     } else if (event === "Received" || event === "Recieved") {

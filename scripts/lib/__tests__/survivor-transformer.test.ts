@@ -164,7 +164,6 @@ describe("transformResults", { timeout: 60000 }, () => {
     expect(journeyEvents.length).toBe(9);
 
     // Journey advantage winners should also get win_advantage
-    // S46: Maria and Tevin got Extra vote on Ep1
     const journeyAdvantages = result.events.filter(
       (e) =>
         e.action === "win_advantage" &&
@@ -173,6 +172,34 @@ describe("transformResults", { timeout: 60000 }, () => {
         ),
     );
     expect(journeyAdvantages.length).toBeGreaterThan(0);
+
+    // Should have beware advantage lifecycle events (S46 has 4 beware idols)
+    const findBeware = result.events.filter(
+      (e) => e.action === "find_beware_advantage",
+    );
+    expect(findBeware.length).toBe(4);
+
+    const acceptBeware = result.events.filter(
+      (e) => e.action === "accept_beware_advantage",
+    );
+    expect(acceptBeware.length).toBe(4);
+
+    const fulfillBeware = result.events.filter(
+      (e) => e.action === "fulfill_beware_advantage",
+    );
+    expect(fulfillBeware.length).toBeGreaterThan(0);
+
+    // Non-idol advantages should produce find_advantage (not find_idol)
+    const findAdvantage = result.events.filter(
+      (e) => e.action === "find_advantage",
+    );
+    expect(findAdvantage.length).toBeGreaterThan(0);
+
+    // Maria's Extra Vote play should be use_advantage (not use_idol)
+    const useAdvantage = result.events.filter(
+      (e) => e.action === "use_advantage",
+    );
+    expect(useAdvantage.length).toBeGreaterThan(0);
 
     // Should detect merge event on episode 6 (not 7)
     const mergeEvents = result.events.filter((e) => e.action === "make_merge");
