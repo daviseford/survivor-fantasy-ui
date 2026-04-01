@@ -21,6 +21,7 @@
     "e2e:audit": "playwright test audit-all --project=setup --project=chromium-desktop --project=chromium-mobile",
     "e2e:ui": "playwright test --ui",
     "new-season": "tsx scripts/new-season.ts",
+    "sync-season": "tsx scripts/sync-season.ts",
     "optimize-images": "tsx scripts/optimize-images.ts",
     "tsc:scripts": "tsc -p scripts/tsconfig.json --noEmit",
     "set-admin": "tsx scripts/set-admin-claim.ts"
