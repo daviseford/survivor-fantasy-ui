@@ -77,6 +77,96 @@ export async function fetchWikitext(pageName: string): Promise<string | null> {
 }
 
 /**
+ * Resolve a wiki image filename to its full CDN URL via the imageinfo API.
+ * E.g., "S46 Ben Katzman.jpg" → "https://static.wikia.nocookie.net/survivor/images/..."
+ */
+export async function fetchImageUrl(
+  fileName: string,
+): Promise<string | null> {
+  const params = new URLSearchParams({
+    action: "query",
+    titles: `File:${fileName}`,
+    prop: "imageinfo",
+    iiprop: "url",
+    format: "json",
+  });
+
+  const url = `${BASE_URL}?${params}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return null;
+
+    const data = (await response.json()) as {
+      query?: { pages?: Record<string, { imageinfo?: { url: string }[] }> };
+    };
+
+    const pages = data.query?.pages;
+    if (!pages) return null;
+
+    for (const page of Object.values(pages)) {
+      const imgUrl = page.imageinfo?.[0]?.url;
+      if (imgUrl) return imgUrl;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Batch-resolve multiple wiki image filenames to CDN URLs.
+ * Uses the API's multi-title support for efficiency (up to 50 at a time).
+ */
+export async function fetchImageUrls(
+  fileNames: string[],
+): Promise<Map<string, string>> {
+  const result = new Map<string, string>();
+  // API supports up to 50 titles per request
+  for (let i = 0; i < fileNames.length; i += 50) {
+    const batch = fileNames.slice(i, i + 50);
+    const titles = batch.map((f) => `File:${f}`).join("|");
+    const params = new URLSearchParams({
+      action: "query",
+      titles,
+      prop: "imageinfo",
+      iiprop: "url",
+      format: "json",
+    });
+
+    const url = `${BASE_URL}?${params}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) continue;
+
+      const data = (await response.json()) as {
+        query?: {
+          pages?: Record<
+            string,
+            { title?: string; imageinfo?: { url: string }[] }
+          >;
+        };
+      };
+
+      const pages = data.query?.pages;
+      if (!pages) continue;
+
+      for (const page of Object.values(pages)) {
+        const imgUrl = page.imageinfo?.[0]?.url;
+        if (imgUrl && page.title) {
+          // Remove "File:" prefix to map back to the original filename
+          const fileName = page.title.replace(/^File:/, "");
+          result.set(fileName, imgUrl);
+        }
+      }
+    } catch {
+      // Skip failed batches
+    }
+    if (i + 50 < fileNames.length) await delay(200);
+  }
+  return result;
+}
+
+/**
  * Expand a MediaWiki template and return the rendered wikitext.
  * E.g., expandTemplate("{{Ep|5001}}") → "[[Epic Party|1]]"
  */

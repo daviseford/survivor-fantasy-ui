@@ -8,6 +8,7 @@ export interface ScrapedPlayer {
   profession?: string;
   hometown?: string;
   previousSeasons?: number[];
+  imageUrl?: string;
   bio?: string;
 }
 

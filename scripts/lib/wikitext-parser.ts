@@ -19,6 +19,8 @@ export interface ContestantInfo {
   previousSeasons?: number[];
   /** All season numbers this player appeared in (including the target season) */
   allSeasons?: number[];
+  /** Wiki image filename (e.g., "S46 Ben Katzman.jpg") — needs URL resolution via API */
+  imageFileName?: string;
 }
 
 export interface CastTableEntry {
@@ -76,13 +78,29 @@ export function parseSeasonNumber(value: string): number | null {
 export function parseInfoboxFields(
   wikitext: string,
 ): Record<string, string> | null {
-  // Find the {{Contestant block — handle optional {{Spoiler}} prefix
-  const contestantMatch = wikitext.match(
-    /\{\{Contestant\s*\n([\s\S]*?)\n\}\}/i,
-  );
-  if (!contestantMatch) return null;
+  // Find the {{Contestant block using bracket-depth counting to handle nested templates
+  const startMatch = wikitext.match(/\{\{Contestant\s*\n/i);
+  if (!startMatch) return null;
 
-  const block = contestantMatch[1];
+  const blockStart = startMatch.index! + startMatch[0].length;
+  let depth = 1;
+  let blockEnd = -1;
+  for (let i = blockStart; i < wikitext.length - 1; i++) {
+    if (wikitext[i] === "{" && wikitext[i + 1] === "{") {
+      depth++;
+      i++; // skip second brace
+    } else if (wikitext[i] === "}" && wikitext[i + 1] === "}") {
+      depth--;
+      if (depth === 0) {
+        blockEnd = i;
+        break;
+      }
+      i++; // skip second brace
+    }
+  }
+  if (blockEnd === -1) return null;
+
+  const block = wikitext.substring(blockStart, blockEnd);
   const fields: Record<string, string> = {};
 
   // Parse line-by-line for robustness with empty values
@@ -135,6 +153,21 @@ export function parseContestantPage(
     const raw = fields.occupation.replace(/<br\s*\/?>/gi, "").trim();
     const parts = raw.split(";").map((s) => s.trim());
     info.occupation = parts[0] || raw;
+  }
+
+  // Image filename — extract from infobox `image` field
+  if (fields.image) {
+    let imgFile = fields.image.trim();
+    // Handle tabber format: <tabber>Label=[[File:S50 Colby.jpg]]</tabber>
+    const fileMatch = imgFile.match(/\[\[File:([^\]|]+)/i);
+    if (fileMatch) {
+      imgFile = fileMatch[1].trim();
+    }
+    // Remove any remaining markup
+    imgFile = imgFile.replace(/<[^>]+>/g, "").trim();
+    if (imgFile && !imgFile.includes("{{") && !imgFile.includes("[[")) {
+      info.imageFileName = imgFile;
+    }
   }
 
   // Collect all season appearances

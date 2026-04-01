@@ -3,7 +3,12 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 import { resolveNames } from "./lib/name-resolver.js";
 import type { ScrapedPlayer, ScrapeResult } from "./lib/types.js";
-import { delay, fetchWikitext, getSeasonPageName } from "./lib/wiki-api.js";
+import {
+  delay,
+  fetchImageUrls,
+  fetchWikitext,
+  getSeasonPageName,
+} from "./lib/wiki-api.js";
 import {
   ContestantInfo,
   parseCastTable,
@@ -73,6 +78,8 @@ export async function scrape(seasonNum: number): Promise<ScrapeResult> {
   // Step 4: Fetch individual player pages
   const players: ScrapedPlayer[] = [];
   const unmatched: ScrapedPlayer[] = [];
+  // Collect image filenames for batch URL resolution
+  const imageFileNames = new Map<string, string>(); // wikiPageTitle → imageFileName
 
   for (let i = 0; i < nameMatches.length; i++) {
     const match = nameMatches[i];
@@ -87,6 +94,10 @@ export async function scrape(seasonNum: number): Promise<ScrapeResult> {
     let info: ContestantInfo | null = null;
     if (playerWikitext) {
       info = parseContestantPage(playerWikitext, seasonNum);
+    }
+
+    if (info?.imageFileName) {
+      imageFileNames.set(match.wikiPageTitle, info.imageFileName);
     }
 
     const player: ScrapedPlayer = {
@@ -112,6 +123,21 @@ export async function scrape(seasonNum: number): Promise<ScrapeResult> {
     if (i < nameMatches.length - 1) {
       await delay(150);
     }
+  }
+
+  // Step 4b: Batch-resolve image URLs
+  if (imageFileNames.size > 0) {
+    console.log(`\nResolving ${imageFileNames.size} image URLs...`);
+    const imageUrls = await fetchImageUrls([...imageFileNames.values()]);
+    const allPlayers = [...players, ...unmatched];
+    for (const player of allPlayers) {
+      const fileName = imageFileNames.get(player.wikiPageTitle);
+      if (fileName) {
+        const url = imageUrls.get(fileName);
+        if (url) player.imageUrl = url;
+      }
+    }
+    console.log(`Resolved ${imageUrls.size}/${imageFileNames.size} image URLs`);
   }
 
   // Step 5: Write JSON output
