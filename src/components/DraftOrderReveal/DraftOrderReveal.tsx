@@ -13,13 +13,13 @@ type Props = {
 const SHUFFLE_INTERVAL = 80;
 
 /** Base delay before the first slot locks (ms) */
-const INITIAL_DELAY = 600;
+const INITIAL_DELAY = 3500;
 
 /** Max stagger between sequential slot locks (ms) — compressed for large groups */
-const MAX_STAGGER = 400;
+const MAX_STAGGER = 500;
 
 /** Pause after all slots lock before calling onComplete (ms) */
-const COMPLETION_PAUSE = 800;
+const COMPLETION_PAUSE = 1000;
 
 function getDisplayName(user: SlimUser): string {
   return user.displayName || user.email || user.uid;
@@ -57,8 +57,8 @@ export const DraftOrderReveal = ({ pickOrder, onComplete }: Props) => {
       return;
     }
 
-    // Compute stagger so total animation stays under ~3 seconds
-    const stagger = Math.min(MAX_STAGGER, 2000 / slotCount);
+    // Compute stagger so lock-in phase scales with group size
+    const stagger = Math.min(MAX_STAGGER, 3000 / slotCount);
 
     // Start shuffling all slots
     const intervals: ReturnType<typeof setInterval>[] = [];
