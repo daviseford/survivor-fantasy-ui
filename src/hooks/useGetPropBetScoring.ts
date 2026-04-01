@@ -48,7 +48,6 @@ export const usePropBetScoring = (competition_id?: Competition["id"]) => {
         filteredChallenges,
         hasFinaleOccurred,
         competition,
-        season,
       ),
     [
       filteredChallenges,
@@ -56,7 +55,6 @@ export const usePropBetScoring = (competition_id?: Competition["id"]) => {
       filteredEvents,
       hasFinaleOccurred,
       competition,
-      season,
     ],
   );
 

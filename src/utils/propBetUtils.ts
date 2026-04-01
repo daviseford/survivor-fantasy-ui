@@ -5,7 +5,6 @@ import {
   Competition,
   Elimination,
   GameEvent,
-  Season,
   SlimUser,
 } from "../types";
 
@@ -36,10 +35,8 @@ export const getPropBetScoresByUser = (
   challenges: Record<Challenge["id"], Challenge>,
   hasFinaleOccurred: boolean,
   competition?: Competition,
-  season?: Season,
 ): PropBetScoresByUser => {
-  if (!competition?.participant_uids || !season || !competition.prop_bets)
-    return {};
+  if (!competition?.participant_uids || !competition.prop_bets) return {};
 
   return competition.participant_uids.reduce<PropBetScoresByUser>((a, b) => {
     const scores = getPropBetScoresForUser(
@@ -49,7 +46,6 @@ export const getPropBetScoresByUser = (
       challenges,
       hasFinaleOccurred,
       competition,
-      season,
     );
     if (scores) {
       a[b] = scores;
@@ -65,7 +61,6 @@ export const getPropBetScoresForUser = (
   challenges: Record<Challenge["id"], Challenge>,
   hasFinaleOccurred: boolean,
   competition: Competition,
-  season: Season,
 ): PropBetScores => {
   const myPropBets = (competition?.prop_bets || []).find(
     (x) => x.user_uid === uid,

@@ -1,13 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { PropBetsQuestions } from "../../data/propbets";
-import {
-  Challenge,
-  Competition,
-  Elimination,
-  GameEvent,
-  Season,
-} from "../../types";
-import { getPropBetScoresForUser, PropBetStatus } from "../propBetUtils";
+import { Challenge, Competition, Elimination, GameEvent } from "../../types";
+import { getPropBetScoresForUser } from "../propBetUtils";
 
 // --- Factories ---
 
@@ -60,49 +54,6 @@ const makeChallenge = (
   winning_players: winningPlayers,
 });
 
-const baseSeason: Season = {
-  id: "season_46",
-  season_num: 46,
-  name: "Survivor 46",
-  players: [
-    { name: "Alice", nickname: null },
-    { name: "Bob", nickname: null },
-    { name: "Charlie", nickname: null },
-  ],
-  episodes: [
-    {
-      id: "episode_1",
-      season_id: "season_46",
-      season_num: 46,
-      order: 1,
-      name: "Ep 1",
-      finale: false,
-      post_merge: false,
-      merge_occurs: false,
-    },
-    {
-      id: "episode_2",
-      season_id: "season_46",
-      season_num: 46,
-      order: 2,
-      name: "Ep 2",
-      finale: false,
-      post_merge: false,
-      merge_occurs: false,
-    },
-    {
-      id: "episode_13",
-      season_id: "season_46",
-      season_num: 46,
-      order: 13,
-      name: "Finale",
-      finale: true,
-      post_merge: true,
-      merge_occurs: false,
-    },
-  ],
-};
-
 const baseCompetition: Competition = {
   id: "competition_test",
   competition_name: "Test",
@@ -111,7 +62,9 @@ const baseCompetition: Competition = {
   draft_id: "draft_test",
   creator_uid: "user1",
   participant_uids: ["user1"],
-  participants: [{ uid: "user1", displayName: "Player One", email: null }],
+  participants: [
+    { uid: "user1", displayName: "Player One", email: null, isAdmin: false },
+  ],
   draft_picks: [],
   prop_bets: [
     {
@@ -145,7 +98,6 @@ const getStatus = (
     challenges?: Record<string, Challenge>;
     hasFinaleOccurred?: boolean;
     competition?: Competition;
-    season?: Season;
   },
 ) => {
   const result = getPropBetScoresForUser(
@@ -155,7 +107,6 @@ const getStatus = (
     overrides?.challenges ?? noChallenges,
     overrides?.hasFinaleOccurred ?? false,
     overrides?.competition ?? baseCompetition,
-    overrides?.season ?? baseSeason,
   );
   return result[key];
 };
@@ -504,7 +455,6 @@ describe("getPropBetScoresForUser", () => {
         noChallenges,
         false,
         baseCompetition,
-        baseSeason,
       );
 
       expect(result.propbet_first_vote.status).toBe("definitive_correct");
@@ -536,7 +486,6 @@ describe("getPropBetScoresForUser", () => {
         noChallenges,
         false,
         comp,
-        baseSeason,
       );
       expect(result.propbet_first_vote.status).toBe("pending");
       expect(result.propbet_first_vote.answer).toBe("");
