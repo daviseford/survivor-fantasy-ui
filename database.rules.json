@@ -6,7 +6,7 @@
 
     "drafts": {
       "$draftId": {
-        ".read": "auth != null && (auth.token.admin == true || data.child('creator_uid').val() == auth.uid || data.child('participants').child(auth.uid).exists())",
+        ".read": "auth != null",
         ".write": "auth.token.admin == true || (!data.exists() && auth != null && newData.child('id').val() == $draftId && newData.child('creator_uid').val() == auth.uid && newData.child('participants').child(auth.uid).exists())",
 
         "id": {
