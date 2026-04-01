@@ -69,6 +69,26 @@ describe("transformResults", { timeout: 60000 }, () => {
     expect(immunities.length).toBeGreaterThan(0);
   });
 
+  it("uses full names (not short names) for challenge winners and events", async () => {
+    const data = await fetchSeasonData(46);
+    const playerResult = transformPlayers(data, 46);
+    const result = transformResults(data, 46);
+
+    const playerNames = new Set(playerResult.players.map((p) => p.localName));
+
+    // Every challenge winner name should be in the player names set
+    for (const chal of result.challenges) {
+      for (const name of chal.winnerNames) {
+        expect(playerNames.has(name)).toBe(true);
+      }
+    }
+
+    // Every event player name should be in the player names set
+    for (const ev of result.events) {
+      expect(playerNames.has(ev.playerName)).toBe(true);
+    }
+  });
+
   it("transforms Season 46 eliminations with correct variants", async () => {
     const data = await fetchSeasonData(46);
     const result = transformResults(data, 46);

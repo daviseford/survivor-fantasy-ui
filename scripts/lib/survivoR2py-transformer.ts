@@ -23,6 +23,29 @@ import type {
 } from "./types.js";
 
 /**
+ * Build a lookup map from castaway short name → full_name.
+ * Used to resolve short names in challenge_results, tribe_mapping,
+ * and advantage_movement back to the full names codegen expects.
+ */
+function buildShortNameMap(castaways: SurvivorCastaway[]): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const c of castaways) {
+    map.set(c.castaway, c.full_name);
+    // Also map castaway_id for advantage_movement lookups
+    map.set(c.castaway_id, c.full_name);
+  }
+  return map;
+}
+
+/** Resolve a short name or castaway_id to full name, falling back to the input. */
+function resolveFullName(
+  nameOrId: string,
+  nameMap: Map<string, string>,
+): string {
+  return nameMap.get(nameOrId) ?? nameOrId;
+}
+
+/**
  * Transform survivoR2py season data into the app's ScrapeResult (players).
  */
 export function transformPlayers(
@@ -37,15 +60,6 @@ export function transformPlayers(
       seen.add(c.castaway_id);
       uniqueCastaways.push(c);
     }
-  }
-
-  // Find previous season appearances for returning players
-  const allCastawaySeasons = new Map<string, number[]>();
-  for (const c of data.castaways) {
-    // The castaways table only has the current season, but we can detect
-    // returning players by checking if they appear in earlier seasons
-    // For now, we don't have cross-season data in a single call.
-    // Previous seasons will be empty unless we cross-reference.
   }
 
   const players: ScrapedPlayer[] = uniqueCastaways.map((c) => {
@@ -81,17 +95,20 @@ export function transformResults(
   seasonNum: number,
 ): ScrapeResultsOutput {
   const warnings: string[] = [];
+  const nameMap = buildShortNameMap(data.castaways);
 
   const episodes = transformEpisodes(data.episodes, data.tribeMapping);
   const challenges = transformChallenges(
     data.challengeResults,
     data.tribeMapping,
+    nameMap,
   );
   const eliminations = transformEliminations(data.castaways);
   const events = transformEvents(
     data.advantageMovement,
     data.castaways,
     data.tribeMapping,
+    nameMap,
     warnings,
   );
 
@@ -164,6 +181,7 @@ function transformEpisodes(
 function transformChallenges(
   results: SurvivorChallengeResult[],
   tribeMapping: SurvivorTribeMapping[],
+  nameMap: Map<string, string>,
 ): ScrapedChallenge[] {
   // Group by challenge_id
   const byChallenge = new Map<number, SurvivorChallengeResult[]>();
@@ -200,14 +218,13 @@ function transformChallenges(
       variant = "reward";
     }
 
-    // Find winners
+    // Find winners — resolve short names to full names for codegen compatibility
     const winners = entries.filter(
       (e) => e.result === "Won" || e.result === "Winner",
     );
-    const winnerNames = winners.map((w) => {
-      // Use full name from castaway_id lookup if available
-      return w.castaway;
-    });
+    const winnerNames = winners.map((w) =>
+      resolveFullName(w.castaway, nameMap),
+    );
 
     // Determine winning tribe (for tribal challenges)
     let winnerTribe: string | null = null;
@@ -279,14 +296,15 @@ function transformEvents(
   advantageMovement: SurvivorAdvantageMovement[],
   castaways: SurvivorCastaway[],
   tribeMapping: SurvivorTribeMapping[],
+  nameMap: Map<string, string>,
   warnings: string[],
 ): ScrapedGameEvent[] {
   const events: ScrapedGameEvent[] = [];
 
-  // Advantage events
+  // Advantage events — resolve short names to full names
   for (const adv of advantageMovement) {
     const epNum = Math.round(adv.episode);
-    const playerName = adv.castaway;
+    const playerName = resolveFullName(adv.castaway, nameMap);
 
     switch (adv.event) {
       case "Found":
@@ -331,12 +349,12 @@ function transformEvents(
   // Merge event — detect from tribe_mapping
   const mergeEp = detectMergeEpisode(tribeMapping);
   if (mergeEp !== null) {
-    // All players still in the game at merge
+    // All players still in the game at merge — resolve to full names
     const mergedPlayers = tribeMapping
       .filter(
         (t) => Math.round(t.episode) === mergeEp && t.tribe_status === "Merged",
       )
-      .map((t) => t.castaway);
+      .map((t) => resolveFullName(t.castaway, nameMap));
 
     const uniqueMerged = [...new Set(mergedPlayers)];
     for (const name of uniqueMerged) {
