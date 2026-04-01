@@ -117,10 +117,10 @@ export interface SurvivorAdvantageMovement {
   day: number | null;
   episode: number;
   event: string; // "Found", "Played", "Received", "Transferred", "Expired"
-  played_for: string;
-  played_for_id: string;
-  success: string;
-  votes_nullified: number | null;
+  played_for?: string; // survivoR2py only
+  played_for_id?: string; // survivoR2py only
+  success?: string; // survivoR2py only
+  votes_nullified?: number | null; // survivoR2py only
 }
 
 /** tribe_mapping.csv — one row per castaway per episode (tribe membership) */
