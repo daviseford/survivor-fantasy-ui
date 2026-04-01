@@ -24,6 +24,7 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 - **Scrape results:** `yarn scrape-results <season_number>` (pull episodes, challenges, eliminations, events from Wiki)
 - **Init season:** `yarn init-season <season_number>` (generate season data file from scraped JSON — players only, no results)
 - **Backfill season:** `yarn backfill <season_number>` (merge re-scraped data into existing season file)
+- **Add season (slash command):** `/add-season <season_number>` — preferred way to add a new season in Claude Code; wraps `yarn new-season` with validation, progress reporting, and post-generation verification
 
 ## Architecture
 

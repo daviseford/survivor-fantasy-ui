@@ -9,12 +9,7 @@ import {
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
-import {
-  IconCheck,
-  IconPencil,
-  IconTrash,
-  IconX,
-} from "@tabler/icons-react";
+import { IconCheck, IconPencil, IconTrash, IconX } from "@tabler/icons-react";
 import { deleteField, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../../firebase";
@@ -192,8 +187,7 @@ export const EliminationCRUDTable = () => {
                 onChange={(val) =>
                   setEditValues({
                     ...editValues,
-                    votes_received:
-                      val === "" ? undefined : Number(val),
+                    votes_received: val === "" ? undefined : Number(val),
                   })
                 }
                 style={{ width: 70 }}
