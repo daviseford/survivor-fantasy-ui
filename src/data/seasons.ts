@@ -1,6 +1,7 @@
 import { Season } from "../types";
 import { SEASON_1_EPISODES, SEASON_1_PLAYERS } from "./season_1";
 import { SEASON_46_EPISODES, SEASON_46_PLAYERS } from "./season_46";
+import { SEASON_48_EPISODES, SEASON_48_PLAYERS } from "./season_48";
 import { SEASON_49_EPISODES, SEASON_49_PLAYERS } from "./season_49";
 import { SEASON_50_EPISODES, SEASON_50_PLAYERS } from "./season_50";
 import { SEASON_9_EPISODES, SEASON_9_PLAYERS } from "./season_9";
@@ -52,5 +53,13 @@ export const SEASONS = {
     img: "/images/season_1/season-1-logo.png",
     players: SEASON_1_PLAYERS,
     episodes: SEASON_1_EPISODES,
+  },
+  season_48: {
+    id: "season_48" as const,
+    order: 48,
+    name: "Survivor 48",
+    img: "/images/season_48/season-48-logo.png",
+    players: SEASON_48_PLAYERS,
+    episodes: SEASON_48_EPISODES,
   },
 } satisfies Record<Season["id"], Season>;
