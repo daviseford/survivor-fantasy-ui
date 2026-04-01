@@ -79,6 +79,7 @@ export function findPlayerSectionEnd(
 ): number {
   // Look for the satisfies line that ends the players array
   const patterns = [
+    `] satisfies Player<CastawayIdType, SeasonNumber>[];`,
     `] satisfies Player<PlayerName, SeasonNumber>[];`,
     `] satisfies Player<PlayerName, ${seasonNum}>[];`,
   ];
@@ -127,7 +128,8 @@ function escapeString(s: string): string {
 
 function formatPlayerCall(
   player: {
-    name: string;
+    castawayId: string;
+    fullName: string;
     img: string;
     age?: number;
     profession?: string;
@@ -140,7 +142,8 @@ function formatPlayerCall(
   imgConstant: { prefix: string } | null,
 ): string {
   const lines: string[] = [];
-  lines.push(`    name: ${escapeString(player.name)},`);
+  lines.push(`    castaway_id: "${player.castawayId}",`);
+  lines.push(`    full_name: ${escapeString(player.fullName)},`);
 
   // Handle IMG constant pattern (Season 50 uses `${IMG}/filename.jpg`)
   if (imgConstant && player.img.startsWith(imgConstant.prefix)) {
@@ -185,10 +188,11 @@ export function generatePlayerSection(
   const existingMap = new Map(existingPlayers.map((p) => [p.name, p]));
 
   // Merge scraped data with existing player data
-  // Use existing player order when possible, adding new scraped-only players at end
-  const allNames = new Set<string>();
+  const allIds = new Set<string>();
   const mergedPlayers: Array<{
-    name: string;
+    castawayId: string;
+    fullName: string;
+    castawayShortName: string;
     img: string;
     age?: number;
     profession?: string;
@@ -198,19 +202,16 @@ export function generatePlayerSection(
     nickname?: string;
   }> = [];
 
-  // First: process matched scraped players in their wiki order
   for (const scraped of scrapedPlayers) {
     const localName = scraped.localName;
-    if (!localName) continue;
+    if (!localName || !scraped.castawayId) continue;
 
     const existing = existingMap.get(localName);
-    // Prefer locally-downloaded images over remote URLs
     const scrapedIsLocal = scraped.imageUrl?.startsWith("/");
     const img = scrapedIsLocal
-      ? scraped.imageUrl
+      ? scraped.imageUrl!
       : existing?.img || scraped.imageUrl || "";
 
-    // Generate description from structured fields (R8)
     const descParts: string[] = [];
     if (scraped.age !== undefined) descParts.push(`Age: ${scraped.age}`);
     if (scraped.hometown) descParts.push(`Hometown: ${scraped.hometown}`);
@@ -219,7 +220,9 @@ export function generatePlayerSection(
       descParts.length > 0 ? descParts.join(" | ") : undefined;
 
     mergedPlayers.push({
-      name: localName,
+      castawayId: scraped.castawayId,
+      fullName: localName,
+      castawayShortName: scraped.nickname || localName.split(" ")[0],
       img,
       age: scraped.age,
       profession: scraped.profession,
@@ -228,57 +231,41 @@ export function generatePlayerSection(
       description,
       nickname: scraped.nickname,
     });
-    allNames.add(localName);
+    allIds.add(scraped.castawayId);
   }
-
-  // Then: add any existing players that weren't in the scraped data
-  for (const existing of existingPlayers) {
-    if (!allNames.has(existing.name)) {
-      mergedPlayers.push({
-        name: existing.name,
-        img: existing.img,
-      });
-      allNames.add(existing.name);
-    }
-  }
-
-  // Generate the player names array
-  const playerNames = mergedPlayers.map((p) => p.name);
 
   // Build the output
   const lines: string[] = [];
 
-  // Player names array
+  // Castaway IDs array
   lines.push(
     `// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used only in typeof for type derivation`,
   );
-  lines.push(`const Players = [`);
-  for (const name of playerNames) {
-    lines.push(`  ${escapeString(name)},`);
+  lines.push(`const CastawayIds = [`);
+  for (const p of mergedPlayers) {
+    lines.push(`  "${p.castawayId}",`);
   }
   lines.push(`] as const;`);
   lines.push(``);
 
-  // Type aliases (normalized naming convention)
-  lines.push(`type PlayerName = (typeof Players)[number];`);
+  // Type aliases
+  lines.push(`type CastawayIdType = (typeof CastawayIds)[number];`);
   lines.push(``);
   lines.push(`type SeasonNumber = ${seasonNum};`);
   lines.push(``);
 
   // Standardized buildPlayer helper
-  lines.push(`const buildPlayer = <T extends PlayerName>(`);
-  lines.push(`  p: { name: T; img: string } & Partial<`);
+  lines.push(`const buildPlayer = <T extends CastawayIdType>(`);
+  lines.push(`  p: { castaway_id: T; full_name: string; img: string } & Partial<`);
   lines.push(
-    `    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "name" | "img">`,
+    `    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "castaway_id" | "full_name" | "img">`,
   );
   lines.push(`  >,`);
-  lines.push(`): Player<T, SeasonNumber> => {`);
-  lines.push(`  return {`);
-  lines.push(`    ...p,`);
-  lines.push(`    season_num: ${seasonNum},`);
-  lines.push(`    season_id: "season_${seasonNum}",`);
-  lines.push(`  };`);
-  lines.push(`};`);
+  lines.push(`): Player<T, SeasonNumber> => ({`);
+  lines.push(`  ...p,`);
+  lines.push(`  season_num: ${seasonNum},`);
+  lines.push(`  season_id: "season_${seasonNum}",`);
+  lines.push(`});`);
   lines.push(``);
 
   // IMG constant if applicable
@@ -287,12 +274,24 @@ export function generatePlayerSection(
     lines.push(``);
   }
 
+  // Castaway lookup map
+  lines.push(
+    `export const SEASON_${seasonNum}_CASTAWAY_LOOKUP: CastawayLookup = {`,
+  );
+  for (const p of mergedPlayers) {
+    lines.push(
+      `  "${p.castawayId}": { full_name: ${escapeString(p.fullName)}, castaway: ${escapeString(p.castawayShortName)} },`,
+    );
+  }
+  lines.push(`};`);
+  lines.push(``);
+
   // Players export
   lines.push(`export const SEASON_${seasonNum}_PLAYERS = [`);
   for (const player of mergedPlayers) {
     lines.push(`${formatPlayerCall(player, imgConstant)},`);
   }
-  lines.push(`] satisfies Player<PlayerName, SeasonNumber>[];`);
+  lines.push(`] satisfies Player<CastawayIdType, SeasonNumber>[];`);
 
   return lines.join("\n");
 }
@@ -312,8 +311,12 @@ export function findPlayerSectionStart(fileContent: string): number {
     return lineStart === -1 ? eslintComment : lineStart + 1;
   }
 
-  // Fallback: find const Players or const Season_*_Players
-  const patterns = [/^const Players\s*=/m, /^const Season_\d+_Players\s*=/m];
+  // Fallback: find const CastawayIds, const Players, or const Season_*_Players
+  const patterns = [
+    /^const CastawayIds\s*=/m,
+    /^const Players\s*=/m,
+    /^const Season_\d+_Players\s*=/m,
+  ];
   for (const pattern of patterns) {
     const match = pattern.exec(fileContent);
     if (match) return match.index;
@@ -430,17 +433,18 @@ export function generateEpisodeSection(
 export function generateChallengeSection(
   challenges: ScrapedChallenge[],
   seasonNum: number,
-  playerNames: string[],
+  castawayIds: string[],
 ): string {
   const lines: string[] = [];
-  const playerNameSet = new Set(playerNames);
+  const castawayIdSet = new Set(castawayIds);
 
   lines.push(`export const SEASON_${seasonNum}_CHALLENGES = {`);
 
   for (const ch of challenges) {
     const id = `challenge_${ch.order}`;
-    // Filter winners to only those in playerNames (handles tribe names vs player names)
-    const validWinners = ch.winnerNames.filter((n) => playerNameSet.has(n));
+    const validWinners = ch.winnerCastawayIds.filter((id) =>
+      castawayIdSet.has(id),
+    );
 
     lines.push(`  ${id}: {`);
     lines.push(`    id: "${id}",`);
@@ -452,13 +456,12 @@ export function generateChallengeSection(
     lines.push(`    order: ${ch.order},`);
 
     if (validWinners.length === 0) {
-      // All winners were tribe names — emit empty array with TODO
-      lines.push(`    // TODO: resolve tribe winners to player names`);
-      lines.push(`    winning_players: [],`);
+      lines.push(`    // TODO: resolve tribe winners to castaway IDs`);
+      lines.push(`    winning_castaways: [],`);
     } else {
-      lines.push(`    winning_players: [`);
-      for (const name of validWinners) {
-        lines.push(`      ${escapeString(name)},`);
+      lines.push(`    winning_castaways: [`);
+      for (const cid of validWinners) {
+        lines.push(`      "${cid}",`);
       }
       lines.push(`    ],`);
     }
@@ -467,7 +470,7 @@ export function generateChallengeSection(
   }
 
   lines.push(
-    `} satisfies Record<Challenge["id"], Challenge<PlayerName, SeasonNumber>>;`,
+    `} satisfies Record<Challenge["id"], Challenge<CastawayIdType, SeasonNumber>>;`,
   );
   return lines.join("\n");
 }
@@ -478,16 +481,16 @@ export function generateChallengeSection(
 export function generateEliminationSection(
   eliminations: ScrapedElimination[],
   seasonNum: number,
-  playerNames: string[],
+  castawayIds: string[],
 ): string {
   const lines: string[] = [];
-  const playerNameSet = new Set(playerNames);
+  const castawayIdSet = new Set(castawayIds);
 
   lines.push(`export const SEASON_${seasonNum}_ELIMINATIONS = {`);
 
   for (const elim of eliminations) {
     const id = `elimination_${elim.order}`;
-    const nameValid = playerNameSet.has(elim.playerName);
+    const idValid = castawayIdSet.has(elim.castawayId);
     const votesReceived = parseVotesReceived(elim.voteString);
 
     lines.push(`  ${id}: {`);
@@ -498,13 +501,13 @@ export function generateEliminationSection(
     lines.push(`    episode_num: ${elim.episodeNum},`);
     lines.push(`    order: ${elim.order},`);
 
-    if (nameValid) {
-      lines.push(`    player_name: ${escapeString(elim.playerName)},`);
+    if (idValid) {
+      lines.push(`    castaway_id: "${elim.castawayId}",`);
     } else {
       lines.push(
-        `    // TODO: resolve player name "${elim.playerName}" to a known player`,
+        `    // TODO: resolve castaway ID "${elim.castawayId}" to a known player`,
       );
-      lines.push(`    player_name: ${escapeString(elim.playerName)},`);
+      lines.push(`    castaway_id: "${elim.castawayId}",`);
     }
 
     if (votesReceived !== undefined) {
@@ -515,7 +518,7 @@ export function generateEliminationSection(
   }
 
   lines.push(
-    `} satisfies Record<Elimination["id"], Elimination<PlayerName, SeasonNumber>>;`,
+    `} satisfies Record<Elimination["id"], Elimination<CastawayIdType, SeasonNumber>>;`,
   );
   return lines.join("\n");
 }
@@ -526,17 +529,17 @@ export function generateEliminationSection(
 export function generateEventSection(
   events: ScrapedGameEvent[],
   seasonNum: number,
-  playerNames: string[],
+  castawayIds: string[],
 ): string {
   const lines: string[] = [];
-  const playerNameSet = new Set(playerNames);
+  const castawayIdSet = new Set(castawayIds);
 
   lines.push(`export const SEASON_${seasonNum}_EVENTS = {`);
 
   for (let i = 0; i < events.length; i++) {
     const ev = events[i];
     const id = `event_${i + 1}`;
-    const nameValid = playerNameSet.has(ev.playerName);
+    const idValid = castawayIdSet.has(ev.castawayId);
 
     lines.push(`  ${id}: {`);
     lines.push(`    id: "${id}",`);
@@ -545,13 +548,13 @@ export function generateEventSection(
     lines.push(`    episode_id: "episode_${ev.episodeNum}",`);
     lines.push(`    episode_num: ${ev.episodeNum},`);
 
-    if (nameValid) {
-      lines.push(`    player_name: ${escapeString(ev.playerName)},`);
+    if (idValid) {
+      lines.push(`    castaway_id: "${ev.castawayId}",`);
     } else {
       lines.push(
-        `    // TODO: resolve player name "${ev.playerName}" to a known player`,
+        `    // TODO: resolve castaway ID "${ev.castawayId}" to a known player`,
       );
-      lines.push(`    player_name: ${escapeString(ev.playerName)},`);
+      lines.push(`    castaway_id: "${ev.castawayId}",`);
     }
 
     lines.push(`    action: "${ev.action}",`);
@@ -562,7 +565,7 @@ export function generateEventSection(
   }
 
   lines.push(
-    `} satisfies Record<GameEvent["id"], GameEvent<PlayerName, SeasonNumber>>;`,
+    `} satisfies Record<GameEvent["id"], GameEvent<CastawayIdType, SeasonNumber>>;`,
   );
   return lines.join("\n");
 }
@@ -584,10 +587,10 @@ export function generateFullSeasonFile(
     null,
   );
 
-  // Extract player names for cross-referencing in gameplay sections
-  const playerNames = playerData.players
-    .filter((p) => p.localName)
-    .map((p) => p.localName);
+  // Extract castaway IDs for cross-referencing in gameplay sections
+  const castawayIds = playerData.players
+    .filter((p) => p.castawayId)
+    .map((p) => p.castawayId);
 
   const episodeSection = generateEpisodeSection(
     resultsData.episodes,
@@ -596,17 +599,17 @@ export function generateFullSeasonFile(
   const challengeSection = generateChallengeSection(
     resultsData.challenges,
     seasonNum,
-    playerNames,
+    castawayIds,
   );
   const eliminationSection = generateEliminationSection(
     resultsData.eliminations,
     seasonNum,
-    playerNames,
+    castawayIds,
   );
   const eventSection = generateEventSection(
     resultsData.events,
     seasonNum,
-    playerNames,
+    castawayIds,
   );
 
   // Compose the full file
@@ -614,11 +617,11 @@ export function generateFullSeasonFile(
 
   // Imports
   parts.push(
-    `import {\n  Challenge,\n  Elimination,\n  Episode,\n  GameEvent,\n  Player,\n} from "../../types";`,
+    `import {\n  CastawayLookup,\n  Challenge,\n  Elimination,\n  Episode,\n  GameEvent,\n  Player,\n} from "../../types";`,
   );
   parts.push("");
 
-  // Player section (const Players, types, buildPlayer, SEASON_XX_PLAYERS)
+  // Player section (CastawayIds, types, buildPlayer, lookup, SEASON_XX_PLAYERS)
   parts.push(playerSection);
   parts.push("");
 
@@ -656,7 +659,7 @@ export function registerSeason(
   }
 
   // Add import line
-  const importLine = `import { SEASON_${seasonNum}_EPISODES, SEASON_${seasonNum}_PLAYERS } from "./${seasonKey}";`;
+  const importLine = `import { SEASON_${seasonNum}_CASTAWAY_LOOKUP, SEASON_${seasonNum}_EPISODES, SEASON_${seasonNum}_PLAYERS } from "./${seasonKey}";`;
 
   // Find the last import line and insert after it
   const importRegex = /^import .+ from ".\/season_\d+";$/gm;
@@ -700,6 +703,7 @@ export function registerSeason(
     `    img: "${seasonImg}",\n` +
     `    players: SEASON_${seasonNum}_PLAYERS,\n` +
     `    episodes: SEASON_${seasonNum}_EPISODES,\n` +
+    `    castawayLookup: SEASON_${seasonNum}_CASTAWAY_LOOKUP,\n` +
     `  },\n`;
 
   const satisfiesPattern = /\n} satisfies Record<Season\["id"\], Season>;/;

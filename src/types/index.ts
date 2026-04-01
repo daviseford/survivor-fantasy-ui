@@ -1,6 +1,13 @@
 import { User } from "firebase/auth";
 import { PropBetsQuestions } from "../data/propbets";
 
+export type CastawayId = `US${string}`;
+
+export type CastawayLookup = Record<
+  CastawayId,
+  { full_name: string; castaway: string }
+>;
+
 export type Season = {
   id: `season_${number}`;
   order: number;
@@ -8,6 +15,7 @@ export type Season = {
   img: string;
   players: Player[];
   episodes: Episode[];
+  castawayLookup: CastawayLookup;
 };
 
 export type Episode<SeasonNumber = number> = {
@@ -34,7 +42,10 @@ export const EliminationVariants = [
 
 export type EliminationVariant = (typeof EliminationVariants)[number];
 
-export type Elimination<PlayerName = string, SeasonNumber = number> = {
+export type Elimination<
+  Id extends CastawayId = CastawayId,
+  SeasonNumber = number,
+> = {
   id: `elimination_${string}`;
 
   season_id: Season["id"];
@@ -43,17 +54,21 @@ export type Elimination<PlayerName = string, SeasonNumber = number> = {
   episode_id: Episode["id"];
   episode_num: number;
 
-  player_name: PlayerName;
+  castaway_id: Id;
 
   order: number;
   variant: EliminationVariant;
   votes_received?: number;
 };
 
-export type Player<PlayerName = string, SeasonNumber = number> = {
+export type Player<
+  Id extends CastawayId = CastawayId,
+  SeasonNumber = number,
+> = {
   season_id: Season["id"];
   season_num: SeasonNumber;
-  name: PlayerName;
+  castaway_id: Id;
+  full_name: string;
   img: string;
   description?: string;
   age?: number;
@@ -74,9 +89,9 @@ export type Team = {
 
 /**
  * A snapshot of player-to-team assignments for a single episode.
- * Keys are player names, values are team IDs or null (no team).
+ * Keys are castaway IDs, values are team IDs or null (no team).
  */
-export type TeamAssignmentSnapshot = Record<string, Team["id"] | null>;
+export type TeamAssignmentSnapshot = Record<CastawayId, Team["id"] | null>;
 
 /**
  * All team assignment snapshots for a season.
@@ -84,7 +99,10 @@ export type TeamAssignmentSnapshot = Record<string, Team["id"] | null>;
  */
 export type TeamAssignments = Record<string, TeamAssignmentSnapshot>;
 
-export type Challenge<PlayerNames = string, SeasonNumber = number> = {
+export type Challenge<
+  Id extends CastawayId = CastawayId,
+  SeasonNumber = number,
+> = {
   id: `challenge_${string}`;
 
   season_id: Season["id"];
@@ -97,13 +115,13 @@ export type Challenge<PlayerNames = string, SeasonNumber = number> = {
   variant: ChallengeWinAction;
 
   /**
-   * List of player names who won
+   * List of castaway IDs who won
    */
-  winning_players: PlayerNames[];
+  winning_castaways: Id[];
 
   /**
    * Optional: the team that won this challenge.
-   * Audit/display metadata only -- winning_players is the scoring source of truth.
+   * Audit/display metadata only -- winning_castaways is the scoring source of truth.
    */
   winning_team_id?: Team["id"] | null;
 };
@@ -151,6 +169,7 @@ export type DraftPick = {
   order: number;
   user_name: string;
   user_uid: string;
+  castaway_id: CastawayId;
   player_name: string;
 };
 
@@ -195,7 +214,10 @@ export type Competition = {
   finished: boolean;
 };
 
-export type GameEvent<PlayerName = string, SeasonNumber = number> = {
+export type GameEvent<
+  Id extends CastawayId = CastawayId,
+  SeasonNumber = number,
+> = {
   id: `event_${string}`;
 
   season_id: Season["id"];
@@ -206,7 +228,7 @@ export type GameEvent<PlayerName = string, SeasonNumber = number> = {
 
   action: GameEventAction;
   multiplier: number | null;
-  player_name: PlayerName;
+  castaway_id: Id;
 };
 
 export const ChallengeWinActions = ["reward", "immunity"] as const;

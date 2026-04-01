@@ -254,7 +254,7 @@ async function compare(seasonNum: number): Promise<void> {
       }
 
       // Compare winners (normalize: sort names for comparison)
-      const scWinners = [...(scC.winnerNames || [])].sort().join(", ");
+      const scWinners = [...(scC.winnerCastawayIds || [])].sort().join(", ");
       const fsWinners = [...(fsC.winning_players || [])].sort().join(", ");
       if (scWinners !== fsWinners) {
         mismatches.push({
@@ -324,11 +324,11 @@ async function compare(seasonNum: number): Promise<void> {
       const label = `Ep${ep} Elimination #${i + 1}`;
 
       if (!fsE) {
-        console.log(`  ${label}: EXTRA in scraped — "${scE.playerName}"`);
+        console.log(`  ${label}: EXTRA in scraped — "${scE.castawayId}"`);
         mismatches.push({
           category: label,
           field: "existence",
-          scraped: scE.playerName,
+          scraped: scE.castawayId,
           firestore: "MISSING",
         });
         continue;
@@ -346,7 +346,7 @@ async function compare(seasonNum: number): Promise<void> {
 
       // Compare player name (scraped uses first name, Firestore uses full name)
       // Allow partial match: scraped first name should be contained in Firestore full name
-      const scName = scE.playerName;
+      const scName = scE.castawayId;
       const fsName = fsE.player_name;
       const nameMatches =
         scName === fsName ||
@@ -408,7 +408,7 @@ async function compare(seasonNum: number): Promise<void> {
 
   const scEventsByAction = new Map<string, any[]>();
   for (const e of scrapedEvents) {
-    const key = `ep${e.episodeNum}_${e.action}_${e.playerName}`;
+    const key = `ep${e.episodeNum}_${e.action}_${e.castawayId}`;
     if (!scEventsByAction.has(key)) scEventsByAction.set(key, []);
     scEventsByAction.get(key)!.push(e);
   }
@@ -435,7 +435,7 @@ async function compare(seasonNum: number): Promise<void> {
     if (!fsEventsByAction.has(key)) {
       for (const e of scEvts) {
         console.log(
-          `  EXTRA in scraped: ${e.action} — ${e.playerName} (ep${e.episodeNum})`,
+          `  EXTRA in scraped: ${e.action} — ${e.castawayId} (ep${e.episodeNum})`,
         );
       }
     }

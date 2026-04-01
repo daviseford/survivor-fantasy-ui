@@ -42,12 +42,14 @@ export async function pushSeasonToFirestore(
   const challengesKey = `SEASON_${seasonNum}_CHALLENGES`;
   const eliminationsKey = `SEASON_${seasonNum}_ELIMINATIONS`;
   const eventsKey = `SEASON_${seasonNum}_EVENTS`;
+  const lookupKey = `SEASON_${seasonNum}_CASTAWAY_LOOKUP`;
 
   const players = mod[playersKey];
   const episodes = mod[episodesKey];
   const challenges = mod[challengesKey];
   const eliminations = mod[eliminationsKey];
   const events = mod[eventsKey];
+  const castawayLookup = mod[lookupKey];
 
   if (!players || !episodes) {
     throw new Error(
@@ -66,6 +68,7 @@ export async function pushSeasonToFirestore(
         img: seasonImg,
         players,
         episodes,
+        castawayLookup: castawayLookup || {},
       },
     },
     {

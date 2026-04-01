@@ -26,26 +26,27 @@ import type {
 } from "./types.js";
 
 /**
- * Build a lookup map from castaway short name → full_name.
- * Used to resolve short names in challenge_results, tribe_mapping,
- * and advantage_movement back to the full names codegen expects.
+ * Build a lookup map from castaway short name / full_name → castaway_id.
+ * Used to resolve short names in tribe_mapping back to castaway_id.
  */
-function buildShortNameMap(castaways: SurvivorCastaway[]): Map<string, string> {
+function buildCastawayIdMap(
+  castaways: SurvivorCastaway[],
+): Map<string, string> {
   const map = new Map<string, string>();
   for (const c of castaways) {
-    map.set(c.castaway, c.full_name);
-    // Also map castaway_id for advantage_movement lookups
-    map.set(c.castaway_id, c.full_name);
+    map.set(c.castaway, c.castaway_id);
+    map.set(c.full_name, c.castaway_id);
+    map.set(c.castaway_id, c.castaway_id);
   }
   return map;
 }
 
-/** Resolve a short name or castaway_id to full name, falling back to the input. */
-function resolveFullName(
+/** Resolve a short name or full_name to castaway_id, falling back to the input. */
+function resolveCastawayId(
   nameOrId: string,
-  nameMap: Map<string, string>,
+  idMap: Map<string, string>,
 ): string {
-  return nameMap.get(nameOrId) ?? nameOrId;
+  return idMap.get(nameOrId) ?? nameOrId;
 }
 
 /**
@@ -74,6 +75,7 @@ export function transformPlayers(
     return {
       wikiPageTitle: c.full_name,
       localName: c.full_name,
+      castawayId: c.castaway_id,
       matchStatus: "exact" as const,
       age: c.age ?? undefined,
       hometown,
@@ -98,14 +100,10 @@ export function transformResults(
   seasonNum: number,
 ): ScrapeResultsOutput {
   const warnings: string[] = [];
-  const nameMap = buildShortNameMap(data.castaways);
+  const idMap = buildCastawayIdMap(data.castaways);
 
   const episodes = transformEpisodes(data.episodes, data.tribeMapping);
-  const challenges = transformChallenges(
-    data.challengeResults,
-    data.tribeMapping,
-    nameMap,
-  );
+  const challenges = transformChallenges(data.challengeResults);
   const eliminations = transformEliminations(data.castaways);
   const events = transformEvents(
     data.advantageMovement,
@@ -114,7 +112,7 @@ export function transformResults(
     data.journeys,
     data.castaways,
     data.tribeMapping,
-    nameMap,
+    idMap,
     warnings,
   );
 
@@ -182,8 +180,6 @@ function transformEpisodes(
 
 function transformChallenges(
   results: SurvivorChallengeResult[],
-  tribeMapping: SurvivorTribeMapping[],
-  nameMap: Map<string, string>,
 ): ScrapedChallenge[] {
   // Group by challenge_id
   const byChallenge = new Map<number, SurvivorChallengeResult[]>();
@@ -242,7 +238,6 @@ function transformChallenges(
         first,
         epNum,
         "immunity",
-        nameMap,
         challenges,
         order,
       );
@@ -257,7 +252,6 @@ function transformChallenges(
         first,
         epNum,
         "reward",
-        nameMap,
         challenges,
         order,
       );
@@ -273,7 +267,6 @@ function transformChallenges(
         first,
         epNum,
         variant,
-        nameMap,
         challenges,
         order,
       );
@@ -293,7 +286,6 @@ function emitChallengeEntries(
   first: SurvivorChallengeResult,
   epNum: number,
   variant: "reward" | "immunity" | "combined",
-  nameMap: Map<string, string>,
   challenges: ScrapedChallenge[],
   startOrder: number,
 ): void {
@@ -309,9 +301,7 @@ function emitChallengeEntries(
       challenges.push({
         episodeNum: epNum,
         variant,
-        winnerNames: tribeWinners.map((w) =>
-          resolveFullName(w.castaway, nameMap),
-        ),
+        winnerCastawayIds: tribeWinners.map((w) => w.castaway_id),
         winnerTribe: tribe,
         order: startOrder + idx,
       });
@@ -321,7 +311,7 @@ function emitChallengeEntries(
     challenges.push({
       episodeNum: epNum,
       variant,
-      winnerNames: winners.map((w) => resolveFullName(w.castaway, nameMap)),
+      winnerCastawayIds: winners.map((w) => w.castaway_id),
       winnerTribe: null,
       order: startOrder,
     });
@@ -345,7 +335,7 @@ function transformEliminations(
 
     return {
       episodeNum: epNum,
-      playerName: c.full_name,
+      castawayId: c.castaway_id,
       voteString: "",
       variant,
       finishText: c.result,
@@ -449,7 +439,7 @@ function transformEvents(
   journeys: SurvivorJourney[],
   castaways: SurvivorCastaway[],
   tribeMapping: SurvivorTribeMapping[],
-  nameMap: Map<string, string>,
+  idMap: Map<string, string>,
   warnings: string[],
 ): ScrapedGameEvent[] {
   const events: ScrapedGameEvent[] = [];
@@ -466,23 +456,22 @@ function transformEvents(
   // Advantage events — type-aware mapping using advantage_details
   for (const adv of advantageMovement) {
     const epNum = Math.round(adv.episode);
-    const playerName = resolveFullName(adv.castaway, nameMap);
+    const castawayId = adv.castaway_id;
     const event = adv.event;
     const detail = detailById.get(adv.advantage_id);
     const advType = detail?.advantage_type ?? "";
 
     if (event === "Found (beware)") {
-      // Beware advantage found — emit find + accept (taking it implies acceptance)
       bewareFoundIds.add(adv.advantage_id);
       events.push({
         episodeNum: epNum,
-        playerName,
+        castawayId,
         action: "find_beware_advantage",
         multiplier: null,
       });
       events.push({
         episodeNum: epNum,
-        playerName,
+        castawayId,
         action: "accept_beware_advantage",
         multiplier: null,
       });
@@ -490,52 +479,48 @@ function transformEvents(
       if (bewareFoundIds.has(adv.advantage_id)) {
         events.push({
           episodeNum: epNum,
-          playerName,
+          castawayId,
           action: "fulfill_beware_advantage",
           multiplier: null,
         });
       }
-      // Emit specific find action based on advantage type
       const findAction =
         ADVANTAGE_TYPE_TO_FIND[advType] ?? "find_other_advantage";
       events.push({
         episodeNum: epNum,
-        playerName,
+        castawayId,
         action: findAction,
         multiplier: null,
       });
     } else if (event === "Played") {
-      // Emit specific use action based on advantage type
       const useAction = ADVANTAGE_TYPE_TO_USE[advType] ?? "use_idol";
       events.push({
         episodeNum: epNum,
-        playerName,
+        castawayId,
         action: useAction,
         multiplier: null,
       });
     } else if (event === "Received" || event === "Recieved") {
-      // Emit specific win action based on advantage type
       const winAction = IDOL_TYPES.has(advType)
         ? "win_idol"
         : "win_other_advantage";
       events.push({
         episodeNum: epNum,
-        playerName,
+        castawayId,
         action: winAction,
         multiplier: null,
       });
     }
   }
 
-  // Journey events (S41+) — each player who goes on a journey gets go_on_journey,
-  // and players who gain an advantage get a specific win action
+  // Journey events (S41+)
   for (const j of journeys) {
     const epNum = Math.round(j.episode);
-    const playerName = resolveFullName(j.castaway, nameMap);
+    const castawayId = j.castaway_id;
 
     events.push({
       episodeNum: epNum,
-      playerName,
+      castawayId,
       action: "go_on_journey",
       multiplier: null,
     });
@@ -543,14 +528,13 @@ function transformEvents(
     if (j.reward) {
       const winAction =
         JOURNEY_REWARD_TO_WIN[j.reward] ?? "win_other_advantage";
-      // Only emit win if it's a positive reward (not "Lost vote", "Returned to camp", etc.)
       if (
         winAction !== "win_other_advantage" ||
         !j.reward.toLowerCase().includes("lost")
       ) {
         events.push({
           episodeNum: epNum,
-          playerName,
+          castawayId,
           action: winAction,
           multiplier: null,
         });
@@ -562,13 +546,13 @@ function transformEvents(
   for (const v of voteHistory) {
     if (!v.vote_event) continue;
     const epNum = Math.round(v.episode);
-    const playerName = resolveFullName(v.castaway, nameMap);
+    const castawayId = v.castaway_id;
 
     if (v.vote_event === "Shot in the dark") {
       const success = v.vote_event_outcome === "Safe";
       events.push({
         episodeNum: epNum,
-        playerName,
+        castawayId,
         action: success
           ? "use_shot_in_the_dark_successfully"
           : "use_shot_in_the_dark_unsuccessfully",
@@ -577,7 +561,7 @@ function transformEvents(
     } else if (VOTE_EVENT_TO_USE[v.vote_event]) {
       events.push({
         episodeNum: epNum,
-        playerName,
+        castawayId,
         action: VOTE_EVENT_TO_USE[v.vote_event],
         multiplier: null,
       });
@@ -587,21 +571,19 @@ function transformEvents(
   // Merge event — detect from tribe_mapping
   const mergeEp = detectMergeEpisode(tribeMapping);
   if (mergeEp !== null) {
-    // All players still in the game at merge — resolve to full names
-    // "Mergatory" (S46+) or "Merged" (older seasons) both indicate merged players
-    const mergedPlayers = tribeMapping
+    const mergedIds = tribeMapping
       .filter(
         (t) =>
           Math.round(t.episode) === mergeEp &&
           (t.tribe_status === "Merged" || t.tribe_status === "Mergatory"),
       )
-      .map((t) => resolveFullName(t.castaway, nameMap));
+      .map((t) => resolveCastawayId(t.castaway, idMap));
 
-    const uniqueMerged = [...new Set(mergedPlayers)];
-    for (const name of uniqueMerged) {
+    const uniqueMerged = [...new Set(mergedIds)];
+    for (const castawayId of uniqueMerged) {
       events.push({
         episodeNum: mergeEp,
-        playerName: name,
+        castawayId,
         action: "make_merge",
         multiplier: null,
       });
@@ -614,7 +596,7 @@ function transformEvents(
     const lastEp = Math.max(...castaways.map((c) => Math.round(c.episode)));
     events.push({
       episodeNum: lastEp,
-      playerName: winner.full_name,
+      castawayId: winner.castaway_id,
       action: "win_survivor",
       multiplier: null,
     });
@@ -624,7 +606,7 @@ function transformEvents(
     for (const f of finalists) {
       events.push({
         episodeNum: lastEp,
-        playerName: f.full_name,
+        castawayId: f.castaway_id,
         action: "make_final_tribal_council",
         multiplier: null,
       });

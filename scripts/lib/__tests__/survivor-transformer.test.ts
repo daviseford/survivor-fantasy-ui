@@ -5,7 +5,7 @@ import { transformPlayers, transformResults } from "../survivor-transformer";
 // Integration tests using real survivoR data
 
 describe("transformPlayers", { timeout: 60000 }, () => {
-  it("transforms Season 46 castaways into Player array", async () => {
+  it("transforms Season 46 castaways into Player array with castawayId", async () => {
     const data = await fetchSeasonData(46);
     const result = transformPlayers(data, 46);
 
@@ -16,6 +16,7 @@ describe("transformPlayers", { timeout: 60000 }, () => {
     // Check first player has expected fields
     const player = result.players[0];
     expect(player.localName).toBeTruthy();
+    expect(player.castawayId).toMatch(/^US\d+$/);
     expect(player.matchStatus).toBe("exact");
   });
 
@@ -29,9 +30,10 @@ describe("transformPlayers", { timeout: 60000 }, () => {
     const sonja = result.players.find((p) => p.localName.includes("Sonja"));
     expect(sonja).toBeDefined();
     expect(sonja!.localName).toBe("Sonja Christopher");
+    expect(sonja!.castawayId).toMatch(/^US\d+$/);
   });
 
-  it("transforms Season 48 castaways into 18 players with full names", async () => {
+  it("transforms Season 48 castaways into 18 players with castaway IDs", async () => {
     const data = await fetchSeasonData(48);
     const result = transformPlayers(data, 48);
 
@@ -41,9 +43,20 @@ describe("transformPlayers", { timeout: 60000 }, () => {
 
     for (const player of result.players) {
       expect(player.localName).toBeTruthy();
+      expect(player.castawayId).toMatch(/^US\d+$/);
       // Full names should have at least first + last
       expect(player.localName).toContain(" ");
     }
+  });
+
+  it("returning players with same name have distinct castaway_id values", async () => {
+    // Season 50 has returning players
+    const data = await fetchSeasonData(50);
+    const result = transformPlayers(data, 50);
+
+    const ids = result.players.map((p) => p.castawayId);
+    const uniqueIds = new Set(ids);
+    expect(uniqueIds.size).toBe(ids.length);
   });
 });
 
@@ -70,7 +83,7 @@ describe("transformResults", { timeout: 60000 }, () => {
     expect(postMerge.length).toBe(8); // episodes 6-13
   });
 
-  it("transforms Season 46 challenges with winning players", async () => {
+  it("transforms Season 46 challenges with winning castaway IDs", async () => {
     const data = await fetchSeasonData(46);
     const result = transformResults(data, 46);
 
@@ -82,9 +95,8 @@ describe("transformResults", { timeout: 60000 }, () => {
     );
     expect(tribalChallenges.length).toBeGreaterThan(0);
     for (const c of tribalChallenges) {
-      // Each tribal challenge entry should have 4-8 winners (one tribe), not 12+
-      expect(c.winnerNames.length).toBeLessThanOrEqual(8);
-      expect(c.winnerNames.length).toBeGreaterThan(0);
+      expect(c.winnerCastawayIds.length).toBeLessThanOrEqual(8);
+      expect(c.winnerCastawayIds.length).toBeGreaterThan(0);
     }
 
     // Combined challenges should be split — no "combined" variant in output
@@ -101,23 +113,25 @@ describe("transformResults", { timeout: 60000 }, () => {
     expect(rewards.length).toBeGreaterThan(0);
   });
 
-  it("uses full names (not short names) for challenge winners and events", async () => {
+  it("uses castaway IDs (not names) for challenge winners and events", async () => {
     const data = await fetchSeasonData(46);
     const playerResult = transformPlayers(data, 46);
     const result = transformResults(data, 46);
 
-    const playerNames = new Set(playerResult.players.map((p) => p.localName));
+    const castawayIds = new Set(
+      playerResult.players.map((p) => p.castawayId),
+    );
 
-    // Every challenge winner name should be in the player names set
+    // Every challenge winner ID should be in the castaway IDs set
     for (const chal of result.challenges) {
-      for (const name of chal.winnerNames) {
-        expect(playerNames.has(name)).toBe(true);
+      for (const id of chal.winnerCastawayIds) {
+        expect(castawayIds.has(id)).toBe(true);
       }
     }
 
-    // Every event player name should be in the player names set
+    // Every event castaway ID should be in the castaway IDs set
     for (const ev of result.events) {
-      expect(playerNames.has(ev.playerName)).toBe(true);
+      expect(castawayIds.has(ev.castawayId)).toBe(true);
     }
   });
 
@@ -128,9 +142,13 @@ describe("transformResults", { timeout: 60000 }, () => {
     // Winner should NOT be in eliminations (17, not 18)
     expect(result.eliminations.length).toBe(17);
 
-    // The winner (Kenzie Petty) should not appear
-    const winnerElim = result.eliminations.find((e) =>
-      e.playerName.includes("Kenzie"),
+    // The winner (Kenzie Petty) should not appear — check by ID
+    const playerResult = transformPlayers(data, 46);
+    const kenzie = playerResult.players.find((p) =>
+      p.localName.includes("Kenzie"),
+    );
+    const winnerElim = result.eliminations.find(
+      (e) => e.castawayId === kenzie?.castawayId,
     );
     expect(winnerElim).toBeUndefined();
 
@@ -167,7 +185,8 @@ describe("transformResults", { timeout: 60000 }, () => {
         e.action.startsWith("win_") &&
         e.action !== "win_survivor" &&
         journeyEvents.some(
-          (j) => j.playerName === e.playerName && j.episodeNum === e.episodeNum,
+          (j) =>
+            j.castawayId === e.castawayId && j.episodeNum === e.episodeNum,
         ),
     );
     expect(journeyWins.length).toBeGreaterThan(0);
@@ -255,33 +274,35 @@ describe("transformResults", { timeout: 60000 }, () => {
     expect(result.episodes[0].title).toBeTruthy();
   });
 
-  it("transforms Season 48 challenges with winning players", async () => {
+  it("transforms Season 48 challenges with winning castaway IDs", async () => {
     const data = await fetchSeasonData(48);
     const result = transformResults(data, 48);
 
     expect(result.challenges.length).toBeGreaterThan(0);
 
     const withWinners = result.challenges.filter(
-      (c) => c.winnerNames.length > 0,
+      (c) => c.winnerCastawayIds.length > 0,
     );
     expect(withWinners.length).toBeGreaterThan(0);
   });
 
-  it("all S48 challenge winner names and event player names exist in the player list", async () => {
+  it("all S48 challenge winner IDs and event castaway IDs exist in the player list", async () => {
     const data = await fetchSeasonData(48);
     const playerResult = transformPlayers(data, 48);
     const result = transformResults(data, 48);
 
-    const playerNames = new Set(playerResult.players.map((p) => p.localName));
+    const castawayIds = new Set(
+      playerResult.players.map((p) => p.castawayId),
+    );
 
     for (const chal of result.challenges) {
-      for (const name of chal.winnerNames) {
-        expect(playerNames.has(name)).toBe(true);
+      for (const id of chal.winnerCastawayIds) {
+        expect(castawayIds.has(id)).toBe(true);
       }
     }
 
     for (const ev of result.events) {
-      expect(playerNames.has(ev.playerName)).toBe(true);
+      expect(castawayIds.has(ev.castawayId)).toBe(true);
     }
   });
 });
