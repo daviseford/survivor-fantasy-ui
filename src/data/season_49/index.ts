@@ -23,9 +23,9 @@ const Players = [
   "Kristina Mills",
   "Rizo Velovic",
   "Sage Ahrens-Nichols",
-  "Shannon Fairweather",
   "Sophi Balerdi",
   "Savannah Louie",
+  "Shannon Fairweather",
 ] as const;
 
 type PlayerName = (typeof Players)[number];
@@ -47,7 +47,7 @@ const buildPlayer = <T extends PlayerName>(
 export const SEASON_49_PLAYERS = [
   buildPlayer({
     name: "Nicole Mazullo",
-    img: "https://static.wikia.nocookie.net/survivor/images/2/21/S49_Nicole_Mazullo.jpg/revision/latest?cb=20250820171247",
+    img: "/images/season_49/Nicole-Mazullo.jpg",
     description:
       "Age: 26 | Hometown: Philadelphia, Pennsylvania | Occupation: Financial Crime Consultant",
     age: 26,
@@ -56,7 +56,7 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "Annie Davis",
-    img: "https://static.wikia.nocookie.net/survivor/images/9/97/S49_Annie_Davis.jpg/revision/latest?cb=20250820171010",
+    img: "/images/season_49/Annie-Davis.jpg",
     description: "Age: 50 | Hometown: Austin, Texas | Occupation: Musician",
     age: 50,
     profession: "Musician",
@@ -64,7 +64,7 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "Jake Latimer",
-    img: "https://static.wikia.nocookie.net/survivor/images/d/d0/S49_Jake_Latimer.jpg/revision/latest?cb=20250820171044",
+    img: "/images/season_49/Jake-Latimer.jpg",
     description:
       "Age: 36 | Hometown: St. Albert, Alberta | Occupation: Correctional Officer",
     age: 36,
@@ -73,7 +73,7 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "Jeremiah Ing",
-    img: "https://static.wikia.nocookie.net/survivor/images/1/1c/S49_Jeremiah_Ing.jpg/revision/latest?cb=20250820171127",
+    img: "/images/season_49/Jeremiah-Ing.jpg",
     description:
       "Age: 39 | Hometown: Toronto, Ontario | Occupation: Global Events Manager",
     age: 39,
@@ -82,7 +82,7 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "Matt Williams",
-    img: "https://static.wikia.nocookie.net/survivor/images/2/20/S49_Matt_Williams.jpg/revision/latest?cb=20250820165418",
+    img: "/images/season_49/Matt-Williams.jpg",
     description:
       "Age: 53 | Hometown: St. George, Utah | Occupation: Airport Ramp Agent",
     age: 53,
@@ -91,7 +91,7 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "Jason Treul",
-    img: "https://static.wikia.nocookie.net/survivor/images/0/01/S49_Jason_Treul.jpg/revision/latest?cb=20250820163341",
+    img: "/images/season_49/Jason-Treul.jpg",
     description:
       "Age: 33 | Hometown: Santa Ana, California | Occupation: Law Clerk",
     age: 33,
@@ -100,7 +100,7 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "Nate Moore",
-    img: "https://static.wikia.nocookie.net/survivor/images/c/cb/S49_Nate_Moore.jpg/revision/latest?cb=20250820172512",
+    img: "/images/season_49/Nate-Moore.jpg",
     description:
       "Age: 47 | Hometown: Hermosa Beach, California | Occupation: Film Producer",
     age: 47,
@@ -109,7 +109,7 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "MC Chukwujekwu",
-    img: "https://static.wikia.nocookie.net/survivor/images/9/9f/S49_MC_Chukwujekwu.jpg/revision/latest?cb=20250820170031",
+    img: "/images/season_49/MC-Chukwujekwu.jpg",
     description:
       "Age: 30 | Hometown: San Diego, California | Occupation: Fitness Trainer",
     age: 30,
@@ -118,7 +118,7 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "Alex Moore",
-    img: "https://static.wikia.nocookie.net/survivor/images/3/3e/S49_Alex_Moore.jpg/revision/latest?cb=20250820170931",
+    img: "/images/season_49/Alex-Moore.jpg",
     description:
       "Age: 27 | Hometown: Washington, District of Columbia | Occupation: Political Communications Director",
     age: 27,
@@ -127,7 +127,7 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "Jawan Pitts",
-    img: "https://static.wikia.nocookie.net/survivor/images/9/96/S49_Jawan_Pitts.jpg/revision/latest?cb=20250820172429",
+    img: "/images/season_49/Jawan-Pitts.jpg",
     description:
       "Age: 28 | Hometown: Los Angeles, California | Occupation: Video Editor",
     age: 28,
@@ -136,7 +136,7 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "Sophie Segreti",
-    img: "https://static.wikia.nocookie.net/survivor/images/b/b6/S49_Sophie_Segreti.jpg/revision/latest?cb=20250820170113",
+    img: "/images/season_49/Sophie-Segreti.jpg",
     description:
       "Age: 32 | Hometown: New York, New York | Occupation: Strategy Associate",
     age: 32,
@@ -145,7 +145,7 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "Steven Ramm",
-    img: "https://static.wikia.nocookie.net/survivor/images/4/4b/S49_Steven_Ramm.jpg/revision/latest?cb=20250820170157",
+    img: "/images/season_49/Steven-Ramm.jpg",
     description:
       "Age: 36 | Hometown: Denver, Colorado | Occupation: Rocket Scientist",
     age: 36,
@@ -154,7 +154,7 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "Kristina Mills",
-    img: "https://static.wikia.nocookie.net/survivor/images/1/16/S49_Kristina_Mills.jpg/revision/latest?cb=20250820165330",
+    img: "/images/season_49/Kristina-Mills.jpg",
     description:
       "Age: 36 | Hometown: Edmond, Oklahoma | Occupation: MBA Career Coach",
     age: 36,
@@ -163,7 +163,7 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "Rizo Velovic",
-    img: "https://static.wikia.nocookie.net/survivor/images/8/8b/S50_Rizo_Velovic.jpg/revision/latest?cb=20260208205520",
+    img: "/images/season_49/Rizo-Velovic.jpg",
     description:
       "Age: 26 | Hometown: Yonkers, New York | Occupation: Tech Sales",
     age: 26,
@@ -172,7 +172,7 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "Sage Ahrens-Nichols",
-    img: "https://static.wikia.nocookie.net/survivor/images/0/0d/S49_Sage_Ahrens-Nichols.jpg/revision/latest?cb=20250820172707",
+    img: "/images/season_49/Sage-Ahrens-Nichols.jpg",
     description:
       "Age: 31 | Hometown: Olympia, Washington | Occupation: Clinical Social Worker",
     age: 31,
@@ -180,17 +180,8 @@ export const SEASON_49_PLAYERS = [
     hometown: "Olympia, Washington",
   }),
   buildPlayer({
-    name: "Shannon Fairweather",
-    img: "https://static.wikia.nocookie.net/survivor/images/9/91/S49_Shannon_Fairweather.jpg/revision/latest?cb=20250820172830",
-    description:
-      "Age: 27 | Hometown: Boston, Massachusetts | Occupation: Wellness Specialist",
-    age: 27,
-    profession: "Wellness Specialist",
-    hometown: "Boston, Massachusetts",
-  }),
-  buildPlayer({
     name: "Sophi Balerdi",
-    img: "https://static.wikia.nocookie.net/survivor/images/d/d9/S49_Sophi_Balerdi.jpg/revision/latest?cb=20250820171321",
+    img: "/images/season_49/Sophi-Balerdi.jpg",
     description:
       "Age: 28 | Hometown: Miami, Florida | Occupation: Entrepreneur",
     age: 28,
@@ -199,12 +190,16 @@ export const SEASON_49_PLAYERS = [
   }),
   buildPlayer({
     name: "Savannah Louie",
-    img: "https://static.wikia.nocookie.net/survivor/images/9/91/S50_Savannah_Louie.jpg/revision/latest?cb=20260128233857",
+    img: "/images/season_49/Savannah-Louie.jpg",
     description:
       "Age: 32 | Hometown: Atlanta, Georgia | Occupation: Former Reporter",
     age: 32,
     profession: "Former Reporter",
     hometown: "Atlanta, Georgia",
+  }),
+  buildPlayer({
+    name: "Shannon Fairweather",
+    img: "/images/season_49/Shannon-Fairweather.jpg",
   }),
 ] satisfies Player<PlayerName, SeasonNumber>[];
 

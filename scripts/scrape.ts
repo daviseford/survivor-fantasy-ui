@@ -5,6 +5,7 @@ import { resolveNames } from "./lib/name-resolver.js";
 import type { ScrapedPlayer, ScrapeResult } from "./lib/types.js";
 import {
   delay,
+  downloadImage,
   fetchImageUrls,
   fetchWikitext,
   getSeasonPageName,
@@ -131,19 +132,49 @@ export async function scrape(seasonNum: number): Promise<ScrapeResult> {
     }
   }
 
-  // Step 4b: Batch-resolve image URLs
+  // Step 4b: Batch-resolve image URLs and download locally
   if (imageFileNames.size > 0) {
     console.log(`\nResolving ${imageFileNames.size} image URLs...`);
     const imageUrls = await fetchImageUrls([...imageFileNames.values()]);
+    console.log(`Resolved ${imageUrls.size}/${imageFileNames.size} image URLs`);
+
+    const imgDir = path.resolve(
+      import.meta.dirname,
+      "..",
+      "public",
+      "images",
+      `season_${seasonNum}`,
+    );
+
+    console.log(`Downloading images to ${imgDir}...`);
+    let downloaded = 0;
     const allPlayers = [...players, ...unmatched];
     for (const player of allPlayers) {
       const fileName = imageFileNames.get(player.wikiPageTitle);
-      if (fileName) {
-        const url = imageUrls.get(fileName);
-        if (url) player.imageUrl = url;
+      if (!fileName) continue;
+      const url = imageUrls.get(fileName);
+      if (!url) continue;
+
+      const name = player.localName || player.wikiPageTitle;
+      // Use wiki thumbnail API for reasonable file sizes (~25KB vs ~3MB)
+      const thumbUrl = url.replace(
+        /\/revision\/latest.*/,
+        "/revision/latest/scale-to-width-down/400",
+      );
+      const localFileName = name.replace(/\s+/g, "-") + ".jpg";
+      const localPath = path.join(imgDir, localFileName);
+
+      const ok = await downloadImage(thumbUrl, localPath);
+      if (ok) {
+        player.imageUrl = `/images/season_${seasonNum}/${localFileName}`;
+        downloaded++;
+      } else {
+        console.warn(`  Failed to download image for ${name}`);
       }
+
+      await delay(100);
     }
-    console.log(`Resolved ${imageUrls.size}/${imageFileNames.size} image URLs`);
+    console.log(`Downloaded ${downloaded}/${imageUrls.size} images`);
   }
 
   // Step 5: Write JSON output

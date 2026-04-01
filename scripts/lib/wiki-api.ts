@@ -264,6 +264,31 @@ export async function fetchSeasonLogoUrl(
   return null;
 }
 
+/**
+ * Download an image from a URL to a local file path.
+ * Returns true on success, false on failure.
+ */
+export async function downloadImage(
+  url: string,
+  destPath: string,
+): Promise<boolean> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return false;
+    const buffer = Buffer.from(await response.arrayBuffer());
+    const { default: fs } = await import("fs");
+    const { default: path } = await import("path");
+    const dir = path.dirname(destPath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(destPath, buffer);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /** Small delay to avoid rate limiting */
 export function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));

@@ -199,7 +199,11 @@ export function generatePlayerSection(
     if (!localName) continue;
 
     const existing = existingMap.get(localName);
-    const img = existing?.img || scraped.imageUrl || "";
+    // Prefer locally-downloaded images over remote URLs
+    const scrapedIsLocal = scraped.imageUrl?.startsWith("/");
+    const img = scrapedIsLocal
+      ? scraped.imageUrl
+      : existing?.img || scraped.imageUrl || "";
 
     // Generate description from structured fields (R8)
     const descParts: string[] = [];

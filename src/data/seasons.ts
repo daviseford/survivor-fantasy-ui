@@ -29,7 +29,7 @@ export const SEASONS = {
     id: "season_49",
     order: 49,
     name: "Survivor 49",
-    img: "https://static.wikia.nocookie.net/survivor/images/7/70/US_S49_logo.png/revision/latest?cb=20250523231159",
+    img: "/images/season_49/season-49-logo.png",
 
     players: SEASON_49_PLAYERS,
     episodes: SEASON_49_EPISODES,

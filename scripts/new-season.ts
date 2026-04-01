@@ -15,7 +15,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { generateFullSeasonFile, registerSeason } from "./lib/codegen.js";
 import { pushSeasonToFirestore } from "./lib/firebase-push.js";
-import { fetchSeasonLogoUrl } from "./lib/wiki-api.js";
+import { downloadImage, fetchSeasonLogoUrl } from "./lib/wiki-api.js";
 import { scrapeResults } from "./scrape-results.js";
 import { scrape } from "./scrape.js";
 
@@ -87,20 +87,31 @@ async function main(): Promise<void> {
 
   console.log(`  Fetching season logo from wiki...`);
   const logoUrl = await fetchSeasonLogoUrl(seasonNum);
+  let localLogoPath = "";
   if (logoUrl) {
-    console.log(`  Found logo: ${logoUrl.substring(0, 80)}...`);
+    const imgDir = path.join(projectRoot, "public", "images", seasonKey);
+    const ext = path.extname(new URL(logoUrl).pathname) || ".png";
+    const logoFileName = `season-${seasonNum}-logo${ext}`;
+    const destPath = path.join(imgDir, logoFileName);
+    const ok = await downloadImage(logoUrl, destPath);
+    if (ok) {
+      localLogoPath = `/images/${seasonKey}/${logoFileName}`;
+      console.log(`  Downloaded logo: ${localLogoPath}`);
+    } else {
+      console.log(`  Found logo URL but download failed`);
+    }
   } else {
     console.log(`  No logo found — img will be empty`);
   }
 
-  registerSeason(seasonNum, seasonsFilePath, logoUrl ?? "");
+  registerSeason(seasonNum, seasonsFilePath, localLogoPath);
 
   // Step 5: Push to Firestore (optional)
   if (push) {
     console.log(`\n${"=".repeat(60)}`);
     console.log(`Step 5/5: Pushing to Firestore`);
     console.log(`${"=".repeat(60)}`);
-    await pushSeasonToFirestore(seasonNum, dryRun, logoUrl ?? "");
+    await pushSeasonToFirestore(seasonNum, dryRun, localLogoPath);
   } else {
     console.log(`\n  Skipping Firestore push (use --push to enable)`);
   }
