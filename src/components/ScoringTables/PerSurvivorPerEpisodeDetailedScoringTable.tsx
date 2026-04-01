@@ -249,30 +249,9 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                       color={getBadgeColor(x.action)}
                       style={{
                         cursor: "pointer",
-                        maxWidth: "100%",
                       }}
                     >
-                      <span
-                        style={{
-                          display: "inline-flex",
-                          maxWidth: "100%",
-                        }}
-                      >
-                        <span
-                          style={{
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            minWidth: 0,
-                          }}
-                        >
-                          {x.action.replace(/_/g, " ")}
-                        </span>
-                        <span style={{ flexShrink: 0 }}>
-                          {" "}
-                          +{x.points_awarded}
-                        </span>
-                      </span>
+                      {x.action.replace(/_/g, " ")} +{x.points_awarded}
                     </Badge>
                   </Tooltip>
                 );
@@ -349,7 +328,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
           </Badge>
         </Group>
       </Group>
-      <Table.ScrollContainer minWidth={500 + filteredEpisodes.length * 130}>
+      <Table.ScrollContainer minWidth={500 + filteredEpisodes.length * 170}>
         <Table
           highlightOnHover
           verticalSpacing="xs"
@@ -390,7 +369,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                 width="60px"
               />
               {filteredEpisodes.map((x) => (
-                <Table.Th key={x.id} w={120}>
+                <Table.Th key={x.id} w={160}>
                   Ep {x.order}
                 </Table.Th>
               ))}
