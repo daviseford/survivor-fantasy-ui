@@ -71,7 +71,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0683",
     full_name: "David Jelinsky",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/1/11/S46_jelinsky_t.png",
     description: "Age: 21 | Hometown: Las Vegas, Nevada",
     age: 21,
     hometown: "Las Vegas, Nevada",
@@ -80,7 +80,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0686",
     full_name: "Jess Chong",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/2/2a/S46_jess_t.png",
     description: "Age: 37 | Hometown: San Francisco, California",
     age: 37,
     hometown: "San Francisco, California",
@@ -88,7 +88,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0692",
     full_name: "Randen Montalvo",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/4/4b/S46_randen_t.png",
     description: "Age: 40 | Hometown: Orlando, Florida",
     age: 40,
     hometown: "Orlando, Florida",
@@ -96,7 +96,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0681",
     full_name: "Bhanu Gopal",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/4/4d/S46_bhanu_t.png",
     description: "Age: 41 | Hometown: Acton, Massachusetts",
     age: 41,
     hometown: "Acton, Massachusetts",
@@ -104,7 +104,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0685",
     full_name: "Jem Hussain-Adams",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/1/14/S46_jem_t.png",
     description: "Age: 31 | Hometown: Chicago, Illinois",
     age: 31,
     hometown: "Chicago, Illinois",
@@ -112,7 +112,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0690",
     full_name: "Moriah Gaynor",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/f/f0/S46_moriah_t.png",
     description: "Age: 28 | Hometown: San Diego, California",
     age: 28,
     hometown: "San Diego, California",
@@ -120,7 +120,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0696",
     full_name: "Tim Spicer",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/e/ec/S46_tim_t.png",
     description: "Age: 30 | Hometown: Atlanta, Georgia",
     age: 30,
     hometown: "Atlanta, Georgia",
@@ -128,7 +128,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0693",
     full_name: "Soda Thompson",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/5/58/S46_soda_t.png",
     description: "Age: 27 | Hometown: Lake Hopatcong, New Jersey",
     age: 27,
     hometown: "Lake Hopatcong, New Jersey",
@@ -136,7 +136,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0694",
     full_name: "Tevin Davis",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/e/e2/S46_tevin_t.png",
     description: "Age: 24 | Hometown: Richmond, Virginia",
     age: 24,
     hometown: "Richmond, Virginia",
@@ -144,7 +144,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0684",
     full_name: "Hunter McKnight",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/9/90/S46_hunter_t.png",
     description: "Age: 27 | Hometown: French Camp, Mississippi",
     age: 27,
     hometown: "French Camp, Mississippi",
@@ -152,7 +152,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0695",
     full_name: "Tiffany Nicole Ervin",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/8/84/S46_tiffany_t.png",
     description: "Age: 32 | Hometown: Elizabeth, New Jersey",
     age: 32,
     hometown: "Elizabeth, New Jersey",
@@ -160,7 +160,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0697",
     full_name: "Venus Vafa",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/9/9b/S46_venus_t.png",
     description: "Age: 24 | Hometown: Toronto, Ontario",
     age: 24,
     hometown: "Toronto, Ontario",
@@ -168,7 +168,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0691",
     full_name: "Q Burdette",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/f/f2/S46_q_t.png",
     description: "Age: 29 | Hometown: Memphis, Tennessee",
     age: 29,
     hometown: "Memphis, Tennessee",
@@ -176,7 +176,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0689",
     full_name: "Maria Shrime Gonzalez",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/6/65/S46_maria_t.png",
     description: "Age: 47 | Hometown: Dallas, Texas",
     age: 47,
     hometown: "Dallas, Texas",
@@ -184,7 +184,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0688",
     full_name: "Liz Wilcox",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/9/93/S46_liz_t.png",
     description: "Age: 35 | Hometown: Orlando, Florida",
     age: 35,
     hometown: "Orlando, Florida",
@@ -192,7 +192,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0680",
     full_name: "Ben Katzman",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/3/34/S46_ben_t.png",
     description: "Age: 31 | Hometown: Miami, Florida",
     age: 31,
     hometown: "Miami, Florida",
@@ -200,7 +200,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0682",
     full_name: "Charlie Davis",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/5/5a/S46_charlie_t.png",
     description: "Age: 25 | Hometown: Boston, Massachusetts",
     age: 25,
     hometown: "Boston, Massachusetts",
@@ -208,7 +208,7 @@ export const SEASON_46_PLAYERS = [
   buildPlayer({
     castaway_id: "US0687",
     full_name: "Kenzie Petty",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/a/aa/S46_kenzie_t.png",
     description: "Age: 28 | Hometown: Charlotte, North Carolina",
     age: 28,
     hometown: "Charlotte, North Carolina",

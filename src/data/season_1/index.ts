@@ -67,7 +67,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0001",
     full_name: "Sonja Christopher",
-    img: "",
+    img: "/images/season_1/Sonja-Christopher.jpg",
     description: "Age: 63 | Hometown: Walnut Creek, California",
     age: 63,
     hometown: "Walnut Creek, California",
@@ -75,7 +75,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0002",
     full_name: "B.B. Andersen",
-    img: "",
+    img: "/images/season_1/B.B.-Andersen.jpg",
     description: "Age: 64 | Hometown: Mission Hills, Kansas",
     age: 64,
     hometown: "Mission Hills, Kansas",
@@ -83,7 +83,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0003",
     full_name: "Stacey Stillman",
-    img: "",
+    img: "/images/season_1/Stacey-Stillman.jpg",
     description: "Age: 27 | Hometown: San Francisco, California",
     age: 27,
     hometown: "San Francisco, California",
@@ -91,7 +91,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0004",
     full_name: "Ramona Gray",
-    img: "",
+    img: "/images/season_1/Ramona-Gray.jpg",
     description: "Age: 29 | Hometown: Edison, New Jersey",
     age: 29,
     hometown: "Edison, New Jersey",
@@ -99,7 +99,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0005",
     full_name: "Dirk Been",
-    img: "",
+    img: "/images/season_1/Dirk-Been.jpg",
     description: "Age: 23 | Hometown: Spring Green, Wisconsin",
     age: 23,
     hometown: "Spring Green, Wisconsin",
@@ -107,7 +107,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0006",
     full_name: "Joel Klug",
-    img: "",
+    img: "/images/season_1/Joel-Klug.jpg",
     description: "Age: 27 | Hometown: Sherwood, Arkansas",
     age: 27,
     hometown: "Sherwood, Arkansas",
@@ -115,7 +115,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0007",
     full_name: "Gretchen Cordy",
-    img: "",
+    img: "/images/season_1/Gretchen-Cordy.jpg",
     description: "Age: 38 | Hometown: Clarksville, Tennessee",
     age: 38,
     hometown: "Clarksville, Tennessee",
@@ -123,7 +123,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0008",
     full_name: "Greg Buis",
-    img: "",
+    img: "/images/season_1/Greg-Buis.jpg",
     description: "Age: 24 | Hometown: Gold Hill, Colorado",
     age: 24,
     hometown: "Gold Hill, Colorado",
@@ -131,7 +131,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0009",
     full_name: "Jenna Lewis",
-    img: "",
+    img: "/images/season_1/Jenna-Lewis.jpg",
     description: "Age: 22 | Hometown: Franklin, New Hampshire",
     age: 22,
     hometown: "Franklin, New Hampshire",
@@ -139,7 +139,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0010",
     full_name: "Gervase Peterson",
-    img: "",
+    img: "/images/season_1/Gervase-Peterson.jpg",
     description: "Age: 30 | Hometown: Willingboro, New Jersey",
     age: 30,
     hometown: "Willingboro, New Jersey",
@@ -147,7 +147,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0011",
     full_name: "Colleen Haskell",
-    img: "",
+    img: "/images/season_1/Colleen-Haskell.jpg",
     description: "Age: 23 | Hometown: Miami Beach, Florida",
     age: 23,
     hometown: "Miami Beach, Florida",
@@ -155,7 +155,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0012",
     full_name: "Sean Kenniff",
-    img: "",
+    img: "/images/season_1/Sean-Kenniff.jpg",
     description: "Age: 30 | Hometown: Carle Place, New York",
     age: 30,
     hometown: "Carle Place, New York",
@@ -163,7 +163,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0013",
     full_name: "Susan Hawk",
-    img: "",
+    img: "/images/season_1/Susan-Hawk.jpg",
     description: "Age: 38 | Hometown: Palmyra, Wisconsin",
     age: 38,
     hometown: "Palmyra, Wisconsin",
@@ -172,7 +172,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0014",
     full_name: "Rudy Boesch",
-    img: "",
+    img: "/images/season_1/Rudy-Boesch.jpg",
     description: "Age: 72 | Hometown: Virginia Beach, Virginia",
     age: 72,
     hometown: "Virginia Beach, Virginia",
@@ -180,7 +180,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0015",
     full_name: "Kelly Wiglesworth",
-    img: "",
+    img: "/images/season_1/Kelly-Wiglesworth.jpg",
     description: "Age: 22 | Hometown: Kernville, California",
     age: 22,
     hometown: "Kernville, California",
@@ -188,7 +188,7 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     castaway_id: "US0016",
     full_name: "Richard Hatch",
-    img: "",
+    img: "/images/season_1/Richard-Hatch.jpg",
     description: "Age: 39 | Hometown: Newport, Rhode Island",
     age: 39,
     hometown: "Newport, Rhode Island",

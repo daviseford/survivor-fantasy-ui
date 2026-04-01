@@ -71,7 +71,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0113",
     full_name: "Brook Geraghty",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/b/bb/S9_brook_t.png",
     description: "Age: 27 | Hometown: Winthrop, Massachusetts",
     age: 27,
     hometown: "Winthrop, Massachusetts",
@@ -79,7 +79,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0114",
     full_name: "Dolly Neely",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/5/5a/S9_dolly_t.png",
     description: "Age: 25 | Hometown: Lake Latonka, Pennsylvania",
     age: 25,
     hometown: "Lake Latonka, Pennsylvania",
@@ -87,7 +87,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0115",
     full_name: "John Palyok",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/8/85/S9_johnp_t.png",
     description: "Age: 31 | Hometown: Los Angeles, California",
     age: 31,
     hometown: "Los Angeles, California",
@@ -96,7 +96,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0116",
     full_name: "Mia Galeotalanza",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/1/1d/S9_mia_t.png",
     description: "Age: 29 | Hometown: Boston, Massachusetts",
     age: 29,
     hometown: "Boston, Massachusetts",
@@ -104,7 +104,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0117",
     full_name: "Brady Finta",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/c/c5/S9_brady_t.png",
     description: "Age: 33 | Hometown: Huntington Beach, California",
     age: 33,
     hometown: "Huntington Beach, California",
@@ -112,7 +112,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0118",
     full_name: "Travis Sampson",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/d/df/S9_travis_t.png",
     description: "Age: 33 | Hometown: Johnson City, Tennessee",
     age: 33,
     hometown: "Johnson City, Tennessee",
@@ -120,7 +120,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0119",
     full_name: "Lisa Keiffer",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/c/c3/S9_lisa_t.png",
     description: "Age: 44 | Hometown: Mandeville, Louisiana",
     age: 44,
     hometown: "Mandeville, Louisiana",
@@ -128,7 +128,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0120",
     full_name: "John Kenney",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/e/e0/S9_johnk_t.png",
     description: "Age: 22 | Hometown: Los Angeles, California",
     age: 22,
     hometown: "Los Angeles, California",
@@ -137,7 +137,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0121",
     full_name: "Rory Freeman",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/0/0f/S9_rory_t.png",
     description: "Age: 35 | Hometown: Des Moines, Iowa",
     age: 35,
     hometown: "Des Moines, Iowa",
@@ -145,7 +145,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0122",
     full_name: "Lea Masters",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/6/62/S9_lea_t.png",
     description: "Age: 40 | Hometown: Columbia, South Carolina",
     age: 40,
     hometown: "Columbia, South Carolina",
@@ -153,7 +153,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0123",
     full_name: "James Crittenden",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/5/57/S9_chad_t.png",
     description: "Age: 34 | Hometown: Oakland, California",
     age: 34,
     hometown: "Oakland, California",
@@ -162,7 +162,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0124",
     full_name: "Leann Slaby",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/1/1d/S9_leann_t.png",
     description: "Age: 35 | Hometown: Kansasville, Wisconsin",
     age: 35,
     hometown: "Kansasville, Wisconsin",
@@ -170,7 +170,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0125",
     full_name: "Ami Cusack",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/b/ba/S9_ami_t.png",
     description: "Age: 31 | Hometown: Lakewood, Colorado",
     age: 31,
     hometown: "Lakewood, Colorado",
@@ -178,7 +178,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0126",
     full_name: "Julie Berry",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/2/2e/S9_julie_t.png",
     description: "Age: 23 | Hometown: Gorham, Maine",
     age: 23,
     hometown: "Gorham, Maine",
@@ -186,7 +186,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0127",
     full_name: "Eliza Orlins",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/0/09/S9_eliza_t.png",
     description: "Age: 21 | Hometown: Syracuse, New York",
     age: 21,
     hometown: "Syracuse, New York",
@@ -194,7 +194,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0128",
     full_name: "Scout Cloud Lee",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/d/d7/S9_scout_t.png",
     description: "Age: 59 | Hometown: Stillwater, Oklahoma",
     age: 59,
     hometown: "Stillwater, Oklahoma",
@@ -202,7 +202,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0129",
     full_name: "Twila Tanner",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/3/3f/S9_twila_t.png",
     description: "Age: 41 | Hometown: Marshall, Missouri",
     age: 41,
     hometown: "Marshall, Missouri",
@@ -210,7 +210,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0130",
     full_name: "Chris Daugherty",
-    img: "",
+    img: "https://static.wikia.nocookie.net/survivor/images/c/c1/S9_chris_t.png",
     description: "Age: 33 | Hometown: South Vienna, Ohio",
     age: 33,
     hometown: "South Vienna, Ohio",

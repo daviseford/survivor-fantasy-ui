@@ -28,6 +28,10 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 - **Snapshot Firestore:** `yarn tsx scripts/snapshot-firestore.ts` (backup Firestore + RTDB to `data/firestore-snapshots/`)
 - **Migrate to castaway_id:** `yarn tsx scripts/migrate-to-castaway-id.ts [--upload]` (translate Firestore/RTDB from player names to castaway_id; writes to `data/migration-output/` for review, `--upload` pushes to Firebase)
 
+## Data Source
+
+**survivoR is the authoritative data source.** Always prefer survivoR data (the R dataset at `github.com/doehm/survivoR`) over wiki scraping. The wiki scraper is retained only for player images. When data conflicts between survivoR and the wiki, trust survivoR.
+
 ## Architecture
 
 - **React 19 + TypeScript + Vite** SPA with Mantine v9 UI components
