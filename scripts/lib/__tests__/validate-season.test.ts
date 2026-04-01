@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type {
   ScrapedChallenge,
   ScrapedElimination,
+  ScrapedEpisode,
   ScrapedGameEvent,
   ScrapedPlayer,
   ScrapeResult,
@@ -91,12 +92,48 @@ describe("validateSeasonData", () => {
 
     expect(result.valid).toBe(true);
     expect(result.errors).toHaveLength(0);
+    expect(result.warnings).toHaveLength(0);
   });
 
   it("passes for new season with no existing episode count", () => {
     const result = validateSeasonData(makePlayerData(), makeResultsData());
     expect(result.valid).toBe(true);
     expect(result.errors).toHaveLength(0);
+    expect(result.warnings).toHaveLength(0);
+  });
+
+  it("passes when episode count equals existing count", () => {
+    const result = validateSeasonData(makePlayerData(), makeResultsData(), 1);
+    expect(result.valid).toBe(true);
+  });
+
+  it("passes when episode count increases from existing", () => {
+    const episodes: ScrapedEpisode[] = [
+      {
+        order: 1,
+        title: "Ep 1",
+        airDate: "",
+        isCombinedChallenge: false,
+        isFinale: false,
+        postMerge: false,
+        mergeOccurs: false,
+      },
+      {
+        order: 2,
+        title: "Ep 2",
+        airDate: "",
+        isCombinedChallenge: false,
+        isFinale: false,
+        postMerge: false,
+        mergeOccurs: false,
+      },
+    ];
+    const result = validateSeasonData(
+      makePlayerData(),
+      makeResultsData({ episodes }),
+      1,
+    );
+    expect(result.valid).toBe(true);
   });
 
   it("passes for season with empty challenges/eliminations/events (early-season state)", () => {
@@ -207,8 +244,50 @@ describe("validateSeasonData", () => {
 
     // Duplicate events are warnings, not errors
     expect(result.valid).toBe(true);
-    expect(result.warnings.length).toBeGreaterThan(0);
+    expect(result.warnings).toHaveLength(1);
     expect(result.warnings[0]).toContain("Duplicate event");
+  });
+
+  it("fails when elimination references unknown castaway_id", () => {
+    const eliminations: ScrapedElimination[] = [
+      {
+        episodeNum: 1,
+        castawayId: "US9999",
+        voteString: "5-2",
+        variant: "tribal",
+        finishText: "Voted Out",
+        order: 1,
+      },
+    ];
+
+    const result = validateSeasonData(
+      makePlayerData(),
+      makeResultsData({ eliminations }),
+    );
+
+    expect(result.valid).toBe(false);
+    expect(result.errors[0]).toContain(
+      'references unknown castaway_id "US9999"',
+    );
+  });
+
+  it("fails when event references unknown castaway_id", () => {
+    const events: ScrapedGameEvent[] = [
+      {
+        episodeNum: 1,
+        castawayId: "US8888",
+        action: "find_idol",
+        multiplier: null,
+      },
+    ];
+
+    const result = validateSeasonData(
+      makePlayerData(),
+      makeResultsData({ events }),
+    );
+
+    expect(result.valid).toBe(false);
+    expect(result.errors[0]).toContain('"US8888"');
   });
 
   it("fails when elimination missing castaway_id", () => {
@@ -260,6 +339,6 @@ describe("validateSeasonData", () => {
     );
 
     expect(result.valid).toBe(false);
-    expect(result.errors.length).toBeGreaterThanOrEqual(3);
+    expect(result.errors).toHaveLength(3);
   });
 });

@@ -67,7 +67,9 @@ jobs:
           echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
           echo "season=$SEASON" >> "$GITHUB_OUTPUT"
           echo "is_new=$IS_NEW" >> "$GITHUB_OUTPUT"
-          echo "error=$ERROR" >> "$GITHUB_OUTPUT"
+          echo "error<<ERREOF" >> "$GITHUB_OUTPUT"
+          echo "$ERROR" >> "$GITHUB_OUTPUT"
+          echo "ERREOF" >> "$GITHUB_OUTPUT"
           echo "firestore=$FIRESTORE" >> "$GITHUB_OUTPUT"
           echo "episodes=$EPISODES" >> "$GITHUB_OUTPUT"
           echo "challenges=$CHALLENGES" >> "$GITHUB_OUTPUT"
@@ -99,24 +101,16 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Create or checkout branch
-          if git ls-remote --heads origin "$BRANCH" | grep -q "$BRANCH"; then
-            git fetch origin "$BRANCH"
-            git checkout "$BRANCH"
-            # If merge conflicts with main, recreate branch from main
-            if ! git merge origin/main --no-edit; then
-              git merge --abort
-              git checkout -B "$BRANCH" origin/main
-            fi
-          else
-            git checkout -b "$BRANCH"
-          fi
+          # Always create/recreate branch from current HEAD (main + sync changes).
+          # The sync script already wrote the updated files, so we just need to
+          # branch, commit, and push. Force-push is safe for bot-managed branches.
+          git checkout -B "$BRANCH"
 
           # Stage and commit
           git add src/data/
           git diff --cached --quiet && echo "No changes to commit" && exit 0
           git commit -m "$COMMIT_MSG"
-          git push -u origin "$BRANCH"
+          git push --force-with-lease -u origin "$BRANCH"
 
           # Create PR if none exists
           EXISTING_PR=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number')
