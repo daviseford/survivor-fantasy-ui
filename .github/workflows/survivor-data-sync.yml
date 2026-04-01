@@ -1,4 +1,4 @@
-name: Sync survivoR data
+name: "Sync survivoR data"
 
 on:
   schedule:
