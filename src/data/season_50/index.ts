@@ -41,10 +41,7 @@ type SeasonNumber = 50;
 
 const buildPlayer = <T extends CastawayIdType>(
   p: { castaway_id: T; full_name: string; img: string } & Partial<
-    Omit<
-      Player<T, SeasonNumber>,
-      "season_id" | "season_num" | "castaway_id" | "full_name" | "img"
-    >
+    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "castaway_id" | "full_name" | "img">
   >,
 ): Player<T, SeasonNumber> => ({
   ...p,
@@ -53,37 +50,37 @@ const buildPlayer = <T extends CastawayIdType>(
 });
 
 export const SEASON_50_CASTAWAY_LOOKUP: CastawayLookup = {
-  US0009: { full_name: "Jenna Lewis-Dougherty", castaway: "Jenna" },
-  US0726: { full_name: "Kyle Fraser", castaway: "Kyle" },
-  US0747: { full_name: "Savannah Louie", castaway: "Savannah" },
-  US0691: { full_name: "Q Burdette", castaway: "Q" },
-  US0555: { full_name: "Mike White", castaway: "Mike" },
-  US0554: { full_name: "Angelina Keeley", castaway: "Angelina" },
-  US0682: { full_name: "Charlie Davis", castaway: "Charlie" },
-  US0477: { full_name: "Aubry Bracco", castaway: "Aubry" },
-  US0515: { full_name: "Chrissy Hofbeck", castaway: "Chrissy" },
-  US0550: { full_name: "Christian Hubicki", castaway: "Christian" },
-  US0179: { full_name: "Cirie Fields", castaway: "Cirie" },
-  US0277: { full_name: "Coach Wade", castaway: "Coach" },
-  US0031: { full_name: "Colby Donaldson", castaway: "Colby" },
-  US0666: { full_name: "Dee Valladares", castaway: "Dee" },
-  US0668: { full_name: "Emily Flippen", castaway: "Emily" },
-  US0703: { full_name: "Genevieve Mushaluk", castaway: "Genevieve" },
-  US0722: { full_name: "Joe Hunter", castaway: "Joe" },
-  US0615: { full_name: "Jonathan Young", castaway: "Jonathan" },
-  US0724: { full_name: "Kamilla Karthigesu", castaway: "Kamilla" },
-  US0201: { full_name: "Oscar Lusth", castaway: "Oscar" },
-  US0560: { full_name: "Rick Devens", castaway: "Rick" },
-  US0745: { full_name: "Rizo Velovic", castaway: "Rizo" },
-  US0144: { full_name: "Stephenie LaGrossa Kendrick", castaway: "Stephenie" },
-  US0695: { full_name: "Tiffany Ervin", castaway: "Tiffany" },
+  "US0009": { full_name: "Jenna Lewis-Dougherty", castaway: "Jenna" },
+  "US0726": { full_name: "Kyle Fraser", castaway: "Kyle" },
+  "US0747": { full_name: "Savannah Louie", castaway: "Savannah" },
+  "US0691": { full_name: "Q Burdette", castaway: "Q" },
+  "US0555": { full_name: "Mike White", castaway: "Mike" },
+  "US0554": { full_name: "Angelina Keeley", castaway: "Angelina" },
+  "US0682": { full_name: "Charlie Davis", castaway: "Charlie" },
+  "US0477": { full_name: "Aubry Bracco", castaway: "Aubry" },
+  "US0515": { full_name: "Chrissy Hofbeck", castaway: "Chrissy" },
+  "US0550": { full_name: "Christian Hubicki", castaway: "Christian" },
+  "US0179": { full_name: "Cirie Fields", castaway: "Cirie" },
+  "US0277": { full_name: "Coach Wade", castaway: "Coach" },
+  "US0031": { full_name: "Colby Donaldson", castaway: "Colby" },
+  "US0666": { full_name: "Dee Valladares", castaway: "Dee" },
+  "US0668": { full_name: "Emily Flippen", castaway: "Emily" },
+  "US0703": { full_name: "Genevieve Mushaluk", castaway: "Genevieve" },
+  "US0722": { full_name: "Joe Hunter", castaway: "Joe" },
+  "US0615": { full_name: "Jonathan Young", castaway: "Jonathan" },
+  "US0724": { full_name: "Kamilla Karthigesu", castaway: "Kamilla" },
+  "US0201": { full_name: "Oscar Lusth", castaway: "Oscar" },
+  "US0560": { full_name: "Rick Devens", castaway: "Rick" },
+  "US0745": { full_name: "Rizo Velovic", castaway: "Rizo" },
+  "US0144": { full_name: "Stephenie LaGrossa Kendrick", castaway: "Stephenie" },
+  "US0695": { full_name: "Tiffany Ervin", castaway: "Tiffany" },
 };
 
 export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0009",
     full_name: "Jenna Lewis-Dougherty",
-    img: "/images/season_50/Survivor-50-Cast-Jenna-Lewis-Dougherty.jpg",
+    img: "",
     description: "Age: 47 | Hometown: Woodland, California",
     age: 47,
     hometown: "Woodland, California",
@@ -91,7 +88,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0726",
     full_name: "Kyle Fraser",
-    img: "/images/season_50/Survivor-50-Cast-Kyle-Fraser.jpg",
+    img: "",
     description: "Age: 31 | Hometown: Brooklyn, New York",
     age: 31,
     hometown: "Brooklyn, New York",
@@ -99,7 +96,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0747",
     full_name: "Savannah Louie",
-    img: "/images/season_50/Survivor-50-Cast-Savannah-Louie.jpg",
+    img: "",
     description: "Age: 31 | Hometown: Atlanta, Georgia",
     age: 31,
     hometown: "Atlanta, Georgia",
@@ -107,7 +104,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0691",
     full_name: "Q Burdette",
-    img: "/images/season_50/Survivor-50-Cast-Q-Burdette.jpg",
+    img: "",
     description: "Age: 31 | Hometown: Germantown, Tennessee",
     age: 31,
     hometown: "Germantown, Tennessee",
@@ -115,7 +112,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0555",
     full_name: "Mike White",
-    img: "/images/season_50/Survivor-50-Cast-Mike-White.jpg",
+    img: "",
     description: "Age: 54 | Hometown: Hanalei, Hawaii",
     age: 54,
     hometown: "Hanalei, Hawaii",
@@ -123,7 +120,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0554",
     full_name: "Angelina Keeley",
-    img: "/images/season_50/Survivor-50-Cast-Angelina-Keeley.jpg",
+    img: "",
     description: "Age: 35 | Hometown: San Diego, California",
     age: 35,
     hometown: "San Diego, California",
@@ -131,7 +128,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0682",
     full_name: "Charlie Davis",
-    img: "/images/season_50/Survivor-50-Cast-Charlie-Davis.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Boston, Massachusetts",
     age: 27,
     hometown: "Boston, Massachusetts",
@@ -139,7 +136,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0477",
     full_name: "Aubry Bracco",
-    img: "/images/season_50/Survivor-50-Cast-Aubry-Bracco.jpg",
+    img: "",
     description: "Age: 39 | Hometown: Hampton Falls, New Hampshire",
     age: 39,
     hometown: "Hampton Falls, New Hampshire",
@@ -147,7 +144,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0515",
     full_name: "Chrissy Hofbeck",
-    img: "/images/season_50/Survivor-50-Cast-Chrissy-Hofbeck.jpg",
+    img: "",
     description: "Age: 54 | Hometown: The Villages, Florida",
     age: 54,
     hometown: "The Villages, Florida",
@@ -155,7 +152,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0550",
     full_name: "Christian Hubicki",
-    img: "/images/season_50/Survivor-50-Cast-Christian-Hubicki.jpg",
+    img: "",
     description: "Age: 39 | Hometown: Tallahassee, Florida",
     age: 39,
     hometown: "Tallahassee, Florida",
@@ -163,7 +160,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0179",
     full_name: "Cirie Fields",
-    img: "/images/season_50/Survivor-50-Cast-Cirie-Fields.jpg",
+    img: "",
     description: "Age: 54 | Hometown: Jersey City, New Jersey",
     age: 54,
     hometown: "Jersey City, New Jersey",
@@ -171,7 +168,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0277",
     full_name: "Coach Wade",
-    img: "/images/season_50/Survivor-50-Cast-Benjamin-Coach-Wade.jpg",
+    img: "",
     description: "Age: 53 | Hometown: Susanville, California",
     age: 53,
     hometown: "Susanville, California",
@@ -179,7 +176,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0031",
     full_name: "Colby Donaldson",
-    img: "/images/season_50/Survivor-50-Cast-Colby-Donaldson.jpg",
+    img: "",
     description: "Age: 51 | Hometown: Austin, Texas",
     age: 51,
     hometown: "Austin, Texas",
@@ -187,7 +184,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0666",
     full_name: "Dee Valladares",
-    img: "/images/season_50/Survivor-50-Cast-Dee-Valladres.jpg",
+    img: "",
     description: "Age: 28 | Hometown: Miami, Florida",
     age: 28,
     hometown: "Miami, Florida",
@@ -195,7 +192,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0668",
     full_name: "Emily Flippen",
-    img: "/images/season_50/Survivor-50-Cast-Emily-Flippen.jpg",
+    img: "",
     description: "Age: 30 | Hometown: Laurel, Maryland",
     age: 30,
     hometown: "Laurel, Maryland",
@@ -203,7 +200,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0703",
     full_name: "Genevieve Mushaluk",
-    img: "/images/season_50/Survivor-50-Cast-Genevieve-Mushaluk.jpg",
+    img: "",
     description: "Age: 34 | Hometown: Winnipeg, Manitoba",
     age: 34,
     hometown: "Winnipeg, Manitoba",
@@ -211,7 +208,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0722",
     full_name: "Joe Hunter",
-    img: "/images/season_50/Survivor-50-Cast-Joe-Hunter.jpg",
+    img: "",
     description: "Age: 45 | Hometown: West Sacramento, California",
     age: 45,
     hometown: "West Sacramento, California",
@@ -219,7 +216,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0615",
     full_name: "Jonathan Young",
-    img: "/images/season_50/Survivor-50-Cast-Jonathan-Young.jpg",
+    img: "",
     description: "Age: 32 | Hometown: Gulf Shores, Alabama",
     age: 32,
     hometown: "Gulf Shores, Alabama",
@@ -227,7 +224,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0724",
     full_name: "Kamilla Karthigesu",
-    img: "/images/season_50/Survivor-50-Cast-Kamilla-Karthigesu.jpg",
+    img: "",
     description: "Age: 31 | Hometown: Foster City, California",
     age: 31,
     hometown: "Foster City, California",
@@ -235,7 +232,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0201",
     full_name: "Oscar Lusth",
-    img: "/images/season_50/Survivor-50-Cast-Ozzy-Lusth.jpg",
+    img: "",
     description: "Age: 43 | Hometown: Guanajuato, Guanajuato",
     age: 43,
     hometown: "Guanajuato, Guanajuato",
@@ -243,7 +240,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0560",
     full_name: "Rick Devens",
-    img: "/images/season_50/Survivor-50-Cast-Rick-Devens.jpg",
+    img: "",
     description: "Age: 41 | Hometown: Macon, Georgia",
     age: 41,
     hometown: "Macon, Georgia",
@@ -251,7 +248,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0745",
     full_name: "Rizo Velovic",
-    img: "/images/season_50/Survivor-50-Cast-Rizo-Velovic.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Yonkers, New York",
     age: 25,
     hometown: "Yonkers, New York",
@@ -259,7 +256,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0144",
     full_name: "Stephenie LaGrossa Kendrick",
-    img: "/images/season_50/Survivor-50-Cast-Stephenie-Lagrossa-Kendrick.jpg",
+    img: "",
     description: "Age: 45 | Hometown: Dunedin, Florida",
     age: 45,
     hometown: "Dunedin, Florida",
@@ -267,7 +264,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0695",
     full_name: "Tiffany Ervin",
-    img: "/images/season_50/Survivor-50-Cast-Tiffany-Ervin.jpg",
+    img: "",
     description: "Age: 34 | Hometown: Los Angeles, California",
     age: 34,
     hometown: "Los Angeles, California",
@@ -322,7 +319,7 @@ export const SEASON_50_EPISODES = [
     order: 5,
     name: "Open Wounds",
     post_merge: false,
-    finale: true,
+    finale: false,
     merge_occurs: false,
   },
 ] satisfies Episode<SeasonNumber>[];
@@ -355,7 +352,9 @@ export const SEASON_50_CHALLENGES = {
     episode_num: 1,
     variant: "reward",
     order: 1,
-    winning_castaways: ["US0277"],
+    winning_castaways: [
+      "US0277",
+    ],
   },
   challenge_2: {
     id: "challenge_2",
@@ -365,7 +364,9 @@ export const SEASON_50_CHALLENGES = {
     episode_num: 1,
     variant: "immunity",
     order: 2,
-    winning_castaways: ["US0550"],
+    winning_castaways: [
+      "US0550",
+    ],
   },
   challenge_3: {
     id: "challenge_3",
@@ -412,7 +413,9 @@ export const SEASON_50_CHALLENGES = {
     episode_num: 1,
     variant: "reward",
     order: 5,
-    winning_castaways: ["US0550"],
+    winning_castaways: [
+      "US0550",
+    ],
   },
   challenge_6: {
     id: "challenge_6",
@@ -742,10 +745,7 @@ export const SEASON_50_ELIMINATIONS = {
     castaway_id: "US0682",
     variant: "tribal",
   },
-} satisfies Record<
-  Elimination["id"],
-  Elimination<CastawayIdType, SeasonNumber>
->;
+} satisfies Record<Elimination["id"], Elimination<CastawayIdType, SeasonNumber>>;
 
 export const SEASON_50_EVENTS = {
   event_1: {
