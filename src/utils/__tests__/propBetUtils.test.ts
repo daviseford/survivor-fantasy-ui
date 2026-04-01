@@ -444,9 +444,9 @@ describe("getPropBetScoresForUser", () => {
       expect(answer.status).toBe("definitive_incorrect");
     });
 
-    it("handles combined challenge variant", () => {
+    it("handles immunity challenge variant", () => {
       const challenges = {
-        c1: makeChallenge("1", 2, ["Alice"], "combined"),
+        c1: makeChallenge("1", 2, ["Alice"], "immunity"),
       };
       const answer = getStatus("propbet_immunities", { challenges });
       expect(answer.status).toBe("leading");

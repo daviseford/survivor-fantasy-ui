@@ -359,7 +359,7 @@ export const SEASON_49_CHALLENGES = {
     season_num: 49,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "combined",
+    variant: "immunity",
     order: 2,
     winning_players: [
       "Jason Treul",
@@ -375,7 +375,7 @@ export const SEASON_49_CHALLENGES = {
     season_num: 49,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "combined",
+    variant: "immunity",
     order: 3,
     winning_players: [
       "Jawan Pitts",
@@ -391,7 +391,7 @@ export const SEASON_49_CHALLENGES = {
     season_num: 49,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "combined",
+    variant: "immunity",
     order: 4,
     winning_players: [
       "Jason Treul",
@@ -407,7 +407,7 @@ export const SEASON_49_CHALLENGES = {
     season_num: 49,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "combined",
+    variant: "immunity",
     order: 5,
     winning_players: [
       "Jawan Pitts",
@@ -423,7 +423,7 @@ export const SEASON_49_CHALLENGES = {
     season_num: 49,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "combined",
+    variant: "immunity",
     order: 6,
     winning_players: [
       "Jason Treul",
@@ -439,7 +439,7 @@ export const SEASON_49_CHALLENGES = {
     season_num: 49,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "combined",
+    variant: "immunity",
     order: 7,
     winning_players: [
       "Jawan Pitts",
@@ -455,7 +455,7 @@ export const SEASON_49_CHALLENGES = {
     season_num: 49,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "combined",
+    variant: "immunity",
     order: 8,
     winning_players: [
       "Alex Moore",
@@ -471,7 +471,7 @@ export const SEASON_49_CHALLENGES = {
     season_num: 49,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "combined",
+    variant: "immunity",
     order: 9,
     winning_players: [
       "Alex Moore",
@@ -563,7 +563,7 @@ export const SEASON_49_CHALLENGES = {
     season_num: 49,
     episode_id: "episode_8",
     episode_num: 8,
-    variant: "combined",
+    variant: "immunity",
     order: 16,
     winning_players: [
       "Alex Moore",
@@ -624,7 +624,7 @@ export const SEASON_49_CHALLENGES = {
     season_num: 49,
     episode_id: "episode_11",
     episode_num: 11,
-    variant: "combined",
+    variant: "immunity",
     order: 21,
     winning_players: ["Steven Ramm"],
   },
@@ -654,7 +654,7 @@ export const SEASON_49_CHALLENGES = {
     season_num: 49,
     episode_id: "episode_13",
     episode_num: 13,
-    variant: "combined",
+    variant: "immunity",
     order: 24,
     winning_players: ["Savannah Louie"],
   },

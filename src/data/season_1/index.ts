@@ -329,7 +329,7 @@ export const SEASON_1_CHALLENGES = {
     season_num: 1,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "combined",
+    variant: "immunity",
     order: 1,
     winning_players: [
       "B.B. Andersen",

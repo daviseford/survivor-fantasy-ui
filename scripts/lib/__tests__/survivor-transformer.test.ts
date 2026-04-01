@@ -161,15 +161,16 @@ describe("transformResults", { timeout: 60000 }, () => {
     );
     expect(journeyEvents.length).toBe(9);
 
-    // Journey advantage winners should also get win_advantage
-    const journeyAdvantages = result.events.filter(
+    // Journey advantage winners should get specific win actions (e.g., win_extra_vote)
+    const journeyWins = result.events.filter(
       (e) =>
-        e.action === "win_advantage" &&
+        e.action.startsWith("win_") &&
+        e.action !== "win_survivor" &&
         journeyEvents.some(
           (j) => j.playerName === e.playerName && j.episodeNum === e.episodeNum,
         ),
     );
-    expect(journeyAdvantages.length).toBeGreaterThan(0);
+    expect(journeyWins.length).toBeGreaterThan(0);
 
     // Should have beware advantage lifecycle events (S46 has 4 beware idols)
     const findBeware = result.events.filter(
@@ -187,17 +188,26 @@ describe("transformResults", { timeout: 60000 }, () => {
     );
     expect(fulfillBeware.length).toBeGreaterThan(0);
 
-    // Non-idol advantages should produce find_advantage (not find_idol)
-    const findAdvantage = result.events.filter(
-      (e) => e.action === "find_advantage",
+    // Non-idol advantages should produce specific find actions (e.g., find_extra_vote)
+    const findExtraVote = result.events.filter(
+      (e) => e.action === "find_extra_vote",
     );
-    expect(findAdvantage.length).toBeGreaterThan(0);
+    expect(findExtraVote.length).toBeGreaterThan(0);
 
-    // Maria's Extra Vote play should be use_advantage (not use_idol)
-    const useAdvantage = result.events.filter(
-      (e) => e.action === "use_advantage",
+    // Maria's Extra Vote play should be use_extra_vote (not use_idol)
+    const useExtraVote = result.events.filter(
+      (e) => e.action === "use_extra_vote",
     );
-    expect(useAdvantage.length).toBeGreaterThan(0);
+    expect(useExtraVote.length).toBeGreaterThan(0);
+
+    // No retired generic actions should appear
+    const genericActions = result.events.filter(
+      (e) =>
+        e.action === "find_advantage" ||
+        e.action === "use_advantage" ||
+        e.action === "win_advantage",
+    );
+    expect(genericActions.length).toBe(0);
 
     // Moriah's Shot in the Dark (ep6, unsuccessful)
     const sitd = result.events.filter(

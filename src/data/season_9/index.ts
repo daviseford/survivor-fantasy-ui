@@ -352,7 +352,7 @@ export const SEASON_9_CHALLENGES = {
     season_num: 9,
     episode_num: 1,
     episode_id: "episode_1",
-    variant: "combined",
+    variant: "immunity",
     order: 1,
 
     winning_players: [

@@ -375,23 +375,66 @@ function mapResultToVariant(
 
 // --- Event transformation ---
 
-/** Journey rewards that represent gaining an advantage. */
-const ADVANTAGE_REWARDS = new Set([
-  "extra vote",
-  "block a vote",
-  "steal a vote",
-  "idol",
-  "hidden immunity idol",
-  "advantage",
-]);
+/** Map advantage_details.advantage_type → specific find action. */
+const ADVANTAGE_TYPE_TO_FIND: Record<string, string> = {
+  "Hidden Immunity Idol": "find_idol",
+  "Hidden Immunity Idol Half": "find_idol",
+  "Preventative Hidden Immunity Idol": "find_idol",
+  "Super Idol": "find_idol",
+  "Extra Vote": "find_extra_vote",
+  "Steal a Vote": "find_steal_a_vote",
+  "Block a Vote": "find_block_a_vote",
+  "Vote Blocker": "find_block_a_vote",
+  "Bank your Vote": "find_bank_your_vote",
+  "Idol Nullifier": "find_idol_nullifier",
+  "Knowledge is Power": "find_knowledge_is_power",
+  "Safety without Power": "find_safety_without_power",
+  "Control the Vote": "find_control_the_vote",
+  Amulet: "find_amulet",
+  "Challenge Advantage": "find_challenge_advantage",
+};
 
-/** Returns true if a journey reward represents winning an advantage. */
-function isAdvantageReward(reward: string | null): boolean {
-  if (!reward) return false;
-  return ADVANTAGE_REWARDS.has(reward.toLowerCase());
-}
+/** Map advantage_details.advantage_type → specific use action. */
+const ADVANTAGE_TYPE_TO_USE: Record<string, string> = {
+  "Hidden Immunity Idol": "use_idol",
+  "Hidden Immunity Idol Half": "use_idol",
+  "Preventative Hidden Immunity Idol": "use_idol",
+  "Super Idol": "use_idol",
+  "Extra Vote": "use_extra_vote",
+  "Steal a Vote": "use_steal_a_vote",
+  "Block a Vote": "use_block_a_vote",
+  "Vote Blocker": "use_block_a_vote",
+  "Bank your Vote": "use_bank_your_vote",
+  "Idol Nullifier": "use_idol_nullifier",
+  "Knowledge is Power": "use_knowledge_is_power",
+  "Safety without Power": "use_safety_without_power",
+  "Control the Vote": "use_control_the_vote",
+};
 
-/** Advantage types that are idols (for use_idol vs use_advantage distinction). */
+/** Map vote_history.vote_event → specific use action. */
+const VOTE_EVENT_TO_USE: Record<string, string> = {
+  "Extra vote": "use_extra_vote",
+  "Steal a vote": "use_steal_a_vote",
+  "Block a vote": "use_block_a_vote",
+  "Played block a vote": "use_block_a_vote",
+  "Vote blocker": "use_block_a_vote",
+  "Bank your vote": "use_bank_your_vote",
+  "Played bank your vote": "use_bank_your_vote",
+  "Played banked vote": "use_bank_your_vote",
+  "Safety without power": "use_safety_without_power",
+  "Control the vote": "use_control_the_vote",
+};
+
+/** Map journeys.reward → specific win action. */
+const JOURNEY_REWARD_TO_WIN: Record<string, string> = {
+  "Extra vote": "win_extra_vote",
+  "Block a Vote": "win_block_a_vote",
+  "Steal a Vote": "win_steal_a_vote",
+  Idol: "win_idol",
+  "Hidden Immunity Idol": "win_idol",
+};
+
+/** Idol advantage types (for beware lifecycle detection). */
 const IDOL_TYPES = new Set([
   "Hidden Immunity Idol",
   "Hidden Immunity Idol Half",
@@ -426,8 +469,7 @@ function transformEvents(
     const playerName = resolveFullName(adv.castaway, nameMap);
     const event = adv.event;
     const detail = detailById.get(adv.advantage_id);
-    const isIdol = detail ? IDOL_TYPES.has(detail.advantage_type) : true; // default to idol if unknown
-    const isBeware = detail?.conditions === "Beware advantage";
+    const advType = detail?.advantage_type ?? "";
 
     if (event === "Found (beware)") {
       // Beware advantage found — emit find + accept (taking it implies acceptance)
@@ -446,7 +488,6 @@ function transformEvents(
       });
     } else if (event.startsWith("Found")) {
       if (bewareFoundIds.has(adv.advantage_id)) {
-        // Same advantage_id was previously "Found (beware)" → beware condition fulfilled
         events.push({
           episodeNum: epNum,
           playerName,
@@ -454,32 +495,40 @@ function transformEvents(
           multiplier: null,
         });
       }
-      // The advantage/idol is now active
+      // Emit specific find action based on advantage type
+      const findAction =
+        ADVANTAGE_TYPE_TO_FIND[advType] ?? "find_other_advantage";
       events.push({
         episodeNum: epNum,
         playerName,
-        action: isIdol ? "find_idol" : "find_advantage",
+        action: findAction,
         multiplier: null,
       });
     } else if (event === "Played") {
+      // Emit specific use action based on advantage type
+      const useAction = ADVANTAGE_TYPE_TO_USE[advType] ?? "use_idol";
       events.push({
         episodeNum: epNum,
         playerName,
-        action: isIdol ? "use_idol" : "use_advantage",
+        action: useAction,
         multiplier: null,
       });
     } else if (event === "Received" || event === "Recieved") {
+      // Emit specific win action based on advantage type
+      const winAction = IDOL_TYPES.has(advType)
+        ? "win_idol"
+        : "win_other_advantage";
       events.push({
         episodeNum: epNum,
         playerName,
-        action: "win_advantage",
+        action: winAction,
         multiplier: null,
       });
     }
   }
 
   // Journey events (S41+) — each player who goes on a journey gets go_on_journey,
-  // and players who gain an advantage also get win_advantage
+  // and players who gain an advantage get a specific win action
   for (const j of journeys) {
     const epNum = Math.round(j.episode);
     const playerName = resolveFullName(j.castaway, nameMap);
@@ -491,29 +540,45 @@ function transformEvents(
       multiplier: null,
     });
 
-    if (isAdvantageReward(j.reward)) {
-      events.push({
-        episodeNum: epNum,
-        playerName,
-        action: "win_advantage",
-        multiplier: null,
-      });
+    if (j.reward) {
+      const winAction =
+        JOURNEY_REWARD_TO_WIN[j.reward] ?? "win_other_advantage";
+      // Only emit win if it's a positive reward (not "Lost vote", "Returned to camp", etc.)
+      if (
+        winAction !== "win_other_advantage" ||
+        !j.reward.toLowerCase().includes("lost")
+      ) {
+        events.push({
+          episodeNum: epNum,
+          playerName,
+          action: winAction,
+          multiplier: null,
+        });
+      }
     }
   }
 
-  // Shot in the Dark events (S41+) — from vote_history.vote_event
+  // Vote history events (S41+) — SITD and advantage plays from vote_event
   for (const v of voteHistory) {
-    if (v.vote_event === "Shot in the dark") {
-      const epNum = Math.round(v.episode);
-      const playerName = resolveFullName(v.castaway, nameMap);
-      const success = v.vote_event_outcome === "Safe";
+    if (!v.vote_event) continue;
+    const epNum = Math.round(v.episode);
+    const playerName = resolveFullName(v.castaway, nameMap);
 
+    if (v.vote_event === "Shot in the dark") {
+      const success = v.vote_event_outcome === "Safe";
       events.push({
         episodeNum: epNum,
         playerName,
         action: success
           ? "use_shot_in_the_dark_successfully"
           : "use_shot_in_the_dark_unsuccessfully",
+        multiplier: null,
+      });
+    } else if (VOTE_EVENT_TO_USE[v.vote_event]) {
+      events.push({
+        episodeNum: epNum,
+        playerName,
+        action: VOTE_EVENT_TO_USE[v.vote_event],
         multiplier: null,
       });
     }

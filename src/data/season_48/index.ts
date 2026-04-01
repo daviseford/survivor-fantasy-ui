@@ -362,7 +362,7 @@ export const SEASON_48_CHALLENGES = {
     season_num: 48,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "combined",
+    variant: "immunity",
     order: 2,
     // TODO: resolve tribe winners to player names
     winning_players: [],
@@ -373,7 +373,7 @@ export const SEASON_48_CHALLENGES = {
     season_num: 48,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "combined",
+    variant: "immunity",
     order: 3,
     // TODO: resolve tribe winners to player names
     winning_players: [],
@@ -384,7 +384,7 @@ export const SEASON_48_CHALLENGES = {
     season_num: 48,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "combined",
+    variant: "immunity",
     order: 4,
     // TODO: resolve tribe winners to player names
     winning_players: [],
@@ -395,7 +395,7 @@ export const SEASON_48_CHALLENGES = {
     season_num: 48,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "combined",
+    variant: "immunity",
     order: 5,
     // TODO: resolve tribe winners to player names
     winning_players: [],
@@ -450,7 +450,7 @@ export const SEASON_48_CHALLENGES = {
     season_num: 48,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "combined",
+    variant: "immunity",
     order: 10,
     // TODO: resolve tribe winners to player names
     winning_players: [],
@@ -494,7 +494,7 @@ export const SEASON_48_CHALLENGES = {
     season_num: 48,
     episode_id: "episode_9",
     episode_num: 9,
-    variant: "combined",
+    variant: "immunity",
     order: 14,
     // TODO: resolve tribe winners to player names
     winning_players: [],
@@ -527,7 +527,7 @@ export const SEASON_48_CHALLENGES = {
     season_num: 48,
     episode_id: "episode_11",
     episode_num: 11,
-    variant: "combined",
+    variant: "immunity",
     order: 17,
     // TODO: resolve tribe winners to player names
     winning_players: [],
@@ -560,7 +560,7 @@ export const SEASON_48_CHALLENGES = {
     season_num: 48,
     episode_id: "episode_13",
     episode_num: 13,
-    variant: "combined",
+    variant: "immunity",
     order: 20,
     // TODO: resolve tribe winners to player names
     winning_players: [],

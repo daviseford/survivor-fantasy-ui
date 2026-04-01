@@ -209,26 +209,47 @@ export type GameEvent<PlayerName = string, SeasonNumber = number> = {
   player_name: PlayerName;
 };
 
-export const ChallengeWinActions = ["reward", "combined", "immunity"] as const;
+export const ChallengeWinActions = ["reward", "immunity"] as const;
 
 export type ChallengeWinAction = (typeof ChallengeWinActions)[number];
 
 export const GameEventActions = [
   "accept_beware_advantage",
   "complete_sweat_or_savvy_task",
-  "find_advantage",
+  "find_amulet",
+  "find_bank_your_vote",
   "find_beware_advantage",
+  "find_block_a_vote",
+  "find_challenge_advantage",
+  "find_control_the_vote",
+  "find_extra_vote",
   "find_idol",
+  "find_idol_nullifier",
+  "find_knowledge_is_power",
+  "find_other_advantage",
+  "find_safety_without_power",
+  "find_steal_a_vote",
   "fulfill_beware_advantage",
   "go_on_journey",
   "make_final_tribal_council",
   "make_merge",
-  "use_advantage",
+  "use_bank_your_vote",
+  "use_block_a_vote",
+  "use_control_the_vote",
+  "use_extra_vote",
   "use_idol",
+  "use_idol_nullifier",
+  "use_knowledge_is_power",
+  "use_safety_without_power",
   "use_shot_in_the_dark_successfully",
   "use_shot_in_the_dark_unsuccessfully",
+  "use_steal_a_vote",
   "votes_negated_by_idol",
-  "win_advantage",
+  "win_block_a_vote",
+  "win_extra_vote",
+  "win_idol",
+  "win_other_advantage",
+  "win_steal_a_vote",
   "win_survivor",
 ] as const;
 

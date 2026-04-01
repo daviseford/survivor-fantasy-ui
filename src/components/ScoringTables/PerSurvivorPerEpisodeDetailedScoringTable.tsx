@@ -29,8 +29,7 @@ const getBadgeColor = (action: string) => {
   if (
     action.includes("immunity") ||
     action.includes("challenge") ||
-    action.includes("reward") ||
-    action.includes("combined")
+    action.includes("reward")
   )
     return "blue";
   return "gray";
