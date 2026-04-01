@@ -364,6 +364,43 @@ describe("getPropBetScoresForUser", () => {
       expect(answer.status).toBe("definitive_incorrect");
     });
 
+    it("returns pending when picked player was eliminated but returned (has events after elimination)", () => {
+      const events = {
+        ev1: makeEvent("1", 2, BOB, "find_idol"),
+        ev2: makeEvent("2", 8, ALICE, "find_idol"),
+      };
+      const elims = {
+        e1: makeElimination("1", 3, ALICE, 2),
+      };
+      const answer = getStatus("propbet_idols", {
+        events,
+        eliminations: elims,
+      });
+      // ALICE was eliminated ep 3 but found an idol ep 8 (returned to game)
+      // She is tied with BOB so she should be "leading", not "definitive_incorrect"
+      expect(answer.status).toBe("leading");
+    });
+
+    it("returns pending when picked player was eliminated but returned (has challenge wins after elimination)", () => {
+      const events = {
+        ev1: makeEvent("1", 2, BOB, "find_idol"),
+      };
+      const elims = {
+        e1: makeElimination("1", 3, ALICE, 2),
+      };
+      const challenges = {
+        c1: makeChallenge("1", 8, [ALICE], "immunity"),
+      };
+      const answer = getStatus("propbet_idols", {
+        events,
+        eliminations: elims,
+        challenges,
+      });
+      // ALICE was eliminated ep 3 but won a challenge ep 8 (returned to game)
+      // She has 0 idol finds vs BOB's 1, but she's still active so status is "pending"
+      expect(answer.status).toBe("pending");
+    });
+
     it("returns definitive_correct at finale when picked player leads", () => {
       const events = {
         ev1: makeEvent("1", 2, ALICE, "find_idol"),
@@ -448,6 +485,45 @@ describe("getPropBetScoresForUser", () => {
         eliminations: elims,
       });
       expect(answer.status).toBe("definitive_incorrect");
+    });
+
+    it("returns pending when eliminated but returned (has events after elimination) and behind leader", () => {
+      const challenges = {
+        c1: makeChallenge("1", 2, [BOB], "immunity"),
+        c2: makeChallenge("2", 3, [BOB], "immunity"),
+      };
+      const elims = {
+        e1: makeElimination("1", 4, ALICE, 2),
+      };
+      const events = {
+        ev1: makeEvent("1", 8, ALICE, "find_idol"),
+      };
+      const answer = getStatus("propbet_immunities", {
+        challenges,
+        eliminations: elims,
+        events,
+      });
+      // ALICE was eliminated ep 4 but has an event ep 8 (returned to game)
+      // She's behind BOB but still active, so status should be "pending"
+      expect(answer.status).toBe("pending");
+    });
+
+    it("returns pending when eliminated but returned (has challenge win after elimination) and behind leader", () => {
+      const challenges = {
+        c1: makeChallenge("1", 2, [BOB], "immunity"),
+        c2: makeChallenge("2", 3, [BOB], "immunity"),
+        c3: makeChallenge("3", 8, [ALICE], "immunity"),
+      };
+      const elims = {
+        e1: makeElimination("1", 4, ALICE, 2),
+      };
+      const answer = getStatus("propbet_immunities", {
+        challenges,
+        eliminations: elims,
+      });
+      // ALICE was eliminated ep 4 but won immunity ep 8 (returned to game)
+      // She has 1 win vs BOB's 2, but she's still active so status is "pending"
+      expect(answer.status).toBe("pending");
     });
 
     it("handles immunity challenge variant", () => {
