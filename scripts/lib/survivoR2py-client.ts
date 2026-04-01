@@ -1,8 +1,10 @@
 /**
- * Client for fetching survivoR2py data from GitHub CDN.
- * Source: https://github.com/stiles/survivoR2py
+ * Client for fetching survivor data from dual sources:
+ *   1. survivoR (upstream R package) — primary, has S38-50
+ *   2. survivoR2py — fallback, has S1-47
  *
- * Fetches JSON tables, filters by season, and validates schemas.
+ * For each table, survivoR is tried first. If no data is found for the
+ * requested season, falls back to survivoR2py.
  */
 
 import type {
@@ -15,18 +17,30 @@ import type {
   SurvivorVoteHistory,
 } from "./survivoR2py-types.js";
 
-const BASE_URL =
+/** survivoR upstream — JSON exports for all tables (S38-50) */
+const SURVIVOR_BASE_URL =
+  "https://raw.githubusercontent.com/doehm/survivoR/master/dev/json";
+
+/** survivoR2py — processed JSON/CSV data (S1-47) */
+const SURVIVOR2PY_BASE_URL =
   "https://raw.githubusercontent.com/stiles/survivoR2py/main/data/processed";
 
+/** Fetch a table from survivoR (upstream) as JSON. Returns [] on failure. */
+async function fetchFromSurvivoR<T>(table: SurvivorTable): Promise<T[]> {
+  const url = `${SURVIVOR_BASE_URL}/${table}.json`;
+  const res = await fetch(url);
+  if (!res.ok) return [];
+  return (await res.json()) as T[];
+}
+
 /**
- * Fetch a survivoR2py table as JSON.
+ * Fetch a table from survivoR2py as JSON or CSV.
  * Large tables (challenge_results, vote_history) use CSV with local parsing.
  */
-async function fetchTable<T>(table: SurvivorTable): Promise<T[]> {
-  // Some tables are too large for JSON (>10MB). Use CSV for those.
+async function fetchFromSurvivoR2py<T>(table: SurvivorTable): Promise<T[]> {
   const useCsv = table === "challenge_results" || table === "vote_history";
   const ext = useCsv ? "csv" : "json";
-  const url = `${BASE_URL}/${ext}/${table}.${ext}`;
+  const url = `${SURVIVOR2PY_BASE_URL}/${ext}/${table}.${ext}`;
 
   const res = await fetch(url);
   if (!res.ok) {
@@ -41,6 +55,31 @@ async function fetchTable<T>(table: SurvivorTable): Promise<T[]> {
   }
 
   return (await res.json()) as T[];
+}
+
+/**
+ * Fetch a table for a specific season, trying survivoR first.
+ * Falls back to survivoR2py if survivoR returns no data for the season.
+ */
+async function fetchTableForSeason<
+  T extends { version?: string; season?: number },
+>(table: SurvivorTable, seasonNum: number): Promise<T[]> {
+  // Try survivoR (upstream) first
+  try {
+    const data = await fetchFromSurvivoR<T>(table);
+    const filtered = filterBySeason(data, seasonNum);
+    if (filtered.length > 0) {
+      console.log(`    ${table}: found in survivoR`);
+      return filtered;
+    }
+  } catch {
+    // survivoR fetch failed, fall through to survivoR2py
+  }
+
+  // Fall back to survivoR2py
+  console.log(`    ${table}: falling back to survivoR2py`);
+  const data = await fetchFromSurvivoR2py<T>(table);
+  return filterBySeason(data, seasonNum);
 }
 
 /** Simple CSV parser — handles quoted fields and common edge cases. */
@@ -138,42 +177,29 @@ export interface SurvivorSeasonData {
 }
 
 /**
- * Fetch all survivoR2py data needed for a given season.
+ * Fetch all survivor data needed for a given season.
+ * Tries survivoR (upstream) first, falls back to survivoR2py per table.
  * Returns typed, filtered, and validated data.
  */
 export async function fetchSeasonData(
   seasonNum: number,
 ): Promise<SurvivorSeasonData> {
-  console.log(`  Fetching survivoR2py data for Season ${seasonNum}...`);
+  console.log(`  Fetching survivor data for Season ${seasonNum}...`);
 
-  // Fetch tables in parallel
-  const [
-    allCastaways,
-    allEpisodes,
-    allChallengeResults,
-    allVoteHistory,
-    allAdvantageMovement,
-    allTribeMapping,
-  ] = await Promise.all([
-    fetchTable<SurvivorCastaway>("castaways"),
-    fetchTable<SurvivorEpisode>("episodes"),
-    fetchTable<SurvivorChallengeResult>("challenge_results"),
-    fetchTable<SurvivorVoteHistory>("vote_history"),
-    fetchTable<SurvivorAdvantageMovement>("advantage_movement"),
-    fetchTable<SurvivorTribeMapping>("tribe_mapping"),
-  ]);
-
-  // Filter to the requested season
-  const castaways = filterBySeason(allCastaways, seasonNum);
-  const episodes = filterBySeason(allEpisodes, seasonNum);
-  const challengeResults = filterBySeason(allChallengeResults, seasonNum);
-  const voteHistory = filterBySeason(allVoteHistory, seasonNum);
-  const advantageMovement = filterBySeason(allAdvantageMovement, seasonNum);
-  const tribeMapping = filterBySeason(allTribeMapping, seasonNum);
+  // Fetch each table with dual-source fallback, in parallel
+  const [castaways, episodes, challengeResults, voteHistory, advantageMovement, tribeMapping] =
+    await Promise.all([
+      fetchTableForSeason<SurvivorCastaway>("castaways", seasonNum),
+      fetchTableForSeason<SurvivorEpisode>("episodes", seasonNum),
+      fetchTableForSeason<SurvivorChallengeResult>("challenge_results", seasonNum),
+      fetchTableForSeason<SurvivorVoteHistory>("vote_history", seasonNum),
+      fetchTableForSeason<SurvivorAdvantageMovement>("advantage_movement", seasonNum),
+      fetchTableForSeason<SurvivorTribeMapping>("tribe_mapping", seasonNum),
+    ]);
 
   if (castaways.length === 0) {
     console.log(
-      `  Warning: No castaways found for Season ${seasonNum} — season may not exist in survivoR2py`,
+      `  Warning: No castaways found for Season ${seasonNum} — season may not exist in either data source`,
     );
   } else {
     validateCastaways(castaways);
