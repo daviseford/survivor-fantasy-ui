@@ -35,7 +35,12 @@ async function compare(seasonNum: number): Promise<void> {
 
   if (!fs.existsSync(scrapedPath)) {
     console.error(`Scraped results not found: ${scrapedPath}`);
-    console.error(`Run: yarn scrape-results ${seasonNum}`);
+    console.error(
+      `This tool requires a *_results.json file for comparison. These files are no longer generated automatically.`,
+    );
+    console.error(
+      `Run 'yarn new-season ${seasonNum} --force' to regenerate season data, then manually export results if needed.`,
+    );
     process.exit(1);
   }
 

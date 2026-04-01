@@ -165,67 +165,6 @@ export async function fetchImageUrls(
 }
 
 /**
- * Expand a MediaWiki template and return the rendered wikitext.
- * E.g., expandTemplate("{{Ep|5001}}") → "[[Epic Party|1]]"
- */
-export async function expandTemplate(
-  templateText: string,
-): Promise<string | null> {
-  const params = new URLSearchParams({
-    action: "expandtemplates",
-    text: templateText,
-    prop: "wikitext",
-    format: "json",
-  });
-
-  const url = `${BASE_URL}?${params}`;
-  const response = await fetch(url);
-  if (!response.ok) return null;
-
-  const data = (await response.json()) as {
-    expandtemplates?: { wikitext?: string };
-  };
-
-  return data.expandtemplates?.wikitext ?? null;
-}
-
-/**
- * Resolve episode titles for a season by expanding {{Ep|SSEE}} templates.
- * Returns a map of episode number → title.
- */
-export async function fetchEpisodeTitles(
-  seasonNum: number,
-  episodeCount: number,
-): Promise<Map<number, string>> {
-  const titles = new Map<number, string>();
-
-  // Build a batch template expansion text: all Ep templates separated by newlines
-  // Format: {{Ep|SSEE}} where SS is season (2-3 digits) and EE is episode (2 digits)
-  const templateParts: string[] = [];
-  for (let ep = 1; ep <= episodeCount; ep++) {
-    const code = `${seasonNum}${ep.toString().padStart(2, "0")}`;
-    templateParts.push(`{{Ep|${code}}}`);
-  }
-
-  const batchText = templateParts.join("\n---EPSEP---\n");
-  const expanded = await expandTemplate(batchText);
-  if (!expanded) return titles;
-
-  // Parse expanded text — each template becomes a wikilink like [[Episode Title|N]]
-  const parts = expanded.split("---EPSEP---");
-  for (let i = 0; i < parts.length; i++) {
-    const part = parts[i].trim();
-    // Extract title from [[Title|display]] or [[Title]]
-    const linkMatch = part.match(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/);
-    if (linkMatch) {
-      titles.set(i + 1, linkMatch[1].trim());
-    }
-  }
-
-  return titles;
-}
-
-/**
  * Fetch the season logo URL from the wiki.
  * Checks the season page infobox (image/logo field), then falls back to common filenames.
  */

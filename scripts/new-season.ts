@@ -1,18 +1,15 @@
 /**
  * Season Bootstrap CLI — one command to scaffold a complete season.
  *
- * Usage: yarn new-season <N> [--push] [--force] [--dry-run] [--source=survivoR|wiki]
+ * Usage: yarn new-season <N> [--push] [--force] [--dry-run]
  *
  * Steps:
- *   1. Fetch player data (from survivoR or wiki)
- *   2. Fetch results data (from survivoR or wiki)
- *   3. Generate full season data file
- *   4. Register season in src/data/seasons.ts
- *   5. (optional) Push to Firestore with --push
- *
- * Data sources:
- *   --source=survivoR (default) — structured data from survivoR GitHub dataset
- *   --source=wiki — legacy wiki scraping (slower, more fragile)
+ *   1. Fetch player data from survivoR dataset
+ *   2. Transform survivoR data
+ *   3. Fetch player images and bios from wiki (supplemental)
+ *   4. Generate full season data file
+ *   5. Register season in src/data/seasons.ts
+ *   6. (optional) Push to Firestore with --push
  */
 
 import * as fs from "fs";
@@ -24,9 +21,100 @@ import {
   transformPlayers,
   transformResults,
 } from "./lib/survivor-transformer.js";
-import { downloadImage, fetchSeasonLogoUrl } from "./lib/wiki-api.js";
-import { scrapeResults } from "./scrape-results.js";
-import { scrape } from "./scrape.js";
+import type { ScrapedPlayer } from "./lib/types.js";
+import {
+  delay,
+  downloadImage,
+  fetchImageUrls,
+  fetchSeasonLogoUrl,
+  fetchWikitext,
+} from "./lib/wiki-api.js";
+import { parseContestantPage } from "./lib/wikitext-parser.js";
+
+/**
+ * Fetch player images and bios from the Survivor Wiki as a supplemental step
+ * after survivoR data fetch. Uses survivoR full_name as wiki page titles.
+ */
+async function fetchWikiSupplemental(
+  players: ScrapedPlayer[],
+  seasonNum: number,
+  projectRoot: string,
+): Promise<void> {
+  const seasonKey = `season_${seasonNum}`;
+  const imageFileNames = new Map<string, string>(); // wikiPageTitle → imageFileName
+
+  for (let i = 0; i < players.length; i++) {
+    const player = players[i];
+    const wikiPageTitle = player.wikiPageTitle;
+    console.log(
+      `  [${i + 1}/${players.length}] Fetching wiki page: ${wikiPageTitle}`,
+    );
+
+    const wikitext = await fetchWikitext(wikiPageTitle);
+    if (!wikitext) {
+      console.warn(
+        `    ⚠ Wiki page not found for "${wikiPageTitle}" — skipping`,
+      );
+      if (i < players.length - 1) await delay(150);
+      continue;
+    }
+
+    const info = parseContestantPage(wikitext, seasonNum);
+    if (!info) {
+      console.warn(
+        `    ⚠ No {{Contestant}} infobox found for "${wikiPageTitle}" — skipping`,
+      );
+      if (i < players.length - 1) await delay(150);
+      continue;
+    }
+
+    if (info.imageFileName) {
+      imageFileNames.set(wikiPageTitle, info.imageFileName);
+    }
+    if (info.nickname) {
+      player.nickname = info.nickname;
+    }
+
+    if (i < players.length - 1) await delay(150);
+  }
+
+  // Batch-resolve image URLs and download
+  if (imageFileNames.size > 0) {
+    console.log(`\n  Resolving ${imageFileNames.size} image URLs...`);
+    const imageUrls = await fetchImageUrls([...imageFileNames.values()]);
+    console.log(
+      `  Resolved ${imageUrls.size}/${imageFileNames.size} image URLs`,
+    );
+
+    const imgDir = path.join(projectRoot, "public", "images", seasonKey);
+    let downloaded = 0;
+
+    for (const player of players) {
+      const fileName = imageFileNames.get(player.wikiPageTitle);
+      if (!fileName) continue;
+      const url = imageUrls.get(fileName);
+      if (!url) continue;
+
+      const name = player.localName || player.wikiPageTitle;
+      const thumbUrl = url.replace(
+        /\/revision\/latest.*/,
+        "/revision/latest/scale-to-width-down/400",
+      );
+      const localFileName = name.replace(/\s+/g, "-") + ".jpg";
+      const localPath = path.join(imgDir, localFileName);
+
+      const ok = await downloadImage(thumbUrl, localPath);
+      if (ok) {
+        player.imageUrl = `/images/${seasonKey}/${localFileName}`;
+        downloaded++;
+      } else {
+        console.warn(`    Failed to download image for ${name}`);
+      }
+      await delay(100);
+    }
+    console.log(`  Downloaded ${downloaded}/${imageUrls.size} images`);
+  }
+}
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
@@ -37,20 +125,12 @@ async function main(): Promise<void> {
   const force = flags.has("--force");
   const push = flags.has("--push");
   const dryRun = flags.has("--dry-run");
-  const sourceFlag = [...flags].find((f) => f.startsWith("--source="));
-  const source = sourceFlag ? sourceFlag.split("=")[1] : "survivoR";
 
   if (!seasonNum || isNaN(seasonNum)) {
     console.error(
-      "Usage: yarn new-season <season_number> [--push] [--force] [--dry-run] [--source=survivoR|wiki]",
+      "Usage: yarn new-season <season_number> [--push] [--force] [--dry-run]",
     );
     console.error("Example: yarn new-season 51");
-    process.exit(1);
-  }
-
-  if (source !== "survivoR" && source !== "wiki") {
-    console.error(`Invalid --source value: ${source}`);
-    console.error(`Valid options: survivoR, wiki`);
     process.exit(1);
   }
 
@@ -67,37 +147,28 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  let playerData;
-  let resultsData;
-
-  if (source === "survivoR") {
-    // Fetch from survivoR (structured dataset)
-    console.log(`\n${"=".repeat(60)}`);
-    console.log(`Step 1/5: Fetching survivoR data for Season ${seasonNum}`);
-    console.log(`${"=".repeat(60)}`);
-    const seasonData = await fetchSeasonData(seasonNum);
-
-    console.log(`\n${"=".repeat(60)}`);
-    console.log(`Step 2/5: Transforming survivoR data`);
-    console.log(`${"=".repeat(60)}`);
-    playerData = transformPlayers(seasonData, seasonNum);
-    resultsData = transformResults(seasonData, seasonNum);
-  } else {
-    // Legacy: Scrape from Survivor Wiki
-    console.log(`\n${"=".repeat(60)}`);
-    console.log(`Step 1/5: Scraping player data for Season ${seasonNum}`);
-    console.log(`${"=".repeat(60)}`);
-    playerData = await scrape(seasonNum);
-
-    console.log(`\n${"=".repeat(60)}`);
-    console.log(`Step 2/5: Scraping results data for Season ${seasonNum}`);
-    console.log(`${"=".repeat(60)}`);
-    resultsData = await scrapeResults(seasonNum);
-  }
-
-  // Step 3: Generate full season file
+  // Step 1: Fetch from survivoR (structured dataset)
   console.log(`\n${"=".repeat(60)}`);
-  console.log(`Step 3/5: Generating season data file`);
+  console.log(`Step 1/6: Fetching survivoR data for Season ${seasonNum}`);
+  console.log(`${"=".repeat(60)}`);
+  const seasonData = await fetchSeasonData(seasonNum);
+
+  // Step 2: Transform survivoR data
+  console.log(`\n${"=".repeat(60)}`);
+  console.log(`Step 2/6: Transforming survivoR data`);
+  console.log(`${"=".repeat(60)}`);
+  const playerData = transformPlayers(seasonData, seasonNum);
+  const resultsData = transformResults(seasonData, seasonNum);
+
+  // Step 3: Fetch wiki supplemental data (images, bios)
+  console.log(`\n${"=".repeat(60)}`);
+  console.log(`Step 3/6: Fetching player images and bios from wiki`);
+  console.log(`${"=".repeat(60)}`);
+  await fetchWikiSupplemental(playerData.players, seasonNum, projectRoot);
+
+  // Step 4: Generate full season file
+  console.log(`\n${"=".repeat(60)}`);
+  console.log(`Step 4/6: Generating season data file`);
   console.log(`${"=".repeat(60)}`);
 
   const fileContent = generateFullSeasonFile(
@@ -113,9 +184,9 @@ async function main(): Promise<void> {
   fs.writeFileSync(outputPath, fileContent);
   console.log(`  Created: ${outputPath}`);
 
-  // Step 4: Register in seasons.ts (with logo from wiki)
+  // Step 5: Register in seasons.ts (with logo from wiki)
   console.log(`\n${"=".repeat(60)}`);
-  console.log(`Step 4/5: Registering season in seasons.ts`);
+  console.log(`Step 5/6: Registering season in seasons.ts`);
   console.log(`${"=".repeat(60)}`);
 
   console.log(`  Fetching season logo from wiki...`);
@@ -139,10 +210,10 @@ async function main(): Promise<void> {
 
   registerSeason(seasonNum, seasonsFilePath, localLogoPath);
 
-  // Step 5: Push to Firestore (optional)
+  // Step 6: Push to Firestore (optional)
   if (push) {
     console.log(`\n${"=".repeat(60)}`);
-    console.log(`Step 5/5: Pushing to Firestore`);
+    console.log(`Step 6/6: Pushing to Firestore`);
     console.log(`${"=".repeat(60)}`);
     await pushSeasonToFirestore(seasonNum, dryRun, localLogoPath);
   } else {
