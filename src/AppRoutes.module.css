@@ -24,13 +24,14 @@
 
 .title {
   font-family: var(--mantine-font-family);
-  font-size: rem(28px);
-  font-weight: 900;
+  font-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.75rem);
+  font-weight: 800;
   line-height: 1;
   color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+  letter-spacing: -0.04em;
 
   @media (max-width: $mantine-breakpoint-sm) {
-    font-size: rem(22px);
+    margin-left: auto;
   }
 }
 
