@@ -74,6 +74,9 @@ const PLAYER_PROP_BET_PREFIXES = [
   "propbet_immunities",
   "propbet_ftc",
   "propbet_first_vote",
+  "propbet_first_idol_found",
+  "propbet_first_successful_idol_play",
+  "propbet_rewards",
 ];
 
 // ---------------------------------------------------------------------------
