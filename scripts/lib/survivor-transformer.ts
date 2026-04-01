@@ -102,7 +102,8 @@ export function transformResults(
   const warnings: string[] = [];
   const idMap = buildCastawayIdMap(data.castaways);
 
-  const episodes = transformEpisodes(data.episodes, data.tribeMapping);
+  const hasWinner = data.castaways.some((c) => c.winner);
+  const episodes = transformEpisodes(data.episodes, data.tribeMapping, hasWinner);
   const challenges = transformChallenges(data.challengeResults);
   const eliminations = transformEliminations(data.castaways);
   const events = transformEvents(
@@ -142,6 +143,7 @@ export function transformResults(
 function transformEpisodes(
   episodes: SurvivorEpisode[],
   tribeMapping: SurvivorTribeMapping[],
+  hasWinner: boolean,
 ): ScrapedEpisode[] {
   // Detect merge episode: "Mergatory" (S46+) marks the actual merge episode;
   // for older seasons, the first "Merged" status IS the merge episode.
@@ -161,6 +163,7 @@ function transformEpisodes(
   return episodes.map((ep) => {
     const epNum = Math.round(ep.episode);
     const isFinale =
+      hasWinner &&
       epNum === Math.max(...episodes.map((e) => Math.round(e.episode)));
     const title = ep.episode_title || `Episode ${epNum}`;
 
