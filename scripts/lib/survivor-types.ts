@@ -1,11 +1,8 @@
 /**
- * TypeScript types matching the survivoR / survivoR2py dataset schemas.
- * Sources:
- *   - https://github.com/doehm/survivoR (upstream, S38-50, JSON)
- *   - https://github.com/stiles/survivoR2py (fallback, S1-47, JSON/CSV)
+ * TypeScript types matching the survivoR dataset schema.
+ * Source: https://github.com/doehm/survivoR (dev/json/)
  *
- * Fields use the exact names from the JSON/CSV data.
- * Optional fields are source-specific (one source may not include them).
+ * Fields use the exact names from the JSON data.
  * Numbers come as floats from JSON (e.g., season: 1.0).
  */
 
@@ -13,7 +10,6 @@
 export interface SurvivorCastaway {
   version: string;
   version_season: string;
-  season_name?: string; // survivoR2py only
   season: number;
   full_name: string;
   castaway_id: string;
@@ -25,26 +21,23 @@ export interface SurvivorCastaway {
   day: number | null;
   order: number;
   result: string;
-  jury_status?: string | null; // survivoR2py only
+  place: number;
   original_tribe: string;
   jury: boolean;
   finalist: boolean;
   winner: boolean;
-  result_number?: number; // survivoR2py only
-  place?: number; // survivoR only (equivalent of result_number)
 }
 
 /** episodes.json — one row per episode */
 export interface SurvivorEpisode {
   version: string;
   version_season: string;
-  season_name?: string;
   season: number;
   episode_number_overall: number;
   episode: number;
   episode_title: string;
   episode_label: string;
-  episode_date: number; // epoch ms
+  episode_date: string; // ISO date string, e.g. "2025-02-26"
   episode_length: number | null;
   viewers: number | null;
   imdb_rating: number | null;
@@ -52,11 +45,10 @@ export interface SurvivorEpisode {
   episode_summary: string | null;
 }
 
-/** challenge_results.csv — one row per castaway per challenge */
+/** challenge_results.json — one row per castaway per challenge */
 export interface SurvivorChallengeResult {
   version: string;
   version_season: string;
-  season_name?: string;
   season: number;
   episode: number;
   n_boots: number;
@@ -66,34 +58,27 @@ export interface SurvivorChallengeResult {
   tribe_status: string;
   challenge_type: string; // "Immunity", "Reward", "Immunity and Reward"
   outcome_type: string; // "Tribal", "Individual", "Team"
-  team: string;
-  result: string; // "Won", "Lost", etc.
-  result_notes: string;
-  chosen_for_reward: boolean | string;
+  result: string; // "Won", "Lost", "Won (immunity only)", etc.
+  chosen_for_reward: boolean;
   challenge_id: number;
-  sit_out: boolean | string;
+  sit_out: boolean;
   order_of_finish: number | null;
   sog_id: number;
 }
 
-/** vote_history.csv — one row per vote cast */
+/** vote_history.json — one row per vote cast */
 export interface SurvivorVoteHistory {
   version: string;
   version_season: string;
-  season_name?: string;
   season: number;
   episode: number;
   day: number;
   tribe_status: string;
   tribe: string;
   castaway: string;
-  immunity?: string; // survivoR2py only
   vote: string;
-  vote_event?: string; // survivoR2py only
-  vote_event_outcome?: string; // survivoR2py only
-  split_vote?: string; // survivoR2py only
-  nullified: boolean | string;
-  tie: boolean | string;
+  nullified: boolean;
+  tie: boolean;
   voted_out: string;
   order: number;
   vote_order: number;
@@ -104,11 +89,10 @@ export interface SurvivorVoteHistory {
   challenge_id: number;
 }
 
-/** advantage_movement.csv — one row per advantage event */
+/** advantage_movement.json — one row per advantage event */
 export interface SurvivorAdvantageMovement {
   version: string;
   version_season: string;
-  season_name?: string;
   season: number;
   castaway: string;
   castaway_id: string;
@@ -116,18 +100,14 @@ export interface SurvivorAdvantageMovement {
   sequence_id: number;
   day: number | null;
   episode: number;
-  event: string; // "Found", "Played", "Received", "Transferred", "Expired"
-  played_for?: string; // survivoR2py only
-  played_for_id?: string; // survivoR2py only
-  success?: string; // survivoR2py only
-  votes_nullified?: number | null; // survivoR2py only
+  event: string; // "Found", "Found (beware)", "Played", "Received", etc.
+  sog_id: number;
 }
 
-/** tribe_mapping.csv — one row per castaway per episode (tribe membership) */
+/** tribe_mapping.json — one row per castaway per episode (tribe membership) */
 export interface SurvivorTribeMapping {
   version: string;
   version_season: string;
-  season_name?: string;
   season: number;
   episode: number;
   day: number;
@@ -137,7 +117,7 @@ export interface SurvivorTribeMapping {
   tribe_status: string; // "Original", "Swapped", "Merged"
 }
 
-/** Table names available from survivoR2py */
+/** Table names available from survivoR */
 export type SurvivorTable =
   | "castaways"
   | "episodes"

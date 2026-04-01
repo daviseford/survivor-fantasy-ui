@@ -1,17 +1,17 @@
 /**
- * Transform survivoR2py data into the app's existing scraper types
+ * Transform survivoR data into the app's existing scraper types
  * (ScrapeResult, ScrapeResultsOutput) so the existing codegen pipeline
- * can generate season files from survivoR2py data without modification.
+ * can generate season files from survivoR data without modification.
  */
 
-import type { SurvivorSeasonData } from "./survivoR2py-client.js";
+import type { SurvivorSeasonData } from "./survivor-client.js";
 import type {
   SurvivorAdvantageMovement,
   SurvivorCastaway,
   SurvivorChallengeResult,
   SurvivorEpisode,
   SurvivorTribeMapping,
-} from "./survivoR2py-types.js";
+} from "./survivor-types.js";
 import type {
   ScrapedChallenge,
   ScrapedElimination,
@@ -46,7 +46,7 @@ function resolveFullName(
 }
 
 /**
- * Transform survivoR2py season data into the app's ScrapeResult (players).
+ * Transform survivoR season data into the app's ScrapeResult (players).
  */
 export function transformPlayers(
   data: SurvivorSeasonData,
@@ -88,7 +88,7 @@ export function transformPlayers(
 }
 
 /**
- * Transform survivoR2py season data into the app's ScrapeResultsOutput (gameplay).
+ * Transform survivoR season data into the app's ScrapeResultsOutput (gameplay).
  */
 export function transformResults(
   data: SurvivorSeasonData,
@@ -114,11 +114,11 @@ export function transformResults(
 
   // Warn about data gaps
   if (data.episodes.length === 0) {
-    warnings.push(`No episodes found for Season ${seasonNum} in survivoR2py`);
+    warnings.push(`No episodes found for Season ${seasonNum} in survivoR`);
   }
   if (data.challengeResults.length === 0) {
     warnings.push(
-      `No challenge results found for Season ${seasonNum} in survivoR2py`,
+      `No challenge results found for Season ${seasonNum} in survivoR`,
     );
   }
 
@@ -168,7 +168,7 @@ function transformEpisodes(
       order: epNum,
       title,
       airDate: new Date(ep.episode_date).toISOString().split("T")[0],
-      isCombinedChallenge: false, // survivoR2py doesn't have this flag directly
+      isCombinedChallenge: false, // survivoR doesn't have this flag directly
       isFinale: isFinale,
       postMerge: postMergeEpisodes.has(epNum),
       mergeOccurs: mergeEpisodes.has(epNum),
@@ -218,10 +218,8 @@ function transformChallenges(
       variant = "reward";
     }
 
-    // Find winners — resolve short names to full names for codegen compatibility
-    const winners = entries.filter(
-      (e) => e.result === "Won" || e.result === "Winner",
-    );
+    // Find winners — survivoR uses "Won", "Won (immunity only)", "Won (reward only)", etc.
+    const winners = entries.filter((e) => e.result.startsWith("Won"));
     const winnerNames = winners.map((w) =>
       resolveFullName(w.castaway, nameMap),
     );
@@ -305,44 +303,29 @@ function transformEvents(
   for (const adv of advantageMovement) {
     const epNum = Math.round(adv.episode);
     const playerName = resolveFullName(adv.castaway, nameMap);
+    const event = adv.event;
 
-    switch (adv.event) {
-      case "Found":
-        events.push({
-          episodeNum: epNum,
-          playerName,
-          action: "find_idol",
-          multiplier: null,
-        });
-        break;
-      case "Played":
-        events.push({
-          episodeNum: epNum,
-          playerName,
-          action: "use_idol",
-          multiplier: null,
-        });
-        if (
-          adv.votes_nullified !== null &&
-          adv.votes_nullified !== undefined &&
-          adv.votes_nullified > 0
-        ) {
-          events.push({
-            episodeNum: epNum,
-            playerName,
-            action: "votes_negated_by_idol",
-            multiplier: adv.votes_nullified,
-          });
-        }
-        break;
-      case "Received":
-        events.push({
-          episodeNum: epNum,
-          playerName,
-          action: "win_advantage",
-          multiplier: null,
-        });
-        break;
+    if (event.startsWith("Found")) {
+      events.push({
+        episodeNum: epNum,
+        playerName,
+        action: "find_idol",
+        multiplier: null,
+      });
+    } else if (event === "Played") {
+      events.push({
+        episodeNum: epNum,
+        playerName,
+        action: "use_idol",
+        multiplier: null,
+      });
+    } else if (event === "Received" || event === "Recieved") {
+      events.push({
+        episodeNum: epNum,
+        playerName,
+        action: "win_advantage",
+        multiplier: null,
+      });
     }
   }
 

@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { fetchSeasonData } from "../survivoR2py-client";
+import { fetchSeasonData } from "../survivor-client";
 
-// Integration tests — hit the real GitHub CDN (both survivoR and survivoR2py)
-// These are slow but verify the actual data sources work
+// Integration tests — hit the real survivoR GitHub CDN
+// These are slow but verify the actual data source works
 
 describe("fetchSeasonData", { timeout: 60000 }, () => {
-  it("fetches Season 48 from survivoR (not in survivoR2py)", async () => {
+  it("fetches Season 48 castaways with expected fields", async () => {
     const data = await fetchSeasonData(48);
 
     expect(data.castaways.length).toBe(18);
@@ -17,7 +17,7 @@ describe("fetchSeasonData", { timeout: 60000 }, () => {
     }
   });
 
-  it("fetches Season 46 castaways with expected fields (available in both sources)", async () => {
+  it("fetches Season 46 castaways with expected fields", async () => {
     const data = await fetchSeasonData(46);
 
     expect(data.castaways.length).toBe(18);
@@ -26,7 +26,6 @@ describe("fetchSeasonData", { timeout: 60000 }, () => {
     expect(data.castaways[0]).toHaveProperty("age");
     expect(data.castaways[0]).toHaveProperty("original_tribe");
 
-    // Validate castaway_id format
     for (const c of data.castaways) {
       expect(c.castaway_id).toMatch(/^US\d{4}$/);
     }
@@ -41,14 +40,14 @@ describe("fetchSeasonData", { timeout: 60000 }, () => {
     expect(data.episodes[0]).toHaveProperty("episode_date");
   });
 
-  it("fetches Season 1 via survivoR2py fallback (not in survivoR)", async () => {
+  it("fetches Season 1 with sparse advantage data (empty, not error)", async () => {
     const data = await fetchSeasonData(1);
 
     expect(data.castaways.length).toBe(16);
     expect(data.advantageMovement.length).toBe(0);
   });
 
-  it("fetches Season 50 from survivoR (most recent)", async () => {
+  it("fetches Season 50 (most recent)", async () => {
     const data = await fetchSeasonData(50);
 
     expect(data.castaways.length).toBeGreaterThan(0);

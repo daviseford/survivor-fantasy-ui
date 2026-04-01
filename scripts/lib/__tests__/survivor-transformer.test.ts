@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { fetchSeasonData } from "../survivoR2py-client";
-import { transformPlayers, transformResults } from "../survivoR2py-transformer";
+import { fetchSeasonData } from "../survivor-client";
+import { transformPlayers, transformResults } from "../survivor-transformer";
 
-// Integration tests using real survivoR2py data
+// Integration tests using real survivoR data
 
 describe("transformPlayers", { timeout: 60000 }, () => {
   it("transforms Season 46 castaways into Player array", async () => {
@@ -29,6 +29,21 @@ describe("transformPlayers", { timeout: 60000 }, () => {
     const sonja = result.players.find((p) => p.localName.includes("Sonja"));
     expect(sonja).toBeDefined();
     expect(sonja!.localName).toBe("Sonja Christopher");
+  });
+
+  it("transforms Season 48 castaways into 18 players with full names", async () => {
+    const data = await fetchSeasonData(48);
+    const result = transformPlayers(data, 48);
+
+    expect(result.seasonNum).toBe(48);
+    expect(result.players.length).toBe(18);
+    expect(result.unmatched.length).toBe(0);
+
+    for (const player of result.players) {
+      expect(player.localName).toBeTruthy();
+      // Full names should have at least first + last
+      expect(player.localName).toContain(" ");
+    }
   });
 });
 
@@ -135,71 +150,43 @@ describe("transformResults", { timeout: 60000 }, () => {
     const mergeEvents = result.events.filter((e) => e.action === "make_merge");
     expect(mergeEvents.length).toBeGreaterThan(0);
   });
+
+  it("transforms Season 48 episodes", async () => {
+    const data = await fetchSeasonData(48);
+    const result = transformResults(data, 48);
+
+    expect(result.episodes.length).toBeGreaterThanOrEqual(13);
+    expect(result.episodes[0].order).toBe(1);
+    expect(result.episodes[0].title).toBeTruthy();
+  });
+
+  it("transforms Season 48 challenges with winning players", async () => {
+    const data = await fetchSeasonData(48);
+    const result = transformResults(data, 48);
+
+    expect(result.challenges.length).toBeGreaterThan(0);
+
+    const withWinners = result.challenges.filter(
+      (c) => c.winnerNames.length > 0,
+    );
+    expect(withWinners.length).toBeGreaterThan(0);
+  });
+
+  it("all S48 challenge winner names and event player names exist in the player list", async () => {
+    const data = await fetchSeasonData(48);
+    const playerResult = transformPlayers(data, 48);
+    const result = transformResults(data, 48);
+
+    const playerNames = new Set(playerResult.players.map((p) => p.localName));
+
+    for (const chal of result.challenges) {
+      for (const name of chal.winnerNames) {
+        expect(playerNames.has(name)).toBe(true);
+      }
+    }
+
+    for (const ev of result.events) {
+      expect(playerNames.has(ev.playerName)).toBe(true);
+    }
+  });
 });
-
-// Season 48 — sourced from survivoR (upstream), not survivoR2py
-describe(
-  "transformPlayers (Season 48 via survivoR)",
-  { timeout: 60000 },
-  () => {
-    it("transforms Season 48 castaways into 18 players with full names", async () => {
-      const data = await fetchSeasonData(48);
-      const result = transformPlayers(data, 48);
-
-      expect(result.seasonNum).toBe(48);
-      expect(result.players.length).toBe(18);
-      expect(result.unmatched.length).toBe(0);
-
-      for (const player of result.players) {
-        expect(player.localName).toBeTruthy();
-        // Full names should have at least first + last
-        expect(player.localName).toContain(" ");
-      }
-    });
-  },
-);
-
-describe(
-  "transformResults (Season 48 via survivoR)",
-  { timeout: 60000 },
-  () => {
-    it("transforms Season 48 episodes", async () => {
-      const data = await fetchSeasonData(48);
-      const result = transformResults(data, 48);
-
-      expect(result.episodes.length).toBeGreaterThanOrEqual(13);
-      expect(result.episodes[0].order).toBe(1);
-      expect(result.episodes[0].title).toBeTruthy();
-    });
-
-    it("transforms Season 48 challenges with winning players", async () => {
-      const data = await fetchSeasonData(48);
-      const result = transformResults(data, 48);
-
-      expect(result.challenges.length).toBeGreaterThan(0);
-
-      const withWinners = result.challenges.filter(
-        (c) => c.winnerNames.length > 0,
-      );
-      expect(withWinners.length).toBeGreaterThan(0);
-    });
-
-    it("all S48 challenge winner names and event player names exist in the player list", async () => {
-      const data = await fetchSeasonData(48);
-      const playerResult = transformPlayers(data, 48);
-      const result = transformResults(data, 48);
-
-      const playerNames = new Set(playerResult.players.map((p) => p.localName));
-
-      for (const chal of result.challenges) {
-        for (const name of chal.winnerNames) {
-          expect(playerNames.has(name)).toBe(true);
-        }
-      }
-
-      for (const ev of result.events) {
-        expect(playerNames.has(ev.playerName)).toBe(true);
-      }
-    });
-  },
-);
