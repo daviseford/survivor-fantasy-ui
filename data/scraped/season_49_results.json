@@ -1,6 +1,6 @@
 {
   "seasonNum": 49,
-  "scrapedAt": "2026-04-01T00:24:42.065Z",
+  "scrapedAt": "2026-04-01T00:34:31.863Z",
   "episodes": [
     {
       "order": 1,
@@ -156,7 +156,7 @@
         "Rizo Velovic",
         "Sage Ahrens-Nichols",
         "Savannah Louie",
-        "Shannon"
+        "Shannon Fairweather"
       ],
       "winnerTribe": "uli",
       "order": 3
@@ -183,7 +183,7 @@
         "Rizo Velovic",
         "Sage Ahrens-Nichols",
         "Savannah Louie",
-        "Shannon"
+        "Shannon Fairweather"
       ],
       "winnerTribe": "uli",
       "order": 5
@@ -210,7 +210,7 @@
         "Rizo Velovic",
         "Sage Ahrens-Nichols",
         "Savannah Louie",
-        "Shannon"
+        "Shannon Fairweather"
       ],
       "winnerTribe": "uli",
       "order": 7
@@ -222,7 +222,7 @@
         "Alex Moore",
         "Kristina Mills",
         "Sage Ahrens-Nichols",
-        "Shannon",
+        "Shannon Fairweather",
         "Sophie Segreti",
         "Steven Ramm"
       ],
@@ -236,7 +236,7 @@
         "Alex Moore",
         "Kristina Mills",
         "Sage Ahrens-Nichols",
-        "Shannon",
+        "Shannon Fairweather",
         "Sophie Segreti",
         "Steven Ramm"
       ],
@@ -465,7 +465,7 @@
     },
     {
       "episodeNum": 6,
-      "playerName": "Shannon",
+      "playerName": "Shannon Fairweather",
       "voteString": "3-1",
       "variant": "tribal",
       "finishText": "6th Voted Out\nDay 12",
