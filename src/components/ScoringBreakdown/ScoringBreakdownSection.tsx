@@ -1,7 +1,7 @@
 import { SegmentedControl, Text } from "@mantine/core";
 import { sum } from "lodash-es";
 import { useMemo, useState } from "react";
-import { CastawayId } from "../../types";
+import type { CastawayId } from "../../types";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
