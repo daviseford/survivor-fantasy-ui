@@ -3,6 +3,7 @@
 export interface ScrapedPlayer {
   wikiPageTitle: string;
   localName: string;
+  castawayId: string;
   matchStatus: "exact" | "fuzzy" | "unmatched";
   age?: number;
   profession?: string;
@@ -35,14 +36,14 @@ export interface ScrapedEpisode {
 export interface ScrapedChallenge {
   episodeNum: number;
   variant: "reward" | "immunity" | "combined";
-  winnerNames: string[];
+  winnerCastawayIds: string[];
   winnerTribe: string | null;
   order: number;
 }
 
 export interface ScrapedElimination {
   episodeNum: number;
-  playerName: string;
+  castawayId: string;
   voteString: string;
   variant: "tribal" | "medical" | "quitter" | "final_tribal_council" | "other";
   finishText: string;
@@ -51,7 +52,7 @@ export interface ScrapedElimination {
 
 export interface ScrapedGameEvent {
   episodeNum: number;
-  playerName: string;
+  castawayId: string;
   action: string;
   multiplier: number | null;
 }

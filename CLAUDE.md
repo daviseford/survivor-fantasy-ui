@@ -25,6 +25,8 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 - **Init season:** `yarn init-season <season_number>` (generate season data file from scraped JSON — players only, no results)
 - **Backfill season:** `yarn backfill <season_number>` (merge re-scraped data into existing season file)
 - **Add season (slash command):** `/add-season <season_number>` — preferred way to add a new season in Claude Code; wraps `yarn new-season` with validation, progress reporting, and post-generation verification
+- **Snapshot Firestore:** `yarn tsx scripts/snapshot-firestore.ts` (backup Firestore + RTDB to `data/firestore-snapshots/`)
+- **Migrate to castaway_id:** `yarn tsx scripts/migrate-to-castaway-id.ts [--upload]` (translate Firestore/RTDB from player names to castaway_id; writes to `data/migration-output/` for review, `--upload` pushes to Firebase)
 
 ## Architecture
 
@@ -36,8 +38,8 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 
 ## Key Patterns
 
-- **Season data is hardcoded** in `src/data/` (players, episodes per season) and also stored in Firestore. The `SEASONS` map in `src/data/seasons.ts` is the local source of truth for season metadata.
-- **Typed IDs:** Domain types use branded string IDs (`season_${number}`, `draft_${string}`, `episode_${string}`, etc.) defined in `src/types/index.ts`.
+- **Season data is hardcoded** in `src/data/` (players, episodes per season) and also stored in Firestore. The `SEASONS` map in `src/data/seasons.ts` is the local source of truth for season metadata. Each season exports `SEASON_XX_PLAYERS`, `SEASON_XX_EPISODES`, and `SEASON_XX_CASTAWAY_LOOKUP` (a `Record<CastawayId, { full_name, castaway }>` for display name resolution).
+- **Typed IDs:** Domain types use branded string IDs (`season_${number}`, `draft_${string}`, `episode_${string}`, `US${string}` for `CastawayId`, etc.) defined in `src/types/index.ts`. `CastawayId` uses survivoR's format (e.g., `US0693`) as the canonical player identifier.
 - **Hooks per entity:** Each Firestore/RTDB entity has a dedicated hook (`useSeason`, `useCompetition`, `useDraft`, `useChallenges`, `useEliminations`, `useEvents`). Hooks read route params via `useParams()` with optional ID override. All onSnapshot hooks include error callbacks.
 - **CSS Modules** for component-scoped styles (`.module.css` files), PostCSS with `postcss-preset-mantine`.
 

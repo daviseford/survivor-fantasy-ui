@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { Challenge, Elimination, Episode, GameEvent } from "../../types";
+import { CastawayId, Challenge, Elimination, Episode, GameEvent } from "../../types";
 import { filterEpisodesByMax, filterRecordByEpisode } from "../episodeFilter";
+
+const ALICE = "US0001" as CastawayId;
+const BOB = "US0002" as CastawayId;
 
 const makeEpisode = (order: number): Episode => ({
   id: `episode_${order}`,
@@ -13,10 +16,7 @@ const makeEpisode = (order: number): Episode => ({
   merge_occurs: false,
 });
 
-const makeChallenge = (
-  id: string,
-  episodeNum: number,
-): Challenge<string, number> => ({
+const makeChallenge = (id: string, episodeNum: number): Challenge => ({
   id: `challenge_${id}`,
   season_id: "season_46",
   season_num: 46,
@@ -24,27 +24,21 @@ const makeChallenge = (
   episode_num: episodeNum,
   order: 1,
   variant: "immunity",
-  winning_players: ["Alice"],
+  winning_castaways: [ALICE],
 });
 
-const makeElimination = (
-  id: string,
-  episodeNum: number,
-): Elimination<string, number> => ({
+const makeElimination = (id: string, episodeNum: number): Elimination => ({
   id: `elimination_${id}`,
   season_id: "season_46",
   season_num: 46,
   episode_id: `episode_${episodeNum}`,
   episode_num: episodeNum,
-  player_name: "Bob",
+  castaway_id: BOB,
   order: 1,
   variant: "tribal",
 });
 
-const makeEvent = (
-  id: string,
-  episodeNum: number,
-): GameEvent<string, number> => ({
+const makeEvent = (id: string, episodeNum: number): GameEvent => ({
   id: `event_${id}`,
   season_id: "season_46",
   season_num: 46,
@@ -52,7 +46,7 @@ const makeEvent = (
   episode_num: episodeNum,
   action: "find_idol",
   multiplier: null,
-  player_name: "Alice",
+  castaway_id: ALICE,
 });
 
 describe("filterEpisodesByMax", () => {
@@ -131,4 +125,3 @@ describe("filterRecordByEpisode", () => {
     expect(filterRecordByEpisode({}, 3)).toEqual({});
   });
 });
-

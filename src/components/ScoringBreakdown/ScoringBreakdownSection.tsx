@@ -1,9 +1,11 @@
 import { SegmentedControl, Text } from "@mantine/core";
 import { sum } from "lodash-es";
 import { useMemo, useState } from "react";
+import type { CastawayId } from "../../types";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
+import { useSeason } from "../../hooks/useSeason";
 import { aggregateByScoringCategory } from "../../utils/scoringCategories";
 import { NightingaleRose, RoseDataEntry } from "./NightingaleRose";
 
@@ -20,6 +22,7 @@ const filterAndSort = (entries: RoseDataEntry[]): RoseDataEntry[] =>
 export const ScoringBreakdownSection = () => {
   const [viewMode, setViewMode] = useState<ViewMode>("participant");
   const { data: competition } = useCompetition();
+  const { data: season } = useSeason(competition?.season_id);
   const { survivorPointsByEpisode } = useScoringCalculations();
   const isMobile = useIsMobile();
 
@@ -33,12 +36,12 @@ export const ScoringBreakdownSection = () => {
     if (!competition) return [];
 
     const entries = competition.participants.map((participant) => {
-      const draftedPlayerNames = competition.draft_picks
+      const draftedCastawayIds = competition.draft_picks
         .filter((dp) => dp.user_uid === participant.uid)
-        .map((dp) => dp.player_name);
+        .map((dp) => dp.castaway_id);
 
-      const allEpisodeScores = draftedPlayerNames.flatMap(
-        (name) => survivorPointsByEpisode[name] || [],
+      const allEpisodeScores = draftedCastawayIds.flatMap(
+        (id) => survivorPointsByEpisode[id] || [],
       );
 
       const categories = aggregateByScoringCategory(allEpisodeScores);
@@ -54,14 +57,16 @@ export const ScoringBreakdownSection = () => {
 
   const survivorData: RoseDataEntry[] = useMemo(() => {
     const entries = Object.entries(survivorPointsByEpisode).map(
-      ([name, episodes]) => ({
-        name,
+      ([castawayId, episodes]) => ({
+        name:
+          season?.castawayLookup[castawayId as CastawayId]?.full_name ??
+          castawayId,
         categories: aggregateByScoringCategory(episodes),
       }),
     );
 
     return filterAndSort(entries);
-  }, [survivorPointsByEpisode]);
+  }, [survivorPointsByEpisode, season?.castawayLookup]);
 
   if (!hasData) {
     return (

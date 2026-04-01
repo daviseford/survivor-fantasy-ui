@@ -254,8 +254,8 @@ async function compare(seasonNum: number): Promise<void> {
       }
 
       // Compare winners (normalize: sort names for comparison)
-      const scWinners = [...(scC.winnerNames || [])].sort().join(", ");
-      const fsWinners = [...(fsC.winning_players || [])].sort().join(", ");
+      const scWinners = [...(scC.winnerCastawayIds || [])].sort().join(", ");
+      const fsWinners = [...(fsC.winning_castaways || [])].sort().join(", ");
       if (scWinners !== fsWinners) {
         mismatches.push({
           category: label,
@@ -324,48 +324,40 @@ async function compare(seasonNum: number): Promise<void> {
       const label = `Ep${ep} Elimination #${i + 1}`;
 
       if (!fsE) {
-        console.log(`  ${label}: EXTRA in scraped — "${scE.playerName}"`);
+        console.log(`  ${label}: EXTRA in scraped — "${scE.castawayId}"`);
         mismatches.push({
           category: label,
           field: "existence",
-          scraped: scE.playerName,
+          scraped: scE.castawayId,
           firestore: "MISSING",
         });
         continue;
       }
       if (!scE) {
-        console.log(`  ${label}: MISSING from scraped — "${fsE.player_name}"`);
+        console.log(`  ${label}: MISSING from scraped — "${fsE.castaway_id}"`);
         mismatches.push({
           category: label,
           field: "existence",
           scraped: "MISSING",
-          firestore: fsE.player_name,
+          firestore: fsE.castaway_id,
         });
         continue;
       }
 
-      // Compare player name (scraped uses first name, Firestore uses full name)
-      // Allow partial match: scraped first name should be contained in Firestore full name
-      const scName = scE.playerName;
-      const fsName = fsE.player_name;
-      const nameMatches =
-        scName === fsName ||
-        fsName.startsWith(scName) ||
-        fsName.includes(scName);
+      // Compare castaway IDs
+      const scId = scE.castawayId;
+      const fsId = fsE.castaway_id;
+      const nameMatches = scId === fsId;
 
       if (!nameMatches) {
         mismatches.push({
           category: label,
           field: "player_name",
-          scraped: scName,
-          firestore: fsName,
+          scraped: scId,
+          firestore: fsId,
         });
         console.log(
-          `  ${label} name: scraped="${scName}" vs firestore="${fsName}"`,
-        );
-      } else if (scName !== fsName) {
-        console.log(
-          `  ${label} name: partial match — scraped="${scName}" ≈ firestore="${fsName}"`,
+          `  ${label} castaway_id: scraped="${scId}" vs firestore="${fsId}"`,
         );
       }
 
@@ -401,14 +393,14 @@ async function compare(seasonNum: number): Promise<void> {
   // Group by action type for easier comparison
   const fsEventsByAction = new Map<string, any[]>();
   for (const e of fsEventList) {
-    const key = `ep${e.episode_num}_${e.action}_${e.player_name}`;
+    const key = `ep${e.episode_num}_${e.action}_${e.castaway_id}`;
     if (!fsEventsByAction.has(key)) fsEventsByAction.set(key, []);
     fsEventsByAction.get(key)!.push(e);
   }
 
   const scEventsByAction = new Map<string, any[]>();
   for (const e of scrapedEvents) {
-    const key = `ep${e.episodeNum}_${e.action}_${e.playerName}`;
+    const key = `ep${e.episodeNum}_${e.action}_${e.castawayId}`;
     if (!scEventsByAction.has(key)) scEventsByAction.set(key, []);
     scEventsByAction.get(key)!.push(e);
   }
@@ -421,10 +413,10 @@ async function compare(seasonNum: number): Promise<void> {
           category: "Events",
           field: key,
           scraped: "MISSING",
-          firestore: `${e.action} — ${e.player_name} (ep${e.episode_num})`,
+          firestore: `${e.action} — ${e.castaway_id} (ep${e.episode_num})`,
         });
         console.log(
-          `  MISSING from scraped: ${e.action} — ${e.player_name} (ep${e.episode_num})`,
+          `  MISSING from scraped: ${e.action} — ${e.castaway_id} (ep${e.episode_num})`,
         );
       }
     }
@@ -435,7 +427,7 @@ async function compare(seasonNum: number): Promise<void> {
     if (!fsEventsByAction.has(key)) {
       for (const e of scEvts) {
         console.log(
-          `  EXTRA in scraped: ${e.action} — ${e.playerName} (ep${e.episodeNum})`,
+          `  EXTRA in scraped: ${e.action} — ${e.castawayId} (ep${e.episodeNum})`,
         );
       }
     }

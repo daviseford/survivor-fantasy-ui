@@ -17,6 +17,7 @@ import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
 import {
+  CastawayId,
   Elimination,
   EliminationVariant,
   EliminationVariants,
@@ -25,7 +26,7 @@ import {
 type EditValues = {
   order: number;
   variant: EliminationVariant;
-  player_name: string;
+  castaway_id: CastawayId;
   episode_num: number;
   votes_received?: number;
 };
@@ -63,7 +64,7 @@ export const EliminationCRUDTable = () => {
     setEditValues({
       order: e.order,
       variant: e.variant,
-      player_name: e.player_name,
+      castaway_id: e.castaway_id,
       episode_num: e.episode_num,
       votes_received: e.votes_received,
     });
@@ -82,7 +83,7 @@ export const EliminationCRUDTable = () => {
         ...e,
         order: editValues.order,
         variant: editValues.variant,
-        player_name: editValues.player_name,
+        castaway_id: editValues.castaway_id,
         episode_num: editValues.episode_num,
         episode_id: `episode_${editValues.episode_num}`,
         votes_received:
@@ -95,7 +96,7 @@ export const EliminationCRUDTable = () => {
 
       notifications.show({
         title: "Elimination updated",
-        message: `${editValues.player_name} (order ${editValues.order}) saved`,
+        message: `${season?.castawayLookup?.[editValues.castaway_id]?.full_name ?? editValues.castaway_id} (order ${editValues.order}) saved`,
         color: "green",
         icon: <IconCheck size={16} />,
       });
@@ -112,7 +113,11 @@ export const EliminationCRUDTable = () => {
     }
   };
 
-  const playerNames = season?.players.map((p) => p.name) ?? [];
+  const playerOptions =
+    season?.players.map((p) => ({
+      value: p.castaway_id,
+      label: p.full_name,
+    })) ?? [];
   const variantOptions = EliminationVariants.slice().reverse();
 
   const rows = Object.values(eliminations || {})
@@ -151,13 +156,14 @@ export const EliminationCRUDTable = () => {
             <Table.Td>
               <Select
                 size="xs"
-                data={playerNames}
-                value={editValues.player_name}
+                data={playerOptions}
+                value={editValues.castaway_id}
                 searchable
                 onChange={(val) =>
                   setEditValues({
                     ...editValues,
-                    player_name: val ?? editValues.player_name,
+                    castaway_id:
+                      (val as CastawayId) ?? editValues.castaway_id,
                   })
                 }
                 style={{ width: 180 }}
@@ -213,7 +219,10 @@ export const EliminationCRUDTable = () => {
         <Table.Tr key={e.id}>
           <Table.Td>{e.order}</Table.Td>
           <Table.Td>{e.variant}</Table.Td>
-          <Table.Td>{e.player_name}</Table.Td>
+          <Table.Td>
+            {season?.castawayLookup?.[e.castaway_id]?.full_name ??
+              e.castaway_id}
+          </Table.Td>
           <Table.Td>episode_{e.episode_num}</Table.Td>
           <Table.Td>{e.votes_received ?? "—"}</Table.Td>
           {slimUser?.isAdmin && (

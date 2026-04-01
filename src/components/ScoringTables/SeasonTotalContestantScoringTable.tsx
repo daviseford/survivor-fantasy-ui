@@ -4,6 +4,7 @@ import { useEliminations } from "../../hooks/useEliminations";
 import { useEvents } from "../../hooks/useEvents";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
+import { CastawayId } from "../../types";
 import { getNumberWithOrdinal } from "../../utils/misc";
 
 export const SeasonTotalContestantScoringTable = () => {
@@ -16,11 +17,14 @@ export const SeasonTotalContestantScoringTable = () => {
 
   const rows = Object.entries(survivorPointsTotalSeason)
     .sort((a, b) => b[1] - a[1]) // sort by highest
-    .map(([playerName, seasonScore]) => {
-      const playerData = season?.players.find((x) => x.name === playerName);
+    .map(([castawayId, seasonScore]) => {
+      const playerData = season?.players.find((x) => x.castaway_id === castawayId);
+      const displayName =
+        season?.castawayLookup[castawayId as CastawayId]?.full_name ??
+        castawayId;
 
       const draftPick = competition?.draft_picks.find(
-        (x) => x.player_name === playerName,
+        (x) => x.castaway_id === castawayId,
       );
 
       const draftedBy = competition?.participants.find(
@@ -28,7 +32,7 @@ export const SeasonTotalContestantScoringTable = () => {
       );
 
       const playerElimination = Object.values(eliminations).find(
-        (x) => x.player_name === playerName,
+        (x) => x.castaway_id === castawayId,
       );
 
       const isRemovedFromGame =
@@ -41,12 +45,12 @@ export const SeasonTotalContestantScoringTable = () => {
         playerElimination.variant === "final_tribal_council";
 
       const isWinner = Object.values(events).some(
-        (x) => x.player_name === playerName && x.action === "win_survivor",
+        (x) => x.castaway_id === castawayId && x.action === "win_survivor",
       );
 
       return (
         <Table.Tr
-          key={playerName}
+          key={castawayId}
           style={{
             backgroundColor: playerElimination
               ? "var(--mantine-color-gray-light)"
@@ -60,7 +64,7 @@ export const SeasonTotalContestantScoringTable = () => {
               <Avatar size={26} src={playerData?.img} radius={26} />
               <div>
                 <Text fz="sm" fw={500} lh={1.2}>
-                  {playerName}
+                  {displayName}
                 </Text>
                 {draftedBy && (
                   <Text fz="xs" c="dimmed" lh={1.2}>

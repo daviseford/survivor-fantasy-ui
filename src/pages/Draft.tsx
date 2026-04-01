@@ -54,6 +54,7 @@ import { useDraft } from "../hooks/useDraft";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
 import {
+  CastawayId,
   Competition,
   Draft,
   PropBetsEntry,
@@ -208,7 +209,7 @@ export const DraftComponent = () => {
     await updateDraft(_draft);
   };
 
-  const draftPlayer = async (playerName: string) => {
+  const draftPlayer = async (player: { castaway_id: CastawayId; full_name: string }) => {
     if (!season || !draft || !slimUser?.uid) return;
 
     const finished = draft.current_pick_number >= draft.total_players;
@@ -237,7 +238,8 @@ export const DraftComponent = () => {
           order: draft.current_pick_number,
           user_uid: slimUser.uid,
           user_name: slimUser.displayName || slimUser.email || slimUser.uid,
-          player_name: playerName,
+          castaway_id: player.castaway_id,
+          player_name: player.full_name,
         },
       ],
     } satisfies Draft;
@@ -279,10 +281,10 @@ export const DraftComponent = () => {
     }
   }, [competition]);
 
-  const isPlayerDrafted = (name: string) => {
+  const isPlayerDrafted = (castawayId: string) => {
     if (!draft?.draft_picks) return false;
 
-    return draft.draft_picks.some((x) => x.player_name === name);
+    return draft.draft_picks.some((x) => x.castaway_id === castawayId);
   };
 
   const isCurrentDrafter =
@@ -761,16 +763,16 @@ export const DraftComponent = () => {
           {phase === "drafting" && (
             <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }} mt="md">
               {season.players.map((p) => {
-                const isDrafted = isPlayerDrafted(p.name);
+                const isDrafted = isPlayerDrafted(p.castaway_id);
                 const draftedBy = !isDrafted
                   ? null
-                  : draft?.draft_picks.find((x) => x.player_name === p.name);
+                  : draft?.draft_picks.find((x) => x.castaway_id === p.castaway_id);
                 return (
                   <Paper
                     radius="md"
                     withBorder
                     p="sm"
-                    key={p.name + "-grid"}
+                    key={p.castaway_id + "-grid"}
                     style={{
                       opacity: isDrafted ? 0.5 : 1,
                     }}
@@ -780,7 +782,7 @@ export const DraftComponent = () => {
                         src={p.img}
                         size={80}
                         radius={80}
-                        alt={p.name}
+                        alt={p.full_name}
                         style={{
                           filter: isDrafted ? "grayscale(1)" : "none",
                         }}
@@ -790,14 +792,14 @@ export const DraftComponent = () => {
                             children: (
                               <Stack>
                                 <Center>
-                                  <Title order={3}>{p.name}</Title>
+                                  <Title order={3}>{p.full_name}</Title>
                                 </Center>
                                 <Center>
                                   <Avatar
                                     size={"100%"}
                                     src={p.img}
                                     radius={10}
-                                    alt={p.name}
+                                    alt={p.full_name}
                                   />
                                 </Center>
                                 {p.description && (
@@ -821,7 +823,7 @@ export const DraftComponent = () => {
                         size="sm"
                         c={isDrafted ? "dimmed" : undefined}
                       >
-                        {p.name}
+                        {p.full_name}
                       </Text>
                       {(p.age || p.profession || p.hometown) && (
                         <Text ta="center" size="xs" c="dimmed" lh={1.3}>
@@ -846,7 +848,7 @@ export const DraftComponent = () => {
                           fullWidth
                           size="xs"
                           variant={isCurrentDrafter ? "filled" : "light"}
-                          onClick={() => draftPlayer(p.name)}
+                          onClick={() => draftPlayer(p)}
                           disabled={
                             !draft?.started ||
                             draft.finished ||
@@ -989,7 +991,7 @@ const PropBets = ({ season, onSubmit }: PropBetsProps) => {
     },
   });
 
-  const players = season?.players.map((x) => x.name);
+  const players = season?.players.map((x) => x.full_name);
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement> | undefined,

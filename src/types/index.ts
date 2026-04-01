@@ -1,6 +1,13 @@
 import { User } from "firebase/auth";
 import { PropBetsQuestions } from "../data/propbets";
 
+export type CastawayId = `US${string}`;
+
+export type CastawayLookup = Record<
+  CastawayId,
+  { full_name: string; castaway: string }
+>;
+
 export type Season = {
   id: `season_${number}`;
   order: number;
@@ -8,6 +15,7 @@ export type Season = {
   img: string;
   players: Player[];
   episodes: Episode[];
+  castawayLookup: CastawayLookup;
 };
 
 export type Episode<SeasonNumber = number> = {
@@ -34,7 +42,10 @@ export const EliminationVariants = [
 
 export type EliminationVariant = (typeof EliminationVariants)[number];
 
-export type Elimination<PlayerName = string, SeasonNumber = number> = {
+export type Elimination<
+  Id extends CastawayId = CastawayId,
+  SeasonNumber = number,
+> = {
   id: `elimination_${string}`;
 
   season_id: Season["id"];
@@ -43,17 +54,21 @@ export type Elimination<PlayerName = string, SeasonNumber = number> = {
   episode_id: Episode["id"];
   episode_num: number;
 
-  player_name: PlayerName;
+  castaway_id: Id;
 
   order: number;
   variant: EliminationVariant;
   votes_received?: number;
 };
 
-export type Player<PlayerName = string, SeasonNumber = number> = {
+export type Player<
+  Id extends CastawayId = CastawayId,
+  SeasonNumber = number,
+> = {
   season_id: Season["id"];
   season_num: SeasonNumber;
-  name: PlayerName;
+  castaway_id: Id;
+  full_name: string;
   img: string;
   description?: string;
   age?: number;
@@ -74,9 +89,9 @@ export type Team = {
 
 /**
  * A snapshot of player-to-team assignments for a single episode.
- * Keys are player names, values are team IDs or null (no team).
+ * Keys are castaway IDs, values are team IDs or null (no team).
  */
-export type TeamAssignmentSnapshot = Record<string, Team["id"] | null>;
+export type TeamAssignmentSnapshot = Record<CastawayId, Team["id"] | null>;
 
 /**
  * All team assignment snapshots for a season.
@@ -84,7 +99,10 @@ export type TeamAssignmentSnapshot = Record<string, Team["id"] | null>;
  */
 export type TeamAssignments = Record<string, TeamAssignmentSnapshot>;
 
-export type Challenge<PlayerNames = string, SeasonNumber = number> = {
+export type Challenge<
+  Id extends CastawayId = CastawayId,
+  SeasonNumber = number,
+> = {
   id: `challenge_${string}`;
 
   season_id: Season["id"];
@@ -97,13 +115,13 @@ export type Challenge<PlayerNames = string, SeasonNumber = number> = {
   variant: ChallengeWinAction;
 
   /**
-   * List of player names who won
+   * List of castaway IDs who won
    */
-  winning_players: PlayerNames[];
+  winning_castaways: Id[];
 
   /**
    * Optional: the team that won this challenge.
-   * Audit/display metadata only -- winning_players is the scoring source of truth.
+   * Audit/display metadata only -- winning_castaways is the scoring source of truth.
    */
   winning_team_id?: Team["id"] | null;
 };
@@ -151,6 +169,7 @@ export type DraftPick = {
   order: number;
   user_name: string;
   user_uid: string;
+  castaway_id: CastawayId;
   player_name: string;
 };
 
@@ -195,7 +214,10 @@ export type Competition = {
   finished: boolean;
 };
 
-export type GameEvent<PlayerName = string, SeasonNumber = number> = {
+export type GameEvent<
+  Id extends CastawayId = CastawayId,
+  SeasonNumber = number,
+> = {
   id: `event_${string}`;
 
   season_id: Season["id"];
@@ -206,29 +228,50 @@ export type GameEvent<PlayerName = string, SeasonNumber = number> = {
 
   action: GameEventAction;
   multiplier: number | null;
-  player_name: PlayerName;
+  castaway_id: Id;
 };
 
-export const ChallengeWinActions = ["reward", "combined", "immunity"] as const;
+export const ChallengeWinActions = ["reward", "immunity"] as const;
 
 export type ChallengeWinAction = (typeof ChallengeWinActions)[number];
 
 export const GameEventActions = [
   "accept_beware_advantage",
   "complete_sweat_or_savvy_task",
-  "find_advantage",
+  "find_amulet",
+  "find_bank_your_vote",
   "find_beware_advantage",
+  "find_block_a_vote",
+  "find_challenge_advantage",
+  "find_control_the_vote",
+  "find_extra_vote",
   "find_idol",
+  "find_idol_nullifier",
+  "find_knowledge_is_power",
+  "find_other_advantage",
+  "find_safety_without_power",
+  "find_steal_a_vote",
   "fulfill_beware_advantage",
   "go_on_journey",
   "make_final_tribal_council",
   "make_merge",
-  "use_advantage",
+  "use_bank_your_vote",
+  "use_block_a_vote",
+  "use_control_the_vote",
+  "use_extra_vote",
   "use_idol",
+  "use_idol_nullifier",
+  "use_knowledge_is_power",
+  "use_safety_without_power",
   "use_shot_in_the_dark_successfully",
   "use_shot_in_the_dark_unsuccessfully",
+  "use_steal_a_vote",
   "votes_negated_by_idol",
-  "win_advantage",
+  "win_block_a_vote",
+  "win_extra_vote",
+  "win_idol",
+  "win_other_advantage",
+  "win_steal_a_vote",
   "win_survivor",
 ] as const;
 

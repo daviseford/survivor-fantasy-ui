@@ -12,12 +12,12 @@ export const MyDraftedPlayers = () => {
   const { draft } = useDraft();
   const { data: season } = useSeason(draft?.season_id);
 
-  const myPlayerNames = (draft?.draft_picks || [])
+  const myCastawayIds = (draft?.draft_picks || [])
     .filter((x) => x.user_uid === slimUser?.uid)
-    .map((x) => x.player_name);
+    .map((x) => x.castaway_id);
 
   const myPlayerInfo = (season?.players || []).filter((p) =>
-    myPlayerNames.includes(p.name),
+    myCastawayIds.includes(p.castaway_id),
   );
 
   if (!myPlayerInfo?.length) return null;
@@ -33,8 +33,8 @@ export const MyDraftedPlayers = () => {
         </Badge>
         <Avatar.Group spacing="sm">
           {myPlayerInfo.map((p) => (
-            <Tooltip label={p.name} key={p.name}>
-              <Avatar src={p.img} size={isMobile ? "md" : "lg"} alt={p.name} />
+            <Tooltip label={p.full_name} key={p.castaway_id}>
+              <Avatar src={p.img} size={isMobile ? "md" : "lg"} alt={p.full_name} />
             </Tooltip>
           ))}
         </Avatar.Group>

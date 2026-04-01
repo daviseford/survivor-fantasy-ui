@@ -16,7 +16,7 @@ import { useCompetition } from "../../hooks/useCompetition";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
-import { PlayerAction } from "../../types";
+import { CastawayId, PlayerAction } from "../../types";
 import { getNumberWithOrdinal } from "../../utils/misc";
 
 type SortField = "rank" | "player" | "total" | "draft";
@@ -29,8 +29,7 @@ const getBadgeColor = (action: string) => {
   if (
     action.includes("immunity") ||
     action.includes("challenge") ||
-    action.includes("reward") ||
-    action.includes("combined")
+    action.includes("reward")
   )
     return "blue";
   return "gray";
@@ -94,13 +93,17 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
   // Build a sortable array from the scoring data
   const entries = useMemo(() => {
     return Object.entries(survivorPointsByEpisode)
-      .map(([playerName, episodeScores]) => {
-        const total = survivorPointsTotalSeason[playerName] ?? 0;
+      .map(([castawayId, episodeScores]) => {
+        const total = survivorPointsTotalSeason[castawayId] ?? 0;
         const draftPick = competition?.draft_picks.find(
-          (x) => x.player_name === playerName,
+          (x) => x.castaway_id === castawayId,
         );
+        const displayName =
+          season?.castawayLookup[castawayId as CastawayId]?.full_name ??
+          castawayId;
         return {
-          playerName,
+          castawayId: castawayId as CastawayId,
+          displayName,
           episodeScores,
           total,
           draftOrder: draftPick?.order ?? 999,
@@ -112,6 +115,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
     survivorPointsByEpisode,
     survivorPointsTotalSeason,
     competition?.draft_picks,
+    season?.castawayLookup,
   ]);
 
   const sorted = useMemo(() => {
@@ -125,7 +129,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
           cmp = a.defaultRank - b.defaultRank;
           break;
         case "player":
-          cmp = a.playerName.localeCompare(b.playerName);
+          cmp = a.displayName.localeCompare(b.displayName);
           break;
         case "total":
           cmp = b.total - a.total; // higher total = better rank
@@ -152,18 +156,18 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
   );
 
   const rows = sorted.map((entry) => {
-    const { playerName, episodeScores, total, defaultRank, draftOrder } = entry;
-    const playerData = season?.players.find((x) => x.name === playerName);
+    const { castawayId, displayName, episodeScores, total, defaultRank, draftOrder } = entry;
+    const playerData = season?.players.find((x) => x.castaway_id === castawayId);
 
     const draftPick = competition?.draft_picks.find(
-      (x) => x.player_name === playerName,
+      (x) => x.castaway_id === castawayId,
     );
     const draftedBy = competition?.participants.find(
       (x) => x.uid === draftPick?.user_uid,
     );
 
     const playerElimination = Object.values(eliminations).find(
-      (x) => x.player_name === playerName,
+      (x) => x.castaway_id === castawayId,
     );
 
     const isRemovedFromGame =
@@ -172,7 +176,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
         playerElimination.variant === "quitter");
 
     const isWinner = Object.values(events).some(
-      (x) => x.player_name === playerName && x.action === "win_survivor",
+      (x) => x.castaway_id === castawayId && x.action === "win_survivor",
     );
 
     const isDraftedByCurrentUser = draftPick?.user_uid === slimUser?.uid;
@@ -189,7 +193,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
     const avatarStyle = playerElimination ? { filter: "grayscale(1)" } : {};
 
     return (
-      <Table.Tr key={playerName} style={trStyle}>
+      <Table.Tr key={castawayId} style={trStyle}>
         <Table.Td ta="center">
           <Text span size="sm" fw={500} c="dimmed">
             {defaultRank}
@@ -211,7 +215,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                 lh={1.2}
                 truncate
               >
-                {playerName}
+                {displayName}
               </Text>
               {draftedBy && (
                 <Text fz="xs" c="dimmed" lh={1.2} truncate>

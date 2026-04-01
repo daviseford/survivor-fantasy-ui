@@ -1,7 +1,13 @@
 import { useMemo } from "react";
 import { Competition } from "../types";
-import { filterEpisodesByMax, filterRecordByEpisode } from "../utils/episodeFilter";
-import { getPropBetScoresByUser, PropBetScoresByUser } from "../utils/propBetUtils";
+import {
+  filterEpisodesByMax,
+  filterRecordByEpisode,
+} from "../utils/episodeFilter";
+import {
+  getPropBetScoresByUser,
+  PropBetScoresByUser,
+} from "../utils/propBetUtils";
 import { useChallenges } from "./useChallenges";
 import { useCompetition } from "./useCompetition";
 import { useEliminations } from "./useEliminations";

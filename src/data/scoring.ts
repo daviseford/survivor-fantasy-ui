@@ -7,11 +7,6 @@ export const BASE_PLAYER_SCORING = [
     description: "Win a reward challenge.",
   },
   {
-    action: "combined",
-    fixed_value: 3,
-    description: "Win a combined reward + immunity challenge.",
-  },
-  {
     action: "immunity",
     fixed_value: 2,
     description: "Win an immunity challenge.",
@@ -48,34 +43,140 @@ export const BASE_PLAYER_SCORING = [
     fixed_value: 20,
     description: "Become the Sole Survivor.",
   },
+  // --- Find actions (1 pt each) ---
   {
     action: "find_idol",
     fixed_value: 1,
-    description: "Find a hidden immunity idol. (Clues do not count)",
+    description: "Find a Hidden Immunity Idol.",
   },
   {
-    action: "find_advantage",
+    action: "find_extra_vote",
     fixed_value: 1,
-    description: "Find a hidden advantage. (Clues do not count)",
+    description: "Find an Extra Vote advantage.",
   },
   {
-    action: "win_advantage",
+    action: "find_steal_a_vote",
     fixed_value: 1,
-    description:
-      "Obtain an advantage (e.g. extra vote) from the result of a challenge or competition.",
+    description: "Find a Steal a Vote advantage.",
   },
+  {
+    action: "find_block_a_vote",
+    fixed_value: 1,
+    description: "Find a Block a Vote advantage.",
+  },
+  {
+    action: "find_bank_your_vote",
+    fixed_value: 1,
+    description: "Find a Bank your Vote advantage.",
+  },
+  {
+    action: "find_idol_nullifier",
+    fixed_value: 1,
+    description: "Find an Idol Nullifier.",
+  },
+  {
+    action: "find_knowledge_is_power",
+    fixed_value: 1,
+    description: "Find a Knowledge is Power advantage.",
+  },
+  {
+    action: "find_safety_without_power",
+    fixed_value: 1,
+    description: "Find a Safety without Power advantage.",
+  },
+  {
+    action: "find_control_the_vote",
+    fixed_value: 1,
+    description: "Find a Control the Vote advantage.",
+  },
+  {
+    action: "find_amulet",
+    fixed_value: 1,
+    description: "Find an Amulet advantage.",
+  },
+  {
+    action: "find_challenge_advantage",
+    fixed_value: 1,
+    description: "Find a Challenge Advantage.",
+  },
+  {
+    action: "find_other_advantage",
+    fixed_value: 1,
+    description: "Find a rare or one-off advantage.",
+  },
+  // --- Use actions (2 pts each) ---
   {
     action: "use_idol",
     fixed_value: 2,
-    description:
-      "Player gets credit for playing an idol, whether on themself or another player.",
+    description: "Play a Hidden Immunity Idol at Tribal Council.",
   },
   {
-    action: "use_advantage",
+    action: "use_extra_vote",
     fixed_value: 2,
-    description:
-      "Whether it's at tribal or pre-challenge or any other time. Using an advantage triggers this.",
+    description: "Play an Extra Vote at Tribal Council.",
   },
+  {
+    action: "use_steal_a_vote",
+    fixed_value: 2,
+    description: "Play a Steal a Vote at Tribal Council.",
+  },
+  {
+    action: "use_block_a_vote",
+    fixed_value: 2,
+    description: "Play a Block a Vote at Tribal Council.",
+  },
+  {
+    action: "use_bank_your_vote",
+    fixed_value: 2,
+    description: "Bank your vote for a future Tribal Council.",
+  },
+  {
+    action: "use_idol_nullifier",
+    fixed_value: 2,
+    description: "Play an Idol Nullifier against another player.",
+  },
+  {
+    action: "use_knowledge_is_power",
+    fixed_value: 2,
+    description: "Play Knowledge is Power to steal an idol or advantage.",
+  },
+  {
+    action: "use_safety_without_power",
+    fixed_value: 2,
+    description: "Use Safety without Power to be safe but lose your vote.",
+  },
+  {
+    action: "use_control_the_vote",
+    fixed_value: 2,
+    description: "Use Control the Vote at Tribal Council.",
+  },
+  // --- Win actions (1 pt each) ---
+  {
+    action: "win_extra_vote",
+    fixed_value: 1,
+    description: "Win an Extra Vote from a journey or challenge.",
+  },
+  {
+    action: "win_steal_a_vote",
+    fixed_value: 1,
+    description: "Win a Steal a Vote from a journey or challenge.",
+  },
+  {
+    action: "win_block_a_vote",
+    fixed_value: 1,
+    description: "Win a Block a Vote from a journey or challenge.",
+  },
+  {
+    action: "win_idol",
+    fixed_value: 1,
+    description: "Win an idol from a journey or challenge.",
+  },
+  {
+    action: "win_other_advantage",
+    fixed_value: 1,
+    description: "Win a rare or one-off advantage from a journey or challenge.",
+  },
+  // --- Other scoring events ---
   {
     action: "eliminated",
     description:

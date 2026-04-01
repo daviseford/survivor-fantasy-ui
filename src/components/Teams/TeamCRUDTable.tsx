@@ -19,7 +19,7 @@ import { useSeason } from "../../hooks/useSeason";
 import { useTeamAssignments } from "../../hooks/useTeamAssignments";
 import { useTeams } from "../../hooks/useTeams";
 import { useUser } from "../../hooks/useUser";
-import { Team } from "../../types";
+import { CastawayId, Team } from "../../types";
 
 const SURVIVOR_SWATCHES = [
   "#3B82F6",
@@ -111,9 +111,9 @@ export const TeamCRUDTable = () => {
     let assignmentsChanged = false;
     for (const [episodeKey, snapshot] of Object.entries(updatedAssignments)) {
       const updatedSnapshot = { ...snapshot };
-      for (const [playerName, teamId] of Object.entries(updatedSnapshot)) {
+      for (const [castawayId, teamId] of Object.entries(updatedSnapshot)) {
         if (teamId === team.id) {
-          updatedSnapshot[playerName] = null;
+          updatedSnapshot[castawayId as CastawayId] = null;
           assignmentsChanged = true;
         }
       }

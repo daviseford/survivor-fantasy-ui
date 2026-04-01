@@ -58,11 +58,11 @@ export const useScoringCalculations = () => {
             Object.values(filteredEliminations),
             Object.values(filteredEvents),
             e.order,
-            player.name,
+            player.castaway_id,
           ),
         );
 
-        accum[player.name] = p;
+        accum[player.castaway_id] = p;
 
         return accum;
       },
@@ -82,16 +82,16 @@ export const useScoringCalculations = () => {
         (accum, participant) => {
           const { uid } = participant;
 
-          const myPlayerNames = competition.draft_picks
+          const myCastawayIds = competition.draft_picks
             .filter((x) => x.user_uid === uid)
-            .map((x) => x.player_name);
+            .map((x) => x.castaway_id);
 
           const playerPointsPerEpisode = filteredEpisodes.map((e) => {
             return sum(
-              myPlayerNames.flatMap(
-                (p) =>
-                  (survivorPointsByEpisode || {})?.[p]?.[e.order - 1]?.total ||
-                  0,
+              myCastawayIds.flatMap(
+                (id) =>
+                  (survivorPointsByEpisode || {})?.[id]?.[e.order - 1]
+                    ?.total || 0,
               ),
             );
           });
