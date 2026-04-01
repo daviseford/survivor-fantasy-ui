@@ -46,7 +46,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Sonja Christopher",
     img: "/images/season_1/Sonja-Christopher.jpg",
-    description: "Age: 63 | Hometown: Walnut Creek, California | Occupation: Musician",
+    description:
+      "Age: 63 | Hometown: Walnut Creek, California | Occupation: Musician",
     age: 63,
     profession: "Musician",
     hometown: "Walnut Creek, California",
@@ -54,7 +55,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "B.B. Andersen",
     img: "/images/season_1/B.B.-Andersen.jpg",
-    description: "Age: 64 | Hometown: Mission Hills, Kansas | Occupation: Real Estate Developer",
+    description:
+      "Age: 64 | Hometown: Mission Hills, Kansas | Occupation: Real Estate Developer",
     age: 64,
     profession: "Real Estate Developer",
     hometown: "Mission Hills, Kansas",
@@ -62,7 +64,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Stacey Stillman",
     img: "/images/season_1/Stacey-Stillman.jpg",
-    description: "Age: 53 | Hometown: San Francisco, California | Occupation: Attorney",
+    description:
+      "Age: 53 | Hometown: San Francisco, California | Occupation: Attorney",
     age: 53,
     profession: "Attorney",
     hometown: "San Francisco, California",
@@ -70,7 +73,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Ramona Gray",
     img: "/images/season_1/Ramona-Gray.jpg",
-    description: "Age: 55 | Hometown: Edison, New Jersey | Occupation: Biochemist",
+    description:
+      "Age: 55 | Hometown: Edison, New Jersey | Occupation: Biochemist",
     age: 55,
     profession: "Biochemist",
     hometown: "Edison, New Jersey",
@@ -78,7 +82,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Dirk Been",
     img: "/images/season_1/Dirk-Been.jpg",
-    description: "Age: 49 | Hometown: Spring Green, Wisconsin | Occupation: Dairy Farmer",
+    description:
+      "Age: 49 | Hometown: Spring Green, Wisconsin | Occupation: Dairy Farmer",
     age: 49,
     profession: "Dairy Farmer",
     hometown: "Spring Green, Wisconsin",
@@ -86,7 +91,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Joel Klug",
     img: "/images/season_1/Joel-Klug.jpg",
-    description: "Age: 53 | Hometown: Sherwood, Arkansas | Occupation: Health Club Consultant",
+    description:
+      "Age: 53 | Hometown: Sherwood, Arkansas | Occupation: Health Club Consultant",
     age: 53,
     profession: "Health Club Consultant",
     hometown: "Sherwood, Arkansas",
@@ -94,7 +100,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Gretchen Cordy",
     img: "/images/season_1/Gretchen-Cordy.jpg",
-    description: "Age: 64 | Hometown: Clarksville, Tennessee | Occupation: Teacher",
+    description:
+      "Age: 64 | Hometown: Clarksville, Tennessee | Occupation: Teacher",
     age: 64,
     profession: "Teacher",
     hometown: "Clarksville, Tennessee",
@@ -102,7 +109,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Greg Buis",
     img: "/images/season_1/Greg-Buis.jpg",
-    description: "Age: 50 | Hometown: Gold Hill, Colorado | Occupation: Ivy League Graduate",
+    description:
+      "Age: 50 | Hometown: Gold Hill, Colorado | Occupation: Ivy League Graduate",
     age: 50,
     profession: "Ivy League Graduate",
     hometown: "Gold Hill, Colorado",
@@ -110,7 +118,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Jenna Lewis",
     img: "/images/season_1/Jenna-Lewis.jpg",
-    description: "Age: 48 | Hometown: Franklin, New Hampshire | Occupation: Student",
+    description:
+      "Age: 48 | Hometown: Franklin, New Hampshire | Occupation: Student",
     age: 48,
     profession: "Student",
     hometown: "Franklin, New Hampshire",
@@ -118,7 +127,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Gervase Peterson",
     img: "/images/season_1/Gervase-Peterson.jpg",
-    description: "Age: 56 | Hometown: Willingboro, New Jersey | Occupation: YMCA Basketball Coach",
+    description:
+      "Age: 56 | Hometown: Willingboro, New Jersey | Occupation: YMCA Basketball Coach",
     age: 56,
     profession: "YMCA Basketball Coach",
     hometown: "Willingboro, New Jersey",
@@ -126,7 +136,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Colleen Haskell",
     img: "/images/season_1/Colleen-Haskell.jpg",
-    description: "Age: 49 | Hometown: Miami Beach, Florida | Occupation: Student",
+    description:
+      "Age: 49 | Hometown: Miami Beach, Florida | Occupation: Student",
     age: 49,
     profession: "Student",
     hometown: "Miami Beach, Florida",
@@ -134,7 +145,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Sean Kenniff",
     img: "/images/season_1/Sean-Kenniff.jpg",
-    description: "Age: 56 | Hometown: Carle Place, New York | Occupation: Doctor",
+    description:
+      "Age: 56 | Hometown: Carle Place, New York | Occupation: Doctor",
     age: 56,
     profession: "Doctor",
     hometown: "Carle Place, New York",
@@ -142,7 +154,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Susan Hawk",
     img: "/images/season_1/Susan-Hawk.jpg",
-    description: "Age: 64 | Hometown: Palmyra, Wisconsin | Occupation: Truck Driver",
+    description:
+      "Age: 64 | Hometown: Palmyra, Wisconsin | Occupation: Truck Driver",
     age: 64,
     profession: "Truck Driver",
     hometown: "Palmyra, Wisconsin",
@@ -150,7 +163,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Rudy Boesch",
     img: "/images/season_1/Rudy-Boesch.jpg",
-    description: "Age: 72 | Hometown: Virginia Beach, Virginia | Occupation: Retired Navy SEAL",
+    description:
+      "Age: 72 | Hometown: Virginia Beach, Virginia | Occupation: Retired Navy SEAL",
     age: 72,
     profession: "Retired Navy SEAL",
     hometown: "Virginia Beach, Virginia",
@@ -158,7 +172,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Kelly Wiglesworth",
     img: "/images/season_1/Kelly-Wiglesworth.jpg",
-    description: "Age: 48 | Hometown: Kernville, California | Occupation: River Guide",
+    description:
+      "Age: 48 | Hometown: Kernville, California | Occupation: River Guide",
     age: 48,
     profession: "River Guide",
     hometown: "Kernville, California",
@@ -166,7 +181,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Richard Hatch",
     img: "/images/season_1/Richard-Hatch.jpg",
-    description: "Age: 64 | Hometown: Newport, Rhode Island | Occupation: Corporate Trainer",
+    description:
+      "Age: 64 | Hometown: Newport, Rhode Island | Occupation: Corporate Trainer",
     age: 64,
     profession: "Corporate Trainer",
     hometown: "Newport, Rhode Island",
@@ -508,9 +524,7 @@ export const SEASON_1_CHALLENGES = {
     episode_num: 7,
     variant: "immunity",
     order: 12,
-    winning_players: [
-      "Greg Buis",
-    ],
+    winning_players: ["Greg Buis"],
   },
   challenge_13: {
     id: "challenge_13",
@@ -520,9 +534,7 @@ export const SEASON_1_CHALLENGES = {
     episode_num: 8,
     variant: "reward",
     order: 13,
-    winning_players: [
-      "Greg Buis",
-    ],
+    winning_players: ["Greg Buis"],
   },
   challenge_14: {
     id: "challenge_14",
@@ -532,9 +544,7 @@ export const SEASON_1_CHALLENGES = {
     episode_num: 8,
     variant: "immunity",
     order: 14,
-    winning_players: [
-      "Gervase Peterson",
-    ],
+    winning_players: ["Gervase Peterson"],
   },
   challenge_15: {
     id: "challenge_15",
@@ -544,9 +554,7 @@ export const SEASON_1_CHALLENGES = {
     episode_num: 9,
     variant: "reward",
     order: 15,
-    winning_players: [
-      "Colleen Haskell",
-    ],
+    winning_players: ["Colleen Haskell"],
   },
   challenge_16: {
     id: "challenge_16",
@@ -556,9 +564,7 @@ export const SEASON_1_CHALLENGES = {
     episode_num: 9,
     variant: "immunity",
     order: 16,
-    winning_players: [
-      "Rudy Boesch",
-    ],
+    winning_players: ["Rudy Boesch"],
   },
   challenge_17: {
     id: "challenge_17",
@@ -568,9 +574,7 @@ export const SEASON_1_CHALLENGES = {
     episode_num: 10,
     variant: "reward",
     order: 17,
-    winning_players: [
-      "Gervase Peterson",
-    ],
+    winning_players: ["Gervase Peterson"],
   },
   challenge_18: {
     id: "challenge_18",
@@ -580,9 +584,7 @@ export const SEASON_1_CHALLENGES = {
     episode_num: 10,
     variant: "immunity",
     order: 18,
-    winning_players: [
-      "Richard Hatch",
-    ],
+    winning_players: ["Richard Hatch"],
   },
   challenge_19: {
     id: "challenge_19",
@@ -592,9 +594,7 @@ export const SEASON_1_CHALLENGES = {
     episode_num: 11,
     variant: "reward",
     order: 19,
-    winning_players: [
-      "Sean Kenniff",
-    ],
+    winning_players: ["Sean Kenniff"],
   },
   challenge_20: {
     id: "challenge_20",
@@ -604,9 +604,7 @@ export const SEASON_1_CHALLENGES = {
     episode_num: 11,
     variant: "immunity",
     order: 20,
-    winning_players: [
-      "Kelly Wiglesworth",
-    ],
+    winning_players: ["Kelly Wiglesworth"],
   },
   challenge_21: {
     id: "challenge_21",
@@ -616,9 +614,7 @@ export const SEASON_1_CHALLENGES = {
     episode_num: 12,
     variant: "reward",
     order: 21,
-    winning_players: [
-      "Kelly Wiglesworth",
-    ],
+    winning_players: ["Kelly Wiglesworth"],
   },
   challenge_22: {
     id: "challenge_22",
@@ -628,9 +624,7 @@ export const SEASON_1_CHALLENGES = {
     episode_num: 12,
     variant: "immunity",
     order: 22,
-    winning_players: [
-      "Kelly Wiglesworth",
-    ],
+    winning_players: ["Kelly Wiglesworth"],
   },
   challenge_23: {
     id: "challenge_23",
@@ -640,9 +634,7 @@ export const SEASON_1_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 23,
-    winning_players: [
-      "Kelly Wiglesworth",
-    ],
+    winning_players: ["Kelly Wiglesworth"],
   },
 } satisfies Record<Challenge["id"], Challenge<PlayerName, SeasonNumber>>;
 
