@@ -28,6 +28,8 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 
 **survivoR is the authoritative data source.** Always prefer survivoR data (the R dataset at `github.com/doehm/survivoR`) over wiki scraping. The wiki scraper is retained only for player images. When data conflicts between survivoR and the wiki, trust survivoR.
 
+**Finale rule:** An episode is the finale only if a winner has been declared (`castaways.winner === true`). If the season is still in progress (no winner in survivoR data), no episode should be flagged as `isFinale`. See `docs/survivor-data-reference.md` for full transformation rules.
+
 ## Architecture
 
 - **React 19 + TypeScript + Vite** SPA with Mantine v9 UI components
