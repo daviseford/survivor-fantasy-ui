@@ -159,12 +159,12 @@ describe("getPropBetScoresForUser", () => {
       expect(answer.status).toBe("pending");
     });
 
-    it("returns definitive_incorrect when picked player is eliminated", () => {
+    it("returns pending when picked player is eliminated (could return to game)", () => {
       const elims = {
         e1: makeElimination("1", 5, ALICE, 3),
       };
       const answer = getStatus("propbet_winner", { eliminations: elims });
-      expect(answer.status).toBe("definitive_incorrect");
+      expect(answer.status).toBe("pending");
     });
 
     it("returns definitive_correct when win_survivor event matches pick", () => {
@@ -199,12 +199,12 @@ describe("getPropBetScoresForUser", () => {
       expect(answer.status).toBe("pending");
     });
 
-    it("returns definitive_incorrect when picked player eliminated (non-FTC)", () => {
+    it("returns pending when picked player eliminated (could return to game)", () => {
       const elims = {
         e1: makeElimination("1", 5, ALICE, 3, "tribal"),
       };
       const answer = getStatus("propbet_ftc", { eliminations: elims });
-      expect(answer.status).toBe("definitive_incorrect");
+      expect(answer.status).toBe("pending");
     });
 
     it("does not mark as incorrect when elimination variant is final_tribal_council", () => {
