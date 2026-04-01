@@ -1,20 +1,29 @@
 /**
  * Season Bootstrap CLI — one command to scaffold a complete season.
  *
- * Usage: yarn new-season <N> [--push] [--force] [--dry-run]
+ * Usage: yarn new-season <N> [--push] [--force] [--dry-run] [--source=survivoR2py|wiki]
  *
  * Steps:
- *   1. Scrape player data from Survivor Wiki
- *   2. Scrape results (episodes, challenges, eliminations, events)
+ *   1. Fetch player data (from survivoR2py or wiki)
+ *   2. Fetch results data (from survivoR2py or wiki)
  *   3. Generate full season data file
  *   4. Register season in src/data/seasons.ts
  *   5. (optional) Push to Firestore with --push
+ *
+ * Data sources:
+ *   --source=survivoR2py (default) — structured data from survivoR2py GitHub dataset
+ *   --source=wiki — legacy wiki scraping (slower, more fragile)
  */
 
 import * as fs from "fs";
 import * as path from "path";
 import { generateFullSeasonFile, registerSeason } from "./lib/codegen.js";
 import { pushSeasonToFirestore } from "./lib/firebase-push.js";
+import { fetchSeasonData } from "./lib/survivoR2py-client.js";
+import {
+  transformPlayers,
+  transformResults,
+} from "./lib/survivoR2py-transformer.js";
 import { downloadImage, fetchSeasonLogoUrl } from "./lib/wiki-api.js";
 import { scrapeResults } from "./scrape-results.js";
 import { scrape } from "./scrape.js";
@@ -28,12 +37,22 @@ async function main(): Promise<void> {
   const force = flags.has("--force");
   const push = flags.has("--push");
   const dryRun = flags.has("--dry-run");
+  const sourceFlag = [...flags].find((f) => f.startsWith("--source="));
+  const source = sourceFlag
+    ? sourceFlag.split("=")[1]
+    : "survivoR2py";
 
   if (!seasonNum || isNaN(seasonNum)) {
     console.error(
-      "Usage: yarn new-season <season_number> [--push] [--force] [--dry-run]",
+      "Usage: yarn new-season <season_number> [--push] [--force] [--dry-run] [--source=survivoR2py|wiki]",
     );
     console.error("Example: yarn new-season 51");
+    process.exit(1);
+  }
+
+  if (source !== "survivoR2py" && source !== "wiki") {
+    console.error(`Invalid --source value: ${source}`);
+    console.error(`Valid options: survivoR2py, wiki`);
     process.exit(1);
   }
 
@@ -50,17 +69,33 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  // Step 1: Scrape player data
-  console.log(`\n${"=".repeat(60)}`);
-  console.log(`Step 1/5: Scraping player data for Season ${seasonNum}`);
-  console.log(`${"=".repeat(60)}`);
-  const playerData = await scrape(seasonNum);
+  let playerData;
+  let resultsData;
 
-  // Step 2: Scrape results data
-  console.log(`\n${"=".repeat(60)}`);
-  console.log(`Step 2/5: Scraping results data for Season ${seasonNum}`);
-  console.log(`${"=".repeat(60)}`);
-  const resultsData = await scrapeResults(seasonNum);
+  if (source === "survivoR2py") {
+    // Fetch from survivoR2py (structured dataset)
+    console.log(`\n${"=".repeat(60)}`);
+    console.log(`Step 1/5: Fetching survivoR2py data for Season ${seasonNum}`);
+    console.log(`${"=".repeat(60)}`);
+    const seasonData = await fetchSeasonData(seasonNum);
+
+    console.log(`\n${"=".repeat(60)}`);
+    console.log(`Step 2/5: Transforming survivoR2py data`);
+    console.log(`${"=".repeat(60)}`);
+    playerData = transformPlayers(seasonData, seasonNum);
+    resultsData = transformResults(seasonData, seasonNum);
+  } else {
+    // Legacy: Scrape from Survivor Wiki
+    console.log(`\n${"=".repeat(60)}`);
+    console.log(`Step 1/5: Scraping player data for Season ${seasonNum}`);
+    console.log(`${"=".repeat(60)}`);
+    playerData = await scrape(seasonNum);
+
+    console.log(`\n${"=".repeat(60)}`);
+    console.log(`Step 2/5: Scraping results data for Season ${seasonNum}`);
+    console.log(`${"=".repeat(60)}`);
+    resultsData = await scrapeResults(seasonNum);
+  }
 
   // Step 3: Generate full season file
   console.log(`\n${"=".repeat(60)}`);
