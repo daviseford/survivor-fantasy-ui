@@ -21,7 +21,7 @@ const BASE_URL =
   "https://raw.githubusercontent.com/doehm/survivoR/master/dev/json";
 
 /** Fetch a survivoR table as JSON. */
-async function fetchTable<T>(table: SurvivorTable): Promise<T[]> {
+export async function fetchTable<T>(table: SurvivorTable): Promise<T[]> {
   const url = `${BASE_URL}/${table}.json`;
   const res = await fetch(url);
   if (!res.ok) {
@@ -33,7 +33,7 @@ async function fetchTable<T>(table: SurvivorTable): Promise<T[]> {
 }
 
 /** Filter records by US version and season number. */
-function filterBySeason<T extends { version?: string; season?: number }>(
+export function filterBySeason<T extends { version?: string; season?: number }>(
   data: T[],
   seasonNum: number,
 ): T[] {
