@@ -262,14 +262,7 @@ function transformChallenges(
     } else {
       // Non-combined challenge
       const winners = entries.filter((e) => e.result.startsWith("Won"));
-      emitChallengeEntries(
-        winners,
-        first,
-        epNum,
-        variant,
-        challenges,
-        order,
-      );
+      emitChallengeEntries(winners, first, epNum, variant, challenges, order);
       order +=
         first.outcome_type === "Tribal" && winners.length > 0
           ? new Set(winners.map((w) => w.tribe)).size

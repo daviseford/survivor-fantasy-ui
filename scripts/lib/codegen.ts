@@ -256,7 +256,9 @@ export function generatePlayerSection(
 
   // Standardized buildPlayer helper
   lines.push(`const buildPlayer = <T extends CastawayIdType>(`);
-  lines.push(`  p: { castaway_id: T; full_name: string; img: string } & Partial<`);
+  lines.push(
+    `  p: { castaway_id: T; full_name: string; img: string } & Partial<`,
+  );
   lines.push(
     `    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "castaway_id" | "full_name" | "img">`,
   );

@@ -118,9 +118,7 @@ describe("transformResults", { timeout: 60000 }, () => {
     const playerResult = transformPlayers(data, 46);
     const result = transformResults(data, 46);
 
-    const castawayIds = new Set(
-      playerResult.players.map((p) => p.castawayId),
-    );
+    const castawayIds = new Set(playerResult.players.map((p) => p.castawayId));
 
     // Every challenge winner ID should be in the castaway IDs set
     for (const chal of result.challenges) {
@@ -185,8 +183,7 @@ describe("transformResults", { timeout: 60000 }, () => {
         e.action.startsWith("win_") &&
         e.action !== "win_survivor" &&
         journeyEvents.some(
-          (j) =>
-            j.castawayId === e.castawayId && j.episodeNum === e.episodeNum,
+          (j) => j.castawayId === e.castawayId && j.episodeNum === e.episodeNum,
         ),
     );
     expect(journeyWins.length).toBeGreaterThan(0);
@@ -291,9 +288,7 @@ describe("transformResults", { timeout: 60000 }, () => {
     const playerResult = transformPlayers(data, 48);
     const result = transformResults(data, 48);
 
-    const castawayIds = new Set(
-      playerResult.players.map((p) => p.castawayId),
-    );
+    const castawayIds = new Set(playerResult.players.map((p) => p.castawayId));
 
     for (const chal of result.challenges) {
       for (const id of chal.winnerCastawayIds) {
