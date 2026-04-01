@@ -10,6 +10,7 @@ export interface ScrapedPlayer {
   previousSeasons?: number[];
   imageUrl?: string;
   bio?: string;
+  nickname?: string;
 }
 
 export interface ScrapeResult {

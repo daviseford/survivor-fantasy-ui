@@ -61,6 +61,7 @@ export type Player<PlayerName = string, SeasonNumber = number> = {
   hometown?: string;
   previousSeasons?: number[];
   bio?: string;
+  nickname?: string;
 };
 
 export type Team = {

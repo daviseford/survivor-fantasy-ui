@@ -9,6 +9,7 @@ import {
   parseContestantPage,
   parseEpisodeGuide,
   parseInfoboxFields,
+  parseNickname,
   parseSeasonNumber,
   parseVotingHistory,
 } from "../wikitext-parser";
@@ -167,6 +168,56 @@ describe("parseSeasonNumber", () => {
   });
 });
 
+describe("parseNickname", () => {
+  it("extracts Q from bold intro", () => {
+    expect(
+      parseNickname(
+        `'''Quintavius "Q" Burdette''' is a contestant from {{S|46}}.`,
+      ),
+    ).toBe("Q");
+  });
+
+  it("extracts Coach from bold intro", () => {
+    expect(
+      parseNickname(
+        `'''Benjamin "Coach" Wade''' is a contestant from {{S|18}}.`,
+      ),
+    ).toBe("Coach");
+  });
+
+  it("extracts Ozzy from bold intro", () => {
+    expect(
+      parseNickname(`'''Oscar "Ozzy" Lusth''' is a contestant from {{S|13}}.`),
+    ).toBe("Ozzy");
+  });
+
+  it("returns null when no nickname present", () => {
+    expect(
+      parseNickname(`'''Sandra Diaz-Twine''' is the Sole Survivor of {{S|7}}.`),
+    ).toBeNull();
+  });
+
+  it("prefers 'also known as' alias over inline quoted name", () => {
+    expect(
+      parseNickname(
+        `'''Robert Carlo "Rob" Mariano''' (also known as '''Boston Rob''') is a contestant.`,
+      ),
+    ).toBe("Boston Rob");
+  });
+
+  it("returns null when no bold intro block", () => {
+    expect(
+      parseNickname("some random text without bold formatting"),
+    ).toBeNull();
+  });
+
+  it("handles smart/curly quotes", () => {
+    expect(
+      parseNickname(`'''Benjamin \u201CCoach\u201D Wade''' is a contestant.`),
+    ).toBe("Coach");
+  });
+});
+
 describe("parseInfoboxFields", () => {
   it("extracts all fields from a single-season player", () => {
     const fields = parseInfoboxFields(BEN_KATZMAN_WIKITEXT);
@@ -238,6 +289,22 @@ describe("parseContestantPage", () => {
 
   it("returns null for wikitext without Contestant template", () => {
     expect(parseContestantPage("no template here")).toBeNull();
+  });
+
+  it("extracts nickname when bold intro precedes infobox", () => {
+    const wikitext = `'''Benjamin "Coach" Wade''' is a contestant from {{S|18}}.
+
+${COLBY_DONALDSON_WIKITEXT.replace("{{Spoiler}}", "")}`;
+    // Replace Colby's infobox but prefix with Coach's bold intro
+    const info = parseContestantPage(wikitext, 50);
+    expect(info).not.toBeNull();
+    expect(info!.nickname).toBe("Coach");
+  });
+
+  it("returns no nickname when bold intro has no quoted text", () => {
+    const info = parseContestantPage(BEN_KATZMAN_WIKITEXT, 46);
+    expect(info).not.toBeNull();
+    expect(info!.nickname).toBeUndefined();
   });
 });
 

@@ -21,6 +21,8 @@ export interface ContestantInfo {
   allSeasons?: number[];
   /** Wiki image filename (e.g., "S46 Ben Katzman.jpg") — needs URL resolution via API */
   imageFileName?: string;
+  /** Nickname extracted from the bold intro paragraph (e.g., "Coach", "Q", "Boston Rob") */
+  nickname?: string;
 }
 
 export interface CastTableEntry {
@@ -65,6 +67,35 @@ export function parseBirthDate(value: string): {
 export function parseSeasonNumber(value: string): number | null {
   const match = value.match(/\{\{S2?\|(\d+)\}\}/);
   return match ? Number(match[1]) : null;
+}
+
+/**
+ * Extract a contestant's nickname from the bold intro paragraph of their wiki page.
+ *
+ * Priority:
+ * 1. "also known as '''Nickname'''" pattern (e.g., "Boston Rob")
+ * 2. Quoted text within the first '''...''' bold block (e.g., "Q", "Coach", "Ozzy")
+ * 3. null if no nickname found
+ */
+export function parseNickname(wikitext: string): string | null {
+  // Priority 1: Check for "(also known as '''Nickname''')" pattern
+  const akaMatch = wikitext.match(/\(also known as\s+'''([^']+)'''\)/i);
+  if (akaMatch) {
+    return akaMatch[1].trim();
+  }
+
+  // Priority 2: Find first '''...''' bold block and extract quoted text within it
+  const boldMatch = wikitext.match(/'''([^']+)'''/);
+  if (boldMatch) {
+    const boldContent = boldMatch[1];
+    // Match straight quotes or smart quotes (curly)
+    const quoteMatch = boldContent.match(/[""\u201C]([^""\u201D]+)[""\u201D]/);
+    if (quoteMatch) {
+      return quoteMatch[1].trim();
+    }
+  }
+
+  return null;
 }
 
 // --- Infobox parser ---
@@ -131,6 +162,12 @@ export function parseContestantPage(
   if (!fields) return null;
 
   const info: ContestantInfo = {};
+
+  // Nickname — extracted from bold intro paragraph, not the infobox
+  const nickname = parseNickname(wikitext);
+  if (nickname) {
+    info.nickname = nickname;
+  }
 
   // Parse birthdate → age
   if (fields.birthdate) {
