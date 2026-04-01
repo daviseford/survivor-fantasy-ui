@@ -1,0 +1,315 @@
+{| class="wikitable" style="margin:auto; text-align:center; font-size:8pt; line-height:18px;" align="center"
+! colspan="2"|
+! colspan="5"| Original Tribes
+! colspan="3"| Switched Tribes
+! colspan="10"| Merged Tribe
+|-
+! colspan="2"| Episode 
+! [[They Came at Us with Spears!|1]]
+! [[Burly Girls, Bowheads, Young Studs, and the Old Bunch|2]]
+! colspan="2"| [[Double Tribal, Double Trouble|3]]
+! [[Now That's a Reward!|4]]
+! [[Earthquakes and Shake-Ups!|5]]
+! [[Hog Tied|6]]
+! [[Anger, Threats, Tears... and Coffee|7]]
+! [[Now the Battle Really Begins|8]]
+! [[Gender Wars... It's Getting Ugly|9]]
+! [[Culture Shock and Violent Storms|10]]
+! [[Surprise and... Surprise Again!|11]]
+! [[Now Who's in Charge Here?!|12]]
+! [[Eruption of Volcanic Magnitude|13]]
+! colspan="4"| [[Spirits and the Final Four|14]]
+|-
+! colspan="2"| Voted Out
+| {{tribebox|lopevi|[[File:S9 brook t.png|50px|link=Brook Geraghty]]<br />Brook}}
+| {{tribebox|yasur|[[File:S9 dolly t.png|50px|link=Dolly Neely]]<br />Dolly}}
+| {{tribebox|lopevi|[[File:S9 johnp t.png|50px|link=John Palyok]]<br />John P.}}
+| {{tribebox|yasur|[[File:S9 mia t.png|50px|link=Mia Galeotalanza]]<br />Mia}}
+| {{tribebox|lopevi|[[File:S9 brady t.png|50px|link=Brady Finta]]<br />Brady}}
+| {{tribebox|yasur|[[File:S9 travis t.png|50px|link=Travis Sampson]]<br />Travis}}
+| {{tribebox|yasur|[[File:S9 lisa t.png|50px|link=Lisa Keiffer]]<br />Lisa}}
+| {{tribebox|lopevi|[[File:S9 johnk t.png|50px|link=John Kenney]]<br />John K.}}
+| {{tribebox|alinta|[[File:S9 rory t.png|50px|link=Rory Freeman]]<br />Rory}}
+| {{tribebox|alinta|[[File:S9 lea t.png|50px|link=Lea Masters]]<br />Lea}}
+| {{tribebox|alinta|[[File:S9 chad t.png|50px|link=Chad Crittenden]]<br />Chad}}
+| {{tribebox|alinta|[[File:S9 leann t.png|50px|link=Leann Slaby]]<br />Leann}}
+| {{tribebox|alinta|[[File:S9 ami t.png|50px|link=Ami Cusack]]<br />Ami}}
+| {{tribebox|alinta|[[File:S9 julie t.png|50px|link=Julie Berry]]<br />Julie}}
+| {{tribebox|alinta|[[File:S9 eliza t.png|50px|link=Eliza Orlins]]<br />Eliza}}
+| {{tribebox|alinta|[[File:S9 scout t.png|50px|link=Scout Cloud Lee]]<br />Scout}}
+| {{tribebox|alinta|[[File:S9 twila t.png|50px|link=Twila Tanner]]<br />Twila}}
+| {{tribebox|alinta|[[File:S9 chris t.png|50px|link=Chris Daugherty]]<br />Chris}}
+|-
+! colspan="2"| Vote 
+| 5-3-1
+| 5-4
+| 5-3
+| 5-3
+| 6-1
+| 6-1
+| 4-2
+| 5-1
+| 6-4
+| 7-1-1
+| 6-2
+| 4-3
+| 4-2
+| 3-2
+| 3-1
+| 1-0{{sup|[[#endnote f3|1]]}}
+| colspan="2"| 5-2
+|-
+| align="left" {{tribebox2|alinta}}{{tribeicon1|lopevi}}{{tribeicon1|lopevi}}
+| align="left"| Chris
+| {{tribebox|lopevi|Brook}}
+| —
+| {{tribebox|lopevi|John P.}}
+| —
+| {{tribebox|lopevi|Brady}}
+| —
+| —
+| {{tribebox|lopevi|John K.}}
+| {{tribebox|alinta|Ami}}
+| {{tribebox|alinta|Lea}}
+| {{tribebox|alinta|Eliza}}
+| {{tribebox|alinta|Leann}}
+| {{tribebox|alinta|Ami}}
+| {{tribebox|alinta|Julie}}
+| {{tribebox|alinta|Eliza}}
+| {{tribebox|alinta|Scout}}
+! colspan="2" rowspan="2"|Jury Vote
+|-
+| align="left" {{tribebox2|alinta}}{{tribeicon1|yasur}}{{tribeicon1|lopevi}}
+| align="left"| Twila
+| —
+| {{tribebox|yasur|Dolly}}
+| —
+| {{tribebox|yasur|Mia}}
+| —
+| —
+| —
+| {{tribebox|lopevi|John K.}}
+| {{tribebox|alinta|Rory}}
+| {{tribebox|alinta|Lea}}
+| {{tribebox|alinta|Chad}}
+| {{tribebox|alinta|Leann}}
+| {{tribebox|alinta|Ami}}
+| {{tribebox|alinta|Julie}}
+| {{tribebox|alinta|Eliza}}
+| {{tribebox|none|''None''}}
+|-
+| align="left" {{tribebox2|alinta}}{{tribeicon1|yasur}}{{tribeicon1|yasur}}
+| align="left"| Scout
+| —
+| {{tribebox|yasur|Dolly}}
+| —
+| {{tribebox|yasur|Mia}}
+| —
+| {{tribebox|yasur|Travis}}
+| {{tribebox|yasur|Rory}}
+| —
+| {{tribebox|alinta|Rory}}
+| {{tribebox|alinta|Lea}}
+| {{tribebox|alinta|Chad}}
+| {{tribebox|alinta|Leann}}
+| {{tribebox|alinta|Ami}}
+| {{tribebox|alinta|Julie}}
+| {{tribebox|alinta|Eliza}}
+| {{tribebox|none|''None''}}
+| {{tribebox|alinta|Twila}}
+|
+|-
+| align="left" {{tribebox2|alinta}}{{tribeicon1|yasur}}{{tribeicon1|yasur}}
+| align="left"| Eliza
+| —
+| {{tribebox|yasur|Dolly}}
+| —
+| {{tribebox|yasur|Twila}}
+| —
+| {{tribebox|yasur|Travis}}
+| {{tribebox|yasur|Lisa}}
+| —
+| {{tribebox|alinta|Rory}}
+| {{tribebox|alinta|Lea}}
+| {{tribebox|alinta|Chad}}
+| {{tribebox|alinta|Leann}}
+| {{tribebox|alinta|Ami}}
+| {{tribebox|alinta|Twila}}
+| {{tribebox|alinta|Twila}}
+| style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+| 
+| {{tribebox|alinta|Chris}}
+|-
+| align="left" {{tribebox2|alinta}}{{tribeicon1|yasur}}{{tribeicon1|lopevi}}
+| align="left"| Julie
+| —
+| {{tribebox|yasur|Leann}}
+| —
+| {{tribebox|yasur|Twila}}
+| —
+| —
+| —
+| {{tribebox|lopevi|John K.}}
+| {{tribebox|alinta|Rory}}
+| {{tribebox|alinta|Lea}}
+| {{tribebox|alinta|Chad}}
+| {{tribebox|alinta|Eliza}}
+| {{tribebox|alinta|Scout}}
+| {{tribebox|alinta|Twila}}
+| colspan="2" style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+|
+| {{tribebox|alinta|Chris}}
+|-
+| align="left" {{tribebox2|alinta}}{{tribeicon1|yasur}}{{tribeicon1|yasur}}
+| align="left"| Ami
+| —
+| {{tribebox|yasur|Dolly}}
+| —
+| {{tribebox|yasur|Mia}}
+| —
+| {{tribebox|yasur|Travis}}
+| {{tribebox|yasur|Lisa}}
+| —
+| {{tribebox|alinta|Rory}}
+| {{tribebox|alinta|Lea}}
+| {{tribebox|alinta|Chad}}
+| {{tribebox|alinta|Eliza}}
+| {{tribebox|alinta|Scout}}
+| colspan="3" style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+| {{tribebox|alinta|Twila}}
+|
+|-
+| align="left" {{tribebox2|alinta}}{{tribeicon1|yasur}}{{tribeicon1|yasur}}
+| align="left"| Leann
+| —
+| {{tribebox|yasur|Dolly}}
+| —
+| {{tribebox|yasur|Mia}}
+| —
+| {{tribebox|yasur|Travis}}
+| {{tribebox|yasur|Lisa}}
+| —
+| {{tribebox|alinta|Rory}}
+| {{tribebox|alinta|Lea}}
+| {{tribebox|alinta|Chad}}
+| {{tribebox|alinta|Eliza}}
+| colspan="4" style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+|
+| {{tribebox|alinta|Chris}}
+|-
+| align="left" {{tribebox2|alinta}}{{tribeicon1|lopevi}}{{tribeicon1|lopevi}}
+| align="left"| Chad
+| {{tribebox|lopevi|Brook}}
+| —
+| {{tribebox|lopevi|John P.}}
+| —
+| {{tribebox|lopevi|Brady}}
+| —
+| —
+| {{tribebox|lopevi|John K.}}
+| {{tribebox|alinta|Ami}}
+| {{tribebox|alinta|Julie}}
+| {{tribebox|alinta|Eliza}}
+| colspan="5" style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+|
+| {{tribebox|alinta|Chris}}
+|-
+| align="left" {{tribebox2|alinta}}{{tribeicon1|lopevi}}{{tribeicon1|lopevi}}
+| align="left"| Lea
+| {{tribebox|lopevi|Brook}}
+| —
+| {{tribebox|lopevi|John P.}}
+| —
+| {{tribebox|lopevi|Brady}}
+| —
+| —
+| {{tribebox|lopevi|John K.}}
+| {{tribebox|alinta|Ami}}
+| {{tribebox|alinta|Eliza}}
+| colspan="6" style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+|
+| {{tribebox|alinta|Chris}}
+|-
+| align="left" {{tribebox2|alinta}}{{tribeicon1|lopevi}}{{tribeicon1|yasur}}
+| align="left"| Rory
+| {{tribebox|lopevi|Brook}}
+| —
+| {{tribebox|lopevi|John P.}}
+| —
+| {{tribebox|lopevi|Brady}}
+| {{tribebox|yasur|Travis}}
+| {{tribebox|yasur|Lisa}}
+| —
+| {{tribebox|alinta|Ami}}
+| colspan="9" style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+|-
+| align="left" {{tribebox2|lopevi}}{{tribeicon1|lopevi}}
+| align="left"| {{nowrap|John K.}}
+| {{tribebox|lopevi|Chris}}
+| —
+| {{tribebox|lopevi|Rory}}
+| —
+| {{tribebox|lopevi|Brady}}
+| —
+| —
+| {{tribebox|lopevi|Chad}}
+| colspan="10" style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+|-
+| align="left" {{tribebox2|yasur}}{{tribeicon1|yasur}}
+| align="left"| Lisa
+| —
+| {{tribebox|yasur|Leann}}
+| —
+| {{tribebox|yasur|Mia}}
+| —
+| {{tribebox|yasur|Travis}}
+| {{tribebox|yasur|Rory}}
+| colspan="11" style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+|-
+| align="left" {{tribebox2|yasur}}{{tribeicon1|lopevi}}
+| align="left"| Travis
+| {{tribebox|lopevi|Brook}}
+| —
+| {{tribebox|lopevi|John P.}}
+| —
+| {{tribebox|lopevi|Brady}}
+| {{tribebox|yasur|Rory}}
+| colspan="12" style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+|-
+| align="left" {{tribebox2|lopevi}}
+| align="left"| Brady
+| {{tribebox|lopevi|Rory}}
+| —
+| {{tribebox|lopevi|Rory}}
+| —
+| {{tribebox|lopevi|Rory}}
+| colspan="13" style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+|-
+| align="left" {{tribebox2|yasur}}
+| align="left"| Mia
+| —
+| {{tribebox|yasur|Leann}}
+| —
+| {{tribebox|yasur|Twila}}
+| colspan="14" style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+|-
+| align="left" {{tribebox2|lopevi}}
+| align="left"| {{nowrap|John P.}}
+| {{tribebox|lopevi|Chris}}
+| —
+| {{tribebox|lopevi|Rory}}
+| colspan="15" style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+|-
+| align="left" {{tribebox2|yasur}}
+| align="left"| Dolly
+| —
+| {{tribebox|yasur|Leann}}
+| colspan="16" style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+|-
+| align="left" {{tribebox2|lopevi}}
+| align="left"| Brook
+| {{tribebox|lopevi|Chris}}
+| colspan="17" style="background-color: rgb(166, 166, 166); border-color: rgb(166, 166, 166);"|
+|-
+| colspan="20" align="left" style="width:50px"|'''Notes:'''{{refbegin}}{{note|f3|1}} Scout and Twila did not vote as they could only vote for each other. By virtue of winning the Final Immunity Challenge, only Chris voted.{{refend}}
+|}

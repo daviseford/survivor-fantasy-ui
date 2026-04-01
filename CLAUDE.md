@@ -19,8 +19,10 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 - **E2E screenshots:** `yarn e2e:screenshot` (Playwright — screenshots all pages)
 - **E2E auth setup:** `yarn e2e:setup` (login once, save session for reuse)
 - **E2E interactive:** `yarn e2e:ui` (Playwright UI mode)
+- **New season (preferred):** `yarn new-season <season_number> [--force] [--push]` (scrapes players + results, generates full season file, registers in seasons.ts, optionally pushes to Firestore)
 - **Scrape season:** `yarn scrape <season_number>` (pull contestant data from Survivor Wiki)
-- **Init season:** `yarn init-season <season_number>` (generate season data file from scraped JSON)
+- **Scrape results:** `yarn scrape-results <season_number>` (pull episodes, challenges, eliminations, events from Wiki)
+- **Init season:** `yarn init-season <season_number>` (generate season data file from scraped JSON — players only, no results)
 - **Backfill season:** `yarn backfill <season_number>` (merge re-scraped data into existing season file)
 
 ## Architecture

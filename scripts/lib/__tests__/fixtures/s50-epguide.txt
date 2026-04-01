@@ -1,0 +1,114 @@
+{| class="wikitable" style="margin:auto; text-align:center; font-size:8pt; line-height:18px; text-wrap:pretty;" align="center"
+! colspan="2" rowspan="2"| Episode
+! rowspan="2"| Air Date
+! colspan="2"| Challenges
+! rowspan="2"| Exiled
+! rowspan="2"| Journey
+! rowspan="2"| Eliminated<br />(vote) 
+! rowspan="2"| Finish
+! rowspan="2"| Viewers<br />{{nowrap|(in millions)}}
+! rowspan="2"| Ratings/Share<br />(18-49) 
+|-
+! Reward
+! Immunity
+|-
+| rowspan="7" | 1
+| rowspan="7" align="left"| {{Ep|5001}}
+| rowspan="7" align="left"| February 25, 2026
+| {{tribebox|vatu}}
+| rowspan="2" {{tribebox2|out}}
+| rowspan="2" {{tribebox|cila|Ozzy}}
+| rowspan="4"| None
+| rowspan="4" {{tribebox|cila|Jenna<br />(7-1)}}
+| rowspan="4" | {{nowrap|1st Voted Out<br />Day 3}}
+| rowspan="7" | 6.18<ref>https://deadline.com/2026/02/survivor-50-cbs-ratings-1236739119/</ref>
+| rowspan="7" |
+|-
+| {{tribebox|kalo}}
+|-
+| colspan="2" {{tribebox|vatu}}{{sup|[[#endnote combined|<font color={{textsub|vatu}}>1</font>]]}}
+| rowspan="2" {{tribebox|vatu|Q}}
+|-
+| colspan="2" {{tribebox|kalo}}{{sup|[[#endnote combined|<font color={{textsub|kalo}}>1</font>]]}}
+|-
+| rowspan="3" colspan="2" style="background-color: rgb(166, 166, 166)"|
+| rowspan="3"| None
+| {{tribebox|cila|Savannah}}
+| rowspan="3" {{tribebox|vatu|Kyle<br />(no vote)}}{{sup|[[#endnote kyle|<font color={{textsub|vatu}}>2</font>]]}}
+| rowspan="3"| {{nowrap|Evacuated<br />Day 4}}
+|-
+| {{tribebox|kalo|Mike}}
+|-
+| {{tribebox|vatu|Colby}}
+|-
+| rowspan="2" | 2
+| rowspan="2" align="left"| {{Ep|5002}}
+| rowspan="2" align="left"| March 4, 2026
+| {{tribebox|cila}}
+| {{tribebox|vatu}}
+| rowspan="2" |None
+| rowspan="2" |None
+| rowspan="2" {{tribebox|cila|Savannah<br />(6-1)}}
+| rowspan="2" | {{nowrap|2nd Voted Out<br />Day 6}}
+| rowspan="2" |
+| rowspan="2" |
+|-
+| {{tribebox|kalo}}
+| {{tribebox|kalo}}
+|-
+| rowspan="2"| 3
+| rowspan="2" align="left"| {{Ep|5003}}
+| rowspan="2" align="left"| March 11, 2026
+| colspan="2" {{tribebox|cila}}{{sup|[[#endnote combined|<font color={{textsub|cila}}>1</font>]]}}
+| rowspan="2" |None
+| rowspan="2" |None
+| rowspan="2" {{tribebox|vatu|Q<br />(5-1)}}
+| rowspan="2"| {{nowrap|3rd Voted Out<br />Day 8}}
+| rowspan="2"| 
+| rowspan="2"| 
+|-
+| colspan="2" {{tribebox|kalo}}{{sup|[[#endnote combined|<font color={{textsub|kalo}}>1</font>]]}}
+|-
+| rowspan="2" | 4
+| rowspan="2" align="left"| {{Ep|5004}}
+| rowspan="2" align="left"| March 18, 2026
+| colspan="2" style="{{tribecolor|kalo}}; border-bottom:none;"| Kalo{{sup|[[#endnote combined|<font color={{textsub|kalo}}>1</font>]]}}
+| rowspan="2" | None
+| rowspan="2" | None
+| rowspan="2"  {{tribebox|vatu|Mike<br />(3-2-1)}}
+| rowspan="2" | {{nowrap|4th Voted Out<br />Day 9}}
+| rowspan="2" |
+| rowspan="2" |
+|-
+| style="{{tribecolor|kalo}}; border-top:none;"| 
+| {{tribebox|cila}}
+|-
+| rowspan="2" |5
+| rowspan="2" align="left"| {{Ep|5005}}
+| rowspan="2" align="left"| March 25, 2026
+| rowspan="2" |None
+| rowspan="2" {{tribebox|kalo}}
+| rowspan="2" |None
+| rowspan="2" |None
+| {{tribebox|vatu|Angelina<br />(4-1)}}
+| {{nowrap|5th Voted Out<br />Day 11}}
+| rowspan="2" |
+| rowspan="2" |
+|-
+| {{tribebox|cila|Charlie<br />(4-3)}}
+| {{nowrap|6th Voted Out<br />Day 11}}
+|-
+| 6
+| align="left"| {{Ep|5006}}
+| align="left"| April 1, 2026
+| {{tribebox|50merge|TBD}}
+| {{tribebox|50merge|TBD}}
+| {{tribebox|50merge|TBD}}
+| {{tribebox|50merge|TBD}}
+| {{tribebox|50merge|TBD<br />(TBD)}}
+| {{nowrap|7th Voted Out<br />Day TBD}}
+|
+|
+|-
+| colspan="100%" align="left" style="width:50px;"|  '''Notes:'''<br />{{note|combined|1}} Combined Reward and Immunity Challenge.<br />{{note|kyle|2}} Kyle was evacuated due to a leg injury. No vote occurred for his removal. 
+|}

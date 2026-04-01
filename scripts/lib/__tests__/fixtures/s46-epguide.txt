@@ -1,0 +1,202 @@
+{| class="wikitable" style="margin:auto; text-align:center; font-size:8pt; line-height:18px;" align="center"
+! colspan="2" rowspan="2"|Episode
+! rowspan="2"| Air Date
+! colspan="2"| Challenges
+! rowspan="2"| Journey
+! rowspan="2"| Eliminated<br>(vote) 
+! rowspan="2"| Finish
+! rowspan="2"| Viewers<br>(in millions)<ref>https://tvseriesfinale.com/tv-show/survivor-season-46-ratings-spring-2024/</ref>
+! rowspan="2"| Ratings/Share<br>(18-49)<ref>https://tvseriesfinale.com/tv-show/survivor-season-46-ratings-spring-2024/</ref>
+|-
+! Reward
+! Immunity
+|-
+| rowspan="4"| 1
+| rowspan="4" align="left"| {{Ep|4601}}
+| rowspan="4" align="left"| February 28, 2024
+| rowspan="4" {{tribebox|nami}}
+| rowspan="2" {{tribebox|nami}}
+| {{Tribebox|nami|Tevin}}{{sup|[[#endnote journey1|<font color={{textsub|nami}}>1</font>]]}}
+| rowspan="4" {{tribebox|yanu|Jelinsky<br />(5-0)}}
+| rowspan="4"| {{nowrap|1st Voted Out<br />Day 3}}
+| rowspan="4"| 4.90
+| rowspan="4"| 0.83/9
+|-
+| rowspan="2" {{Tribebox|siga|Maria}}{{sup|[[#endnote journey1|<font color={{textsub|siga}}>1</font>]]}}
+|-
+| rowspan="2" {{tribebox|siga}}
+|-
+| {{Tribebox|yanu|Jelinsky}}{{sup|[[#endnote journey1|<font color={{textsub|yanu}}>1</font>]]}}
+|-
+| rowspan="2"| 2
+| rowspan="2" align="left"| {{Ep|4602}}
+| rowspan="2" align="left"| March 6, 2024
+| colspan="2" {{tribebox|nami}}{{sup|[[#endnote combined|<font color={{textsub|nami}}>2</font>]]}}
+| rowspan="2" | None
+| rowspan="2" {{tribebox|yanu|Jess<br />(4-1)}}
+| rowspan="2"| {{nowrap|2nd Voted Out<br>Day 5}}
+| rowspan="2"| 4.428
+| rowspan="2"| 0.61
+|-
+| colspan="2" {{tribebox|siga}}{{sup|[[#endnote combined|<font color={{textsub|siga}}>2</font>]]}}
+|-
+| rowspan="4"| 3
+| rowspan="4" align="left"| {{Ep|4603}}
+| rowspan="4" align="left"| March 13, 2024
+| rowspan=2 colspan="2" {{tribebox|nami}}{{sup|[[#endnote combined|<font color={{textsub|nami}}>2</font>]]}}
+| {{Tribebox|nami|Liz}}
+| rowspan="4" {{tribebox|nami|Randen<br />(no vote)}}
+| rowspan="4"| {{nowrap|Evacuated<br>Day 7}}
+| rowspan="4"| 4.783
+| rowspan="4"| 0.75
+|-
+| rowspan=2 {{Tribebox|siga|Ben}}{{sup|[[#endnote journey2|<font color={{textsub|siga}}>3</font>]]}}
+|-
+| rowspan=2 colspan="2" {{tribebox|siga}}{{sup|[[#endnote combined|<font color={{textsub|siga}}>2</font>]]}}
+|-
+| {{Tribebox|yanu|Bhanu}}{{sup|[[#endnote journey2|<font color={{textsub|yanu}}>3</font>]]}}
+|-
+| rowspan="2"| 4
+| rowspan="2" align="left"| {{Ep|4604}}
+| rowspan="2" align="left"| March 20, 2024
+| {{tribebox|yanu}}
+| {{tribebox|nami}}
+| rowspan=2 | None
+| rowspan="2" {{tribebox|yanu|Bhanu<br />(3-0)}}
+| rowspan="2"| {{nowrap|3rd Voted Out<br />Day 9}}
+| rowspan="2"| 4.683
+| rowspan="2"| 0.78
+|-
+| {{tribebox|nami}}
+| {{tribebox|siga}}
+|-
+| rowspan="4"| 5
+| rowspan="4" align="left"| {{Ep|4605}}
+| rowspan="4" align="left"| March 27, 2024
+| rowspan=2 colspan="2" {{tribebox|nami}}{{sup|[[#endnote combined|<font color={{textsub|nami}}>2</font>]]}}
+| {{Tribebox|nami|Hunter}}{{sup|[[#endnote journey3|<font color={{textsub|siga}}>4</font>]]}}
+| rowspan="4" {{tribebox|siga|Jem<br />(4-2)}}
+| rowspan="4"| {{nowrap|4th Voted Out<br>Day 11}}
+| rowspan="4"| 4.721
+| rowspan="4"| 0.70 
+|-
+| rowspan=2 {{Tribebox|siga|Tim}}
+|-
+| rowspan=2 colspan=2 {{tribebox|yanu}}{{sup|[[#endnote combined|<font color={{textsub|yanu}}>2</font>]]}}
+|-
+| {{Tribebox|yanu|Q}}
+|-
+| 6
+| align="left"| {{Ep|4606}}
+| align="left"| April 3, 2024
+| colspan="2" {{tribebox|nuinui|Ben, Hunter, Kenzie,<br />Q, Tevin, Tim<br />[Tiffany]}}{{sup|[[#endnote combined|<font color={{textsub|nuinui}}>2</font>]]}}
+| rowspan=13 {{Tribebox2|none}}
+| {{tribebox|none|Moriah<br />(10-1)}}
+| {{nowrap|5th Voted Out<br />Day 13}}
+| 5.047
+| 0.80
+|-
+| rowspan="3"| 7
+| rowspan="3" align="left"| {{Ep|4607}}
+| rowspan="3" align="left"| April 10, 2024
+| {{tribebox2|none}}
+| {{tribebox|nuinui|Kenzie}}
+| {{tribebox|nuinui|Tim<br />(4-2)}}
+| {{nowrap|6th Voted Out<br />Day 14}}
+| rowspan="3"| 4.636
+| rowspan="3"| 0.69
+|-
+| colspan="2" style="{{tribecolor|nuinui}}; border-bottom:none;"| Maria{{sup|[[#endnote doubleboot|<font color={{textsub|nuinui}}>4</font>]]}}
+| rowspan="2" {{tribebox|nuinui|Soda<br />(4-2)}}
+| rowspan="2"| {{nowrap|7th Voted Out<br />1st Jury Member<br />Day 14}}
+|-
+| style="{{tribecolor|nuinui}}; border-top:none;"| (Charlie,<br />Liz,<br />Soda,<br />Tevin,<br />Venus)
+| {{tribebox2|none}}
+|-
+| 8
+| align="left"| {{Ep|4608}}
+| align="left"| April 17, 2024
+| {{nowrap|None}}
+| {{tribebox|nuinui|Hunter}}
+| {{tribebox|nuinui|Tevin<br />(8-2)}}
+| {{nowrap|8th Voted Out<br />2nd Jury Member<br />Day 16}}
+| 4.839
+| 0.77
+|-
+| 9
+| align="left"| {{Ep|4609}}
+| align="left"| April 24, 2024
+| {{nowrap|None}}
+| {{tribebox|nuinui|Charlie}}
+| {{tribebox|nuinui|Hunter<br />(4-4-1;<br />6-1)}}{{sup|[[#endnote tie|<font color={{textsub|nuinui}}>2</font>]]}}
+| {{nowrap|9th Voted Out<br />3rd Jury Member<br />Day 17}}
+| 4.914
+| 0.74
+|-
+| 10
+| align="left"| {{Ep|4610}}
+| align="left"| May 1, 2024
+| {{tribebox|nuinui|Q<br />[Kenzie,<br />Maria,<br />Tiffany]}}
+| {{tribebox|nuinui|Charlie}}
+| {{tribebox|nuinui|Tiffany<br />(5-3)}}
+| {{nowrap|10th Voted Out<br />4th Jury Member<br />Day 19}}
+| 4.786
+| 0.80
+|-
+| rowspan=2| 11
+| rowspan=2 align="left"| {{Ep|4611}}
+| rowspan=2 align="left"| May 8, 2024
+| colspan=2 style="{{tribecolor|nuinui}}; border-bottom:none;"| Maria{{sup|[[#endnote combined|<font color={{textsub|nuinui}}>2</font>]]}}
+| rowspan=2 {{tribebox|nuinui|Venus<br />(5-1-1)}}
+| rowspan=2| {{nowrap|11th Voted Out<br />5th Jury Member<br />Day 21}}
+| rowspan=2| 4.685
+| rowspan=2| 0.75
+|-
+| style="{{tribecolor|nuinui}}; border-top:none;"| [Ben, Q]
+| {{Tribebox2|none}}
+|-
+| 12
+| align="left"| {{Ep|4612}}
+| align="left"| May 15, 2024
+| {{tribebox|nuinui|Charlie<br />[Kenzie,<br />Liz]}}
+| {{tribebox|nuinui|Maria}}
+| {{tribebox|nuinui|Q<br />(4-2)}}
+| {{nowrap|12th Voted Out<br />6th Jury Member<br />Day 23}}
+| 4.713
+| 0.75
+|-
+| rowspan=6 | 13
+| rowspan=6 align="left"| {{Ep|4613}}
+| rowspan=7 align="left"| May 22, 2024
+| colspan=2 style="{{tribecolor|nuinui}}; border-bottom:none;"| Kenzie{{sup|[[#endnote combined|<font color={{textsub|nuinui}}>2</font>]]}}
+| rowspan=2 {{tribebox|nuinui|Maria<br />(4-1)}}
+| rowspan=2|{{nowrap|13th Voted Out<br />7th Jury Member<br />Day 24}}
+| rowspan=6| 4.506
+| rowspan=6| 0.75
+|-
+| style="{{tribecolor|nuinui}}; border-top:none;"| [Ben]
+| {{Tribebox2|none}}
+|-
+| None
+| {{tribebox|nuinui|Ben}}
+| {{tribebox|nuinui|Liz<br />(no vote)}}{{sup|[[#endnote final4|<font color={{textsub|nuinui}}>7</font>]]}}
+| {{nowrap|Eliminated<br />8th Jury Member<br />Day 25}}
+|-
+| rowspan=3 colspan=3 | Jury Vote
+| {{tribebox|nuinui|Ben<br />(5-3-'''0''')}}
+| {{nowrap|Second Runner-Up}}
+|-
+| {{tribebox|nuinui|Charlie<br />(5-'''3'''-0)}}
+| {{nowrap|Runner-Up}}
+|-
+| {{tribebox|nuinui|Kenzie<br />('''5'''-3-0)}}
+| {{nowrap|Sole Survivor}}
+|-
+| 14
+| align="left"| {{Ep|4614}}
+| colspan=5 {{Tribebox2|none}}
+| 
+|
+|-
+| colspan=10 align="left" style=width:50px;| '''Notes:'''<br />{{refbegin}}{{note|journey1|1}} During the journey on Day 2, Maria and Tevin each won an extra vote, while Jelinsky lost his vote at his next Tribal Council.<br />{{note|combined|2}} Combined Reward and Immunity Challenge.<br />{{note|journey2|3}} During the journey on Day 7, Ben and Bhanu each lost their vote at their next Tribal Council.<br />{{Note|journey3|4}} During the journey on Day 11, Hunter lost his vote at his next Tribal Council.<br />{{note|doubleboot|5}} At the Immunity Challenge, the twelve remaining players were divided into two teams of six, with one person from each team winning immunity. The last player standing overall (Maria) won reward for their team.<br />{{note|tie|6}} The vote resulted in a tie. Per ''Survivor'' rules, a revote would commence.<br />{{note|final4|7}} Instead of a traditional vote, the winner of the Immunity Challenge, Ben, would choose someone to take with them to the Final Three. He chose Charlie. The remaining two castaways, Kenzie and Liz, would compete in a fire-making challenge to determine the last finalist.{{refend}}
+|}
