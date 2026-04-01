@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Competition } from "../types";
-import { shouldSuppressPropBets } from "../utils/episodeFilter";
-import { getPropBetScoresByUser } from "../utils/propBetUtils";
+import { filterEpisodesByMax, filterRecordByEpisode } from "../utils/episodeFilter";
+import { getPropBetScoresByUser, PropBetScoresByUser } from "../utils/propBetUtils";
 import { useChallenges } from "./useChallenges";
 import { useCompetition } from "./useCompetition";
 import { useEliminations } from "./useEliminations";
@@ -16,34 +16,49 @@ export const usePropBetScoring = (competition_id?: Competition["id"]) => {
   const { data: events } = useEvents(season?.id);
 
   const maxEpisode = competition?.current_episode ?? null;
-  const episodes = season?.episodes || [];
-  const finaleOrder =
-    episodes.length > 0 ? episodes[episodes.length - 1].order : 0;
-  const isWatchAlongBeforeFinale = shouldSuppressPropBets(
-    maxEpisode,
-    finaleOrder,
+
+  const filteredChallenges = useMemo(
+    () => filterRecordByEpisode(challenges || {}, maxEpisode),
+    [challenges, maxEpisode],
   );
 
-  const data = useMemo(
+  const filteredEliminations = useMemo(
+    () => filterRecordByEpisode(eliminations || {}, maxEpisode),
+    [eliminations, maxEpisode],
+  );
+
+  const filteredEvents = useMemo(
+    () => filterRecordByEpisode(events || {}, maxEpisode),
+    [events, maxEpisode],
+  );
+
+  const hasFinaleOccurred = useMemo(() => {
+    const filteredEpisodes = filterEpisodesByMax(
+      season?.episodes || [],
+      maxEpisode,
+    );
+    return filteredEpisodes.some((e) => e.finale);
+  }, [season?.episodes, maxEpisode]);
+
+  const data: PropBetScoresByUser = useMemo(
     () =>
-      isWatchAlongBeforeFinale
-        ? {}
-        : getPropBetScoresByUser(
-            events,
-            eliminations,
-            challenges,
-            competition,
-            season,
-          ),
+      getPropBetScoresByUser(
+        filteredEvents,
+        filteredEliminations,
+        filteredChallenges,
+        hasFinaleOccurred,
+        competition,
+        season,
+      ),
     [
-      challenges,
+      filteredChallenges,
+      filteredEliminations,
+      filteredEvents,
+      hasFinaleOccurred,
       competition,
-      eliminations,
-      events,
-      isWatchAlongBeforeFinale,
       season,
     ],
   );
 
-  return { data, isWatchAlongBeforeFinale };
+  return { data };
 };

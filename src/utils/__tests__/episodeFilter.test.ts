@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Challenge, Elimination, Episode, GameEvent } from "../../types";
-import {
-  filterEpisodesByMax,
-  filterRecordByEpisode,
-  shouldSuppressPropBets,
-} from "../episodeFilter";
+import { filterEpisodesByMax, filterRecordByEpisode } from "../episodeFilter";
 
 const makeEpisode = (order: number): Episode => ({
   id: `episode_${order}`,
@@ -136,34 +132,3 @@ describe("filterRecordByEpisode", () => {
   });
 });
 
-describe("shouldSuppressPropBets", () => {
-  const FINALE_ORDER = 13;
-
-  it("returns false when currentEpisode is null (live mode)", () => {
-    expect(shouldSuppressPropBets(null, FINALE_ORDER)).toBe(false);
-  });
-
-  it("returns true when currentEpisode is 0 (no episodes revealed)", () => {
-    expect(shouldSuppressPropBets(0, FINALE_ORDER)).toBe(true);
-  });
-
-  it("returns true when mid-season (before finale)", () => {
-    expect(shouldSuppressPropBets(5, FINALE_ORDER)).toBe(true);
-  });
-
-  it("returns true when one episode before finale", () => {
-    expect(shouldSuppressPropBets(12, FINALE_ORDER)).toBe(true);
-  });
-
-  it("returns false when currentEpisode equals finale order", () => {
-    expect(shouldSuppressPropBets(13, FINALE_ORDER)).toBe(false);
-  });
-
-  it("returns false when currentEpisode exceeds finale order", () => {
-    expect(shouldSuppressPropBets(14, FINALE_ORDER)).toBe(false);
-  });
-
-  it("returns false when finaleOrder is 0 (no episodes)", () => {
-    expect(shouldSuppressPropBets(0, 0)).toBe(false);
-  });
-});
