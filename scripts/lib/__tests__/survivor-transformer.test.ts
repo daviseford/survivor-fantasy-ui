@@ -108,17 +108,28 @@ describe("transformResults", { timeout: 60000 }, () => {
     const data = await fetchSeasonData(46);
     const result = transformResults(data, 46);
 
-    expect(result.eliminations.length).toBeGreaterThan(0);
+    // Winner should NOT be in eliminations (17, not 18)
+    expect(result.eliminations.length).toBe(17);
+
+    // The winner (Kenzie Petty) should not appear
+    const winnerElim = result.eliminations.find((e) =>
+      e.playerName.includes("Kenzie"),
+    );
+    expect(winnerElim).toBeUndefined();
 
     // Should have tribal eliminations
     const tribals = result.eliminations.filter((e) => e.variant === "tribal");
     expect(tribals.length).toBeGreaterThan(0);
 
-    // Should have FTC participants
+    // Should have FTC runner-ups as final_tribal_council
     const ftc = result.eliminations.filter(
       (e) => e.variant === "final_tribal_council",
     );
-    expect(ftc.length).toBeGreaterThanOrEqual(2); // at least winner + runner-up
+    expect(ftc.length).toBeGreaterThanOrEqual(2);
+
+    // No eliminations should have variant "other" for fire-making
+    const others = result.eliminations.filter((e) => e.variant === "other");
+    expect(others.length).toBe(0);
   });
 
   it("transforms Season 46 events (advantages, journeys, merge, winner)", async () => {

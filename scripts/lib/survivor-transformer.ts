@@ -250,10 +250,10 @@ function transformChallenges(
 function transformEliminations(
   castaways: SurvivorCastaway[],
 ): ScrapedElimination[] {
-  // Filter to eliminated players (not the winner, not still in game)
+  // Filter to eliminated players — exclude the winner (they were never eliminated)
   // Sort by order (elimination order)
   const eliminated = castaways
-    .filter((c) => c.result && c.result !== "")
+    .filter((c) => c.result && c.result !== "" && !c.winner)
     .sort((a, b) => a.order - b.order);
 
   return eliminated.map((c, idx) => {
@@ -284,7 +284,7 @@ function mapResultToVariant(
   if (lower.includes("quit")) return "quitter";
   if (lower.includes("voted out") || lower.includes("eliminated"))
     return "tribal";
-  if (lower.includes("fire")) return "other";
+  if (lower.includes("fire")) return "tribal";
   // Default to tribal for numbered elimination results like "1st voted out"
   if (/\d+(st|nd|rd|th)\s+voted\s+out/i.test(result)) return "tribal";
   return "tribal";
