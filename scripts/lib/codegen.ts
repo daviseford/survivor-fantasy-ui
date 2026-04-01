@@ -135,6 +135,7 @@ function formatPlayerCall(
     previousSeasons?: number[];
     bio?: string;
     description?: string;
+    nickname?: string;
   },
   imgConstant: { prefix: string } | null,
 ): string {
@@ -164,6 +165,9 @@ function formatPlayerCall(
   if (player.previousSeasons && player.previousSeasons.length > 0) {
     lines.push(`    previousSeasons: [${player.previousSeasons.join(", ")}],`);
   }
+  if (player.nickname) {
+    lines.push(`    nickname: ${escapeString(player.nickname)},`);
+  }
 
   return `  buildPlayer({\n${lines.join("\n")}\n  })`;
 }
@@ -191,6 +195,7 @@ export function generatePlayerSection(
     hometown?: string;
     previousSeasons?: number[];
     description?: string;
+    nickname?: string;
   }> = [];
 
   // First: process matched scraped players in their wiki order
@@ -221,6 +226,7 @@ export function generatePlayerSection(
       hometown: scraped.hometown,
       previousSeasons: scraped.previousSeasons,
       description,
+      nickname: scraped.nickname,
     });
     allNames.add(localName);
   }

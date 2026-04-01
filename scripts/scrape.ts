@@ -118,6 +118,7 @@ export async function scrape(seasonNum: number): Promise<ScrapeResult> {
         info?.previousSeasons && info.previousSeasons.length > 0
           ? info.previousSeasons
           : undefined,
+      nickname: info?.nickname,
     };
 
     if (match.matchStatus === "unmatched") {
