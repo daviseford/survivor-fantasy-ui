@@ -13,6 +13,7 @@ import "./admin.js";
 export async function pushSeasonToFirestore(
   seasonNum: number,
   dryRun = false,
+  seasonImg = "",
 ): Promise<void> {
   const projectRoot = path.resolve(import.meta.dirname, "..", "..");
 
@@ -31,8 +32,10 @@ export async function pushSeasonToFirestore(
     );
   }
 
-  // Dynamically import the season data
-  const mod = await import(seasonDataPath);
+  // Dynamically import the season data (use file:// URL for Windows compatibility)
+  const mod = await import(
+    new URL(`file:///${seasonDataPath.replace(/\\/g, "/")}`).href
+  );
 
   const playersKey = `SEASON_${seasonNum}_PLAYERS`;
   const episodesKey = `SEASON_${seasonNum}_EPISODES`;
@@ -60,7 +63,7 @@ export async function pushSeasonToFirestore(
         id: seasonKey,
         order: seasonNum,
         name: `Survivor ${seasonNum}`,
-        img: "",
+        img: seasonImg,
         players,
         episodes,
       },

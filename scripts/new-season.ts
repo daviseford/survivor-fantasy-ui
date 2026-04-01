@@ -100,7 +100,7 @@ async function main(): Promise<void> {
     console.log(`\n${"=".repeat(60)}`);
     console.log(`Step 5/5: Pushing to Firestore`);
     console.log(`${"=".repeat(60)}`);
-    await pushSeasonToFirestore(seasonNum, dryRun);
+    await pushSeasonToFirestore(seasonNum, dryRun, logoUrl ?? "");
   } else {
     console.log(`\n  Skipping Firestore push (use --push to enable)`);
   }
