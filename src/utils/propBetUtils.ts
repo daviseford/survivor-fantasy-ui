@@ -1,6 +1,7 @@
 import { countBy, entries } from "lodash-es";
 import { PropBetsQuestions } from "../data/propbets";
 import {
+  CastawayId,
   Challenge,
   Competition,
   Elimination,
@@ -51,6 +52,37 @@ export const getPropBetScoresByUser = (
     }
     return a;
   }, {});
+};
+
+/**
+ * Determines if a player is currently out of the game.
+ * A player who was eliminated but later appears in events or challenge wins
+ * (e.g., returned from Edge of Extinction) is NOT currently eliminated.
+ */
+const isCurrentlyEliminated = (
+  castawayId: string,
+  elims: Elimination[],
+  events: GameEvent[],
+  challenges: Record<Challenge["id"], Challenge>,
+): boolean => {
+  const playerElims = elims.filter((x) => x.castaway_id === castawayId);
+  if (playerElims.length === 0) return false;
+
+  const lastElimEpisode = Math.max(...playerElims.map((x) => x.episode_num));
+
+  const hasLaterEvent = events.some(
+    (x) => x.castaway_id === castawayId && x.episode_num > lastElimEpisode,
+  );
+  if (hasLaterEvent) return false;
+
+  const hasLaterChallengeWin = Object.values(challenges).some(
+    (x) =>
+      x.episode_num > lastElimEpisode &&
+      x.winning_castaways?.includes(castawayId as CastawayId),
+  );
+  if (hasLaterChallengeWin) return false;
+
+  return true;
 };
 
 /**
@@ -212,7 +244,7 @@ export const getPropBetScoresForUser = (
     resolveLeaderboardBetStatus(
       rankedImmunityWinners,
       myPropBets.propbet_immunities,
-      _elims.some((x) => x.castaway_id === myPropBets.propbet_immunities),
+      isCurrentlyEliminated(myPropBets.propbet_immunities, _elims, _events, challenges),
       hasFinaleOccurred,
     ),
   );
@@ -228,7 +260,7 @@ export const getPropBetScoresForUser = (
     resolveLeaderboardBetStatus(
       rankedIdolFinders,
       myPropBets.propbet_idols,
-      _elims.some((x) => x.castaway_id === myPropBets.propbet_idols),
+      isCurrentlyEliminated(myPropBets.propbet_idols, _elims, _events, challenges),
       hasFinaleOccurred,
     ),
   );
