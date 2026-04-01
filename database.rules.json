@@ -7,7 +7,7 @@
     "drafts": {
       "$draftId": {
         ".read": "auth != null && (auth.token.admin == true || data.child('creator_uid').val() == auth.uid || data.child('participants').child(auth.uid).exists())",
-        ".write": "auth.token.admin == true || (!data.exists() && auth != null && newData.child('id').val() == $draftId && newData.child('creator_uid').val() == auth.uid && newData.child('participants').childrenCount() == 1 && newData.child('participants').child(auth.uid).exists())",
+        ".write": "auth.token.admin == true || (!data.exists() && auth != null && newData.child('id').val() == $draftId && newData.child('creator_uid').val() == auth.uid && newData.child('participants').child(auth.uid).exists())",
 
         "id": {
           ".validate": "newData.isString() && newData.val() == $draftId"
@@ -65,7 +65,7 @@
 
         "state": {
           "started": {
-            ".write": "auth.token.admin == true || (auth != null && root.child('drafts').child($draftId).child('creator_uid').val() == auth.uid && data.val() != true && newData.val() == true && root.child('drafts').child($draftId).child('participants').childrenCount() >= 2)",
+            ".write": "auth.token.admin == true || (auth != null && root.child('drafts').child($draftId).child('creator_uid').val() == auth.uid && data.val() != true && newData.val() == true)",
             ".validate": "newData.isBoolean()"
           },
           "finished": {
