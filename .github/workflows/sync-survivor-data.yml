@@ -1,6 +1,9 @@
 name: "Sync survivoR data"
 
 on:
+  push:
+    paths:
+      - '.github/workflows/sync-survivor-data.yml'
   schedule:
     - cron: '0 14 * * *' # Daily at 14:00 UTC
   workflow_dispatch:
