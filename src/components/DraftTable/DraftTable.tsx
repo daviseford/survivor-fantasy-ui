@@ -14,7 +14,7 @@ export const DraftTable = ({
   const rows = !draft_picks
     ? []
     : draft_picks?.map((x) => {
-        const player = players?.find((p) => p.name === x.player_name);
+        const player = players?.find((p) => p.castaway_id === x.castaway_id);
         const user = participants?.find((p) => p.uid === x.user_uid);
         return (
           <Table.Tr key={x.player_name + "draft_table"}>

@@ -24,7 +24,12 @@ import { v4 } from "uuid";
 import { db } from "../../firebase";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
-import { Elimination, EliminationVariants, TeamAssignments } from "../../types";
+import {
+  CastawayId,
+  Elimination,
+  EliminationVariants,
+  TeamAssignments,
+} from "../../types";
 
 const dropdownOptions = EliminationVariants.slice().reverse();
 
@@ -39,13 +44,13 @@ export const CreateElimination = () => {
       season_id: "season_1",
       episode_id: "episode_1",
       episode_num: 1,
-      player_name: "",
+      castaway_id: "" as CastawayId,
       variant: dropdownOptions[0],
       order: 0,
     },
 
     validate: {
-      player_name: hasLength({ min: 1 }, "Add winning player"),
+      castaway_id: hasLength({ min: 1 }, "Add eliminated player"),
     },
 
     transformValues: (values) => ({
@@ -103,13 +108,13 @@ export const CreateElimination = () => {
       // Remove eliminated player from team assignments for this episode onward
       await removePlayerFromTeams(
         season!.id,
-        values.player_name,
+        values.castaway_id,
         values.episode_num,
       );
 
       notifications.show({
         title: "Elimination created successfully",
-        message: `${values.player_name} eliminated`,
+        message: `${season?.castawayLookup?.[values.castaway_id]?.full_name ?? values.castaway_id} eliminated`,
         color: "green",
         icon: <IconCheck size={16} />,
       });
@@ -128,7 +133,7 @@ export const CreateElimination = () => {
 
   const removePlayerFromTeams = async (
     seasonId: string,
-    playerName: string,
+    castawayId: CastawayId,
     fromEpisode: number,
   ) => {
     const assignmentsRef = doc(db, "team_assignments", seasonId);
@@ -139,8 +144,8 @@ export const CreateElimination = () => {
     let changed = false;
 
     for (const [epNum, snapshot] of Object.entries(allAssignments)) {
-      if (Number(epNum) >= fromEpisode && snapshot[playerName] !== undefined) {
-        snapshot[playerName] = null;
+      if (Number(epNum) >= fromEpisode && snapshot[castawayId] !== undefined) {
+        snapshot[castawayId] = null;
         changed = true;
       }
     }
@@ -150,12 +155,12 @@ export const CreateElimination = () => {
     }
   };
 
-  const eliminatedPlayers = new Set(
-    Object.values(eliminations).map((x) => x.player_name),
+  const eliminatedCastaways = new Set(
+    Object.values(eliminations).map((x) => x.castaway_id),
   );
-  const playerNames = season?.players
-    .map((x) => x.name)
-    .filter((x) => !eliminatedPlayers.has(x));
+  const playerOptions = season?.players
+    .filter((x) => !eliminatedCastaways.has(x.castaway_id))
+    .map((x) => ({ value: x.castaway_id, label: x.full_name }));
 
   return (
     <Accordion defaultValue="create-elimination">
@@ -193,9 +198,9 @@ export const CreateElimination = () => {
                 <Select
                   withAsterisk
                   label="Eliminated Player"
-                  data={playerNames}
+                  data={playerOptions}
                   searchable
-                  {...form.getInputProps("player_name")}
+                  {...form.getInputProps("castaway_id")}
                 />
 
                 <NumberInput

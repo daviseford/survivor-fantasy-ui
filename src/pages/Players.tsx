@@ -10,7 +10,7 @@ export const Players = () => {
   return (
     <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }}>
       {season.players.map((x) => (
-        <PlayerCard {...x} key={x.name} />
+        <PlayerCard {...x} key={x.castaway_id} />
       ))}
     </SimpleGrid>
   );
@@ -31,11 +31,11 @@ const PlayerCard = (props: Player) => {
         size={100}
         radius={100}
         mx="auto"
-        alt={props.name}
+        alt={props.full_name}
         imageProps={{ loading: "lazy" }}
       />
       <Text ta="center" fw={600} mt="sm" size="sm">
-        {props.name}
+        {props.full_name}
       </Text>
       {(props.age || props.profession || props.hometown) && (
         <Text ta="center" size="xs" c="dimmed" lh={1.3} mt={4}>

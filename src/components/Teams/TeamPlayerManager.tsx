@@ -37,13 +37,19 @@ import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
 import { useTeamAssignments } from "../../hooks/useTeamAssignments";
 import { useTeams } from "../../hooks/useTeams";
-import { Team, TeamAssignmentSnapshot } from "../../types";
+import { CastawayId, Team, TeamAssignmentSnapshot } from "../../types";
 
 const NO_TEAM_ID = "__no_team__";
 
-const DraggablePlayerCard = ({ playerName }: { playerName: string }) => {
+const DraggablePlayerCard = ({
+  castawayId,
+  displayName,
+}: {
+  castawayId: CastawayId;
+  displayName: string;
+}) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({ id: playerName });
+    useDraggable({ id: castawayId });
 
   const style = {
     transform: transform
@@ -66,15 +72,15 @@ const DraggablePlayerCard = ({ playerName }: { playerName: string }) => {
         root: { cursor: "grab", userSelect: "none" },
       }}
     >
-      <Text size="sm">{playerName}</Text>
+      <Text size="sm">{displayName}</Text>
     </Paper>
   );
 };
 
-const PlayerDragOverlay = ({ playerName }: { playerName: string }) => (
+const PlayerDragOverlay = ({ displayName }: { displayName: string }) => (
   <Paper p="xs" withBorder shadow="md">
     <Text size="sm" fw={600}>
-      {playerName}
+      {displayName}
     </Text>
   </Paper>
 );
@@ -83,7 +89,8 @@ type DroppableColumnProps = {
   id: string;
   title: string;
   color: string | null;
-  players: string[];
+  players: CastawayId[];
+  resolveName: (id: CastawayId) => string;
 };
 
 const DroppableColumn = ({
@@ -91,6 +98,7 @@ const DroppableColumn = ({
   title,
   color,
   players,
+  resolveName,
 }: DroppableColumnProps) => {
   const { setNodeRef, isOver } = useDroppable({ id });
 
@@ -127,8 +135,12 @@ const DroppableColumn = ({
         </Text>
       </Group>
 
-      {players.map((name) => (
-        <DraggablePlayerCard key={name} playerName={name} />
+      {players.map((cid) => (
+        <DraggablePlayerCard
+          key={cid}
+          castawayId={cid}
+          displayName={resolveName(cid)}
+        />
       ))}
 
       {players.length === 0 && (
@@ -149,7 +161,7 @@ export const TeamPlayerManager = () => {
   const [episodeNum, setEpisodeNum] = useState<number>(1);
   const [localAssignments, setLocalAssignments] =
     useState<TeamAssignmentSnapshot | null>(null);
-  const [activePlayer, setActivePlayer] = useState<string | null>(null);
+  const [activePlayer, setActivePlayer] = useState<CastawayId | null>(null);
   const [saving, setSaving] = useState(false);
 
   const sensors = useSensors(
@@ -163,11 +175,14 @@ export const TeamPlayerManager = () => {
   const eliminatedBefore = new Set(
     Object.values(eliminations)
       .filter((e) => e.episode_num < episodeNum)
-      .map((e) => e.player_name),
+      .map((e) => e.castaway_id),
   );
-  const playerNames = (season?.players.map((p) => p.name) ?? []).filter(
-    (name) => !eliminatedBefore.has(name),
+  const castawayIds = (season?.players.map((p) => p.castaway_id) ?? []).filter(
+    (cid) => !eliminatedBefore.has(cid),
   );
+
+  const resolveName = (cid: CastawayId): string =>
+    season?.castawayLookup?.[cid]?.full_name ?? cid;
 
   // Build snapshot: prefer local edits, then saved data, then all null
   const getSnapshot = (): TeamAssignmentSnapshot => {
@@ -178,8 +193,8 @@ export const TeamPlayerManager = () => {
 
     // Default: all players unassigned
     const snapshot: TeamAssignmentSnapshot = {};
-    playerNames.forEach((name) => {
-      snapshot[name] = null;
+    castawayIds.forEach((cid) => {
+      snapshot[cid] = null;
     });
     return snapshot;
   };
@@ -187,20 +202,20 @@ export const TeamPlayerManager = () => {
   const snapshot = getSnapshot();
 
   // Group players by team
-  const getPlayersByContainer = (): Record<string, string[]> => {
-    const groups: Record<string, string[]> = {};
+  const getPlayersByContainer = (): Record<string, CastawayId[]> => {
+    const groups: Record<string, CastawayId[]> = {};
 
     teamList.forEach((t) => {
       groups[t.id] = [];
     });
     groups[NO_TEAM_ID] = [];
 
-    playerNames.forEach((name) => {
-      const teamId = snapshot[name];
+    castawayIds.forEach((cid) => {
+      const teamId = snapshot[cid];
       if (teamId && groups[teamId]) {
-        groups[teamId].push(name);
+        groups[teamId].push(cid);
       } else {
-        groups[NO_TEAM_ID].push(name);
+        groups[NO_TEAM_ID].push(cid);
       }
     });
 
@@ -210,7 +225,7 @@ export const TeamPlayerManager = () => {
   const playersByContainer = getPlayersByContainer();
 
   const handleDragStart = (event: DragStartEvent) => {
-    setActivePlayer(event.active.id as string);
+    setActivePlayer(event.active.id as CastawayId);
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -219,7 +234,7 @@ export const TeamPlayerManager = () => {
     const { active, over } = event;
     if (!over) return;
 
-    const activeId = active.id as string;
+    const activeId = active.id as CastawayId;
     const targetContainer = over.id as string;
 
     // over.id is always a droppable container since we only use useDroppable
@@ -265,8 +280,8 @@ export const TeamPlayerManager = () => {
     if (prevSnapshot) {
       // Ensure all current players are represented
       const merged: TeamAssignmentSnapshot = {};
-      playerNames.forEach((name) => {
-        merged[name] = prevSnapshot[name] ?? null;
+      castawayIds.forEach((cid) => {
+        merged[cid] = prevSnapshot[cid] ?? null;
       });
       setLocalAssignments(merged);
     }
@@ -274,8 +289,8 @@ export const TeamPlayerManager = () => {
 
   const handleMoveAllToNoTeam = () => {
     const newSnapshot: TeamAssignmentSnapshot = {};
-    playerNames.forEach((name) => {
-      newSnapshot[name] = null;
+    castawayIds.forEach((cid) => {
+      newSnapshot[cid] = null;
     });
     setLocalAssignments(newSnapshot);
   };
@@ -388,6 +403,7 @@ export const TeamPlayerManager = () => {
                 title={team.name}
                 color={team.color}
                 players={playersByContainer[team.id] || []}
+                resolveName={resolveName}
               />
             ))}
             <DroppableColumn
@@ -395,12 +411,13 @@ export const TeamPlayerManager = () => {
               title="No Team"
               color={null}
               players={playersByContainer[NO_TEAM_ID] || []}
+              resolveName={resolveName}
             />
           </SimpleGrid>
 
           <DragOverlay>
             {activePlayer ? (
-              <PlayerDragOverlay playerName={activePlayer} />
+              <PlayerDragOverlay displayName={resolveName(activePlayer)} />
             ) : null}
           </DragOverlay>
         </DndContext>

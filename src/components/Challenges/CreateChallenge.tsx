@@ -46,12 +46,12 @@ export const CreateChallenge = () => {
       episode_id: "episode_1",
       episode_num: 1,
       variant: ChallengeWinActions[0],
-      winning_players: [],
+      winning_castaways: [],
       order: 0,
     },
 
     validate: {
-      winning_players: hasLength({ min: 1 }, "Add winning player(s)"),
+      winning_castaways: hasLength({ min: 1 }, "Add winning player(s)"),
     },
 
     transformValues: (values) => ({
@@ -93,11 +93,11 @@ export const CreateChallenge = () => {
         episodeSnapshot,
         currentWinningTeamId,
       );
-      form.setFieldValue("winning_players", playersOnTeam);
+      form.setFieldValue("winning_castaways", playersOnTeam);
     } else {
       // No snapshot for this episode -- clear team selection and winners
       form.setFieldValue("winning_team_id", null);
-      form.setFieldValue("winning_players", []);
+      form.setFieldValue("winning_castaways", []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentEpisodeNum]);
@@ -137,7 +137,7 @@ export const CreateChallenge = () => {
       // reset id and important form values
       form.setValues({
         id: `challenge_${v4()}`,
-        winning_players: [],
+        winning_castaways: [],
         winning_team_id: null,
       });
     } catch (err) {
@@ -162,7 +162,7 @@ export const CreateChallenge = () => {
   const handleWinningTeamChange = (teamId: string | null) => {
     if (!teamId) {
       form.setFieldValue("winning_team_id", null);
-      form.setFieldValue("winning_players", []);
+      form.setFieldValue("winning_castaways", []);
       return;
     }
 
@@ -174,18 +174,18 @@ export const CreateChallenge = () => {
     );
 
     form.setFieldValue("winning_team_id", teamId as Team["id"]);
-    form.setFieldValue("winning_players", playersOnTeam);
+    form.setFieldValue("winning_castaways", playersOnTeam);
   };
 
   // Only exclude players eliminated before the selected episode
-  const eliminatedPlayers = new Set(
+  const eliminatedCastaways = new Set(
     Object.values(eliminations)
       .filter((x) => x.episode_num < form.values.episode_num)
-      .map((x) => x.player_name),
+      .map((x) => x.castaway_id),
   );
-  const playerNames = season?.players
-    .map((x) => x.name)
-    .filter((x) => !eliminatedPlayers.has(x));
+  const playerOptions = season?.players
+    .filter((x) => !eliminatedCastaways.has(x.castaway_id))
+    .map((x) => ({ value: x.castaway_id, label: x.full_name }));
 
   return (
     <Accordion defaultValue="create-challenge">
@@ -244,9 +244,9 @@ export const CreateChallenge = () => {
                 <MultiSelect
                   withAsterisk
                   label="Winning Players"
-                  data={playerNames}
+                  data={playerOptions}
                   searchable
-                  {...form.getInputProps("winning_players")}
+                  {...form.getInputProps("winning_castaways")}
                 />
 
                 <Select

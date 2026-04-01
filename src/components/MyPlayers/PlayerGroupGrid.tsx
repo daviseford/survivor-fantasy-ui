@@ -42,7 +42,7 @@ export const PlayerGroupGrid = () => {
 
         const numDrafted = userSurvivors.length;
         const numEliminated = userSurvivors.filter((s) =>
-          eliminatedSurvivors.includes(s.name),
+          eliminatedSurvivors.includes(s.castaway_id),
         ).length;
         const numActive = numDrafted - numEliminated;
 

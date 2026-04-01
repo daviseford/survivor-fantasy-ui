@@ -15,20 +15,20 @@ export const PlayerGroup = ({ uid }: { uid: SlimUser["uid"] }) => {
   return (
     <Avatar.Group spacing={isMobile ? "xs" : "lg"}>
       {userSurvivors?.map((p) => {
-        const isEliminated = eliminatedSurvivors.includes(p.name);
+        const isEliminated = eliminatedSurvivors.includes(p.castaway_id);
 
         const avatarStyle = isEliminated ? { filter: "grayscale(1)" } : {};
 
-        const label = `${p.name}${isEliminated ? " (Eliminated)" : ""}`;
+        const label = `${p.full_name}${isEliminated ? " (Eliminated)" : ""}`;
 
         return (
-          <Tooltip label={label} key={label}>
+          <Tooltip label={label} key={p.castaway_id}>
             <Avatar
-              key={label}
+              key={p.castaway_id}
               src={p.img}
               size="md"
               style={avatarStyle}
-              alt={p.name}
+              alt={p.full_name}
             />
           </Tooltip>
         );

@@ -18,7 +18,7 @@ import { useChallenges } from "../../hooks/useChallenges";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
-import { Challenge, ChallengeWinActions } from "../../types";
+import { CastawayId, Challenge, ChallengeWinActions } from "../../types";
 
 export const ChallengeCRUDTable = () => {
   const { data: season } = useSeason();
@@ -81,16 +81,16 @@ export const ChallengeCRUDTable = () => {
   };
 
   // Players available for the currently-edited episode
-  const getPlayerNames = (episodeNum: number) => {
-    const eliminatedPlayers = new Set(
+  const getPlayerOptions = (episodeNum: number) => {
+    const eliminatedCastaways = new Set(
       Object.values(eliminations)
         .filter((x) => x.episode_num < episodeNum)
-        .map((x) => x.player_name),
+        .map((x) => x.castaway_id),
     );
     return (
       season?.players
-        .map((x) => x.name)
-        .filter((x) => !eliminatedPlayers.has(x)) ?? []
+        .filter((x) => !eliminatedCastaways.has(x.castaway_id))
+        .map((x) => ({ value: x.castaway_id, label: x.full_name })) ?? []
     );
   };
 
@@ -100,7 +100,7 @@ export const ChallengeCRUDTable = () => {
       const isEditing = editingId === e.id;
 
       if (isEditing && editValues) {
-        const playerNames = getPlayerNames(editValues.episode_num);
+        const playerOptions = getPlayerOptions(editValues.episode_num);
 
         return (
           <Table.Tr key={e.id}>
@@ -131,11 +131,14 @@ export const ChallengeCRUDTable = () => {
             <Table.Td>
               <MultiSelect
                 size="xs"
-                data={playerNames}
-                value={editValues.winning_players}
+                data={playerOptions}
+                value={editValues.winning_castaways}
                 searchable
                 onChange={(val) =>
-                  setEditValues({ ...editValues, winning_players: val })
+                  setEditValues({
+                    ...editValues,
+                    winning_castaways: val as CastawayId[],
+                  })
                 }
               />
             </Table.Td>
@@ -175,7 +178,14 @@ export const ChallengeCRUDTable = () => {
         <Table.Tr key={e.id}>
           <Table.Td>{e.order}</Table.Td>
           <Table.Td>{e.variant}</Table.Td>
-          <Table.Td>{e.winning_players.join(", ")}</Table.Td>
+          <Table.Td>
+            {e.winning_castaways
+              .map(
+                (id) =>
+                  season?.castawayLookup?.[id]?.full_name ?? id,
+              )
+              .join(", ")}
+          </Table.Td>
           <Table.Td>{e.episode_id}</Table.Td>
           {slimUser?.isAdmin && (
             <Table.Td>

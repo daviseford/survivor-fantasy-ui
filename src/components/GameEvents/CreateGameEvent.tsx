@@ -24,7 +24,7 @@ import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { db } from "../../firebase";
 import { useEliminations } from "../../hooks/useEliminations";
 import { useSeason } from "../../hooks/useSeason";
-import { GameEvent, GameEventActions } from "../../types";
+import { CastawayId, GameEvent, GameEventActions } from "../../types";
 
 export const CreateGameEvent = () => {
   const { data: season, isLoading } = useSeason();
@@ -39,11 +39,11 @@ export const CreateGameEvent = () => {
       episode_num: 1,
       action: GameEventActions[0],
       multiplier: null,
-      player_name: "",
+      castaway_id: "" as CastawayId,
     },
 
     validate: {
-      player_name: isNotEmpty("Enter player name"),
+      castaway_id: isNotEmpty("Select a player"),
     },
 
     transformValues: (values) => ({
@@ -103,7 +103,7 @@ export const CreateGameEvent = () => {
 
       notifications.show({
         title: "Event created successfully",
-        message: `${values.action} for ${values.player_name}`,
+        message: `${values.action} for ${season?.castawayLookup?.[values.castaway_id]?.full_name ?? values.castaway_id}`,
         color: "green",
         icon: <IconCheck size={16} />,
       });
@@ -121,14 +121,14 @@ export const CreateGameEvent = () => {
   };
 
   // Only exclude players eliminated before the selected episode
-  const eliminatedPlayers = new Set(
+  const eliminatedCastaways = new Set(
     Object.values(eliminations)
       .filter((x) => x.episode_num < form.values.episode_num)
-      .map((x) => x.player_name),
+      .map((x) => x.castaway_id),
   );
-  const playerNames = season?.players
-    .map((x) => x.name)
-    .filter((x) => !eliminatedPlayers.has(x));
+  const playerOptions = season?.players
+    .filter((x) => !eliminatedCastaways.has(x.castaway_id))
+    .map((x) => ({ value: x.castaway_id, label: x.full_name }));
 
   return (
     <Accordion defaultValue="create-event">
@@ -157,10 +157,10 @@ export const CreateGameEvent = () => {
 
                 <Select
                   withAsterisk
-                  label="Player Name"
-                  data={playerNames}
+                  label="Player"
+                  data={playerOptions}
                   searchable
-                  {...form.getInputProps("player_name")}
+                  {...form.getInputProps("castaway_id")}
                 />
 
                 <Select
