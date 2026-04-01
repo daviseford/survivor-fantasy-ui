@@ -223,11 +223,15 @@ function transformChallenges(
       // Split combined challenges into separate immunity + reward entries
       const immunityWinners = entries.filter(
         (e) =>
-          e.won_tribal_immunity === 1 || e.won_individual_immunity === 1 || e.won_team_immunity === 1,
+          e.won_tribal_immunity === 1 ||
+          e.won_individual_immunity === 1 ||
+          e.won_team_immunity === 1,
       );
       const rewardWinners = entries.filter(
         (e) =>
-          e.won_tribal_reward === 1 || e.won_individual_reward === 1 || e.won_team_reward === 1,
+          e.won_tribal_reward === 1 ||
+          e.won_individual_reward === 1 ||
+          e.won_team_reward === 1,
       );
 
       // Emit immunity entry (split by tribe if tribal)
@@ -240,9 +244,10 @@ function transformChallenges(
         challenges,
         order,
       );
-      order += first.outcome_type === "Tribal" && immunityWinners.length > 0
-        ? new Set(immunityWinners.map((w) => w.tribe)).size
-        : 1;
+      order +=
+        first.outcome_type === "Tribal" && immunityWinners.length > 0
+          ? new Set(immunityWinners.map((w) => w.tribe)).size
+          : 1;
 
       // Emit reward entry (split by tribe if tribal)
       emitChallengeEntries(
@@ -254,9 +259,10 @@ function transformChallenges(
         challenges,
         order,
       );
-      order += first.outcome_type === "Tribal" && rewardWinners.length > 0
-        ? new Set(rewardWinners.map((w) => w.tribe)).size
-        : 1;
+      order +=
+        first.outcome_type === "Tribal" && rewardWinners.length > 0
+          ? new Set(rewardWinners.map((w) => w.tribe)).size
+          : 1;
     } else {
       // Non-combined challenge
       const winners = entries.filter((e) => e.result.startsWith("Won"));
@@ -269,9 +275,10 @@ function transformChallenges(
         challenges,
         order,
       );
-      order += first.outcome_type === "Tribal" && winners.length > 0
-        ? new Set(winners.map((w) => w.tribe)).size
-        : 1;
+      order +=
+        first.outcome_type === "Tribal" && winners.length > 0
+          ? new Set(winners.map((w) => w.tribe)).size
+          : 1;
     }
   }
 

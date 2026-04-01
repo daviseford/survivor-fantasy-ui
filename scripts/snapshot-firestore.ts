@@ -18,7 +18,12 @@ import * as path from "path";
 
 import "./lib/admin.js";
 
-const COLLECTIONS = ["seasons", "challenges", "eliminations", "events"] as const;
+const COLLECTIONS = [
+  "seasons",
+  "challenges",
+  "eliminations",
+  "events",
+] as const;
 
 async function snapshotSeason(
   db: FirebaseFirestore.Firestore,
@@ -71,9 +76,7 @@ async function main() {
   const outDir = path.join("data", "firestore-snapshots", timestamp);
   fs.mkdirSync(outDir, { recursive: true });
 
-  console.log(
-    `Snapshotting ${seasonNums.length} seasons to ${outDir}/\n`,
-  );
+  console.log(`Snapshotting ${seasonNums.length} seasons to ${outDir}/\n`);
 
   for (const num of seasonNums) {
     await snapshotSeason(db, num, outDir);

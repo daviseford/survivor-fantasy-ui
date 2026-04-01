@@ -88,9 +88,7 @@ describe("transformResults", { timeout: 60000 }, () => {
     }
 
     // Combined challenges should be split — no "combined" variant in output
-    const combined = result.challenges.filter(
-      (c) => c.variant === "combined",
-    );
+    const combined = result.challenges.filter((c) => c.variant === "combined");
     expect(combined.length).toBe(0);
 
     // Should have both immunity and reward challenges
