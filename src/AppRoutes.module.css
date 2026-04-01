@@ -1,7 +1,29 @@
+.skipLink {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 1000;
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md);
+  background: var(--mantine-color-blue-6);
+  color: var(--mantine-color-white);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--mantine-radius-sm);
+
+  &:focus {
+    position: fixed;
+    top: var(--mantine-spacing-sm);
+    left: var(--mantine-spacing-sm);
+    width: auto;
+    height: auto;
+  }
+}
+
 .title {
-  font-family:
-    Greycliff CF,
-    var(--mantine-font-family);
+  font-family: var(--mantine-font-family);
   font-size: rem(28px);
   font-weight: 900;
   line-height: 1;

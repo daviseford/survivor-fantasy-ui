@@ -3,22 +3,30 @@ import {
   Badge,
   Button,
   Center,
-  Loader,
+  Group,
+  Skeleton,
   Stack,
   Table,
   Text,
   Title,
+  Tooltip,
   UnstyledButton,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { IconChevronDown, IconChevronUp, IconLogin } from "@tabler/icons-react";
+import {
+  IconChevronDown,
+  IconChevronRight,
+  IconChevronUp,
+  IconLogin,
+} from "@tabler/icons-react";
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCompetitions } from "../hooks/useCompetitions";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useMyCompetitions } from "../hooks/useMyCompetitions";
 import { useUser } from "../hooks/useUser";
 import { Competition } from "../types";
+import classes from "./Competitions.module.css";
 
 type SortField = "name" | "season" | "participants";
 type SortDir = "asc" | "desc";
@@ -38,11 +46,16 @@ const SortableHeader = ({
 }) => {
   const isActive = sortField === field;
   const Icon = isActive && sortDir === "desc" ? IconChevronDown : IconChevronUp;
+  const ariaSortValue = isActive
+    ? sortDir === "asc"
+      ? "ascending"
+      : "descending"
+    : undefined;
   return (
-    <Table.Th>
+    <Table.Th aria-sort={ariaSortValue}>
       <UnstyledButton
         onClick={() => onSort(field)}
-        style={{ display: "flex", alignItems: "center", gap: 4 }}
+        className={classes.sortButton}
         aria-label={`Sort by ${label}`}
       >
         {label}
@@ -96,12 +109,22 @@ export const Competitions = () => {
     return _comps.slice().sort(compareFn);
   }, [_comps, sortField, sortDir]);
 
+  const formatParticipants = (comp: Competition) => {
+    const names = comp.participants.map((p) => p.displayName ?? p.email);
+    const maxShow = isMobile ? 2 : names.length;
+    const shown = names.slice(0, maxShow).join(", ");
+    const remaining = names.length - maxShow;
+    if (remaining > 0) {
+      return `${shown} +${remaining} more`;
+    }
+    return shown;
+  };
+
   const rows = sorted.map((x) => (
     <Table.Tr
       onClick={() => navigate(`/competitions/${x.id}`)}
       key={x.id}
-      style={{ cursor: "pointer" }}
-      role="link"
+      className={classes.clickableRow}
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
@@ -109,32 +132,27 @@ export const Competitions = () => {
         }
       }}
     >
-      <Table.Td fw={600}>{x.competition_name}</Table.Td>
       <Table.Td>
-        <Badge variant="light" size="sm">
-          S{x.season_num}
-        </Badge>
-      </Table.Td>
-      <Table.Td>
-        <Text size="sm">
-          {x.participants.map((p) => p.displayName ?? p.email).join(", ")}
+        <Text fw={600} size="sm">
+          {x.competition_name}
+        </Text>
+        <Text size="xs" c="dimmed">
+          {x.participants.find((p) => p.uid === x.creator_uid)?.displayName}
         </Text>
       </Table.Td>
-
-      {!isMobile && (
-        <>
-          <Table.Td>
-            <Text size="sm" c="dimmed">
-              {x.participants.find((p) => p.uid === x.creator_uid)?.displayName}
-            </Text>
-          </Table.Td>
-          <Table.Td>
-            <Text size="xs" c="dimmed" ff="monospace">
-              {x.draft_id.slice(-6)}
-            </Text>
-          </Table.Td>
-        </>
-      )}
+      <Table.Td>
+        <Tooltip label={`Season ${x.season_num}`}>
+          <Badge variant="light" size="sm">
+            S{x.season_num}
+          </Badge>
+        </Tooltip>
+      </Table.Td>
+      <Table.Td>
+        <Text size="sm">{formatParticipants(x)}</Text>
+      </Table.Td>
+      <Table.Td w={36}>
+        <IconChevronRight size={16} className={classes.chevron} />
+      </Table.Td>
     </Table.Tr>
   ));
 
@@ -164,17 +182,32 @@ export const Competitions = () => {
 
   return (
     <Stack gap="lg" p="md">
-      <div>
-        <Title order={2}>Competitions</Title>
-        <Text c="dimmed" size="sm">
-          Your active and past competitions.
-        </Text>
-      </div>
+      <Group justify="space-between" align="flex-end">
+        <div>
+          <Title order={2}>Competitions</Title>
+          <Text c="dimmed" size="sm">
+            {sorted.length > 0
+              ? `${sorted.length} competition${sorted.length === 1 ? "" : "s"}`
+              : "Your active and past competitions"}
+          </Text>
+        </div>
+        <Button
+          component={Link}
+          to="/seasons"
+          variant="light"
+          size="compact-sm"
+        >
+          Browse seasons
+        </Button>
+      </Group>
 
       {isLoading && (
-        <Center py="xl">
-          <Loader size="lg" />
-        </Center>
+        <Stack gap="xs">
+          <Skeleton height={40} />
+          <Skeleton height={40} />
+          <Skeleton height={40} />
+          <Skeleton height={40} />
+        </Stack>
       )}
 
       {!isLoading && sorted.length === 0 && (
@@ -216,13 +249,7 @@ export const Competitions = () => {
                   sortDir={sortDir}
                   onSort={handleSort}
                 />
-
-                {!isMobile && (
-                  <>
-                    <Table.Th>Creator</Table.Th>
-                    <Table.Th>ID</Table.Th>
-                  </>
-                )}
+                <Table.Th />
               </Table.Tr>
             </Table.Thead>
 

@@ -72,6 +72,7 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
 
       <div className={classes.footer}>
         <button
+          type="button"
           className={classes.link}
           onClick={toggleColorScheme}
           aria-label="Toggle color scheme"
@@ -86,6 +87,7 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
 
         {!slimUser && (
           <button
+            type="button"
             className={classes.link}
             onClick={() =>
               modals.openContextModal({
@@ -115,7 +117,7 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
               </Text>
             </div>
 
-            <button className={classes.link} onClick={handleLogout}>
+            <button type="button" className={classes.link} onClick={handleLogout}>
               <IconLogout className={classes.linkIcon} stroke={1.5} />
               <span>Logout</span>
             </button>

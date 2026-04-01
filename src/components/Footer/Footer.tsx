@@ -12,7 +12,7 @@ const links = [
 
 export const Footer = () => {
   return (
-    <div className={classes.footer}>
+    <footer className={classes.footer}>
       <Container className={classes.inner}>
         <Group gap="xs" wrap="nowrap">
           <img src="/icons/probst.svg" alt="" className={classes.icon} />
@@ -34,6 +34,6 @@ export const Footer = () => {
           ))}
         </Group>
       </Container>
-    </div>
+    </footer>
   );
 };
