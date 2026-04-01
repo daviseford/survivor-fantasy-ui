@@ -4,7 +4,10 @@ import { ref, set } from "firebase/database";
 import { v4 } from "uuid";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
-import { buildParticipantMap, type RealtimeDraft } from "../utils/draftRealtime";
+import {
+  buildParticipantMap,
+  type RealtimeDraft,
+} from "../utils/draftRealtime";
 
 export const useCreateDraft = () => {
   const { slimUser } = useUser();

@@ -1,5 +1,5 @@
-import { getActivePropBetKeys } from "../data/propbets";
 import { useMemo } from "react";
+import { getActivePropBetKeys } from "../data/propbets";
 import { Competition } from "../types";
 import { filterRecordByEpisode } from "../utils/episodeFilter";
 import {
@@ -38,18 +38,16 @@ export const usePropBetScoring = (competition_id?: Competition["id"]) => {
 
   const hasFinaleOccurred = useMemo(
     () =>
-      Object.values(filteredEvents).some(
-        (e) => e.action === "win_survivor",
-      ),
+      Object.values(filteredEvents).some((e) => e.action === "win_survivor"),
     [filteredEvents],
   );
 
   const postMergeEpisodeNumbers = useMemo(
     () =>
       new Set(
-        (season?.episodes || []).filter((episode) => episode.post_merge).map(
-          (episode) => episode.order,
-        ),
+        (season?.episodes || [])
+          .filter((episode) => episode.post_merge)
+          .map((episode) => episode.order),
       ),
     [season?.episodes],
   );

@@ -43,7 +43,9 @@ export const PostDraftPropBetTable = () => {
           <Table.Tr>
             <Table.Th></Table.Th>
             {activeKeys.map((key) => (
-              <Table.Th key={key}>{PropBetsQuestions[key].description}</Table.Th>
+              <Table.Th key={key}>
+                {PropBetsQuestions[key].description}
+              </Table.Th>
             ))}
           </Table.Tr>
         </Table.Thead>

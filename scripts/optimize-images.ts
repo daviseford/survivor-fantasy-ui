@@ -123,7 +123,9 @@ async function main(): Promise<void> {
 
   console.log(
     `Optimized ${changed}/${files.length} files, saved ${(
-      bytesSaved / 1024 / 1024
+      bytesSaved /
+      1024 /
+      1024
     ).toFixed(2)} MB total`,
   );
 }

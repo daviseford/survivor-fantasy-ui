@@ -33,7 +33,10 @@ type SeasonNumber = 6;
 
 const buildPlayer = <T extends CastawayIdType>(
   p: { castaway_id: T; full_name: string; img: string } & Partial<
-    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "castaway_id" | "full_name" | "img">
+    Omit<
+      Player<T, SeasonNumber>,
+      "season_id" | "season_num" | "castaway_id" | "full_name" | "img"
+    >
   >,
 ): Player<T, SeasonNumber> => ({
   ...p,
@@ -42,22 +45,22 @@ const buildPlayer = <T extends CastawayIdType>(
 });
 
 export const SEASON_6_CASTAWAY_LOOKUP: CastawayLookup = {
-  "US0081": { full_name: "Ryan Aiken", castaway: "Ryan" },
-  "US0082": { full_name: "Janet Koth", castaway: "Janet" },
-  "US0083": { full_name: "Daniel Lue", castaway: "Daniel" },
-  "US0084": { full_name: "JoAnna Ward", castaway: "JoAnna" },
-  "US0085": { full_name: "Jeanne Hebert", castaway: "Jeanne" },
-  "US0086": { full_name: "Shawna Mitchell", castaway: "Shawna" },
-  "US0087": { full_name: "Roger Sexton", castaway: "Roger" },
-  "US0088": { full_name: "Dave Johnson", castaway: "Dave" },
-  "US0089": { full_name: "Deena Bennett", castaway: "Deena" },
-  "US0090": { full_name: "Alex Bell", castaway: "Alex" },
-  "US0091": { full_name: "Christy Smith", castaway: "Christy" },
-  "US0092": { full_name: "Heidi Strobel", castaway: "Heidi" },
-  "US0093": { full_name: "Butch Lockley", castaway: "Butch" },
-  "US0094": { full_name: "Rob Cesternino", castaway: "Rob" },
-  "US0095": { full_name: "Matthew von Ertfelda", castaway: "Matthew" },
-  "US0096": { full_name: "Jenna Morasca", castaway: "Jenna" },
+  US0081: { full_name: "Ryan Aiken", castaway: "Ryan" },
+  US0082: { full_name: "Janet Koth", castaway: "Janet" },
+  US0083: { full_name: "Daniel Lue", castaway: "Daniel" },
+  US0084: { full_name: "JoAnna Ward", castaway: "JoAnna" },
+  US0085: { full_name: "Jeanne Hebert", castaway: "Jeanne" },
+  US0086: { full_name: "Shawna Mitchell", castaway: "Shawna" },
+  US0087: { full_name: "Roger Sexton", castaway: "Roger" },
+  US0088: { full_name: "Dave Johnson", castaway: "Dave" },
+  US0089: { full_name: "Deena Bennett", castaway: "Deena" },
+  US0090: { full_name: "Alex Bell", castaway: "Alex" },
+  US0091: { full_name: "Christy Smith", castaway: "Christy" },
+  US0092: { full_name: "Heidi Strobel", castaway: "Heidi" },
+  US0093: { full_name: "Butch Lockley", castaway: "Butch" },
+  US0094: { full_name: "Rob Cesternino", castaway: "Rob" },
+  US0095: { full_name: "Matthew von Ertfelda", castaway: "Matthew" },
+  US0096: { full_name: "Jenna Morasca", castaway: "Jenna" },
 };
 
 export const SEASON_6_PLAYERS = [
@@ -516,13 +519,7 @@ export const SEASON_6_CHALLENGES = {
     episode_num: 6,
     variant: "reward",
     order: 9,
-    winning_castaways: [
-      "US0087",
-      "US0088",
-      "US0091",
-      "US0092",
-      "US0093",
-    ],
+    winning_castaways: ["US0087", "US0088", "US0091", "US0092", "US0093"],
   },
   challenge_10: {
     id: "challenge_10",
@@ -532,13 +529,7 @@ export const SEASON_6_CHALLENGES = {
     episode_num: 6,
     variant: "immunity",
     order: 10,
-    winning_castaways: [
-      "US0087",
-      "US0088",
-      "US0091",
-      "US0092",
-      "US0093",
-    ],
+    winning_castaways: ["US0087", "US0088", "US0091", "US0092", "US0093"],
   },
   challenge_11: {
     id: "challenge_11",
@@ -548,9 +539,7 @@ export const SEASON_6_CHALLENGES = {
     episode_num: 7,
     variant: "immunity",
     order: 11,
-    winning_castaways: [
-      "US0089",
-    ],
+    winning_castaways: ["US0089"],
   },
   challenge_12: {
     id: "challenge_12",
@@ -560,9 +549,7 @@ export const SEASON_6_CHALLENGES = {
     episode_num: 8,
     variant: "reward",
     order: 12,
-    winning_castaways: [
-      "US0088",
-    ],
+    winning_castaways: ["US0088"],
   },
   challenge_13: {
     id: "challenge_13",
@@ -572,9 +559,7 @@ export const SEASON_6_CHALLENGES = {
     episode_num: 8,
     variant: "immunity",
     order: 13,
-    winning_castaways: [
-      "US0096",
-    ],
+    winning_castaways: ["US0096"],
   },
   challenge_14: {
     id: "challenge_14",
@@ -584,9 +569,7 @@ export const SEASON_6_CHALLENGES = {
     episode_num: 9,
     variant: "reward",
     order: 14,
-    winning_castaways: [
-      "US0090",
-    ],
+    winning_castaways: ["US0090"],
   },
   challenge_15: {
     id: "challenge_15",
@@ -596,9 +579,7 @@ export const SEASON_6_CHALLENGES = {
     episode_num: 9,
     variant: "immunity",
     order: 15,
-    winning_castaways: [
-      "US0095",
-    ],
+    winning_castaways: ["US0095"],
   },
   challenge_16: {
     id: "challenge_16",
@@ -608,9 +589,7 @@ export const SEASON_6_CHALLENGES = {
     episode_num: 11,
     variant: "immunity",
     order: 16,
-    winning_castaways: [
-      "US0094",
-    ],
+    winning_castaways: ["US0094"],
   },
   challenge_17: {
     id: "challenge_17",
@@ -620,9 +599,7 @@ export const SEASON_6_CHALLENGES = {
     episode_num: 12,
     variant: "reward",
     order: 17,
-    winning_castaways: [
-      "US0095",
-    ],
+    winning_castaways: ["US0095"],
   },
   challenge_18: {
     id: "challenge_18",
@@ -632,9 +609,7 @@ export const SEASON_6_CHALLENGES = {
     episode_num: 12,
     variant: "immunity",
     order: 18,
-    winning_castaways: [
-      "US0096",
-    ],
+    winning_castaways: ["US0096"],
   },
   challenge_19: {
     id: "challenge_19",
@@ -644,9 +619,7 @@ export const SEASON_6_CHALLENGES = {
     episode_num: 13,
     variant: "reward",
     order: 19,
-    winning_castaways: [
-      "US0095",
-    ],
+    winning_castaways: ["US0095"],
   },
   challenge_20: {
     id: "challenge_20",
@@ -656,9 +629,7 @@ export const SEASON_6_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 20,
-    winning_castaways: [
-      "US0095",
-    ],
+    winning_castaways: ["US0095"],
   },
   challenge_21: {
     id: "challenge_21",
@@ -668,9 +639,7 @@ export const SEASON_6_CHALLENGES = {
     episode_num: 14,
     variant: "immunity",
     order: 21,
-    winning_castaways: [
-      "US0096",
-    ],
+    winning_castaways: ["US0096"],
   },
   challenge_22: {
     id: "challenge_22",
@@ -680,9 +649,7 @@ export const SEASON_6_CHALLENGES = {
     episode_num: 14,
     variant: "immunity",
     order: 22,
-    winning_castaways: [
-      "US0096",
-    ],
+    winning_castaways: ["US0096"],
   },
 } satisfies Record<Challenge["id"], Challenge<CastawayIdType, SeasonNumber>>;
 
@@ -837,7 +804,10 @@ export const SEASON_6_ELIMINATIONS = {
     castaway_id: "US0095",
     variant: "final_tribal_council",
   },
-} satisfies Record<Elimination["id"], Elimination<CastawayIdType, SeasonNumber>>;
+} satisfies Record<
+  Elimination["id"],
+  Elimination<CastawayIdType, SeasonNumber>
+>;
 
 export const SEASON_6_EVENTS = {
   event_1: {

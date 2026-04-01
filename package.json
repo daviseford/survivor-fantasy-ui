@@ -22,6 +22,7 @@
     "e2e:ui": "playwright test --ui",
     "new-season": "tsx scripts/new-season.ts",
     "sync-season": "tsx scripts/sync-season.ts",
+    "push-all-seasons": "tsx scripts/push-all-seasons.ts",
     "optimize-images": "tsx scripts/optimize-images.ts",
     "tsc:scripts": "tsc -p scripts/tsconfig.json --noEmit",
     "set-admin": "tsx scripts/set-admin-claim.ts"

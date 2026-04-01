@@ -38,7 +38,9 @@ const compareKeys = ([a]: [string, unknown], [b]: [string, unknown]) =>
 function recordToOrderedArray<T>(value?: IndexedRecord<T> | T[]): T[] {
   if (!value) return [];
   if (Array.isArray(value)) return value.filter(Boolean);
-  return Object.entries(value).sort(compareKeys).map(([, item]) => item);
+  return Object.entries(value)
+    .sort(compareKeys)
+    .map(([, item]) => item);
 }
 
 function recordValues<T>(value?: IndexedRecord<T> | T[]): T[] {
@@ -50,7 +52,9 @@ function recordValues<T>(value?: IndexedRecord<T> | T[]): T[] {
 export function buildParticipantMap(
   participants: SlimUser[],
 ): Record<string, SlimUser> {
-  return Object.fromEntries(participants.map((participant) => [participant.uid, participant]));
+  return Object.fromEntries(
+    participants.map((participant) => [participant.uid, participant]),
+  );
 }
 
 export function buildPickOrderUidMap(
@@ -94,7 +98,9 @@ export function normalizeDraft(raw?: RealtimeDraft | null): Draft | undefined {
     pickOrderUids.length > 0
       ? pickOrderUids
           .map((uid) => participantsByUid.get(uid))
-          .filter((participant): participant is SlimUser => Boolean(participant))
+          .filter((participant): participant is SlimUser =>
+            Boolean(participant),
+          )
       : legacyPickOrder;
 
   const currentPickNumber =
@@ -112,8 +118,8 @@ export function normalizeDraft(raw?: RealtimeDraft | null): Draft | undefined {
     !started || finished
       ? null
       : turnUid
-        ? participantsByUid.get(turnUid) ?? null
-        : raw.current_picker ?? null;
+        ? (participantsByUid.get(turnUid) ?? null)
+        : (raw.current_picker ?? null);
 
   return {
     id: raw.id,

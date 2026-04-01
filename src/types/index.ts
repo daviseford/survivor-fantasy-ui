@@ -173,7 +173,6 @@ export type DraftPick = {
   player_name: string;
 };
 
-// todo
 export type PropBet = {
   id: `propbet_${string}`;
 

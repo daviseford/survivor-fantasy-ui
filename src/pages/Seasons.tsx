@@ -204,13 +204,9 @@ export const Seasons = () => {
       </div>
 
       {/* Marquee — two latest seasons */}
-      <SimpleGrid cols={{ base: 1, sm: 2 }}>
+      <SimpleGrid cols={{ base: 1, sm: 2 }} maw={900}>
         {marqueeSeasons.map((meta) => (
-          <HeroCard
-            key={meta.id}
-            meta={meta}
-            live={meta.id === liveSeasonId}
-          />
+          <HeroCard key={meta.id} meta={meta} live={meta.id === liveSeasonId} />
         ))}
       </SimpleGrid>
 

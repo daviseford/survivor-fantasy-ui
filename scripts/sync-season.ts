@@ -10,7 +10,11 @@
 
 import * as fs from "fs";
 import * as path from "path";
-import { generateFullSeasonFile, registerSeason } from "./lib/codegen.js";
+import {
+  extractExistingPlayers,
+  generateFullSeasonFile,
+  registerSeason,
+} from "./lib/codegen.js";
 import { pushSeasonToFirestore } from "./lib/firebase-push.js";
 import { fetchSeasonData, fetchTable } from "./lib/survivor-client.js";
 import {
@@ -124,17 +128,37 @@ async function main(): Promise<void> {
   const playerData = transformPlayers(seasonData, seasonNum);
   const resultsData = transformResults(seasonData, seasonNum);
 
+  // Preserve existing player images from the current file
+  const seasonKey = `season_${seasonNum}`;
+  const seasonDir = path.join(PROJECT_ROOT, "src", "data", seasonKey);
+  const seasonFilePath = path.join(seasonDir, "index.ts");
+
+  if (fs.existsSync(seasonFilePath)) {
+    const existingContent = fs.readFileSync(seasonFilePath, "utf-8");
+    const existingPlayers = extractExistingPlayers(existingContent);
+    const imgMap = new Map(
+      existingPlayers.filter((p) => p.img).map((p) => [p.name, p.img]),
+    );
+
+    if (imgMap.size > 0) {
+      console.log(`  Preserving ${imgMap.size} existing player images.`);
+      for (const player of playerData.players) {
+        if (!player.imageUrl) {
+          const existingImg = imgMap.get(player.localName);
+          if (existingImg) {
+            player.imageUrl = existingImg;
+          }
+        }
+      }
+    }
+  }
+
   console.log("  Generating season file...");
   const generatedContent = generateFullSeasonFile(
     playerData,
     resultsData,
     seasonNum,
   );
-
-  // Phase 3: Compare
-  const seasonKey = `season_${seasonNum}`;
-  const seasonDir = path.join(PROJECT_ROOT, "src", "data", seasonKey);
-  const seasonFilePath = path.join(seasonDir, "index.ts");
 
   if (!isNewSeason && fs.existsSync(seasonFilePath)) {
     const existingContent = fs.readFileSync(seasonFilePath, "utf-8");

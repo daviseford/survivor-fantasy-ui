@@ -468,8 +468,16 @@ export const SEASON_9_CHALLENGES = {
     episode_num: 3,
     variant: "reward",
     order: 5,
-    // TODO: resolve tribe winners to castaway IDs
-    winning_castaways: [],
+    winning_castaways: [
+      "US0115",
+      "US0117",
+      "US0118",
+      "US0120",
+      "US0121",
+      "US0122",
+      "US0123",
+      "US0130",
+    ],
   },
   challenge_6: {
     id: "challenge_6",

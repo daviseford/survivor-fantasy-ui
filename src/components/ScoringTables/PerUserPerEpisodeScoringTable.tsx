@@ -1,8 +1,10 @@
-import { Table, Text } from "@mantine/core";
+import { Table, Text, Tooltip } from "@mantine/core";
 import { IconTrophy } from "@tabler/icons-react";
+import { PropBetQuestionKey, PropBetsQuestions } from "../../data/propbets";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useUser } from "../../hooks/useUser";
+import { PropBetScores } from "../../utils/propBetUtils";
 
 export const PerUserPerEpisodeScoringTable = () => {
   const { data: competition } = useCompetition();
@@ -12,8 +14,8 @@ export const PerUserPerEpisodeScoringTable = () => {
     activePropBetKeys,
     filteredEpisodes,
     pointsByUserPerEpisodeWithPropBets,
-  } =
-    useScoringCalculations();
+    propBetScores,
+  } = useScoringCalculations();
 
   const sortedEntries = Object.entries(pointsByUserPerEpisodeWithPropBets).sort(
     (a, b) => b[1].total - a[1].total,
@@ -64,13 +66,11 @@ export const PerUserPerEpisodeScoringTable = () => {
 
         {activePropBetKeys.length > 0 && (
           <Table.Td ta="center">
-            <Text
-              span
-              size="sm"
-              c={values.propBetPoints === 0 ? "dimmed" : undefined}
-            >
-              {values.propBetPoints}
-            </Text>
+            <PropBetCell
+              points={values.propBetPoints}
+              scores={propBetScores[uid]}
+              activeKeys={activePropBetKeys}
+            />
           </Table.Td>
         )}
       </Table.Tr>
@@ -111,3 +111,46 @@ export const PerUserPerEpisodeScoringTable = () => {
     </Table.ScrollContainer>
   );
 };
+
+function PropBetCell({
+  points,
+  scores,
+  activeKeys,
+}: {
+  points: number;
+  scores?: PropBetScores;
+  activeKeys: PropBetQuestionKey[];
+}) {
+  const correctProps = activeKeys.filter(
+    (key) => scores?.[key]?.status === "definitive_correct",
+  );
+
+  const label =
+    correctProps.length > 0
+      ? correctProps
+          .map(
+            (key) =>
+              `${PropBetsQuestions[key].description} (+${PropBetsQuestions[key].point_value})`,
+          )
+          .join("\n")
+      : undefined;
+
+  const content = (
+    <Text
+      span
+      size="sm"
+      c={points === 0 ? "dimmed" : undefined}
+      style={label ? { cursor: "default" } : undefined}
+    >
+      {points}
+    </Text>
+  );
+
+  if (!label) return content;
+
+  return (
+    <Tooltip label={label} multiline maw={300} withArrow>
+      {content}
+    </Tooltip>
+  );
+}

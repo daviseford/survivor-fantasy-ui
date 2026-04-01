@@ -80,7 +80,5 @@ export const getEnhancedSurvivorPoints = (
     }
   });
 
-  // todo: post-merge stuff
-
   return scores;
 };

@@ -175,6 +175,12 @@ New-era journey twist outcomes (S41+).
 | `auction_details.json`       | 164    | S2-47   | Individual auction item purchases                    | Auctions are rare, not scored                        |
 | `survivor_auction.json`      | 147    | S2-47   | Per-player auction spend totals                      | Auctions are rare, not scored                        |
 
+## Transformation Rules
+
+### Finale Detection
+
+An episode should only be marked as the finale (`isFinale: true`) if a winner has been declared for the season (i.e., `castaways.winner === true` for at least one castaway). If no winner exists in the data, the season is still in progress and no episode should be flagged as the finale — even if it is the highest-numbered episode.
+
 ## Known Data Gaps
 
 These are things survivoR does NOT track that our app scores:
