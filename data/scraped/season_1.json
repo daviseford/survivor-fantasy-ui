@@ -1,6 +1,6 @@
 {
   "seasonNum": 1,
-  "scrapedAt": "2026-03-31T23:36:42.666Z",
+  "scrapedAt": "2026-04-01T00:48:10.491Z",
   "players": [
     {
       "wikiPageTitle": "Sonja Christopher",
@@ -8,7 +8,8 @@
       "matchStatus": "exact",
       "age": 63,
       "profession": "Musician",
-      "hometown": "Walnut Creek, California"
+      "hometown": "Walnut Creek, California",
+      "imageUrl": "/images/season_1/Sonja-Christopher.jpg"
     },
     {
       "wikiPageTitle": "B.B. Andersen",
@@ -16,7 +17,8 @@
       "matchStatus": "exact",
       "age": 64,
       "profession": "Real Estate Developer",
-      "hometown": "Mission Hills, Kansas"
+      "hometown": "Mission Hills, Kansas",
+      "imageUrl": "/images/season_1/B.B.-Andersen.jpg"
     },
     {
       "wikiPageTitle": "Stacey Stillman",
@@ -24,7 +26,8 @@
       "matchStatus": "exact",
       "age": 53,
       "profession": "Attorney",
-      "hometown": "San Francisco, California"
+      "hometown": "San Francisco, California",
+      "imageUrl": "/images/season_1/Stacey-Stillman.jpg"
     },
     {
       "wikiPageTitle": "Ramona Gray",
@@ -32,7 +35,8 @@
       "matchStatus": "exact",
       "age": 55,
       "profession": "Biochemist",
-      "hometown": "Edison, New Jersey"
+      "hometown": "Edison, New Jersey",
+      "imageUrl": "/images/season_1/Ramona-Gray.jpg"
     },
     {
       "wikiPageTitle": "Dirk Been",
@@ -40,7 +44,8 @@
       "matchStatus": "exact",
       "age": 49,
       "profession": "Dairy Farmer",
-      "hometown": "Spring Green, Wisconsin"
+      "hometown": "Spring Green, Wisconsin",
+      "imageUrl": "/images/season_1/Dirk-Been.jpg"
     },
     {
       "wikiPageTitle": "Joel Klug",
@@ -48,7 +53,8 @@
       "matchStatus": "exact",
       "age": 53,
       "profession": "Health Club Consultant",
-      "hometown": "Sherwood, Arkansas"
+      "hometown": "Sherwood, Arkansas",
+      "imageUrl": "/images/season_1/Joel-Klug.jpg"
     },
     {
       "wikiPageTitle": "Gretchen Cordy",
@@ -56,7 +62,8 @@
       "matchStatus": "exact",
       "age": 64,
       "profession": "Teacher",
-      "hometown": "Clarksville, Tennessee"
+      "hometown": "Clarksville, Tennessee",
+      "imageUrl": "/images/season_1/Gretchen-Cordy.jpg"
     },
     {
       "wikiPageTitle": "Greg Buis",
@@ -64,7 +71,8 @@
       "matchStatus": "exact",
       "age": 50,
       "profession": "Ivy League Graduate",
-      "hometown": "Gold Hill, Colorado"
+      "hometown": "Gold Hill, Colorado",
+      "imageUrl": "/images/season_1/Greg-Buis.jpg"
     },
     {
       "wikiPageTitle": "Jenna Lewis",
@@ -72,7 +80,8 @@
       "matchStatus": "exact",
       "age": 48,
       "profession": "Student",
-      "hometown": "Franklin, New Hampshire"
+      "hometown": "Franklin, New Hampshire",
+      "imageUrl": "/images/season_1/Jenna-Lewis.jpg"
     },
     {
       "wikiPageTitle": "Gervase Peterson",
@@ -80,7 +89,8 @@
       "matchStatus": "exact",
       "age": 56,
       "profession": "YMCA Basketball Coach",
-      "hometown": "Willingboro, New Jersey"
+      "hometown": "Willingboro, New Jersey",
+      "imageUrl": "/images/season_1/Gervase-Peterson.jpg"
     },
     {
       "wikiPageTitle": "Colleen Haskell",
@@ -88,7 +98,8 @@
       "matchStatus": "exact",
       "age": 49,
       "profession": "Student",
-      "hometown": "Miami Beach, Florida"
+      "hometown": "Miami Beach, Florida",
+      "imageUrl": "/images/season_1/Colleen-Haskell.jpg"
     },
     {
       "wikiPageTitle": "Sean Kenniff",
@@ -96,7 +107,8 @@
       "matchStatus": "exact",
       "age": 56,
       "profession": "Doctor",
-      "hometown": "Carle Place, New York"
+      "hometown": "Carle Place, New York",
+      "imageUrl": "/images/season_1/Sean-Kenniff.jpg"
     },
     {
       "wikiPageTitle": "Susan Hawk",
@@ -104,7 +116,8 @@
       "matchStatus": "exact",
       "age": 64,
       "profession": "Truck Driver",
-      "hometown": "Palmyra, Wisconsin"
+      "hometown": "Palmyra, Wisconsin",
+      "imageUrl": "/images/season_1/Susan-Hawk.jpg"
     },
     {
       "wikiPageTitle": "Rudy Boesch",
@@ -112,7 +125,8 @@
       "matchStatus": "exact",
       "age": 72,
       "profession": "Retired Navy SEAL",
-      "hometown": "Virginia Beach, Virginia"
+      "hometown": "Virginia Beach, Virginia",
+      "imageUrl": "/images/season_1/Rudy-Boesch.jpg"
     },
     {
       "wikiPageTitle": "Kelly Wiglesworth",
@@ -120,7 +134,8 @@
       "matchStatus": "exact",
       "age": 48,
       "profession": "River Guide",
-      "hometown": "Kernville, California"
+      "hometown": "Kernville, California",
+      "imageUrl": "/images/season_1/Kelly-Wiglesworth.jpg"
     },
     {
       "wikiPageTitle": "Richard Hatch",
@@ -128,7 +143,8 @@
       "matchStatus": "exact",
       "age": 64,
       "profession": "Corporate Trainer",
-      "hometown": "Newport, Rhode Island"
+      "hometown": "Newport, Rhode Island",
+      "imageUrl": "/images/season_1/Richard-Hatch.jpg"
     }
   ],
   "unmatched": []
