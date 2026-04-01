@@ -8,4 +8,13 @@ export const theme = createTheme({
       h4: { fontSize: rem(17), fontWeight: "600", lineHeight: "1.5" },
     },
   },
+  components: {
+    Badge: {
+      styles: {
+        label: {
+          textBoxTrim: "none",
+        },
+      },
+    },
+  },
 });

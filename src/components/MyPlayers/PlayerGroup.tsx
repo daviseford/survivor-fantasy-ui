@@ -26,7 +26,7 @@ export const PlayerGroup = ({ uid }: { uid: SlimUser["uid"] }) => {
             <Avatar
               key={p.castaway_id}
               src={p.img}
-              size="md"
+              size={isMobile ? "md" : "lg"}
               style={avatarStyle}
               alt={p.full_name}
             />

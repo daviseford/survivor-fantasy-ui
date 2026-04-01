@@ -1,0 +1,18 @@
+.sortButton {
+  display: flex;
+  align-items: center;
+  gap: rem(4px);
+}
+
+.clickableRow {
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-blue-6);
+    outline-offset: -2px;
+  }
+}
+
+.chevron {
+  color: light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-3));
+}

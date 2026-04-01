@@ -70,6 +70,9 @@ export const AppRoutes = () => {
             }}
             padding="md"
           >
+            <a className={classes.skipLink} href="#main-content">
+              Skip to main content
+            </a>
             <AppShell.Header>
               <Group h="100%" px="md">
                 <Burger
@@ -77,6 +80,7 @@ export const AppRoutes = () => {
                   onClick={toggle}
                   hiddenFrom="md"
                   size="sm"
+                  aria-label="Toggle navigation"
                 />
                 <Anchor
                   className={classes.title}
@@ -95,7 +99,7 @@ export const AppRoutes = () => {
               <Navbar onNavigate={close} />
             </AppShell.Navbar>
 
-            <AppShell.Main className={classes.main}>
+            <AppShell.Main id="main-content" className={classes.main}>
               <Routes>
                 <Route path="/" element={<Home />} />
 
