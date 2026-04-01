@@ -1,6 +1,6 @@
 # Add a New Survivor Season
 
-Add season **$ARGUMENTS** to the app by running the full scraping + generation + Firebase push pipeline.
+Add season **$ARGUMENTS** to the app by running the full survivoR data + wiki image pipeline.
 
 ## Steps
 
@@ -22,9 +22,9 @@ yarn new-season $ARGUMENTS --force --push
 
 This command:
 
-1. Scrapes player data from the Survivor Wiki
-2. Scrapes results (episodes, challenges, eliminations, events)
-3. Downloads player images and the season logo locally (not wiki CDN links)
+1. Fetches structured gameplay data from the survivoR dataset (players, episodes, challenges, eliminations, events, advantages)
+2. Fetches player images and bios from the Survivor Wiki (supplemental)
+3. Downloads player images and the season logo locally
 4. Generates the season data file at `src/data/season_$ARGUMENTS/index.ts`
 5. Registers the season in `src/data/seasons.ts`
 6. Pushes all season data to Firestore
@@ -35,8 +35,8 @@ This command:
 
 Pay close attention to the script output for:
 
-- **Odd player count warning** — This means the wiki cast table parser may have missed or duplicated a player. Tell the user the count, warn them to review the generated file manually, and check the scraped JSON in `scripts/data/` for discrepancies. Do NOT attempt to fix this automatically.
-- **Image download failures** — Report which images failed. These can be re-downloaded later.
+- **Wiki page not found warnings** — Some player names from survivoR may not match wiki page titles exactly. These players will be missing images. Tell the user which players were affected.
+- **Image download failures** — Report which images failed. These can be retried by running `yarn new-season $ARGUMENTS --force`.
 - **Firebase push errors** — Often caused by missing `firebase-private-key.json`. Tell the user to check their Firebase Admin SDK credentials.
 
 ### 4. Verify Output
@@ -54,9 +54,9 @@ yarn format && yarn tsc
 
 Report to the user:
 
-- Number of players scraped
+- Number of players fetched from survivoR
 - Number of episodes, challenges, eliminations, and events
-- Number of images downloaded
+- Number of images downloaded from wiki
 - Whether Firestore push succeeded
 - Any warnings that need manual attention
 
@@ -66,5 +66,5 @@ Create a new feature branch and commit the generated files:
 
 - Branch name: `feat/add-season-$ARGUMENTS`
 - Commit message: `feat: add season $ARGUMENTS data`
-- Stage only the new/modified files: `src/data/season_$ARGUMENTS/`, `src/data/seasons.ts`, `public/images/season_$ARGUMENTS/`, and any scraped JSON in `scripts/data/`
+- Stage only the new/modified files: `src/data/season_$ARGUMENTS/`, `src/data/seasons.ts`, `public/images/season_$ARGUMENTS/`
 - Do NOT commit to `main` directly — always use a feature branch
