@@ -775,7 +775,7 @@ export const DraftComponent = () => {
                       opacity: isDrafted ? 0.5 : 1,
                     }}
                   >
-                    <Stack gap={6} align="center">
+                    <Stack gap={8} align="center">
                       <Avatar
                         src={p.img}
                         size={80}
