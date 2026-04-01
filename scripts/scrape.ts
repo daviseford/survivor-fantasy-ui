@@ -61,6 +61,12 @@ export async function scrape(seasonNum: number): Promise<ScrapeResult> {
     );
   }
 
+  if (castEntries.length % 2 !== 0) {
+    console.warn(
+      `⚠ WARNING: Found ${castEntries.length} contestants (odd number). Survivor seasons always have an even number of players — the cast table parser likely missed someone.\n`,
+    );
+  }
+
   // Step 3: Resolve names (or discover names from wiki if no local data)
   let nameMatches;
   if (localNames.length === 0) {
@@ -172,6 +178,13 @@ export async function scrape(seasonNum: number): Promise<ScrapeResult> {
       console.log(`    - ${p.wikiPageTitle}`);
     }
   }
+  const totalPlayers = players.length + unmatched.length;
+  if (totalPlayers % 2 !== 0) {
+    console.log(
+      `\n⚠ WARNING: Total player count is ${totalPlayers} (odd). This likely means the cast table parser missed a contestant.`,
+    );
+  }
+
   console.log(`\nOutput: ${outputPath}`);
 
   return result;
