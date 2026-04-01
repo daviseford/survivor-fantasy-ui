@@ -161,6 +161,25 @@ const resolveLeaderboardBetStatus = (
   return "pending";
 };
 
+const resolveBinarySeasonBetStatus = (
+  answer: string | undefined,
+  conditionMet: boolean,
+  hasFinaleOccurred: boolean,
+): PropBetStatus => {
+  if (answer === "Yes") {
+    if (conditionMet) return "definitive_correct";
+    if (hasFinaleOccurred) return "definitive_incorrect";
+    return "pending";
+  }
+
+  if (answer === "No") {
+    if (conditionMet) return "definitive_incorrect";
+    if (hasFinaleOccurred) return "definitive_correct";
+  }
+
+  return "pending";
+};
+
 export const getPropBetScoresForUser = (
   uid: SlimUser["uid"],
   events: Record<GameEvent["id"], GameEvent>,
@@ -231,21 +250,54 @@ export const getPropBetScoresForUser = (
 
   // --- propbet_medical_evac ---
   const hasEvac = _elims.some((x) => x.variant === "medical");
-  if (myPropBets.propbet_medical_evac === "Yes") {
-    if (hasEvac) {
-      setStatus("propbet_medical_evac", "definitive_correct");
-    } else if (hasFinaleOccurred) {
-      setStatus("propbet_medical_evac", "definitive_incorrect");
-    }
-    // else: pending
-  } else if (myPropBets.propbet_medical_evac === "No") {
-    if (hasEvac) {
-      setStatus("propbet_medical_evac", "definitive_incorrect");
-    } else if (hasFinaleOccurred) {
-      setStatus("propbet_medical_evac", "definitive_correct");
-    }
-    // else: pending
+  setStatus(
+    "propbet_medical_evac",
+    resolveBinarySeasonBetStatus(
+      myPropBets.propbet_medical_evac,
+      hasEvac,
+      hasFinaleOccurred,
+    ),
+  );
+
+  // --- propbet_first_idol_found ---
+  const firstIdolEvent = _events
+    .filter((x) => x.action === "find_idol")
+    .sort((a, b) => a.episode_num - b.episode_num)[0];
+  if (firstIdolEvent) {
+    setStatus(
+      "propbet_first_idol_found",
+      firstIdolEvent.castaway_id === myPropBets.propbet_first_idol_found
+        ? "definitive_correct"
+        : "definitive_incorrect",
+    );
   }
+
+  // --- propbet_first_successful_idol_play ---
+  const firstSuccessfulIdolPlay = _events
+    .filter((x) => x.action === "use_idol")
+    .sort((a, b) => a.episode_num - b.episode_num)[0];
+  if (firstSuccessfulIdolPlay) {
+    setStatus(
+      "propbet_first_successful_idol_play",
+      firstSuccessfulIdolPlay.castaway_id ===
+        myPropBets.propbet_first_successful_idol_play
+        ? "definitive_correct"
+        : "definitive_incorrect",
+    );
+  }
+
+  // --- propbet_successful_shot_in_the_dark ---
+  const successfulShotInTheDark = _events.some(
+    (x) => x.action === "use_shot_in_the_dark_successfully",
+  );
+  setStatus(
+    "propbet_successful_shot_in_the_dark",
+    resolveBinarySeasonBetStatus(
+      myPropBets.propbet_successful_shot_in_the_dark,
+      successfulShotInTheDark,
+      hasFinaleOccurred,
+    ),
+  );
 
   // --- propbet_immunities ---
   const immunities = Object.values(challenges).filter(
@@ -273,6 +325,32 @@ export const getPropBetScoresForUser = (
     ),
   );
 
+  // --- propbet_rewards ---
+  const rewards = Object.values(challenges).filter(
+    (x) =>
+      x.variant === "reward" &&
+      postMergeEpisodeNumbers.has(x.episode_num) &&
+      x.winning_castaways.length <= 2,
+  );
+  const allRewardWinners = rewards.flatMap((x) => x.winning_castaways);
+  const rankedRewardWinners = entries(countBy(allRewardWinners)).sort(
+    (a, b) => b[1] - a[1],
+  );
+  setStatus(
+    "propbet_rewards",
+    resolveLeaderboardBetStatus(
+      rankedRewardWinners,
+      myPropBets.propbet_rewards || "",
+      isCurrentlyEliminated(
+        myPropBets.propbet_rewards || "",
+        _elims,
+        _events,
+        challenges,
+      ),
+      hasFinaleOccurred,
+    ),
+  );
+
   // --- propbet_idols ---
   const idols = _events.filter((x) => x.action === "find_idol");
   const allIdolFinders = idols.map((x) => x.castaway_id);
@@ -290,6 +368,17 @@ export const getPropBetScoresForUser = (
         _events,
         challenges,
       ),
+      hasFinaleOccurred,
+    ),
+  );
+
+  // --- propbet_quit ---
+  const hasQuit = _elims.some((x) => x.variant === "quitter");
+  setStatus(
+    "propbet_quit",
+    resolveBinarySeasonBetStatus(
+      myPropBets.propbet_quit,
+      hasQuit,
       hasFinaleOccurred,
     ),
   );

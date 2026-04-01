@@ -320,6 +320,132 @@ describe("getPropBetScoresForUser", () => {
     });
   });
 
+  describe("propbet_first_idol_found", () => {
+    it("returns definitive_correct when pick matches the first idol find", () => {
+      const comp: Competition = {
+        ...baseCompetition,
+        prop_bets: [
+          {
+            ...baseCompetition.prop_bets![0],
+            values: {
+              propbet_first_idol_found: ALICE,
+            },
+          },
+        ],
+      };
+      const events = {
+        ev1: makeEvent("1", 2, ALICE, "find_idol"),
+        ev2: makeEvent("2", 3, BOB, "find_idol"),
+      };
+
+      const answer = getStatus("propbet_first_idol_found", {
+        competition: comp,
+        events,
+      });
+      expect(answer.status).toBe("definitive_correct");
+      expect(answer.points_awarded).toBe(
+        PropBetsQuestions.propbet_first_idol_found.point_value,
+      );
+    });
+
+    it("returns definitive_incorrect when another player finds the first idol", () => {
+      const comp: Competition = {
+        ...baseCompetition,
+        prop_bets: [
+          {
+            ...baseCompetition.prop_bets![0],
+            values: {
+              propbet_first_idol_found: ALICE,
+            },
+          },
+        ],
+      };
+      const events = {
+        ev1: makeEvent("1", 2, BOB, "find_idol"),
+      };
+
+      const answer = getStatus("propbet_first_idol_found", {
+        competition: comp,
+        events,
+      });
+      expect(answer.status).toBe("definitive_incorrect");
+    });
+  });
+
+  describe("propbet_first_successful_idol_play", () => {
+    it("returns definitive_correct when pick matches the first idol play", () => {
+      const comp: Competition = {
+        ...baseCompetition,
+        prop_bets: [
+          {
+            ...baseCompetition.prop_bets![0],
+            values: {
+              propbet_first_successful_idol_play: ALICE,
+            },
+          },
+        ],
+      };
+      const events = {
+        ev1: makeEvent("1", 4, ALICE, "use_idol"),
+        ev2: makeEvent("2", 5, BOB, "use_idol"),
+      };
+
+      const answer = getStatus("propbet_first_successful_idol_play", {
+        competition: comp,
+        events,
+      });
+      expect(answer.status).toBe("definitive_correct");
+      expect(answer.points_awarded).toBe(
+        PropBetsQuestions.propbet_first_successful_idol_play.point_value,
+      );
+    });
+  });
+
+  describe("propbet_successful_shot_in_the_dark", () => {
+    it("returns definitive_correct for Yes when someone succeeds", () => {
+      const comp: Competition = {
+        ...baseCompetition,
+        prop_bets: [
+          {
+            ...baseCompetition.prop_bets![0],
+            values: {
+              propbet_successful_shot_in_the_dark: "Yes",
+            },
+          },
+        ],
+      };
+      const events = {
+        ev1: makeEvent("1", 3, BOB, "use_shot_in_the_dark_successfully"),
+      };
+
+      const answer = getStatus("propbet_successful_shot_in_the_dark", {
+        competition: comp,
+        events,
+      });
+      expect(answer.status).toBe("definitive_correct");
+    });
+
+    it("returns definitive_correct for No when finale occurs with no success", () => {
+      const comp: Competition = {
+        ...baseCompetition,
+        prop_bets: [
+          {
+            ...baseCompetition.prop_bets![0],
+            values: {
+              propbet_successful_shot_in_the_dark: "No",
+            },
+          },
+        ],
+      };
+
+      const answer = getStatus("propbet_successful_shot_in_the_dark", {
+        competition: comp,
+        hasFinaleOccurred: true,
+      });
+      expect(answer.status).toBe("definitive_correct");
+    });
+  });
+
   describe("propbet_idols", () => {
     it("returns pending when no idol events exist", () => {
       const answer = getStatus("propbet_idols");
@@ -540,6 +666,107 @@ describe("getPropBetScoresForUser", () => {
       };
       const answer = getStatus("propbet_immunities", { challenges });
       expect(answer.status).toBe("leading");
+    });
+  });
+
+  describe("propbet_rewards", () => {
+    it("returns definitive_correct at finale for the most post-merge reward wins", () => {
+      const comp: Competition = {
+        ...baseCompetition,
+        prop_bets: [
+          {
+            ...baseCompetition.prop_bets![0],
+            values: {
+              propbet_rewards: ALICE,
+            },
+          },
+        ],
+      };
+      const challenges = {
+        c1: makeChallenge("1", 8, [ALICE], "reward"),
+        c2: makeChallenge("2", 9, [ALICE], "reward"),
+        c3: makeChallenge("3", 10, [BOB], "reward"),
+        c4: makeChallenge("4", 2, [BOB, CHARLIE, ALICE], "reward"),
+      };
+
+      const answer = getStatus("propbet_rewards", {
+        competition: comp,
+        challenges,
+        hasFinaleOccurred: true,
+      });
+      expect(answer.status).toBe("definitive_correct");
+      expect(answer.points_awarded).toBe(
+        PropBetsQuestions.propbet_rewards.point_value,
+      );
+    });
+
+    it("ignores pre-merge and large-group reward results", () => {
+      const comp: Competition = {
+        ...baseCompetition,
+        prop_bets: [
+          {
+            ...baseCompetition.prop_bets![0],
+            values: {
+              propbet_rewards: ALICE,
+            },
+          },
+        ],
+      };
+      const challenges = {
+        c1: makeChallenge("1", 2, [ALICE, BOB, CHARLIE], "reward"),
+        c2: makeChallenge("2", 8, [BOB], "reward"),
+      };
+
+      const answer = getStatus("propbet_rewards", {
+        competition: comp,
+        challenges,
+      });
+      expect(answer.status).toBe("pending");
+    });
+  });
+
+  describe("propbet_quit", () => {
+    it("returns definitive_correct for Yes when someone quits", () => {
+      const comp: Competition = {
+        ...baseCompetition,
+        prop_bets: [
+          {
+            ...baseCompetition.prop_bets![0],
+            values: {
+              propbet_quit: "Yes",
+            },
+          },
+        ],
+      };
+      const elims = {
+        e1: makeElimination("1", 6, BOB, 4, "quitter"),
+      };
+
+      const answer = getStatus("propbet_quit", {
+        competition: comp,
+        eliminations: elims,
+      });
+      expect(answer.status).toBe("definitive_correct");
+    });
+
+    it("returns definitive_correct for No when finale occurs with no quit", () => {
+      const comp: Competition = {
+        ...baseCompetition,
+        prop_bets: [
+          {
+            ...baseCompetition.prop_bets![0],
+            values: {
+              propbet_quit: "No",
+            },
+          },
+        ],
+      };
+
+      const answer = getStatus("propbet_quit", {
+        competition: comp,
+        hasFinaleOccurred: true,
+      });
+      expect(answer.status).toBe("definitive_correct");
     });
   });
 
