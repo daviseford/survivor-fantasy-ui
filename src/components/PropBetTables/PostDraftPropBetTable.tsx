@@ -1,5 +1,5 @@
 import { Table, TableScrollContainer, Text } from "@mantine/core";
-import { PropBetsQuestions } from "../../data/propbets";
+import { getActivePropBetKeys, PropBetsQuestions } from "../../data/propbets";
 import { useDraft } from "../../hooks/useDraft";
 import { useSeason } from "../../hooks/useSeason";
 import type { CastawayId, CastawayLookup } from "../../types";
@@ -17,6 +17,9 @@ export const PostDraftPropBetTable = () => {
   if (!draft?.prop_bets) return null;
 
   const lookup = season?.castawayLookup;
+  const activeKeys = getActivePropBetKeys(draft.prop_bets);
+
+  if (activeKeys.length === 0) return null;
 
   const rows = draft.prop_bets.map((p) => {
     return (
@@ -24,30 +27,11 @@ export const PostDraftPropBetTable = () => {
         <Table.Td fw={600}>
           <Text size="sm">{p.user_name}</Text>
         </Table.Td>
-        <Table.Td>
-          <Text size="sm">
-            {resolveAnswer(p.values.propbet_first_vote, lookup)}
-          </Text>
-        </Table.Td>
-        <Table.Td>
-          <Text size="sm">{resolveAnswer(p.values.propbet_ftc, lookup)}</Text>
-        </Table.Td>
-        <Table.Td>
-          <Text size="sm">{resolveAnswer(p.values.propbet_idols, lookup)}</Text>
-        </Table.Td>
-        <Table.Td>
-          <Text size="sm">
-            {resolveAnswer(p.values.propbet_immunities, lookup)}
-          </Text>
-        </Table.Td>
-        <Table.Td>
-          <Text size="sm">{p.values.propbet_medical_evac}</Text>
-        </Table.Td>
-        <Table.Td>
-          <Text size="sm">
-            {resolveAnswer(p.values.propbet_winner, lookup)}
-          </Text>
-        </Table.Td>
+        {activeKeys.map((key) => (
+          <Table.Td key={key}>
+            <Text size="sm">{resolveAnswer(p.values[key] || "", lookup)}</Text>
+          </Table.Td>
+        ))}
       </Table.Tr>
     );
   });
@@ -58,18 +42,9 @@ export const PostDraftPropBetTable = () => {
         <Table.Thead>
           <Table.Tr>
             <Table.Th></Table.Th>
-            <Table.Th>
-              {PropBetsQuestions.propbet_first_vote.description}
-            </Table.Th>
-            <Table.Th>{PropBetsQuestions.propbet_ftc.description}</Table.Th>
-            <Table.Th>{PropBetsQuestions.propbet_idols.description}</Table.Th>
-            <Table.Th>
-              {PropBetsQuestions.propbet_immunities.description}
-            </Table.Th>
-            <Table.Th>
-              {PropBetsQuestions.propbet_medical_evac.description}
-            </Table.Th>
-            <Table.Th>{PropBetsQuestions.propbet_winner.description}</Table.Th>
+            {activeKeys.map((key) => (
+              <Table.Th key={key}>{PropBetsQuestions[key].description}</Table.Th>
+            ))}
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>

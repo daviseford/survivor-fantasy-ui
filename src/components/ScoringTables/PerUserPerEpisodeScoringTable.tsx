@@ -8,7 +8,11 @@ export const PerUserPerEpisodeScoringTable = () => {
   const { data: competition } = useCompetition();
   const { slimUser } = useUser();
 
-  const { filteredEpisodes, pointsByUserPerEpisodeWithPropBets } =
+  const {
+    activePropBetKeys,
+    filteredEpisodes,
+    pointsByUserPerEpisodeWithPropBets,
+  } =
     useScoringCalculations();
 
   const sortedEntries = Object.entries(pointsByUserPerEpisodeWithPropBets).sort(
@@ -58,7 +62,7 @@ export const PerUserPerEpisodeScoringTable = () => {
           </Table.Td>
         ))}
 
-        {competition?.prop_bets && (
+        {activePropBetKeys.length > 0 && (
           <Table.Td ta="center">
             <Text
               span
@@ -95,7 +99,7 @@ export const PerUserPerEpisodeScoringTable = () => {
                 Ep {x.order}
               </Table.Th>
             ))}
-            {competition?.prop_bets && (
+            {activePropBetKeys.length > 0 && (
               <Table.Th w={80} ta="center">
                 Props
               </Table.Th>

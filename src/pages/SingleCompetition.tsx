@@ -27,6 +27,7 @@ import {
   ScoringLegendTable,
 } from "../components/ScoringTables";
 import { useCompetition } from "../hooks/useCompetition";
+import { usePropBetScoring } from "../hooks/useGetPropBetScoring";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
 
@@ -62,6 +63,7 @@ const Section = ({
 export const SingleCompetition = () => {
   const { data: competition } = useCompetition();
   const { slimUser } = useUser();
+  const { activeKeys: activePropBetKeys } = usePropBetScoring();
 
   const { data: season } = useSeason(competition?.season_id);
 
@@ -112,7 +114,7 @@ export const SingleCompetition = () => {
         <PerUserPerEpisodeScoringTable />
       </Section>
 
-      {competition.prop_bets && (
+      {activePropBetKeys.length > 0 && (
         <Section
           title="Prop Bets"
           subtitle="Pre-season predictions and results"

@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { PropBetsQuestions } from "../../data/propbets";
+import {
+  getActivePropBetKeys,
+  PropBetsQuestions,
+} from "../../data/propbets";
 import {
   CastawayId,
   Challenge,
@@ -100,6 +103,7 @@ const baseCompetition: Competition = {
 const noEvents: Record<string, GameEvent> = {};
 const noElims: Record<string, Elimination> = {};
 const noChallenges: Record<string, Challenge> = {};
+const postMergeEpisodes = new Set<number>([8, 9, 10, 11, 12, 13]);
 
 const getStatus = (
   key: keyof typeof PropBetsQuestions,
@@ -107,17 +111,21 @@ const getStatus = (
     events?: Record<string, GameEvent>;
     eliminations?: Record<string, Elimination>;
     challenges?: Record<string, Challenge>;
+    postMergeEpisodes?: Set<number>;
     hasFinaleOccurred?: boolean;
     competition?: Competition;
   },
 ) => {
+  const competition = overrides?.competition ?? baseCompetition;
   const result = getPropBetScoresForUser(
     "user1",
     overrides?.events ?? noEvents,
     overrides?.eliminations ?? noElims,
     overrides?.challenges ?? noChallenges,
+    overrides?.postMergeEpisodes ?? postMergeEpisodes,
     overrides?.hasFinaleOccurred ?? false,
-    overrides?.competition ?? baseCompetition,
+    getActivePropBetKeys(competition.prop_bets),
+    competition,
   );
   return result[key];
 };
@@ -449,7 +457,7 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns leading when picked player leads mid-season", () => {
       const challenges = {
-        c1: makeChallenge("1", 2, [ALICE], "immunity"),
+        c1: makeChallenge("1", 8, [ALICE], "immunity"),
       };
       const answer = getStatus("propbet_immunities", { challenges });
       expect(answer.status).toBe("leading");
@@ -458,9 +466,9 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns definitive_correct at finale when picked player leads", () => {
       const challenges = {
-        c1: makeChallenge("1", 2, [ALICE], "immunity"),
-        c2: makeChallenge("2", 5, [ALICE], "immunity"),
-        c3: makeChallenge("3", 7, [BOB], "immunity"),
+        c1: makeChallenge("1", 8, [ALICE], "immunity"),
+        c2: makeChallenge("2", 9, [ALICE], "immunity"),
+        c3: makeChallenge("3", 10, [BOB], "immunity"),
       };
       const answer = getStatus("propbet_immunities", {
         challenges,
@@ -474,8 +482,8 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns definitive_incorrect when eliminated and behind leader", () => {
       const challenges = {
-        c1: makeChallenge("1", 2, [BOB], "immunity"),
-        c2: makeChallenge("2", 3, [BOB], "immunity"),
+        c1: makeChallenge("1", 8, [BOB], "immunity"),
+        c2: makeChallenge("2", 9, [BOB], "immunity"),
       };
       const elims = {
         e1: makeElimination("1", 4, ALICE, 2),
@@ -489,8 +497,8 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns pending when eliminated but returned (has events after elimination) and behind leader", () => {
       const challenges = {
-        c1: makeChallenge("1", 2, [BOB], "immunity"),
-        c2: makeChallenge("2", 3, [BOB], "immunity"),
+        c1: makeChallenge("1", 8, [BOB], "immunity"),
+        c2: makeChallenge("2", 9, [BOB], "immunity"),
       };
       const elims = {
         e1: makeElimination("1", 4, ALICE, 2),
@@ -510,9 +518,9 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns pending when eliminated but returned (has challenge win after elimination) and behind leader", () => {
       const challenges = {
-        c1: makeChallenge("1", 2, [BOB], "immunity"),
-        c2: makeChallenge("2", 3, [BOB], "immunity"),
-        c3: makeChallenge("3", 8, [ALICE], "immunity"),
+        c1: makeChallenge("1", 8, [BOB], "immunity"),
+        c2: makeChallenge("2", 9, [BOB], "immunity"),
+        c3: makeChallenge("3", 10, [ALICE], "immunity"),
       };
       const elims = {
         e1: makeElimination("1", 4, ALICE, 2),
@@ -528,7 +536,7 @@ describe("getPropBetScoresForUser", () => {
 
     it("handles immunity challenge variant", () => {
       const challenges = {
-        c1: makeChallenge("1", 2, [ALICE], "immunity"),
+        c1: makeChallenge("1", 8, [ALICE], "immunity"),
       };
       const answer = getStatus("propbet_immunities", { challenges });
       expect(answer.status).toBe("leading");
@@ -545,7 +553,9 @@ describe("getPropBetScoresForUser", () => {
         noEvents,
         elims,
         noChallenges,
+        postMergeEpisodes,
         false,
+        getActivePropBetKeys(baseCompetition.prop_bets),
         baseCompetition,
       );
 
@@ -575,12 +585,77 @@ describe("getPropBetScoresForUser", () => {
         noEvents,
         noElims,
         noChallenges,
+        postMergeEpisodes,
         false,
+        getActivePropBetKeys(comp.prop_bets),
         comp,
       );
       expect(result.propbet_first_vote.status).toBe("pending");
       expect(result.propbet_first_vote.answer).toBe("");
       expect(result.total).toBe(0);
+    });
+  });
+
+  describe("global prop compatibility", () => {
+    it("ignores globally defined props that nobody answered in this competition", () => {
+      const comp: Competition = {
+        ...baseCompetition,
+        prop_bets: [
+          {
+            ...baseCompetition.prop_bets![0],
+            values: {
+              propbet_winner: ALICE,
+            },
+          },
+        ],
+      };
+
+      const events = {
+        ev1: makeEvent("1", 13, ALICE, "win_survivor"),
+      };
+
+      const result = getPropBetScoresForUser(
+        "user1",
+        events,
+        noElims,
+        noChallenges,
+        postMergeEpisodes,
+        true,
+        getActivePropBetKeys(comp.prop_bets),
+        comp,
+      );
+
+      expect(result.propbet_winner.points_awarded).toBe(
+        PropBetsQuestions.propbet_winner.point_value,
+      );
+      expect(result.propbet_ftc.points_awarded).toBe(0);
+      expect(result.total).toBe(PropBetsQuestions.propbet_winner.point_value);
+    });
+  });
+
+  describe("post-merge individual immunity filtering", () => {
+    it("ignores pre-merge and multi-winner immunity results", () => {
+      const challenges = {
+        c1: makeChallenge("1", 2, [ALICE, BOB, CHARLIE], "immunity"),
+        c2: makeChallenge("2", 8, [BOB], "immunity"),
+      };
+
+      const answer = getStatus("propbet_immunities", { challenges });
+      expect(answer.status).toBe("pending");
+    });
+
+    it("counts post-merge individual immunity wins", () => {
+      const challenges = {
+        c1: makeChallenge("1", 8, [ALICE], "immunity"),
+        c2: makeChallenge("2", 9, [ALICE], "immunity"),
+        c3: makeChallenge("3", 10, [BOB], "immunity"),
+      };
+
+      const answer = getStatus("propbet_immunities", {
+        challenges,
+        hasFinaleOccurred: true,
+      });
+      expect(answer.status).toBe("definitive_correct");
     });
   });
 });

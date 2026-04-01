@@ -68,13 +68,13 @@ const KNOWN_ALIASES: Record<string, string> = {
 };
 
 // Prop bet keys that contain player names (not Yes/No)
-const PLAYER_PROP_BETS = new Set([
+const PLAYER_PROP_BET_PREFIXES = [
   "propbet_winner",
   "propbet_idols",
   "propbet_immunities",
   "propbet_ftc",
   "propbet_first_vote",
-]);
+];
 
 // ---------------------------------------------------------------------------
 // Build reverse name → castaway_id maps
@@ -181,7 +181,7 @@ function transformPropBets(
   return propBets.map((pb) => {
     const newValues = { ...pb.values };
     for (const [key, value] of Object.entries(newValues)) {
-      if (!PLAYER_PROP_BETS.has(key)) continue;
+      if (!PLAYER_PROP_BET_PREFIXES.includes(key)) continue;
       if (!value || typeof value !== "string") continue;
 
       const castawayId = resolveName(value as string, season.reverseMap);

@@ -1,3 +1,4 @@
+import { getActivePropBetKeys } from "../data/propbets";
 import { useMemo } from "react";
 import { Competition } from "../types";
 import { filterRecordByEpisode } from "../utils/episodeFilter";
@@ -43,12 +44,28 @@ export const usePropBetScoring = (competition_id?: Competition["id"]) => {
     [filteredEvents],
   );
 
+  const postMergeEpisodeNumbers = useMemo(
+    () =>
+      new Set(
+        (season?.episodes || []).filter((episode) => episode.post_merge).map(
+          (episode) => episode.order,
+        ),
+      ),
+    [season?.episodes],
+  );
+
+  const activeKeys = useMemo(
+    () => getActivePropBetKeys(competition?.prop_bets),
+    [competition?.prop_bets],
+  );
+
   const data: PropBetScoresByUser = useMemo(
     () =>
       getPropBetScoresByUser(
         filteredEvents,
         filteredEliminations,
         filteredChallenges,
+        postMergeEpisodeNumbers,
         hasFinaleOccurred,
         competition,
       ),
@@ -56,10 +73,11 @@ export const usePropBetScoring = (competition_id?: Competition["id"]) => {
       filteredChallenges,
       filteredEliminations,
       filteredEvents,
+      postMergeEpisodeNumbers,
       hasFinaleOccurred,
       competition,
     ],
   );
 
-  return { data };
+  return { data, activeKeys };
 };

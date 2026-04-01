@@ -1,11 +1,15 @@
 import { Badge, Group, Table, TableScrollContainer, Text } from "@mantine/core";
-import { PropBetQuestionObj, PropBetsQuestions } from "../../data/propbets";
+import {
+  PropBetQuestionKey,
+  PropBetQuestionObj,
+  PropBetsQuestions,
+} from "../../data/propbets";
 import { useCompetition } from "../../hooks/useCompetition";
 import { usePropBetScoring } from "../../hooks/useGetPropBetScoring";
 import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
 import type { CastawayId, CastawayLookup } from "../../types";
-import { PropBetAnswer } from "../../utils/propBetUtils";
+import { PropBetAnswer, PropBetScores } from "../../utils/propBetUtils";
 
 /** Resolve a prop bet answer to a display name if it's a castaway ID. */
 const resolveAnswer = (answer: string, lookup?: CastawayLookup): string => {
@@ -64,26 +68,23 @@ const AnswerTd = ({
 
 export const PropBetScoring = () => {
   const { slimUser } = useUser();
-  const { data: scores } = usePropBetScoring();
+  const { data: scores, activeKeys } = usePropBetScoring();
   const { data: competition } = useCompetition();
   const { data: season } = useSeason(competition?.season_id);
 
-  if (!slimUser || !competition) return null;
+  if (!slimUser || !competition || activeKeys.length === 0) return null;
 
   const lookup = season?.castawayLookup;
 
   const rows = Object.entries(scores).map(([uid, s]) => (
     <Table.Tr key={uid}>
       <Table.Td>
-        <strong>{s.propbet_first_vote.user_name}</strong>
+        <strong>{getFirstAnswer(s, activeKeys).user_name}</strong>
       </Table.Td>
 
-      <AnswerTd score={s.propbet_first_vote} lookup={lookup} />
-      <AnswerTd score={s.propbet_ftc} lookup={lookup} />
-      <AnswerTd score={s.propbet_idols} lookup={lookup} />
-      <AnswerTd score={s.propbet_immunities} lookup={lookup} />
-      <AnswerTd score={s.propbet_medical_evac} />
-      <AnswerTd score={s.propbet_winner} lookup={lookup} />
+      {activeKeys.map((key) => (
+        <AnswerTd key={key} score={s[key]} lookup={lookup} />
+      ))}
     </Table.Tr>
   ));
 
@@ -93,12 +94,9 @@ export const PropBetScoring = () => {
         <Table.Thead>
           <Table.Tr>
             <Table.Th></Table.Th>
-            <Th {...PropBetsQuestions.propbet_first_vote} />
-            <Th {...PropBetsQuestions.propbet_ftc} />
-            <Th {...PropBetsQuestions.propbet_idols} />
-            <Th {...PropBetsQuestions.propbet_immunities} />
-            <Th {...PropBetsQuestions.propbet_medical_evac} />
-            <Th {...PropBetsQuestions.propbet_winner} />
+            {activeKeys.map((key) => (
+              <Th key={key} {...PropBetsQuestions[key]} />
+            ))}
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
@@ -106,6 +104,11 @@ export const PropBetScoring = () => {
     </TableScrollContainer>
   );
 };
+
+const getFirstAnswer = (
+  scores: PropBetScores,
+  activeKeys: PropBetQuestionKey[],
+): PropBetAnswer => scores[activeKeys[0]];
 
 const Th = ({ description, point_value }: PropBetQuestionObj) => {
   return (
