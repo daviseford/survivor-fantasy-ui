@@ -36,7 +36,7 @@ const AnswerTd = ({
         )}
 
         {score.status === "definitive_incorrect" && (
-          <Text size="sm" c="dimmed">
+          <Text size="sm" c="red.4" td="line-through">
             {display}
           </Text>
         )}
