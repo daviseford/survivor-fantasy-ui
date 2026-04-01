@@ -143,11 +143,19 @@ export const Seasons = () => {
 
   const marqueeSeasons = useMemo(() => allSeasons.slice(0, 2), [allSeasons]);
 
+  const marqueeIds = useMemo(
+    () => new Set(marqueeSeasons.map((m) => m.id)),
+    [marqueeSeasons],
+  );
+
   const browseSeasons = useMemo(() => {
     return allSeasons.filter(
-      (meta) => matchesSearch(meta, search) && matchesEras(meta, selectedEras),
+      (meta) =>
+        !marqueeIds.has(meta.id) &&
+        matchesSearch(meta, search) &&
+        matchesEras(meta, selectedEras),
     );
-  }, [allSeasons, search, selectedEras]);
+  }, [allSeasons, marqueeIds, search, selectedEras]);
 
   return (
     <Stack gap="lg" p="md">

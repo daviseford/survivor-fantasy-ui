@@ -291,9 +291,7 @@ async function main(): Promise<void> {
 
   // ── Step 2: Generate each season ──
   console.log(`\n${"=".repeat(60)}`);
-  console.log(
-    `Step 2: Generating ${seasonNums.length} season(s)...`,
-  );
+  console.log(`Step 2: Generating ${seasonNums.length} season(s)...`);
   console.log(`${"=".repeat(60)}`);
 
   const results: SeasonMetadataEntry[] = [];
@@ -420,23 +418,19 @@ async function main(): Promise<void> {
     console.log("Step 3: Pushing seasons to Firestore...");
     console.log(`${"=".repeat(60)}`);
 
-    // Push all seasons that have data files (not just the ones we generated)
-    const allExisting = ALL_SEASONS.filter((n) => {
-      const dir = path.join(PROJECT_ROOT, "src", "data", `season_${n}`);
-      return fs.existsSync(path.join(dir, "index.ts"));
-    });
-
-    for (const seasonNum of allExisting) {
+    // Push only the seasons that were successfully generated in this run
+    for (const entry of results) {
+      const seasonNum = entry.seasonNum;
       try {
-        // Find the logo path from our results or from existing files
-        const entry = results.find((r) => r.seasonNum === seasonNum);
-        const logoPath = entry?.logoPath ?? "";
+        const logoPath = entry.logoPath;
 
         console.log(`  Pushing season ${seasonNum}...`);
         await pushSeasonToFirestore(seasonNum, dryRun, logoPath);
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        console.error(`  ✗ Firestore push failed for season ${seasonNum}: ${msg}`);
+        console.error(
+          `  ✗ Firestore push failed for season ${seasonNum}: ${msg}`,
+        );
       }
     }
   }
@@ -455,11 +449,7 @@ async function main(): Promise<void> {
 
   // Write metadata JSON for use in building SEASON_METADATA
   if (results.length > 0 && !dryRun) {
-    const metadataPath = path.join(
-      PROJECT_ROOT,
-      "data",
-      "batch-metadata.json",
-    );
+    const metadataPath = path.join(PROJECT_ROOT, "data", "batch-metadata.json");
     const metadataDir = path.dirname(metadataPath);
     if (!fs.existsSync(metadataDir)) {
       fs.mkdirSync(metadataDir, { recursive: true });
