@@ -149,6 +149,7 @@ e2e/.auth/
 
 # Scraped data (ephemeral working output)
 data/scraped/*.json
+data/firestore-snapshots/
 
 # Sensitive data
 firebase-private-key.json
