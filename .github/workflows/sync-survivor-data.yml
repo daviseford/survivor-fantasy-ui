@@ -51,7 +51,7 @@ jobs:
         if: always()
         run: |
           if [ ! -f sync-result.json ]; then
-            echo "sync-result.json not found — script may have crashed"
+            echo "sync-result.json not found - script may have crashed"
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "error=sync-result.json not found" >> "$GITHUB_OUTPUT"
             exit 0
