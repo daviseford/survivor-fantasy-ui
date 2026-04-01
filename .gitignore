@@ -149,10 +149,12 @@ e2e/screenshots/
 e2e/.auth/
 /test-results/
 /playwright-report/
-/.claude/worktrees
 
 # Scraped data (ephemeral working output)
 data/scraped/*.json
 
 # Sensitive data
 firebase-private-key.json
+
+/.claude/worktrees
+autoresearch-results.tsv

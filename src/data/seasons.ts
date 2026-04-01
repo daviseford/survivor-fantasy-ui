@@ -1,5 +1,6 @@
 import { Season } from "../types";
 import { SEASON_46_EPISODES, SEASON_46_PLAYERS } from "./season_46";
+import { SEASON_49_EPISODES, SEASON_49_PLAYERS } from "./season_49";
 import { SEASON_50_EPISODES, SEASON_50_PLAYERS } from "./season_50";
 import { SEASON_9_EPISODES, SEASON_9_PLAYERS } from "./season_9";
 
@@ -22,6 +23,16 @@ export const SEASONS = {
 
     players: SEASON_46_PLAYERS,
     episodes: SEASON_46_EPISODES,
+  },
+
+  season_49: {
+    id: "season_49",
+    order: 49,
+    name: "Survivor 49",
+    img: "/images/season_49/season-49-logo.png",
+
+    players: SEASON_49_PLAYERS,
+    episodes: SEASON_49_EPISODES,
   },
 
   season_50: {

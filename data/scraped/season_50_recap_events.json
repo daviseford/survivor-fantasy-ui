@@ -1,0 +1,79 @@
+{
+  "seasonNum": 50,
+  "scrapedAt": "2026-03-31T23:09:00.351Z",
+  "sourceUrls": [
+    "https://insidesurvivor.com/survivor-50-episode-1-recap-a-grand-return-to-form-61173",
+    "https://insidesurvivor.com/survivor-50-episode-2-recap-honor-means-nothing-61220",
+    "https://insidesurvivor.com/survivor-50-episode-3-recap-no-secret-left-unspoiled-61260",
+    "https://insidesurvivor.com/survivor-50-episode-4-recap-the-zac-brown-show-61298",
+    "https://insidesurvivor.com/survivor-50-episode-5-recap-operation-bad-blood-61339"
+  ],
+  "events": [
+    {
+      "episodeNum": 1,
+      "playerName": "Quintavius \"Q\" Burdette",
+      "action": "go_on_journey",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 1,
+      "playerName": "Benjamin \"Coach\" Wade",
+      "action": "go_on_journey",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 1,
+      "playerName": "Ozzy Lusth",
+      "action": "go_on_journey",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 1,
+      "playerName": "Ozzy Lusth",
+      "action": "win_advantage",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 2,
+      "playerName": "Genevieve Mushaluk",
+      "action": "find_idol",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 2,
+      "playerName": "Mike White",
+      "action": "go_on_journey",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 2,
+      "playerName": "Colby Donaldson",
+      "action": "go_on_journey",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 2,
+      "playerName": "Savannah Louie",
+      "action": "go_on_journey",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 2,
+      "playerName": "Savannah Louie",
+      "action": "win_advantage",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 2,
+      "playerName": "Christian Hubicki",
+      "action": "find_idol",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 4,
+      "playerName": "Genevieve Mushaluk",
+      "action": "find_idol",
+      "multiplier": null
+    }
+  ]
+}

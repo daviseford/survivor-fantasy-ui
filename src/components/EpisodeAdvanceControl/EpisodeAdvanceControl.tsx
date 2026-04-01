@@ -1,12 +1,4 @@
-import {
-  Badge,
-  Button,
-  Group,
-  Paper,
-  Stack,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Badge, Button, Group, Paper, Stack, Text, Title } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import {

@@ -1,0 +1,591 @@
+{
+  "seasonNum": 1,
+  "scrapedAt": "2026-03-31T23:41:14.695Z",
+  "episodes": [
+    {
+      "order": 1,
+      "title": "The Marooning",
+      "airDate": "May 31, 2000",
+      "isCombinedChallenge": true,
+      "isFinale": false,
+      "postMerge": false,
+      "mergeOccurs": false
+    },
+    {
+      "order": 2,
+      "title": "The Generation Gap",
+      "airDate": "June 7, 2000",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": false,
+      "mergeOccurs": false
+    },
+    {
+      "order": 3,
+      "title": "Quest for Food",
+      "airDate": "June 14, 2000",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": false,
+      "mergeOccurs": false
+    },
+    {
+      "order": 4,
+      "title": "Too Little, Too Late?",
+      "airDate": "June 21, 2000",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": false,
+      "mergeOccurs": false
+    },
+    {
+      "order": 5,
+      "title": "Pulling Your Own Weight",
+      "airDate": "June 28, 2000",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": false,
+      "mergeOccurs": false
+    },
+    {
+      "order": 6,
+      "title": "Udder Revenge",
+      "airDate": "July 5, 2000",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": false,
+      "mergeOccurs": false
+    },
+    {
+      "order": 7,
+      "title": "The Merger",
+      "airDate": "July 12, 2000",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": false,
+      "mergeOccurs": true
+    },
+    {
+      "order": 8,
+      "title": "Thy Name Is Duplicity",
+      "airDate": "July 19, 2000",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": true,
+      "mergeOccurs": false
+    },
+    {
+      "order": 9,
+      "title": "Old and New Bonds",
+      "airDate": "July 26, 2000",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": true,
+      "mergeOccurs": false
+    },
+    {
+      "order": 10,
+      "title": "Crack in the Alliance",
+      "airDate": "August 2, 2000",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": true,
+      "mergeOccurs": false
+    },
+    {
+      "order": 11,
+      "title": "Long Hard Days",
+      "airDate": "August 9, 2000",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": true,
+      "mergeOccurs": false
+    },
+    {
+      "order": 12,
+      "title": "Death of an Alliance",
+      "airDate": "August 16, 2000",
+      "isCombinedChallenge": false,
+      "isFinale": false,
+      "postMerge": true,
+      "mergeOccurs": false
+    },
+    {
+      "order": 13,
+      "title": "The Final Four (Borneo)",
+      "airDate": "August 23, 2000",
+      "isCombinedChallenge": false,
+      "isFinale": true,
+      "postMerge": true,
+      "mergeOccurs": false
+    }
+  ],
+  "challenges": [
+    {
+      "episodeNum": 1,
+      "variant": "combined",
+      "winnerNames": [
+        "B.B. Andersen",
+        "Colleen Haskell",
+        "Gervase Peterson",
+        "Greg Buis",
+        "Gretchen Cordy",
+        "Jenna Lewis",
+        "Joel Klug",
+        "Ramona Gray"
+      ],
+      "winnerTribe": "pagong",
+      "order": 1
+    },
+    {
+      "episodeNum": 2,
+      "variant": "reward",
+      "winnerNames": [
+        "B.B. Andersen",
+        "Colleen Haskell",
+        "Gervase Peterson",
+        "Greg Buis",
+        "Gretchen Cordy",
+        "Jenna Lewis",
+        "Joel Klug",
+        "Ramona Gray"
+      ],
+      "winnerTribe": "pagong",
+      "order": 2
+    },
+    {
+      "episodeNum": 2,
+      "variant": "immunity",
+      "winnerNames": [
+        "Dirk Been",
+        "Kelly Wiglesworth",
+        "Richard Hatch",
+        "Rudy Boesch",
+        "Sean Kenniff",
+        "Stacey Stillman",
+        "Susan Hawk"
+      ],
+      "winnerTribe": "tagi",
+      "order": 3
+    },
+    {
+      "episodeNum": 3,
+      "variant": "reward",
+      "winnerNames": [
+        "Dirk Been",
+        "Kelly Wiglesworth",
+        "Richard Hatch",
+        "Rudy Boesch",
+        "Sean Kenniff",
+        "Stacey Stillman",
+        "Susan Hawk"
+      ],
+      "winnerTribe": "tagi",
+      "order": 4
+    },
+    {
+      "episodeNum": 3,
+      "variant": "immunity",
+      "winnerNames": [
+        "Colleen Haskell",
+        "Gervase Peterson",
+        "Greg Buis",
+        "Gretchen Cordy",
+        "Jenna Lewis",
+        "Joel Klug",
+        "Ramona Gray"
+      ],
+      "winnerTribe": "pagong",
+      "order": 5
+    },
+    {
+      "episodeNum": 4,
+      "variant": "reward",
+      "winnerNames": [
+        "Dirk Been",
+        "Kelly Wiglesworth",
+        "Richard Hatch",
+        "Rudy Boesch",
+        "Sean Kenniff",
+        "Susan Hawk"
+      ],
+      "winnerTribe": "tagi",
+      "order": 6
+    },
+    {
+      "episodeNum": 4,
+      "variant": "immunity",
+      "winnerNames": [
+        "Dirk Been",
+        "Kelly Wiglesworth",
+        "Richard Hatch",
+        "Rudy Boesch",
+        "Sean Kenniff",
+        "Susan Hawk"
+      ],
+      "winnerTribe": "tagi",
+      "order": 7
+    },
+    {
+      "episodeNum": 5,
+      "variant": "reward",
+      "winnerNames": [
+        "Colleen Haskell",
+        "Gervase Peterson",
+        "Greg Buis",
+        "Gretchen Cordy",
+        "Jenna Lewis",
+        "Joel Klug"
+      ],
+      "winnerTribe": "pagong",
+      "order": 8
+    },
+    {
+      "episodeNum": 5,
+      "variant": "immunity",
+      "winnerNames": [
+        "Colleen Haskell",
+        "Gervase Peterson",
+        "Greg Buis",
+        "Gretchen Cordy",
+        "Jenna Lewis",
+        "Joel Klug"
+      ],
+      "winnerTribe": "pagong",
+      "order": 9
+    },
+    {
+      "episodeNum": 6,
+      "variant": "reward",
+      "winnerNames": [
+        "Colleen Haskell",
+        "Gervase Peterson",
+        "Greg Buis",
+        "Gretchen Cordy",
+        "Jenna Lewis",
+        "Joel Klug"
+      ],
+      "winnerTribe": "pagong",
+      "order": 10
+    },
+    {
+      "episodeNum": 6,
+      "variant": "immunity",
+      "winnerNames": [
+        "Kelly Wiglesworth",
+        "Richard Hatch",
+        "Rudy Boesch",
+        "Sean Kenniff",
+        "Susan Hawk"
+      ],
+      "winnerTribe": "tagi",
+      "order": 11
+    },
+    {
+      "episodeNum": 7,
+      "variant": "immunity",
+      "winnerNames": [
+        "Greg Buis"
+      ],
+      "winnerTribe": null,
+      "order": 12
+    },
+    {
+      "episodeNum": 8,
+      "variant": "reward",
+      "winnerNames": [
+        "Greg Buis"
+      ],
+      "winnerTribe": null,
+      "order": 13
+    },
+    {
+      "episodeNum": 8,
+      "variant": "immunity",
+      "winnerNames": [
+        "Gervase Peterson"
+      ],
+      "winnerTribe": null,
+      "order": 14
+    },
+    {
+      "episodeNum": 9,
+      "variant": "reward",
+      "winnerNames": [
+        "Colleen Haskell"
+      ],
+      "winnerTribe": null,
+      "order": 15
+    },
+    {
+      "episodeNum": 9,
+      "variant": "immunity",
+      "winnerNames": [
+        "Rudy Boesch"
+      ],
+      "winnerTribe": null,
+      "order": 16
+    },
+    {
+      "episodeNum": 10,
+      "variant": "reward",
+      "winnerNames": [
+        "Gervase Peterson"
+      ],
+      "winnerTribe": null,
+      "order": 17
+    },
+    {
+      "episodeNum": 10,
+      "variant": "immunity",
+      "winnerNames": [
+        "Richard Hatch"
+      ],
+      "winnerTribe": null,
+      "order": 18
+    },
+    {
+      "episodeNum": 11,
+      "variant": "reward",
+      "winnerNames": [
+        "Sean Kenniff",
+        "Colleen{{sup|]"
+      ],
+      "winnerTribe": null,
+      "order": 19
+    },
+    {
+      "episodeNum": 11,
+      "variant": "immunity",
+      "winnerNames": [
+        "Kelly Wiglesworth"
+      ],
+      "winnerTribe": null,
+      "order": 20
+    },
+    {
+      "episodeNum": 12,
+      "variant": "reward",
+      "winnerNames": [
+        "Kelly Wiglesworth"
+      ],
+      "winnerTribe": null,
+      "order": 21
+    },
+    {
+      "episodeNum": 12,
+      "variant": "immunity",
+      "winnerNames": [
+        "Kelly Wiglesworth"
+      ],
+      "winnerTribe": null,
+      "order": 22
+    },
+    {
+      "episodeNum": 13,
+      "variant": "immunity",
+      "winnerNames": [
+        "Kelly Wiglesworth"
+      ],
+      "winnerTribe": null,
+      "order": 23
+    }
+  ],
+  "eliminations": [
+    {
+      "episodeNum": 1,
+      "playerName": "Sonja Christopher",
+      "voteString": "4-3-1",
+      "variant": "tribal",
+      "finishText": "1st Voted Out\nDay 3",
+      "order": 1
+    },
+    {
+      "episodeNum": 2,
+      "playerName": "B.B. Andersen",
+      "voteString": "6-2",
+      "variant": "tribal",
+      "finishText": "2nd Voted Out\nDay 6",
+      "order": 2
+    },
+    {
+      "episodeNum": 3,
+      "playerName": "Stacey Stillman",
+      "voteString": "5-2",
+      "variant": "tribal",
+      "finishText": "3rd Voted Out\nDay 9",
+      "order": 3
+    },
+    {
+      "episodeNum": 4,
+      "playerName": "Ramona Gray",
+      "voteString": "4-2-1",
+      "variant": "tribal",
+      "finishText": "4th Voted Out\nDay 12",
+      "order": 4
+    },
+    {
+      "episodeNum": 5,
+      "playerName": "Dirk Been",
+      "voteString": "4-1-1",
+      "variant": "tribal",
+      "finishText": "5th Voted Out\nDay 15",
+      "order": 5
+    },
+    {
+      "episodeNum": 6,
+      "playerName": "Joel Klug",
+      "voteString": "4-2",
+      "variant": "tribal",
+      "finishText": "6th Voted Out\nDay 18",
+      "order": 6
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Gretchen Cordy",
+      "voteString": "4-1-1-1-1-1-1",
+      "variant": "tribal",
+      "finishText": "7th Voted Out\nDay 21",
+      "order": 7
+    },
+    {
+      "episodeNum": 8,
+      "playerName": "Greg Buis",
+      "voteString": "6-3",
+      "variant": "tribal",
+      "finishText": "8th Voted Out\n1st Jury Member\nDay 24",
+      "order": 8
+    },
+    {
+      "episodeNum": 9,
+      "playerName": "Jenna Lewis",
+      "voteString": "4-3-1",
+      "variant": "tribal",
+      "finishText": "9th Voted Out\n2nd Jury Member\nDay 27",
+      "order": 9
+    },
+    {
+      "episodeNum": 10,
+      "playerName": "Gervase Peterson",
+      "voteString": "5-2",
+      "variant": "tribal",
+      "finishText": "10th Voted Out\n3rd Jury Member\nDay 30",
+      "order": 10
+    },
+    {
+      "episodeNum": 11,
+      "playerName": "Colleen Haskell",
+      "voteString": "4-2",
+      "variant": "tribal",
+      "finishText": "11th Voted Out\n4th Jury Member\nDay 33",
+      "order": 11
+    },
+    {
+      "episodeNum": 12,
+      "playerName": "Sean Kenniff",
+      "voteString": "4-1",
+      "variant": "tribal",
+      "finishText": "12th Voted Out\n5th Jury Member\nDay 36",
+      "order": 12
+    },
+    {
+      "episodeNum": 13,
+      "playerName": "Susan Hawk",
+      "voteString": "2-2;2-0",
+      "variant": "tribal",
+      "finishText": "13th Voted Out\n6th Jury Member\nDay 37",
+      "order": 13
+    },
+    {
+      "episodeNum": 13,
+      "playerName": "Rudy Boesch",
+      "voteString": "1-0",
+      "variant": "tribal",
+      "finishText": "14th Voted Out\n7th Jury Member\nDay 38",
+      "order": 14
+    },
+    {
+      "episodeNum": 13,
+      "playerName": "Kelly Wiglesworth",
+      "voteString": "4-3",
+      "variant": "final_tribal_council",
+      "finishText": "Runner-Up",
+      "order": 15
+    }
+  ],
+  "events": [
+    {
+      "episodeNum": 7,
+      "playerName": "Greg Buis",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Jenna Lewis",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Gervase Peterson",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Colleen Haskell",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Sean Kenniff",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Susan Hawk",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Rudy Boesch",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Kelly Wiglesworth",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 7,
+      "playerName": "Richard Hatch",
+      "action": "make_merge",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 13,
+      "playerName": "Richard Hatch",
+      "action": "win_survivor",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 13,
+      "playerName": "Kelly Wiglesworth",
+      "action": "make_final_tribal_council",
+      "multiplier": null
+    },
+    {
+      "episodeNum": 13,
+      "playerName": "Richard Hatch",
+      "action": "make_final_tribal_council",
+      "multiplier": null
+    }
+  ],
+  "warnings": []
+}

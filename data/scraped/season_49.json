@@ -1,0 +1,160 @@
+{
+  "seasonNum": 49,
+  "scrapedAt": "2026-04-01T00:43:23.871Z",
+  "players": [
+    {
+      "wikiPageTitle": "Nicole Mazullo",
+      "localName": "Nicole Mazullo",
+      "matchStatus": "exact",
+      "age": 26,
+      "profession": "Financial Crime Consultant",
+      "hometown": "Philadelphia, Pennsylvania",
+      "imageUrl": "/images/season_49/Nicole-Mazullo.jpg"
+    },
+    {
+      "wikiPageTitle": "Annie Davis",
+      "localName": "Annie Davis",
+      "matchStatus": "exact",
+      "age": 50,
+      "profession": "Musician",
+      "hometown": "Austin, Texas",
+      "imageUrl": "/images/season_49/Annie-Davis.jpg"
+    },
+    {
+      "wikiPageTitle": "Jake Latimer",
+      "localName": "Jake Latimer",
+      "matchStatus": "exact",
+      "age": 36,
+      "profession": "Correctional Officer",
+      "hometown": "St. Albert, Alberta",
+      "imageUrl": "/images/season_49/Jake-Latimer.jpg"
+    },
+    {
+      "wikiPageTitle": "Jeremiah Ing",
+      "localName": "Jeremiah Ing",
+      "matchStatus": "exact",
+      "age": 39,
+      "profession": "Global Events Manager",
+      "hometown": "Toronto, Ontario",
+      "imageUrl": "/images/season_49/Jeremiah-Ing.jpg"
+    },
+    {
+      "wikiPageTitle": "Matt Williams",
+      "localName": "Matt Williams",
+      "matchStatus": "exact",
+      "age": 53,
+      "profession": "Airport Ramp Agent",
+      "hometown": "St. George, Utah",
+      "imageUrl": "/images/season_49/Matt-Williams.jpg"
+    },
+    {
+      "wikiPageTitle": "Jason Treul",
+      "localName": "Jason Treul",
+      "matchStatus": "exact",
+      "age": 33,
+      "profession": "Law Clerk",
+      "hometown": "Santa Ana, California",
+      "imageUrl": "/images/season_49/Jason-Treul.jpg"
+    },
+    {
+      "wikiPageTitle": "Nate Moore",
+      "localName": "Nate Moore",
+      "matchStatus": "exact",
+      "age": 47,
+      "profession": "Film Producer",
+      "hometown": "Hermosa Beach, California",
+      "imageUrl": "/images/season_49/Nate-Moore.jpg"
+    },
+    {
+      "wikiPageTitle": "MC Chukwujekwu",
+      "localName": "MC Chukwujekwu",
+      "matchStatus": "exact",
+      "age": 30,
+      "profession": "Fitness Trainer",
+      "hometown": "San Diego, California",
+      "imageUrl": "/images/season_49/MC-Chukwujekwu.jpg"
+    },
+    {
+      "wikiPageTitle": "Alex Moore",
+      "localName": "Alex Moore",
+      "matchStatus": "exact",
+      "age": 27,
+      "profession": "Political Communications Director",
+      "hometown": "Washington, District of Columbia",
+      "imageUrl": "/images/season_49/Alex-Moore.jpg"
+    },
+    {
+      "wikiPageTitle": "Jawan Pitts",
+      "localName": "Jawan Pitts",
+      "matchStatus": "exact",
+      "age": 28,
+      "profession": "Video Editor",
+      "hometown": "Los Angeles, California",
+      "imageUrl": "/images/season_49/Jawan-Pitts.jpg"
+    },
+    {
+      "wikiPageTitle": "Sophie Segreti",
+      "localName": "Sophie Segreti",
+      "matchStatus": "exact",
+      "age": 32,
+      "profession": "Strategy Associate",
+      "hometown": "New York, New York",
+      "imageUrl": "/images/season_49/Sophie-Segreti.jpg"
+    },
+    {
+      "wikiPageTitle": "Steven Ramm",
+      "localName": "Steven Ramm",
+      "matchStatus": "exact",
+      "age": 36,
+      "profession": "Rocket Scientist",
+      "hometown": "Denver, Colorado",
+      "imageUrl": "/images/season_49/Steven-Ramm.jpg"
+    },
+    {
+      "wikiPageTitle": "Kristina Mills",
+      "localName": "Kristina Mills",
+      "matchStatus": "exact",
+      "age": 36,
+      "profession": "MBA Career Coach",
+      "hometown": "Edmond, Oklahoma",
+      "imageUrl": "/images/season_49/Kristina-Mills.jpg"
+    },
+    {
+      "wikiPageTitle": "Rizo Velovic",
+      "localName": "Rizo Velovic",
+      "matchStatus": "exact",
+      "age": 26,
+      "profession": "Tech Sales",
+      "hometown": "Yonkers, New York",
+      "imageUrl": "/images/season_49/Rizo-Velovic.jpg"
+    },
+    {
+      "wikiPageTitle": "Sage Ahrens-Nichols",
+      "localName": "Sage Ahrens-Nichols",
+      "matchStatus": "exact",
+      "age": 31,
+      "profession": "Clinical Social Worker",
+      "hometown": "Olympia, Washington",
+      "imageUrl": "/images/season_49/Sage-Ahrens-Nichols.jpg"
+    },
+    {
+      "wikiPageTitle": "Sophi Balerdi",
+      "localName": "Sophi Balerdi",
+      "matchStatus": "exact",
+      "age": 28,
+      "profession": "Entrepreneur",
+      "hometown": "Miami, Florida",
+      "imageUrl": "/images/season_49/Sophi-Balerdi.jpg"
+    },
+    {
+      "wikiPageTitle": "Savannah Louie",
+      "localName": "Savannah Louie",
+      "matchStatus": "exact",
+      "age": 32,
+      "profession": "Former Reporter",
+      "hometown": "Atlanta, Georgia",
+      "imageUrl": "/images/season_49/Savannah-Louie.jpg"
+    }
+  ],
+  "unmatched": []
+}

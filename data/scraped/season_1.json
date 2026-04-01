@@ -1,0 +1,135 @@
+{
+  "seasonNum": 1,
+  "scrapedAt": "2026-03-31T23:36:42.666Z",
+  "players": [
+    {
+      "wikiPageTitle": "Sonja Christopher",
+      "localName": "Sonja Christopher",
+      "matchStatus": "exact",
+      "age": 63,
+      "profession": "Musician",
+      "hometown": "Walnut Creek, California"
+    },
+    {
+      "wikiPageTitle": "B.B. Andersen",
+      "localName": "B.B. Andersen",
+      "matchStatus": "exact",
+      "age": 64,
+      "profession": "Real Estate Developer",
+      "hometown": "Mission Hills, Kansas"
+    },
+    {
+      "wikiPageTitle": "Stacey Stillman",
+      "localName": "Stacey Stillman",
+      "matchStatus": "exact",
+      "age": 53,
+      "profession": "Attorney",
+      "hometown": "San Francisco, California"
+    },
+    {
+      "wikiPageTitle": "Ramona Gray",
+      "localName": "Ramona Gray",
+      "matchStatus": "exact",
+      "age": 55,
+      "profession": "Biochemist",
+      "hometown": "Edison, New Jersey"
+    },
+    {
+      "wikiPageTitle": "Dirk Been",
+      "localName": "Dirk Been",
+      "matchStatus": "exact",
+      "age": 49,
+      "profession": "Dairy Farmer",
+      "hometown": "Spring Green, Wisconsin"
+    },
+    {
+      "wikiPageTitle": "Joel Klug",
+      "localName": "Joel Klug",
+      "matchStatus": "exact",
+      "age": 53,
+      "profession": "Health Club Consultant",
+      "hometown": "Sherwood, Arkansas"
+    },
+    {
+      "wikiPageTitle": "Gretchen Cordy",
+      "localName": "Gretchen Cordy",
+      "matchStatus": "exact",
+      "age": 64,
+      "profession": "Teacher",
+      "hometown": "Clarksville, Tennessee"
+    },
+    {
+      "wikiPageTitle": "Greg Buis",
+      "localName": "Greg Buis",
+      "matchStatus": "exact",
+      "age": 50,
+      "profession": "Ivy League Graduate",
+      "hometown": "Gold Hill, Colorado"
+    },
+    {
+      "wikiPageTitle": "Jenna Lewis",
+      "localName": "Jenna Lewis",
+      "matchStatus": "exact",
+      "age": 48,
+      "profession": "Student",
+      "hometown": "Franklin, New Hampshire"
+    },
+    {
+      "wikiPageTitle": "Gervase Peterson",
+      "localName": "Gervase Peterson",
+      "matchStatus": "exact",
+      "age": 56,
+      "profession": "YMCA Basketball Coach",
+      "hometown": "Willingboro, New Jersey"
+    },
+    {
+      "wikiPageTitle": "Colleen Haskell",
+      "localName": "Colleen Haskell",
+      "matchStatus": "exact",
+      "age": 49,
+      "profession": "Student",
+      "hometown": "Miami Beach, Florida"
+    },
+    {
+      "wikiPageTitle": "Sean Kenniff",
+      "localName": "Sean Kenniff",
+      "matchStatus": "exact",
+      "age": 56,
+      "profession": "Doctor",
+      "hometown": "Carle Place, New York"
+    },
+    {
+      "wikiPageTitle": "Susan Hawk",
+      "localName": "Susan Hawk",
+      "matchStatus": "exact",
+      "age": 64,
+      "profession": "Truck Driver",
+      "hometown": "Palmyra, Wisconsin"
+    },
+    {
+      "wikiPageTitle": "Rudy Boesch",
+      "localName": "Rudy Boesch",
+      "matchStatus": "exact",
+      "age": 72,
+      "profession": "Retired Navy SEAL",
+      "hometown": "Virginia Beach, Virginia"
+    },
+    {
+      "wikiPageTitle": "Kelly Wiglesworth",
+      "localName": "Kelly Wiglesworth",
+      "matchStatus": "exact",
+      "age": 48,
+      "profession": "River Guide",
+      "hometown": "Kernville, California"
+    },
+    {
+      "wikiPageTitle": "Richard Hatch",
+      "localName": "Richard Hatch",
+      "matchStatus": "exact",
+      "age": 64,
+      "profession": "Corporate Trainer",
+      "hometown": "Newport, Rhode Island"
+    }
+  ],
+  "unmatched": []
+}

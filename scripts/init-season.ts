@@ -112,6 +112,5 @@ fs.writeFileSync(outputPath, lines.join("\n"));
 
 console.log(`Created: ${outputPath}`);
 console.log(`\nNext steps:`);
-console.log(`  1. Add player images to public/images/season_${seasonNum}/`);
-console.log(`  2. Update image paths in the generated file`);
-console.log(`  3. Run 'yarn format' and 'yarn tsc' to verify`);
+console.log(`  1. Review player image URLs (auto-scraped from wiki)`);
+console.log(`  2. Run 'yarn format' and 'yarn tsc' to verify`);
