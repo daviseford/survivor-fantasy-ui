@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Alert,
   Code,
   Group,
   MultiSelect,
@@ -32,9 +33,9 @@ export const ChallengeCRUDTable = () => {
     if (!slimUser?.isAdmin) return;
 
     modals.openConfirmModal({
-      title: "Do you want to delete this challenge?",
+      title: `Delete challenge ${e.order}?`,
       children: <Code block>{JSON.stringify(e, null, 2)}</Code>,
-      labels: { confirm: "Delete", cancel: "Cancel" },
+      labels: { confirm: "Delete challenge", cancel: "Keep it" },
       onConfirm: async () => {
         const ref = doc(db, `challenges/${season?.id}`);
         const newChallenges = { ...challenges };
@@ -161,10 +162,18 @@ export const ChallengeCRUDTable = () => {
             {slimUser?.isAdmin && (
               <Table.Td>
                 <Group gap="xs">
-                  <ActionIcon color="green" onClick={saveEdit}>
+                  <ActionIcon
+                    color="green"
+                    onClick={saveEdit}
+                    aria-label="Save challenge"
+                  >
                     <IconCheck />
                   </ActionIcon>
-                  <ActionIcon color="gray" onClick={cancelEdit}>
+                  <ActionIcon
+                    color="gray"
+                    onClick={cancelEdit}
+                    aria-label="Cancel editing challenge"
+                  >
                     <IconX />
                   </ActionIcon>
                 </Group>
@@ -187,10 +196,18 @@ export const ChallengeCRUDTable = () => {
           {slimUser?.isAdmin && (
             <Table.Td>
               <Group gap="xs">
-                <ActionIcon color="blue" onClick={() => startEdit(e)}>
+                <ActionIcon
+                  color="blue"
+                  onClick={() => startEdit(e)}
+                  aria-label={`Edit challenge ${e.order}`}
+                >
                   <IconPencil />
                 </ActionIcon>
-                <ActionIcon color="red" onClick={() => handleDelete(e)}>
+                <ActionIcon
+                  color="red"
+                  onClick={() => handleDelete(e)}
+                  aria-label={`Delete challenge ${e.order}`}
+                >
                   <IconTrash />
                 </ActionIcon>
               </Group>
@@ -212,7 +229,19 @@ export const ChallengeCRUDTable = () => {
             {slimUser?.isAdmin && <Table.Th>Actions</Table.Th>}
           </Table.Tr>
         </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
+        <Table.Tbody>
+          {rows.length > 0 ? (
+            rows
+          ) : (
+            <Table.Tr>
+              <Table.Td colSpan={5}>
+                <Alert color="blue" variant="light">
+                  No challenge results recorded yet.
+                </Alert>
+              </Table.Td>
+            </Table.Tr>
+          )}
+        </Table.Tbody>
       </Table>
     </TableScrollContainer>
   );

@@ -236,7 +236,6 @@ export type ChallengeWinAction = (typeof ChallengeWinActions)[number];
 
 export const GameEventActions = [
   "accept_beware_advantage",
-  "complete_sweat_or_savvy_task",
   "find_amulet",
   "find_bank_your_vote",
   "find_beware_advantage",

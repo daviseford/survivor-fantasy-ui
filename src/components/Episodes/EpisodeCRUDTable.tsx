@@ -1,11 +1,12 @@
 import {
   ActionIcon,
+  Alert,
   Badge,
   Checkbox,
-  Code,
   Group,
   Table,
   TableScrollContainer,
+  Text,
   TextInput,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
@@ -28,9 +29,14 @@ export const EpisodeCRUDTable = () => {
     if (!slimUser?.isAdmin || !season) return;
 
     modals.openConfirmModal({
-      title: "Do you want to delete this episode?",
-      children: <Code block>{JSON.stringify(episode, null, 2)}</Code>,
-      labels: { confirm: "Delete", cancel: "Cancel" },
+      title: `Delete Episode ${episode.order}?`,
+      children: (
+        <Text size="sm">
+          Remove "{episode.name || `Episode ${episode.order}`}" from this
+          season. Use this only if the episode was created by mistake.
+        </Text>
+      ),
+      labels: { confirm: "Delete episode", cancel: "Keep it" },
       onConfirm: async () => {
         try {
           const ref = doc(db, "seasons", season.id);
@@ -150,10 +156,18 @@ export const EpisodeCRUDTable = () => {
           {slimUser?.isAdmin && (
             <Table.Td>
               <Group gap="xs">
-                <ActionIcon color="green" onClick={saveEdit}>
+                <ActionIcon
+                  color="green"
+                  onClick={saveEdit}
+                  aria-label="Save episode"
+                >
                   <IconCheck />
                 </ActionIcon>
-                <ActionIcon color="gray" onClick={cancelEdit}>
+                <ActionIcon
+                  color="gray"
+                  onClick={cancelEdit}
+                  aria-label="Cancel editing episode"
+                >
                   <IconX />
                 </ActionIcon>
               </Group>
@@ -189,10 +203,18 @@ export const EpisodeCRUDTable = () => {
         {slimUser?.isAdmin && (
           <Table.Td>
             <Group gap="xs">
-              <ActionIcon color="blue" onClick={() => startEdit(e)}>
+              <ActionIcon
+                color="blue"
+                onClick={() => startEdit(e)}
+                aria-label={`Edit episode ${e.order}`}
+              >
                 <IconPencil />
               </ActionIcon>
-              <ActionIcon color="red" onClick={() => handleDelete(e)}>
+              <ActionIcon
+                color="red"
+                onClick={() => handleDelete(e)}
+                aria-label={`Delete episode ${e.order}`}
+              >
                 <IconTrash />
               </ActionIcon>
             </Group>
@@ -213,7 +235,20 @@ export const EpisodeCRUDTable = () => {
             {slimUser?.isAdmin && <Table.Th>Actions</Table.Th>}
           </Table.Tr>
         </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
+        <Table.Tbody>
+          {rows.length > 0 ? (
+            rows
+          ) : (
+            <Table.Tr>
+              <Table.Td colSpan={4}>
+                <Alert color="blue" variant="light">
+                  No episodes yet. Add the first episode above to start the
+                  season timeline.
+                </Alert>
+              </Table.Td>
+            </Table.Tr>
+          )}
+        </Table.Tbody>
       </Table>
     </TableScrollContainer>
   );

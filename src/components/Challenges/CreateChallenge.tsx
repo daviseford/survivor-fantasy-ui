@@ -1,16 +1,16 @@
 import {
   Accordion,
+  Alert,
   Box,
   Button,
   Center,
-  Code,
   Group,
   Loader,
   MultiSelect,
   NumberInput,
+  Paper,
   Select,
   SimpleGrid,
-  Spoiler,
   Text,
   TextInput,
   Title,
@@ -191,11 +191,11 @@ export const CreateChallenge = () => {
     <Accordion defaultValue="create-challenge">
       <Accordion.Item value="create-challenge">
         <Accordion.Control>
-          <Title order={4}>Create a new Challenge</Title>
+          <Title order={4}>Add Challenge Result</Title>
         </Accordion.Control>
         <Accordion.Panel>
           <SimpleGrid cols={{ base: 1, md: 2 }}>
-            <Box maw={340} mx="auto">
+            <Box maw={420} mx="auto">
               <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
                 <TextInput
                   withAsterisk
@@ -246,30 +246,40 @@ export const CreateChallenge = () => {
                   label="Winning Players"
                   data={playerOptions}
                   searchable
+                  description="Choose the winner or winners for this challenge. Team winners can be auto-filled from the selected team."
                   {...form.getInputProps("winning_castaways")}
                 />
 
                 <Select
                   withAsterisk
-                  label="Challenge Variant"
+                  label="Challenge Type"
                   data={ChallengeWinActions}
                   searchable
                   {...form.getInputProps("variant")}
                 />
 
                 <Group justify="flex-end" mt="md">
-                  <Button type="submit">Submit</Button>
+                  <Button type="submit">Save Challenge</Button>
                 </Group>
               </form>
             </Box>
             <Box>
-              <Spoiler
-                maxHeight={0}
-                showLabel="Show payload"
-                hideLabel="Hide payload"
-              >
-                <Code block>{JSON.stringify(form.values, null, 2)}</Code>
-              </Spoiler>
+              <Paper withBorder p="md" radius="md">
+                <Title order={5} mb="xs">
+                  Recording guidance
+                </Title>
+                <Text size="sm" c="dimmed">
+                  Use the episode number to place this result correctly in the
+                  season timeline. Team selection is optional and only helps
+                  pre-fill winners when team assignments exist.
+                </Text>
+                {!hasEpisodeSnapshot && teamSelectData.length > 0 && (
+                  <Alert color="yellow" variant="light" mt="md">
+                    No team assignments exist for this episode yet, so winners
+                    need to be selected manually.
+                  </Alert>
+                )}
+              </Paper>
             </Box>
           </SimpleGrid>
         </Accordion.Panel>

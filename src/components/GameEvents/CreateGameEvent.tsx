@@ -1,15 +1,15 @@
 import {
   Accordion,
+  Alert,
   Box,
   Button,
   Center,
-  Code,
   Group,
   Loader,
   NumberInput,
+  Paper,
   Select,
   SimpleGrid,
-  Spoiler,
   Text,
   TextInput,
   Title,
@@ -134,11 +134,11 @@ export const CreateGameEvent = () => {
     <Accordion defaultValue="create-event">
       <Accordion.Item value="create-event">
         <Accordion.Control>
-          <Title order={4}>Create a new Event</Title>
+          <Title order={4}>Add Scoring Event</Title>
         </Accordion.Control>
         <Accordion.Panel>
           <SimpleGrid cols={{ base: 1, md: 2 }}>
-            <Box maw={340} mx="auto">
+            <Box maw={420} mx="auto">
               <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
                 <TextInput
                   withAsterisk
@@ -165,7 +165,7 @@ export const CreateGameEvent = () => {
 
                 <Select
                   withAsterisk
-                  label="Action"
+                  label="Scoring Action"
                   data={GameEventActions}
                   searchable
                   {...form.getInputProps("action")}
@@ -181,18 +181,26 @@ export const CreateGameEvent = () => {
                 )}
 
                 <Group justify="flex-end" mt="md">
-                  <Button type="submit">Submit</Button>
+                  <Button type="submit">Save Event</Button>
                 </Group>
               </form>
             </Box>
             <Box>
-              <Spoiler
-                maxHeight={0}
-                showLabel="Show payload"
-                hideLabel="Hide payload"
-              >
-                <Code block>{JSON.stringify(form.values, null, 2)}</Code>
-              </Spoiler>
+              <Paper withBorder p="md" radius="md">
+                <Title order={5} mb="xs">
+                  Use this for player moments
+                </Title>
+                <Text size="sm" c="dimmed">
+                  This form records scoring actions like idol finds, advantages,
+                  and other player events tied to a specific episode.
+                </Text>
+                {currentAction?.multiplier && (
+                  <Alert color="blue" variant="light" mt="md">
+                    This action supports a count. Use <strong>How many?</strong>{" "}
+                    when the same action happened multiple times.
+                  </Alert>
+                )}
+              </Paper>
             </Box>
           </SimpleGrid>
         </Accordion.Panel>

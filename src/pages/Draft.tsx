@@ -40,7 +40,7 @@ import { ref, set, update } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
 import { shuffle } from "lodash-es";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { v4 } from "uuid";
 import { DraftOrderReveal } from "../components/DraftOrderReveal";
 import { DraftTable } from "../components/DraftTable";
@@ -184,10 +184,13 @@ export const DraftComponent = () => {
     return draft?.participants.some((x) => x.uid === slimUser?.uid);
   }, [draft, slimUser]);
 
+  const { draftId } = useParams();
+
   const joinDraft = async () => {
-    if (!draft || !slimUser) return;
+    const id = draft?.id ?? draftId;
+    if (!id || !slimUser) return;
     await set(
-      ref(rt_db, `drafts/${draft.id}/participants/${slimUser.uid}`),
+      ref(rt_db, `drafts/${id}/participants/${slimUser.uid}`),
       slimUser,
     );
   };
@@ -294,7 +297,7 @@ export const DraftComponent = () => {
       {phase === "pre-draft" ? (
         <Stack gap="lg" p="lg">
           {/* ===== JOIN CTA (non-participant, logged in) ===== */}
-          {draft && slimUser && !userIsParticipant && (
+          {slimUser && !userIsParticipant && (
             <Paper
               p="lg"
               radius="md"

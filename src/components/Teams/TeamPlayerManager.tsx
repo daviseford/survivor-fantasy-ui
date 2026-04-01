@@ -18,7 +18,9 @@ import {
   Group,
   NumberInput,
   Paper,
+  Select,
   SimpleGrid,
+  Stack,
   Text,
   Title,
 } from "@mantine/core";
@@ -295,6 +297,16 @@ export const TeamPlayerManager = () => {
     setLocalAssignments(newSnapshot);
   };
 
+  const handleManualAssignmentChange = (
+    castawayId: CastawayId,
+    value: string | null,
+  ) => {
+    const newSnapshot = { ...snapshot };
+    newSnapshot[castawayId] =
+      value && value !== NO_TEAM_ID ? (value as Team["id"]) : null;
+    setLocalAssignments(newSnapshot);
+  };
+
   const handleEpisodeChange = (val: string | number) => {
     setEpisodeNum(Number(val));
     setLocalAssignments(null);
@@ -319,7 +331,8 @@ export const TeamPlayerManager = () => {
       <Card.Section p="md">
         <Title order={4}>Team Assignments by Episode</Title>
         <Text size="sm" c="dimmed" mt="xs">
-          Drag players between columns to assign them to teams. Save when done.
+          Drag players between columns or use the manual assignment list below,
+          then save when done.
         </Text>
       </Card.Section>
 
@@ -389,6 +402,14 @@ export const TeamPlayerManager = () => {
           </Alert>
         )}
 
+        <Alert color="blue" variant="light" mb="md">
+          <Text size="sm">
+            Drag-and-drop is fastest on desktop. The manual assignment controls
+            below are the fallback for touch devices, keyboard users, or quick
+            spot fixes.
+          </Text>
+        </Alert>
+
         <DndContext
           sensors={sensors}
           collisionDetection={rectIntersection}
@@ -421,6 +442,37 @@ export const TeamPlayerManager = () => {
             ) : null}
           </DragOverlay>
         </DndContext>
+
+        <Paper withBorder radius="md" p="md" mt="md">
+          <Stack gap="md">
+            <div>
+              <Title order={5}>Manual Assignment</Title>
+              <Text size="sm" c="dimmed" mt={4}>
+                Assign players one by one without dragging.
+              </Text>
+            </div>
+
+            <SimpleGrid cols={{ base: 1, md: 2 }}>
+              {castawayIds.map((cid) => (
+                <Select
+                  key={cid}
+                  label={resolveName(cid)}
+                  data={[
+                    ...teamList.map((team) => ({
+                      value: team.id,
+                      label: team.name,
+                    })),
+                    { value: NO_TEAM_ID, label: "No Team" },
+                  ]}
+                  value={snapshot[cid] ?? NO_TEAM_ID}
+                  onChange={(value) => handleManualAssignmentChange(cid, value)}
+                  searchable
+                  clearable={false}
+                />
+              ))}
+            </SimpleGrid>
+          </Stack>
+        </Paper>
       </Card.Section>
     </Card>
   );

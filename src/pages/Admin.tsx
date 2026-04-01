@@ -1,14 +1,16 @@
 import {
   Accordion,
   ActionIcon,
+  Alert,
   Badge,
   Button,
   Card,
   Center,
-  Code,
+  Divider,
   Group,
   Image,
   Loader,
+  Paper,
   SimpleGrid,
   Stack,
   Table,
@@ -20,6 +22,8 @@ import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import {
   IconCheck,
+  IconChevronRight,
+  IconDatabase,
   IconList,
   IconSearch,
   IconSettings,
@@ -86,9 +90,19 @@ export const Admin = () => {
 
   const handleDeleteCompetition = (competition: Competition) => {
     modals.openConfirmModal({
-      title: "Delete this competition?",
-      children: <Code block>{JSON.stringify(competition, null, 2)}</Code>,
-      labels: { confirm: "Delete", cancel: "Cancel" },
+      title: `Delete "${competition.competition_name}"?`,
+      children: (
+        <Stack gap="xs">
+          <Text size="sm">
+            This removes the competition and its linked live draft data.
+          </Text>
+          <Text size="sm" c="dimmed">
+            Season {competition.season_num} · {competition.participants.length}{" "}
+            participants
+          </Text>
+        </Stack>
+      ),
+      labels: { confirm: "Delete competition", cancel: "Keep it" },
       confirmProps: { color: "red" },
       onConfirm: async () => {
         try {
@@ -122,20 +136,97 @@ export const Admin = () => {
 
   return (
     <Stack gap="xl" p="md">
-      <div>
-        <Group gap="xs" mb={4}>
-          <IconSettings size={22} color="var(--mantine-color-blue-6)" />
-          <Title order={2}>Admin Dashboard</Title>
-        </Group>
-        <Text c="dimmed" size="sm">
-          Manage seasons, episodes, and game data.
-        </Text>
-      </div>
+      <Paper withBorder p="lg" radius="md">
+        <Stack gap="md">
+          <div>
+            <Group gap="xs" mb={4}>
+              <IconSettings size={22} color="var(--mantine-color-blue-6)" />
+              <Title order={2}>Admin Dashboard</Title>
+            </Group>
+            <Text c="dimmed" size="sm">
+              Choose a season, update game data, and keep league operations in
+              sync.
+            </Text>
+          </div>
+
+          <SimpleGrid cols={{ base: 1, sm: 3 }}>
+            <Paper withBorder radius="md" p="md">
+              <Text size="xs" tt="uppercase" c="dimmed" fw={700}>
+                Latest Season
+              </Text>
+              <Text fw={700} mt={6}>
+                {latestSeason?.name ?? "No seasons"}
+              </Text>
+              <Text size="sm" c="dimmed" mt={4}>
+                {latestSeason
+                  ? `${latestSeason.episodes?.length ?? 0} episodes · ${latestSeason.players?.length ?? 0} players`
+                  : "Add season data to get started."}
+              </Text>
+            </Paper>
+
+            <Paper withBorder radius="md" p="md">
+              <Text size="xs" tt="uppercase" c="dimmed" fw={700}>
+                Competition Count
+              </Text>
+              <Text fw={700} mt={6}>
+                {competitions.length}
+              </Text>
+              <Text size="sm" c="dimmed" mt={4}>
+                Active and archived competitions visible to admins.
+              </Text>
+            </Paper>
+
+            <Paper withBorder radius="md" p="md">
+              <Text size="xs" tt="uppercase" c="dimmed" fw={700}>
+                Recommended Next Step
+              </Text>
+              <Text fw={700} mt={6}>
+                {latestSeason ? `Open ${latestSeason.name}` : "Review seasons"}
+              </Text>
+              <Text size="sm" c="dimmed" mt={4}>
+                Start with episodes, then events, challenges, eliminations, and
+                teams.
+              </Text>
+            </Paper>
+          </SimpleGrid>
+
+          {latestSeason && (
+            <Group>
+              <Button
+                component={Link}
+                to={`/admin/${latestSeason.id}`}
+                rightSection={<IconChevronRight size={16} />}
+              >
+                Open Latest Season
+              </Button>
+              <Button
+                variant="light"
+                component={Link}
+                to={`/admin/${latestSeason.id}?tab=events`}
+              >
+                Jump to Events
+              </Button>
+            </Group>
+          )}
+        </Stack>
+      </Paper>
 
       <div>
-        <Title order={3} mb="md">
-          Seasons
-        </Title>
+        <Group justify="space-between" align="end" mb="md" wrap="wrap">
+          <div>
+            <Title order={3}>Seasons</Title>
+            <Text c="dimmed" size="sm" mt={4}>
+              Pick a season to manage its weekly data and roster state.
+            </Text>
+          </div>
+          <TextInput
+            placeholder="Search by season name, number, or id"
+            leftSection={<IconSearch size={16} />}
+            value={seasonSearch}
+            onChange={(e) => setSeasonSearch(e.currentTarget.value)}
+            maw={360}
+          />
+        </Group>
         {isLoading ? (
           <Center>
             <Loader size="lg" />
@@ -175,6 +266,9 @@ export const Admin = () => {
                 <Text fw={600} mt="md" mb="xs">
                   {latestSeason.name}
                 </Text>
+                <Text size="sm" c="dimmed" mb="md">
+                  Best place to continue live season maintenance.
+                </Text>
                 <Group gap="lg">
                   <Group gap={4}>
                     <IconList size={14} color="gray" />
@@ -189,16 +283,15 @@ export const Admin = () => {
                     </Text>
                   </Group>
                 </Group>
+                <Divider my="md" />
+                <Group justify="space-between">
+                  <Text size="sm" fw={600}>
+                    Open season workspace
+                  </Text>
+                  <IconChevronRight size={16} />
+                </Group>
               </Card>
             )}
-
-            <TextInput
-              placeholder="Search seasons..."
-              leftSection={<IconSearch size={16} />}
-              value={seasonSearch}
-              onChange={(e) => setSeasonSearch(e.currentTarget.value)}
-              maw={350}
-            />
 
             <Table.ScrollContainer minWidth={400}>
               <Table highlightOnHover verticalSpacing="xs">
@@ -207,33 +300,55 @@ export const Admin = () => {
                     <Table.Th>Season</Table.Th>
                     <Table.Th>Episodes</Table.Th>
                     <Table.Th>Players</Table.Th>
+                    <Table.Th>Actions</Table.Th>
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>
-                  {filteredSeasons.map((season) => (
-                    <Table.Tr
-                      key={season.id}
-                      onClick={() => navigate(`/admin/${season.id}`)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <Table.Td>
-                        <Group gap="xs">
-                          <Badge variant="light" size="sm">
-                            S{season.order}
-                          </Badge>
-                          <Text size="sm" fw={500}>
-                            {season.name}
-                          </Text>
-                        </Group>
-                      </Table.Td>
-                      <Table.Td>
-                        <Text size="sm">{season.episodes?.length ?? 0}</Text>
-                      </Table.Td>
-                      <Table.Td>
-                        <Text size="sm">{season.players?.length ?? 0}</Text>
+                  {filteredSeasons.length > 0 ? (
+                    filteredSeasons.map((season) => (
+                      <Table.Tr key={season.id}>
+                        <Table.Td>
+                          <Group gap="xs">
+                            <Badge variant="light" size="sm">
+                              S{season.order}
+                            </Badge>
+                            <Text size="sm" fw={500}>
+                              {season.name}
+                            </Text>
+                          </Group>
+                        </Table.Td>
+                        <Table.Td>
+                          <Text size="sm">{season.episodes?.length ?? 0}</Text>
+                        </Table.Td>
+                        <Table.Td>
+                          <Text size="sm">{season.players?.length ?? 0}</Text>
+                        </Table.Td>
+                        <Table.Td>
+                          <Button
+                            size="xs"
+                            variant="light"
+                            onClick={() => navigate(`/admin/${season.id}`)}
+                            rightSection={<IconChevronRight size={14} />}
+                          >
+                            Manage
+                          </Button>
+                        </Table.Td>
+                      </Table.Tr>
+                    ))
+                  ) : (
+                    <Table.Tr>
+                      <Table.Td colSpan={4}>
+                        <Alert
+                          color="blue"
+                          variant="light"
+                          icon={<IconSearch size={16} />}
+                        >
+                          No seasons match "{seasonSearch}". Try a season number
+                          or clear the search.
+                        </Alert>
                       </Table.Td>
                     </Table.Tr>
-                  ))}
+                  )}
                 </Table.Tbody>
               </Table>
             </Table.ScrollContainer>
@@ -242,9 +357,13 @@ export const Admin = () => {
       </div>
 
       <div>
-        <Title order={3} mb="md">
+        <Title order={3} mb="xs">
           Competitions
         </Title>
+        <Text c="dimmed" size="sm" mb="md">
+          Archive cleanup lives here. Delete only when you want to remove the
+          competition and its draft data together.
+        </Text>
         {competitions.length === 0 ? (
           <Text c="dimmed" size="sm">
             No competitions found.
@@ -296,13 +415,21 @@ export const Admin = () => {
       <Accordion variant="subtle">
         <Accordion.Item value="data-tools">
           <Accordion.Control>
-            <Title order={4} c="dimmed">
-              Data Tools
-            </Title>
+            <Group gap="xs">
+              <IconDatabase size={16} />
+              <Title order={4} c="dimmed">
+                Data Tools
+              </Title>
+            </Group>
           </Accordion.Control>
           <Accordion.Panel>
-            <SimpleGrid cols={3}>
+            <Text c="dimmed" size="sm" mb="md">
+              One-off maintenance actions for known season uploads. Use these
+              when a season record needs to be restored or refreshed.
+            </Text>
+            <SimpleGrid cols={{ base: 1, md: 3 }}>
               <Button
+                variant="light"
                 onClick={() =>
                   upload("Season 9", async () => {
                     await setDoc(
@@ -323,9 +450,10 @@ export const Admin = () => {
                   })
                 }
               >
-                Upload Season 9 Data
+                Restore Season 9
               </Button>
               <Button
+                variant="light"
                 onClick={() =>
                   upload("Season 46", async () => {
                     await setDoc(
@@ -336,9 +464,10 @@ export const Admin = () => {
                   })
                 }
               >
-                Upload Season 46 Data
+                Restore Season 46
               </Button>
               <Button
+                variant="light"
                 onClick={() =>
                   upload("Season 50", async () => {
                     await setDoc(
@@ -349,7 +478,7 @@ export const Admin = () => {
                   })
                 }
               >
-                Upload Season 50 Data
+                Restore Season 50
               </Button>
             </SimpleGrid>
           </Accordion.Panel>

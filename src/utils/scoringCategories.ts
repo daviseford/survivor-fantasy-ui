@@ -69,7 +69,6 @@ export const ScoringCategoryMap: Record<PlayerAction, ScoringCategory> = {
   use_shot_in_the_dark_successfully: "other",
   use_shot_in_the_dark_unsuccessfully: "other",
   go_on_journey: "other",
-  complete_sweat_or_savvy_task: "other",
 };
 
 export const CategoryColors: Record<ScoringCategory, string> = {

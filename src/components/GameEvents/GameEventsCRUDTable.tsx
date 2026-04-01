@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Alert,
   Code,
   Group,
   NumberInput,
@@ -32,9 +33,9 @@ export const GameEventsCRUDTable = () => {
     if (!slimUser?.isAdmin) return;
 
     modals.openConfirmModal({
-      title: "Do you want to delete this event?",
+      title: `Delete ${e.action} event?`,
       children: <Code block>{JSON.stringify(e, null, 2)}</Code>,
-      labels: { confirm: "Delete", cancel: "Cancel" },
+      labels: { confirm: "Delete event", cancel: "Keep it" },
       onConfirm: async () => {
         const ref = doc(db, `events/${season?.id}`);
         const newEvents = { ...events };
@@ -178,10 +179,18 @@ export const GameEventsCRUDTable = () => {
             {slimUser?.isAdmin && (
               <Table.Td>
                 <Group gap="xs">
-                  <ActionIcon color="green" onClick={saveEdit}>
+                  <ActionIcon
+                    color="green"
+                    onClick={saveEdit}
+                    aria-label="Save event"
+                  >
                     <IconCheck />
                   </ActionIcon>
-                  <ActionIcon color="gray" onClick={cancelEdit}>
+                  <ActionIcon
+                    color="gray"
+                    onClick={cancelEdit}
+                    aria-label="Cancel editing event"
+                  >
                     <IconX />
                   </ActionIcon>
                 </Group>
@@ -203,10 +212,18 @@ export const GameEventsCRUDTable = () => {
           {slimUser?.isAdmin && (
             <Table.Td>
               <Group gap="xs">
-                <ActionIcon color="blue" onClick={() => startEdit(e)}>
+                <ActionIcon
+                  color="blue"
+                  onClick={() => startEdit(e)}
+                  aria-label={`Edit ${e.action} event`}
+                >
                   <IconPencil />
                 </ActionIcon>
-                <ActionIcon color="red" onClick={() => handleDelete(e)}>
+                <ActionIcon
+                  color="red"
+                  onClick={() => handleDelete(e)}
+                  aria-label={`Delete ${e.action} event`}
+                >
                   <IconTrash />
                 </ActionIcon>
               </Group>
@@ -228,7 +245,19 @@ export const GameEventsCRUDTable = () => {
             {slimUser?.isAdmin && <Table.Th>Actions</Table.Th>}
           </Table.Tr>
         </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
+        <Table.Tbody>
+          {rows.length > 0 ? (
+            rows
+          ) : (
+            <Table.Tr>
+              <Table.Td colSpan={5}>
+                <Alert color="blue" variant="light">
+                  No scoring events recorded yet.
+                </Alert>
+              </Table.Td>
+            </Table.Tr>
+          )}
+        </Table.Tbody>
       </Table>
     </TableScrollContainer>
   );
