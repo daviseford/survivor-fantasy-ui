@@ -122,7 +122,8 @@ export const ChallengeCRUDTable = () => {
                 onChange={(val) =>
                   setEditValues({
                     ...editValues,
-                    variant: (val as Challenge["variant"]) ?? editValues.variant,
+                    variant:
+                      (val as Challenge["variant"]) ?? editValues.variant,
                   })
                 }
               />

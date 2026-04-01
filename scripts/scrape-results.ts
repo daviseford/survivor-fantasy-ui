@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
-import type { ScrapeResultsOutput } from "./lib/types.js";
+import type { PlayerTribeHistory, ScrapeResultsOutput } from "./lib/types.js";
 import {
   fetchEpisodeTitles,
   fetchWikitext,
@@ -13,7 +13,6 @@ import {
   parseEpisodeGuide,
   parseVotingHistory,
 } from "./lib/wikitext-parser.js";
-import type { PlayerTribeHistory } from "./lib/types.js";
 
 export async function scrapeResults(
   seasonNum: number,
@@ -107,9 +106,7 @@ export async function scrapeResults(
     );
     if (byNickname) return byNickname;
     // Last name match
-    const byLast = playerNames.find((full) =>
-      full.endsWith(` ${shortName}`),
-    );
+    const byLast = playerNames.find((full) => full.endsWith(` ${shortName}`));
     if (byLast) return byLast;
     // Abbreviated name match — "John K." → "John Kenney" (first name + last initial with period)
     const abbrMatch = shortName.match(/^(\w+)\s+(\w)\.\s*$/);
@@ -221,7 +218,9 @@ export async function scrapeResults(
         allEvents.push(re);
       }
     }
-    console.log(`  Merged ${recapEvents.length} recap events (${allEvents.length} total)`);
+    console.log(
+      `  Merged ${recapEvents.length} recap events (${allEvents.length} total)`,
+    );
   }
 
   // Step 7: Resolve event player names to full names
@@ -246,9 +245,7 @@ export async function scrapeResults(
   } else {
     // Older seasons: votetable doesn't have tribebox2 patterns.
     // Fallback: fetch tribe data from the season page's Castaways table.
-    console.log(
-      `\nVotetable has no tribe data — fetching from season page...`,
-    );
+    console.log(`\nVotetable has no tribe data — fetching from season page...`);
     const seasonPageName = getSeasonPageName(seasonNum);
     const seasonPageWikitext = await fetchWikitext(seasonPageName);
     if (seasonPageWikitext) {
@@ -330,10 +327,7 @@ export async function scrapeResults(
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  const outputPath = path.join(
-    outputDir,
-    `season_${seasonNum}_results.json`,
-  );
+  const outputPath = path.join(outputDir, `season_${seasonNum}_results.json`);
   fs.writeFileSync(outputPath, JSON.stringify(result, null, 2) + "\n");
 
   // Summary

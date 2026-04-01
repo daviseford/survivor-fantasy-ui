@@ -46,7 +46,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Sonja Christopher",
     img: "",
-    description: "Age: 63 | Hometown: Walnut Creek, California | Occupation: Musician",
+    description:
+      "Age: 63 | Hometown: Walnut Creek, California | Occupation: Musician",
     age: 63,
     profession: "Musician",
     hometown: "Walnut Creek, California",
@@ -54,7 +55,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "B.B. Andersen",
     img: "",
-    description: "Age: 64 | Hometown: Mission Hills, Kansas | Occupation: Real Estate Developer",
+    description:
+      "Age: 64 | Hometown: Mission Hills, Kansas | Occupation: Real Estate Developer",
     age: 64,
     profession: "Real Estate Developer",
     hometown: "Mission Hills, Kansas",
@@ -62,7 +64,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Stacey Stillman",
     img: "",
-    description: "Age: 53 | Hometown: San Francisco, California | Occupation: Attorney",
+    description:
+      "Age: 53 | Hometown: San Francisco, California | Occupation: Attorney",
     age: 53,
     profession: "Attorney",
     hometown: "San Francisco, California",
@@ -70,7 +73,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Ramona Gray",
     img: "",
-    description: "Age: 55 | Hometown: Edison, New Jersey | Occupation: Biochemist",
+    description:
+      "Age: 55 | Hometown: Edison, New Jersey | Occupation: Biochemist",
     age: 55,
     profession: "Biochemist",
     hometown: "Edison, New Jersey",
@@ -78,7 +82,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Dirk Been",
     img: "",
-    description: "Age: 49 | Hometown: Spring Green, Wisconsin | Occupation: Dairy Farmer",
+    description:
+      "Age: 49 | Hometown: Spring Green, Wisconsin | Occupation: Dairy Farmer",
     age: 49,
     profession: "Dairy Farmer",
     hometown: "Spring Green, Wisconsin",
@@ -86,7 +91,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Joel Klug",
     img: "",
-    description: "Age: 53 | Hometown: Sherwood, Arkansas | Occupation: Health Club Consultant",
+    description:
+      "Age: 53 | Hometown: Sherwood, Arkansas | Occupation: Health Club Consultant",
     age: 53,
     profession: "Health Club Consultant",
     hometown: "Sherwood, Arkansas",
@@ -94,7 +100,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Gretchen Cordy",
     img: "",
-    description: "Age: 64 | Hometown: Clarksville, Tennessee | Occupation: Teacher",
+    description:
+      "Age: 64 | Hometown: Clarksville, Tennessee | Occupation: Teacher",
     age: 64,
     profession: "Teacher",
     hometown: "Clarksville, Tennessee",
@@ -102,7 +109,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Greg Buis",
     img: "",
-    description: "Age: 50 | Hometown: Gold Hill, Colorado | Occupation: Ivy League Graduate",
+    description:
+      "Age: 50 | Hometown: Gold Hill, Colorado | Occupation: Ivy League Graduate",
     age: 50,
     profession: "Ivy League Graduate",
     hometown: "Gold Hill, Colorado",
@@ -110,7 +118,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Jenna Lewis",
     img: "",
-    description: "Age: 48 | Hometown: Franklin, New Hampshire | Occupation: Student",
+    description:
+      "Age: 48 | Hometown: Franklin, New Hampshire | Occupation: Student",
     age: 48,
     profession: "Student",
     hometown: "Franklin, New Hampshire",
@@ -118,7 +127,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Gervase Peterson",
     img: "",
-    description: "Age: 56 | Hometown: Willingboro, New Jersey | Occupation: YMCA Basketball Coach",
+    description:
+      "Age: 56 | Hometown: Willingboro, New Jersey | Occupation: YMCA Basketball Coach",
     age: 56,
     profession: "YMCA Basketball Coach",
     hometown: "Willingboro, New Jersey",
@@ -126,7 +136,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Colleen Haskell",
     img: "",
-    description: "Age: 49 | Hometown: Miami Beach, Florida | Occupation: Student",
+    description:
+      "Age: 49 | Hometown: Miami Beach, Florida | Occupation: Student",
     age: 49,
     profession: "Student",
     hometown: "Miami Beach, Florida",
@@ -134,7 +145,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Sean Kenniff",
     img: "",
-    description: "Age: 56 | Hometown: Carle Place, New York | Occupation: Doctor",
+    description:
+      "Age: 56 | Hometown: Carle Place, New York | Occupation: Doctor",
     age: 56,
     profession: "Doctor",
     hometown: "Carle Place, New York",
@@ -142,7 +154,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Susan Hawk",
     img: "",
-    description: "Age: 64 | Hometown: Palmyra, Wisconsin | Occupation: Truck Driver",
+    description:
+      "Age: 64 | Hometown: Palmyra, Wisconsin | Occupation: Truck Driver",
     age: 64,
     profession: "Truck Driver",
     hometown: "Palmyra, Wisconsin",
@@ -150,7 +163,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Rudy Boesch",
     img: "",
-    description: "Age: 72 | Hometown: Virginia Beach, Virginia | Occupation: Retired Navy SEAL",
+    description:
+      "Age: 72 | Hometown: Virginia Beach, Virginia | Occupation: Retired Navy SEAL",
     age: 72,
     profession: "Retired Navy SEAL",
     hometown: "Virginia Beach, Virginia",
@@ -158,7 +172,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Kelly Wiglesworth",
     img: "",
-    description: "Age: 48 | Hometown: Kernville, California | Occupation: River Guide",
+    description:
+      "Age: 48 | Hometown: Kernville, California | Occupation: River Guide",
     age: 48,
     profession: "River Guide",
     hometown: "Kernville, California",
@@ -166,7 +181,8 @@ export const SEASON_1_PLAYERS = [
   buildPlayer({
     name: "Richard Hatch",
     img: "",
-    description: "Age: 64 | Hometown: Newport, Rhode Island | Occupation: Corporate Trainer",
+    description:
+      "Age: 64 | Hometown: Newport, Rhode Island | Occupation: Corporate Trainer",
     age: 64,
     profession: "Corporate Trainer",
     hometown: "Newport, Rhode Island",

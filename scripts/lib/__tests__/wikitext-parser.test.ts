@@ -302,9 +302,7 @@ describe("parseEpisodeGuide", () => {
 
     it("episode 3 has Randen as a medical evacuation", () => {
       const result = parseEpisodeGuide(s46Epguide, 46);
-      const randen = result.eliminations.find(
-        (e) => e.playerName === "Randen",
-      );
+      const randen = result.eliminations.find((e) => e.playerName === "Randen");
       expect(randen).toBeDefined();
       expect(randen!.episodeNum).toBe(3);
       expect(randen!.variant).toBe("medical");
@@ -473,14 +471,10 @@ describe("parseEpisodeGuide", () => {
 
     it("Ep 4 tribecolor style detected as challenge win", () => {
       const result = parseEpisodeGuide(s50Epguide, 50);
-      const ep4Challenges = result.challenges.filter(
-        (c) => c.episodeNum === 4,
-      );
+      const ep4Challenges = result.challenges.filter((c) => c.episodeNum === 4);
       // Ep 4 has a combined challenge won by kalo
       expect(ep4Challenges.length).toBeGreaterThanOrEqual(1);
-      const kaloChallenge = ep4Challenges.find(
-        (c) => c.winnerTribe === "kalo",
-      );
+      const kaloChallenge = ep4Challenges.find((c) => c.winnerTribe === "kalo");
       expect(kaloChallenge).toBeDefined();
     });
   });

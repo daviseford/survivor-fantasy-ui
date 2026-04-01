@@ -80,9 +80,7 @@ export async function fetchWikitext(pageName: string): Promise<string | null> {
  * Resolve a wiki image filename to its full CDN URL via the imageinfo API.
  * E.g., "S46 Ben Katzman.jpg" → "https://static.wikia.nocookie.net/survivor/images/..."
  */
-export async function fetchImageUrl(
-  fileName: string,
-): Promise<string | null> {
+export async function fetchImageUrl(fileName: string): Promise<string | null> {
   const params = new URLSearchParams({
     action: "query",
     titles: `File:${fileName}`,

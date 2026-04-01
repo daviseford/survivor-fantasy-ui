@@ -226,7 +226,9 @@ function callClaude(prompt: string, tmpDir: string, label: string): string {
       setTimeout(() => {
         try {
           if (fs.existsSync(promptPath)) fs.unlinkSync(promptPath);
-        } catch { /* ignore */ }
+        } catch {
+          /* ignore */
+        }
       }, 1000);
     }
   }
@@ -275,12 +277,19 @@ async function scrapeOneRecap(
       : recapText;
 
   // Call Claude (with one retry on failure)
-  const prompt = buildPrompt(seasonNum, truncatedText, playerNames, articleTitle);
+  const prompt = buildPrompt(
+    seasonNum,
+    truncatedText,
+    playerNames,
+    articleTitle,
+  );
   let responseText: string;
   try {
     responseText = callClaude(prompt, tmpDir, label);
   } catch (err) {
-    console.error(`  Claude call failed: ${err instanceof Error ? err.message : err}`);
+    console.error(
+      `  Claude call failed: ${err instanceof Error ? err.message : err}`,
+    );
     console.log("  Retrying in 5 seconds...");
     await delay(5000);
     responseText = callClaude(prompt, tmpDir, `${label}-retry`);
@@ -321,7 +330,9 @@ async function scrapeRecap(
   // Load player names for accurate attribution
   const playerNames = await getLocalPlayers(seasonNum);
   if (playerNames.length > 0) {
-    console.log(`Loaded ${playerNames.length} player names for Season ${seasonNum}`);
+    console.log(
+      `Loaded ${playerNames.length} player names for Season ${seasonNum}`,
+    );
   } else {
     console.log(
       `No local player data found for Season ${seasonNum} — Claude will use names from the article`,
@@ -344,7 +355,13 @@ async function scrapeRecap(
   }
 
   const allEvents: ScrapedGameEvent[] = [];
-  const results: { url: string; title: string; status: "success" | "failed"; eventCount: number; error?: string }[] = [];
+  const results: {
+    url: string;
+    title: string;
+    status: "success" | "failed";
+    eventCount: number;
+    error?: string;
+  }[] = [];
 
   for (let i = 0; i < urls.length; i++) {
     const { url, title } = urls[i];
@@ -371,11 +388,22 @@ async function scrapeRecap(
       }
 
       allEvents.push(...events);
-      results.push({ url, title, status: "success", eventCount: events.length });
+      results.push({
+        url,
+        title,
+        status: "success",
+        eventCount: events.length,
+      });
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : String(err);
       console.error(`  FAILED: ${errorMsg}`);
-      results.push({ url, title, status: "failed", eventCount: 0, error: errorMsg });
+      results.push({
+        url,
+        title,
+        status: "failed",
+        eventCount: 0,
+        error: errorMsg,
+      });
     }
 
     // Rate limit between requests
@@ -394,10 +422,7 @@ async function scrapeRecap(
   });
 
   // Write output
-  const outputPath = path.join(
-    tmpDir,
-    `season_${seasonNum}_recap_events.json`,
-  );
+  const outputPath = path.join(tmpDir, `season_${seasonNum}_recap_events.json`);
 
   const output = {
     seasonNum,
@@ -417,12 +442,17 @@ async function scrapeRecap(
   const failedCount = results.filter((r) => r.status === "failed").length;
   for (const r of results) {
     const icon = r.status === "success" ? "[OK]" : "[FAIL]";
-    const events = r.status === "success" ? `${r.eventCount} events` : r.error ?? "unknown error";
+    const events =
+      r.status === "success"
+        ? `${r.eventCount} events`
+        : (r.error ?? "unknown error");
     console.log(`  ${icon} ${r.title}`);
     console.log(`       ${events}`);
   }
   console.log("");
-  console.log(`  Articles: ${successCount} succeeded, ${failedCount} failed, ${urls.length} total`);
+  console.log(
+    `  Articles: ${successCount} succeeded, ${failedCount} failed, ${urls.length} total`,
+  );
   console.log(`  Total events: ${deduped.length}`);
   console.log(`\nOutput: ${outputPath}`);
 

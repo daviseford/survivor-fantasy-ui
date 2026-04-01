@@ -545,7 +545,9 @@ export function generateEventSection(
     }
 
     lines.push(`    action: "${ev.action}",`);
-    lines.push(`    multiplier: ${ev.multiplier === null ? "null" : ev.multiplier},`);
+    lines.push(
+      `    multiplier: ${ev.multiplier === null ? "null" : ev.multiplier},`,
+    );
     lines.push(`  },`);
   }
 

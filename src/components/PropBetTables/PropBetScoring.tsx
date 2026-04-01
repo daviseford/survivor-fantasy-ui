@@ -1,10 +1,4 @@
-import {
-  Badge,
-  Group,
-  Table,
-  TableScrollContainer,
-  Text,
-} from "@mantine/core";
+import { Badge, Group, Table, TableScrollContainer, Text } from "@mantine/core";
 import { useMemo } from "react";
 import { PropBetQuestionObj, PropBetsQuestions } from "../../data/propbets";
 import { useCompetition } from "../../hooks/useCompetition";

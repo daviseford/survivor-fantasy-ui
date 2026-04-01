@@ -325,7 +325,10 @@ function parseEliminatedCell(cellText: string): {
   let voteString = "";
   if (parts.length > 1) {
     // Extract vote from parentheses
-    const voteMatch = parts.slice(1).join(" ").match(/\(([^)]+)\)/);
+    const voteMatch = parts
+      .slice(1)
+      .join(" ")
+      .match(/\(([^)]+)\)/);
     if (voteMatch) {
       // Collapse internal whitespace around hyphens/semicolons for numeric votes
       // but preserve meaningful words like "no vote"
@@ -405,9 +408,7 @@ function parseChallengeWinners(cellText: string): {
   const tb = parseTribebox(cellText);
   if (!tb) {
     // Fallback: handle style="{{tribecolor|tribe}}" pattern (e.g., post-merge individual challenges)
-    const tribecolorMatch = cellText.match(
-      /\{\{tribecolor\|([^|}]+)\}\}/i,
-    );
+    const tribecolorMatch = cellText.match(/\{\{tribecolor\|([^|}]+)\}\}/i);
     if (tribecolorMatch) {
       const tribe = tribecolorMatch[1].trim().toLowerCase();
       // Extract content after the style pipe: ...;"| Maria{{sup|...}}
@@ -680,8 +681,10 @@ export function parseEpisodeGuide(
     const isNotesRow =
       firstCell.includes("Notes:") ||
       row.some((c) => c.includes("Notes:")) ||
-      (!epNumMatch && /colspan\s*=\s*"?(\d+)"?/.test(firstCell) &&
-        parseInt(firstCell.match(/colspan\s*=\s*"?(\d+)"?/)?.[1] || "0", 10) >= 8);
+      (!epNumMatch &&
+        /colspan\s*=\s*"?(\d+)"?/.test(firstCell) &&
+        parseInt(firstCell.match(/colspan\s*=\s*"?(\d+)"?/)?.[1] || "0", 10) >=
+          8);
     if (isNotesRow) {
       // Notes row — check for combined footnote marker
       if (
@@ -704,7 +707,10 @@ export function parseEpisodeGuide(
 
     // Reunion/recap episodes blank out challenge+eliminated columns with a wide colspan.
     // S46 uses colspan=5, S9 uses colspan=4.
-    if (effectiveCells[3] && /colspan\s*=\s*"?[4-9]"?/i.test(effectiveCells[3])) {
+    if (
+      effectiveCells[3] &&
+      /colspan\s*=\s*"?[4-9]"?/i.test(effectiveCells[3])
+    ) {
       // Reunion episode — skip
       continue;
     }
@@ -740,9 +746,7 @@ export function parseEpisodeGuide(
     // Detect gray-background rows (journey/exile formatting, not challenge data)
     const isGrayRow =
       rewardCell.includes("background-color") &&
-      /rgb\s*\(\s*166\s*,\s*166\s*,\s*166\s*\)|#a6a6a6|gray/i.test(
-        rewardCell,
-      );
+      /rgb\s*\(\s*166\s*,\s*166\s*,\s*166\s*\)|#a6a6a6|gray/i.test(rewardCell);
 
     // Determine if THIS ROW is a combined challenge (colspan=2) vs separate reward/immunity.
     // Gray rows use colspan=2 for layout, not for combined challenges — skip those.
@@ -854,9 +858,7 @@ export function parseEpisodeGuide(
       if (elimData) {
         const finishText = parseFinishCell(finaleFinishCell);
         const isDuplicate = epData.eliminations.some(
-          (e) =>
-            e.name === elimData.name &&
-            e.finishText === finishText,
+          (e) => e.name === elimData.name && e.finishText === finishText,
         );
         if (!isDuplicate) {
           epData.eliminations.push({
@@ -1164,9 +1166,7 @@ export function parseVotingHistory(
   }
 
   if (episodeColumns.length === 0) {
-    warnings.push(
-      "Could not parse episode columns from voting history header",
-    );
+    warnings.push("Could not parse episode columns from voting history header");
     return { events, votesByEpisode, tribeHistories, warnings };
   }
 

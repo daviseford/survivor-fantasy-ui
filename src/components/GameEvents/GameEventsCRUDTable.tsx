@@ -124,8 +124,7 @@ export const GameEventsCRUDTable = () => {
                 onChange={(val) =>
                   setEditValues({
                     ...editValues,
-                    action:
-                      (val as GameEvent["action"]) ?? editValues.action,
+                    action: (val as GameEvent["action"]) ?? editValues.action,
                   })
                 }
               />

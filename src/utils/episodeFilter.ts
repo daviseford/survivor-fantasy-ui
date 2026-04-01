@@ -38,4 +38,3 @@ export function filterRecordByEpisode<T extends HasEpisodeNum>(
     Object.entries(data).filter(([, v]) => v.episode_num <= maxEpisode),
   );
 }
-

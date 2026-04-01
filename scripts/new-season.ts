@@ -13,13 +13,10 @@
 
 import * as fs from "fs";
 import * as path from "path";
-import {
-  generateFullSeasonFile,
-  registerSeason,
-} from "./lib/codegen.js";
+import { generateFullSeasonFile, registerSeason } from "./lib/codegen.js";
 import { pushSeasonToFirestore } from "./lib/firebase-push.js";
-import { scrape } from "./scrape.js";
 import { scrapeResults } from "./scrape-results.js";
+import { scrape } from "./scrape.js";
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
@@ -32,7 +29,9 @@ async function main(): Promise<void> {
   const dryRun = flags.has("--dry-run");
 
   if (!seasonNum || isNaN(seasonNum)) {
-    console.error("Usage: yarn new-season <season_number> [--push] [--force] [--dry-run]");
+    console.error(
+      "Usage: yarn new-season <season_number> [--push] [--force] [--dry-run]",
+    );
     console.error("Example: yarn new-season 51");
     process.exit(1);
   }
@@ -67,7 +66,11 @@ async function main(): Promise<void> {
   console.log(`Step 3/5: Generating season data file`);
   console.log(`${"=".repeat(60)}`);
 
-  const fileContent = generateFullSeasonFile(playerData, resultsData, seasonNum);
+  const fileContent = generateFullSeasonFile(
+    playerData,
+    resultsData,
+    seasonNum,
+  );
 
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
@@ -109,7 +112,9 @@ async function main(): Promise<void> {
   console.log(`  1. Run 'yarn format' and 'yarn tsc' to verify`);
   console.log(`  2. Review generated file at ${outputPath}`);
   if (!push) {
-    console.log(`  3. Run 'yarn new-season ${seasonNum} --push' to upload to Firestore`);
+    console.log(
+      `  3. Run 'yarn new-season ${seasonNum} --push' to upload to Firestore`,
+    );
   }
 }
 

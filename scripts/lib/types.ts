@@ -43,12 +43,7 @@ export interface ScrapedElimination {
   episodeNum: number;
   playerName: string;
   voteString: string;
-  variant:
-    | "tribal"
-    | "medical"
-    | "quitter"
-    | "final_tribal_council"
-    | "other";
+  variant: "tribal" | "medical" | "quitter" | "final_tribal_council" | "other";
   finishText: string;
   order: number;
 }
