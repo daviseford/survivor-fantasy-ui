@@ -118,26 +118,17 @@ jobs:
           # Create PR if none exists
           EXISTING_PR=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number')
           if [ -z "$EXISTING_PR" ]; then
-            PR_BODY="$(cat <<EOF
-## Automated survivoR data sync
+            TYPE_LABEL=$([ "$IS_NEW" = "true" ] && echo "New season bootstrap" || echo "Episode data update")
+            PR_BODY="## Automated survivoR data sync"
+            PR_BODY="${PR_BODY}\n\n**Season:** ${SEASON}\n**Type:** ${TYPE_LABEL}"
+            PR_BODY="${PR_BODY}\n\n### Changes"
+            PR_BODY="${PR_BODY}\n- Episodes: ${EPISODES}\n- Challenges: ${CHALLENGES}\n- Eliminations: ${ELIMINATIONS}\n- Events: ${EVENTS}"
+            if [ "$IS_NEW" = "true" ]; then
+              PR_BODY="${PR_BODY}\n\n### Note\nPlayer images are not available during automated bootstrap. Run \`yarn new-season ${SEASON} --force\` locally to backfill images and bios from the wiki."
+            fi
+            PR_BODY="${PR_BODY}\n\n---\n*This PR was created automatically by the [survivoR data sync workflow](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}).*"
 
-**Season:** ${SEASON}
-**Type:** $([ "$IS_NEW" = "true" ] && echo "New season bootstrap" || echo "Episode data update")
-
-### Changes
-- Episodes: ${EPISODES}
-- Challenges: ${CHALLENGES}
-- Eliminations: ${ELIMINATIONS}
-- Events: ${EVENTS}
-
-$([ "$IS_NEW" = "true" ] && echo "### Note
-Player images are not available during automated bootstrap. Run \`yarn new-season ${SEASON} --force\` locally to backfill images and bios from the wiki." || echo "")
-
----
-*This PR was created automatically by the [survivoR data sync workflow](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}).*
-EOF
-)"
-            gh pr create --title "$PR_TITLE" --body "$PR_BODY" --base main
+            gh pr create --title "$PR_TITLE" --body "$(echo -e "$PR_BODY")" --base main
           else
             echo "PR #${EXISTING_PR} already exists for branch ${BRANCH}"
           fi
