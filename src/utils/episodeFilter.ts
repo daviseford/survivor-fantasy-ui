@@ -1,17 +1,5 @@
 import { Challenge, Elimination, Episode, GameEvent } from "../types";
 
-/**
- * Determines whether prop bet scoring should be hidden in watch-along mode.
- * Returns true when the competition is in watch-along mode and the finale
- * episode has not yet been revealed.
- */
-export function shouldSuppressPropBets(
-  currentEpisode: number | null,
-  finaleEpisodeOrder: number,
-): boolean {
-  return currentEpisode !== null && currentEpisode < finaleEpisodeOrder;
-}
-
 type HasEpisodeNum = Challenge | Elimination | GameEvent;
 
 /**

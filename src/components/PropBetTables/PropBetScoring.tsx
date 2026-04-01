@@ -1,35 +1,46 @@
 import { Badge, Group, Table, TableScrollContainer, Text } from "@mantine/core";
-import { useMemo } from "react";
 import { PropBetQuestionObj, PropBetsQuestions } from "../../data/propbets";
 import { useCompetition } from "../../hooks/useCompetition";
-import { useEliminations } from "../../hooks/useEliminations";
 import { usePropBetScoring } from "../../hooks/useGetPropBetScoring";
 import { useUser } from "../../hooks/useUser";
-import { filterRecordByEpisode } from "../../utils/episodeFilter";
 import { PropBetAnswer } from "../../utils/propBetUtils";
 
-const AnswerTd = ({
-  score,
-  strikethrough = false,
-}: {
-  score: PropBetAnswer;
-  strikethrough?: boolean;
-}) => {
+const AnswerTd = ({ score }: { score: PropBetAnswer }) => {
   return (
     <Table.Td>
       <Group gap="sm">
-        <Text
-          size="sm"
-          c={!score.correct ? "dimmed" : ""}
-          fw={score.correct ? 600 : 400}
-          td={strikethrough ? "line-through" : ""}
-        >
-          {score.answer}
-        </Text>
-        {score.correct && (
-          <Badge variant="light" color="green" size="sm">
-            +{score.points_awarded}
-          </Badge>
+        {score.status === "definitive_correct" && (
+          <>
+            <Text size="sm" fw={600}>
+              {score.answer}
+            </Text>
+            <Badge variant="light" color="green" size="sm">
+              +{score.points_awarded}
+            </Badge>
+          </>
+        )}
+
+        {score.status === "definitive_incorrect" && (
+          <Text size="sm" c="red.4" td="line-through">
+            {score.answer}
+          </Text>
+        )}
+
+        {score.status === "leading" && (
+          <>
+            <Text size="sm" fw={500} c="yellow.6">
+              {score.answer}
+            </Text>
+            <Badge variant="outline" color="yellow" size="xs">
+              Leading
+            </Badge>
+          </>
+        )}
+
+        {score.status === "pending" && (
+          <Text size="sm" c="dimmed">
+            {score.answer}
+          </Text>
         )}
       </Group>
     </Table.Td>
@@ -38,32 +49,10 @@ const AnswerTd = ({
 
 export const PropBetScoring = () => {
   const { slimUser } = useUser();
-
-  const { data: scores, isWatchAlongBeforeFinale } = usePropBetScoring();
-
+  const { data: scores } = usePropBetScoring();
   const { data: competition } = useCompetition();
-  const { data: rawEliminations } = useEliminations(competition?.season_id);
 
-  const maxEpisode = competition?.current_episode ?? null;
-
-  const filteredEliminations = useMemo(
-    () => filterRecordByEpisode(rawEliminations || {}, maxEpisode),
-    [rawEliminations, maxEpisode],
-  );
-
-  const _elims = Object.values(filteredEliminations);
-
-  if (!slimUser) return null;
-
-  if (isWatchAlongBeforeFinale) {
-    return (
-      <Text size="sm" c="dimmed" ta="center" py="md">
-        Prop bet results will be revealed after the finale.
-      </Text>
-    );
-  }
-
-  const firstElim = _elims.find((x) => x.order === 1)?.player_name;
+  if (!slimUser || !competition) return null;
 
   const rows = Object.entries(scores).map(([uid, s]) => (
     <Table.Tr key={uid}>
@@ -71,52 +60,12 @@ export const PropBetScoring = () => {
         <strong>{s.propbet_first_vote.user_name}</strong>
       </Table.Td>
 
-      <AnswerTd
-        score={s.propbet_first_vote}
-        strikethrough={Boolean(
-          firstElim && firstElim !== s.propbet_first_vote.answer,
-        )}
-      />
-
-      <AnswerTd
-        score={s.propbet_ftc}
-        strikethrough={_elims.some(
-          (x) =>
-            x.player_name === s.propbet_ftc.answer &&
-            x.variant !== "final_tribal_council",
-        )}
-      />
-
-      <AnswerTd
-        score={s.propbet_idols}
-        strikethrough={
-          _elims.some((x) => x.player_name === s.propbet_idols.answer) &&
-          !s.propbet_idols.correct
-        }
-      />
-
-      <AnswerTd
-        score={s.propbet_immunities}
-        strikethrough={
-          _elims.some((x) => x.player_name === s.propbet_immunities.answer) &&
-          !s.propbet_immunities.correct
-        }
-      />
-
-      <AnswerTd
-        score={s.propbet_medical_evac}
-        strikethrough={
-          _elims.some((x) => x.variant === "medical") &&
-          !s.propbet_medical_evac.correct
-        }
-      />
-
-      <AnswerTd
-        score={s.propbet_winner}
-        strikethrough={_elims.some(
-          (x) => x.player_name === s.propbet_winner.answer,
-        )}
-      />
+      <AnswerTd score={s.propbet_first_vote} />
+      <AnswerTd score={s.propbet_ftc} />
+      <AnswerTd score={s.propbet_idols} />
+      <AnswerTd score={s.propbet_immunities} />
+      <AnswerTd score={s.propbet_medical_evac} />
+      <AnswerTd score={s.propbet_winner} />
     </Table.Tr>
   ));
 
