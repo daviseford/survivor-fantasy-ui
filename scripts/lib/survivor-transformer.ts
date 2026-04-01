@@ -13,6 +13,7 @@ import type {
   SurvivorEpisode,
   SurvivorJourney,
   SurvivorTribeMapping,
+  SurvivorVoteHistory,
 } from "./survivor-types.js";
 import type {
   ScrapedChallenge,
@@ -109,6 +110,7 @@ export function transformResults(
   const events = transformEvents(
     data.advantageMovement,
     data.advantageDetails,
+    data.voteHistory,
     data.journeys,
     data.castaways,
     data.tribeMapping,
@@ -400,6 +402,7 @@ const IDOL_TYPES = new Set([
 function transformEvents(
   advantageMovement: SurvivorAdvantageMovement[],
   advantageDetails: SurvivorAdvantageDetail[],
+  voteHistory: SurvivorVoteHistory[],
   journeys: SurvivorJourney[],
   castaways: SurvivorCastaway[],
   tribeMapping: SurvivorTribeMapping[],
@@ -493,6 +496,24 @@ function transformEvents(
         episodeNum: epNum,
         playerName,
         action: "win_advantage",
+        multiplier: null,
+      });
+    }
+  }
+
+  // Shot in the Dark events (S41+) — from vote_history.vote_event
+  for (const v of voteHistory) {
+    if (v.vote_event === "Shot in the dark") {
+      const epNum = Math.round(v.episode);
+      const playerName = resolveFullName(v.castaway, nameMap);
+      const success = v.vote_event_outcome === "Safe";
+
+      events.push({
+        episodeNum: epNum,
+        playerName,
+        action: success
+          ? "use_shot_in_the_dark_successfully"
+          : "use_shot_in_the_dark_unsuccessfully",
         multiplier: null,
       });
     }

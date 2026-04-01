@@ -199,6 +199,16 @@ describe("transformResults", { timeout: 60000 }, () => {
     );
     expect(useAdvantage.length).toBeGreaterThan(0);
 
+    // Moriah's Shot in the Dark (ep6, unsuccessful)
+    const sitd = result.events.filter(
+      (e) =>
+        e.action === "use_shot_in_the_dark_successfully" ||
+        e.action === "use_shot_in_the_dark_unsuccessfully",
+    );
+    expect(sitd.length).toBe(1);
+    expect(sitd[0].action).toBe("use_shot_in_the_dark_unsuccessfully");
+    expect(sitd[0].episodeNum).toBe(6);
+
     // Should detect merge event on episode 6 (not 7)
     const mergeEvents = result.events.filter((e) => e.action === "make_merge");
     expect(mergeEvents.length).toBeGreaterThan(0);
