@@ -1,16 +1,16 @@
-import { Team, TeamAssignmentSnapshot } from "../types";
+import { CastawayId, Team, TeamAssignmentSnapshot } from "../types";
 
 export const getPlayersOnTeam = (
   snapshot: TeamAssignmentSnapshot,
   teamId: Team["id"],
-): string[] =>
-  Object.entries(snapshot)
+): CastawayId[] =>
+  (Object.entries(snapshot) as [CastawayId, Team["id"] | null][])
     .filter(([, tid]) => tid === teamId)
-    .map(([name]) => name);
+    .map(([id]) => id);
 
 export const getUnassignedPlayers = (
   snapshot: TeamAssignmentSnapshot,
-): string[] =>
-  Object.entries(snapshot)
+): CastawayId[] =>
+  (Object.entries(snapshot) as [CastawayId, Team["id"] | null][])
     .filter(([, tid]) => tid === null)
-    .map(([name]) => name);
+    .map(([id]) => id);

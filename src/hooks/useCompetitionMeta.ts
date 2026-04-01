@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Player } from "../types";
+import { CastawayId, Player } from "../types";
 import { filterRecordByEpisode } from "../utils/episodeFilter";
 import { useCompetition } from "./useCompetition";
 import { useEliminations } from "./useEliminations";
@@ -23,12 +23,12 @@ export const useCompetitionMeta = () => {
   const survivorsByUserUid = (competition?.participants || []).reduce<
     Record<string, Player[]>
   >((accum, user) => {
-    const draftPickNames = (competition?.draft_picks || [])
+    const draftPickCastawayIds = (competition?.draft_picks || [])
       .filter((x) => x.user_uid === user?.uid)
-      .map((x) => x.player_name);
+      .map((x) => x.castaway_id);
 
-    accum[user.uid] = draftPickNames.reduce<Player[]>((accum, x) => {
-      const _p = season?.players.find((p) => p.name === x);
+    accum[user.uid] = draftPickCastawayIds.reduce<Player[]>((accum, id) => {
+      const _p = season?.players.find((p) => p.castaway_id === id);
 
       if (_p) accum.push(_p);
 
@@ -38,13 +38,13 @@ export const useCompetitionMeta = () => {
     return accum;
   }, {});
 
-  const mySurvivors = slimUser?.uid
-    ? survivorsByUserUid[slimUser?.uid]?.map((x) => x.name)
+  const mySurvivors: CastawayId[] = slimUser?.uid
+    ? survivorsByUserUid[slimUser?.uid]?.map((x) => x.castaway_id)
     : [];
 
-  const eliminatedSurvivors = Object.values(filteredEliminations).map(
-    (x) => x.player_name,
-  );
+  const eliminatedSurvivors: CastawayId[] = Object.values(
+    filteredEliminations,
+  ).map((x) => x.castaway_id);
 
   return {
     mySurvivors,

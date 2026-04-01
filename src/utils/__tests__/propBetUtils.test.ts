@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { PropBetsQuestions } from "../../data/propbets";
-import { Challenge, Competition, Elimination, GameEvent } from "../../types";
+import {
+  CastawayId,
+  Challenge,
+  Competition,
+  Elimination,
+  GameEvent,
+} from "../../types";
 import { getPropBetScoresForUser } from "../propBetUtils";
 
 // --- Factories ---
@@ -8,16 +14,16 @@ import { getPropBetScoresForUser } from "../propBetUtils";
 const makeElimination = (
   id: string,
   episodeNum: number,
-  playerName: string,
+  castawayId: CastawayId,
   order: number,
   variant: Elimination["variant"] = "tribal",
-): Elimination<string, number> => ({
+): Elimination => ({
   id: `elimination_${id}`,
   season_id: "season_46",
   season_num: 46,
   episode_id: `episode_${episodeNum}`,
   episode_num: episodeNum,
-  player_name: playerName,
+  castaway_id: castawayId,
   order,
   variant,
 });
@@ -25,9 +31,9 @@ const makeElimination = (
 const makeEvent = (
   id: string,
   episodeNum: number,
-  playerName: string,
+  castawayId: CastawayId,
   action: GameEvent["action"],
-): GameEvent<string, number> => ({
+): GameEvent => ({
   id: `event_${id}`,
   season_id: "season_46",
   season_num: 46,
@@ -35,15 +41,15 @@ const makeEvent = (
   episode_num: episodeNum,
   action,
   multiplier: null,
-  player_name: playerName,
+  castaway_id: castawayId,
 });
 
 const makeChallenge = (
   id: string,
   episodeNum: number,
-  winningPlayers: string[],
+  winningCastaways: CastawayId[],
   variant: Challenge["variant"] = "immunity",
-): Challenge<string, number> => ({
+): Challenge => ({
   id: `challenge_${id}`,
   season_id: "season_46",
   season_num: 46,
@@ -51,8 +57,13 @@ const makeChallenge = (
   episode_num: episodeNum,
   order: 1,
   variant,
-  winning_players: winningPlayers,
+  winning_castaways: winningCastaways,
 });
+
+// Test castaway IDs
+const ALICE = "US0001" as CastawayId;
+const BOB = "US0002" as CastawayId;
+const CHARLIE = "US0003" as CastawayId;
 
 const baseCompetition: Competition = {
   id: "competition_test",
@@ -72,11 +83,11 @@ const baseCompetition: Competition = {
       user_name: "Player One",
       user_uid: "user1",
       values: {
-        propbet_first_vote: "Bob",
-        propbet_winner: "Alice",
-        propbet_ftc: "Alice",
-        propbet_idols: "Alice",
-        propbet_immunities: "Alice",
+        propbet_first_vote: BOB,
+        propbet_winner: ALICE,
+        propbet_ftc: ALICE,
+        propbet_idols: ALICE,
+        propbet_immunities: ALICE,
         propbet_medical_evac: "No",
       },
     },
@@ -123,7 +134,7 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns definitive_correct when pick matches first elimination", () => {
       const elims = {
-        e1: makeElimination("1", 1, "Bob", 1),
+        e1: makeElimination("1", 1, BOB, 1),
       };
       const answer = getStatus("propbet_first_vote", { eliminations: elims });
       expect(answer.status).toBe("definitive_correct");
@@ -134,7 +145,7 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns definitive_incorrect when pick does not match first elimination", () => {
       const elims = {
-        e1: makeElimination("1", 1, "Charlie", 1),
+        e1: makeElimination("1", 1, CHARLIE, 1),
       };
       const answer = getStatus("propbet_first_vote", { eliminations: elims });
       expect(answer.status).toBe("definitive_incorrect");
@@ -150,7 +161,7 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns definitive_incorrect when picked player is eliminated", () => {
       const elims = {
-        e1: makeElimination("1", 5, "Alice", 3),
+        e1: makeElimination("1", 5, ALICE, 3),
       };
       const answer = getStatus("propbet_winner", { eliminations: elims });
       expect(answer.status).toBe("definitive_incorrect");
@@ -158,7 +169,7 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns definitive_correct when win_survivor event matches pick", () => {
       const events = {
-        ev1: makeEvent("1", 13, "Alice", "win_survivor"),
+        ev1: makeEvent("1", 13, ALICE, "win_survivor"),
       };
       const answer = getStatus("propbet_winner", {
         events,
@@ -172,7 +183,7 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns definitive_incorrect when someone else wins", () => {
       const events = {
-        ev1: makeEvent("1", 13, "Charlie", "win_survivor"),
+        ev1: makeEvent("1", 13, CHARLIE, "win_survivor"),
       };
       const answer = getStatus("propbet_winner", {
         events,
@@ -190,7 +201,7 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns definitive_incorrect when picked player eliminated (non-FTC)", () => {
       const elims = {
-        e1: makeElimination("1", 5, "Alice", 3, "tribal"),
+        e1: makeElimination("1", 5, ALICE, 3, "tribal"),
       };
       const answer = getStatus("propbet_ftc", { eliminations: elims });
       expect(answer.status).toBe("definitive_incorrect");
@@ -198,16 +209,15 @@ describe("getPropBetScoresForUser", () => {
 
     it("does not mark as incorrect when elimination variant is final_tribal_council", () => {
       const elims = {
-        e1: makeElimination("1", 13, "Alice", 10, "final_tribal_council"),
+        e1: makeElimination("1", 13, ALICE, 10, "final_tribal_council"),
       };
       const answer = getStatus("propbet_ftc", { eliminations: elims });
-      // Not incorrectly eliminated — FTC elimination means they made FTC
       expect(answer.status).not.toBe("definitive_incorrect");
     });
 
     it("returns definitive_correct when make_final_tribal_council event matches", () => {
       const events = {
-        ev1: makeEvent("1", 13, "Alice", "make_final_tribal_council"),
+        ev1: makeEvent("1", 13, ALICE, "make_final_tribal_council"),
       };
       const answer = getStatus("propbet_ftc", {
         events,
@@ -240,7 +250,7 @@ describe("getPropBetScoresForUser", () => {
         ],
       };
       const elims = {
-        e1: makeElimination("1", 3, "Charlie", 2, "medical"),
+        e1: makeElimination("1", 3, CHARLIE, 2, "medical"),
       };
       const answer = getStatus("propbet_medical_evac", {
         competition: comp,
@@ -251,7 +261,7 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns definitive_incorrect for No when evac occurred", () => {
       const elims = {
-        e1: makeElimination("1", 3, "Charlie", 2, "medical"),
+        e1: makeElimination("1", 3, CHARLIE, 2, "medical"),
       };
       const answer = getStatus("propbet_medical_evac", { eliminations: elims });
       expect(answer.status).toBe("definitive_incorrect");
@@ -310,7 +320,7 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns leading when picked player leads mid-season", () => {
       const events = {
-        ev1: makeEvent("1", 2, "Alice", "find_idol"),
+        ev1: makeEvent("1", 2, ALICE, "find_idol"),
       };
       const answer = getStatus("propbet_idols", { events });
       expect(answer.status).toBe("leading");
@@ -319,8 +329,8 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns leading when picked player tied for lead mid-season", () => {
       const events = {
-        ev1: makeEvent("1", 2, "Alice", "find_idol"),
-        ev2: makeEvent("2", 3, "Bob", "find_idol"),
+        ev1: makeEvent("1", 2, ALICE, "find_idol"),
+        ev2: makeEvent("2", 3, BOB, "find_idol"),
       };
       const answer = getStatus("propbet_idols", { events });
       expect(answer.status).toBe("leading");
@@ -328,25 +338,24 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns leading when picked player eliminated but was leading", () => {
       const events = {
-        ev1: makeEvent("1", 2, "Alice", "find_idol"),
+        ev1: makeEvent("1", 2, ALICE, "find_idol"),
       };
       const elims = {
-        e1: makeElimination("1", 5, "Alice", 3),
+        e1: makeElimination("1", 5, ALICE, 3),
       };
       const answer = getStatus("propbet_idols", {
         events,
         eliminations: elims,
       });
-      // Alice is still the leader even though eliminated — no one has surpassed her
       expect(answer.status).toBe("leading");
     });
 
     it("returns definitive_incorrect when picked player eliminated with 0 finds and others have finds", () => {
       const events = {
-        ev1: makeEvent("1", 2, "Bob", "find_idol"),
+        ev1: makeEvent("1", 2, BOB, "find_idol"),
       };
       const elims = {
-        e1: makeElimination("1", 5, "Alice", 3),
+        e1: makeElimination("1", 5, ALICE, 3),
       };
       const answer = getStatus("propbet_idols", {
         events,
@@ -357,9 +366,9 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns definitive_correct at finale when picked player leads", () => {
       const events = {
-        ev1: makeEvent("1", 2, "Alice", "find_idol"),
-        ev2: makeEvent("2", 5, "Alice", "find_idol"),
-        ev3: makeEvent("3", 7, "Bob", "find_idol"),
+        ev1: makeEvent("1", 2, ALICE, "find_idol"),
+        ev2: makeEvent("2", 5, ALICE, "find_idol"),
+        ev3: makeEvent("3", 7, BOB, "find_idol"),
       };
       const answer = getStatus("propbet_idols", {
         events,
@@ -373,9 +382,9 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns definitive_incorrect at finale when picked player does not lead", () => {
       const events = {
-        ev1: makeEvent("1", 2, "Bob", "find_idol"),
-        ev2: makeEvent("2", 5, "Bob", "find_idol"),
-        ev3: makeEvent("3", 7, "Alice", "find_idol"),
+        ev1: makeEvent("1", 2, BOB, "find_idol"),
+        ev2: makeEvent("2", 5, BOB, "find_idol"),
+        ev3: makeEvent("3", 7, ALICE, "find_idol"),
       };
       const answer = getStatus("propbet_idols", {
         events,
@@ -385,15 +394,12 @@ describe("getPropBetScoresForUser", () => {
     });
 
     it("correctly identifies leader even when picked player appears first in data", () => {
-      // Alice has 1 idol find, Bob has 2 — Alice appears first in the data
-      // but Bob is the actual leader. Tests that sorting by count works.
       const events = {
-        ev1: makeEvent("1", 1, "Alice", "find_idol"),
-        ev2: makeEvent("2", 2, "Bob", "find_idol"),
-        ev3: makeEvent("3", 3, "Bob", "find_idol"),
+        ev1: makeEvent("1", 1, ALICE, "find_idol"),
+        ev2: makeEvent("2", 2, BOB, "find_idol"),
+        ev3: makeEvent("3", 3, BOB, "find_idol"),
       };
       const answer = getStatus("propbet_idols", { events });
-      // Alice is behind Bob (1 < 2), so should NOT be leading
       expect(answer.status).toBe("pending");
     });
   });
@@ -406,7 +412,7 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns leading when picked player leads mid-season", () => {
       const challenges = {
-        c1: makeChallenge("1", 2, ["Alice"], "immunity"),
+        c1: makeChallenge("1", 2, [ALICE], "immunity"),
       };
       const answer = getStatus("propbet_immunities", { challenges });
       expect(answer.status).toBe("leading");
@@ -415,9 +421,9 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns definitive_correct at finale when picked player leads", () => {
       const challenges = {
-        c1: makeChallenge("1", 2, ["Alice"], "immunity"),
-        c2: makeChallenge("2", 5, ["Alice"], "immunity"),
-        c3: makeChallenge("3", 7, ["Bob"], "immunity"),
+        c1: makeChallenge("1", 2, [ALICE], "immunity"),
+        c2: makeChallenge("2", 5, [ALICE], "immunity"),
+        c3: makeChallenge("3", 7, [BOB], "immunity"),
       };
       const answer = getStatus("propbet_immunities", {
         challenges,
@@ -431,11 +437,11 @@ describe("getPropBetScoresForUser", () => {
 
     it("returns definitive_incorrect when eliminated and behind leader", () => {
       const challenges = {
-        c1: makeChallenge("1", 2, ["Bob"], "immunity"),
-        c2: makeChallenge("2", 3, ["Bob"], "immunity"),
+        c1: makeChallenge("1", 2, [BOB], "immunity"),
+        c2: makeChallenge("2", 3, [BOB], "immunity"),
       };
       const elims = {
-        e1: makeElimination("1", 4, "Alice", 2),
+        e1: makeElimination("1", 4, ALICE, 2),
       };
       const answer = getStatus("propbet_immunities", {
         challenges,
@@ -446,7 +452,7 @@ describe("getPropBetScoresForUser", () => {
 
     it("handles immunity challenge variant", () => {
       const challenges = {
-        c1: makeChallenge("1", 2, ["Alice"], "immunity"),
+        c1: makeChallenge("1", 2, [ALICE], "immunity"),
       };
       const answer = getStatus("propbet_immunities", { challenges });
       expect(answer.status).toBe("leading");
@@ -455,9 +461,8 @@ describe("getPropBetScoresForUser", () => {
 
   describe("points_awarded", () => {
     it("only awards points for definitive_correct status", () => {
-      // Set up a scenario where first_vote is correct but everything else is pending
       const elims = {
-        e1: makeElimination("1", 1, "Bob", 1),
+        e1: makeElimination("1", 1, BOB, 1),
       };
       const result = getPropBetScoresForUser(
         "user1",
@@ -471,7 +476,6 @@ describe("getPropBetScoresForUser", () => {
       expect(result.propbet_first_vote.status).toBe("definitive_correct");
       expect(result.propbet_first_vote.points_awarded).toBeGreaterThan(0);
 
-      // All others should be pending with 0 points
       expect(result.propbet_winner.points_awarded).toBe(0);
       expect(result.propbet_ftc.points_awarded).toBe(0);
       expect(result.propbet_idols.points_awarded).toBe(0);

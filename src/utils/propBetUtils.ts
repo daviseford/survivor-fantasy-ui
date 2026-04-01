@@ -149,7 +149,7 @@ export const getPropBetScoresForUser = (
   // --- propbet_first_vote ---
   const firstEpisodeElim = _elims.find((x) => x.order === 1);
   if (firstEpisodeElim) {
-    if (firstEpisodeElim.player_name === myPropBets.propbet_first_vote) {
+    if (firstEpisodeElim.castaway_id === myPropBets.propbet_first_vote) {
       setStatus("propbet_first_vote", "definitive_correct");
     } else {
       setStatus("propbet_first_vote", "definitive_incorrect");
@@ -160,10 +160,10 @@ export const getPropBetScoresForUser = (
   // --- propbet_winner ---
   const winSurvivorEvent = _events.find((x) => x.action === "win_survivor");
   const winnerPickEliminated = _elims.some(
-    (x) => x.player_name === myPropBets.propbet_winner,
+    (x) => x.castaway_id === myPropBets.propbet_winner,
   );
   if (winSurvivorEvent) {
-    if (winSurvivorEvent.player_name === myPropBets.propbet_winner) {
+    if (winSurvivorEvent.castaway_id === myPropBets.propbet_winner) {
       setStatus("propbet_winner", "definitive_correct");
     } else {
       setStatus("propbet_winner", "definitive_incorrect");
@@ -177,11 +177,11 @@ export const getPropBetScoresForUser = (
   const ftcEvent = _events.find(
     (x) =>
       x.action === "make_final_tribal_council" &&
-      x.player_name === myPropBets.propbet_ftc,
+      x.castaway_id === myPropBets.propbet_ftc,
   );
   const ftcPickEliminated = _elims.some(
     (x) =>
-      x.player_name === myPropBets.propbet_ftc &&
+      x.castaway_id === myPropBets.propbet_ftc &&
       x.variant !== "final_tribal_council",
   );
   if (ftcEvent) {
@@ -215,7 +215,7 @@ export const getPropBetScoresForUser = (
   const immunities = Object.values(challenges).filter(
     (x) => x.variant === "immunity",
   );
-  const allImmunityWinners = immunities.flatMap((x) => x.winning_players);
+  const allImmunityWinners = immunities.flatMap((x) => x.winning_castaways);
   const rankedImmunityWinners = entries(countBy(allImmunityWinners)).sort(
     (a, b) => b[1] - a[1],
   );
@@ -224,14 +224,14 @@ export const getPropBetScoresForUser = (
     resolveLeaderboardBetStatus(
       rankedImmunityWinners,
       myPropBets.propbet_immunities,
-      _elims.some((x) => x.player_name === myPropBets.propbet_immunities),
+      _elims.some((x) => x.castaway_id === myPropBets.propbet_immunities),
       hasFinaleOccurred,
     ),
   );
 
   // --- propbet_idols ---
   const idols = _events.filter((x) => x.action === "find_idol");
-  const allIdolFinders = idols.map((x) => x.player_name);
+  const allIdolFinders = idols.map((x) => x.castaway_id);
   const rankedIdolFinders = entries(countBy(allIdolFinders)).sort(
     (a, b) => b[1] - a[1],
   );
@@ -240,7 +240,7 @@ export const getPropBetScoresForUser = (
     resolveLeaderboardBetStatus(
       rankedIdolFinders,
       myPropBets.propbet_idols,
-      _elims.some((x) => x.player_name === myPropBets.propbet_idols),
+      _elims.some((x) => x.castaway_id === myPropBets.propbet_idols),
       hasFinaleOccurred,
     ),
   );

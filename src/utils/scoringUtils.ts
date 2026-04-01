@@ -1,5 +1,11 @@
 import { BASE_PLAYER_SCORING } from "../data/scoring";
-import { Challenge, Elimination, GameEvent, PlayerAction } from "../types";
+import {
+  CastawayId,
+  Challenge,
+  Elimination,
+  GameEvent,
+  PlayerAction,
+} from "../types";
 
 const addFixedActionPoints = (action: PlayerAction) =>
   BASE_PLAYER_SCORING.find((x) => x.action === action)?.fixed_value || 0;
@@ -20,7 +26,7 @@ export const getEnhancedSurvivorPoints = (
   eliminations: Elimination[],
   events: GameEvent[],
   episodeNumber: number,
-  playerName: string,
+  castawayId: CastawayId,
 ) => {
   const scores: EnhancedScores = {
     episode_num: episodeNumber,
@@ -42,14 +48,14 @@ export const getEnhancedSurvivorPoints = (
   const _events = events?.filter((x) => x.episode_num === episodeNumber);
 
   _challenges?.forEach((c) => {
-    if (c.winning_players.includes(playerName)) {
+    if (c.winning_castaways.includes(castawayId)) {
       addToScores(c.variant, addFixedActionPoints(c.variant));
     }
   });
 
   // if the player was eliminated, give them points based on episode number
   _eliminations?.forEach((e) => {
-    if (e.player_name !== playerName) return;
+    if (e.castaway_id !== castawayId) return;
 
     addToScores("eliminated", e.episode_num);
 
@@ -65,7 +71,7 @@ export const getEnhancedSurvivorPoints = (
 
   // Handle game events like finding idols etc
   _events.forEach((e) => {
-    if (e.player_name !== playerName) return;
+    if (e.castaway_id !== castawayId) return;
 
     if (e.multiplier) {
       addToScores(e.action, addFixedActionPoints(e.action) * e.multiplier);
