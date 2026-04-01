@@ -6,6 +6,7 @@
  */
 
 import type {
+  SurvivorAdvantageDetail,
   SurvivorAdvantageMovement,
   SurvivorCastaway,
   SurvivorChallengeResult,
@@ -63,6 +64,7 @@ export interface SurvivorSeasonData {
   episodes: SurvivorEpisode[];
   challengeResults: SurvivorChallengeResult[];
   voteHistory: SurvivorVoteHistory[];
+  advantageDetails: SurvivorAdvantageDetail[];
   advantageMovement: SurvivorAdvantageMovement[];
   tribeMapping: SurvivorTribeMapping[];
   journeys: SurvivorJourney[];
@@ -83,6 +85,7 @@ export async function fetchSeasonData(
     allEpisodes,
     allChallengeResults,
     allVoteHistory,
+    allAdvantageDetails,
     allAdvantageMovement,
     allTribeMapping,
     allJourneys,
@@ -91,6 +94,7 @@ export async function fetchSeasonData(
     fetchTable<SurvivorEpisode>("episodes"),
     fetchTable<SurvivorChallengeResult>("challenge_results"),
     fetchTable<SurvivorVoteHistory>("vote_history"),
+    fetchTable<SurvivorAdvantageDetail>("advantage_details"),
     fetchTable<SurvivorAdvantageMovement>("advantage_movement"),
     fetchTable<SurvivorTribeMapping>("tribe_mapping"),
     fetchTable<SurvivorJourney>("journeys"),
@@ -101,6 +105,7 @@ export async function fetchSeasonData(
   const episodes = filterBySeason(allEpisodes, seasonNum);
   const challengeResults = filterBySeason(allChallengeResults, seasonNum);
   const voteHistory = filterBySeason(allVoteHistory, seasonNum);
+  const advantageDetails = filterBySeason(allAdvantageDetails, seasonNum);
   const advantageMovement = filterBySeason(allAdvantageMovement, seasonNum);
   const tribeMapping = filterBySeason(allTribeMapping, seasonNum);
   const journeys = filterBySeason(allJourneys, seasonNum);
@@ -122,6 +127,7 @@ export async function fetchSeasonData(
     episodes,
     challengeResults,
     voteHistory,
+    advantageDetails,
     advantageMovement,
     tribeMapping,
     journeys,

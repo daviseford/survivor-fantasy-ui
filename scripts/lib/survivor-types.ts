@@ -97,6 +97,18 @@ export interface SurvivorVoteHistory {
   challenge_id: number;
 }
 
+/** advantage_details.json — catalog of advantages per season */
+export interface SurvivorAdvantageDetail {
+  version: string;
+  version_season: string;
+  season: number;
+  advantage_id: number;
+  advantage_type: string; // "Hidden Immunity Idol", "Extra Vote", "Steal a Vote", etc.
+  clue_details: string | null;
+  location_found: string | null;
+  conditions: string | null; // "Beware advantage" or null
+}
+
 /** advantage_movement.json — one row per advantage event */
 export interface SurvivorAdvantageMovement {
   version: string;
@@ -144,6 +156,7 @@ export type SurvivorTable =
   | "episodes"
   | "challenge_results"
   | "vote_history"
+  | "advantage_details"
   | "advantage_movement"
   | "tribe_mapping"
   | "journeys";
