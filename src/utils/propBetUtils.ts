@@ -159,17 +159,12 @@ export const getPropBetScoresForUser = (
 
   // --- propbet_winner ---
   const winSurvivorEvent = _events.find((x) => x.action === "win_survivor");
-  const winnerPickEliminated = _elims.some(
-    (x) => x.castaway_id === myPropBets.propbet_winner,
-  );
   if (winSurvivorEvent) {
     if (winSurvivorEvent.castaway_id === myPropBets.propbet_winner) {
       setStatus("propbet_winner", "definitive_correct");
     } else {
       setStatus("propbet_winner", "definitive_incorrect");
     }
-  } else if (winnerPickEliminated) {
-    setStatus("propbet_winner", "definitive_incorrect");
   }
   // else: pending (player still alive, no finale yet)
 
@@ -179,15 +174,8 @@ export const getPropBetScoresForUser = (
       x.action === "make_final_tribal_council" &&
       x.castaway_id === myPropBets.propbet_ftc,
   );
-  const ftcPickEliminated = _elims.some(
-    (x) =>
-      x.castaway_id === myPropBets.propbet_ftc &&
-      x.variant !== "final_tribal_council",
-  );
   if (ftcEvent) {
     setStatus("propbet_ftc", "definitive_correct");
-  } else if (ftcPickEliminated) {
-    setStatus("propbet_ftc", "definitive_incorrect");
   } else if (hasFinaleOccurred) {
     setStatus("propbet_ftc", "definitive_incorrect");
   }
