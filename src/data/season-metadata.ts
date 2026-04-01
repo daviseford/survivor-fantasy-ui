@@ -17,6 +17,8 @@ export type SeasonMeta = {
   year: number;
   contestantCount: number;
   img: string;
+  /** True when the season has completed (winner determined in survivoR data) */
+  complete: boolean;
 };
 
 export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
@@ -29,6 +31,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2000,
     contestantCount: 16,
     img: "/images/season_1/season-1-logo.png",
+    complete: true,
   },
   season_2: {
     id: "season_2",
@@ -39,6 +42,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2001,
     contestantCount: 16,
     img: "",
+    complete: true,
   },
   season_3: {
     id: "season_3",
@@ -49,6 +53,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2001,
     contestantCount: 16,
     img: "",
+    complete: true,
   },
   season_4: {
     id: "season_4",
@@ -59,6 +64,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2002,
     contestantCount: 16,
     img: "",
+    complete: true,
   },
   season_5: {
     id: "season_5",
@@ -69,6 +75,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2002,
     contestantCount: 16,
     img: "",
+    complete: true,
   },
   season_6: {
     id: "season_6",
@@ -79,6 +86,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2003,
     contestantCount: 16,
     img: "",
+    complete: true,
   },
   season_7: {
     id: "season_7",
@@ -89,6 +97,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2003,
     contestantCount: 16,
     img: "",
+    complete: true,
   },
   season_8: {
     id: "season_8",
@@ -99,6 +108,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2004,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_9: {
     id: "season_9",
@@ -109,6 +119,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2004,
     contestantCount: 18,
     img: "/images/season_9/season-9-logo.png",
+    complete: true,
   },
   season_10: {
     id: "season_10",
@@ -119,6 +130,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2005,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_11: {
     id: "season_11",
@@ -129,6 +141,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2005,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_12: {
     id: "season_12",
@@ -139,6 +152,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2006,
     contestantCount: 16,
     img: "",
+    complete: true,
   },
   season_13: {
     id: "season_13",
@@ -149,6 +163,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2006,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_14: {
     id: "season_14",
@@ -159,6 +174,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2007,
     contestantCount: 19,
     img: "",
+    complete: true,
   },
   season_15: {
     id: "season_15",
@@ -169,6 +185,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2007,
     contestantCount: 16,
     img: "",
+    complete: true,
   },
   season_16: {
     id: "season_16",
@@ -179,6 +196,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2008,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_17: {
     id: "season_17",
@@ -189,6 +207,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2008,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_18: {
     id: "season_18",
@@ -199,6 +218,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2009,
     contestantCount: 16,
     img: "",
+    complete: true,
   },
   season_19: {
     id: "season_19",
@@ -209,6 +229,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2009,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_20: {
     id: "season_20",
@@ -219,6 +240,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2010,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_21: {
     id: "season_21",
@@ -229,6 +251,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2010,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_22: {
     id: "season_22",
@@ -239,6 +262,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2011,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_23: {
     id: "season_23",
@@ -249,6 +273,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2011,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_24: {
     id: "season_24",
@@ -259,6 +284,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2012,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_25: {
     id: "season_25",
@@ -269,6 +295,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2012,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_26: {
     id: "season_26",
@@ -279,6 +306,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2013,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_27: {
     id: "season_27",
@@ -289,6 +317,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2013,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_28: {
     id: "season_28",
@@ -299,6 +328,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2014,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_29: {
     id: "season_29",
@@ -309,6 +339,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2014,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_30: {
     id: "season_30",
@@ -319,6 +350,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2015,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_31: {
     id: "season_31",
@@ -329,6 +361,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2015,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_32: {
     id: "season_32",
@@ -339,6 +372,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2016,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_33: {
     id: "season_33",
@@ -349,6 +383,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2016,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_34: {
     id: "season_34",
@@ -359,6 +394,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2017,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_35: {
     id: "season_35",
@@ -369,6 +405,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2017,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_36: {
     id: "season_36",
@@ -379,6 +416,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2018,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_37: {
     id: "season_37",
@@ -389,6 +427,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2018,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_38: {
     id: "season_38",
@@ -399,6 +438,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2019,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_39: {
     id: "season_39",
@@ -409,6 +449,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2019,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_40: {
     id: "season_40",
@@ -419,6 +460,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2020,
     contestantCount: 20,
     img: "",
+    complete: true,
   },
   season_41: {
     id: "season_41",
@@ -429,6 +471,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2021,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_42: {
     id: "season_42",
@@ -439,6 +482,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2022,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_43: {
     id: "season_43",
@@ -449,6 +493,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2022,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_44: {
     id: "season_44",
@@ -459,6 +504,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2023,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_45: {
     id: "season_45",
@@ -469,6 +515,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2023,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_46: {
     id: "season_46",
@@ -479,6 +526,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2024,
     contestantCount: 18,
     img: "/images/season_46/season-46-logo.png",
+    complete: true,
   },
   season_47: {
     id: "season_47",
@@ -489,6 +537,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2024,
     contestantCount: 18,
     img: "",
+    complete: true,
   },
   season_48: {
     id: "season_48",
@@ -499,6 +548,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2025,
     contestantCount: 18,
     img: "/images/season_48/season-48-logo.png",
+    complete: true,
   },
   season_49: {
     id: "season_49",
@@ -509,6 +559,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2025,
     contestantCount: 18,
     img: "/images/season_49/season-49-logo.png",
+    complete: true,
   },
   season_50: {
     id: "season_50",
@@ -519,5 +570,6 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     year: 2025,
     contestantCount: 18,
     img: "/images/season_50/season-50-logo.webp",
+    complete: false,
   },
 };

@@ -49,7 +49,7 @@ function matchesEras(meta: SeasonMeta, selectedEras: string[]): boolean {
   });
 }
 
-function HeroCard({ meta }: { meta: SeasonMeta }) {
+function HeroCard({ meta, live }: { meta: SeasonMeta; live: boolean }) {
   return (
     <Card
       component={Link}
@@ -73,16 +73,16 @@ function HeroCard({ meta }: { meta: SeasonMeta }) {
             )}
           </div>
         )}
-        <Badge
-          color="dark"
-          variant="filled"
-          size="lg"
-          pos="absolute"
-          top={12}
-          right={12}
-        >
-          Season {meta.order}
-        </Badge>
+        <Group pos="absolute" top={12} right={12} gap="xs">
+          {live && (
+            <Badge color="red" variant="filled" size="lg">
+              LIVE
+            </Badge>
+          )}
+          <Badge color="dark" variant="filled" size="lg">
+            Season {meta.order}
+          </Badge>
+        </Group>
       </Card.Section>
 
       <Group justify="space-between" mt="md" align="flex-start">
@@ -104,7 +104,7 @@ function HeroCard({ meta }: { meta: SeasonMeta }) {
   );
 }
 
-function CompactCard({ meta }: { meta: SeasonMeta }) {
+function CompactCard({ meta, live }: { meta: SeasonMeta; live: boolean }) {
   return (
     <Card
       component={Link}
@@ -115,7 +115,7 @@ function CompactCard({ meta }: { meta: SeasonMeta }) {
       withBorder
       className={classes.compactCard}
     >
-      <Card.Section>
+      <Card.Section pos="relative">
         {meta.img ? (
           <Image src={meta.img} height={100} alt={meta.name} />
         ) : (
@@ -127,6 +127,18 @@ function CompactCard({ meta }: { meta: SeasonMeta }) {
               <span className={classes.compactSubtitle}>{meta.subtitle}</span>
             )}
           </div>
+        )}
+        {live && (
+          <Badge
+            color="red"
+            variant="filled"
+            size="xs"
+            pos="absolute"
+            top={6}
+            right={6}
+          >
+            LIVE
+          </Badge>
         )}
       </Card.Section>
 
@@ -150,6 +162,12 @@ export const Seasons = () => {
     () => Object.values(SEASON_METADATA).sort((a, b) => b.order - a.order),
     [],
   );
+
+  // The live season is the highest-order incomplete season
+  const liveSeasonId = useMemo(() => {
+    const liveSeason = allSeasons.find((m) => !m.complete);
+    return liveSeason?.id ?? null;
+  }, [allSeasons]);
 
   const marqueeSeasons = useMemo(() => allSeasons.slice(0, 2), [allSeasons]);
 
@@ -181,7 +199,11 @@ export const Seasons = () => {
       {/* Marquee — two latest seasons */}
       <SimpleGrid cols={{ base: 1, sm: 2 }}>
         {marqueeSeasons.map((meta) => (
-          <HeroCard key={meta.id} meta={meta} />
+          <HeroCard
+            key={meta.id}
+            meta={meta}
+            live={meta.id === liveSeasonId}
+          />
         ))}
       </SimpleGrid>
 
@@ -222,7 +244,11 @@ export const Seasons = () => {
         ) : (
           <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4, lg: 5 }}>
             {browseSeasons.map((meta) => (
-              <CompactCard key={meta.id} meta={meta} />
+              <CompactCard
+                key={meta.id}
+                meta={meta}
+                live={meta.id === liveSeasonId}
+              />
             ))}
           </SimpleGrid>
         )}

@@ -48,6 +48,17 @@ describe("SEASON_METADATA", () => {
     }
   });
 
+  it("every entry has a boolean complete field", () => {
+    for (const meta of values) {
+      expect(typeof meta.complete).toBe("boolean");
+    }
+  });
+
+  it("at most one season is incomplete (currently airing)", () => {
+    const incomplete = values.filter((m) => !m.complete);
+    expect(incomplete.length).toBeLessThanOrEqual(1);
+  });
+
   it("every season in SEASONS also appears in SEASON_METADATA", () => {
     for (const key of Object.keys(SEASONS)) {
       expect(SEASON_METADATA).toHaveProperty(key);
