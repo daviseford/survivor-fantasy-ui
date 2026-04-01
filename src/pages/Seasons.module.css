@@ -1,0 +1,60 @@
+.heroCard {
+  overflow: hidden;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--mantine-shadow-lg);
+  }
+}
+
+.heroImageFallback {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    light-dark(var(--mantine-color-green-6), var(--mantine-color-green-8)),
+    light-dark(var(--mantine-color-teal-6), var(--mantine-color-teal-8))
+  );
+}
+
+.heroSeasonNumber {
+  font-size: rem(72px);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1;
+}
+
+.compactCard {
+  transition: transform 150ms ease, box-shadow 150ms ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--mantine-shadow-md);
+  }
+}
+
+.compactImageFallback {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    light-dark(var(--mantine-color-green-7), var(--mantine-color-green-9)),
+    light-dark(var(--mantine-color-teal-7), var(--mantine-color-teal-9))
+  );
+}
+
+.compactSeasonNumber {
+  font-size: rem(36px);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1;
+}
+
+.eraChip {
+  cursor: pointer;
+}
