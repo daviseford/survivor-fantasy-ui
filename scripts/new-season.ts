@@ -38,9 +38,7 @@ async function main(): Promise<void> {
   const push = flags.has("--push");
   const dryRun = flags.has("--dry-run");
   const sourceFlag = [...flags].find((f) => f.startsWith("--source="));
-  const source = sourceFlag
-    ? sourceFlag.split("=")[1]
-    : "survivoR2py";
+  const source = sourceFlag ? sourceFlag.split("=")[1] : "survivoR2py";
 
   if (!seasonNum || isNaN(seasonNum)) {
     console.error(

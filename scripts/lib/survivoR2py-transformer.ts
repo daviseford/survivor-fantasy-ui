@@ -4,6 +4,14 @@
  * can generate season files from survivoR2py data without modification.
  */
 
+import type { SurvivorSeasonData } from "./survivoR2py-client.js";
+import type {
+  SurvivorAdvantageMovement,
+  SurvivorCastaway,
+  SurvivorChallengeResult,
+  SurvivorEpisode,
+  SurvivorTribeMapping,
+} from "./survivoR2py-types.js";
 import type {
   ScrapedChallenge,
   ScrapedElimination,
@@ -13,15 +21,6 @@ import type {
   ScrapeResult,
   ScrapeResultsOutput,
 } from "./types.js";
-import type { SurvivorSeasonData } from "./survivoR2py-client.js";
-import type {
-  SurvivorAdvantageMovement,
-  SurvivorCastaway,
-  SurvivorChallengeResult,
-  SurvivorEpisode,
-  SurvivorTribeMapping,
-  SurvivorVoteHistory,
-} from "./survivoR2py-types.js";
 
 /**
  * Transform survivoR2py season data into the app's ScrapeResult (players).
@@ -51,7 +50,9 @@ export function transformPlayers(
 
   const players: ScrapedPlayer[] = uniqueCastaways.map((c) => {
     const hometown =
-      c.city && c.state ? `${c.city}, ${c.state}` : c.city || c.state || undefined;
+      c.city && c.state
+        ? `${c.city}, ${c.state}`
+        : c.city || c.state || undefined;
 
     return {
       wikiPageTitle: c.full_name,
@@ -59,7 +60,8 @@ export function transformPlayers(
       matchStatus: "exact" as const,
       age: c.age ?? undefined,
       hometown,
-      nickname: c.castaway !== c.full_name.split(" ")[0] ? c.castaway : undefined,
+      nickname:
+        c.castaway !== c.full_name.split(" ")[0] ? c.castaway : undefined,
     };
   });
 
@@ -124,9 +126,9 @@ function transformEpisodes(
   const mergeEpisodes = new Set<number>();
   const postMergeEpisodes = new Set<number>();
   let mergeFound = false;
-  const episodeNums = [...new Set(tribeMapping.map((t) => Math.round(t.episode)))].sort(
-    (a, b) => a - b,
-  );
+  const episodeNums = [
+    ...new Set(tribeMapping.map((t) => Math.round(t.episode))),
+  ].sort((a, b) => a - b);
   for (const ep of episodeNums) {
     const tribes = tribeMapping.filter((t) => Math.round(t.episode) === ep);
     const hasMerged = tribes.some((t) => t.tribe_status === "Merged");
@@ -332,9 +334,7 @@ function transformEvents(
     // All players still in the game at merge
     const mergedPlayers = tribeMapping
       .filter(
-        (t) =>
-          Math.round(t.episode) === mergeEp &&
-          t.tribe_status === "Merged",
+        (t) => Math.round(t.episode) === mergeEp && t.tribe_status === "Merged",
       )
       .map((t) => t.castaway);
 
@@ -375,7 +375,9 @@ function transformEvents(
   return events;
 }
 
-function detectMergeEpisode(tribeMapping: SurvivorTribeMapping[]): number | null {
+function detectMergeEpisode(
+  tribeMapping: SurvivorTribeMapping[],
+): number | null {
   for (const t of tribeMapping) {
     if (t.tribe_status === "Merged") {
       return Math.round(t.episode);

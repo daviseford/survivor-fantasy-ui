@@ -122,9 +122,7 @@ function validateCastaways(data: SurvivorCastaway[]): void {
       );
     }
     if (!c.full_name) {
-      throw new Error(
-        `Missing full_name for castaway_id ${c.castaway_id}`,
-      );
+      throw new Error(`Missing full_name for castaway_id ${c.castaway_id}`);
     }
   }
 }
@@ -181,7 +179,9 @@ export async function fetchSeasonData(
     validateCastaways(castaways);
   }
 
-  console.log(`  Fetched: ${castaways.length} castaways, ${episodes.length} episodes, ${challengeResults.length} challenge results`);
+  console.log(
+    `  Fetched: ${castaways.length} castaways, ${episodes.length} episodes, ${challengeResults.length} challenge results`,
+  );
 
   return {
     castaways,

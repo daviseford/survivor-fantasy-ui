@@ -26,9 +26,7 @@ describe("transformPlayers", { timeout: 60000 }, () => {
     expect(result.players.length).toBe(16);
 
     // Verify Sonja Christopher is in the list
-    const sonja = result.players.find((p) =>
-      p.localName.includes("Sonja"),
-    );
+    const sonja = result.players.find((p) => p.localName.includes("Sonja"));
     expect(sonja).toBeDefined();
     expect(sonja!.localName).toBe("Sonja Christopher");
   });
@@ -78,9 +76,7 @@ describe("transformResults", { timeout: 60000 }, () => {
     expect(result.eliminations.length).toBeGreaterThan(0);
 
     // Should have tribal eliminations
-    const tribals = result.eliminations.filter(
-      (e) => e.variant === "tribal",
-    );
+    const tribals = result.eliminations.filter((e) => e.variant === "tribal");
     expect(tribals.length).toBeGreaterThan(0);
 
     // Should have FTC participants
@@ -97,15 +93,11 @@ describe("transformResults", { timeout: 60000 }, () => {
     expect(result.events.length).toBeGreaterThan(0);
 
     // Should detect merge event
-    const mergeEvents = result.events.filter(
-      (e) => e.action === "make_merge",
-    );
+    const mergeEvents = result.events.filter((e) => e.action === "make_merge");
     expect(mergeEvents.length).toBeGreaterThan(0);
 
     // Should detect winner
-    const winEvents = result.events.filter(
-      (e) => e.action === "win_survivor",
-    );
+    const winEvents = result.events.filter((e) => e.action === "win_survivor");
     expect(winEvents.length).toBe(1);
   });
 
@@ -120,9 +112,7 @@ describe("transformResults", { timeout: 60000 }, () => {
     expect(idolEvents.length).toBe(0);
 
     // But should still have merge and winner events
-    const mergeEvents = result.events.filter(
-      (e) => e.action === "make_merge",
-    );
+    const mergeEvents = result.events.filter((e) => e.action === "make_merge");
     expect(mergeEvents.length).toBeGreaterThan(0);
   });
 });
