@@ -65,10 +65,7 @@ import {
   PropBetsFormData,
   Season,
 } from "../types";
-import {
-  buildPickOrderUidMap,
-  buildTurnsMap,
-} from "../utils/draftRealtime";
+import { buildPickOrderUidMap, buildTurnsMap } from "../utils/draftRealtime";
 
 export const DraftComponent = () => {
   const navigate = useNavigate();
@@ -189,7 +186,10 @@ export const DraftComponent = () => {
 
   const joinDraft = async () => {
     if (!draft || !slimUser) return;
-    await set(ref(rt_db, `drafts/${draft.id}/participants/${slimUser.uid}`), slimUser);
+    await set(
+      ref(rt_db, `drafts/${draft.id}/participants/${slimUser.uid}`),
+      slimUser,
+    );
   };
 
   const startDraft = async () => {

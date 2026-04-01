@@ -27,9 +27,9 @@ import {
   IconUsers,
   IconX,
 } from "@tabler/icons-react";
-import { useMemo, useState } from "react";
 import { ref, remove } from "firebase/database";
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
+import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SEASON_9_CHALLENGES, SEASON_9_ELIMINATIONS } from "../data/season_9";
 import { SEASONS } from "../data/seasons";

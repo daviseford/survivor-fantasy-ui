@@ -53,10 +53,13 @@ const buildEmptyScores = (
 ): PropBetScores => {
   const propBetScores = PropBetQuestionKeyList.reduce<
     Record<PropBetQuestionKey, PropBetAnswer>
-  >((accum, key) => {
-    accum[key] = makeEmptyAnswer(uid, userName, answers?.[key] || "");
-    return accum;
-  }, {} as Record<PropBetQuestionKey, PropBetAnswer>);
+  >(
+    (accum, key) => {
+      accum[key] = makeEmptyAnswer(uid, userName, answers?.[key] || "");
+      return accum;
+    },
+    {} as Record<PropBetQuestionKey, PropBetAnswer>,
+  );
 
   return {
     ...propBetScores,

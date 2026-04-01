@@ -20,11 +20,11 @@ This single command runs the full pipeline:
 
 ### Flags
 
-| Flag | Effect |
+| Flag        | Effect                                                  |
 | ----------- | ------------------------------------------------------- |
-| `--force` | Overwrite an existing season file |
-| `--push` | Push the generated season to Firestore after generation |
-| `--dry-run` | Run the pipeline without writing files |
+| `--force`   | Overwrite an existing season file                       |
+| `--push`    | Push the generated season to Firestore after generation |
+| `--dry-run` | Run the pipeline without writing files                  |
 
 ### Post-generation
 

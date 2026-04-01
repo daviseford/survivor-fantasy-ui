@@ -103,7 +103,11 @@ export function transformResults(
   const idMap = buildCastawayIdMap(data.castaways);
 
   const hasWinner = data.castaways.some((c) => c.winner);
-  const episodes = transformEpisodes(data.episodes, data.tribeMapping, hasWinner);
+  const episodes = transformEpisodes(
+    data.episodes,
+    data.tribeMapping,
+    hasWinner,
+  );
   const challenges = transformChallenges(data.challengeResults);
   const eliminations = transformEliminations(data.castaways);
   const events = transformEvents(

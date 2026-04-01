@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  getActivePropBetKeys,
-  PropBetsQuestions,
-} from "../../data/propbets";
+import { getActivePropBetKeys, PropBetsQuestions } from "../../data/propbets";
 import {
   CastawayId,
   Challenge,
