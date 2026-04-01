@@ -1,10 +1,15 @@
 import { countBy, entries } from "lodash-es";
-import { PropBetsQuestions } from "../data/propbets";
+import {
+  getActivePropBetKeys,
+  PropBetQuestionKey,
+  PropBetsQuestions,
+} from "../data/propbets";
 import {
   CastawayId,
   Challenge,
   Competition,
   Elimination,
+  Episode,
   GameEvent,
   SlimUser,
 } from "../types";
@@ -23,20 +28,57 @@ export type PropBetAnswer = {
   points_awarded: number;
 };
 
-type PropBetScores = Record<keyof typeof PropBetsQuestions, PropBetAnswer> & {
+export type PropBetScores = Record<PropBetQuestionKey, PropBetAnswer> & {
   total: number;
 };
 
 export type PropBetScoresByUser = Record<SlimUser["uid"], PropBetScores>;
 
+const makeEmptyAnswer = (
+  uid: SlimUser["uid"],
+  userName: string,
+  answer = "",
+): PropBetAnswer => ({
+  user_uid: uid,
+  user_name: userName,
+  status: "pending",
+  points_awarded: 0,
+  answer,
+});
+
+const buildEmptyScores = (
+  uid: SlimUser["uid"],
+  userName: string,
+  answers?: Partial<Record<PropBetQuestionKey, string>>,
+): PropBetScores => {
+  const propBetScores = PropBetQuestionKeyList.reduce<
+    Record<PropBetQuestionKey, PropBetAnswer>
+  >((accum, key) => {
+    accum[key] = makeEmptyAnswer(uid, userName, answers?.[key] || "");
+    return accum;
+  }, {} as Record<PropBetQuestionKey, PropBetAnswer>);
+
+  return {
+    ...propBetScores,
+    total: 0,
+  };
+};
+
+const PropBetQuestionKeyList = Object.keys(
+  PropBetsQuestions,
+) as PropBetQuestionKey[];
+
 export const getPropBetScoresByUser = (
   events: Record<GameEvent["id"], GameEvent>,
   eliminations: Record<Elimination["id"], Elimination>,
   challenges: Record<Challenge["id"], Challenge>,
+  postMergeEpisodeNumbers: Set<Episode["order"]>,
   hasFinaleOccurred: boolean,
   competition?: Competition,
 ): PropBetScoresByUser => {
   if (!competition?.participant_uids || !competition.prop_bets) return {};
+
+  const activeKeys = getActivePropBetKeys(competition.prop_bets);
 
   return competition.participant_uids.reduce<PropBetScoresByUser>((a, b) => {
     const scores = getPropBetScoresForUser(
@@ -44,7 +86,9 @@ export const getPropBetScoresByUser = (
       events,
       eliminations,
       challenges,
+      postMergeEpisodeNumbers,
       hasFinaleOccurred,
+      activeKeys,
       competition,
     );
     if (scores) {
@@ -122,7 +166,9 @@ export const getPropBetScoresForUser = (
   events: Record<GameEvent["id"], GameEvent>,
   eliminations: Record<Elimination["id"], Elimination>,
   challenges: Record<Challenge["id"], Challenge>,
+  postMergeEpisodeNumbers: Set<Episode["order"]>,
   hasFinaleOccurred: boolean,
+  activeKeys: PropBetQuestionKey[],
   competition: Competition,
 ): PropBetScores => {
   const myPropBets = (competition?.prop_bets || []).find(
@@ -131,45 +177,15 @@ export const getPropBetScoresForUser = (
 
   const _user = competition.participants.find((x) => x.uid === uid);
 
-  const emptyAnswer: PropBetAnswer = {
-    user_uid: uid,
-    user_name: _user?.displayName || _user?.email || uid,
-    status: "pending",
-    points_awarded: 0,
-    answer: "",
-  };
-
-  const scores = {
-    total: 0,
-    propbet_first_vote: {
-      ...emptyAnswer,
-      answer: myPropBets?.propbet_first_vote || "",
-    },
-    propbet_ftc: { ...emptyAnswer, answer: myPropBets?.propbet_ftc || "" },
-    propbet_idols: { ...emptyAnswer, answer: myPropBets?.propbet_idols || "" },
-    propbet_immunities: {
-      ...emptyAnswer,
-      answer: myPropBets?.propbet_immunities || "",
-    },
-    propbet_medical_evac: {
-      ...emptyAnswer,
-      answer: myPropBets?.propbet_medical_evac || "",
-    },
-    propbet_winner: {
-      ...emptyAnswer,
-      answer: myPropBets?.propbet_winner || "",
-    },
-  } satisfies PropBetScores;
+  const userName = _user?.displayName || _user?.email || uid;
+  const scores = buildEmptyScores(uid, userName, myPropBets);
 
   // bail if no data
   if (!myPropBets) return scores;
 
-  const setStatus = (
-    key: Exclude<keyof typeof scores, "total">,
-    status: PropBetStatus,
-  ) => {
+  const setStatus = (key: PropBetQuestionKey, status: PropBetStatus) => {
     scores[key].status = status;
-    if (status === "definitive_correct") {
+    if (activeKeys.includes(key) && status === "definitive_correct") {
       scores[key].points_awarded = PropBetsQuestions[key].point_value;
       scores.total += PropBetsQuestions[key].point_value;
     }
@@ -233,7 +249,10 @@ export const getPropBetScoresForUser = (
 
   // --- propbet_immunities ---
   const immunities = Object.values(challenges).filter(
-    (x) => x.variant === "immunity",
+    (x) =>
+      x.variant === "immunity" &&
+      postMergeEpisodeNumbers.has(x.episode_num) &&
+      x.winning_castaways.length <= 2,
   );
   const allImmunityWinners = immunities.flatMap((x) => x.winning_castaways);
   const rankedImmunityWinners = entries(countBy(allImmunityWinners)).sort(
@@ -243,9 +262,9 @@ export const getPropBetScoresForUser = (
     "propbet_immunities",
     resolveLeaderboardBetStatus(
       rankedImmunityWinners,
-      myPropBets.propbet_immunities,
+      myPropBets.propbet_immunities || "",
       isCurrentlyEliminated(
-        myPropBets.propbet_immunities,
+        myPropBets.propbet_immunities || "",
         _elims,
         _events,
         challenges,
@@ -264,9 +283,9 @@ export const getPropBetScoresForUser = (
     "propbet_idols",
     resolveLeaderboardBetStatus(
       rankedIdolFinders,
-      myPropBets.propbet_idols,
+      myPropBets.propbet_idols || "",
       isCurrentlyEliminated(
-        myPropBets.propbet_idols,
+        myPropBets.propbet_idols || "",
         _elims,
         _events,
         challenges,

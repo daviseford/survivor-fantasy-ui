@@ -47,7 +47,11 @@ import { DraftTable } from "../components/DraftTable";
 import { MyDraftedPlayers } from "../components/MyPlayers/MyDraftedPlayers";
 import { PostDraftPropBetTable } from "../components/PropBetTables/PostDraftPropBetTable";
 import { ScoringLegendTable } from "../components/ScoringTables";
-import { PropBetsQuestions } from "../data/propbets";
+import {
+  PropBetQuestionKey,
+  PropBetQuestionKeys,
+  PropBetsQuestions,
+} from "../data/propbets";
 import { db, rt_db } from "../firebase";
 import { useCompetition } from "../hooks/useCompetition";
 import { useDraft } from "../hooks/useDraft";
@@ -952,26 +956,35 @@ type PropBetsProps = {
 };
 
 const PropBets = ({ season, onSubmit }: PropBetsProps) => {
+  const initialValues = useMemo(
+    () =>
+      PropBetQuestionKeys.reduce<PropBetsFormData>((accum, key) => {
+        accum[key] = "";
+        return accum;
+      }, {}),
+    [],
+  );
+
+  const validate = useMemo(
+    () =>
+      PropBetQuestionKeys.reduce<
+        Partial<Record<PropBetQuestionKey, ReturnType<typeof isNotEmpty>>>
+      >((accum, key) => {
+        accum[key] = isNotEmpty("Enter an answer");
+        return accum;
+      }, {}),
+    [],
+  );
+
   const form = useForm<PropBetsFormData>({
-    initialValues: {
-      propbet_first_vote: "",
-      propbet_ftc: "",
-      propbet_idols: "",
-      propbet_immunities: "",
-      propbet_medical_evac: "",
-      propbet_winner: "",
-    },
-    validate: {
-      propbet_first_vote: isNotEmpty("Enter an answer"),
-      propbet_ftc: isNotEmpty("Enter an answer"),
-      propbet_idols: isNotEmpty("Enter an answer"),
-      propbet_immunities: isNotEmpty("Enter an answer"),
-      propbet_medical_evac: isNotEmpty("Enter an answer"),
-      propbet_winner: isNotEmpty("Enter an answer"),
-    },
+    initialValues,
+    validate,
   });
 
-  const players = season?.players.map((x) => x.full_name);
+  const playerOptions = season.players.map((player) => ({
+    value: player.castaway_id,
+    label: player.full_name,
+  }));
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement> | undefined,
@@ -989,58 +1002,23 @@ const PropBets = ({ season, onSubmit }: PropBetsProps) => {
     <Box>
       <form onSubmit={handleSubmit}>
         <Stack>
-          <Select
-            required
-            label={PropBetsQuestions.propbet_winner.description}
-            description={
-              PropBetsQuestions.propbet_winner.point_value + " points"
-            }
-            data={players}
-            {...form.getInputProps("propbet_winner")}
-          />
-          <Select
-            required
-            label={PropBetsQuestions.propbet_first_vote.description}
-            description={
-              PropBetsQuestions.propbet_first_vote.point_value + " points"
-            }
-            data={players}
-            {...form.getInputProps("propbet_first_vote")}
-          />
-          <Select
-            required
-            label={PropBetsQuestions.propbet_idols.description}
-            description={
-              PropBetsQuestions.propbet_idols.point_value + " points"
-            }
-            data={players}
-            {...form.getInputProps("propbet_idols")}
-          />
-          <Select
-            required
-            label={PropBetsQuestions.propbet_immunities.description}
-            description={
-              PropBetsQuestions.propbet_immunities.point_value + " points"
-            }
-            data={players}
-            {...form.getInputProps("propbet_immunities")}
-          />
-          <Select
-            required
-            label={PropBetsQuestions.propbet_ftc.description}
-            description={PropBetsQuestions.propbet_ftc.point_value + " points"}
-            data={players}
-            {...form.getInputProps("propbet_ftc")}
-          />
-          <Select
-            required
-            label={PropBetsQuestions.propbet_medical_evac.description}
-            description={
-              PropBetsQuestions.propbet_medical_evac.point_value + " points"
-            }
-            data={["Yes", "No"]}
-            {...form.getInputProps("propbet_medical_evac")}
-          />
+          {PropBetQuestionKeys.map((key) => {
+            const question = PropBetsQuestions[key];
+            return (
+              <Select
+                key={key}
+                required
+                label={question.description}
+                description={question.point_value + " points"}
+                data={
+                  question.answer_type === "boolean"
+                    ? ["Yes", "No"]
+                    : playerOptions
+                }
+                {...form.getInputProps(key)}
+              />
+            );
+          })}
 
           <Button
             type="submit"

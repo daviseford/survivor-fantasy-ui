@@ -1,5 +1,5 @@
 import { User } from "firebase/auth";
-import { PropBetsQuestions } from "../data/propbets";
+import { PropBetQuestionKey } from "../data/propbets";
 
 export type CastawayId = `US${string}`;
 
@@ -161,7 +161,7 @@ export type PropBetsEntry = {
   values: PropBetsFormData;
 };
 
-export type PropBetsFormData = Record<keyof typeof PropBetsQuestions, string>;
+export type PropBetsFormData = Partial<Record<PropBetQuestionKey, string>>;
 
 export type DraftPick = {
   season_id: Season["id"];

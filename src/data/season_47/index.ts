@@ -1299,28 +1299,6 @@ export const SEASON_47_EVENTS = {
     action: "use_idol",
     multiplier: null,
   },
-  event_27: {
-    id: "event_27",
-    season_id: "season_47",
-    season_num: 47,
-    episode_id: "episode_6",
-    episode_num: 6,
-    // TODO: resolve castaway ID "US0701, US0698, US0713" to a known player
-    castaway_id: "US0701, US0698, US0713",
-    action: "find_idol",
-    multiplier: null,
-  },
-  event_28: {
-    id: "event_28",
-    season_id: "season_47",
-    season_num: 47,
-    episode_id: "episode_6",
-    episode_num: 6,
-    // TODO: resolve castaway ID "US0701, US0698, US0713" to a known player
-    castaway_id: "US0701, US0698, US0713",
-    action: "use_idol",
-    multiplier: null,
-  },
   event_29: {
     id: "event_29",
     season_id: "season_47",

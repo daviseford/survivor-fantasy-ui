@@ -23,7 +23,7 @@ export const useScoringCalculations = () => {
   const { data: eliminations } = useEliminations(competition?.season_id);
   const { data: events } = useEvents(season?.id);
 
-  const { data: propBetScores } = usePropBetScoring();
+  const { data: propBetScores, activeKeys } = usePropBetScoring();
 
   const maxEpisode = competition?.current_episode ?? null;
 
@@ -145,6 +145,7 @@ export const useScoringCalculations = () => {
   );
 
   return {
+    activePropBetKeys: activeKeys,
     filteredEpisodes,
     filteredEliminations,
     filteredEvents,
