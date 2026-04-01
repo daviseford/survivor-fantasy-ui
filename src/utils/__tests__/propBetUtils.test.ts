@@ -127,7 +127,6 @@ describe("getPropBetScoresForUser", () => {
       };
       const answer = getStatus("propbet_first_vote", { eliminations: elims });
       expect(answer.status).toBe("definitive_correct");
-      expect(answer.correct).toBe(true);
       expect(answer.points_awarded).toBe(
         PropBetsQuestions.propbet_first_vote.point_value,
       );
@@ -139,7 +138,6 @@ describe("getPropBetScoresForUser", () => {
       };
       const answer = getStatus("propbet_first_vote", { eliminations: elims });
       expect(answer.status).toBe("definitive_incorrect");
-      expect(answer.correct).toBe(false);
       expect(answer.points_awarded).toBe(0);
     });
   });
@@ -384,6 +382,19 @@ describe("getPropBetScoresForUser", () => {
         hasFinaleOccurred: true,
       });
       expect(answer.status).toBe("definitive_incorrect");
+    });
+
+    it("correctly identifies leader even when picked player appears first in data", () => {
+      // Alice has 1 idol find, Bob has 2 — Alice appears first in the data
+      // but Bob is the actual leader. Tests that sorting by count works.
+      const events = {
+        ev1: makeEvent("1", 1, "Alice", "find_idol"),
+        ev2: makeEvent("2", 2, "Bob", "find_idol"),
+        ev3: makeEvent("3", 3, "Bob", "find_idol"),
+      };
+      const answer = getStatus("propbet_idols", { events });
+      // Alice is behind Bob (1 < 2), so should NOT be leading
+      expect(answer.status).toBe("pending");
     });
   });
 

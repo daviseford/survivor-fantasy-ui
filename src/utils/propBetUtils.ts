@@ -18,7 +18,6 @@ export type PropBetAnswer = {
   user_uid: SlimUser["uid"];
   user_name: SlimUser["displayName"];
   status: PropBetStatus;
-  correct: boolean;
   answer: string;
   points_awarded: number;
 };
@@ -54,6 +53,38 @@ export const getPropBetScoresByUser = (
   }, {});
 };
 
+/**
+ * Resolves the status of a cumulative leaderboard bet (most idols, most immunities).
+ * Given a list of occurrences per player (sorted by count descending), determines
+ * whether the picked player is leading, definitively behind, or pending.
+ */
+const resolveLeaderboardBetStatus = (
+  rankedPlayers: [string, number][],
+  pickedPlayer: string,
+  isPickEliminated: boolean,
+  hasFinaleOccurred: boolean,
+): PropBetStatus => {
+  const topCount = rankedPlayers[0]?.[1] ?? 0;
+  const leaders = rankedPlayers
+    .filter(([, count]) => count === topCount)
+    .map(([name]) => name);
+
+  const isLeading = topCount > 0 && leaders.includes(pickedPlayer);
+  const pickCount =
+    rankedPlayers.find(([name]) => name === pickedPlayer)?.[1] ?? 0;
+
+  if (hasFinaleOccurred) {
+    return isLeading ? "definitive_correct" : "definitive_incorrect";
+  }
+  if (isLeading) {
+    return "leading";
+  }
+  if (isPickEliminated && pickCount < topCount) {
+    return "definitive_incorrect";
+  }
+  return "pending";
+};
+
 export const getPropBetScoresForUser = (
   uid: SlimUser["uid"],
   events: Record<GameEvent["id"], GameEvent>,
@@ -72,7 +103,6 @@ export const getPropBetScoresForUser = (
     user_uid: uid,
     user_name: _user?.displayName || _user?.email || uid,
     status: "pending",
-    correct: false,
     points_awarded: 0,
     answer: "",
   };
@@ -107,7 +137,6 @@ export const getPropBetScoresForUser = (
     status: PropBetStatus,
   ) => {
     scores[key].status = status;
-    scores[key].correct = status === "definitive_correct";
     if (status === "definitive_correct") {
       scores[key].points_awarded = PropBetsQuestions[key].point_value;
       scores.total += PropBetsQuestions[key].point_value;
@@ -160,7 +189,6 @@ export const getPropBetScoresForUser = (
   } else if (ftcPickEliminated) {
     setStatus("propbet_ftc", "definitive_incorrect");
   } else if (hasFinaleOccurred) {
-    // Finale happened but no make_final_tribal_council event for this pick
     setStatus("propbet_ftc", "definitive_incorrect");
   }
   // else: pending (player still alive, no finale yet)
@@ -188,70 +216,34 @@ export const getPropBetScoresForUser = (
     (x) => x.variant === "combined" || x.variant === "immunity",
   );
   const allImmunityWinners = immunities.flatMap((x) => x.winning_players);
-  const rankedImmunityWinners = entries(countBy(allImmunityWinners));
-  const topImmunityCount = rankedImmunityWinners?.[0]?.[1] ?? 0;
-  const immunityLeaders = rankedImmunityWinners
-    .filter((x) => x[1] === topImmunityCount)
-    .map((x) => x[0]);
-
-  const immunityPickLeading =
-    topImmunityCount > 0 &&
-    immunityLeaders.some((x) => x === myPropBets.propbet_immunities);
-  const immunityPickEliminated = _elims.some(
-    (x) => x.player_name === myPropBets.propbet_immunities,
+  const rankedImmunityWinners = entries(countBy(allImmunityWinners)).sort(
+    (a, b) => b[1] - a[1],
   );
-  const immunityPickCount =
-    allImmunityWinners.filter((x) => x === myPropBets.propbet_immunities)
-      .length ?? 0;
-
-  if (hasFinaleOccurred) {
-    if (immunityPickLeading) {
-      setStatus("propbet_immunities", "definitive_correct");
-    } else {
-      setStatus("propbet_immunities", "definitive_incorrect");
-    }
-  } else if (immunityPickLeading) {
-    setStatus("propbet_immunities", "leading");
-  } else if (
-    immunityPickEliminated &&
-    immunityPickCount < topImmunityCount
-  ) {
-    // Pick is eliminated and behind the leader — can never catch up
-    setStatus("propbet_immunities", "definitive_incorrect");
-  }
-  // else: pending
+  setStatus(
+    "propbet_immunities",
+    resolveLeaderboardBetStatus(
+      rankedImmunityWinners,
+      myPropBets.propbet_immunities,
+      _elims.some((x) => x.player_name === myPropBets.propbet_immunities),
+      hasFinaleOccurred,
+    ),
+  );
 
   // --- propbet_idols ---
   const idols = _events.filter((x) => x.action === "find_idol");
   const allIdolFinders = idols.map((x) => x.player_name);
-  const rankedFinders = entries(countBy(allIdolFinders));
-  const topIdolCount = rankedFinders?.[0]?.[1] ?? 0;
-  const idolLeaders = rankedFinders
-    .filter((x) => x[1] === topIdolCount)
-    .map((x) => x[0]);
-
-  const idolPickLeading =
-    topIdolCount > 0 &&
-    idolLeaders.some((x) => x === myPropBets.propbet_idols);
-  const idolPickEliminated = _elims.some(
-    (x) => x.player_name === myPropBets.propbet_idols,
+  const rankedIdolFinders = entries(countBy(allIdolFinders)).sort(
+    (a, b) => b[1] - a[1],
   );
-  const idolPickCount =
-    allIdolFinders.filter((x) => x === myPropBets.propbet_idols).length ?? 0;
-
-  if (hasFinaleOccurred) {
-    if (idolPickLeading) {
-      setStatus("propbet_idols", "definitive_correct");
-    } else {
-      setStatus("propbet_idols", "definitive_incorrect");
-    }
-  } else if (idolPickLeading) {
-    setStatus("propbet_idols", "leading");
-  } else if (idolPickEliminated && idolPickCount < topIdolCount) {
-    // Pick is eliminated and behind the leader — can never catch up
-    setStatus("propbet_idols", "definitive_incorrect");
-  }
-  // else: pending
+  setStatus(
+    "propbet_idols",
+    resolveLeaderboardBetStatus(
+      rankedIdolFinders,
+      myPropBets.propbet_idols,
+      _elims.some((x) => x.player_name === myPropBets.propbet_idols),
+      hasFinaleOccurred,
+    ),
+  );
 
   return scores;
 };
