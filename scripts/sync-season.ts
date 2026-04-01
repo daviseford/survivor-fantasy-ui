@@ -63,19 +63,21 @@ function getSeasonImg(seasonsFilePath: string, seasonNum: number): string {
 }
 
 /**
- * Count episodes in an existing season file by matching episode object patterns.
+ * Count episodes in an existing season file by matching episode object entries.
+ * Uses a pattern that only matches the episode definition (not episode_id refs).
  */
 function countExistingEpisodes(filePath: string): number {
   if (!fs.existsSync(filePath)) return 0;
   const content = fs.readFileSync(filePath, "utf-8");
-  const matches = content.match(/id: "episode_\d+"/g);
+  const matches = content.match(/^\s+id: "episode_\d+",$/gm);
   return matches?.length ?? 0;
 }
 
+const PROJECT_ROOT = path.resolve(import.meta.dirname, "..");
+const RESULT_PATH = path.join(PROJECT_ROOT, "sync-result.json");
+
 async function main(): Promise<void> {
-  const projectRoot = path.resolve(import.meta.dirname, "..");
-  const seasonsFilePath = path.join(projectRoot, "src", "data", "seasons.ts");
-  const resultPath = path.join(projectRoot, "sync-result.json");
+  const seasonsFilePath = path.join(PROJECT_ROOT, "src", "data", "seasons.ts");
 
   // Phase 1: Detect — find active season and check for new seasons
   console.log("Phase 1: Detecting active season...");
@@ -114,7 +116,7 @@ async function main(): Promise<void> {
       isNewSeason,
       warnings: [`No castaways found in survivoR for season ${seasonNum}`],
     };
-    writeResult(resultPath, result);
+    writeResult(RESULT_PATH, result);
     console.log(`  No castaways found — nothing to sync.`);
     return;
   }
@@ -131,7 +133,7 @@ async function main(): Promise<void> {
 
   // Phase 3: Compare
   const seasonKey = `season_${seasonNum}`;
-  const seasonDir = path.join(projectRoot, "src", "data", seasonKey);
+  const seasonDir = path.join(PROJECT_ROOT, "src", "data", seasonKey);
   const seasonFilePath = path.join(seasonDir, "index.ts");
 
   if (!isNewSeason && fs.existsSync(seasonFilePath)) {
@@ -142,7 +144,7 @@ async function main(): Promise<void> {
         seasonNum,
         isNewSeason: false,
       };
-      writeResult(resultPath, result);
+      writeResult(RESULT_PATH, result);
       console.log("\nPhase 3: No changes detected. Exiting.");
       return;
     }
@@ -173,7 +175,7 @@ async function main(): Promise<void> {
       firestorePushed: false,
       warnings: validation.warnings,
     };
-    writeResult(resultPath, result);
+    writeResult(RESULT_PATH, result);
     console.error("  Validation failed:");
     for (const err of validation.errors) {
       console.error(`    - ${err}`);
@@ -234,7 +236,7 @@ async function main(): Promise<void> {
     },
     warnings: validation.warnings,
   };
-  writeResult(resultPath, result);
+  writeResult(RESULT_PATH, result);
 
   console.log("\nSync complete!");
   console.log(`  Season: ${seasonNum}`);
@@ -247,7 +249,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((err) => {
-  const resultPath = path.join(process.cwd(), "sync-result.json");
   const result: SyncResult = {
     changed: false,
     seasonNum: 0,
@@ -255,7 +256,7 @@ main().catch((err) => {
     error: err instanceof Error ? err.message : String(err),
     firestorePushed: false,
   };
-  writeResult(resultPath, result);
+  writeResult(RESULT_PATH, result);
   console.error("Sync failed:", err);
   process.exit(1);
 });

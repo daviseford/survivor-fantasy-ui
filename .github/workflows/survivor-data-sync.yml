@@ -19,6 +19,7 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
         with:
@@ -33,7 +34,9 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Write Firebase service account key
-        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SURVIVOR_FANTASY_51C4B }}' > firebase-private-key.json
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SURVIVOR_FANTASY_51C4B }}' > firebase-private-key.json
+          chmod 600 firebase-private-key.json
 
       - name: Run sync script
         env:
@@ -42,12 +45,13 @@ jobs:
 
       - name: Parse sync result
         id: result
+        if: always()
         run: |
           if [ ! -f sync-result.json ]; then
             echo "sync-result.json not found — script may have crashed"
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "error=sync-result.json not found" >> "$GITHUB_OUTPUT"
-            exit 1
+            exit 0
           fi
 
           CHANGED=$(jq -r '.changed' sync-result.json)
@@ -74,10 +78,13 @@ jobs:
         if: steps.result.outputs.changed == 'true' && steps.result.outputs.error == ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SEASON: ${{ steps.result.outputs.season }}
+          IS_NEW: ${{ steps.result.outputs.is_new }}
+          EPISODES: ${{ steps.result.outputs.episodes }}
+          CHALLENGES: ${{ steps.result.outputs.challenges }}
+          ELIMINATIONS: ${{ steps.result.outputs.eliminations }}
+          EVENTS: ${{ steps.result.outputs.events }}
         run: |
-          SEASON=${{ steps.result.outputs.season }}
-          IS_NEW=${{ steps.result.outputs.is_new }}
-
           if [ "$IS_NEW" = "true" ]; then
             BRANCH="auto/survivor-new-season-${SEASON}"
             PR_TITLE="feat: bootstrap season ${SEASON} from survivoR"
@@ -96,7 +103,11 @@ jobs:
           if git ls-remote --heads origin "$BRANCH" | grep -q "$BRANCH"; then
             git fetch origin "$BRANCH"
             git checkout "$BRANCH"
-            git merge origin/main --no-edit || true
+            # If merge conflicts with main, recreate branch from main
+            if ! git merge origin/main --no-edit; then
+              git merge --abort
+              git checkout -B "$BRANCH" origin/main
+            fi
           else
             git checkout -b "$BRANCH"
           fi
@@ -110,28 +121,25 @@ jobs:
           # Create PR if none exists
           EXISTING_PR=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number')
           if [ -z "$EXISTING_PR" ]; then
-            EPISODES=${{ steps.result.outputs.episodes }}
-            CHALLENGES=${{ steps.result.outputs.challenges }}
-            ELIMINATIONS=${{ steps.result.outputs.eliminations }}
-            EVENTS=${{ steps.result.outputs.events }}
+            PR_BODY="$(cat <<EOF
+## Automated survivoR data sync
 
-            PR_BODY="## Automated survivoR data sync
+**Season:** ${SEASON}
+**Type:** $([ "$IS_NEW" = "true" ] && echo "New season bootstrap" || echo "Episode data update")
 
-          **Season:** ${SEASON}
-          **Type:** $([ "$IS_NEW" = "true" ] && echo "New season bootstrap" || echo "Episode data update")
+### Changes
+- Episodes: ${EPISODES}
+- Challenges: ${CHALLENGES}
+- Eliminations: ${ELIMINATIONS}
+- Events: ${EVENTS}
 
-          ### Changes
-          - Episodes: ${EPISODES}
-          - Challenges: ${CHALLENGES}
-          - Eliminations: ${ELIMINATIONS}
-          - Events: ${EVENTS}
+$([ "$IS_NEW" = "true" ] && echo "### Note
+Player images are not available during automated bootstrap. Run \`yarn new-season ${SEASON} --force\` locally to backfill images and bios from the wiki." || echo "")
 
-          $([ "$IS_NEW" = "true" ] && echo "### Note
-          Player images are not available during automated bootstrap. Run \`yarn new-season ${SEASON} --force\` locally to backfill images and bios from the wiki." || echo "")
-
-          ---
-          *This PR was created automatically by the [survivoR data sync workflow](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}).*"
-
+---
+*This PR was created automatically by the [survivoR data sync workflow](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}).*
+EOF
+)"
             gh pr create --title "$PR_TITLE" --body "$PR_BODY" --base main
           else
             echo "PR #${EXISTING_PR} already exists for branch ${BRANCH}"
@@ -139,12 +147,16 @@ jobs:
 
       - name: Write job summary
         if: always()
+        env:
+          SEASON: ${{ steps.result.outputs.season }}
+          CHANGED: ${{ steps.result.outputs.changed }}
+          SYNC_ERROR: ${{ steps.result.outputs.error }}
+          FIRESTORE: ${{ steps.result.outputs.firestore }}
+          EPISODES: ${{ steps.result.outputs.episodes }}
+          CHALLENGES: ${{ steps.result.outputs.challenges }}
+          ELIMINATIONS: ${{ steps.result.outputs.eliminations }}
+          EVENTS: ${{ steps.result.outputs.events }}
         run: |
-          SEASON=${{ steps.result.outputs.season }}
-          CHANGED=${{ steps.result.outputs.changed }}
-          ERROR="${{ steps.result.outputs.error }}"
-          FIRESTORE=${{ steps.result.outputs.firestore }}
-
           {
             echo "## survivoR Data Sync"
             echo ""
@@ -155,27 +167,24 @@ jobs:
             echo "| Firestore pushed | ${FIRESTORE:-false} |"
 
             if [ "$CHANGED" = "true" ]; then
-              echo "| Episodes | ${{ steps.result.outputs.episodes }} |"
-              echo "| Challenges | ${{ steps.result.outputs.challenges }} |"
-              echo "| Eliminations | ${{ steps.result.outputs.eliminations }} |"
-              echo "| Events | ${{ steps.result.outputs.events }} |"
+              echo "| Episodes | ${EPISODES} |"
+              echo "| Challenges | ${CHALLENGES} |"
+              echo "| Eliminations | ${ELIMINATIONS} |"
+              echo "| Events | ${EVENTS} |"
             fi
 
-            if [ -n "$ERROR" ]; then
+            if [ -n "$SYNC_ERROR" ]; then
               echo ""
               echo "### Error"
               echo "\`\`\`"
-              echo "$ERROR"
+              echo "$SYNC_ERROR"
               echo "\`\`\`"
             fi
 
-            if [ "$FIRESTORE" = "true" ] && [ "$CHANGED" = "true" ]; then
-              # Check if PR step succeeded by looking for error
-              if [ -n "$ERROR" ]; then
-                echo ""
-                echo "### ⚠️ Divergence"
-                echo "Firestore was updated but an error occurred. The codebase may be out of sync."
-              fi
+            if [ "$FIRESTORE" = "true" ] && [ "$CHANGED" = "true" ] && [ -n "$SYNC_ERROR" ]; then
+              echo ""
+              echo "### Divergence"
+              echo "Firestore was updated but an error occurred. The codebase may be out of sync."
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -186,7 +195,9 @@ jobs:
           rm -f sync-result.json
 
       - name: Fail on error
-        if: steps.result.outputs.error != ''
+        if: always() && steps.result.outputs.error != ''
+        env:
+          SYNC_ERROR: ${{ steps.result.outputs.error }}
         run: |
-          echo "Sync failed: ${{ steps.result.outputs.error }}"
+          echo "Sync failed: $SYNC_ERROR"
           exit 1
