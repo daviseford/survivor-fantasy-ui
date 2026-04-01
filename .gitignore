@@ -136,9 +136,6 @@ package-lock.json
 # DEF sessions
 .def/
 
-# MCP config
-.mcp.json
-
 # Compound Engineering
 /docs/plans
 /docs/brainstorms

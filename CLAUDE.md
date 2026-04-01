@@ -27,7 +27,7 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 
 ## Architecture
 
-- **React 19 + TypeScript + Vite** SPA with Mantine v8 UI components
+- **React 19 + TypeScript + Vite** SPA with Mantine v9 UI components
 - **Routing:** react-router-dom v6, routes defined in `src/AppRoutes.tsx`
 - **State/Data:** All hooks use raw Firebase `onSnapshot` for realtime Firestore/RTDB subscriptions (no react-query)
 - **Firebase backend:** Firestore (seasons, competitions), Realtime Database (live drafts), Firebase Auth, hosted on Firebase Hosting
