@@ -15,6 +15,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { generateFullSeasonFile, registerSeason } from "./lib/codegen.js";
 import { pushSeasonToFirestore } from "./lib/firebase-push.js";
+import { fetchSeasonLogoUrl } from "./lib/wiki-api.js";
 import { scrapeResults } from "./scrape-results.js";
 import { scrape } from "./scrape.js";
 
@@ -79,12 +80,20 @@ async function main(): Promise<void> {
   fs.writeFileSync(outputPath, fileContent);
   console.log(`  Created: ${outputPath}`);
 
-  // Step 4: Register in seasons.ts
+  // Step 4: Register in seasons.ts (with logo from wiki)
   console.log(`\n${"=".repeat(60)}`);
   console.log(`Step 4/5: Registering season in seasons.ts`);
   console.log(`${"=".repeat(60)}`);
 
-  registerSeason(seasonNum, seasonsFilePath);
+  console.log(`  Fetching season logo from wiki...`);
+  const logoUrl = await fetchSeasonLogoUrl(seasonNum);
+  if (logoUrl) {
+    console.log(`  Found logo: ${logoUrl.substring(0, 80)}...`);
+  } else {
+    console.log(`  No logo found — img will be empty`);
+  }
+
+  registerSeason(seasonNum, seasonsFilePath, logoUrl ?? "");
 
   // Step 5: Push to Firestore (optional)
   if (push) {

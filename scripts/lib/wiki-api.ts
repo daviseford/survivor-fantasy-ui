@@ -225,6 +225,45 @@ export async function fetchEpisodeTitles(
   return titles;
 }
 
+/**
+ * Fetch the season logo URL from the wiki.
+ * Checks the season page infobox (image/logo field), then falls back to common filenames.
+ */
+export async function fetchSeasonLogoUrl(
+  seasonNum: number,
+): Promise<string | null> {
+  // Try infobox image/logo field — may contain [[File:...]] or tabber markup
+  const pageName = getSeasonPageName(seasonNum);
+  const wikitext = await fetchWikitext(pageName);
+  if (wikitext) {
+    // Match `| image = ...` or `| logo = ...` — value may span to next `|` field
+    const fieldMatch = wikitext.match(
+      /\|\s*(?:image|logo)\s*=\s*([\s\S]*?)(?=\n\s*\||\n\}\})/i,
+    );
+    if (fieldMatch) {
+      const fieldValue = fieldMatch[1];
+      // Extract first [[File:...]] reference
+      const fileMatch = fieldValue.match(/\[\[File:([^\]|]+)/i);
+      if (fileMatch) {
+        const url = await fetchImageUrl(fileMatch[1].trim());
+        if (url) return url;
+      }
+    }
+  }
+
+  // Fallback: try common filename patterns
+  const candidates = [
+    `US S${seasonNum} logo.png`,
+    `Survivor ${seasonNum} Logo.png`,
+  ];
+  for (const candidate of candidates) {
+    const url = await fetchImageUrl(candidate);
+    if (url) return url;
+  }
+
+  return null;
+}
+
 /** Small delay to avoid rate limiting */
 export function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));

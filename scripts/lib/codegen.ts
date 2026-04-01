@@ -632,6 +632,7 @@ export function generateFullSeasonFile(
 export function registerSeason(
   seasonNum: number,
   seasonsFilePath: string,
+  seasonImg = "",
 ): void {
   const content = fs.readFileSync(seasonsFilePath, "utf-8");
   const seasonKey = `season_${seasonNum}`;
@@ -686,7 +687,7 @@ export function registerSeason(
     `    id: "${seasonKey}" as const,\n` +
     `    order: ${seasonNum},\n` +
     `    name: "Survivor ${seasonNum}",\n` +
-    `    img: "",\n` +
+    `    img: "${seasonImg}",\n` +
     `    players: SEASON_${seasonNum}_PLAYERS,\n` +
     `    episodes: SEASON_${seasonNum}_EPISODES,\n` +
     `  },\n`;
