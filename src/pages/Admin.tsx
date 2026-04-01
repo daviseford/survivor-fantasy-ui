@@ -13,6 +13,7 @@ import {
   Stack,
   Table,
   Text,
+  TextInput,
   Title,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
@@ -20,14 +21,16 @@ import { notifications } from "@mantine/notifications";
 import {
   IconCheck,
   IconList,
+  IconSearch,
   IconSettings,
   IconTrash,
   IconUsers,
   IconX,
 } from "@tabler/icons-react";
+import { useMemo, useState } from "react";
 import { ref, remove } from "firebase/database";
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SEASON_9_CHALLENGES, SEASON_9_ELIMINATIONS } from "../data/season_9";
 import { SEASONS } from "../data/seasons";
 import { db, rt_db } from "../firebase";
@@ -56,10 +59,30 @@ const upload = async (label: string, fn: () => Promise<void>) => {
 };
 
 export const Admin = () => {
+  const navigate = useNavigate();
   const { slimUser } = useUser();
 
   const { data: seasons, isLoading } = useSeasons();
   const { data: competitions } = useCompetitions();
+  const [seasonSearch, setSeasonSearch] = useState("");
+
+  const sortedSeasons = useMemo(
+    () => seasons?.slice().sort((a, b) => b.order - a.order) ?? [],
+    [seasons],
+  );
+
+  const latestSeason = sortedSeasons[0];
+
+  const filteredSeasons = useMemo(() => {
+    if (!seasonSearch.trim()) return sortedSeasons;
+    const q = seasonSearch.toLowerCase();
+    return sortedSeasons.filter(
+      (s) =>
+        s.name.toLowerCase().includes(q) ||
+        String(s.order).includes(q) ||
+        s.id.toLowerCase().includes(q),
+    );
+  }, [sortedSeasons, seasonSearch]);
 
   const handleDeleteCompetition = (competition: Competition) => {
     modals.openConfirmModal({
@@ -118,57 +141,103 @@ export const Admin = () => {
             <Loader size="lg" />
           </Center>
         ) : (
-          <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
-            {seasons
-              ?.slice()
-              .sort((a, b) => b.order - a.order)
-              .map((season) => (
-                <Card
-                  component={Link}
-                  to={`/admin/${season.id}`}
-                  key={season.id}
-                  shadow="sm"
-                  padding="lg"
-                  radius="md"
-                  withBorder
-                >
-                  {season.img && (
-                    <Card.Section pos="relative">
-                      <Image src={season.img} height={100} alt="" fit="cover" />
-                      <Badge
-                        color="dark"
-                        variant="filled"
-                        size="sm"
-                        pos="absolute"
-                        top={12}
-                        right={12}
-                      >
-                        S{season.order}
-                      </Badge>
-                    </Card.Section>
-                  )}
-
-                  <Text fw={600} mt="md" mb="xs">
-                    {season.name}
-                  </Text>
-
-                  <Group gap="lg">
-                    <Group gap={4}>
-                      <IconList size={14} color="gray" />
-                      <Text size="xs" c="dimmed">
-                        {season.episodes?.length ?? 0} episodes
-                      </Text>
-                    </Group>
-                    <Group gap={4}>
-                      <IconUsers size={14} color="gray" />
-                      <Text size="xs" c="dimmed">
-                        {season.players?.length ?? 0} players
-                      </Text>
-                    </Group>
+          <Stack gap="md">
+            {latestSeason && (
+              <Card
+                component={Link}
+                to={`/admin/${latestSeason.id}`}
+                shadow="sm"
+                padding="lg"
+                radius="md"
+                withBorder
+                maw={450}
+              >
+                {latestSeason.img && (
+                  <Card.Section pos="relative">
+                    <Image
+                      src={latestSeason.img}
+                      height={100}
+                      alt=""
+                      fit="cover"
+                    />
+                    <Badge
+                      color="dark"
+                      variant="filled"
+                      size="sm"
+                      pos="absolute"
+                      top={12}
+                      right={12}
+                    >
+                      S{latestSeason.order}
+                    </Badge>
+                  </Card.Section>
+                )}
+                <Text fw={600} mt="md" mb="xs">
+                  {latestSeason.name}
+                </Text>
+                <Group gap="lg">
+                  <Group gap={4}>
+                    <IconList size={14} color="gray" />
+                    <Text size="xs" c="dimmed">
+                      {latestSeason.episodes?.length ?? 0} episodes
+                    </Text>
                   </Group>
-                </Card>
-              ))}
-          </SimpleGrid>
+                  <Group gap={4}>
+                    <IconUsers size={14} color="gray" />
+                    <Text size="xs" c="dimmed">
+                      {latestSeason.players?.length ?? 0} players
+                    </Text>
+                  </Group>
+                </Group>
+              </Card>
+            )}
+
+            <TextInput
+              placeholder="Search seasons..."
+              leftSection={<IconSearch size={16} />}
+              value={seasonSearch}
+              onChange={(e) => setSeasonSearch(e.currentTarget.value)}
+              maw={350}
+            />
+
+            <Table.ScrollContainer minWidth={400}>
+              <Table highlightOnHover verticalSpacing="xs">
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Season</Table.Th>
+                    <Table.Th>Episodes</Table.Th>
+                    <Table.Th>Players</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  {filteredSeasons.map((season) => (
+                    <Table.Tr
+                      key={season.id}
+                      onClick={() => navigate(`/admin/${season.id}`)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <Table.Td>
+                        <Group gap="xs">
+                          <Badge variant="light" size="sm">
+                            S{season.order}
+                          </Badge>
+                          <Text size="sm" fw={500}>
+                            {season.name}
+                          </Text>
+                        </Group>
+                      </Table.Td>
+                      <Table.Td>
+                        <Text size="sm">{season.episodes?.length ?? 0}</Text>
+                      </Table.Td>
+                      <Table.Td>
+                        <Text size="sm">{season.players?.length ?? 0}</Text>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Table.ScrollContainer>
+          </Stack>
         )}
       </div>
 
