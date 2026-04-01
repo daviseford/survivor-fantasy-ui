@@ -23,13 +23,13 @@ export const PropBetsQuestions = {
   propbet_first_vote: {
     id: "propbet_first_vote",
     point_value: 4,
-    description: "First boot",
+    description: "First eliminated",
     answer_type: "castaway",
   },
   propbet_immunities: {
     id: "propbet_immunities",
     point_value: 5,
-    description: "Most individual immunity wins",
+    description: "Most post-merge individual immunity wins",
     answer_type: "castaway",
   },
   propbet_idols: {
