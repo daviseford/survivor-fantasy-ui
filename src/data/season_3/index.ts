@@ -33,10 +33,7 @@ type SeasonNumber = 3;
 
 const buildPlayer = <T extends CastawayIdType>(
   p: { castaway_id: T; full_name: string; img: string } & Partial<
-    Omit<
-      Player<T, SeasonNumber>,
-      "season_id" | "season_num" | "castaway_id" | "full_name" | "img"
-    >
+    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "castaway_id" | "full_name" | "img">
   >,
 ): Player<T, SeasonNumber> => ({
   ...p,
@@ -45,45 +42,47 @@ const buildPlayer = <T extends CastawayIdType>(
 });
 
 export const SEASON_3_CASTAWAY_LOOKUP: CastawayLookup = {
-  US0033: { full_name: "Diane Ogden", castaway: "Diane" },
-  US0034: { full_name: "Jessie Camacho", castaway: "Jessie" },
-  US0035: { full_name: "Carl Bilancione", castaway: "Carl" },
-  US0036: { full_name: "Linda Spencer", castaway: "Linda" },
-  US0037: { full_name: "Silas Gaither", castaway: "Silas" },
-  US0038: { full_name: "Lindsey Richter", castaway: "Lindsey" },
-  US0039: { full_name: "Clarence Black", castaway: "Clarence" },
-  US0040: { full_name: "Kelly Goldsmith", castaway: "Kelly" },
-  US0041: { full_name: "Brandon Quinton", castaway: "Brandon" },
-  US0042: { full_name: "Frank Garrison", castaway: "Frank" },
-  US0043: { full_name: "Kim Powers", castaway: "Kim P." },
-  US0044: { full_name: "Teresa Cooper", castaway: "Teresa" },
-  US0045: { full_name: "Tom Buchanan", castaway: "Tom" },
-  US0046: { full_name: "Lex van den Berghe", castaway: "Lex" },
-  US0047: { full_name: "Kim Johnson", castaway: "Kim J." },
-  US0048: { full_name: "Ethan Zohn", castaway: "Ethan" },
+  "US0033": { full_name: "Diane Ogden", castaway: "Diane" },
+  "US0034": { full_name: "Jessie Camacho", castaway: "Jessie" },
+  "US0035": { full_name: "Carl Bilancione", castaway: "Carl" },
+  "US0036": { full_name: "Linda Spencer", castaway: "Linda" },
+  "US0037": { full_name: "Silas Gaither", castaway: "Silas" },
+  "US0038": { full_name: "Lindsey Richter", castaway: "Lindsey" },
+  "US0039": { full_name: "Clarence Black", castaway: "Clarence" },
+  "US0040": { full_name: "Kelly Goldsmith", castaway: "Kelly" },
+  "US0041": { full_name: "Brandon Quinton", castaway: "Brandon" },
+  "US0042": { full_name: "Frank Garrison", castaway: "Frank" },
+  "US0043": { full_name: "Kim Powers", castaway: "Kim" },
+  "US0044": { full_name: "Teresa Cooper", castaway: "T-Bird" },
+  "US0045": { full_name: "Tom Buchanan", castaway: "Tom" },
+  "US0046": { full_name: "Lex van den Berghe", castaway: "Lex" },
+  "US0047": { full_name: "Kim Johnson", castaway: "Kim J." },
+  "US0048": { full_name: "Ethan Zohn", castaway: "Ethan" },
 };
 
 export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0033",
     full_name: "Diane Ogden",
-    img: "",
+    img: "/images/season_3/Diane-Ogden.jpg",
     description: "Age: 42 | Hometown: Lincoln, Nebraska",
     age: 42,
     hometown: "Lincoln, Nebraska",
+    nickname: "Diane",
   }),
   buildPlayer({
     castaway_id: "US0034",
     full_name: "Jessie Camacho",
-    img: "",
+    img: "/images/season_3/Jessie-Camacho.jpg",
     description: "Age: 26 | Hometown: Orlando, Florida",
     age: 26,
     hometown: "Orlando, Florida",
+    nickname: "Jessie",
   }),
   buildPlayer({
     castaway_id: "US0035",
     full_name: "Carl Bilancione",
-    img: "",
+    img: "/images/season_3/Carl-Bilancione.jpg",
     description: "Age: 46 | Hometown: Winter Springs, Florida",
     age: 46,
     hometown: "Winter Springs, Florida",
@@ -91,7 +90,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0036",
     full_name: "Linda Spencer",
-    img: "",
+    img: "/images/season_3/Linda-Spencer.jpg",
     description: "Age: 44 | Hometown: Boston, Massachusetts",
     age: 44,
     hometown: "Boston, Massachusetts",
@@ -99,7 +98,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0037",
     full_name: "Silas Gaither",
-    img: "",
+    img: "/images/season_3/Silas-Gaither.jpg",
     description: "Age: 23 | Hometown: Los Angeles, California",
     age: 23,
     hometown: "Los Angeles, California",
@@ -107,7 +106,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0038",
     full_name: "Lindsey Richter",
-    img: "",
+    img: "/images/season_3/Lindsey-Richter.jpg",
     description: "Age: 26 | Hometown: Portland, Oregon",
     age: 26,
     hometown: "Portland, Oregon",
@@ -115,7 +114,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0039",
     full_name: "Clarence Black",
-    img: "",
+    img: "/images/season_3/Clarence-Black.jpg",
     description: "Age: 24 | Hometown: Detroit, Michigan",
     age: 24,
     hometown: "Detroit, Michigan",
@@ -123,7 +122,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0040",
     full_name: "Kelly Goldsmith",
-    img: "",
+    img: "/images/season_3/Kelly-Goldsmith.jpg",
     description: "Age: 22 | Hometown: San Diego, California",
     age: 22,
     hometown: "San Diego, California",
@@ -131,7 +130,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0041",
     full_name: "Brandon Quinton",
-    img: "",
+    img: "/images/season_3/Brandon-Quinton.jpg",
     description: "Age: 25 | Hometown: Dallas, Texas",
     age: 25,
     hometown: "Dallas, Texas",
@@ -139,48 +138,52 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0042",
     full_name: "Frank Garrison",
-    img: "",
+    img: "/images/season_3/Frank-Garrison.jpg",
     description: "Age: 43 | Hometown: Odessa, New York",
     age: 43,
     hometown: "Odessa, New York",
+    nickname: "Frank",
   }),
   buildPlayer({
     castaway_id: "US0043",
     full_name: "Kim Powers",
-    img: "",
+    img: "/images/season_3/Kim-Powers.jpg",
     description: "Age: 29 | Hometown: Conshohocken, Pennsylvania",
     age: 29,
     hometown: "Conshohocken, Pennsylvania",
-    nickname: "Kim P.",
+    nickname: "Kim",
   }),
   buildPlayer({
     castaway_id: "US0044",
     full_name: "Teresa Cooper",
-    img: "",
+    img: "/images/season_3/Teresa-Cooper.jpg",
     description: "Age: 42 | Hometown: Jackson, Georgia",
     age: 42,
     hometown: "Jackson, Georgia",
+    nickname: "T-Bird",
   }),
   buildPlayer({
     castaway_id: "US0045",
     full_name: "Tom Buchanan",
-    img: "",
+    img: "/images/season_3/Tom-Buchanan.jpg",
     description: "Age: 45 | Hometown: Rich Valley, Virginia",
     age: 45,
     hometown: "Rich Valley, Virginia",
+    nickname: "Tom",
   }),
   buildPlayer({
     castaway_id: "US0046",
     full_name: "Lex van den Berghe",
-    img: "",
+    img: "/images/season_3/Lex-van-den-Berghe.jpg",
     description: "Age: 38 | Hometown: Santa Cruz, California",
     age: 38,
     hometown: "Santa Cruz, California",
+    nickname: "Lex",
   }),
   buildPlayer({
     castaway_id: "US0047",
     full_name: "Kim Johnson",
-    img: "",
+    img: "/images/season_3/Kim-Johnson.jpg",
     description: "Age: 56 | Hometown: Oyster Bay, New York",
     age: 56,
     hometown: "Oyster Bay, New York",
@@ -189,7 +192,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0048",
     full_name: "Ethan Zohn",
-    img: "",
+    img: "/images/season_3/Ethan-Zohn.jpg",
     description: "Age: 27 | Hometown: Lexington, Massachusetts",
     age: 27,
     hometown: "Lexington, Massachusetts",
@@ -554,7 +557,13 @@ export const SEASON_3_CHALLENGES = {
     episode_num: 6,
     variant: "immunity",
     order: 11,
-    winning_castaways: ["US0039", "US0042", "US0044", "US0047", "US0048"],
+    winning_castaways: [
+      "US0039",
+      "US0042",
+      "US0044",
+      "US0047",
+      "US0048",
+    ],
   },
   challenge_12: {
     id: "challenge_12",
@@ -564,7 +573,9 @@ export const SEASON_3_CHALLENGES = {
     episode_num: 7,
     variant: "immunity",
     order: 12,
-    winning_castaways: ["US0044"],
+    winning_castaways: [
+      "US0044",
+    ],
   },
   challenge_13: {
     id: "challenge_13",
@@ -574,7 +585,9 @@ export const SEASON_3_CHALLENGES = {
     episode_num: 9,
     variant: "reward",
     order: 13,
-    winning_castaways: ["US0048"],
+    winning_castaways: [
+      "US0048",
+    ],
   },
   challenge_14: {
     id: "challenge_14",
@@ -584,7 +597,9 @@ export const SEASON_3_CHALLENGES = {
     episode_num: 9,
     variant: "immunity",
     order: 14,
-    winning_castaways: ["US0048"],
+    winning_castaways: [
+      "US0048",
+    ],
   },
   challenge_15: {
     id: "challenge_15",
@@ -594,7 +609,10 @@ export const SEASON_3_CHALLENGES = {
     episode_num: 10,
     variant: "reward",
     order: 15,
-    winning_castaways: ["US0041", "US0042"],
+    winning_castaways: [
+      "US0041",
+      "US0042",
+    ],
   },
   challenge_16: {
     id: "challenge_16",
@@ -604,7 +622,9 @@ export const SEASON_3_CHALLENGES = {
     episode_num: 10,
     variant: "immunity",
     order: 16,
-    winning_castaways: ["US0046"],
+    winning_castaways: [
+      "US0046",
+    ],
   },
   challenge_17: {
     id: "challenge_17",
@@ -614,7 +634,9 @@ export const SEASON_3_CHALLENGES = {
     episode_num: 11,
     variant: "immunity",
     order: 17,
-    winning_castaways: ["US0046"],
+    winning_castaways: [
+      "US0046",
+    ],
   },
   challenge_18: {
     id: "challenge_18",
@@ -624,7 +646,9 @@ export const SEASON_3_CHALLENGES = {
     episode_num: 12,
     variant: "reward",
     order: 18,
-    winning_castaways: ["US0046"],
+    winning_castaways: [
+      "US0046",
+    ],
   },
   challenge_19: {
     id: "challenge_19",
@@ -634,7 +658,9 @@ export const SEASON_3_CHALLENGES = {
     episode_num: 12,
     variant: "immunity",
     order: 19,
-    winning_castaways: ["US0045"],
+    winning_castaways: [
+      "US0045",
+    ],
   },
   challenge_20: {
     id: "challenge_20",
@@ -644,7 +670,9 @@ export const SEASON_3_CHALLENGES = {
     episode_num: 13,
     variant: "reward",
     order: 20,
-    winning_castaways: ["US0046"],
+    winning_castaways: [
+      "US0046",
+    ],
   },
   challenge_21: {
     id: "challenge_21",
@@ -654,7 +682,9 @@ export const SEASON_3_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 21,
-    winning_castaways: ["US0046"],
+    winning_castaways: [
+      "US0046",
+    ],
   },
   challenge_22: {
     id: "challenge_22",
@@ -664,7 +694,9 @@ export const SEASON_3_CHALLENGES = {
     episode_num: 14,
     variant: "immunity",
     order: 22,
-    winning_castaways: ["US0047"],
+    winning_castaways: [
+      "US0047",
+    ],
   },
   challenge_23: {
     id: "challenge_23",
@@ -674,7 +706,9 @@ export const SEASON_3_CHALLENGES = {
     episode_num: 14,
     variant: "immunity",
     order: 23,
-    winning_castaways: ["US0047"],
+    winning_castaways: [
+      "US0047",
+    ],
   },
 } satisfies Record<Challenge["id"], Challenge<CastawayIdType, SeasonNumber>>;
 
@@ -829,10 +863,7 @@ export const SEASON_3_ELIMINATIONS = {
     castaway_id: "US0047",
     variant: "final_tribal_council",
   },
-} satisfies Record<
-  Elimination["id"],
-  Elimination<CastawayIdType, SeasonNumber>
->;
+} satisfies Record<Elimination["id"], Elimination<CastawayIdType, SeasonNumber>>;
 
 export const SEASON_3_EVENTS = {
   event_1: {

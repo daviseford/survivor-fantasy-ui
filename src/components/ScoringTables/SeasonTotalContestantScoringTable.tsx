@@ -18,7 +18,9 @@ export const SeasonTotalContestantScoringTable = () => {
   const rows = Object.entries(survivorPointsTotalSeason)
     .sort((a, b) => b[1] - a[1]) // sort by highest
     .map(([castawayId, seasonScore]) => {
-      const playerData = season?.players.find((x) => x.castaway_id === castawayId);
+      const playerData = season?.players.find(
+        (x) => x.castaway_id === castawayId,
+      );
       const displayName =
         season?.castawayLookup[castawayId as CastawayId]?.full_name ??
         castawayId;

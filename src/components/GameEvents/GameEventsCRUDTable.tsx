@@ -154,8 +154,7 @@ export const GameEventsCRUDTable = () => {
                 onChange={(val) =>
                   setEditValues({
                     ...editValues,
-                    castaway_id:
-                      (val as CastawayId) ?? editValues.castaway_id,
+                    castaway_id: (val as CastawayId) ?? editValues.castaway_id,
                   })
                 }
               />

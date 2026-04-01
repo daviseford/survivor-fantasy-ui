@@ -30,14 +30,10 @@ export const PostDraftPropBetTable = () => {
           </Text>
         </Table.Td>
         <Table.Td>
-          <Text size="sm">
-            {resolveAnswer(p.values.propbet_ftc, lookup)}
-          </Text>
+          <Text size="sm">{resolveAnswer(p.values.propbet_ftc, lookup)}</Text>
         </Table.Td>
         <Table.Td>
-          <Text size="sm">
-            {resolveAnswer(p.values.propbet_idols, lookup)}
-          </Text>
+          <Text size="sm">{resolveAnswer(p.values.propbet_idols, lookup)}</Text>
         </Table.Td>
         <Table.Td>
           <Text size="sm">

@@ -17,34 +17,34 @@ import * as path from "path";
 // Season data imports — these are the re-generated files with castaway_id
 import {
   SEASON_1_CASTAWAY_LOOKUP,
-  SEASON_1_PLAYERS,
   SEASON_1_EPISODES,
+  SEASON_1_PLAYERS,
 } from "../src/data/season_1/index.js";
 import {
-  SEASON_9_CASTAWAY_LOOKUP,
-  SEASON_9_PLAYERS,
-  SEASON_9_EPISODES,
-} from "../src/data/season_9/index.js";
-import {
   SEASON_46_CASTAWAY_LOOKUP,
-  SEASON_46_PLAYERS,
   SEASON_46_EPISODES,
+  SEASON_46_PLAYERS,
 } from "../src/data/season_46/index.js";
 import {
   SEASON_48_CASTAWAY_LOOKUP,
-  SEASON_48_PLAYERS,
   SEASON_48_EPISODES,
+  SEASON_48_PLAYERS,
 } from "../src/data/season_48/index.js";
 import {
   SEASON_49_CASTAWAY_LOOKUP,
-  SEASON_49_PLAYERS,
   SEASON_49_EPISODES,
+  SEASON_49_PLAYERS,
 } from "../src/data/season_49/index.js";
 import {
   SEASON_50_CASTAWAY_LOOKUP,
-  SEASON_50_PLAYERS,
   SEASON_50_EPISODES,
+  SEASON_50_PLAYERS,
 } from "../src/data/season_50/index.js";
+import {
+  SEASON_9_CASTAWAY_LOOKUP,
+  SEASON_9_EPISODES,
+  SEASON_9_PLAYERS,
+} from "../src/data/season_9/index.js";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -253,7 +253,8 @@ function transformDraft(
     }
   }
 
-  const effectiveSeason = season || seasons.get(draft.draft_picks?.[0]?.season_id);
+  const effectiveSeason =
+    season || seasons.get(draft.draft_picks?.[0]?.season_id);
   if (!effectiveSeason) return draft;
 
   const newDraft = { ...draft };
@@ -302,7 +303,9 @@ async function main(): Promise<void> {
       seasonNum: 1,
       seasonKey: "season_1",
       lookup: SEASON_1_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      reverseMap: buildReverseMap(SEASON_1_CASTAWAY_LOOKUP as unknown as CastawayLookup),
+      reverseMap: buildReverseMap(
+        SEASON_1_CASTAWAY_LOOKUP as unknown as CastawayLookup,
+      ),
       players: SEASON_1_PLAYERS,
       episodes: SEASON_1_EPISODES,
     },
@@ -310,7 +313,9 @@ async function main(): Promise<void> {
       seasonNum: 9,
       seasonKey: "season_9",
       lookup: SEASON_9_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      reverseMap: buildReverseMap(SEASON_9_CASTAWAY_LOOKUP as unknown as CastawayLookup),
+      reverseMap: buildReverseMap(
+        SEASON_9_CASTAWAY_LOOKUP as unknown as CastawayLookup,
+      ),
       players: SEASON_9_PLAYERS,
       episodes: SEASON_9_EPISODES,
     },
@@ -318,7 +323,9 @@ async function main(): Promise<void> {
       seasonNum: 46,
       seasonKey: "season_46",
       lookup: SEASON_46_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      reverseMap: buildReverseMap(SEASON_46_CASTAWAY_LOOKUP as unknown as CastawayLookup),
+      reverseMap: buildReverseMap(
+        SEASON_46_CASTAWAY_LOOKUP as unknown as CastawayLookup,
+      ),
       players: SEASON_46_PLAYERS,
       episodes: SEASON_46_EPISODES,
     },
@@ -326,7 +333,9 @@ async function main(): Promise<void> {
       seasonNum: 48,
       seasonKey: "season_48",
       lookup: SEASON_48_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      reverseMap: buildReverseMap(SEASON_48_CASTAWAY_LOOKUP as unknown as CastawayLookup),
+      reverseMap: buildReverseMap(
+        SEASON_48_CASTAWAY_LOOKUP as unknown as CastawayLookup,
+      ),
       players: SEASON_48_PLAYERS,
       episodes: SEASON_48_EPISODES,
     },
@@ -334,7 +343,9 @@ async function main(): Promise<void> {
       seasonNum: 49,
       seasonKey: "season_49",
       lookup: SEASON_49_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      reverseMap: buildReverseMap(SEASON_49_CASTAWAY_LOOKUP as unknown as CastawayLookup),
+      reverseMap: buildReverseMap(
+        SEASON_49_CASTAWAY_LOOKUP as unknown as CastawayLookup,
+      ),
       players: SEASON_49_PLAYERS,
       episodes: SEASON_49_EPISODES,
     },
@@ -342,7 +353,9 @@ async function main(): Promise<void> {
       seasonNum: 50,
       seasonKey: "season_50",
       lookup: SEASON_50_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      reverseMap: buildReverseMap(SEASON_50_CASTAWAY_LOOKUP as unknown as CastawayLookup),
+      reverseMap: buildReverseMap(
+        SEASON_50_CASTAWAY_LOOKUP as unknown as CastawayLookup,
+      ),
       players: SEASON_50_PLAYERS,
       episodes: SEASON_50_EPISODES,
     },
@@ -522,7 +535,9 @@ async function main(): Promise<void> {
   console.log();
 
   if (!doUpload) {
-    console.log("Dry run complete. Review the output directory before uploading.");
+    console.log(
+      "Dry run complete. Review the output directory before uploading.",
+    );
     console.log("Run with --upload to push to Firebase.");
     return;
   }

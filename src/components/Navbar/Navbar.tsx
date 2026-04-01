@@ -117,7 +117,11 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
               </Text>
             </div>
 
-            <button type="button" className={classes.link} onClick={handleLogout}>
+            <button
+              type="button"
+              className={classes.link}
+              onClick={handleLogout}
+            >
               <IconLogout className={classes.linkIcon} stroke={1.5} />
               <span>Logout</span>
             </button>

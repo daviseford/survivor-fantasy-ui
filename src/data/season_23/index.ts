@@ -35,10 +35,7 @@ type SeasonNumber = 23;
 
 const buildPlayer = <T extends CastawayIdType>(
   p: { castaway_id: T; full_name: string; img: string } & Partial<
-    Omit<
-      Player<T, SeasonNumber>,
-      "season_id" | "season_num" | "castaway_id" | "full_name" | "img"
-    >
+    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "castaway_id" | "full_name" | "img">
   >,
 ): Player<T, SeasonNumber> => ({
   ...p,
@@ -47,31 +44,31 @@ const buildPlayer = <T extends CastawayIdType>(
 });
 
 export const SEASON_23_CASTAWAY_LOOKUP: CastawayLookup = {
-  US0338: { full_name: "Semhar Tadesse", castaway: "Semhar" },
-  US0339: { full_name: "Christine Shields Markoski", castaway: "Christine" },
-  US0340: { full_name: "Mark Caruso", castaway: "Papa Bear" },
-  US0341: { full_name: "Stacey Powell", castaway: "Stacey" },
-  US0342: { full_name: "Elyse Umemoto", castaway: "Elyse" },
-  US0343: { full_name: "Mikayla Wingle", castaway: "Mikayla" },
-  US0344: { full_name: "Keith Tollefson", castaway: "Keith" },
-  US0345: { full_name: "Jim Rice", castaway: "Jim" },
-  US0346: { full_name: "Dawn Meehan", castaway: "Dawn" },
-  US0347: { full_name: "Whitney Duncan", castaway: "Whitney" },
-  US0348: { full_name: "John Cochran", castaway: "Cochran" },
-  US0349: { full_name: "Edna Ma", castaway: "Edna" },
-  US0350: { full_name: "Brandon Hantz", castaway: "Brandon" },
-  US0351: { full_name: "Rick Nelson", castaway: "Rick" },
-  US0201: { full_name: "Oscar Lusth", castaway: "Ozzy" },
-  US0352: { full_name: "Albert Destrade", castaway: "Albert" },
-  US0277: { full_name: "Benjamin Wade", castaway: "Coach" },
-  US0353: { full_name: "Sophie Clarke", castaway: "Sophie" },
+  "US0338": { full_name: "Semhar Tadesse", castaway: "Semhar" },
+  "US0339": { full_name: "Christine Shields Markoski", castaway: "Christine" },
+  "US0340": { full_name: "Mark Caruso", castaway: "Papa Bear" },
+  "US0341": { full_name: "Stacey Powell", castaway: "Stacey" },
+  "US0342": { full_name: "Elyse Umemoto", castaway: "Elyse" },
+  "US0343": { full_name: "Mikayla Wingle", castaway: "Mikayla" },
+  "US0344": { full_name: "Keith Tollefson", castaway: "Keith" },
+  "US0345": { full_name: "Jim Rice", castaway: "Jim" },
+  "US0346": { full_name: "Dawn Meehan", castaway: "Dawn" },
+  "US0347": { full_name: "Whitney Duncan", castaway: "Whitney" },
+  "US0348": { full_name: "John Cochran", castaway: "Cochran" },
+  "US0349": { full_name: "Edna Ma", castaway: "Edna" },
+  "US0350": { full_name: "Brandon Hantz", castaway: "Brandon" },
+  "US0351": { full_name: "Rick Nelson", castaway: "Rick" },
+  "US0201": { full_name: "Oscar Lusth", castaway: "Ozzy" },
+  "US0352": { full_name: "Albert Destrade", castaway: "Albert" },
+  "US0277": { full_name: "Benjamin Wade", castaway: "Coach" },
+  "US0353": { full_name: "Sophie Clarke", castaway: "Sophie" },
 };
 
 export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0338",
     full_name: "Semhar Tadesse",
-    img: "",
+    img: "/images/season_23/Semhar-Tadesse.jpg",
     description: "Age: 24 | Hometown: Los Angeles, California",
     age: 24,
     hometown: "Los Angeles, California",
@@ -79,7 +76,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0339",
     full_name: "Christine Shields Markoski",
-    img: "",
+    img: "/images/season_23/Christine-Shields-Markoski.jpg",
     description: "Age: 39 | Hometown: Merrick, New York",
     age: 39,
     hometown: "Merrick, New York",
@@ -87,7 +84,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0340",
     full_name: "Mark Caruso",
-    img: "",
+    img: "/images/season_23/Mark-Caruso.jpg",
     description: "Age: 48 | Hometown: Forest Hills, New York",
     age: 48,
     hometown: "Forest Hills, New York",
@@ -96,7 +93,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0341",
     full_name: "Stacey Powell",
-    img: "",
+    img: "/images/season_23/Stacey-Powell.jpg",
     description: "Age: 44 | Hometown: Grand Prairie, Texas",
     age: 44,
     hometown: "Grand Prairie, Texas",
@@ -104,7 +101,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0342",
     full_name: "Elyse Umemoto",
-    img: "",
+    img: "/images/season_23/Elyse-Umemoto.jpg",
     description: "Age: 27 | Hometown: Las Vegas, Nevada",
     age: 27,
     hometown: "Las Vegas, Nevada",
@@ -112,7 +109,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0343",
     full_name: "Mikayla Wingle",
-    img: "",
+    img: "/images/season_23/Mikayla-Wingle.jpg",
     description: "Age: 22 | Hometown: Tampa, Florida",
     age: 22,
     hometown: "Tampa, Florida",
@@ -120,7 +117,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0344",
     full_name: "Keith Tollefson",
-    img: "",
+    img: "/images/season_23/Keith-Tollefson.jpg",
     description: "Age: 26 | Hometown: Edina, Minnesota",
     age: 26,
     hometown: "Edina, Minnesota",
@@ -128,15 +125,16 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0345",
     full_name: "Jim Rice",
-    img: "",
+    img: "/images/season_23/Jim-Rice.jpg",
     description: "Age: 35 | Hometown: Denver, Colorado",
     age: 35,
     hometown: "Denver, Colorado",
+    nickname: "Jim",
   }),
   buildPlayer({
     castaway_id: "US0346",
     full_name: "Dawn Meehan",
-    img: "",
+    img: "/images/season_23/Dawn-Meehan.jpg",
     description: "Age: 41 | Hometown: South Jordan, Utah",
     age: 41,
     hometown: "South Jordan, Utah",
@@ -144,7 +142,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0347",
     full_name: "Whitney Duncan",
-    img: "",
+    img: "/images/season_23/Whitney-Duncan.jpg",
     description: "Age: 27 | Hometown: Nashville, Tennessee",
     age: 27,
     hometown: "Nashville, Tennessee",
@@ -152,7 +150,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0348",
     full_name: "John Cochran",
-    img: "",
+    img: "/images/season_23/John-Cochran.jpg",
     description: "Age: 24 | Hometown: Washington, D.C.",
     age: 24,
     hometown: "Washington, D.C.",
@@ -161,7 +159,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0349",
     full_name: "Edna Ma",
-    img: "",
+    img: "/images/season_23/Edna-Ma.jpg",
     description: "Age: 35 | Hometown: Los Angeles, California",
     age: 35,
     hometown: "Los Angeles, California",
@@ -169,7 +167,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0350",
     full_name: "Brandon Hantz",
-    img: "",
+    img: "/images/season_23/Brandon-Hantz.jpg",
     description: "Age: 19 | Hometown: Katy, Texas",
     age: 19,
     hometown: "Katy, Texas",
@@ -177,15 +175,16 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0351",
     full_name: "Rick Nelson",
-    img: "",
+    img: "/images/season_23/Rick-Nelson.jpg",
     description: "Age: 51 | Hometown: Aurora, Utah",
     age: 51,
     hometown: "Aurora, Utah",
+    nickname: "Rick",
   }),
   buildPlayer({
     castaway_id: "US0201",
     full_name: "Oscar Lusth",
-    img: "",
+    img: "/images/season_23/Oscar-Lusth.jpg",
     description: "Age: 29 | Hometown: Venice, California",
     age: 29,
     hometown: "Venice, California",
@@ -194,7 +193,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0352",
     full_name: "Albert Destrade",
-    img: "",
+    img: "/images/season_23/Albert-Destrade.jpg",
     description: "Age: 26 | Hometown: Plantation, Florida",
     age: 26,
     hometown: "Plantation, Florida",
@@ -202,7 +201,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0277",
     full_name: "Benjamin Wade",
-    img: "",
+    img: "/images/season_23/Benjamin-Wade.jpg",
     description: "Age: 39 | Hometown: Susanville, California",
     age: 39,
     hometown: "Susanville, California",
@@ -211,7 +210,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0353",
     full_name: "Sophie Clarke",
-    img: "",
+    img: "/images/season_23/Sophie-Clarke.jpg",
     description: "Age: 22 | Hometown: Willsboro, New York",
     age: 22,
     hometown: "Willsboro, New York",
@@ -468,7 +467,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 3,
     variant: "reward",
     order: 4,
-    winning_castaways: ["US0338"],
+    winning_castaways: [
+      "US0338",
+    ],
   },
   challenge_5: {
     id: "challenge_5",
@@ -516,7 +517,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 4,
     variant: "reward",
     order: 7,
-    winning_castaways: ["US0339"],
+    winning_castaways: [
+      "US0339",
+    ],
   },
   challenge_8: {
     id: "challenge_8",
@@ -562,7 +565,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 5,
     variant: "reward",
     order: 10,
-    winning_castaways: ["US0339"],
+    winning_castaways: [
+      "US0339",
+    ],
   },
   challenge_11: {
     id: "challenge_11",
@@ -608,7 +613,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 6,
     variant: "reward",
     order: 13,
-    winning_castaways: ["US0339"],
+    winning_castaways: [
+      "US0339",
+    ],
   },
   challenge_14: {
     id: "challenge_14",
@@ -652,7 +659,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 7,
     variant: "reward",
     order: 16,
-    winning_castaways: ["US0339"],
+    winning_castaways: [
+      "US0339",
+    ],
   },
   challenge_17: {
     id: "challenge_17",
@@ -696,7 +705,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 8,
     variant: "reward",
     order: 19,
-    winning_castaways: ["US0201"],
+    winning_castaways: [
+      "US0201",
+    ],
   },
   challenge_20: {
     id: "challenge_20",
@@ -706,7 +717,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 8,
     variant: "immunity",
     order: 20,
-    winning_castaways: ["US0346"],
+    winning_castaways: [
+      "US0346",
+    ],
   },
   challenge_21: {
     id: "challenge_21",
@@ -716,7 +729,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 9,
     variant: "immunity",
     order: 21,
-    winning_castaways: ["US0345"],
+    winning_castaways: [
+      "US0345",
+    ],
   },
   challenge_22: {
     id: "challenge_22",
@@ -726,7 +741,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 9,
     variant: "immunity",
     order: 22,
-    winning_castaways: ["US0347"],
+    winning_castaways: [
+      "US0347",
+    ],
   },
   challenge_23: {
     id: "challenge_23",
@@ -736,7 +753,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 10,
     variant: "reward",
     order: 23,
-    winning_castaways: ["US0201"],
+    winning_castaways: [
+      "US0201",
+    ],
   },
   challenge_24: {
     id: "challenge_24",
@@ -746,7 +765,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 10,
     variant: "immunity",
     order: 24,
-    winning_castaways: ["US0353"],
+    winning_castaways: [
+      "US0353",
+    ],
   },
   challenge_25: {
     id: "challenge_25",
@@ -756,7 +777,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 10,
     variant: "immunity",
     order: 25,
-    winning_castaways: ["US0353"],
+    winning_castaways: [
+      "US0353",
+    ],
   },
   challenge_26: {
     id: "challenge_26",
@@ -766,7 +789,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 12,
     variant: "reward",
     order: 26,
-    winning_castaways: ["US0201"],
+    winning_castaways: [
+      "US0201",
+    ],
   },
   challenge_27: {
     id: "challenge_27",
@@ -776,7 +801,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 12,
     variant: "immunity",
     order: 27,
-    winning_castaways: ["US0352"],
+    winning_castaways: [
+      "US0352",
+    ],
   },
   challenge_28: {
     id: "challenge_28",
@@ -786,7 +813,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 12,
     variant: "reward",
     order: 28,
-    winning_castaways: ["US0352"],
+    winning_castaways: [
+      "US0352",
+    ],
   },
   challenge_29: {
     id: "challenge_29",
@@ -796,7 +825,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 13,
     variant: "reward",
     order: 29,
-    winning_castaways: ["US0201"],
+    winning_castaways: [
+      "US0201",
+    ],
   },
   challenge_30: {
     id: "challenge_30",
@@ -806,7 +837,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 30,
-    winning_castaways: ["US0277"],
+    winning_castaways: [
+      "US0277",
+    ],
   },
   challenge_31: {
     id: "challenge_31",
@@ -816,7 +849,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 14,
     variant: "reward",
     order: 31,
-    winning_castaways: ["US0201"],
+    winning_castaways: [
+      "US0201",
+    ],
   },
   challenge_32: {
     id: "challenge_32",
@@ -826,7 +861,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 14,
     variant: "immunity",
     order: 32,
-    winning_castaways: ["US0350"],
+    winning_castaways: [
+      "US0350",
+    ],
   },
   challenge_33: {
     id: "challenge_33",
@@ -836,7 +873,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 14,
     variant: "reward",
     order: 33,
-    winning_castaways: ["US0350"],
+    winning_castaways: [
+      "US0350",
+    ],
   },
   challenge_34: {
     id: "challenge_34",
@@ -846,7 +885,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 15,
     variant: "reward",
     order: 34,
-    winning_castaways: ["US0201"],
+    winning_castaways: [
+      "US0201",
+    ],
   },
   challenge_35: {
     id: "challenge_35",
@@ -856,7 +897,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 15,
     variant: "immunity",
     order: 35,
-    winning_castaways: ["US0201"],
+    winning_castaways: [
+      "US0201",
+    ],
   },
   challenge_36: {
     id: "challenge_36",
@@ -866,7 +909,9 @@ export const SEASON_23_CHALLENGES = {
     episode_num: 15,
     variant: "immunity",
     order: 36,
-    winning_castaways: ["US0353"],
+    winning_castaways: [
+      "US0353",
+    ],
   },
 } satisfies Record<Challenge["id"], Challenge<CastawayIdType, SeasonNumber>>;
 
@@ -1041,10 +1086,7 @@ export const SEASON_23_ELIMINATIONS = {
     castaway_id: "US0277",
     variant: "final_tribal_council",
   },
-} satisfies Record<
-  Elimination["id"],
-  Elimination<CastawayIdType, SeasonNumber>
->;
+} satisfies Record<Elimination["id"], Elimination<CastawayIdType, SeasonNumber>>;
 
 export const SEASON_23_EVENTS = {
   event_1: {

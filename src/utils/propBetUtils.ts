@@ -244,7 +244,12 @@ export const getPropBetScoresForUser = (
     resolveLeaderboardBetStatus(
       rankedImmunityWinners,
       myPropBets.propbet_immunities,
-      isCurrentlyEliminated(myPropBets.propbet_immunities, _elims, _events, challenges),
+      isCurrentlyEliminated(
+        myPropBets.propbet_immunities,
+        _elims,
+        _events,
+        challenges,
+      ),
       hasFinaleOccurred,
     ),
   );
@@ -260,7 +265,12 @@ export const getPropBetScoresForUser = (
     resolveLeaderboardBetStatus(
       rankedIdolFinders,
       myPropBets.propbet_idols,
-      isCurrentlyEliminated(myPropBets.propbet_idols, _elims, _events, challenges),
+      isCurrentlyEliminated(
+        myPropBets.propbet_idols,
+        _elims,
+        _events,
+        challenges,
+      ),
       hasFinaleOccurred,
     ),
   );

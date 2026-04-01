@@ -41,7 +41,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Herbert River, Queensland, Australia",
     year: 2001,
     contestantCount: 16,
-    img: "",
+    img: "/images/season_2/season-2-logo.png",
     complete: true,
   },
   season_3: {
@@ -52,7 +52,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Shaba National Reserve, Kenya",
     year: 2001,
     contestantCount: 16,
-    img: "",
+    img: "/images/season_3/season-3-logo.png",
     complete: true,
   },
   season_4: {
@@ -63,7 +63,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Nuku Hiva, Marquesas Islands, French Polynesia",
     year: 2002,
     contestantCount: 16,
-    img: "",
+    img: "/images/season_4/season-4-logo.png",
     complete: true,
   },
   season_5: {
@@ -74,7 +74,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Ko Tarutao, Satun, Thailand",
     year: 2002,
     contestantCount: 16,
-    img: "",
+    img: "/images/season_5/season-5-logo.png",
     complete: true,
   },
   season_6: {
@@ -85,7 +85,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Rio Negro, Amazonas, Brazil",
     year: 2003,
     contestantCount: 16,
-    img: "",
+    img: "/images/season_6/season-6-logo.png",
     complete: true,
   },
   season_7: {
@@ -96,7 +96,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Pearl Islands, Panama",
     year: 2003,
     contestantCount: 16,
-    img: "",
+    img: "/images/season_7/season-7-logo.png",
     complete: true,
   },
   season_8: {
@@ -107,7 +107,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Pearl Islands, Panama",
     year: 2004,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_8/season-8-logo.png",
     complete: true,
   },
   season_9: {
@@ -129,7 +129,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Koror, Palau",
     year: 2005,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_10/season-10-logo.png",
     complete: true,
   },
   season_11: {
@@ -140,7 +140,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Yaxhá, Petén, Guatemala",
     year: 2005,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_11/season-11-logo.png",
     complete: true,
   },
   season_12: {
@@ -151,7 +151,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Pearl Islands, Panama",
     year: 2006,
     contestantCount: 16,
-    img: "",
+    img: "/images/season_12/season-12-logo.png",
     complete: true,
   },
   season_13: {
@@ -162,7 +162,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Aitutaki, Cook Islands",
     year: 2006,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_13/season-13-logo.png",
     complete: true,
   },
   season_14: {
@@ -173,7 +173,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Macuata, Fiji",
     year: 2007,
     contestantCount: 19,
-    img: "",
+    img: "/images/season_14/season-14-logo.png",
     complete: true,
   },
   season_15: {
@@ -184,7 +184,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Zhelin Reservoir, Jiangxi, China",
     year: 2007,
     contestantCount: 16,
-    img: "",
+    img: "/images/season_15/season-15-logo.png",
     complete: true,
   },
   season_16: {
@@ -195,7 +195,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Koror, Palau",
     year: 2008,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_16/season-16-logo.png",
     complete: true,
   },
   season_17: {
@@ -206,7 +206,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Wonga-Wongué Reserve, Gabon",
     year: 2008,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_17/season-17-logo.png",
     complete: true,
   },
   season_18: {
@@ -217,7 +217,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Tocantins, Brazil",
     year: 2009,
     contestantCount: 16,
-    img: "",
+    img: "/images/season_18/season-18-logo.png",
     complete: true,
   },
   season_19: {
@@ -228,7 +228,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Upolu, Samoa",
     year: 2009,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_19/season-19-logo.png",
     complete: true,
   },
   season_20: {
@@ -239,7 +239,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Upolu, Samoa",
     year: 2010,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_20/season-20-logo.png",
     complete: true,
   },
   season_21: {
@@ -250,7 +250,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "San Juan del Sur, Nicaragua",
     year: 2010,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_21/season-21-logo.png",
     complete: true,
   },
   season_22: {
@@ -261,7 +261,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "San Juan del Sur, Nicaragua",
     year: 2011,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_22/season-22-logo.png",
     complete: true,
   },
   season_23: {
@@ -272,7 +272,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Upolu, Samoa",
     year: 2011,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_23/season-23-logo.png",
     complete: true,
   },
   season_24: {
@@ -283,7 +283,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Upolu, Samoa",
     year: 2012,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_24/season-24-logo.png",
     complete: true,
   },
   season_25: {
@@ -294,7 +294,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Caramoan, Camarines Sur, Philippines",
     year: 2012,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_25/season-25-logo.png",
     complete: true,
   },
   season_26: {
@@ -305,7 +305,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Caramoan, Camarines Sur, Philippines",
     year: 2013,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_26/season-26-logo.png",
     complete: true,
   },
   season_27: {
@@ -316,7 +316,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Palaui Island, Cagayan, Philippines",
     year: 2013,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_27/season-27-logo.png",
     complete: true,
   },
   season_28: {
@@ -327,7 +327,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Palaui Island, Cagayan, Philippines",
     year: 2014,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_28/season-28-logo.png",
     complete: true,
   },
   season_29: {
@@ -338,7 +338,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "San Juan del Sur, Nicaragua",
     year: 2014,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_29/season-29-logo.png",
     complete: true,
   },
   season_30: {
@@ -349,7 +349,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "San Juan del Sur, Nicaragua",
     year: 2015,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_30/season-30-logo.png",
     complete: true,
   },
   season_31: {
@@ -360,7 +360,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Koh Rong, Cambodia",
     year: 2015,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_31/season-31-logo.png",
     complete: true,
   },
   season_32: {
@@ -371,7 +371,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Koh Rong, Cambodia",
     year: 2016,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_32/season-32-logo.png",
     complete: true,
   },
   season_33: {
@@ -382,7 +382,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Mamanuca Islands, Fiji",
     year: 2016,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_33/season-33-logo.png",
     complete: true,
   },
   season_34: {
@@ -393,7 +393,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Mamanuca Islands, Fiji",
     year: 2017,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_34/season-34-logo.png",
     complete: true,
   },
   season_35: {
@@ -404,7 +404,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Mamanuca Islands, Fiji",
     year: 2017,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_35/season-35-logo.png",
     complete: true,
   },
   season_36: {
@@ -415,7 +415,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Mamanuca Islands, Fiji",
     year: 2018,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_36/season-36-logo.png",
     complete: true,
   },
   season_37: {
@@ -426,7 +426,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Mamanuca Islands, Fiji",
     year: 2018,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_37/season-37-logo.png",
     complete: true,
   },
   season_38: {
@@ -437,7 +437,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Mamanuca Islands, Fiji",
     year: 2019,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_38/season-38-logo.png",
     complete: true,
   },
   season_39: {
@@ -448,7 +448,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Mamanuca Islands, Fiji",
     year: 2019,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_39/season-39-logo.png",
     complete: true,
   },
   season_40: {
@@ -459,7 +459,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Mamanuca Islands, Fiji",
     year: 2020,
     contestantCount: 20,
-    img: "",
+    img: "/images/season_40/season-40-logo.png",
     complete: true,
   },
   season_41: {
@@ -470,7 +470,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Mamanuca Islands, Fiji",
     year: 2021,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_41/season-41-logo.png",
     complete: true,
   },
   season_42: {
@@ -481,7 +481,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Mamanuca Islands, Fiji",
     year: 2022,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_42/season-42-logo.png",
     complete: true,
   },
   season_43: {
@@ -492,7 +492,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Mamanuca Islands, Fiji",
     year: 2022,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_43/season-43-logo.png",
     complete: true,
   },
   season_44: {
@@ -503,7 +503,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Mamanuca Islands, Fiji",
     year: 2023,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_44/season-44-logo.png",
     complete: true,
   },
   season_45: {
@@ -514,7 +514,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Mamanuca Islands, Fiji",
     year: 2023,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_45/season-45-logo.png",
     complete: true,
   },
   season_46: {
@@ -536,7 +536,7 @@ export const SEASON_METADATA: Record<Season["id"], SeasonMeta> = {
     location: "Mamanuca Islands, Fiji",
     year: 2024,
     contestantCount: 18,
-    img: "",
+    img: "/images/season_47/season-47-logo.png",
     complete: true,
   },
   season_48: {

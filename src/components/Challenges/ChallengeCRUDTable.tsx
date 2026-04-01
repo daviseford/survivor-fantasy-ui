@@ -180,10 +180,7 @@ export const ChallengeCRUDTable = () => {
           <Table.Td>{e.variant}</Table.Td>
           <Table.Td>
             {e.winning_castaways
-              .map(
-                (id) =>
-                  season?.castawayLookup?.[id]?.full_name ?? id,
-              )
+              .map((id) => season?.castawayLookup?.[id]?.full_name ?? id)
               .join(", ")}
           </Table.Td>
           <Table.Td>{e.episode_id}</Table.Td>

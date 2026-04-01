@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { CastawayId, Challenge, Elimination, Episode, GameEvent } from "../../types";
+import {
+  CastawayId,
+  Challenge,
+  Elimination,
+  Episode,
+  GameEvent,
+} from "../../types";
 import { filterEpisodesByMax, filterRecordByEpisode } from "../episodeFilter";
 
 const ALICE = "US0001" as CastawayId;

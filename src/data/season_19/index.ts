@@ -37,10 +37,7 @@ type SeasonNumber = 19;
 
 const buildPlayer = <T extends CastawayIdType>(
   p: { castaway_id: T; full_name: string; img: string } & Partial<
-    Omit<
-      Player<T, SeasonNumber>,
-      "season_id" | "season_num" | "castaway_id" | "full_name" | "img"
-    >
+    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "castaway_id" | "full_name" | "img">
   >,
 ): Player<T, SeasonNumber> => ({
   ...p,
@@ -49,33 +46,33 @@ const buildPlayer = <T extends CastawayIdType>(
 });
 
 export const SEASON_19_CASTAWAY_LOOKUP: CastawayLookup = {
-  US0282: { full_name: "Marisa Calihan", castaway: "Marisa" },
-  US0283: { full_name: "Mike Borassi", castaway: "Mike" },
-  US0284: { full_name: "Betsy Bolan", castaway: "Betsy" },
-  US0285: { full_name: "Ben Browning", castaway: "Ben" },
-  US0286: { full_name: "Yasmin Giles", castaway: "Yasmin" },
-  US0287: { full_name: "Ashley Trainer", castaway: "Ashley" },
-  US0288: { full_name: "Russell Swan", castaway: "Russell S." },
-  US0289: { full_name: "Elizabeth Kim", castaway: "Liz" },
-  US0290: { full_name: "Erik Cardona", castaway: "Erik" },
-  US0291: { full_name: "Kelly Sharbaugh", castaway: "Kelly" },
-  US0292: { full_name: "Laura Morett", castaway: "Laura" },
-  US0293: { full_name: "John Fincher", castaway: "John" },
-  US0294: { full_name: "Dave Ball", castaway: "Dave" },
-  US0295: { full_name: "Monica Padilla", castaway: "Monica" },
-  US0296: { full_name: "Shannon Waters", castaway: "Shambo" },
-  US0297: { full_name: "Jaison Robinson", castaway: "Jaison" },
-  US0298: { full_name: "Brett Clouser", castaway: "Brett" },
-  US0299: { full_name: "Mick Trimming", castaway: "Mick" },
-  US0300: { full_name: "Russell Hantz", castaway: "Russell H." },
-  US0301: { full_name: "Natalie White", castaway: "Natalie" },
+  "US0282": { full_name: "Marisa Calihan", castaway: "Marisa" },
+  "US0283": { full_name: "Mike Borassi", castaway: "Mike" },
+  "US0284": { full_name: "Betsy Bolan", castaway: "Betsy" },
+  "US0285": { full_name: "Ben Browning", castaway: "Ben" },
+  "US0286": { full_name: "Yasmin Giles", castaway: "Yasmin" },
+  "US0287": { full_name: "Ashley Trainer", castaway: "Ashley" },
+  "US0288": { full_name: "Russell Swan", castaway: "Russell S." },
+  "US0289": { full_name: "Elizabeth Kim", castaway: "Liz" },
+  "US0290": { full_name: "Erik Cardona", castaway: "Erik" },
+  "US0291": { full_name: "Kelly Sharbaugh", castaway: "Kelly" },
+  "US0292": { full_name: "Laura Morett", castaway: "Laura" },
+  "US0293": { full_name: "John Fincher", castaway: "John" },
+  "US0294": { full_name: "Dave Ball", castaway: "Dave" },
+  "US0295": { full_name: "Monica Padilla", castaway: "Monica" },
+  "US0296": { full_name: "Shannon Waters", castaway: "Shambo" },
+  "US0297": { full_name: "Jaison Robinson", castaway: "Jaison" },
+  "US0298": { full_name: "Brett Clouser", castaway: "Brett" },
+  "US0299": { full_name: "Mick Trimming", castaway: "Mick" },
+  "US0300": { full_name: "Russell Hantz", castaway: "Russell H." },
+  "US0301": { full_name: "Natalie White", castaway: "Natalie" },
 };
 
 export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0282",
     full_name: "Marisa Calihan",
-    img: "",
+    img: "/images/season_19/Marisa-Calihan.jpg",
     description: "Age: 26 | Hometown: Cincinnati, Ohio",
     age: 26,
     hometown: "Cincinnati, Ohio",
@@ -83,7 +80,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0283",
     full_name: "Mike Borassi",
-    img: "",
+    img: "/images/season_19/Mike-Borassi.jpg",
     description: "Age: 62 | Hometown: Marina del Rey, California",
     age: 62,
     hometown: "Marina del Rey, California",
@@ -91,7 +88,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0284",
     full_name: "Betsy Bolan",
-    img: "",
+    img: "/images/season_19/Betsy-Bolan.jpg",
     description: "Age: 48 | Hometown: Campton, New Hampshire",
     age: 48,
     hometown: "Campton, New Hampshire",
@@ -99,15 +96,16 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0285",
     full_name: "Ben Browning",
-    img: "",
+    img: "/images/season_19/Ben-Browning.jpg",
     description: "Age: 28 | Hometown: Los Angeles, California",
     age: 28,
     hometown: "Los Angeles, California",
+    nickname: "Ben",
   }),
   buildPlayer({
     castaway_id: "US0286",
     full_name: "Yasmin Giles",
-    img: "",
+    img: "/images/season_19/Yasmin-Giles.jpg",
     description: "Age: 33 | Hometown: Los Angeles, California",
     age: 33,
     hometown: "Los Angeles, California",
@@ -115,7 +113,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0287",
     full_name: "Ashley Trainer",
-    img: "",
+    img: "/images/season_19/Ashley-Trainer.jpg",
     description: "Age: 22 | Hometown: Maple Grove, Minnesota",
     age: 22,
     hometown: "Maple Grove, Minnesota",
@@ -123,7 +121,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0288",
     full_name: "Russell Swan",
-    img: "",
+    img: "/images/season_19/Russell-Swan.jpg",
     description: "Age: 42 | Hometown: Glenside, Pennsylvania",
     age: 42,
     hometown: "Glenside, Pennsylvania",
@@ -132,7 +130,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0289",
     full_name: "Elizabeth Kim",
-    img: "",
+    img: "/images/season_19/Elizabeth-Kim.jpg",
     description: "Age: 33 | Hometown: New York City, New York",
     age: 33,
     hometown: "New York City, New York",
@@ -141,7 +139,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0290",
     full_name: "Erik Cardona",
-    img: "",
+    img: "/images/season_19/Erik-Cardona.jpg",
     description: "Age: 28 | Hometown: Los Angeles, California",
     age: 28,
     hometown: "Los Angeles, California",
@@ -149,7 +147,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0291",
     full_name: "Kelly Sharbaugh",
-    img: "",
+    img: "/images/season_19/Kelly-Sharbaugh.jpg",
     description: "Age: 25 | Hometown: San Diego, California",
     age: 25,
     hometown: "San Diego, California",
@@ -157,7 +155,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0292",
     full_name: "Laura Morett",
-    img: "",
+    img: "/images/season_19/Laura-Morett.jpg",
     description: "Age: 39 | Hometown: Salem, Oregon",
     age: 39,
     hometown: "Salem, Oregon",
@@ -165,7 +163,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0293",
     full_name: "John Fincher",
-    img: "",
+    img: "/images/season_19/John-Fincher.jpg",
     description: "Age: 25 | Hometown: Santa Monica, California",
     age: 25,
     hometown: "Santa Monica, California",
@@ -173,15 +171,16 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0294",
     full_name: "Dave Ball",
-    img: "",
+    img: "/images/season_19/Dave-Ball.jpg",
     description: "Age: 38 | Hometown: Los Angeles, California",
     age: 38,
     hometown: "Los Angeles, California",
+    nickname: "Dave",
   }),
   buildPlayer({
     castaway_id: "US0295",
     full_name: "Monica Padilla",
-    img: "",
+    img: "/images/season_19/Monica-Padilla.jpg",
     description: "Age: 25 | Hometown: San Diego, California",
     age: 25,
     hometown: "San Diego, California",
@@ -198,7 +197,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0297",
     full_name: "Jaison Robinson",
-    img: "",
+    img: "/images/season_19/Jaison-Robinson.jpg",
     description: "Age: 28 | Hometown: Chicago, Illinois",
     age: 28,
     hometown: "Chicago, Illinois",
@@ -206,7 +205,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0298",
     full_name: "Brett Clouser",
-    img: "",
+    img: "/images/season_19/Brett-Clouser.jpg",
     description: "Age: 23 | Hometown: Los Angeles, California",
     age: 23,
     hometown: "Los Angeles, California",
@@ -214,15 +213,16 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0299",
     full_name: "Mick Trimming",
-    img: "",
+    img: "/images/season_19/Mick-Trimming.jpg",
     description: "Age: 33 | Hometown: Los Angeles, California",
     age: 33,
     hometown: "Los Angeles, California",
+    nickname: "Mick",
   }),
   buildPlayer({
     castaway_id: "US0300",
     full_name: "Russell Hantz",
-    img: "",
+    img: "/images/season_19/Russell-Hantz.jpg",
     description: "Age: 36 | Hometown: Dayton, Texas",
     age: 36,
     hometown: "Dayton, Texas",
@@ -231,7 +231,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0301",
     full_name: "Natalie White",
-    img: "",
+    img: "/images/season_19/Natalie-White.jpg",
     description: "Age: 26 | Hometown: Van Buren, Arkansas",
     age: 26,
     hometown: "Van Buren, Arkansas",
@@ -652,7 +652,10 @@ export const SEASON_19_CHALLENGES = {
     episode_num: 8,
     variant: "immunity",
     order: 12,
-    winning_castaways: ["US0292", "US0293"],
+    winning_castaways: [
+      "US0292",
+      "US0293",
+    ],
   },
   challenge_13: {
     id: "challenge_13",
@@ -662,7 +665,13 @@ export const SEASON_19_CHALLENGES = {
     episode_num: 9,
     variant: "reward",
     order: 13,
-    winning_castaways: ["US0291", "US0293", "US0294", "US0295", "US0296"],
+    winning_castaways: [
+      "US0291",
+      "US0293",
+      "US0294",
+      "US0295",
+      "US0296",
+    ],
   },
   challenge_14: {
     id: "challenge_14",
@@ -672,7 +681,9 @@ export const SEASON_19_CHALLENGES = {
     episode_num: 9,
     variant: "immunity",
     order: 14,
-    winning_castaways: ["US0292"],
+    winning_castaways: [
+      "US0292",
+    ],
   },
   challenge_15: {
     id: "challenge_15",
@@ -682,7 +693,13 @@ export const SEASON_19_CHALLENGES = {
     episode_num: 10,
     variant: "reward",
     order: 15,
-    winning_castaways: ["US0292", "US0294", "US0298", "US0300", "US0301"],
+    winning_castaways: [
+      "US0292",
+      "US0294",
+      "US0298",
+      "US0300",
+      "US0301",
+    ],
   },
   challenge_16: {
     id: "challenge_16",
@@ -692,7 +709,9 @@ export const SEASON_19_CHALLENGES = {
     episode_num: 10,
     variant: "immunity",
     order: 16,
-    winning_castaways: ["US0299"],
+    winning_castaways: [
+      "US0299",
+    ],
   },
   challenge_17: {
     id: "challenge_17",
@@ -702,7 +721,9 @@ export const SEASON_19_CHALLENGES = {
     episode_num: 12,
     variant: "immunity",
     order: 17,
-    winning_castaways: ["US0297"],
+    winning_castaways: [
+      "US0297",
+    ],
   },
   challenge_18: {
     id: "challenge_18",
@@ -712,7 +733,9 @@ export const SEASON_19_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 18,
-    winning_castaways: ["US0297"],
+    winning_castaways: [
+      "US0297",
+    ],
   },
   challenge_19: {
     id: "challenge_19",
@@ -722,7 +745,9 @@ export const SEASON_19_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 19,
-    winning_castaways: ["US0298"],
+    winning_castaways: [
+      "US0298",
+    ],
   },
   challenge_20: {
     id: "challenge_20",
@@ -732,7 +757,11 @@ export const SEASON_19_CHALLENGES = {
     episode_num: 14,
     variant: "reward",
     order: 20,
-    winning_castaways: ["US0296", "US0297", "US0300"],
+    winning_castaways: [
+      "US0296",
+      "US0297",
+      "US0300",
+    ],
   },
   challenge_21: {
     id: "challenge_21",
@@ -742,7 +771,9 @@ export const SEASON_19_CHALLENGES = {
     episode_num: 14,
     variant: "immunity",
     order: 21,
-    winning_castaways: ["US0298"],
+    winning_castaways: [
+      "US0298",
+    ],
   },
   challenge_22: {
     id: "challenge_22",
@@ -752,7 +783,9 @@ export const SEASON_19_CHALLENGES = {
     episode_num: 15,
     variant: "immunity",
     order: 22,
-    winning_castaways: ["US0298"],
+    winning_castaways: [
+      "US0298",
+    ],
   },
   challenge_23: {
     id: "challenge_23",
@@ -762,7 +795,9 @@ export const SEASON_19_CHALLENGES = {
     episode_num: 15,
     variant: "immunity",
     order: 23,
-    winning_castaways: ["US0300"],
+    winning_castaways: [
+      "US0300",
+    ],
   },
 } satisfies Record<Challenge["id"], Challenge<CastawayIdType, SeasonNumber>>;
 
@@ -957,10 +992,7 @@ export const SEASON_19_ELIMINATIONS = {
     castaway_id: "US0300",
     variant: "final_tribal_council",
   },
-} satisfies Record<
-  Elimination["id"],
-  Elimination<CastawayIdType, SeasonNumber>
->;
+} satisfies Record<Elimination["id"], Elimination<CastawayIdType, SeasonNumber>>;
 
 export const SEASON_19_EVENTS = {
   event_1: {

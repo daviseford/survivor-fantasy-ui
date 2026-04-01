@@ -209,7 +209,10 @@ export const DraftComponent = () => {
     await updateDraft(_draft);
   };
 
-  const draftPlayer = async (player: { castaway_id: CastawayId; full_name: string }) => {
+  const draftPlayer = async (player: {
+    castaway_id: CastawayId;
+    full_name: string;
+  }) => {
     if (!season || !draft || !slimUser?.uid) return;
 
     const finished = draft.current_pick_number >= draft.total_players;
@@ -766,7 +769,9 @@ export const DraftComponent = () => {
                 const isDrafted = isPlayerDrafted(p.castaway_id);
                 const draftedBy = !isDrafted
                   ? null
-                  : draft?.draft_picks.find((x) => x.castaway_id === p.castaway_id);
+                  : draft?.draft_picks.find(
+                      (x) => x.castaway_id === p.castaway_id,
+                    );
                 return (
                   <Paper
                     radius="md"

@@ -1,11 +1,11 @@
 import { SegmentedControl, Text } from "@mantine/core";
 import { sum } from "lodash-es";
 import { useMemo, useState } from "react";
-import type { CastawayId } from "../../types";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
+import type { CastawayId } from "../../types";
 import { aggregateByScoringCategory } from "../../utils/scoringCategories";
 import { NightingaleRose, RoseDataEntry } from "./NightingaleRose";
 

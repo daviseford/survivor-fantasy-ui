@@ -33,10 +33,7 @@ type SeasonNumber = 5;
 
 const buildPlayer = <T extends CastawayIdType>(
   p: { castaway_id: T; full_name: string; img: string } & Partial<
-    Omit<
-      Player<T, SeasonNumber>,
-      "season_id" | "season_num" | "castaway_id" | "full_name" | "img"
-    >
+    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "castaway_id" | "full_name" | "img">
   >,
 ): Player<T, SeasonNumber> => ({
   ...p,
@@ -45,29 +42,29 @@ const buildPlayer = <T extends CastawayIdType>(
 });
 
 export const SEASON_5_CASTAWAY_LOOKUP: CastawayLookup = {
-  US0065: { full_name: "John Raymond", castaway: "John" },
-  US0066: { full_name: "Tanya Vance", castaway: "Tanya" },
-  US0067: { full_name: "Jed Hildebrand", castaway: "Jed" },
-  US0068: { full_name: "Ghandia Johnson", castaway: "Ghandia" },
-  US0069: { full_name: "Stephanie Dill", castaway: "Stephanie" },
-  US0070: { full_name: "Robert Zbacnik", castaway: "Robb" },
-  US0071: { full_name: "Shii Ann Huang", castaway: "Shii Ann" },
-  US0072: { full_name: "Erin Collins", castaway: "Erin" },
-  US0073: { full_name: "Ken Stafford", castaway: "Ken" },
-  US0074: { full_name: "Penny Ramsey", castaway: "Penny" },
-  US0075: { full_name: "Jake Billingsley", castaway: "Jake" },
-  US0076: { full_name: "Ted Rogers Jr.", castaway: "Ted" },
-  US0077: { full_name: "Helen Glover", castaway: "Helen" },
-  US0078: { full_name: "Jan Gentry", castaway: "Jan" },
-  US0079: { full_name: "Clay Jordan", castaway: "Clay" },
-  US0080: { full_name: "Brian Heidik", castaway: "Brian" },
+  "US0065": { full_name: "John Raymond", castaway: "John" },
+  "US0066": { full_name: "Tanya Vance", castaway: "Tanya" },
+  "US0067": { full_name: "Jed Hildebrand", castaway: "Jed" },
+  "US0068": { full_name: "Ghandia Johnson", castaway: "Ghandia" },
+  "US0069": { full_name: "Stephanie Dill", castaway: "Stephanie" },
+  "US0070": { full_name: "Robert Zbacnik", castaway: "Robb" },
+  "US0071": { full_name: "Shii Ann Huang", castaway: "Shii Ann" },
+  "US0072": { full_name: "Erin Collins", castaway: "Erin" },
+  "US0073": { full_name: "Ken Stafford", castaway: "Ken" },
+  "US0074": { full_name: "Penny Ramsey", castaway: "Penny" },
+  "US0075": { full_name: "Jake Billingsley", castaway: "Jake" },
+  "US0076": { full_name: "Ted Rogers Jr.", castaway: "Big Ted" },
+  "US0077": { full_name: "Helen Glover", castaway: "Helen" },
+  "US0078": { full_name: "Jan Gentry", castaway: "Jan" },
+  "US0079": { full_name: "Clay Jordan", castaway: "Clay" },
+  "US0080": { full_name: "Brian Heidik", castaway: "Brian" },
 };
 
 export const SEASON_5_PLAYERS = [
   buildPlayer({
     castaway_id: "US0065",
     full_name: "John Raymond",
-    img: "",
+    img: "/images/season_5/John-Raymond.jpg",
     description: "Age: 40 | Hometown: Slidell, Louisiana",
     age: 40,
     hometown: "Slidell, Louisiana",
@@ -75,7 +72,7 @@ export const SEASON_5_PLAYERS = [
   buildPlayer({
     castaway_id: "US0066",
     full_name: "Tanya Vance",
-    img: "",
+    img: "/images/season_5/Tanya-Vance.jpg",
     description: "Age: 27 | Hometown: Gray, Tennessee",
     age: 27,
     hometown: "Gray, Tennessee",
@@ -83,7 +80,7 @@ export const SEASON_5_PLAYERS = [
   buildPlayer({
     castaway_id: "US0067",
     full_name: "Jed Hildebrand",
-    img: "",
+    img: "/images/season_5/Jed-Hildebrand.jpg",
     description: "Age: 25 | Hometown: Dallas, Texas",
     age: 25,
     hometown: "Dallas, Texas",
@@ -91,7 +88,7 @@ export const SEASON_5_PLAYERS = [
   buildPlayer({
     castaway_id: "US0068",
     full_name: "Ghandia Johnson",
-    img: "",
+    img: "/images/season_5/Ghandia-Johnson.jpg",
     description: "Age: 33 | Hometown: Denver, Colorado",
     age: 33,
     hometown: "Denver, Colorado",
@@ -99,7 +96,7 @@ export const SEASON_5_PLAYERS = [
   buildPlayer({
     castaway_id: "US0069",
     full_name: "Stephanie Dill",
-    img: "",
+    img: "/images/season_5/Stephanie-Dill.jpg",
     description: "Age: 29 | Hometown: Ozark, Arkansas",
     age: 29,
     hometown: "Ozark, Arkansas",
@@ -116,7 +113,7 @@ export const SEASON_5_PLAYERS = [
   buildPlayer({
     castaway_id: "US0071",
     full_name: "Shii Ann Huang",
-    img: "",
+    img: "/images/season_5/Shii-Ann-Huang.jpg",
     description: "Age: 28 | Hometown: New York City, New York",
     age: 28,
     hometown: "New York City, New York",
@@ -125,7 +122,7 @@ export const SEASON_5_PLAYERS = [
   buildPlayer({
     castaway_id: "US0072",
     full_name: "Erin Collins",
-    img: "",
+    img: "/images/season_5/Erin-Collins.jpg",
     description: "Age: 26 | Hometown: Austin, Texas",
     age: 26,
     hometown: "Austin, Texas",
@@ -133,15 +130,16 @@ export const SEASON_5_PLAYERS = [
   buildPlayer({
     castaway_id: "US0073",
     full_name: "Ken Stafford",
-    img: "",
+    img: "/images/season_5/Ken-Stafford.jpg",
     description: "Age: 30 | Hometown: Brooklyn, New York",
     age: 30,
     hometown: "Brooklyn, New York",
+    nickname: "Ken",
   }),
   buildPlayer({
     castaway_id: "US0074",
     full_name: "Penny Ramsey",
-    img: "",
+    img: "/images/season_5/Penny-Ramsey.jpg",
     description: "Age: 27 | Hometown: Plano, Texas",
     age: 27,
     hometown: "Plano, Texas",
@@ -149,7 +147,7 @@ export const SEASON_5_PLAYERS = [
   buildPlayer({
     castaway_id: "US0075",
     full_name: "Jake Billingsley",
-    img: "",
+    img: "/images/season_5/Jake-Billingsley.jpg",
     description: "Age: 60 | Hometown: McKinney, Texas",
     age: 60,
     hometown: "McKinney, Texas",
@@ -157,15 +155,16 @@ export const SEASON_5_PLAYERS = [
   buildPlayer({
     castaway_id: "US0076",
     full_name: "Ted Rogers Jr.",
-    img: "",
+    img: "/images/season_5/Ted-Rogers-Jr..jpg",
     description: "Age: 37 | Hometown: Durham, North Carolina",
     age: 37,
     hometown: "Durham, North Carolina",
+    nickname: "Big Ted",
   }),
   buildPlayer({
     castaway_id: "US0077",
     full_name: "Helen Glover",
-    img: "",
+    img: "/images/season_5/Helen-Glover.jpg",
     description: "Age: 47 | Hometown: Middletown, Rhode Island",
     age: 47,
     hometown: "Middletown, Rhode Island",
@@ -173,7 +172,7 @@ export const SEASON_5_PLAYERS = [
   buildPlayer({
     castaway_id: "US0078",
     full_name: "Jan Gentry",
-    img: "",
+    img: "/images/season_5/Jan-Gentry.jpg",
     description: "Age: 53 | Hometown: Tampa, Florida",
     age: 53,
     hometown: "Tampa, Florida",
@@ -181,15 +180,16 @@ export const SEASON_5_PLAYERS = [
   buildPlayer({
     castaway_id: "US0079",
     full_name: "Clay Jordan",
-    img: "",
+    img: "/images/season_5/Clay-Jordan.jpg",
     description: "Age: 46 | Hometown: Monroe, Louisiana",
     age: 46,
     hometown: "Monroe, Louisiana",
+    nickname: "Clay",
   }),
   buildPlayer({
     castaway_id: "US0080",
     full_name: "Brian Heidik",
-    img: "",
+    img: "/images/season_5/Brian-Heidik.jpg",
     description: "Age: 34 | Hometown: Quartz Hill, California",
     age: 34,
     hometown: "Quartz Hill, California",
@@ -485,7 +485,13 @@ export const SEASON_5_CHALLENGES = {
     episode_num: 5,
     variant: "immunity",
     order: 7,
-    winning_castaways: ["US0076", "US0077", "US0078", "US0079", "US0080"],
+    winning_castaways: [
+      "US0076",
+      "US0077",
+      "US0078",
+      "US0079",
+      "US0080",
+    ],
   },
   challenge_8: {
     id: "challenge_8",
@@ -512,7 +518,13 @@ export const SEASON_5_CHALLENGES = {
     episode_num: 6,
     variant: "immunity",
     order: 9,
-    winning_castaways: ["US0076", "US0077", "US0078", "US0079", "US0080"],
+    winning_castaways: [
+      "US0076",
+      "US0077",
+      "US0078",
+      "US0079",
+      "US0080",
+    ],
   },
   challenge_10: {
     id: "challenge_10",
@@ -522,7 +534,13 @@ export const SEASON_5_CHALLENGES = {
     episode_num: 7,
     variant: "immunity",
     order: 10,
-    winning_castaways: ["US0076", "US0077", "US0078", "US0079", "US0080"],
+    winning_castaways: [
+      "US0076",
+      "US0077",
+      "US0078",
+      "US0079",
+      "US0080",
+    ],
   },
   challenge_11: {
     id: "challenge_11",
@@ -532,7 +550,13 @@ export const SEASON_5_CHALLENGES = {
     episode_num: 8,
     variant: "immunity",
     order: 11,
-    winning_castaways: ["US0076", "US0077", "US0078", "US0079", "US0080"],
+    winning_castaways: [
+      "US0076",
+      "US0077",
+      "US0078",
+      "US0079",
+      "US0080",
+    ],
   },
   challenge_12: {
     id: "challenge_12",
@@ -542,7 +566,9 @@ export const SEASON_5_CHALLENGES = {
     episode_num: 9,
     variant: "reward",
     order: 12,
-    winning_castaways: ["US0080"],
+    winning_castaways: [
+      "US0080",
+    ],
   },
   challenge_13: {
     id: "challenge_13",
@@ -552,7 +578,9 @@ export const SEASON_5_CHALLENGES = {
     episode_num: 9,
     variant: "immunity",
     order: 13,
-    winning_castaways: ["US0079"],
+    winning_castaways: [
+      "US0079",
+    ],
   },
   challenge_14: {
     id: "challenge_14",
@@ -562,7 +590,9 @@ export const SEASON_5_CHALLENGES = {
     episode_num: 10,
     variant: "reward",
     order: 14,
-    winning_castaways: ["US0080"],
+    winning_castaways: [
+      "US0080",
+    ],
   },
   challenge_15: {
     id: "challenge_15",
@@ -572,7 +602,9 @@ export const SEASON_5_CHALLENGES = {
     episode_num: 10,
     variant: "immunity",
     order: 15,
-    winning_castaways: ["US0077"],
+    winning_castaways: [
+      "US0077",
+    ],
   },
   challenge_16: {
     id: "challenge_16",
@@ -582,7 +614,9 @@ export const SEASON_5_CHALLENGES = {
     episode_num: 12,
     variant: "reward",
     order: 16,
-    winning_castaways: ["US0077"],
+    winning_castaways: [
+      "US0077",
+    ],
   },
   challenge_17: {
     id: "challenge_17",
@@ -592,7 +626,9 @@ export const SEASON_5_CHALLENGES = {
     episode_num: 12,
     variant: "immunity",
     order: 17,
-    winning_castaways: ["US0076"],
+    winning_castaways: [
+      "US0076",
+    ],
   },
   challenge_18: {
     id: "challenge_18",
@@ -602,7 +638,9 @@ export const SEASON_5_CHALLENGES = {
     episode_num: 13,
     variant: "reward",
     order: 18,
-    winning_castaways: ["US0076"],
+    winning_castaways: [
+      "US0076",
+    ],
   },
   challenge_19: {
     id: "challenge_19",
@@ -612,7 +650,9 @@ export const SEASON_5_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 19,
-    winning_castaways: ["US0080"],
+    winning_castaways: [
+      "US0080",
+    ],
   },
   challenge_20: {
     id: "challenge_20",
@@ -622,7 +662,9 @@ export const SEASON_5_CHALLENGES = {
     episode_num: 14,
     variant: "immunity",
     order: 20,
-    winning_castaways: ["US0080"],
+    winning_castaways: [
+      "US0080",
+    ],
   },
   challenge_21: {
     id: "challenge_21",
@@ -632,7 +674,9 @@ export const SEASON_5_CHALLENGES = {
     episode_num: 14,
     variant: "immunity",
     order: 21,
-    winning_castaways: ["US0080"],
+    winning_castaways: [
+      "US0080",
+    ],
   },
 } satisfies Record<Challenge["id"], Challenge<CastawayIdType, SeasonNumber>>;
 
@@ -787,10 +831,7 @@ export const SEASON_5_ELIMINATIONS = {
     castaway_id: "US0079",
     variant: "final_tribal_council",
   },
-} satisfies Record<
-  Elimination["id"],
-  Elimination<CastawayIdType, SeasonNumber>
->;
+} satisfies Record<Elimination["id"], Elimination<CastawayIdType, SeasonNumber>>;
 
 export const SEASON_5_EVENTS = {
   event_1: {

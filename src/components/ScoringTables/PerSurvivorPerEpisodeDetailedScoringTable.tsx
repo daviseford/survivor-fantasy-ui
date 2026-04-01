@@ -156,8 +156,17 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
   );
 
   const rows = sorted.map((entry) => {
-    const { castawayId, displayName, episodeScores, total, defaultRank, draftOrder } = entry;
-    const playerData = season?.players.find((x) => x.castaway_id === castawayId);
+    const {
+      castawayId,
+      displayName,
+      episodeScores,
+      total,
+      defaultRank,
+      draftOrder,
+    } = entry;
+    const playerData = season?.players.find(
+      (x) => x.castaway_id === castawayId,
+    );
 
     const draftPick = competition?.draft_picks.find(
       (x) => x.castaway_id === castawayId,

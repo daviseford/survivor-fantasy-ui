@@ -37,10 +37,7 @@ type SeasonNumber = 10;
 
 const buildPlayer = <T extends CastawayIdType>(
   p: { castaway_id: T; full_name: string; img: string } & Partial<
-    Omit<
-      Player<T, SeasonNumber>,
-      "season_id" | "season_num" | "castaway_id" | "full_name" | "img"
-    >
+    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "castaway_id" | "full_name" | "img">
   >,
 ): Player<T, SeasonNumber> => ({
   ...p,
@@ -49,33 +46,33 @@ const buildPlayer = <T extends CastawayIdType>(
 });
 
 export const SEASON_10_CASTAWAY_LOOKUP: CastawayLookup = {
-  US0131: { full_name: "Jonathan Libby", castaway: "Jonathan" },
-  US0132: { full_name: "Wanda Shirk", castaway: "Wanda" },
-  US0133: { full_name: "Jolanda Jones", castaway: "Jolanda" },
-  US0134: { full_name: "Ashlee Ashby", castaway: "Ashlee" },
-  US0135: { full_name: "Jeff Wilson", castaway: "Jeff" },
-  US0136: { full_name: "Kimberly Mullen", castaway: "Kim" },
-  US0137: { full_name: "Willard Smith", castaway: "Willard" },
-  US0138: { full_name: "Angie Jakusz", castaway: "Angie" },
-  US0139: { full_name: "James Miller", castaway: "James" },
-  US0140: { full_name: "Ibrehem Rahman", castaway: "Ibrehem" },
-  US0141: { full_name: "Bobby Jon Drinkard", castaway: "Bobby Jon" },
-  US0142: { full_name: "Coby Archa", castaway: "Coby" },
-  US0143: { full_name: "Janu Tornell", castaway: "Janu" },
-  US0144: { full_name: "Stephenie LaGrossa", castaway: "Stephenie" },
-  US0145: { full_name: "Gregg Carey", castaway: "Gregg" },
-  US0146: { full_name: "Caryn Groedel", castaway: "Caryn" },
-  US0147: { full_name: "Jennifer Lyon", castaway: "Jenn" },
-  US0148: { full_name: "Ian Rosenberger", castaway: "Ian" },
-  US0149: { full_name: "Katie Gallagher", castaway: "Katie" },
-  US0150: { full_name: "Tom Westman", castaway: "Tom" },
+  "US0131": { full_name: "Jonathan Libby", castaway: "Jonathan" },
+  "US0132": { full_name: "Wanda Shirk", castaway: "Wanda" },
+  "US0133": { full_name: "Jolanda Jones", castaway: "Jolanda" },
+  "US0134": { full_name: "Ashlee Ashby", castaway: "Ashlee" },
+  "US0135": { full_name: "Jeff Wilson", castaway: "Jeff" },
+  "US0136": { full_name: "Kimberly Mullen", castaway: "Kim" },
+  "US0137": { full_name: "Willard Smith", castaway: "Willard" },
+  "US0138": { full_name: "Angie Jakusz", castaway: "Angie" },
+  "US0139": { full_name: "James Miller", castaway: "James" },
+  "US0140": { full_name: "Ibrehem Rahman", castaway: "Ibrehem" },
+  "US0141": { full_name: "Bobby Jon Drinkard", castaway: "Bobby Jon" },
+  "US0142": { full_name: "Coby Archa", castaway: "Coby" },
+  "US0143": { full_name: "Janu Tornell", castaway: "Janu" },
+  "US0144": { full_name: "Stephenie LaGrossa", castaway: "Stephenie" },
+  "US0145": { full_name: "Gregg Carey", castaway: "Gregg" },
+  "US0146": { full_name: "Caryn Groedel", castaway: "Caryn" },
+  "US0147": { full_name: "Jennifer Lyon", castaway: "Jenn" },
+  "US0148": { full_name: "Ian Rosenberger", castaway: "Ian" },
+  "US0149": { full_name: "Katie Gallagher", castaway: "Katie" },
+  "US0150": { full_name: "Tom Westman", castaway: "Tom" },
 };
 
 export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0131",
     full_name: "Jonathan Libby",
-    img: "",
+    img: "/images/season_10/Jonathan-Libby.jpg",
     description: "Age: 23 | Hometown: Dallas, Texas",
     age: 23,
     hometown: "Dallas, Texas",
@@ -83,7 +80,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0132",
     full_name: "Wanda Shirk",
-    img: "",
+    img: "/images/season_10/Wanda-Shirk.jpg",
     description: "Age: 55 | Hometown: Ulysses, Pennsylvania",
     age: 55,
     hometown: "Ulysses, Pennsylvania",
@@ -91,7 +88,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0133",
     full_name: "Jolanda Jones",
-    img: "",
+    img: "/images/season_10/Jolanda-Jones.jpg",
     description: "Age: 38 | Hometown: Houston, Texas",
     age: 38,
     hometown: "Houston, Texas",
@@ -99,7 +96,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0134",
     full_name: "Ashlee Ashby",
-    img: "",
+    img: "/images/season_10/Ashlee-Ashby.jpg",
     description: "Age: 22 | Hometown: Easley, South Carolina",
     age: 22,
     hometown: "Easley, South Carolina",
@@ -107,7 +104,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0135",
     full_name: "Jeff Wilson",
-    img: "",
+    img: "/images/season_10/Jeff-Wilson.jpg",
     description: "Age: 21 | Hometown: Ventura, California",
     age: 21,
     hometown: "Ventura, California",
@@ -124,7 +121,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0137",
     full_name: "Willard Smith",
-    img: "",
+    img: "/images/season_10/Willard-Smith.jpg",
     description: "Age: 56 | Hometown: Bellevue, Washington",
     age: 56,
     hometown: "Bellevue, Washington",
@@ -132,15 +129,16 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0138",
     full_name: "Angie Jakusz",
-    img: "",
+    img: "/images/season_10/Angie-Jakusz.jpg",
     description: "Age: 24 | Hometown: New Orleans, Louisiana",
     age: 24,
     hometown: "New Orleans, Louisiana",
+    nickname: "Angie",
   }),
   buildPlayer({
     castaway_id: "US0139",
     full_name: "James Miller",
-    img: "",
+    img: "/images/season_10/James-Miller.jpg",
     description: "Age: 33 | Hometown: Mobile, Alabama",
     age: 33,
     hometown: "Mobile, Alabama",
@@ -148,7 +146,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0140",
     full_name: "Ibrehem Rahman",
-    img: "",
+    img: "/images/season_10/Ibrehem-Rahman.jpg",
     description: "Age: 27 | Hometown: Birmingham, Alabama",
     age: 27,
     hometown: "Birmingham, Alabama",
@@ -156,7 +154,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0141",
     full_name: "Bobby Jon Drinkard",
-    img: "",
+    img: "/images/season_10/Bobby-Jon-Drinkard.jpg",
     description: "Age: 27 | Hometown: Los Angeles, California",
     age: 27,
     hometown: "Los Angeles, California",
@@ -165,7 +163,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0142",
     full_name: "Coby Archa",
-    img: "",
+    img: "/images/season_10/Coby-Archa.jpg",
     description: "Age: 32 | Hometown: Athens, Texas",
     age: 32,
     hometown: "Athens, Texas",
@@ -173,7 +171,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0143",
     full_name: "Janu Tornell",
-    img: "",
+    img: "/images/season_10/Janu-Tornell.jpg",
     description: "Age: 39 | Hometown: Las Vegas, Nevada",
     age: 39,
     hometown: "Las Vegas, Nevada",
@@ -181,7 +179,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0144",
     full_name: "Stephenie LaGrossa",
-    img: "",
+    img: "/images/season_10/Stephenie-LaGrossa.jpg",
     description: "Age: 24 | Hometown: Toms River, New Jersey",
     age: 24,
     hometown: "Toms River, New Jersey",
@@ -189,7 +187,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0145",
     full_name: "Gregg Carey",
-    img: "",
+    img: "/images/season_10/Gregg-Carey.jpg",
     description: "Age: 27 | Hometown: Chicago, Illinois",
     age: 27,
     hometown: "Chicago, Illinois",
@@ -197,7 +195,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0146",
     full_name: "Caryn Groedel",
-    img: "",
+    img: "/images/season_10/Caryn-Groedel.jpg",
     description: "Age: 46 | Hometown: Solon, Ohio",
     age: 46,
     hometown: "Solon, Ohio",
@@ -205,7 +203,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0147",
     full_name: "Jennifer Lyon",
-    img: "",
+    img: "/images/season_10/Jennifer-Lyon.jpg",
     description: "Age: 32 | Hometown: Encino, California",
     age: 32,
     hometown: "Encino, California",
@@ -214,7 +212,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0148",
     full_name: "Ian Rosenberger",
-    img: "",
+    img: "/images/season_10/Ian-Rosenberger.jpg",
     description: "Age: 23 | Hometown: Ambridge, Pennsylvania",
     age: 23,
     hometown: "Ambridge, Pennsylvania",
@@ -222,7 +220,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0149",
     full_name: "Katie Gallagher",
-    img: "",
+    img: "/images/season_10/Katie-Gallagher.jpg",
     description: "Age: 29 | Hometown: Merced, California",
     age: 29,
     hometown: "Merced, California",
@@ -230,7 +228,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0150",
     full_name: "Tom Westman",
-    img: "",
+    img: "/images/season_10/Tom-Westman.jpg",
     description: "Age: 40 | Hometown: Sayville, New York",
     age: 40,
     hometown: "Sayville, New York",
@@ -399,7 +397,10 @@ export const SEASON_10_CHALLENGES = {
     episode_num: 1,
     variant: "immunity",
     order: 0,
-    winning_castaways: ["US0148", "US0133"],
+    winning_castaways: [
+      "US0148",
+      "US0133",
+    ],
   },
   challenge_1: {
     id: "challenge_1",
@@ -586,7 +587,12 @@ export const SEASON_10_CHALLENGES = {
     episode_num: 6,
     variant: "reward",
     order: 10,
-    winning_castaways: ["US0139", "US0140", "US0141", "US0144"],
+    winning_castaways: [
+      "US0139",
+      "US0140",
+      "US0141",
+      "US0144",
+    ],
   },
   challenge_11: {
     id: "challenge_11",
@@ -691,7 +697,9 @@ export const SEASON_10_CHALLENGES = {
     episode_num: 9,
     variant: "immunity",
     order: 16,
-    winning_castaways: ["US0150"],
+    winning_castaways: [
+      "US0150",
+    ],
   },
   challenge_17: {
     id: "challenge_17",
@@ -701,7 +709,12 @@ export const SEASON_10_CHALLENGES = {
     episode_num: 10,
     variant: "reward",
     order: 17,
-    winning_castaways: ["US0143", "US0145", "US0146", "US0150"],
+    winning_castaways: [
+      "US0143",
+      "US0145",
+      "US0146",
+      "US0150",
+    ],
   },
   challenge_18: {
     id: "challenge_18",
@@ -711,7 +724,9 @@ export const SEASON_10_CHALLENGES = {
     episode_num: 10,
     variant: "immunity",
     order: 18,
-    winning_castaways: ["US0150"],
+    winning_castaways: [
+      "US0150",
+    ],
   },
   challenge_19: {
     id: "challenge_19",
@@ -721,7 +736,9 @@ export const SEASON_10_CHALLENGES = {
     episode_num: 11,
     variant: "immunity",
     order: 19,
-    winning_castaways: ["US0148"],
+    winning_castaways: [
+      "US0148",
+    ],
   },
   challenge_20: {
     id: "challenge_20",
@@ -731,7 +748,9 @@ export const SEASON_10_CHALLENGES = {
     episode_num: 12,
     variant: "reward",
     order: 20,
-    winning_castaways: ["US0145"],
+    winning_castaways: [
+      "US0145",
+    ],
   },
   challenge_21: {
     id: "challenge_21",
@@ -741,7 +760,9 @@ export const SEASON_10_CHALLENGES = {
     episode_num: 12,
     variant: "immunity",
     order: 21,
-    winning_castaways: ["US0148"],
+    winning_castaways: [
+      "US0148",
+    ],
   },
   challenge_22: {
     id: "challenge_22",
@@ -751,7 +772,9 @@ export const SEASON_10_CHALLENGES = {
     episode_num: 13,
     variant: "reward",
     order: 22,
-    winning_castaways: ["US0148"],
+    winning_castaways: [
+      "US0148",
+    ],
   },
   challenge_23: {
     id: "challenge_23",
@@ -761,7 +784,9 @@ export const SEASON_10_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 23,
-    winning_castaways: ["US0150"],
+    winning_castaways: [
+      "US0150",
+    ],
   },
   challenge_24: {
     id: "challenge_24",
@@ -771,7 +796,9 @@ export const SEASON_10_CHALLENGES = {
     episode_num: 14,
     variant: "immunity",
     order: 24,
-    winning_castaways: ["US0150"],
+    winning_castaways: [
+      "US0150",
+    ],
   },
   challenge_25: {
     id: "challenge_25",
@@ -781,7 +808,9 @@ export const SEASON_10_CHALLENGES = {
     episode_num: 14,
     variant: "immunity",
     order: 25,
-    winning_castaways: ["US0150"],
+    winning_castaways: [
+      "US0150",
+    ],
   },
 } satisfies Record<Challenge["id"], Challenge<CastawayIdType, SeasonNumber>>;
 
@@ -976,10 +1005,7 @@ export const SEASON_10_ELIMINATIONS = {
     castaway_id: "US0149",
     variant: "final_tribal_council",
   },
-} satisfies Record<
-  Elimination["id"],
-  Elimination<CastawayIdType, SeasonNumber>
->;
+} satisfies Record<Elimination["id"], Elimination<CastawayIdType, SeasonNumber>>;
 
 export const SEASON_10_EVENTS = {
   event_1: {

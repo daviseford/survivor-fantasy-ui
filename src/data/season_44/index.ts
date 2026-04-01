@@ -35,10 +35,7 @@ type SeasonNumber = 44;
 
 const buildPlayer = <T extends CastawayIdType>(
   p: { castaway_id: T; full_name: string; img: string } & Partial<
-    Omit<
-      Player<T, SeasonNumber>,
-      "season_id" | "season_num" | "castaway_id" | "full_name" | "img"
-    >
+    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "castaway_id" | "full_name" | "img">
   >,
 ): Player<T, SeasonNumber> => ({
   ...p,
@@ -47,31 +44,31 @@ const buildPlayer = <T extends CastawayIdType>(
 });
 
 export const SEASON_44_CASTAWAY_LOOKUP: CastawayLookup = {
-  US0657: { full_name: "Bruce Perreault", castaway: "Bruce" },
-  US0649: { full_name: "Maddy Pomilla", castaway: "Maddy" },
-  US0660: { full_name: "Helen Li", castaway: "Helen" },
-  US0651: { full_name: "Claire Rafson", castaway: "Claire" },
-  US0661: { full_name: "Sarah Wade", castaway: "Sarah" },
-  US0650: { full_name: "Matthew Grinstead-Mayle", castaway: "Matthew" },
-  US0655: { full_name: "Josh Wilder", castaway: "Josh" },
-  US0656: { full_name: "Matt Blankinship", castaway: "Matt" },
-  US0645: { full_name: "Brandon Cottom", castaway: "Brandon" },
-  US0647: { full_name: "Kane Fritzler", castaway: "Kane" },
-  US0653: { full_name: "Frannie Marin", castaway: "Frannie" },
-  US0652: { full_name: "Danny Massa", castaway: "Danny" },
-  US0646: { full_name: "Jaime Lynn Ruiz", castaway: "Jaime" },
-  US0648: { full_name: "Lauren Harpe", castaway: "Lauren" },
-  US0659: { full_name: "Carson Garrett", castaway: "Carson" },
-  US0658: { full_name: "Carolyn Wiger", castaway: "Carolyn" },
-  US0654: { full_name: "Heidi Lagares-Greenblatt", castaway: "Heidi" },
-  US0662: { full_name: "Yam Yam Arocho", castaway: "Yam Yam" },
+  "US0657": { full_name: "Bruce Perreault", castaway: "Bruce" },
+  "US0649": { full_name: "Maddy Pomilla", castaway: "Maddy" },
+  "US0660": { full_name: "Helen Li", castaway: "Helen" },
+  "US0651": { full_name: "Claire Rafson", castaway: "Claire" },
+  "US0661": { full_name: "Sarah Wade", castaway: "Sarah" },
+  "US0650": { full_name: "Matthew Grinstead-Mayle", castaway: "Matthew" },
+  "US0655": { full_name: "Josh Wilder", castaway: "Josh" },
+  "US0656": { full_name: "Matt Blankinship", castaway: "Matt" },
+  "US0645": { full_name: "Brandon Cottom", castaway: "Brandon" },
+  "US0647": { full_name: "Kane Fritzler", castaway: "Kane" },
+  "US0653": { full_name: "Frannie Marin", castaway: "Frannie" },
+  "US0652": { full_name: "Danny Massa", castaway: "Danny" },
+  "US0646": { full_name: "Jaime Lynn Ruiz", castaway: "Jaime" },
+  "US0648": { full_name: "Lauren Harpe", castaway: "Lauren" },
+  "US0659": { full_name: "Carson Garrett", castaway: "Carson" },
+  "US0658": { full_name: "Carolyn Wiger", castaway: "Carolyn" },
+  "US0654": { full_name: "Heidi Lagares-Greenblatt", castaway: "Heidi" },
+  "US0662": { full_name: "Yam Yam Arocho", castaway: "Yam Yam" },
 };
 
 export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0657",
     full_name: "Bruce Perreault",
-    img: "",
+    img: "/images/season_44/Bruce-Perreault.jpg",
     description: "Age: 45 | Hometown: Warwick, Rhode Island",
     age: 45,
     hometown: "Warwick, Rhode Island",
@@ -79,7 +76,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0649",
     full_name: "Maddy Pomilla",
-    img: "",
+    img: "/images/season_44/Maddy-Pomilla.jpg",
     description: "Age: 28 | Hometown: Brooklyn, New York",
     age: 28,
     hometown: "Brooklyn, New York",
@@ -88,7 +85,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0660",
     full_name: "Helen Li",
-    img: "",
+    img: "/images/season_44/Helen-Li.jpg",
     description: "Age: 28 | Hometown: San Francisco, California",
     age: 28,
     hometown: "San Francisco, California",
@@ -97,7 +94,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0651",
     full_name: "Claire Rafson",
-    img: "",
+    img: "/images/season_44/Claire-Rafson.jpg",
     description: "Age: 25 | Hometown: Brooklyn, New York",
     age: 25,
     hometown: "Brooklyn, New York",
@@ -106,7 +103,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0661",
     full_name: "Sarah Wade",
-    img: "",
+    img: "/images/season_44/Sarah-Wade.jpg",
     description: "Age: 26 | Hometown: Chicago, Illinois",
     age: 26,
     hometown: "Chicago, Illinois",
@@ -115,7 +112,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0650",
     full_name: "Matthew Grinstead-Mayle",
-    img: "",
+    img: "/images/season_44/Matthew-Grinstead-Mayle.jpg",
     description: "Age: 43 | Hometown: Columbus, Ohio",
     age: 43,
     hometown: "Columbus, Ohio",
@@ -124,7 +121,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0655",
     full_name: "Josh Wilder",
-    img: "",
+    img: "/images/season_44/Josh-Wilder.jpg",
     description: "Age: 34 | Hometown: Atlanta, Georgia",
     age: 34,
     hometown: "Atlanta, Georgia",
@@ -133,7 +130,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0656",
     full_name: "Matt Blankinship",
-    img: "",
+    img: "/images/season_44/Matt-Blankinship.jpg",
     description: "Age: 27 | Hometown: San Francisco, California",
     age: 27,
     hometown: "San Francisco, California",
@@ -142,7 +139,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0645",
     full_name: "Brandon Cottom",
-    img: "",
+    img: "/images/season_44/Brandon-Cottom.jpg",
     description: "Age: 29 | Hometown: Newtown, Pennsylvania",
     age: 29,
     hometown: "Newtown, Pennsylvania",
@@ -151,7 +148,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0647",
     full_name: "Kane Fritzler",
-    img: "",
+    img: "/images/season_44/Kane-Fritzler.jpg",
     description: "Age: 24 | Hometown: Saskatoon, Saskatchewan",
     age: 24,
     hometown: "Saskatoon, Saskatchewan",
@@ -160,7 +157,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0653",
     full_name: "Frannie Marin",
-    img: "",
+    img: "/images/season_44/Frannie-Marin.jpg",
     description: "Age: 23 | Hometown: Cambridge, Massachusetts",
     age: 23,
     hometown: "Cambridge, Massachusetts",
@@ -169,7 +166,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0652",
     full_name: "Danny Massa",
-    img: "",
+    img: "/images/season_44/Danny-Massa.jpg",
     description: "Age: 31 | Hometown: Bronx, New York",
     age: 31,
     hometown: "Bronx, New York",
@@ -178,7 +175,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0646",
     full_name: "Jaime Lynn Ruiz",
-    img: "",
+    img: "/images/season_44/Jaime-Lynn-Ruiz.jpg",
     description: "Age: 35 | Hometown: Mesa, Arizona",
     age: 35,
     hometown: "Mesa, Arizona",
@@ -187,7 +184,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0648",
     full_name: "Lauren Harpe",
-    img: "",
+    img: "/images/season_44/Lauren-Harpe.jpg",
     description: "Age: 30 | Hometown: Mont Belvieu, Texas",
     age: 30,
     hometown: "Mont Belvieu, Texas",
@@ -196,7 +193,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0659",
     full_name: "Carson Garrett",
-    img: "",
+    img: "/images/season_44/Carson-Garrett.jpg",
     description: "Age: 20 | Hometown: Atlanta, Georgia",
     age: 20,
     hometown: "Atlanta, Georgia",
@@ -205,7 +202,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0658",
     full_name: "Carolyn Wiger",
-    img: "",
+    img: "/images/season_44/Carolyn-Wiger.jpg",
     description: "Age: 35 | Hometown: Hugo, Minnesota",
     age: 35,
     hometown: "Hugo, Minnesota",
@@ -214,7 +211,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0654",
     full_name: "Heidi Lagares-Greenblatt",
-    img: "",
+    img: "/images/season_44/Heidi-Lagares-Greenblatt.jpg",
     description: "Age: 42 | Hometown: Pittsburgh, Pennsylvania",
     age: 42,
     hometown: "Pittsburgh, Pennsylvania",
@@ -223,7 +220,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0662",
     full_name: "Yam Yam Arocho",
-    img: "",
+    img: "/images/season_44/Yam-Yam-Arocho.jpg",
     description: "Age: 35 | Hometown: San Juan, Puerto Rico",
     age: 35,
     hometown: "San Juan, Puerto Rico",
@@ -407,7 +404,13 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 1,
     variant: "immunity",
     order: 2,
-    winning_castaways: ["US0658", "US0659", "US0660", "US0661", "US0662"],
+    winning_castaways: [
+      "US0658",
+      "US0659",
+      "US0660",
+      "US0661",
+      "US0662",
+    ],
   },
   challenge_3: {
     id: "challenge_3",
@@ -417,7 +420,13 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 2,
     variant: "immunity",
     order: 3,
-    winning_castaways: ["US0645", "US0646", "US0647", "US0648", "US0650"],
+    winning_castaways: [
+      "US0645",
+      "US0646",
+      "US0647",
+      "US0648",
+      "US0650",
+    ],
   },
   challenge_4: {
     id: "challenge_4",
@@ -444,7 +453,13 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 2,
     variant: "reward",
     order: 5,
-    winning_castaways: ["US0645", "US0646", "US0647", "US0648", "US0650"],
+    winning_castaways: [
+      "US0645",
+      "US0646",
+      "US0647",
+      "US0648",
+      "US0650",
+    ],
   },
   challenge_6: {
     id: "challenge_6",
@@ -471,7 +486,13 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 3,
     variant: "immunity",
     order: 7,
-    winning_castaways: ["US0645", "US0646", "US0647", "US0648", "US0650"],
+    winning_castaways: [
+      "US0645",
+      "US0646",
+      "US0647",
+      "US0648",
+      "US0650",
+    ],
   },
   challenge_8: {
     id: "challenge_8",
@@ -481,7 +502,12 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 3,
     variant: "immunity",
     order: 8,
-    winning_castaways: ["US0658", "US0659", "US0661", "US0662"],
+    winning_castaways: [
+      "US0658",
+      "US0659",
+      "US0661",
+      "US0662",
+    ],
   },
   challenge_9: {
     id: "challenge_9",
@@ -491,7 +517,13 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 3,
     variant: "reward",
     order: 9,
-    winning_castaways: ["US0645", "US0646", "US0647", "US0648", "US0650"],
+    winning_castaways: [
+      "US0645",
+      "US0646",
+      "US0647",
+      "US0648",
+      "US0650",
+    ],
   },
   challenge_10: {
     id: "challenge_10",
@@ -501,7 +533,12 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 3,
     variant: "reward",
     order: 10,
-    winning_castaways: ["US0658", "US0659", "US0661", "US0662"],
+    winning_castaways: [
+      "US0658",
+      "US0659",
+      "US0661",
+      "US0662",
+    ],
   },
   challenge_11: {
     id: "challenge_11",
@@ -511,7 +548,13 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 4,
     variant: "reward",
     order: 11,
-    winning_castaways: ["US0645", "US0646", "US0647", "US0648", "US0650"],
+    winning_castaways: [
+      "US0645",
+      "US0646",
+      "US0647",
+      "US0648",
+      "US0650",
+    ],
   },
   challenge_12: {
     id: "challenge_12",
@@ -521,7 +564,13 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 4,
     variant: "reward",
     order: 12,
-    winning_castaways: ["US0652", "US0653", "US0654", "US0655", "US0656"],
+    winning_castaways: [
+      "US0652",
+      "US0653",
+      "US0654",
+      "US0655",
+      "US0656",
+    ],
   },
   challenge_13: {
     id: "challenge_13",
@@ -531,7 +580,13 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 4,
     variant: "immunity",
     order: 13,
-    winning_castaways: ["US0645", "US0647", "US0648", "US0650", "US0659"],
+    winning_castaways: [
+      "US0645",
+      "US0647",
+      "US0648",
+      "US0650",
+      "US0659",
+    ],
   },
   challenge_14: {
     id: "challenge_14",
@@ -541,7 +596,13 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 4,
     variant: "immunity",
     order: 14,
-    winning_castaways: ["US0646", "US0652", "US0653", "US0654", "US0656"],
+    winning_castaways: [
+      "US0646",
+      "US0652",
+      "US0653",
+      "US0654",
+      "US0656",
+    ],
   },
   challenge_15: {
     id: "challenge_15",
@@ -551,7 +612,13 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 5,
     variant: "immunity",
     order: 15,
-    winning_castaways: ["US0645", "US0647", "US0648", "US0650", "US0659"],
+    winning_castaways: [
+      "US0645",
+      "US0647",
+      "US0648",
+      "US0650",
+      "US0659",
+    ],
   },
   challenge_16: {
     id: "challenge_16",
@@ -561,7 +628,13 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 5,
     variant: "immunity",
     order: 16,
-    winning_castaways: ["US0646", "US0652", "US0653", "US0654", "US0656"],
+    winning_castaways: [
+      "US0646",
+      "US0652",
+      "US0653",
+      "US0654",
+      "US0656",
+    ],
   },
   challenge_17: {
     id: "challenge_17",
@@ -571,7 +644,13 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 5,
     variant: "reward",
     order: 17,
-    winning_castaways: ["US0645", "US0647", "US0648", "US0650", "US0659"],
+    winning_castaways: [
+      "US0645",
+      "US0647",
+      "US0648",
+      "US0650",
+      "US0659",
+    ],
   },
   challenge_18: {
     id: "challenge_18",
@@ -581,7 +660,13 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 5,
     variant: "reward",
     order: 18,
-    winning_castaways: ["US0646", "US0652", "US0653", "US0654", "US0656"],
+    winning_castaways: [
+      "US0646",
+      "US0652",
+      "US0653",
+      "US0654",
+      "US0656",
+    ],
   },
   challenge_19: {
     id: "challenge_19",
@@ -660,7 +745,9 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 8,
     variant: "immunity",
     order: 23,
-    winning_castaways: ["US0648"],
+    winning_castaways: [
+      "US0648",
+    ],
   },
   challenge_24: {
     id: "challenge_24",
@@ -670,7 +757,9 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 9,
     variant: "immunity",
     order: 24,
-    winning_castaways: ["US0653"],
+    winning_castaways: [
+      "US0653",
+    ],
   },
   challenge_25: {
     id: "challenge_25",
@@ -680,7 +769,9 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 10,
     variant: "reward",
     order: 25,
-    winning_castaways: ["US0653"],
+    winning_castaways: [
+      "US0653",
+    ],
   },
   challenge_26: {
     id: "challenge_26",
@@ -690,7 +781,9 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 10,
     variant: "immunity",
     order: 26,
-    winning_castaways: ["US0659"],
+    winning_castaways: [
+      "US0659",
+    ],
   },
   challenge_27: {
     id: "challenge_27",
@@ -700,7 +793,9 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 11,
     variant: "immunity",
     order: 27,
-    winning_castaways: ["US0662"],
+    winning_castaways: [
+      "US0662",
+    ],
   },
   challenge_28: {
     id: "challenge_28",
@@ -710,7 +805,11 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 12,
     variant: "reward",
     order: 28,
-    winning_castaways: ["US0648", "US0659", "US0662"],
+    winning_castaways: [
+      "US0648",
+      "US0659",
+      "US0662",
+    ],
   },
   challenge_29: {
     id: "challenge_29",
@@ -720,7 +819,9 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 12,
     variant: "immunity",
     order: 29,
-    winning_castaways: ["US0648"],
+    winning_castaways: [
+      "US0648",
+    ],
   },
   challenge_30: {
     id: "challenge_30",
@@ -730,7 +831,9 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 30,
-    winning_castaways: ["US0659"],
+    winning_castaways: [
+      "US0659",
+    ],
   },
   challenge_31: {
     id: "challenge_31",
@@ -740,7 +843,9 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 13,
     variant: "reward",
     order: 31,
-    winning_castaways: ["US0659"],
+    winning_castaways: [
+      "US0659",
+    ],
   },
   challenge_32: {
     id: "challenge_32",
@@ -750,7 +855,9 @@ export const SEASON_44_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 32,
-    winning_castaways: ["US0654"],
+    winning_castaways: [
+      "US0654",
+    ],
   },
 } satisfies Record<Challenge["id"], Challenge<CastawayIdType, SeasonNumber>>;
 
@@ -925,10 +1032,7 @@ export const SEASON_44_ELIMINATIONS = {
     castaway_id: "US0654",
     variant: "final_tribal_council",
   },
-} satisfies Record<
-  Elimination["id"],
-  Elimination<CastawayIdType, SeasonNumber>
->;
+} satisfies Record<Elimination["id"], Elimination<CastawayIdType, SeasonNumber>>;
 
 export const SEASON_44_EVENTS = {
   event_1: {

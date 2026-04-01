@@ -49,6 +49,13 @@ function matchesEras(meta: SeasonMeta, selectedEras: string[]): boolean {
   });
 }
 
+function getSeasonDisplayTitle(meta: SeasonMeta): string {
+  if (/\d/.test(meta.name)) return meta.name;
+
+  const label = meta.subtitle ?? meta.name.replace(/^Survivor:\s*/, "");
+  return `S${meta.order}: ${label}`;
+}
+
 function HeroCard({ meta, live }: { meta: SeasonMeta; live: boolean }) {
   return (
     <Card
@@ -88,7 +95,7 @@ function HeroCard({ meta, live }: { meta: SeasonMeta; live: boolean }) {
       <Group justify="space-between" mt="md" align="flex-start">
         <div style={{ flex: 1 }}>
           <Text fw={700} size="lg">
-            {meta.subtitle ? `Survivor: ${meta.subtitle}` : meta.name}
+            {getSeasonDisplayTitle(meta)}
           </Text>
           <Text size="sm" c="dimmed">
             {meta.location} &middot; {meta.year}
@@ -144,7 +151,7 @@ function CompactCard({ meta, live }: { meta: SeasonMeta; live: boolean }) {
 
       <Stack gap={2} mt="xs">
         <Text fw={600} size="sm" lineClamp={1}>
-          {meta.subtitle ?? `Survivor ${meta.order}`}
+          {getSeasonDisplayTitle(meta)}
         </Text>
         <Text size="xs" c="dimmed" lineClamp={1}>
           {meta.location} &middot; {meta.year}

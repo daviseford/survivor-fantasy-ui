@@ -162,8 +162,7 @@ export const EliminationCRUDTable = () => {
                 onChange={(val) =>
                   setEditValues({
                     ...editValues,
-                    castaway_id:
-                      (val as CastawayId) ?? editValues.castaway_id,
+                    castaway_id: (val as CastawayId) ?? editValues.castaway_id,
                   })
                 }
                 style={{ width: 180 }}

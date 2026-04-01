@@ -34,7 +34,11 @@ export const MyDraftedPlayers = () => {
         <Avatar.Group spacing="sm">
           {myPlayerInfo.map((p) => (
             <Tooltip label={p.full_name} key={p.castaway_id}>
-              <Avatar src={p.img} size={isMobile ? "md" : "lg"} alt={p.full_name} />
+              <Avatar
+                src={p.img}
+                size={isMobile ? "md" : "lg"}
+                alt={p.full_name}
+              />
             </Tooltip>
           ))}
         </Avatar.Group>

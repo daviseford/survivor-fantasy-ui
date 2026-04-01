@@ -90,8 +90,8 @@ export const useScoringCalculations = () => {
             return sum(
               myCastawayIds.flatMap(
                 (id) =>
-                  (survivorPointsByEpisode || {})?.[id]?.[e.order - 1]
-                    ?.total || 0,
+                  (survivorPointsByEpisode || {})?.[id]?.[e.order - 1]?.total ||
+                  0,
               ),
             );
           });
