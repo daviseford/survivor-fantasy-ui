@@ -1,4 +1,9 @@
 import {
+  Box,
+  Divider,
+  Group,
+  NavLink,
+  Stack,
   Text,
   useComputedColorScheme,
   useMantineColorScheme,
@@ -45,16 +50,16 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
       undefined;
 
     return (
-      <Link
-        className={classes.link}
-        data-active={isActive}
-        to={item.link}
+      <NavLink
         key={item.label}
+        component={Link}
+        to={item.link}
+        className={classes.link}
+        active={Boolean(isActive)}
+        label={item.label}
+        leftSection={<item.icon className={classes.linkIcon} stroke={1.5} />}
         onClick={onNavigate}
-      >
-        <item.icon className={classes.linkIcon} stroke={1.5} />
-        <span>{item.label}</span>
-      </Link>
+      />
     );
   });
 
@@ -67,67 +72,78 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
   };
 
   return (
-    <nav className={classes.navbar}>
-      <div className={classes.navbarMain}>{links}</div>
+    <Stack className={classes.navbar} gap="md" justify="space-between">
+      <Stack gap={4}>{links}</Stack>
 
-      <div className={classes.footer}>
-        <button
+      <Stack gap="xs">
+        <Divider />
+
+        <NavLink
+          component="button"
           type="button"
           className={classes.link}
+          label={isDark ? "Light mode" : "Dark mode"}
+          leftSection={
+            isDark ? (
+              <IconSun className={classes.linkIcon} stroke={1.5} />
+            ) : (
+              <IconMoon className={classes.linkIcon} stroke={1.5} />
+            )
+          }
           onClick={toggleColorScheme}
           aria-label="Toggle color scheme"
-        >
-          {isDark ? (
-            <IconSun className={classes.linkIcon} stroke={1.5} />
-          ) : (
-            <IconMoon className={classes.linkIcon} stroke={1.5} />
-          )}
-          <span>{isDark ? "Light mode" : "Dark mode"}</span>
-        </button>
+        />
 
         {!slimUser && (
-          <button
+          <NavLink
+            component="button"
             type="button"
             className={classes.link}
+            label="Login"
+            leftSection={
+              <IconLogin className={classes.linkIcon} stroke={1.5} />
+            }
             onClick={() =>
               modals.openContextModal({
                 modal: "AuthModal",
                 innerProps: {},
               })
             }
-          >
-            <IconLogin className={classes.linkIcon} stroke={1.5} />
-            <span>Login</span>
-          </button>
+          />
         )}
 
         {slimUser && (
           <>
-            <div className={classes.userInfo}>
-              <IconUser className={classes.linkIcon} stroke={1.5} />
-              <Text size="sm" fw={500} truncate>
-                {slimUser.displayName}
-              </Text>
-            </div>
+            <Box className={classes.userCard}>
+              <Group align="flex-start" gap="sm" wrap="nowrap">
+                <IconUser className={classes.linkIcon} stroke={1.5} />
+                <Stack gap={2}>
+                  <Text size="sm" fw={600} truncate>
+                    {slimUser.displayName}
+                  </Text>
+                  <Group gap={6} wrap="nowrap">
+                    <IconMail className={classes.metaIcon} stroke={1.5} />
+                    <Text size="xs" c="dimmed" truncate>
+                      {slimUser.email}
+                    </Text>
+                  </Group>
+                </Stack>
+              </Group>
+            </Box>
 
-            <div className={classes.userInfo}>
-              <IconMail className={classes.linkIcon} stroke={1.5} />
-              <Text size="xs" c="dimmed" truncate>
-                {slimUser.email}
-              </Text>
-            </div>
-
-            <button
+            <NavLink
+              component="button"
               type="button"
               className={classes.link}
+              label="Logout"
+              leftSection={
+                <IconLogout className={classes.linkIcon} stroke={1.5} />
+              }
               onClick={handleLogout}
-            >
-              <IconLogout className={classes.linkIcon} stroke={1.5} />
-              <span>Logout</span>
-            </button>
+            />
           </>
         )}
-      </div>
-    </nav>
+      </Stack>
+    </Stack>
   );
 };
