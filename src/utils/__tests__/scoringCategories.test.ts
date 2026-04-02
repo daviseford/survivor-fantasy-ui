@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { PlayerActions } from "../../types";
 import {
   ScoringCategories,
@@ -89,20 +90,23 @@ describe("aggregateByScoringCategory", () => {
     const scores: EnhancedScores[] = [
       {
         episode_num: 1,
-        total: 7,
+        total: 12,
         actions: [
+          // Idol-family actions (should sum to 8)
+          { action: "use_idol_nullifier", points_awarded: 2 },
+          { action: "find_idol_nullifier", points_awarded: 1 },
+          { action: "votes_negated_by_idol", points_awarded: 5 },
+          // Advantage actions (should sum to 4)
           { action: "find_extra_vote", points_awarded: 1 },
           { action: "use_steal_a_vote", points_awarded: 2 },
-          { action: "win_block_a_vote", points_awarded: 1 },
-          { action: "use_idol_nullifier", points_awarded: 2 },
-          { action: "find_other_advantage", points_awarded: 1 },
+          { action: "accept_beware_advantage", points_awarded: 1 },
         ],
       },
     ];
 
     const result = aggregateByScoringCategory(scores);
-    expect(result.find((r) => r.category === "idols")?.points).toBe(2);
-    expect(result.find((r) => r.category === "advantages")?.points).toBe(5);
+    expect(result.find((r) => r.category === "idols")?.points).toBe(8);
+    expect(result.find((r) => r.category === "advantages")?.points).toBe(4);
   });
 
   it("returns all categories with 0 points for empty actions", () => {
@@ -124,6 +128,14 @@ describe("aggregateByScoringCategory", () => {
     expect(result).toHaveLength(7);
     for (const breakdown of result) {
       expect(breakdown.points).toBe(0);
+    }
+  });
+});
+
+describe("BASE_PLAYER_SCORING", () => {
+  it("has a ScoringCategoryMap entry for every scored action", () => {
+    for (const entry of BASE_PLAYER_SCORING) {
+      expect(ScoringCategoryMap[entry.action]).toBeDefined();
     }
   });
 });
