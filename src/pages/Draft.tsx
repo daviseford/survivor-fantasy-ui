@@ -189,10 +189,19 @@ export const DraftComponent = () => {
   const joinDraft = async () => {
     const id = draft?.id ?? draftId;
     if (!id || !slimUser) return;
-    await set(
-      ref(rt_db, `drafts/${id}/participants/${slimUser.uid}`),
-      slimUser,
-    );
+    try {
+      await set(
+        ref(rt_db, `drafts/${id}/participants/${slimUser.uid}`),
+        slimUser,
+      );
+    } catch (err) {
+      notifications.show({
+        title: "Failed to join draft",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+        icon: <IconX size={16} />,
+      });
+    }
   };
 
   const startDraft = async () => {
@@ -201,13 +210,22 @@ export const DraftComponent = () => {
     const draftOrder = shuffle(draft.participants);
     const turns = buildTurnsMap(draftOrder, draft.total_players);
 
-    await update(ref(rt_db, `drafts/${draft.id}`), {
-      pick_order_uids: buildPickOrderUidMap(draftOrder),
-      turns,
-      "state/started": true,
-      "state/finished": false,
-      "state/current_pick_number": 1,
-    });
+    try {
+      await update(ref(rt_db, `drafts/${draft.id}`), {
+        pick_order_uids: buildPickOrderUidMap(draftOrder),
+        turns,
+        "state/started": true,
+        "state/finished": false,
+        "state/current_pick_number": 1,
+      });
+    } catch (err) {
+      notifications.show({
+        title: "Failed to start draft",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+        icon: <IconX size={16} />,
+      });
+    }
   };
 
   const draftPlayer = async (player: {
@@ -229,11 +247,20 @@ export const DraftComponent = () => {
       player_name: player.full_name,
     } satisfies Draft["draft_picks"][number];
 
-    await update(ref(rt_db, `drafts/${draft.id}`), {
-      [`draft_picks/${draft.current_pick_number}`]: draftPick,
-      "state/current_pick_number": nextPickNumber,
-      ...(isFinalPick ? { "state/finished": true } : {}),
-    });
+    try {
+      await update(ref(rt_db, `drafts/${draft.id}`), {
+        [`draft_picks/${draft.current_pick_number}`]: draftPick,
+        "state/current_pick_number": nextPickNumber,
+        ...(isFinalPick ? { "state/finished": true } : {}),
+      });
+    } catch (err) {
+      notifications.show({
+        title: "Failed to draft player",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+        icon: <IconX size={16} />,
+      });
+    }
   };
 
   useEffect(() => {
