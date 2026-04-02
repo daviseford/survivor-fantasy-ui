@@ -154,11 +154,7 @@ export const Competitions = () => {
         <Text size="sm">{formatParticipants(x)}</Text>
       </Table.Td>
       <Table.Td>
-        <Badge
-          variant="light"
-          color={x.finished ? "green" : "blue"}
-          size="sm"
-        >
+        <Badge variant="light" color={x.finished ? "green" : "blue"} size="sm">
           {x.finished ? "Complete" : "In Progress"}
         </Badge>
       </Table.Td>

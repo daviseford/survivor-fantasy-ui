@@ -173,6 +173,28 @@ describe("shouldAutoFinish", () => {
     ).toBe(false);
   });
 
+  it("returns false when current_episode is 0 (fresh watch-along, spoiler protection)", () => {
+    expect(
+      shouldAutoFinish({
+        events: eventsWithWinner,
+        competition: makeCompetition({ current_episode: 0 }),
+        episodes,
+        slimUser: makeUser(),
+      }),
+    ).toBe(false);
+  });
+
+  it("returns true when current_episode exceeds finale episode (past finale)", () => {
+    expect(
+      shouldAutoFinish({
+        events: eventsWithWinner,
+        competition: makeCompetition({ current_episode: 14 }),
+        episodes,
+        slimUser: makeUser(),
+      }),
+    ).toBe(true);
+  });
+
   it("returns false when watch-along and no finale episode defined", () => {
     const episodesNoFinale = episodes.map((e) => ({ ...e, finale: false }));
     expect(

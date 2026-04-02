@@ -55,29 +55,24 @@ export const useAutoFinishCompetition = (args: {
   episodes: Episode[];
   slimUser: SlimUser | null | undefined;
 }) => {
+  const { events, competition, episodes, slimUser } = args;
   const attemptedRef = useRef(false);
 
   useEffect(() => {
     // Reset attempted flag if competition changes or finished changes
     attemptedRef.current = false;
-  }, [args.competition?.id, args.competition?.finished]);
+  }, [competition?.id, competition?.finished]);
 
   useEffect(() => {
     if (attemptedRef.current) return;
-    if (!shouldAutoFinish(args)) return;
+    if (!shouldAutoFinish({ events, competition, episodes, slimUser })) return;
 
     attemptedRef.current = true;
 
-    updateDoc(doc(db, "competitions", args.competition!.id), {
+    updateDoc(doc(db, "competitions", competition!.id), {
       finished: true,
     }).catch((err) => {
       console.error("useAutoFinishCompetition: failed to set finished", err);
     });
-  }, [
-    args.events,
-    args.competition,
-    args.episodes,
-    args.slimUser,
-    args,
-  ]);
+  }, [events, competition, episodes, slimUser]);
 };

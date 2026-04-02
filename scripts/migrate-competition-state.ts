@@ -27,7 +27,9 @@ async function main(): Promise<void> {
   // Log project ID for operator verification
   const projectId = db.projectId;
   console.log(`Firebase project: ${projectId}`);
-  console.log(`Mode: ${upload ? "UPLOAD (writing to Firestore)" : "DRY RUN (read-only)"}\n`);
+  console.log(
+    `Mode: ${upload ? "UPLOAD (writing to Firestore)" : "DRY RUN (read-only)"}\n`,
+  );
 
   // Read all competitions
   const competitionsSnap = await db.collection("competitions").get();
@@ -40,7 +42,7 @@ async function main(): Promise<void> {
 
     // Read the season's events
     const eventsDoc = await db.collection("events").doc(seasonId).get();
-    const eventsData = eventsDoc.exists ? eventsDoc.data() ?? {} : {};
+    const eventsData = eventsDoc.exists ? (eventsDoc.data() ?? {}) : {};
     const hasWinner = Object.values(eventsData).some(
       (e: unknown) => (e as { action: string }).action === "win_survivor",
     );
