@@ -13,13 +13,13 @@ type Props = {
 const SHUFFLE_INTERVAL = 80;
 
 /** Base delay before the first slot locks (ms) */
-const INITIAL_DELAY = 3500;
+const INITIAL_DELAY = 1500;
 
 /** Max stagger between sequential slot locks (ms) — compressed for large groups */
 const MAX_STAGGER = 500;
 
 /** Pause after all slots lock before calling onComplete (ms) */
-const COMPLETION_PAUSE = 1000;
+const COMPLETION_PAUSE = 2500;
 
 function getDisplayName(user: SlimUser): string {
   return user.displayName || user.email || user.uid;

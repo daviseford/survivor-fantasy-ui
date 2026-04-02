@@ -73,7 +73,7 @@
             ".validate": "newData.isBoolean()"
           },
           "current_pick_number": {
-            ".write": "auth.token.admin == true || (auth != null && ((root.child('drafts').child($draftId).child('creator_uid').val() == auth.uid && root.child('drafts').child($draftId).child('state').child('started').val() != true && data.val() == 0 && newData.val() == 1) || (root.child('drafts').child($draftId).child('state').child('started').val() == true && root.child('drafts').child($draftId).child('state').child('finished').val() != true && root.child('drafts').child($draftId).child('turns').child(data.val() + '').val() == auth.uid && newData.val() == data.val() + 1 && newData.parent().parent().child('draft_picks').child(data.val() + '').exists())))",
+            ".write": "auth.token.admin == true || (auth != null && ((root.child('drafts').child($draftId).child('creator_uid').val() == auth.uid && root.child('drafts').child($draftId).child('state').child('started').val() != true && data.val() == 0 && newData.val() == 1) || (root.child('drafts').child($draftId).child('state').child('started').val() == true && root.child('drafts').child($draftId).child('state').child('finished').val() != true && root.child('drafts').child($draftId).child('turns').child(data.val() + '').val() == auth.uid && newData.val() == data.val() + 1)))",
             ".validate": "newData.isNumber() && newData.val() >= 0"
           }
         }
