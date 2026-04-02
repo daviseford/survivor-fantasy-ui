@@ -37,6 +37,7 @@ export const useCreateDraft = () => {
         started: false,
         finished: false,
       },
+      created_at: Date.now(),
     } satisfies RealtimeDraft;
 
     await set(ref(rt_db, "drafts/" + draftId), newDraft);
