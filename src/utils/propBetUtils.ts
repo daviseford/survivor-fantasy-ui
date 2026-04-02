@@ -2,6 +2,7 @@ import { countBy, entries } from "lodash-es";
 import {
   getActivePropBetKeys,
   PropBetQuestionKey,
+  PropBetQuestionKeys,
   PropBetsQuestions,
 } from "../data/propbets";
 import {
@@ -51,7 +52,7 @@ const buildEmptyScores = (
   userName: string,
   answers?: Partial<Record<PropBetQuestionKey, string>>,
 ): PropBetScores => {
-  const propBetScores = PropBetQuestionKeyList.reduce<
+  const propBetScores = PropBetQuestionKeys.reduce<
     Record<PropBetQuestionKey, PropBetAnswer>
   >(
     (accum, key) => {
@@ -66,10 +67,6 @@ const buildEmptyScores = (
     total: 0,
   };
 };
-
-const PropBetQuestionKeyList = Object.keys(
-  PropBetsQuestions,
-) as PropBetQuestionKey[];
 
 export const getPropBetScoresByUser = (
   events: Record<GameEvent["id"], GameEvent>,
