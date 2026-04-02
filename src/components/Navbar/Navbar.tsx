@@ -10,9 +10,11 @@ import {
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import {
+  IconCalendar,
   IconHome,
   IconKarate,
   IconLayoutBoard,
+  IconList,
   IconLogin,
   IconLogout,
   IconMail,
@@ -20,15 +22,43 @@ import {
   IconSettings,
   IconSun,
   IconUser,
+  IconUserX,
+  IconUsersGroup,
 } from "@tabler/icons-react";
 import { Link, useLocation } from "react-router-dom";
 import { auth } from "../../firebase";
 import { useUser } from "../../hooks/useUser";
 import classes from "./Navbar.module.css";
 
-const data = [
+type NavItem = {
+  link: string;
+  label: string;
+  icon: React.FC<{ className?: string; stroke?: number }>;
+  adminOnly?: boolean;
+  children?: {
+    link: string;
+    label: string;
+    icon: React.FC<{ className?: string; stroke?: number }>;
+  }[];
+};
+
+const data: NavItem[] = [
   { link: "/", label: "Home", icon: IconHome },
-  { link: "/admin", label: "Admin", icon: IconSettings, adminOnly: true },
+  {
+    link: "/admin",
+    label: "Admin",
+    icon: IconSettings,
+    adminOnly: true,
+    children: [
+      { link: "/competitions", label: "Competitions", icon: IconKarate },
+      { link: "/seasons", label: "Seasons", icon: IconLayoutBoard },
+      { link: "/admin", label: "Episodes", icon: IconList },
+      { link: "/admin", label: "Events", icon: IconCalendar },
+      { link: "/admin", label: "Challenges", icon: IconKarate },
+      { link: "/admin", label: "Eliminations", icon: IconUserX },
+      { link: "/admin", label: "Teams", icon: IconUsersGroup },
+    ],
+  },
   { link: "/seasons", label: "Seasons", icon: IconLayoutBoard },
   { link: "/competitions", label: "Competitions", icon: IconKarate },
 ];
@@ -48,6 +78,41 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
       (pathname.startsWith("/admin") && item.link === "/admin") ||
       item.link === pathname ||
       undefined;
+
+    if (item.children) {
+      return (
+        <NavLink
+          key={item.label}
+          className={classes.link}
+          label={item.label}
+          leftSection={<item.icon className={classes.linkIcon} stroke={1.5} />}
+          defaultOpened={pathname.startsWith(item.link)}
+          active={Boolean(isActive)}
+          childrenOffset={28}
+        >
+          {item.children.map((child) => {
+            const hasUniqueRoute = child.link !== "/admin";
+            const childIsActive = hasUniqueRoute
+              ? pathname.startsWith(child.link)
+              : false;
+
+            return (
+              <NavLink
+                key={child.label}
+                component={Link}
+                to={child.link}
+                label={child.label}
+                leftSection={
+                  <child.icon className={classes.linkIcon} stroke={1.5} />
+                }
+                active={childIsActive || undefined}
+                onClick={onNavigate}
+              />
+            );
+          })}
+        </NavLink>
+      );
+    }
 
     return (
       <NavLink
