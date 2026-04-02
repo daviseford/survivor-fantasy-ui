@@ -66,6 +66,7 @@ async function main(): Promise<void> {
   console.log(`\nDeleted ${toDelete.length} abandoned drafts.`);
 
   writeResult({ backfilled: toBackfill.length, deleted: toDelete, skippedFinished, skippedTooRecent });
+  process.exit(0);
 }
 
 function writeResult(result: CleanupResult): void {
