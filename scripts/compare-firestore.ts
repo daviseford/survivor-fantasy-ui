@@ -10,7 +10,6 @@ import * as fs from "fs";
 import * as path from "path";
 import type { ScrapeResultsOutput } from "./lib/types.js";
 
-// Trigger Firebase Admin init (read-only usage)
 import "./lib/admin.js";
 
 interface Mismatch {
@@ -20,11 +19,52 @@ interface Mismatch {
   firestore: unknown;
 }
 
+const SEPARATOR = "=".repeat(60);
+
+/** Group an array of items into a Map keyed by an extracted value. */
+function groupBy<T, K>(items: T[], keyFn: (item: T) => K): Map<K, T[]> {
+  const map = new Map<K, T[]>();
+  for (const item of items) {
+    const key = keyFn(item);
+    const group = map.get(key);
+    if (group) {
+      group.push(item);
+    } else {
+      map.set(key, [item]);
+    }
+  }
+  return map;
+}
+
+/** Record a mismatch and log it. */
+function recordMismatch(
+  mismatches: Mismatch[],
+  mismatch: Mismatch,
+  message: string,
+): void {
+  mismatches.push(mismatch);
+  console.log(`  ${message}`);
+}
+
+/** Read a Firestore doc's data, returning an empty object if the doc does not exist. */
+function docDataOrEmpty(
+  doc: FirebaseFirestore.DocumentSnapshot,
+): Record<string, any> {
+  return doc.exists ? doc.data()! : {};
+}
+
+/** Episode field mappings: [scrapedKey, firestoreKey, displayLabel] */
+const EPISODE_FIELDS: [string, string, string][] = [
+  ["title", "name", "title"],
+  ["isFinale", "finale", "finale"],
+  ["postMerge", "post_merge", "post_merge"],
+  ["mergeOccurs", "merge_occurs", "merge_occurs"],
+];
+
 async function compare(seasonNum: number): Promise<void> {
   const db = getFirestore();
   const seasonKey = `season_${seasonNum}`;
 
-  // --- Load scraped results ---
   const scrapedPath = path.resolve(
     import.meta.dirname,
     "..",
@@ -48,12 +88,11 @@ async function compare(seasonNum: number): Promise<void> {
     fs.readFileSync(scrapedPath, "utf-8"),
   );
 
-  console.log(`\n${"=".repeat(60)}`);
+  console.log(`\n${SEPARATOR}`);
   console.log(`Comparing Season ${seasonNum}: scraped vs Firestore`);
   console.log(`Scraped at: ${scraped.scrapedAt}`);
-  console.log(`${"=".repeat(60)}\n`);
+  console.log(`${SEPARATOR}\n`);
 
-  // --- Read Firestore (READ ONLY) ---
   console.log("Reading Firestore data (read-only)...\n");
 
   const [seasonDoc, challengesDoc, eliminationsDoc, eventsDoc] =
@@ -70,93 +109,52 @@ async function compare(seasonNum: number): Promise<void> {
   }
 
   const fsSeasonData = seasonDoc.data()!;
-  const fsChallenges: Record<string, any> = challengesDoc.exists
-    ? challengesDoc.data()!
-    : {};
-  const fsEliminations: Record<string, any> = eliminationsDoc.exists
-    ? eliminationsDoc.data()!
-    : {};
-  const fsEvents: Record<string, any> = eventsDoc.exists
-    ? eventsDoc.data()!
-    : {};
+  const fsChallenges = docDataOrEmpty(challengesDoc);
+  const fsEliminations = docDataOrEmpty(eliminationsDoc);
+  const fsEvents = docDataOrEmpty(eventsDoc);
 
   const mismatches: Mismatch[] = [];
 
-  // --- Compare Episodes ---
+  // --- Episodes ---
   console.log("--- EPISODES ---");
   const fsEpisodes: any[] = fsSeasonData.episodes || [];
-  const scrapedEpisodes = scraped.episodes;
-
-  // Only compare episodes that exist in BOTH (Firestore is truth, scraper may have future episodes)
   const fsEpByOrder = new Map(fsEpisodes.map((e: any) => [e.order, e]));
-  const scrapedEpByOrder = new Map(scrapedEpisodes.map((e) => [e.order, e]));
+  const scrapedEpByOrder = new Map(scraped.episodes.map((e) => [e.order, e]));
 
-  // Check each Firestore episode has a scraped match
   for (const [order, fsEp] of fsEpByOrder) {
     const scEp = scrapedEpByOrder.get(order);
     if (!scEp) {
-      mismatches.push({
-        category: `Episode ${order}`,
-        field: "existence",
-        scraped: "MISSING",
-        firestore: fsEp.name,
-      });
-      console.log(`  Episode ${order}: MISSING from scraped data`);
+      recordMismatch(
+        mismatches,
+        {
+          category: `Episode ${order}`,
+          field: "existence",
+          scraped: "MISSING",
+          firestore: fsEp.name,
+        },
+        `Episode ${order}: MISSING from scraped data`,
+      );
       continue;
     }
 
-    // Compare episode title
-    if (scEp.title !== fsEp.name) {
-      mismatches.push({
-        category: `Episode ${order}`,
-        field: "title",
-        scraped: scEp.title,
-        firestore: fsEp.name,
-      });
-      console.log(
-        `  Episode ${order} title: scraped="${scEp.title}" vs firestore="${fsEp.name}"`,
-      );
-    }
-
-    // Compare flags
-    if (scEp.isFinale !== fsEp.finale) {
-      mismatches.push({
-        category: `Episode ${order}`,
-        field: "finale",
-        scraped: scEp.isFinale,
-        firestore: fsEp.finale,
-      });
-      console.log(
-        `  Episode ${order} finale: scraped=${scEp.isFinale} vs firestore=${fsEp.finale}`,
-      );
-    }
-
-    if (scEp.postMerge !== fsEp.post_merge) {
-      mismatches.push({
-        category: `Episode ${order}`,
-        field: "post_merge",
-        scraped: scEp.postMerge,
-        firestore: fsEp.post_merge,
-      });
-      console.log(
-        `  Episode ${order} post_merge: scraped=${scEp.postMerge} vs firestore=${fsEp.post_merge}`,
-      );
-    }
-
-    if (scEp.mergeOccurs !== fsEp.merge_occurs) {
-      mismatches.push({
-        category: `Episode ${order}`,
-        field: "merge_occurs",
-        scraped: scEp.mergeOccurs,
-        firestore: fsEp.merge_occurs,
-      });
-      console.log(
-        `  Episode ${order} merge_occurs: scraped=${scEp.mergeOccurs} vs firestore=${fsEp.merge_occurs}`,
-      );
+    for (const [scKey, fsKey, label] of EPISODE_FIELDS) {
+      const scVal = scEp[scKey as keyof typeof scEp];
+      const fsVal = fsEp[fsKey];
+      if (scVal !== fsVal) {
+        recordMismatch(
+          mismatches,
+          {
+            category: `Episode ${order}`,
+            field: label,
+            scraped: scVal,
+            firestore: fsVal,
+          },
+          `Episode ${order} ${label}: scraped="${scVal}" vs firestore="${fsVal}"`,
+        );
+      }
     }
   }
 
-  // Check for extra scraped episodes not in Firestore
   for (const [order, scEp] of scrapedEpByOrder) {
     if (!fsEpByOrder.has(order)) {
       console.log(
@@ -165,14 +163,14 @@ async function compare(seasonNum: number): Promise<void> {
     }
   }
 
-  const matchedEpCount =
-    fsEpByOrder.size -
-    mismatches.filter((m) => m.category.startsWith("Episode")).length;
+  const episodeMismatchCount = mismatches.filter((m) =>
+    m.category.startsWith("Episode"),
+  ).length;
   console.log(
-    `  Summary: ${matchedEpCount}/${fsEpByOrder.size} episodes match\n`,
+    `  Summary: ${fsEpByOrder.size - episodeMismatchCount}/${fsEpByOrder.size} episodes match\n`,
   );
 
-  // --- Compare Challenges ---
+  // --- Challenges ---
   console.log("--- CHALLENGES ---");
   const fsChallengeList = Object.values(fsChallenges).sort(
     (a: any, b: any) => a.episode_num - b.episode_num || a.order - b.order,
@@ -185,20 +183,8 @@ async function compare(seasonNum: number): Promise<void> {
     `  Firestore: ${fsChallengeList.length} challenges, Scraped: ${scrapedChallenges.length} challenges`,
   );
 
-  // Group by episode for comparison
-  const fsChalByEp = new Map<number, any[]>();
-  for (const c of fsChallengeList) {
-    const ep = c.episode_num;
-    if (!fsChalByEp.has(ep)) fsChalByEp.set(ep, []);
-    fsChalByEp.get(ep)!.push(c);
-  }
-
-  const scChalByEp = new Map<number, any[]>();
-  for (const c of scrapedChallenges) {
-    const ep = c.episodeNum;
-    if (!scChalByEp.has(ep)) scChalByEp.set(ep, []);
-    scChalByEp.get(ep)!.push(c);
-  }
+  const fsChalByEp = groupBy(fsChallengeList, (c: any) => c.episode_num);
+  const scChalByEp = groupBy(scrapedChallenges, (c) => c.episodeNum);
 
   const allChalEps = new Set([...fsChalByEp.keys(), ...scChalByEp.keys()]);
   for (const ep of [...allChalEps].sort((a, b) => a - b)) {
@@ -206,77 +192,83 @@ async function compare(seasonNum: number): Promise<void> {
     const scList = scChalByEp.get(ep) || [];
 
     if (fsList.length !== scList.length) {
-      mismatches.push({
-        category: `Challenges Ep${ep}`,
-        field: "count",
-        scraped: scList.length,
-        firestore: fsList.length,
-      });
-      console.log(
-        `  Ep${ep}: count mismatch — scraped=${scList.length}, firestore=${fsList.length}`,
+      recordMismatch(
+        mismatches,
+        {
+          category: `Challenges Ep${ep}`,
+          field: "count",
+          scraped: scList.length,
+          firestore: fsList.length,
+        },
+        `Ep${ep}: count mismatch — scraped=${scList.length}, firestore=${fsList.length}`,
       );
     }
 
-    // Compare each challenge in order
     const maxLen = Math.max(fsList.length, scList.length);
     for (let i = 0; i < maxLen; i++) {
-      const fsC = fsList[i];
-      const scC = scList[i];
+      const fsC = fsList[i] as any;
+      const scC = scList[i] as any;
       const label = `Ep${ep} Challenge #${i + 1}`;
 
       if (!fsC) {
-        console.log(`  ${label}: EXTRA in scraped — ${scC.variant}`);
-        mismatches.push({
-          category: label,
-          field: "existence",
-          scraped: `${scC.variant} (tribe: ${scC.winnerTribe})`,
-          firestore: "MISSING",
-        });
+        recordMismatch(
+          mismatches,
+          {
+            category: label,
+            field: "existence",
+            scraped: `${scC.variant} (tribe: ${scC.winnerTribe})`,
+            firestore: "MISSING",
+          },
+          `${label}: EXTRA in scraped — ${scC.variant}`,
+        );
         continue;
       }
       if (!scC) {
-        console.log(`  ${label}: MISSING from scraped — ${fsC.variant}`);
-        mismatches.push({
-          category: label,
-          field: "existence",
-          scraped: "MISSING",
-          firestore: `${fsC.variant}`,
-        });
+        recordMismatch(
+          mismatches,
+          {
+            category: label,
+            field: "existence",
+            scraped: "MISSING",
+            firestore: `${fsC.variant}`,
+          },
+          `${label}: MISSING from scraped — ${fsC.variant}`,
+        );
         continue;
       }
 
-      // Compare variant
       if (scC.variant !== fsC.variant) {
-        mismatches.push({
-          category: label,
-          field: "variant",
-          scraped: scC.variant,
-          firestore: fsC.variant,
-        });
-        console.log(
-          `  ${label} variant: scraped="${scC.variant}" vs firestore="${fsC.variant}"`,
+        recordMismatch(
+          mismatches,
+          {
+            category: label,
+            field: "variant",
+            scraped: scC.variant,
+            firestore: fsC.variant,
+          },
+          `${label} variant: scraped="${scC.variant}" vs firestore="${fsC.variant}"`,
         );
       }
 
-      // Compare winners (normalize: sort names for comparison)
       const scWinners = [...(scC.winnerCastawayIds || [])].sort().join(", ");
       const fsWinners = [...(fsC.winning_castaways || [])].sort().join(", ");
       if (scWinners !== fsWinners) {
-        mismatches.push({
-          category: label,
-          field: "winners",
-          scraped: scWinners || `(tribe: ${scC.winnerTribe})`,
-          firestore: fsWinners || "(none)",
-        });
-        console.log(
-          `  ${label} winners: scraped=[${scWinners || `tribe:${scC.winnerTribe}`}] vs firestore=[${fsWinners}]`,
+        recordMismatch(
+          mismatches,
+          {
+            category: label,
+            field: "winners",
+            scraped: scWinners || `(tribe: ${scC.winnerTribe})`,
+            firestore: fsWinners || "(none)",
+          },
+          `${label} winners: scraped=[${scWinners || `tribe:${scC.winnerTribe}`}] vs firestore=[${fsWinners}]`,
         );
       }
     }
   }
   console.log();
 
-  // --- Compare Eliminations ---
+  // --- Eliminations ---
   console.log("--- ELIMINATIONS ---");
   const fsElimList = Object.values(fsEliminations).sort(
     (a: any, b: any) => a.episode_num - b.episode_num || a.order - b.order,
@@ -289,20 +281,8 @@ async function compare(seasonNum: number): Promise<void> {
     `  Firestore: ${fsElimList.length} eliminations, Scraped: ${scrapedElims.length} eliminations`,
   );
 
-  // Group by episode
-  const fsElimByEp = new Map<number, any[]>();
-  for (const e of fsElimList) {
-    const ep = e.episode_num;
-    if (!fsElimByEp.has(ep)) fsElimByEp.set(ep, []);
-    fsElimByEp.get(ep)!.push(e);
-  }
-
-  const scElimByEp = new Map<number, any[]>();
-  for (const e of scrapedElims) {
-    const ep = e.episodeNum;
-    if (!scElimByEp.has(ep)) scElimByEp.set(ep, []);
-    scElimByEp.get(ep)!.push(e);
-  }
+  const fsElimByEp = groupBy(fsElimList, (e: any) => e.episode_num);
+  const scElimByEp = groupBy(scrapedElims, (e) => e.episodeNum);
 
   const allElimEps = new Set([...fsElimByEp.keys(), ...scElimByEp.keys()]);
   for (const ep of [...allElimEps].sort((a, b) => a - b)) {
@@ -310,79 +290,81 @@ async function compare(seasonNum: number): Promise<void> {
     const scList = scElimByEp.get(ep) || [];
 
     if (fsList.length !== scList.length) {
-      mismatches.push({
-        category: `Eliminations Ep${ep}`,
-        field: "count",
-        scraped: scList.length,
-        firestore: fsList.length,
-      });
-      console.log(
-        `  Ep${ep}: count mismatch — scraped=${scList.length}, firestore=${fsList.length}`,
+      recordMismatch(
+        mismatches,
+        {
+          category: `Eliminations Ep${ep}`,
+          field: "count",
+          scraped: scList.length,
+          firestore: fsList.length,
+        },
+        `Ep${ep}: count mismatch — scraped=${scList.length}, firestore=${fsList.length}`,
       );
     }
 
-    // Compare each elimination
     const maxLen = Math.max(fsList.length, scList.length);
     for (let i = 0; i < maxLen; i++) {
-      const fsE = fsList[i];
-      const scE = scList[i];
+      const fsE = fsList[i] as any;
+      const scE = scList[i] as any;
       const label = `Ep${ep} Elimination #${i + 1}`;
 
       if (!fsE) {
-        console.log(`  ${label}: EXTRA in scraped — "${scE.castawayId}"`);
-        mismatches.push({
-          category: label,
-          field: "existence",
-          scraped: scE.castawayId,
-          firestore: "MISSING",
-        });
+        recordMismatch(
+          mismatches,
+          {
+            category: label,
+            field: "existence",
+            scraped: scE.castawayId,
+            firestore: "MISSING",
+          },
+          `${label}: EXTRA in scraped — "${scE.castawayId}"`,
+        );
         continue;
       }
       if (!scE) {
-        console.log(`  ${label}: MISSING from scraped — "${fsE.castaway_id}"`);
-        mismatches.push({
-          category: label,
-          field: "existence",
-          scraped: "MISSING",
-          firestore: fsE.castaway_id,
-        });
+        recordMismatch(
+          mismatches,
+          {
+            category: label,
+            field: "existence",
+            scraped: "MISSING",
+            firestore: fsE.castaway_id,
+          },
+          `${label}: MISSING from scraped — "${fsE.castaway_id}"`,
+        );
         continue;
       }
 
-      // Compare castaway IDs
-      const scId = scE.castawayId;
-      const fsId = fsE.castaway_id;
-      const nameMatches = scId === fsId;
-
-      if (!nameMatches) {
-        mismatches.push({
-          category: label,
-          field: "player_name",
-          scraped: scId,
-          firestore: fsId,
-        });
-        console.log(
-          `  ${label} castaway_id: scraped="${scId}" vs firestore="${fsId}"`,
+      if (scE.castawayId !== fsE.castaway_id) {
+        recordMismatch(
+          mismatches,
+          {
+            category: label,
+            field: "player_name",
+            scraped: scE.castawayId,
+            firestore: fsE.castaway_id,
+          },
+          `${label} castaway_id: scraped="${scE.castawayId}" vs firestore="${fsE.castaway_id}"`,
         );
       }
 
-      // Compare variant
       if (scE.variant !== fsE.variant) {
-        mismatches.push({
-          category: label,
-          field: "variant",
-          scraped: scE.variant,
-          firestore: fsE.variant,
-        });
-        console.log(
-          `  ${label} variant: scraped="${scE.variant}" vs firestore="${fsE.variant}"`,
+        recordMismatch(
+          mismatches,
+          {
+            category: label,
+            field: "variant",
+            scraped: scE.variant,
+            firestore: fsE.variant,
+          },
+          `${label} variant: scraped="${scE.variant}" vs firestore="${fsE.variant}"`,
         );
       }
     }
   }
   console.log();
 
-  // --- Compare Events ---
+  // --- Events ---
   console.log("--- EVENTS ---");
   const fsEventList = Object.values(fsEvents).sort(
     (a: any, b: any) => a.episode_num - b.episode_num,
@@ -395,39 +377,32 @@ async function compare(seasonNum: number): Promise<void> {
     `  Firestore: ${fsEventList.length} events, Scraped: ${scrapedEvents.length} events`,
   );
 
-  // Group by action type for easier comparison
-  const fsEventsByAction = new Map<string, any[]>();
-  for (const e of fsEventList) {
-    const key = `ep${e.episode_num}_${e.action}_${e.castaway_id}`;
-    if (!fsEventsByAction.has(key)) fsEventsByAction.set(key, []);
-    fsEventsByAction.get(key)!.push(e);
-  }
+  const fsEventsByAction = groupBy(
+    fsEventList as any[],
+    (e: any) => `ep${e.episode_num}_${e.action}_${e.castaway_id}`,
+  );
+  const scEventsByAction = groupBy(
+    scrapedEvents,
+    (e) => `ep${e.episodeNum}_${e.action}_${e.castawayId}`,
+  );
 
-  const scEventsByAction = new Map<string, any[]>();
-  for (const e of scrapedEvents) {
-    const key = `ep${e.episodeNum}_${e.action}_${e.castawayId}`;
-    if (!scEventsByAction.has(key)) scEventsByAction.set(key, []);
-    scEventsByAction.get(key)!.push(e);
-  }
-
-  // Find events in Firestore but not scraped
   for (const [key, fsEvts] of fsEventsByAction) {
     if (!scEventsByAction.has(key)) {
       for (const e of fsEvts) {
-        mismatches.push({
-          category: "Events",
-          field: key,
-          scraped: "MISSING",
-          firestore: `${e.action} — ${e.castaway_id} (ep${e.episode_num})`,
-        });
-        console.log(
-          `  MISSING from scraped: ${e.action} — ${e.castaway_id} (ep${e.episode_num})`,
+        recordMismatch(
+          mismatches,
+          {
+            category: "Events",
+            field: key,
+            scraped: "MISSING",
+            firestore: `${e.action} — ${e.castaway_id} (ep${e.episode_num})`,
+          },
+          `MISSING from scraped: ${e.action} — ${e.castaway_id} (ep${e.episode_num})`,
         );
       }
     }
   }
 
-  // Find events scraped but not in Firestore
   for (const [key, scEvts] of scEventsByAction) {
     if (!fsEventsByAction.has(key)) {
       for (const e of scEvts) {
@@ -439,7 +414,6 @@ async function compare(seasonNum: number): Promise<void> {
   }
   console.log();
 
-  // --- Warnings from scraper ---
   if (scraped.warnings.length > 0) {
     console.log("--- SCRAPER WARNINGS ---");
     for (const w of scraped.warnings) {
@@ -449,7 +423,7 @@ async function compare(seasonNum: number): Promise<void> {
   }
 
   // --- Summary ---
-  console.log(`${"=".repeat(60)}`);
+  console.log(SEPARATOR);
   console.log(`SUMMARY: Season ${seasonNum}`);
   console.log(`  Total mismatches: ${mismatches.length}`);
   if (mismatches.length === 0) {
@@ -465,9 +439,8 @@ async function compare(seasonNum: number): Promise<void> {
       console.log(`    ${cat}: ${count} mismatches`);
     }
   }
-  console.log(`${"=".repeat(60)}\n`);
+  console.log(`${SEPARATOR}\n`);
 
-  // Exit with error code if mismatches found
   process.exit(mismatches.length > 0 ? 1 : 0);
 }
 

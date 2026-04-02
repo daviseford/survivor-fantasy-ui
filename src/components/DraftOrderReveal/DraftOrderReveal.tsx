@@ -1,6 +1,6 @@
 import { Badge, Paper, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { IconCrown, IconDice5 } from "@tabler/icons-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { SlimUser } from "../../types";
 import classes from "./DraftOrderReveal.module.css";
 
@@ -13,16 +13,25 @@ type Props = {
 const SHUFFLE_INTERVAL = 80;
 
 /** Base delay before the first slot locks (ms) */
-const INITIAL_DELAY = 3500;
+const INITIAL_DELAY = 1500;
 
 /** Max stagger between sequential slot locks (ms) — compressed for large groups */
 const MAX_STAGGER = 500;
 
 /** Pause after all slots lock before calling onComplete (ms) */
-const COMPLETION_PAUSE = 1000;
+const COMPLETION_PAUSE = 2500;
 
 function getDisplayName(user: SlimUser): string {
   return user.displayName || user.email || user.uid;
+}
+
+function shuffleNames(names: string[]): string[] {
+  const next = [...names];
+  for (let i = next.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [next[i], next[j]] = [next[j], next[i]];
+  }
+  return next;
 }
 
 export const DraftOrderReveal = ({ pickOrder, onComplete }: Props) => {
@@ -35,20 +44,11 @@ export const DraftOrderReveal = ({ pickOrder, onComplete }: Props) => {
   const intervalsRef = useRef<ReturnType<typeof setInterval>[]>([]);
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const completedRef = useRef(false);
-
-  const allNames = pickOrder.map(getDisplayName);
-
-  const getRandomName = useCallback(
-    (excludeIndex?: number) => {
-      if (allNames.length <= 1) return allNames[0] ?? "";
-      let name: string;
-      do {
-        name = allNames[Math.floor(Math.random() * allNames.length)];
-      } while (excludeIndex !== undefined && name === allNames[excludeIndex]);
-      return name;
-    },
-    [allNames],
+  const lockedSlotsRef = useRef<boolean[]>(
+    new Array(pickOrder.length).fill(false) as boolean[],
   );
+
+  const allNames = useMemo(() => pickOrder.map(getDisplayName), [pickOrder]);
 
   useEffect(() => {
     const slotCount = pickOrder.length;
@@ -57,21 +57,37 @@ export const DraftOrderReveal = ({ pickOrder, onComplete }: Props) => {
       return;
     }
 
+    completedRef.current = false;
+    const initialLockedSlots = new Array(slotCount).fill(false) as boolean[];
+    lockedSlotsRef.current = initialLockedSlots;
+    setLockedSlots(initialLockedSlots);
+    setDisplayNames(shuffleNames(allNames));
+
     // Compute stagger so lock-in phase scales with group size
     const stagger = Math.min(MAX_STAGGER, 3000 / slotCount);
 
-    // Start shuffling all slots
+    // Shuffle all unlocked slots together so each frame shows a unique order.
     const intervals: ReturnType<typeof setInterval>[] = [];
-    for (let i = 0; i < slotCount; i++) {
-      const interval = setInterval(() => {
-        setDisplayNames((prev) => {
-          const next = [...prev];
-          next[i] = getRandomName(i);
-          return next;
+    const shuffleInterval = setInterval(() => {
+      setDisplayNames((prev) => {
+        const next = [...prev];
+        const currentLockedSlots = lockedSlotsRef.current;
+        const unlockedIndexes = currentLockedSlots
+          .map((isLocked, index) => (!isLocked ? index : -1))
+          .filter((index) => index >= 0);
+        const unlockedNames = allNames.filter(
+          (_, index) => !currentLockedSlots[index],
+        );
+        const shuffledUnlockedNames = shuffleNames(unlockedNames);
+
+        unlockedIndexes.forEach((slotIndex, orderIndex) => {
+          next[slotIndex] = shuffledUnlockedNames[orderIndex] ?? next[slotIndex];
         });
-      }, SHUFFLE_INTERVAL);
-      intervals.push(interval);
-    }
+
+        return next;
+      });
+    }, SHUFFLE_INTERVAL);
+    intervals.push(shuffleInterval);
     intervalsRef.current = intervals;
 
     // Stagger the lock-in for each slot
@@ -79,9 +95,6 @@ export const DraftOrderReveal = ({ pickOrder, onComplete }: Props) => {
     for (let i = 0; i < slotCount; i++) {
       const lockDelay = INITIAL_DELAY + i * stagger;
       const timeout = setTimeout(() => {
-        // Stop shuffling this slot
-        clearInterval(intervals[i]);
-
         // Set the final name
         setDisplayNames((prev) => {
           const next = [...prev];
@@ -93,12 +106,14 @@ export const DraftOrderReveal = ({ pickOrder, onComplete }: Props) => {
         setLockedSlots((prev) => {
           const next = [...prev];
           next[i] = true;
+          lockedSlotsRef.current = next;
           return next;
         });
 
         // If this is the last slot, schedule onComplete
         if (i === slotCount - 1 && !completedRef.current) {
           completedRef.current = true;
+          intervals.forEach(clearInterval);
           const completionTimeout = setTimeout(() => {
             onComplete();
           }, COMPLETION_PAUSE);
@@ -114,8 +129,7 @@ export const DraftOrderReveal = ({ pickOrder, onComplete }: Props) => {
       intervals.forEach(clearInterval);
       timeouts.forEach(clearTimeout);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [allNames, onComplete, pickOrder]);
 
   return (
     <Paper p="xl" radius="md" withBorder>

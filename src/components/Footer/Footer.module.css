@@ -2,25 +2,38 @@
   margin-top: auto;
   border-top: rem(1px) solid
     light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+  background: light-dark(
+    color-mix(
+      in srgb,
+      var(--mantine-color-gray-0) 70%,
+      var(--mantine-color-blue-0)
+    ),
+    color-mix(
+      in srgb,
+      var(--mantine-color-dark-7) 88%,
+      var(--mantine-color-blue-9)
+    )
+  );
 }
 
 .inner {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: var(--mantine-spacing-sm);
-  padding-bottom: var(--mantine-spacing-sm);
+  gap: var(--mantine-spacing-md);
+  padding-top: var(--mantine-spacing-md);
+  padding-bottom: var(--mantine-spacing-md);
 
   @media (max-width: $mantine-breakpoint-xs) {
     flex-direction: column;
-    gap: var(--mantine-spacing-xs);
+    align-items: flex-start;
   }
 }
 
 .icon {
-  width: rem(18px);
-  height: rem(18px);
-  opacity: 0.5;
+  width: rem(20px);
+  height: rem(20px);
+  opacity: 0.7;
 }
 
 :global([data-mantine-color-scheme="dark"]) .icon {

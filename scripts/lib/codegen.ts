@@ -21,49 +21,49 @@ interface ExistingPlayerData {
 }
 
 /**
+ * Resolve name and img from a regex match with groups:
+ *   [1] or [2] = name (double or single quoted)
+ *   [3] or [4] or [5] = img (double quoted, single quoted, or backtick template)
+ */
+function resolvePlayerMatch(
+  match: RegExpExecArray,
+  imgConst: { prefix: string } | null,
+): ExistingPlayerData {
+  const name = match[1] || match[2];
+  let img = match[3] || match[4] || "";
+
+  if (match[5] && imgConst) {
+    const tmpl = match[5].slice(1, -1); // Remove backticks
+    img = tmpl.replace(/\$\{IMG\}/g, imgConst.prefix);
+  }
+
+  return { name, img };
+}
+
+/**
  * Extract player names and img URLs from an existing season data file.
  * Resolves `${IMG}/...` template literals using the IMG constant value.
  */
 export function extractExistingPlayers(
   fileContent: string,
 ): ExistingPlayerData[] {
+  const imgConst = detectImgConstant(fileContent);
   const players: ExistingPlayerData[] = [];
 
-  // Detect IMG constant for resolving template literals
-  const imgConst = detectImgConstant(fileContent);
-
-  // Match positional buildPlayer("Name", "img_url", ...) or buildPlayer("Name", `${IMG}/...`)
+  // Positional: buildPlayer("Name", "img_url", ...)
   const positionalRegex =
     /buildPlayer\(\s*\n?\s*(?:"([^"]+)"|'([^']+)')\s*,\s*\n?\s*(?:"([^"]+)"|'([^']+)'|(`[^`]+`))/g;
 
-  let match: RegExpExecArray | null;
-  while ((match = positionalRegex.exec(fileContent)) !== null) {
-    const name = match[1] || match[2];
-    let img = match[3] || match[4] || "";
-
-    // Handle backtick template: `${IMG}/filename.jpg`
-    if (match[5] && imgConst) {
-      const tmpl = match[5].slice(1, -1); // Remove backticks
-      img = tmpl.replace(/\$\{IMG\}/g, imgConst.prefix);
-    }
-
-    players.push({ name, img });
-  }
-
-  // Also match object-style buildPlayer({ name: "Name", img: "..." })
+  // Object-style: buildPlayer({ name: "Name", img: "..." })
   const objectRegex =
     /buildPlayer\(\{\s*\n?\s*name:\s*(?:"([^"]+)"|'([^']+)'),\s*\n?\s*img:\s*(?:"([^"]+)"|'([^']+)'|(`[^`]+`))/g;
 
+  let match: RegExpExecArray | null;
+  while ((match = positionalRegex.exec(fileContent)) !== null) {
+    players.push(resolvePlayerMatch(match, imgConst));
+  }
   while ((match = objectRegex.exec(fileContent)) !== null) {
-    const name = match[1] || match[2];
-    let img = match[3] || match[4] || "";
-
-    if (match[5] && imgConst) {
-      const tmpl = match[5].slice(1, -1);
-      img = tmpl.replace(/\$\{IMG\}/g, imgConst.prefix);
-    }
-
-    players.push({ name, img });
+    players.push(resolvePlayerMatch(match, imgConst));
   }
 
   return players;
@@ -116,29 +116,27 @@ export function detectImgConstant(
 }
 
 function escapeString(s: string): string {
-  // Use double quotes, escape internal double quotes
-  if (s.includes('"') && !s.includes("'")) {
-    return `'${s}'`;
-  }
-  if (s.includes('"')) {
-    return `'${s.replace(/'/g, "\\'")}'`;
-  }
-  return `"${s}"`;
+  if (!s.includes('"')) return `"${s}"`;
+  if (!s.includes("'")) return `'${s}'`;
+  // Contains both quote types: use single quotes with escaping
+  return `'${s.replace(/'/g, "\\'")}'`;
+}
+
+interface MergedPlayer {
+  castawayId: string;
+  fullName: string;
+  castawayShortName: string;
+  img: string;
+  age?: number;
+  profession?: string;
+  hometown?: string;
+  previousSeasons?: number[];
+  description?: string;
+  nickname?: string;
 }
 
 function formatPlayerCall(
-  player: {
-    castawayId: string;
-    fullName: string;
-    img: string;
-    age?: number;
-    profession?: string;
-    hometown?: string;
-    previousSeasons?: number[];
-    bio?: string;
-    description?: string;
-    nickname?: string;
-  },
+  player: MergedPlayer,
   imgConstant: { prefix: string } | null,
 ): string {
   const lines: string[] = [];
@@ -188,19 +186,7 @@ export function generatePlayerSection(
   const existingMap = new Map(existingPlayers.map((p) => [p.name, p]));
 
   // Merge scraped data with existing player data
-  const allIds = new Set<string>();
-  const mergedPlayers: Array<{
-    castawayId: string;
-    fullName: string;
-    castawayShortName: string;
-    img: string;
-    age?: number;
-    profession?: string;
-    hometown?: string;
-    previousSeasons?: number[];
-    description?: string;
-    nickname?: string;
-  }> = [];
+  const mergedPlayers: MergedPlayer[] = [];
 
   for (const scraped of scrapedPlayers) {
     const localName = scraped.localName;
@@ -231,7 +217,6 @@ export function generatePlayerSection(
       description,
       nickname: scraped.nickname,
     });
-    allIds.add(scraped.castawayId);
   }
 
   // Build the output
@@ -398,8 +383,7 @@ export function generateSeasonFile(
  */
 function parseVotesReceived(voteString: string): number | undefined {
   const match = voteString.match(/^(\d+)/);
-  if (match) return Number(match[1]);
-  return undefined;
+  return match ? Number(match[1]) : undefined;
 }
 
 /**
@@ -444,8 +428,8 @@ export function generateChallengeSection(
 
   for (const ch of challenges) {
     const id = `challenge_${ch.order}`;
-    const validWinners = ch.winnerCastawayIds.filter((id) =>
-      castawayIdSet.has(id),
+    const validWinners = ch.winnerCastawayIds.filter((cid) =>
+      castawayIdSet.has(cid),
     );
 
     lines.push(`  ${id}: {`);

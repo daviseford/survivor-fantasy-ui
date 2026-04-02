@@ -37,6 +37,7 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 - **State/Data:** All hooks use raw Firebase `onSnapshot` for realtime Firestore/RTDB subscriptions (no react-query)
 - **Firebase backend:** Firestore (seasons, competitions), Realtime Database (live drafts), Firebase Auth, hosted on Firebase Hosting
 - **Dual database pattern:** Firestore for persistent read-heavy data (seasons, competitions, game events), Realtime Database for live collaborative state (drafts in progress)
+- **Documented solutions:** `docs/solutions/` contains past problem resolutions organized by category with YAML frontmatter (`module`, `tags`, `problem_type`). Relevant when debugging or implementing in documented areas.
 
 ## Key Patterns
 

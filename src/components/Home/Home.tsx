@@ -2,6 +2,7 @@ import {
   Button,
   Container,
   Group,
+  Paper,
   SimpleGrid,
   Stack,
   Text,
@@ -23,14 +24,12 @@ export const Home = () => {
     <>
       <div className={classes.wrapper}>
         <Container size={700} className={classes.inner}>
+          <Text className={classes.eyebrow} size="sm" fw={700} tt="uppercase">
+            Fantasy Survivor for friends
+          </Text>
           <Title order={1} className={classes.title}>
             Draft your{" "}
-            <Text
-              component="span"
-              variant="gradient"
-              gradient={{ from: "blue", to: "cyan" }}
-              inherit
-            >
+            <Text component="span" variant="gradient" inherit>
               Survivor Fantasy
             </Text>{" "}
             team with friends
@@ -70,41 +69,41 @@ export const Home = () => {
             How it works
           </Text>
           <SimpleGrid cols={{ base: 1, sm: 3 }}>
-            <Stack gap={6} align="center">
-              <ThemeIcon size={44} radius="xl" variant="light" color="blue">
-                <IconSearch size={22} />
-              </ThemeIcon>
-              <Text fw={600} ta="center">
-                Pick a season
-              </Text>
-              <Text size="sm" c="dimmed" ta="center">
-                Browse seasons and check out the cast before you commit.
-              </Text>
-            </Stack>
-            <Stack gap={6} align="center">
-              <ThemeIcon size={44} radius="xl" variant="light" color="cyan">
-                <IconTargetArrow size={22} />
-              </ThemeIcon>
-              <Text fw={600} ta="center">
-                Draft your team
-              </Text>
-              <Text size="sm" c="dimmed" ta="center">
-                Invite friends, take turns picking players, and build your
-                roster.
-              </Text>
-            </Stack>
-            <Stack gap={6} align="center">
-              <ThemeIcon size={44} radius="xl" variant="light" color="teal">
-                <IconTrophy size={22} />
-              </ThemeIcon>
-              <Text fw={600} ta="center">
-                Compete for points
-              </Text>
-              <Text size="sm" c="dimmed" ta="center">
-                Earn points as your players win challenges, find idols, and
-                survive.
-              </Text>
-            </Stack>
+            <Paper className={classes.step} withBorder radius="lg" p="lg">
+              <Stack gap="sm" align="flex-start">
+                <ThemeIcon size={44} radius="xl" variant="light" color="blue">
+                  <IconSearch size={22} />
+                </ThemeIcon>
+                <Text fw={700}>Pick a season</Text>
+                <Text size="sm" c="dimmed">
+                  Browse seasons and check out the cast before you commit.
+                </Text>
+              </Stack>
+            </Paper>
+            <Paper className={classes.step} withBorder radius="lg" p="lg">
+              <Stack gap="sm" align="flex-start">
+                <ThemeIcon size={44} radius="xl" variant="light" color="cyan">
+                  <IconTargetArrow size={22} />
+                </ThemeIcon>
+                <Text fw={700}>Draft your team</Text>
+                <Text size="sm" c="dimmed">
+                  Invite friends, take turns picking players, and build your
+                  roster.
+                </Text>
+              </Stack>
+            </Paper>
+            <Paper className={classes.step} withBorder radius="lg" p="lg">
+              <Stack gap="sm" align="flex-start">
+                <ThemeIcon size={44} radius="xl" variant="light" color="teal">
+                  <IconTrophy size={22} />
+                </ThemeIcon>
+                <Text fw={700}>Compete for points</Text>
+                <Text size="sm" c="dimmed">
+                  Earn points as your players win challenges, find idols, and
+                  survive.
+                </Text>
+              </Stack>
+            </Paper>
           </SimpleGrid>
         </Container>
       </div>

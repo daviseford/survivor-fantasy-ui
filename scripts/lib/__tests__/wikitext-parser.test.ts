@@ -81,19 +81,17 @@ const CHRIS_DAUGHERTY_WIKITEXT = `{{Contestant
 describe("parseBirthDate", () => {
   it("parses a standard birthdate template", () => {
     const result = parseBirthDate("{{Birth date and age|1992|3|25|mf=yes}}");
-    expect(result).not.toBeNull();
-    expect(result!.year).toBe(1992);
-    expect(result!.month).toBe(3);
-    expect(result!.day).toBe(25);
+    expect(result).toEqual(
+      expect.objectContaining({ year: 1992, month: 3, day: 25 }),
+    );
     expect(result!.age).toBeGreaterThanOrEqual(33);
   });
 
   it("handles single-digit month and day", () => {
     const result = parseBirthDate("{{Birth date and age|1974|4|1|mf=yes}}");
-    expect(result).not.toBeNull();
-    expect(result!.year).toBe(1974);
-    expect(result!.month).toBe(4);
-    expect(result!.day).toBe(1);
+    expect(result).toEqual(
+      expect.objectContaining({ year: 1974, month: 4, day: 1 }),
+    );
   });
 
   it("returns null for non-matching input", () => {
@@ -168,11 +166,14 @@ describe("parseNickname", () => {
 describe("parseInfoboxFields", () => {
   it("extracts all fields from a single-season player", () => {
     const fields = parseInfoboxFields(BEN_KATZMAN_WIKITEXT);
-    expect(fields).not.toBeNull();
-    expect(fields!.hometown).toBe("Miami, Florida");
-    expect(fields!.occupation).toBe("Musician");
-    expect(fields!.place).toBe("Second Runner-Up (3/18)");
-    expect(fields!.days).toBe("26/26");
+    expect(fields).toEqual(
+      expect.objectContaining({
+        hometown: "Miami, Florida",
+        occupation: "Musician",
+        place: "Second Runner-Up (3/18)",
+        days: "26/26",
+      }),
+    );
   });
 
   it("extracts numbered fields from returning player", () => {
@@ -195,43 +196,46 @@ describe("parseInfoboxFields", () => {
 describe("parseContestantPage", () => {
   it("parses a Season 46 contestant (Ben Katzman)", () => {
     const info = parseContestantPage(BEN_KATZMAN_WIKITEXT, 46);
-    expect(info).not.toBeNull();
+    expect(info).toEqual(
+      expect.objectContaining({
+        hometown: "Miami, Florida",
+        occupation: "Musician",
+        previousSeasons: [],
+        allSeasons: [46],
+      }),
+    );
     expect(info!.age).toBeGreaterThanOrEqual(33);
-    expect(info!.hometown).toBe("Miami, Florida");
-    expect(info!.occupation).toBe("Musician");
-    expect(info!.previousSeasons).toEqual([]);
-    expect(info!.allSeasons).toEqual([46]);
+    expect(info!.nickname).toBeUndefined();
   });
 
   it("parses a Season 9 contestant (Chris Daugherty)", () => {
     const info = parseContestantPage(CHRIS_DAUGHERTY_WIKITEXT, 9);
-    expect(info).not.toBeNull();
-    expect(info!.hometown).toBe("South Vienna, Ohio");
-    expect(info!.occupation).toBe("Highway Construction Worker");
-    expect(info!.previousSeasons).toEqual([]);
+    expect(info).toEqual(
+      expect.objectContaining({
+        hometown: "South Vienna, Ohio",
+        occupation: "Highway Construction Worker",
+        previousSeasons: [],
+      }),
+    );
   });
 
   it("parses a returning player with 4 seasons (Colby Donaldson for S50)", () => {
     const info = parseContestantPage(COLBY_DONALDSON_WIKITEXT, 50);
-    expect(info).not.toBeNull();
-    expect(info!.allSeasons).toEqual([2, 8, 20, 50]);
-    expect(info!.previousSeasons).toEqual([2, 8, 20]);
+    expect(info).toEqual(
+      expect.objectContaining({
+        hometown: "Dallas, Texas",
+        occupation: "Auto Customizer",
+        allSeasons: [2, 8, 20, 50],
+        previousSeasons: [2, 8, 20],
+      }),
+    );
   });
 
   it("parses a returning player for their first season (Colby for S2)", () => {
     const info = parseContestantPage(COLBY_DONALDSON_WIKITEXT, 2);
-    expect(info).not.toBeNull();
-    expect(info!.previousSeasons).toEqual([]);
-  });
-
-  it("handles semicolon-separated hometown (returning player)", () => {
-    const info = parseContestantPage(COLBY_DONALDSON_WIKITEXT, 50);
-    expect(info!.hometown).toBe("Dallas, Texas");
-  });
-
-  it("handles semicolon-separated occupation (returning player)", () => {
-    const info = parseContestantPage(COLBY_DONALDSON_WIKITEXT, 50);
-    expect(info!.occupation).toBe("Auto Customizer");
+    expect(info).toEqual(
+      expect.objectContaining({ previousSeasons: [] }),
+    );
   });
 
   it("returns null for wikitext without Contestant template", () => {
@@ -242,16 +246,8 @@ describe("parseContestantPage", () => {
     const wikitext = `'''Benjamin "Coach" Wade''' is a contestant from {{S|18}}.
 
 ${COLBY_DONALDSON_WIKITEXT.replace("{{Spoiler}}", "")}`;
-    // Replace Colby's infobox but prefix with Coach's bold intro
     const info = parseContestantPage(wikitext, 50);
-    expect(info).not.toBeNull();
-    expect(info!.nickname).toBe("Coach");
-  });
-
-  it("returns no nickname when bold intro has no quoted text", () => {
-    const info = parseContestantPage(BEN_KATZMAN_WIKITEXT, 46);
-    expect(info).not.toBeNull();
-    expect(info!.nickname).toBeUndefined();
+    expect(info).toEqual(expect.objectContaining({ nickname: "Coach" }));
   });
 });
 
@@ -290,38 +286,32 @@ const SEASON_1_INFOBOX = `{{Season
 }}`;
 
 describe("parseSeasonInfobox", () => {
-  it("extracts location from a modern season (S50)", () => {
+  it("extracts location, filming dates, and season run from S50", () => {
     const info = parseSeasonInfobox(SEASON_50_INFOBOX);
-    expect(info).not.toBeNull();
-    expect(info!.location).toBe("Mamanuca Islands, Fiji");
+    expect(info).toEqual(
+      expect.objectContaining({
+        location: "Mamanuca Islands, Fiji",
+        filmingDates: "June 5, 2025 - June 30, 2025",
+        seasonRun: "February 25, 2026 - May 20, 2026",
+      }),
+    );
   });
 
-  it("extracts filming dates and strips ref tags (S50)", () => {
-    const info = parseSeasonInfobox(SEASON_50_INFOBOX);
-    expect(info!.filmingDates).toBe("June 5, 2025 - June 30, 2025");
-  });
-
-  it("extracts season run and strips ref tags (S50)", () => {
-    const info = parseSeasonInfobox(SEASON_50_INFOBOX);
-    expect(info!.seasonRun).toBe("February 25, 2026 - May 20, 2026");
-  });
-
-  it("extracts location with multiple wiki links (S1)", () => {
+  it("extracts location with multiple wiki links and filming dates from S1", () => {
     const info = parseSeasonInfobox(SEASON_1_INFOBOX);
-    expect(info).not.toBeNull();
-    expect(info!.location).toBe("Pulau Tiga, Sabah, Borneo, Malaysia");
-  });
-
-  it("extracts filming dates without ref tags (S1)", () => {
-    const info = parseSeasonInfobox(SEASON_1_INFOBOX);
-    expect(info!.filmingDates).toBe("March 13, 2000 - April 20, 2000");
+    expect(info).toEqual(
+      expect.objectContaining({
+        location: "Pulau Tiga, Sabah, Borneo, Malaysia",
+        filmingDates: "March 13, 2000 - April 20, 2000",
+      }),
+    );
   });
 
   it("returns null for wikitext without Season template", () => {
     expect(parseSeasonInfobox("no template here")).toBeNull();
   });
 
-  it("returns empty fields for missing location/dates", () => {
+  it("returns undefined fields for missing location/dates", () => {
     const info = parseSeasonInfobox(`{{Season
 | version = {{version|us}}
 | season  = 99

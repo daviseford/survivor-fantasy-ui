@@ -4,3 +4,16 @@ dist
 coverage
 .github
 .firebase
+
+# Ignore image assets
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.avif
+*.svg
+*.ico
+
+# Firebase security rules — formatting can silently break rule semantics
+database.rules.json

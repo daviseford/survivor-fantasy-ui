@@ -1,6 +1,7 @@
 import {
   Accordion,
   Alert,
+  AspectRatio,
   Avatar,
   Badge,
   Box,
@@ -76,24 +77,23 @@ export const DraftComponent = () => {
   const { draft } = useDraft();
   const { data: competition } = useCompetition(draft?.competiton_id);
 
-  // Track draft.started transitions to trigger the reveal animation.
-  // If the component mounts with started already true (late joiner), skip animation.
-  const prevStartedRef = useRef(draft?.started ?? false);
-  const [isRevealing, setIsRevealing] = useState(false);
+  const sawNotStartedRef = useRef(false);
+  const [revealDone, setRevealDone] = useState(false);
 
   useEffect(() => {
-    const wasStarted = prevStartedRef.current;
-    const isStarted = draft?.started ?? false;
-
-    if (!wasStarted && isStarted) {
-      setIsRevealing(true);
+    if (draft?.started === false) {
+      sawNotStartedRef.current = true;
     }
-
-    prevStartedRef.current = isStarted;
   }, [draft?.started]);
 
+  const isRevealing = !!(
+    draft?.started &&
+    sawNotStartedRef.current &&
+    !revealDone
+  );
+
   const handleRevealComplete = useCallback(() => {
-    setIsRevealing(false);
+    setRevealDone(true);
   }, []);
 
   const userHasSubmittedPropBets = Boolean(
@@ -189,10 +189,19 @@ export const DraftComponent = () => {
   const joinDraft = async () => {
     const id = draft?.id ?? draftId;
     if (!id || !slimUser) return;
-    await set(
-      ref(rt_db, `drafts/${id}/participants/${slimUser.uid}`),
-      slimUser,
-    );
+    try {
+      await set(
+        ref(rt_db, `drafts/${id}/participants/${slimUser.uid}`),
+        slimUser,
+      );
+    } catch (err) {
+      notifications.show({
+        title: "Failed to join draft",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+        icon: <IconX size={16} />,
+      });
+    }
   };
 
   const startDraft = async () => {
@@ -201,13 +210,22 @@ export const DraftComponent = () => {
     const draftOrder = shuffle(draft.participants);
     const turns = buildTurnsMap(draftOrder, draft.total_players);
 
-    await update(ref(rt_db, `drafts/${draft.id}`), {
-      pick_order_uids: buildPickOrderUidMap(draftOrder),
-      turns,
-      "state/started": true,
-      "state/finished": false,
-      "state/current_pick_number": 1,
-    });
+    try {
+      await update(ref(rt_db, `drafts/${draft.id}`), {
+        pick_order_uids: buildPickOrderUidMap(draftOrder),
+        turns,
+        "state/started": true,
+        "state/finished": false,
+        "state/current_pick_number": 1,
+      });
+    } catch (err) {
+      notifications.show({
+        title: "Failed to start draft",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+        icon: <IconX size={16} />,
+      });
+    }
   };
 
   const draftPlayer = async (player: {
@@ -229,11 +247,20 @@ export const DraftComponent = () => {
       player_name: player.full_name,
     } satisfies Draft["draft_picks"][number];
 
-    await update(ref(rt_db, `drafts/${draft.id}`), {
-      [`draft_picks/${draft.current_pick_number}`]: draftPick,
-      "state/current_pick_number": nextPickNumber,
-      ...(isFinalPick ? { "state/finished": true } : {}),
-    });
+    try {
+      await update(ref(rt_db, `drafts/${draft.id}`), {
+        [`draft_picks/${draft.current_pick_number}`]: draftPick,
+        "state/current_pick_number": nextPickNumber,
+        ...(isFinalPick ? { "state/finished": true } : {}),
+      });
+    } catch (err) {
+      notifications.show({
+        title: "Failed to draft player",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+        icon: <IconX size={16} />,
+      });
+    }
   };
 
   useEffect(() => {
@@ -765,45 +792,64 @@ export const DraftComponent = () => {
                     }}
                   >
                     <Stack gap={8} align="center">
-                      <Avatar
-                        src={p.img}
-                        size={80}
-                        radius={80}
-                        alt={p.full_name}
-                        style={{
-                          filter: isDrafted ? "grayscale(1)" : "none",
-                        }}
-                        onClick={() => {
-                          modals.open({
-                            withCloseButton: false,
-                            children: (
-                              <Stack>
-                                <Center>
-                                  <Title order={3}>{p.full_name}</Title>
-                                </Center>
-                                <Center>
-                                  <Avatar
-                                    size={"100%"}
-                                    src={p.img}
-                                    radius={10}
-                                    alt={p.full_name}
-                                  />
-                                </Center>
-                                {p.description && (
-                                  <Text ta="center" c="dimmed">
-                                    {p.description.split(" | ").map((x, i) => (
-                                      <span key={i}>
-                                        {x}
-                                        <br />
-                                      </span>
-                                    ))}
-                                  </Text>
-                                )}
-                              </Stack>
-                            ),
-                          });
-                        }}
-                      />
+                      <AspectRatio ratio={1} w={96}>
+                        <Box
+                          component="img"
+                          src={p.img}
+                          alt={p.full_name}
+                          onClick={() => {
+                            modals.open({
+                              withCloseButton: false,
+                              children: (
+                                <Stack>
+                                  <Center>
+                                    <Title order={3}>{p.full_name}</Title>
+                                  </Center>
+                                  <Center>
+                                    <Box
+                                      component="img"
+                                      src={p.img}
+                                      alt={p.full_name}
+                                      style={{
+                                        width: "100%",
+                                        maxWidth: 320,
+                                        aspectRatio: "1 / 1",
+                                        objectFit: "cover",
+                                        objectPosition: "center top",
+                                        borderRadius:
+                                          "var(--mantine-radius-md)",
+                                        display: "block",
+                                      }}
+                                    />
+                                  </Center>
+                                  {p.description && (
+                                    <Text ta="center" c="dimmed">
+                                      {p.description
+                                        .split(" | ")
+                                        .map((x, i) => (
+                                          <span key={i}>
+                                            {x}
+                                            <br />
+                                          </span>
+                                        ))}
+                                    </Text>
+                                  )}
+                                </Stack>
+                              ),
+                            });
+                          }}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            objectPosition: "center top",
+                            borderRadius: "var(--mantine-radius-md)",
+                            display: "block",
+                            cursor: "pointer",
+                            filter: isDrafted ? "grayscale(1)" : "none",
+                          }}
+                        />
+                      </AspectRatio>
                       <Text
                         ta="center"
                         fw={600}

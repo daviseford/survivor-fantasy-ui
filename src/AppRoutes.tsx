@@ -4,6 +4,7 @@ import {
   Burger,
   Group,
   MantineProvider,
+  Text,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useDisclosure } from "@mantine/hooks";
@@ -11,6 +12,7 @@ import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
 import {
+  Link,
   Navigate,
   Route,
   BrowserRouter as Router,
@@ -23,7 +25,6 @@ import { Logout } from "./components/Auth/Logout";
 import { Footer } from "./components/Footer";
 import { Home } from "./components/Home/Home";
 import { Navbar } from "./components/Navbar";
-import { PROJECT_NAME } from "./consts";
 import { Admin } from "./pages/Admin";
 import { Competitions } from "./pages/Competitions";
 import { DraftComponent } from "./pages/Draft";
@@ -59,8 +60,8 @@ export const AppRoutes = () => {
           <AppShell
             header={{
               height: {
-                base: 42,
-                sm: 55,
+                base: 56,
+                sm: 64,
               },
             }}
             navbar={{
@@ -68,13 +69,13 @@ export const AppRoutes = () => {
               breakpoint: "md",
               collapsed: { mobile: !opened },
             }}
-            padding="md"
+            padding={{ base: "md", sm: "lg" }}
           >
             <a className={classes.skipLink} href="#main-content">
               Skip to main content
             </a>
             <AppShell.Header>
-              <Group h="100%" px="md">
+              <Group h="100%" justify="space-between" px="md">
                 <Burger
                   opened={opened}
                   onClick={toggle}
@@ -84,13 +85,16 @@ export const AppRoutes = () => {
                 />
                 <Anchor
                   className={classes.title}
-                  variant="gradient"
-                  gradient={{ from: "blue", to: "cyan" }}
-                  inherit
-                  href="/"
+                  component={Link}
+                  to="/"
                   underline="never"
                 >
-                  {PROJECT_NAME}
+                  <Text component="span" inherit fw={900}>
+                    Survivor
+                  </Text>{" "}
+                  <Text component="span" inherit variant="gradient">
+                    Fantasy
+                  </Text>
                 </Anchor>
               </Group>
             </AppShell.Header>

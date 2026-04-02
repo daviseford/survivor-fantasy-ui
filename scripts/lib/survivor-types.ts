@@ -6,11 +6,15 @@
  * Numbers come as floats from JSON (e.g., season: 1.0).
  */
 
-/** castaways.json — one row per castaway per season appearance */
-export interface SurvivorCastaway {
+/** Fields shared by every survivoR table row. */
+interface SurvivorBaseRecord {
   version: string;
   version_season: string;
   season: number;
+}
+
+/** castaways.json — one row per castaway per season appearance */
+export interface SurvivorCastaway extends SurvivorBaseRecord {
   full_name: string;
   castaway_id: string;
   castaway: string; // short name
@@ -29,15 +33,12 @@ export interface SurvivorCastaway {
 }
 
 /** episodes.json — one row per episode */
-export interface SurvivorEpisode {
-  version: string;
-  version_season: string;
-  season: number;
+export interface SurvivorEpisode extends SurvivorBaseRecord {
   episode_number_overall: number;
   episode: number;
   episode_title: string;
   episode_label: string;
-  episode_date: string; // ISO date string, e.g. "2025-02-26"
+  episode_date: string; // ISO date, e.g. "2025-02-26"
   episode_length: number | null;
   viewers: number | null;
   imdb_rating: number | null;
@@ -46,10 +47,7 @@ export interface SurvivorEpisode {
 }
 
 /** challenge_results.json — one row per castaway per challenge */
-export interface SurvivorChallengeResult {
-  version: string;
-  version_season: string;
-  season: number;
+export interface SurvivorChallengeResult extends SurvivorBaseRecord {
   episode: number;
   n_boots: number;
   castaway_id: string;
@@ -75,10 +73,7 @@ export interface SurvivorChallengeResult {
 }
 
 /** vote_history.json — one row per vote cast */
-export interface SurvivorVoteHistory {
-  version: string;
-  version_season: string;
-  season: number;
+export interface SurvivorVoteHistory extends SurvivorBaseRecord {
   episode: number;
   day: number;
   tribe_status: string;
@@ -98,10 +93,7 @@ export interface SurvivorVoteHistory {
 }
 
 /** advantage_details.json — catalog of advantages per season */
-export interface SurvivorAdvantageDetail {
-  version: string;
-  version_season: string;
-  season: number;
+export interface SurvivorAdvantageDetail extends SurvivorBaseRecord {
   advantage_id: number;
   advantage_type: string; // "Hidden Immunity Idol", "Extra Vote", "Steal a Vote", etc.
   clue_details: string | null;
@@ -110,10 +102,7 @@ export interface SurvivorAdvantageDetail {
 }
 
 /** advantage_movement.json — one row per advantage event */
-export interface SurvivorAdvantageMovement {
-  version: string;
-  version_season: string;
-  season: number;
+export interface SurvivorAdvantageMovement extends SurvivorBaseRecord {
   castaway: string;
   castaway_id: string;
   advantage_id: number;
@@ -125,10 +114,7 @@ export interface SurvivorAdvantageMovement {
 }
 
 /** tribe_mapping.json — one row per castaway per episode (tribe membership) */
-export interface SurvivorTribeMapping {
-  version: string;
-  version_season: string;
-  season: number;
+export interface SurvivorTribeMapping extends SurvivorBaseRecord {
   episode: number;
   day: number;
   castaway_id: string;
@@ -138,10 +124,7 @@ export interface SurvivorTribeMapping {
 }
 
 /** journeys.json — one row per castaway per journey (S41+) */
-export interface SurvivorJourney {
-  version: string;
-  version_season: string;
-  season: number;
+export interface SurvivorJourney extends SurvivorBaseRecord {
   episode: number;
   sog_id: number;
   castaway_id: string;

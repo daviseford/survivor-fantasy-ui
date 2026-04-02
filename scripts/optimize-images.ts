@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import sharp from "sharp";
+import sharp, { type Sharp } from "sharp";
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, "..");
 const IMAGES_DIR = path.join(PROJECT_ROOT, "public", "images");
@@ -30,6 +30,14 @@ const LOGO_RULE: OptimizeRule = {
   webpQuality: 84,
 };
 
+function formatKB(bytes: number): string {
+  return `${(bytes / 1024).toFixed(1)} KB`;
+}
+
+function formatMB(bytes: number): string {
+  return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+}
+
 function walk(dir: string): string[] {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   const files: string[] = [];
@@ -49,9 +57,34 @@ function walk(dir: string): string[] {
 }
 
 function getRule(filePath: string): OptimizeRule {
-  return /season-\d+-logo\./i.test(path.basename(filePath))
-    ? LOGO_RULE
-    : PLAYER_RULE;
+  const isLogo = /season-\d+-logo\./i.test(path.basename(filePath));
+  return isLogo ? LOGO_RULE : PLAYER_RULE;
+}
+
+function applyFormat(pipeline: Sharp, ext: string, rule: OptimizeRule): Sharp {
+  switch (ext) {
+    case ".jpg":
+    case ".jpeg":
+      return pipeline.jpeg({
+        quality: rule.jpegQuality ?? 82,
+        mozjpeg: true,
+        progressive: true,
+      });
+    case ".png":
+      return pipeline.png({
+        quality: rule.pngQuality ?? 82,
+        compressionLevel: 9,
+        palette: true,
+        effort: 10,
+      });
+    case ".webp":
+      return pipeline.webp({
+        quality: rule.webpQuality ?? 82,
+        effort: 6,
+      });
+    default:
+      return pipeline;
+  }
 }
 
 async function optimizeFile(filePath: string): Promise<{
@@ -62,34 +95,14 @@ async function optimizeFile(filePath: string): Promise<{
   const ext = path.extname(filePath).toLowerCase();
   const rule = getRule(filePath);
 
-  let pipeline = sharp(input, { animated: false }).rotate().resize({
+  const resized = sharp(input, { animated: false }).rotate().resize({
     width: rule.maxWidth,
     height: rule.maxHeight,
     fit: "inside",
     withoutEnlargement: true,
   });
 
-  if (ext === ".jpg" || ext === ".jpeg") {
-    pipeline = pipeline.jpeg({
-      quality: rule.jpegQuality ?? 82,
-      mozjpeg: true,
-      progressive: true,
-    });
-  } else if (ext === ".png") {
-    pipeline = pipeline.png({
-      quality: rule.pngQuality ?? 82,
-      compressionLevel: 9,
-      palette: true,
-      effort: 10,
-    });
-  } else if (ext === ".webp") {
-    pipeline = pipeline.webp({
-      quality: rule.webpQuality ?? 82,
-      effort: 6,
-    });
-  }
-
-  const output = await pipeline.toBuffer();
+  const output = await applyFormat(resized, ext, rule).toBuffer();
   if (output.length >= input.length) {
     return { changed: false, bytesSaved: 0 };
   }
@@ -106,27 +119,21 @@ async function main(): Promise<void> {
 
   const files = walk(IMAGES_DIR);
   let changed = 0;
-  let bytesSaved = 0;
+  let totalBytesSaved = 0;
 
   for (const file of files) {
     const result = await optimizeFile(file);
     if (!result.changed) continue;
 
     changed++;
-    bytesSaved += result.bytesSaved;
+    totalBytesSaved += result.bytesSaved;
     console.log(
-      `${path.relative(PROJECT_ROOT, file)}: saved ${(
-        result.bytesSaved / 1024
-      ).toFixed(1)} KB`,
+      `${path.relative(PROJECT_ROOT, file)}: saved ${formatKB(result.bytesSaved)}`,
     );
   }
 
   console.log(
-    `Optimized ${changed}/${files.length} files, saved ${(
-      bytesSaved /
-      1024 /
-      1024
-    ).toFixed(2)} MB total`,
+    `Optimized ${changed}/${files.length} files, saved ${formatMB(totalBytesSaved)} total`,
   );
 }
 

@@ -16,8 +16,8 @@ export const Footer = () => {
       <Container className={classes.inner}>
         <Group gap="xs" wrap="nowrap">
           <img src="/icons/probst.svg" alt="" className={classes.icon} />
-          <Text c="dimmed" size="xs">
-            Created by Davis Ford
+          <Text c="dimmed" size="sm">
+            Built for draft night chaos by Davis Ford
           </Text>
         </Group>
         <Group gap="sm">
@@ -26,7 +26,7 @@ export const Footer = () => {
               c="dimmed"
               key={link.label}
               href={link.link}
-              size="xs"
+              size="sm"
               target="_blank"
             >
               {link.label}

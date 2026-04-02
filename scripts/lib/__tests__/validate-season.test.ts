@@ -20,6 +20,58 @@ function makePlayer(overrides: Partial<ScrapedPlayer> = {}): ScrapedPlayer {
   };
 }
 
+function makeEpisode(overrides: Partial<ScrapedEpisode> = {}): ScrapedEpisode {
+  return {
+    order: 1,
+    title: "Ep 1",
+    airDate: "",
+    isCombinedChallenge: false,
+    isFinale: false,
+    postMerge: false,
+    mergeOccurs: false,
+    ...overrides,
+  };
+}
+
+function makeChallenge(
+  overrides: Partial<ScrapedChallenge> = {},
+): ScrapedChallenge {
+  return {
+    episodeNum: 1,
+    variant: "immunity",
+    winnerCastawayIds: ["US0001"],
+    winnerTribe: null,
+    order: 1,
+    ...overrides,
+  };
+}
+
+function makeElimination(
+  overrides: Partial<ScrapedElimination> = {},
+): ScrapedElimination {
+  return {
+    episodeNum: 1,
+    castawayId: "US0001",
+    voteString: "5-2",
+    variant: "tribal",
+    finishText: "Voted Out",
+    order: 1,
+    ...overrides,
+  };
+}
+
+function makeEvent(
+  overrides: Partial<ScrapedGameEvent> = {},
+): ScrapedGameEvent {
+  return {
+    episodeNum: 1,
+    castawayId: "US0001",
+    action: "find_idol",
+    multiplier: null,
+    ...overrides,
+  };
+}
+
 function makePlayerData(
   players: ScrapedPlayer[] = [makePlayer()],
 ): ScrapeResult {
@@ -32,17 +84,7 @@ function makeResultsData(
   return {
     seasonNum: 50,
     scrapedAt: "",
-    episodes: [
-      {
-        order: 1,
-        title: "Ep 1",
-        airDate: "",
-        isCombinedChallenge: false,
-        isFinale: false,
-        postMerge: false,
-        mergeOccurs: false,
-      },
-    ],
+    episodes: [makeEpisode()],
     challenges: [],
     eliminations: [],
     events: [],
@@ -54,36 +96,12 @@ function makeResultsData(
 describe("validateSeasonData", () => {
   it("passes for valid season data with all gameplay sections", () => {
     const players = [
-      makePlayer({ castawayId: "US0001" }),
+      makePlayer(),
       makePlayer({ castawayId: "US0002", localName: "Player 2" }),
     ];
-    const challenges: ScrapedChallenge[] = [
-      {
-        episodeNum: 1,
-        variant: "immunity",
-        winnerCastawayIds: ["US0001"],
-        winnerTribe: null,
-        order: 1,
-      },
-    ];
-    const eliminations: ScrapedElimination[] = [
-      {
-        episodeNum: 1,
-        castawayId: "US0002",
-        voteString: "5-2",
-        variant: "tribal",
-        finishText: "Voted Out",
-        order: 1,
-      },
-    ];
-    const events: ScrapedGameEvent[] = [
-      {
-        episodeNum: 1,
-        castawayId: "US0001",
-        action: "find_idol",
-        multiplier: null,
-      },
-    ];
+    const challenges = [makeChallenge()];
+    const eliminations = [makeElimination({ castawayId: "US0002" })];
+    const events = [makeEvent()];
 
     const result = validateSeasonData(
       makePlayerData(players),
@@ -108,25 +126,9 @@ describe("validateSeasonData", () => {
   });
 
   it("passes when episode count increases from existing", () => {
-    const episodes: ScrapedEpisode[] = [
-      {
-        order: 1,
-        title: "Ep 1",
-        airDate: "",
-        isCombinedChallenge: false,
-        isFinale: false,
-        postMerge: false,
-        mergeOccurs: false,
-      },
-      {
-        order: 2,
-        title: "Ep 2",
-        airDate: "",
-        isCombinedChallenge: false,
-        isFinale: false,
-        postMerge: false,
-        mergeOccurs: false,
-      },
+    const episodes = [
+      makeEpisode({ order: 1 }),
+      makeEpisode({ order: 2, title: "Ep 2" }),
     ];
     const result = validateSeasonData(
       makePlayerData(),
@@ -145,38 +147,14 @@ describe("validateSeasonData", () => {
   });
 
   it("fails when episode count decreased", () => {
-    const result = validateSeasonData(
-      makePlayerData(),
-      makeResultsData({
-        episodes: [
-          {
-            order: 1,
-            title: "Ep 1",
-            airDate: "",
-            isCombinedChallenge: false,
-            isFinale: false,
-            postMerge: false,
-            mergeOccurs: false,
-          },
-        ],
-      }),
-      5,
-    );
+    const result = validateSeasonData(makePlayerData(), makeResultsData(), 5);
 
     expect(result.valid).toBe(false);
     expect(result.errors[0]).toContain("Episode count decreased from 5 to 1");
   });
 
   it("fails when challenge references unknown castaway_id", () => {
-    const challenges: ScrapedChallenge[] = [
-      {
-        episodeNum: 1,
-        variant: "immunity",
-        winnerCastawayIds: ["US9999"],
-        winnerTribe: null,
-        order: 1,
-      },
-    ];
+    const challenges = [makeChallenge({ winnerCastawayIds: ["US9999"] })];
 
     const result = validateSeasonData(
       makePlayerData(),
@@ -188,18 +166,10 @@ describe("validateSeasonData", () => {
   });
 
   it("fails when duplicate challenge IDs exist", () => {
-    const challenge: ScrapedChallenge = {
-      episodeNum: 1,
-      variant: "immunity",
-      winnerCastawayIds: ["US0001"],
-      winnerTribe: null,
-      order: 1,
-    };
-    const challenges = [challenge, { ...challenge }];
-
+    const challenge = makeChallenge();
     const result = validateSeasonData(
       makePlayerData(),
-      makeResultsData({ challenges }),
+      makeResultsData({ challenges: [challenge, { ...challenge }] }),
     );
 
     expect(result.valid).toBe(false);
@@ -207,21 +177,9 @@ describe("validateSeasonData", () => {
   });
 
   it("fails when duplicate elimination IDs exist", () => {
-    const players = [
-      makePlayer({ castawayId: "US0001" }),
-      makePlayer({ castawayId: "US0002", localName: "P2" }),
-    ];
-    const elim: ScrapedElimination = {
-      episodeNum: 1,
-      castawayId: "US0001",
-      voteString: "5-2",
-      variant: "tribal",
-      finishText: "Voted Out",
-      order: 1,
-    };
-
+    const elim = makeElimination();
     const result = validateSeasonData(
-      makePlayerData(players),
+      makePlayerData(),
       makeResultsData({ eliminations: [elim, { ...elim }] }),
     );
 
@@ -230,13 +188,7 @@ describe("validateSeasonData", () => {
   });
 
   it("warns on duplicate event IDs", () => {
-    const event: ScrapedGameEvent = {
-      episodeNum: 1,
-      castawayId: "US0001",
-      action: "find_idol",
-      multiplier: null,
-    };
-
+    const event = makeEvent();
     const result = validateSeasonData(
       makePlayerData(),
       makeResultsData({ events: [event, { ...event }] }),
@@ -249,16 +201,7 @@ describe("validateSeasonData", () => {
   });
 
   it("fails when elimination references unknown castaway_id", () => {
-    const eliminations: ScrapedElimination[] = [
-      {
-        episodeNum: 1,
-        castawayId: "US9999",
-        voteString: "5-2",
-        variant: "tribal",
-        finishText: "Voted Out",
-        order: 1,
-      },
-    ];
+    const eliminations = [makeElimination({ castawayId: "US9999" })];
 
     const result = validateSeasonData(
       makePlayerData(),
@@ -272,14 +215,7 @@ describe("validateSeasonData", () => {
   });
 
   it("fails when event references unknown castaway_id", () => {
-    const events: ScrapedGameEvent[] = [
-      {
-        episodeNum: 1,
-        castawayId: "US8888",
-        action: "find_idol",
-        multiplier: null,
-      },
-    ];
+    const events = [makeEvent({ castawayId: "US8888" })];
 
     const result = validateSeasonData(
       makePlayerData(),
@@ -291,16 +227,7 @@ describe("validateSeasonData", () => {
   });
 
   it("fails when elimination missing castaway_id", () => {
-    const eliminations: ScrapedElimination[] = [
-      {
-        episodeNum: 1,
-        castawayId: "",
-        voteString: "5-2",
-        variant: "tribal",
-        finishText: "Voted Out",
-        order: 1,
-      },
-    ];
+    const eliminations = [makeElimination({ castawayId: "" })];
 
     const result = validateSeasonData(
       makePlayerData(),
@@ -312,24 +239,9 @@ describe("validateSeasonData", () => {
   });
 
   it("reports multiple validation errors together", () => {
-    const challenges: ScrapedChallenge[] = [
-      {
-        episodeNum: 1,
-        variant: "immunity",
-        winnerCastawayIds: ["US9999"],
-        winnerTribe: null,
-        order: 1,
-      },
-    ];
-    const eliminations: ScrapedElimination[] = [
-      {
-        episodeNum: 1,
-        castawayId: "",
-        voteString: "",
-        variant: "tribal",
-        finishText: "",
-        order: 1,
-      },
+    const challenges = [makeChallenge({ winnerCastawayIds: ["US9999"] })];
+    const eliminations = [
+      makeElimination({ castawayId: "", voteString: "", finishText: "" }),
     ];
 
     const result = validateSeasonData(

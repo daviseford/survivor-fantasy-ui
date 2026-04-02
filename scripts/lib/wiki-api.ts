@@ -3,7 +3,19 @@
  * Fetches wikitext content by page name.
  */
 
+import fs from "fs";
+import path from "path";
+
 const BASE_URL = "https://survivor.fandom.com/api.php";
+
+/** MediaWiki API supports up to 50 titles per request */
+const BATCH_SIZE = 50;
+
+/** Shape of the imageinfo query response pages */
+type ImageInfoPages = Record<
+  string,
+  { title?: string; imageinfo?: { url: string }[] }
+>;
 
 /** Known season page names for seasons that don't use the Survivor_N format */
 const SEASON_PAGE_NAMES: Record<number, string> = {
@@ -76,29 +88,35 @@ export async function fetchWikitext(pageName: string): Promise<string | null> {
   return data.parse?.wikitext?.["*"] ?? null;
 }
 
-/**
- * Resolve a wiki image filename to its full CDN URL via the imageinfo API.
- * E.g., "S46 Ben Katzman.jpg" → "https://static.wikia.nocookie.net/survivor/images/..."
- */
-export async function fetchImageUrl(fileName: string): Promise<string | null> {
+/** Query the MediaWiki imageinfo API for the given pipe-separated titles. */
+async function queryImageInfo(
+  titles: string,
+): Promise<ImageInfoPages | null> {
   const params = new URLSearchParams({
     action: "query",
-    titles: `File:${fileName}`,
+    titles,
     prop: "imageinfo",
     iiprop: "url",
     format: "json",
   });
 
-  const url = `${BASE_URL}?${params}`;
+  const response = await fetch(`${BASE_URL}?${params}`);
+  if (!response.ok) return null;
+
+  const data = (await response.json()) as {
+    query?: { pages?: ImageInfoPages };
+  };
+
+  return data.query?.pages ?? null;
+}
+
+/**
+ * Resolve a wiki image filename to its full CDN URL via the imageinfo API.
+ * E.g., "S46 Ben Katzman.jpg" -> "https://static.wikia.nocookie.net/survivor/images/..."
+ */
+export async function fetchImageUrl(fileName: string): Promise<string | null> {
   try {
-    const response = await fetch(url);
-    if (!response.ok) return null;
-
-    const data = (await response.json()) as {
-      query?: { pages?: Record<string, { imageinfo?: { url: string }[] }> };
-    };
-
-    const pages = data.query?.pages;
+    const pages = await queryImageInfo(`File:${fileName}`);
     if (!pages) return null;
 
     for (const page of Object.values(pages)) {
@@ -119,39 +137,18 @@ export async function fetchImageUrls(
   fileNames: string[],
 ): Promise<Map<string, string>> {
   const result = new Map<string, string>();
-  // API supports up to 50 titles per request
-  for (let i = 0; i < fileNames.length; i += 50) {
-    const batch = fileNames.slice(i, i + 50);
+
+  for (let i = 0; i < fileNames.length; i += BATCH_SIZE) {
+    const batch = fileNames.slice(i, i + BATCH_SIZE);
     const titles = batch.map((f) => `File:${f}`).join("|");
-    const params = new URLSearchParams({
-      action: "query",
-      titles,
-      prop: "imageinfo",
-      iiprop: "url",
-      format: "json",
-    });
 
-    const url = `${BASE_URL}?${params}`;
     try {
-      const response = await fetch(url);
-      if (!response.ok) continue;
-
-      const data = (await response.json()) as {
-        query?: {
-          pages?: Record<
-            string,
-            { title?: string; imageinfo?: { url: string }[] }
-          >;
-        };
-      };
-
-      const pages = data.query?.pages;
+      const pages = await queryImageInfo(titles);
       if (!pages) continue;
 
       for (const page of Object.values(pages)) {
         const imgUrl = page.imageinfo?.[0]?.url;
         if (imgUrl && page.title) {
-          // Remove "File:" prefix to map back to the original filename
           const fileName = page.title.replace(/^File:/, "");
           result.set(fileName, imgUrl);
         }
@@ -159,8 +156,10 @@ export async function fetchImageUrls(
     } catch {
       // Skip failed batches
     }
-    if (i + 50 < fileNames.length) await delay(200);
+
+    if (i + BATCH_SIZE < fileNames.length) await delay(200);
   }
+
   return result;
 }
 
@@ -175,13 +174,10 @@ export async function downloadImage(
   try {
     const response = await fetch(url);
     if (!response.ok) return false;
+
     const buffer = Buffer.from(await response.arrayBuffer());
-    const { default: fs } = await import("fs");
-    const { default: path } = await import("path");
     const dir = path.dirname(destPath);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
+    fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(destPath, buffer);
     return true;
   } catch {

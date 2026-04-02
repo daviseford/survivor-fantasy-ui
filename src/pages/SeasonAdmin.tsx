@@ -1,5 +1,4 @@
 import {
-  Alert,
   Badge,
   Button,
   Center,
@@ -7,7 +6,6 @@ import {
   Loader,
   Paper,
   Select,
-  SimpleGrid,
   Stack,
   Tabs,
   Text,
@@ -19,7 +17,6 @@ import {
   IconCalendar,
   IconKarate,
   IconList,
-  IconSparkles,
   IconUserX,
   IconUsersGroup,
 } from "@tabler/icons-react";
@@ -181,55 +178,6 @@ export const SeasonAdmin = () => {
               clearable={false}
             />
           </Group>
-
-          <SimpleGrid cols={{ base: 1, sm: 3 }}>
-            <Paper withBorder radius="md" p="md">
-              <Text size="xs" tt="uppercase" c="dimmed" fw={700}>
-                Castaways
-              </Text>
-              <Text fw={700} mt={6}>
-                {season.players?.length ?? 0}
-              </Text>
-              <Text size="sm" c="dimmed" mt={4}>
-                Active roster available for season operations.
-              </Text>
-            </Paper>
-            <Paper withBorder radius="md" p="md">
-              <Text size="xs" tt="uppercase" c="dimmed" fw={700}>
-                Episodes
-              </Text>
-              <Text fw={700} mt={6}>
-                {season.episodes?.length ?? 0}
-              </Text>
-              <Text size="sm" c="dimmed" mt={4}>
-                Weekly structure that drives all other admin records.
-              </Text>
-            </Paper>
-            <Paper withBorder radius="md" p="md">
-              <Group justify="space-between" align="start">
-                <div>
-                  <Text size="xs" tt="uppercase" c="dimmed" fw={700}>
-                    Current Workspace
-                  </Text>
-                  <Text fw={700} mt={6}>
-                    {tabDescriptions[activeTab].title}
-                  </Text>
-                </div>
-                <IconSparkles size={16} color="var(--mantine-color-blue-6)" />
-              </Group>
-              <Text size="sm" c="dimmed" mt={4}>
-                {tabDescriptions[activeTab].description}
-              </Text>
-            </Paper>
-          </SimpleGrid>
-
-          <Alert color="blue" variant="light">
-            <Text size="sm">
-              Recommended weekly flow: create or confirm the episode, add player
-              events, log challenge winners, record eliminations, then update
-              team assignments if the tribe structure changed.
-            </Text>
-          </Alert>
         </Stack>
       </Paper>
 
