@@ -188,7 +188,6 @@ These are things survivoR does NOT track that our app scores:
 | Scoring Event                                      | Why unavailable                                   | Supplement                                 |
 | -------------------------------------------------- | ------------------------------------------------- | ------------------------------------------ |
 | `use_shot_in_the_dark_successfully/unsuccessfully` | Not encoded in vote_history                       | `scrape-recap.ts`                          |
-| `complete_sweat_or_savvy_task`                     | Not in survivoR's data model                      | `scrape-recap.ts`                          |
 | `votes_negated_by_idol` (with count)               | `votes_nullified` field missing on most seasons   | Derive from `vote_history.nullified` count |
 | Some individual camp challenges                    | survivoR only tracks challenges with challenge_id | Manual entry                               |
 
