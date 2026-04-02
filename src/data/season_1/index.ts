@@ -79,6 +79,7 @@ export const SEASON_1_PLAYERS = [
     description: "Age: 64 | Hometown: Mission Hills, Kansas",
     age: 64,
     hometown: "Mission Hills, Kansas",
+    nickname: "B.B.",
   }),
   buildPlayer({
     castaway_id: "US0003",
@@ -127,6 +128,7 @@ export const SEASON_1_PLAYERS = [
     description: "Age: 24 | Hometown: Gold Hill, Colorado",
     age: 24,
     hometown: "Gold Hill, Colorado",
+    nickname: "Greg",
   }),
   buildPlayer({
     castaway_id: "US0009",
@@ -135,6 +137,7 @@ export const SEASON_1_PLAYERS = [
     description: "Age: 22 | Hometown: Franklin, New Hampshire",
     age: 22,
     hometown: "Franklin, New Hampshire",
+    nickname: "Jenna",
   }),
   buildPlayer({
     castaway_id: "US0010",
@@ -176,6 +179,7 @@ export const SEASON_1_PLAYERS = [
     description: "Age: 72 | Hometown: Virginia Beach, Virginia",
     age: 72,
     hometown: "Virginia Beach, Virginia",
+    nickname: "Rudy",
   }),
   buildPlayer({
     castaway_id: "US0015",
