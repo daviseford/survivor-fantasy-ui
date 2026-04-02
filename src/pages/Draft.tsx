@@ -157,7 +157,6 @@ export const DraftComponent = () => {
       draft_picks: draft.draft_picks,
       prop_bets: draft.prop_bets,
       finished: false,
-      started: false,
       current_episode: watchAlong ? 0 : null,
     } satisfies Competition;
 

@@ -92,7 +92,6 @@ const baseCompetition: Competition = {
       },
     },
   ],
-  started: true,
   current_episode: null,
   finished: false,
 };
