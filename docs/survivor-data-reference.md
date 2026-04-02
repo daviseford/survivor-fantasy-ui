@@ -187,7 +187,7 @@ These are things survivoR does NOT track that our app scores:
 
 | Scoring Event                                      | Why unavailable                                   | Supplement                                 |
 | -------------------------------------------------- | ------------------------------------------------- | ------------------------------------------ |
-| `use_shot_in_the_dark_successfully/unsuccessfully` | Not encoded in vote_history                       | `scrape-recap.ts`                          |
+| `use_shot_in_the_dark_successfully/unsuccessfully` | Available on newer seasons via `vote_history.vote_event` + `vote_event_outcome`, but not across all eras | Derive from `vote_history`                 |
 | `votes_negated_by_idol` (with count)               | `votes_nullified` field missing on most seasons   | Derive from `vote_history.nullified` count |
 | Some individual camp challenges                    | survivoR only tracks challenges with challenge_id | Manual entry                               |
 
