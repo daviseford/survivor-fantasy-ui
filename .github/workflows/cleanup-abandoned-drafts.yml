@@ -1,0 +1,102 @@
+name: "Cleanup abandoned drafts"
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Weekly Monday 6am UTC
+  workflow_dispatch:
+
+concurrency:
+  group: draft-cleanup
+  cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Write Firebase service account key
+        run: |
+          echo '${{ secrets.FIREBASE_ADMIN_SERVICE_ACCOUNT }}' > firebase-private-key.json
+          chmod 600 firebase-private-key.json
+
+      - name: Run cleanup script
+        env:
+          VITE_FIREBASE_DATABASE_URL: ${{ vars.VITE_FIREBASE_DATABASE_URL }}
+        run: yarn tsx scripts/cleanup-abandoned-drafts.ts
+
+      - name: Parse result
+        id: result
+        if: always()
+        run: |
+          if [ ! -f cleanup-result.json ]; then
+            echo "cleanup-result.json not found"
+            echo "error=cleanup-result.json not found" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          DELETED=$(jq -r '.deleted | length' cleanup-result.json)
+          BACKFILLED=$(jq -r '.backfilled' cleanup-result.json)
+          FINISHED=$(jq -r '.skippedFinished' cleanup-result.json)
+          RECENT=$(jq -r '.skippedTooRecent' cleanup-result.json)
+          ERROR=$(jq -r '.error // empty' cleanup-result.json)
+
+          echo "deleted=$DELETED" >> "$GITHUB_OUTPUT"
+          echo "backfilled=$BACKFILLED" >> "$GITHUB_OUTPUT"
+          echo "finished=$FINISHED" >> "$GITHUB_OUTPUT"
+          echo "recent=$RECENT" >> "$GITHUB_OUTPUT"
+          echo "error=$ERROR" >> "$GITHUB_OUTPUT"
+
+      - name: Write job summary
+        if: always()
+        env:
+          DELETED: ${{ steps.result.outputs.deleted }}
+          BACKFILLED: ${{ steps.result.outputs.backfilled }}
+          FINISHED: ${{ steps.result.outputs.finished }}
+          RECENT: ${{ steps.result.outputs.recent }}
+          CLEANUP_ERROR: ${{ steps.result.outputs.error }}
+        run: |
+          {
+            echo "## Draft Cleanup"
+            echo ""
+            echo "| Metric | Count |"
+            echo "|--------|-------|"
+            echo "| Deleted | ${DELETED:-0} |"
+            echo "| Backfilled | ${BACKFILLED:-0} |"
+            echo "| Skipped (finished) | ${FINISHED:-0} |"
+            echo "| Skipped (too recent) | ${RECENT:-0} |"
+
+            if [ -n "$CLEANUP_ERROR" ]; then
+              echo ""
+              echo "### Error"
+              echo "\`\`\`"
+              echo "$CLEANUP_ERROR"
+              echo "\`\`\`"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f firebase-private-key.json
+          rm -f cleanup-result.json
+
+      - name: Fail on error
+        if: always() && steps.result.outputs.error != ''
+        env:
+          CLEANUP_ERROR: ${{ steps.result.outputs.error }}
+        run: |
+          echo "Cleanup failed: $CLEANUP_ERROR"
+          exit 1

@@ -30,6 +30,7 @@ export type RealtimeDraft = Omit<
   current_pick_number?: number;
   current_picker?: SlimUser | null;
   pick_order?: SlimUser[];
+  created_at?: number;
 };
 
 const compareKeys = ([a]: [string, unknown], [b]: [string, unknown]) =>
