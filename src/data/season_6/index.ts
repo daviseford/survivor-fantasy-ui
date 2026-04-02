@@ -83,7 +83,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0083",
     full_name: "Daniel Lue",
-    img: "",
+    img: "/images/season_6/Daniel-Lue.jpg",
     description: "Age: 26 | Hometown: Houston, Texas",
     age: 26,
     hometown: "Houston, Texas",

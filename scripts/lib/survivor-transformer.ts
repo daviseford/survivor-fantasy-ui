@@ -456,8 +456,17 @@ function transformEvents(
   // Advantage events — type-aware mapping using advantage_details
   for (const adv of advantageMovement) {
     const epNum = Math.round(adv.episode);
-    const castawayId = adv.castaway_id;
     const event = adv.event;
+
+    // Skip multi-player advantage records (e.g., team idols with comma-separated IDs)
+    if (adv.castaway_id.includes(",")) {
+      warnings.push(
+        `Episode ${epNum}: skipping multi-player advantage (${event}) for "${adv.castaway_id}" — individual player events should exist separately`,
+      );
+      continue;
+    }
+
+    const castawayId = adv.castaway_id;
     const detail = detailById.get(adv.advantage_id);
     const advType = detail?.advantage_type ?? "";
 
@@ -510,6 +519,60 @@ function transformEvents(
         action: winAction,
         multiplier: null,
       });
+    }
+  }
+
+  // Derive votes_negated_by_idol from nullified votes + idol plays
+  // Group nullified votes by (episode, target castaway_id)
+  const nullifiedByEp = new Map<number, Map<string, number>>();
+  for (const v of voteHistory) {
+    if (!v.nullified) continue;
+    const epNum = Math.round(v.episode);
+    if (!nullifiedByEp.has(epNum)) nullifiedByEp.set(epNum, new Map());
+    const targets = nullifiedByEp.get(epNum)!;
+    targets.set(v.vote_id, (targets.get(v.vote_id) ?? 0) + 1);
+  }
+
+  // Collect idol plays from advantage_movement
+  const idolPlays = advantageMovement
+    .filter(
+      (a) =>
+        a.event === "Played" &&
+        IDOL_TYPES.has(detailById.get(a.advantage_id)?.advantage_type ?? ""),
+    )
+    .map((a) => ({
+      epNum: Math.round(a.episode),
+      castawayId: a.castaway_id,
+    }));
+
+  for (const play of idolPlays) {
+    const targets = nullifiedByEp.get(play.epNum);
+    if (!targets || targets.size === 0) continue;
+
+    // Match: prefer self-play (idol player is the target), else single remaining target
+    let matchedTarget: string | undefined;
+    let matchedCount = 0;
+
+    if (targets.has(play.castawayId)) {
+      matchedTarget = play.castawayId;
+    } else if (targets.size === 1) {
+      matchedTarget = targets.keys().next().value;
+    }
+
+    if (matchedTarget) {
+      matchedCount = targets.get(matchedTarget)!;
+      targets.delete(matchedTarget);
+
+      events.push({
+        episodeNum: play.epNum,
+        castawayId: play.castawayId,
+        action: "votes_negated_by_idol",
+        multiplier: matchedCount,
+      });
+    } else {
+      warnings.push(
+        `Episode ${play.epNum}: could not match idol play by ${play.castawayId} to nullified votes (${targets.size} unmatched targets)`,
+      );
     }
   }
 
