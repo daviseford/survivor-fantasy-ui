@@ -1,6 +1,7 @@
 import {
   Accordion,
   Alert,
+  AspectRatio,
   Avatar,
   Badge,
   Box,
@@ -765,45 +766,62 @@ export const DraftComponent = () => {
                     }}
                   >
                     <Stack gap={8} align="center">
-                      <Avatar
-                        src={p.img}
-                        size={80}
-                        radius={80}
-                        alt={p.full_name}
-                        style={{
-                          filter: isDrafted ? "grayscale(1)" : "none",
-                        }}
-                        onClick={() => {
-                          modals.open({
-                            withCloseButton: false,
-                            children: (
-                              <Stack>
-                                <Center>
-                                  <Title order={3}>{p.full_name}</Title>
-                                </Center>
-                                <Center>
-                                  <Avatar
-                                    size={"100%"}
-                                    src={p.img}
-                                    radius={10}
-                                    alt={p.full_name}
-                                  />
-                                </Center>
-                                {p.description && (
-                                  <Text ta="center" c="dimmed">
-                                    {p.description.split(" | ").map((x, i) => (
-                                      <span key={i}>
-                                        {x}
-                                        <br />
-                                      </span>
-                                    ))}
-                                  </Text>
-                                )}
-                              </Stack>
-                            ),
-                          });
-                        }}
-                      />
+                      <AspectRatio ratio={1} w={96}>
+                        <Box
+                          component="img"
+                          src={p.img}
+                          alt={p.full_name}
+                          onClick={() => {
+                            modals.open({
+                              withCloseButton: false,
+                              children: (
+                                <Stack>
+                                  <Center>
+                                    <Title order={3}>{p.full_name}</Title>
+                                  </Center>
+                                  <Center>
+                                    <Box
+                                      component="img"
+                                      src={p.img}
+                                      alt={p.full_name}
+                                      style={{
+                                        width: "100%",
+                                        maxWidth: 320,
+                                        aspectRatio: "1 / 1",
+                                        objectFit: "cover",
+                                        objectPosition: "center top",
+                                        borderRadius:
+                                          "var(--mantine-radius-md)",
+                                        display: "block",
+                                      }}
+                                    />
+                                  </Center>
+                                  {p.description && (
+                                    <Text ta="center" c="dimmed">
+                                      {p.description.split(" | ").map((x, i) => (
+                                        <span key={i}>
+                                          {x}
+                                          <br />
+                                        </span>
+                                      ))}
+                                    </Text>
+                                  )}
+                                </Stack>
+                              ),
+                            });
+                          }}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            objectPosition: "center top",
+                            borderRadius: "var(--mantine-radius-md)",
+                            display: "block",
+                            cursor: "pointer",
+                            filter: isDrafted ? "grayscale(1)" : "none",
+                          }}
+                        />
+                      </AspectRatio>
                       <Text
                         ta="center"
                         fw={600}
