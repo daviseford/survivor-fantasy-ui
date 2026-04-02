@@ -7,10 +7,3 @@ export const getPlayersOnTeam = (
   (Object.entries(snapshot) as [CastawayId, Team["id"] | null][])
     .filter(([, tid]) => tid === teamId)
     .map(([id]) => id);
-
-export const getUnassignedPlayers = (
-  snapshot: TeamAssignmentSnapshot,
-): CastawayId[] =>
-  (Object.entries(snapshot) as [CastawayId, Team["id"] | null][])
-    .filter(([, tid]) => tid === null)
-    .map(([id]) => id);
