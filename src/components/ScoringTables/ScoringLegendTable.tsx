@@ -123,7 +123,7 @@ export const ScoringLegendTable = () => {
 
     return [
       <Table.Tr key={`category-${category.label}`}>
-        <Table.Td colSpan={3} bg="var(--mantine-color-gray-0)">
+        <Table.Td colSpan={3} bg="light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7))">
           <Text fw={700} size="sm">
             {category.label}
           </Text>

@@ -51,11 +51,11 @@ export const EliminationCRUDTable = () => {
       onConfirm: async () => {
         const ref = doc(db, `eliminations/${season?.id}`);
 
-        const newEvents = { ...eliminations };
+        const newEliminations = { ...eliminations };
 
-        delete newEvents[e.id];
+        delete newEliminations[e.id];
 
-        await setDoc(ref, newEvents);
+        await setDoc(ref, newEliminations);
       },
     });
   };
