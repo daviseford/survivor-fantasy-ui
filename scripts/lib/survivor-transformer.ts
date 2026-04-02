@@ -25,6 +25,21 @@ import type {
   ScrapeResultsOutput,
 } from "./types.js";
 
+/** Group an array into a Map keyed by a derived value. */
+function groupBy<T, K>(items: T[], keyFn: (item: T) => K): Map<K, T[]> {
+  const map = new Map<K, T[]>();
+  for (const item of items) {
+    const key = keyFn(item);
+    const group = map.get(key);
+    if (group) {
+      group.push(item);
+    } else {
+      map.set(key, [item]);
+    }
+  }
+  return map;
+}
+
 /**
  * Build a lookup map from castaway short name / full_name → castaway_id.
  * Used to resolve short names in tribe_mapping back to castaway_id.
@@ -164,19 +179,17 @@ function transformEpisodes(
     }
   }
 
+  const maxEpNum = Math.max(...episodes.map((e) => Math.round(e.episode)));
+
   return episodes.map((ep) => {
     const epNum = Math.round(ep.episode);
-    const isFinale =
-      hasWinner &&
-      epNum === Math.max(...episodes.map((e) => Math.round(e.episode)));
-    const title = ep.episode_title || `Episode ${epNum}`;
 
     return {
       order: epNum,
-      title,
+      title: ep.episode_title || `Episode ${epNum}`,
       airDate: new Date(ep.episode_date).toISOString().split("T")[0],
-      isCombinedChallenge: false, // survivoR doesn't have this flag directly
-      isFinale: isFinale,
+      isCombinedChallenge: false,
+      isFinale: hasWinner && epNum === maxEpNum,
       postMerge: postMergeEpisodes.has(epNum),
       mergeOccurs: mergeEpisodes.has(epNum),
     };
@@ -188,13 +201,7 @@ function transformEpisodes(
 function transformChallenges(
   results: SurvivorChallengeResult[],
 ): ScrapedChallenge[] {
-  // Group by challenge_id
-  const byChallenge = new Map<number, SurvivorChallengeResult[]>();
-  for (const r of results) {
-    const id = Math.round(r.challenge_id);
-    if (!byChallenge.has(id)) byChallenge.set(id, []);
-    byChallenge.get(id)!.push(r);
-  }
+  const byChallenge = groupBy(results, (r) => Math.round(r.challenge_id));
 
   const challenges: ScrapedChallenge[] = [];
   let order = 0;
@@ -211,18 +218,8 @@ function transformChallenges(
     const entries = byChallenge.get(chalId)!;
     const first = entries[0];
     const epNum = Math.round(first.episode);
-
-    // Determine base variant
     const type = first.challenge_type.toLowerCase();
     const isCombined = type.includes("immunity") && type.includes("reward");
-    let variant: "reward" | "immunity" | "combined";
-    if (isCombined) {
-      variant = "combined";
-    } else if (type.includes("immunity")) {
-      variant = "immunity";
-    } else {
-      variant = "reward";
-    }
 
     if (isCombined) {
       // Split combined challenges into separate immunity + reward entries
@@ -239,8 +236,7 @@ function transformChallenges(
           e.won_team_reward === 1,
       );
 
-      // Emit immunity entry (split by tribe if tribal)
-      emitChallengeEntries(
+      order += emitChallengeEntries(
         immunityWinners,
         first,
         epNum,
@@ -248,13 +244,7 @@ function transformChallenges(
         challenges,
         order,
       );
-      order +=
-        first.outcome_type === "Tribal" && immunityWinners.length > 0
-          ? new Set(immunityWinners.map((w) => w.tribe)).size
-          : 1;
-
-      // Emit reward entry (split by tribe if tribal)
-      emitChallengeEntries(
+      order += emitChallengeEntries(
         rewardWinners,
         first,
         epNum,
@@ -262,25 +252,24 @@ function transformChallenges(
         challenges,
         order,
       );
-      order +=
-        first.outcome_type === "Tribal" && rewardWinners.length > 0
-          ? new Set(rewardWinners.map((w) => w.tribe)).size
-          : 1;
     } else {
-      // Non-combined challenge
+      const variant = type.includes("immunity") ? "immunity" : "reward";
       const winners = entries.filter((e) => e.result.startsWith("Won"));
-      emitChallengeEntries(winners, first, epNum, variant, challenges, order);
-      order +=
-        first.outcome_type === "Tribal" && winners.length > 0
-          ? new Set(winners.map((w) => w.tribe)).size
-          : 1;
+      order += emitChallengeEntries(
+        winners,
+        first,
+        epNum,
+        variant,
+        challenges,
+        order,
+      );
     }
   }
 
   return challenges;
 }
 
-/** Emit challenge entries, splitting tribal challenges by tribe. */
+/** Emit challenge entries, splitting tribal challenges by tribe. Returns the order increment. */
 function emitChallengeEntries(
   winners: SurvivorChallengeResult[],
   first: SurvivorChallengeResult,
@@ -288,13 +277,9 @@ function emitChallengeEntries(
   variant: "reward" | "immunity" | "combined",
   challenges: ScrapedChallenge[],
   startOrder: number,
-): void {
+): number {
   if (first.outcome_type === "Tribal" && winners.length > 0) {
-    const winnersByTribe = new Map<string, SurvivorChallengeResult[]>();
-    for (const w of winners) {
-      if (!winnersByTribe.has(w.tribe)) winnersByTribe.set(w.tribe, []);
-      winnersByTribe.get(w.tribe)!.push(w);
-    }
+    const winnersByTribe = groupBy(winners, (w) => w.tribe);
 
     let idx = 0;
     for (const [tribe, tribeWinners] of winnersByTribe) {
@@ -307,15 +292,17 @@ function emitChallengeEntries(
       });
       idx++;
     }
-  } else {
-    challenges.push({
-      episodeNum: epNum,
-      variant,
-      winnerCastawayIds: winners.map((w) => w.castaway_id),
-      winnerTribe: null,
-      order: startOrder,
-    });
+    return winnersByTribe.size;
   }
+
+  challenges.push({
+    episodeNum: epNum,
+    variant,
+    winnerCastawayIds: winners.map((w) => w.castaway_id),
+    winnerTribe: null,
+    order: startOrder,
+  });
+  return 1;
 }
 
 // --- Elimination transformation ---
@@ -326,7 +313,7 @@ function transformEliminations(
   // Filter to eliminated players — exclude the winner (they were never eliminated)
   // Sort by order (elimination order)
   const eliminated = castaways
-    .filter((c) => c.result && c.result !== "" && !c.winner)
+    .filter((c) => c.result !== "" && !c.winner)
     .sort((a, b) => a.order - b.order);
 
   return eliminated.map((c, idx) => {
@@ -355,11 +342,13 @@ function mapResultToVariant(
   if (lower.includes("medically evacuated") || lower.includes("medical"))
     return "medical";
   if (lower.includes("quit")) return "quitter";
-  if (lower.includes("voted out") || lower.includes("eliminated"))
+  // Covers "voted out", "Xth voted out", "eliminated", and fire-making
+  if (
+    lower.includes("voted out") ||
+    lower.includes("eliminated") ||
+    lower.includes("fire")
+  )
     return "tribal";
-  if (lower.includes("fire")) return "tribal";
-  // Default to tribal for numbered elimination results like "1st voted out"
-  if (/\d+(st|nd|rd|th)\s+voted\s+out/i.test(result)) return "tribal";
   return "tribal";
 }
 
@@ -549,10 +538,8 @@ function transformEvents(
     const targets = nullifiedByEp.get(play.epNum);
     if (!targets || targets.size === 0) continue;
 
-    // Match: prefer self-play (idol player is the target), else single remaining target
+    // Prefer self-play (idol player is the target), else single remaining target
     let matchedTarget: string | undefined;
-    let matchedCount = 0;
-
     if (targets.has(play.castawayId)) {
       matchedTarget = play.castawayId;
     } else if (targets.size === 1) {
@@ -560,14 +547,14 @@ function transformEvents(
     }
 
     if (matchedTarget) {
-      matchedCount = targets.get(matchedTarget)!;
+      const negatedCount = targets.get(matchedTarget)!;
       targets.delete(matchedTarget);
 
       events.push({
         episodeNum: play.epNum,
         castawayId: play.castawayId,
         action: "votes_negated_by_idol",
-        multiplier: matchedCount,
+        multiplier: negatedCount,
       });
     } else {
       warnings.push(
@@ -589,16 +576,15 @@ function transformEvents(
     });
 
     if (j.reward) {
-      const winAction =
-        JOURNEY_REWARD_TO_WIN[j.reward] ?? "win_other_advantage";
-      if (
-        winAction !== "win_other_advantage" ||
-        !j.reward.toLowerCase().includes("lost")
-      ) {
+      const winAction = JOURNEY_REWARD_TO_WIN[j.reward];
+      // Skip unrecognized rewards that indicate a loss (e.g., "Lost vote")
+      const isUnknownLoss =
+        !winAction && j.reward.toLowerCase().includes("lost");
+      if (!isUnknownLoss) {
         events.push({
           episodeNum: epNum,
           castawayId,
-          action: winAction,
+          action: winAction ?? "win_other_advantage",
           multiplier: null,
         });
       }

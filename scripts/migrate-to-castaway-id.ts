@@ -67,8 +67,10 @@ const KNOWN_ALIASES: Record<string, string> = {
   'Quintavius "Q" Burdette': "Q Burdette",
 };
 
+const GAMEPLAY_COLLECTIONS = ["challenges", "eliminations", "events"] as const;
+
 // Prop bet keys that contain player names (not Yes/No)
-const PLAYER_PROP_BET_PREFIXES = [
+const PLAYER_PROP_BET_KEYS = new Set([
   "propbet_winner",
   "propbet_idols",
   "propbet_immunities",
@@ -77,7 +79,17 @@ const PLAYER_PROP_BET_PREFIXES = [
   "propbet_first_idol_found",
   "propbet_first_successful_idol_play",
   "propbet_rewards",
-];
+]);
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+/** Write a JSON file, creating parent directories as needed. */
+function writeJson(filePath: string, data: unknown): void {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+}
 
 // ---------------------------------------------------------------------------
 // Build reverse name → castaway_id maps
@@ -95,6 +107,27 @@ function buildReverseMap(lookup: CastawayLookup): Map<string, string> {
     if (!map.has(firstName)) map.set(firstName, id);
   }
   return map;
+}
+
+/**
+ * Build a MigrationSeason from a season number and its exported data.
+ * Handles the type cast from branded CastawayId keys to plain string keys.
+ */
+function buildSeasonConfig(
+  seasonNum: number,
+  lookup: Record<string, { full_name: string; castaway: string }>,
+  players: readonly any[],
+  episodes: readonly any[],
+): MigrationSeason {
+  const castawayLookup = lookup as unknown as CastawayLookup;
+  return {
+    seasonNum,
+    seasonKey: `season_${seasonNum}`,
+    lookup: castawayLookup,
+    reverseMap: buildReverseMap(castawayLookup),
+    players,
+    episodes,
+  };
 }
 
 /**
@@ -141,8 +174,7 @@ function resolveName(
   for (const [key, id] of reverseMap) {
     if (
       key.length > 3 &&
-      (name.toLowerCase().includes(key.toLowerCase()) ||
-        key.toLowerCase().includes(name.toLowerCase()))
+      (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower))
     ) {
       return id;
     }
@@ -168,11 +200,7 @@ function transformDraftPicks(
       );
       return pick; // leave as-is
     }
-    return {
-      ...pick,
-      castaway_id: castawayId,
-      // Keep player_name for display
-    };
+    return { ...pick, castaway_id: castawayId };
   });
 }
 
@@ -184,10 +212,10 @@ function transformPropBets(
   return propBets.map((pb) => {
     const newValues = { ...pb.values };
     for (const [key, value] of Object.entries(newValues)) {
-      if (!PLAYER_PROP_BET_PREFIXES.includes(key)) continue;
+      if (!PLAYER_PROP_BET_KEYS.has(key)) continue;
       if (!value || typeof value !== "string") continue;
 
-      const castawayId = resolveName(value as string, season.reverseMap);
+      const castawayId = resolveName(value, season.reverseMap);
       if (castawayId) {
         newValues[key] = castawayId;
       } else {
@@ -233,47 +261,32 @@ function transformDraft(
   warnings: string[],
 ): any | null {
   // Clean up drafts with no picks and undefined seasonId
-  if (
-    (!draft.draft_picks || draft.draft_picks.length === 0) &&
-    !draft.season_id
-  ) {
+  if (!draft.draft_picks?.length && !draft.season_id) {
     return null; // Mark for deletion
   }
 
-  const seasonId = draft.season_id;
-  const season = seasons.get(seasonId);
-  if (!season) {
-    // Try to infer from draft picks
-    const firstPick = draft.draft_picks?.[0];
-    const inferredSeason = firstPick
-      ? seasons.get(firstPick.season_id)
-      : undefined;
-    if (!inferredSeason) {
-      warnings.push(
-        `Draft ${draft.id || "unknown"}: unknown season ${seasonId}, skipping`,
-      );
-      return draft;
-    }
-  }
+  // Resolve season from draft directly, or infer from the first pick
+  const season =
+    seasons.get(draft.season_id) ||
+    seasons.get(draft.draft_picks?.[0]?.season_id);
 
-  const effectiveSeason =
-    season || seasons.get(draft.draft_picks?.[0]?.season_id);
-  if (!effectiveSeason) return draft;
+  if (!season) {
+    warnings.push(
+      `Draft ${draft.id || "unknown"}: unknown season ${draft.season_id}, skipping`,
+    );
+    return draft;
+  }
 
   const newDraft = { ...draft };
   if (draft.draft_picks?.length) {
     newDraft.draft_picks = transformDraftPicks(
       draft.draft_picks,
-      effectiveSeason,
+      season,
       warnings,
     );
   }
   if (draft.prop_bets?.length) {
-    newDraft.prop_bets = transformPropBets(
-      draft.prop_bets,
-      effectiveSeason,
-      warnings,
-    );
+    newDraft.prop_bets = transformPropBets(draft.prop_bets, season, warnings);
   }
   return newDraft;
 }
@@ -302,73 +315,46 @@ async function main(): Promise<void> {
 
   // Build season data
   const seasonConfigs: MigrationSeason[] = [
-    {
-      seasonNum: 1,
-      seasonKey: "season_1",
-      lookup: SEASON_1_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      reverseMap: buildReverseMap(
-        SEASON_1_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      ),
-      players: SEASON_1_PLAYERS,
-      episodes: SEASON_1_EPISODES,
-    },
-    {
-      seasonNum: 9,
-      seasonKey: "season_9",
-      lookup: SEASON_9_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      reverseMap: buildReverseMap(
-        SEASON_9_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      ),
-      players: SEASON_9_PLAYERS,
-      episodes: SEASON_9_EPISODES,
-    },
-    {
-      seasonNum: 46,
-      seasonKey: "season_46",
-      lookup: SEASON_46_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      reverseMap: buildReverseMap(
-        SEASON_46_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      ),
-      players: SEASON_46_PLAYERS,
-      episodes: SEASON_46_EPISODES,
-    },
-    {
-      seasonNum: 48,
-      seasonKey: "season_48",
-      lookup: SEASON_48_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      reverseMap: buildReverseMap(
-        SEASON_48_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      ),
-      players: SEASON_48_PLAYERS,
-      episodes: SEASON_48_EPISODES,
-    },
-    {
-      seasonNum: 49,
-      seasonKey: "season_49",
-      lookup: SEASON_49_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      reverseMap: buildReverseMap(
-        SEASON_49_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      ),
-      players: SEASON_49_PLAYERS,
-      episodes: SEASON_49_EPISODES,
-    },
-    {
-      seasonNum: 50,
-      seasonKey: "season_50",
-      lookup: SEASON_50_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      reverseMap: buildReverseMap(
-        SEASON_50_CASTAWAY_LOOKUP as unknown as CastawayLookup,
-      ),
-      players: SEASON_50_PLAYERS,
-      episodes: SEASON_50_EPISODES,
-    },
+    buildSeasonConfig(
+      1,
+      SEASON_1_CASTAWAY_LOOKUP,
+      SEASON_1_PLAYERS,
+      SEASON_1_EPISODES,
+    ),
+    buildSeasonConfig(
+      9,
+      SEASON_9_CASTAWAY_LOOKUP,
+      SEASON_9_PLAYERS,
+      SEASON_9_EPISODES,
+    ),
+    buildSeasonConfig(
+      46,
+      SEASON_46_CASTAWAY_LOOKUP,
+      SEASON_46_PLAYERS,
+      SEASON_46_EPISODES,
+    ),
+    buildSeasonConfig(
+      48,
+      SEASON_48_CASTAWAY_LOOKUP,
+      SEASON_48_PLAYERS,
+      SEASON_48_EPISODES,
+    ),
+    buildSeasonConfig(
+      49,
+      SEASON_49_CASTAWAY_LOOKUP,
+      SEASON_49_PLAYERS,
+      SEASON_49_EPISODES,
+    ),
+    buildSeasonConfig(
+      50,
+      SEASON_50_CASTAWAY_LOOKUP,
+      SEASON_50_PLAYERS,
+      SEASON_50_EPISODES,
+    ),
   ];
 
   const seasonsByKey = new Map(seasonConfigs.map((s) => [s.seasonKey, s]));
   const warnings: string[] = [];
-
-  // Create output directory
-  fs.mkdirSync(outputDir, { recursive: true });
 
   console.log("=".repeat(60));
   console.log("Migration: player display names → castaway_id");
@@ -381,34 +367,29 @@ async function main(): Promise<void> {
   // --- 1. Season data (from re-generated files, already in castaway_id format) ---
   console.log("--- SEASON DATA (re-scraped, already castaway_id format) ---");
   for (const season of seasonConfigs) {
-    const seasonOutDir = path.join(outputDir, "firestore", "seasons");
-    fs.mkdirSync(seasonOutDir, { recursive: true });
-
-    // The season doc includes players, episodes, castawayLookup
-    const seasonDoc = {
-      id: season.seasonKey,
-      order: season.seasonNum,
-      name: `Survivor ${season.seasonNum}`,
-      img: "", // Will be populated from existing data
-      players: season.players,
-      episodes: season.episodes,
-      castawayLookup: season.lookup,
-    };
-
     // Read existing season doc for the img field
     const existingSeasonPath = path.join(
       snapshotDir,
       season.seasonKey,
       "seasons.json",
     );
-    if (fs.existsSync(existingSeasonPath)) {
-      const existing = JSON.parse(fs.readFileSync(existingSeasonPath, "utf-8"));
-      seasonDoc.img = existing.img || "";
-    }
+    const existingImg = fs.existsSync(existingSeasonPath)
+      ? JSON.parse(fs.readFileSync(existingSeasonPath, "utf-8")).img || ""
+      : "";
 
-    fs.writeFileSync(
-      path.join(seasonOutDir, `${season.seasonKey}.json`),
-      JSON.stringify(seasonDoc, null, 2),
+    const seasonDoc = {
+      id: season.seasonKey,
+      order: season.seasonNum,
+      name: `Survivor ${season.seasonNum}`,
+      img: existingImg,
+      players: season.players,
+      episodes: season.episodes,
+      castawayLookup: season.lookup,
+    };
+
+    writeJson(
+      path.join(outputDir, "firestore", "seasons", `${season.seasonKey}.json`),
+      seasonDoc,
     );
     console.log(
       `  ${season.seasonKey}: ${season.players.length} players, ${Object.keys(season.lookup).length} lookup entries`,
@@ -431,16 +412,13 @@ async function main(): Promise<void> {
       new URL(`file:///${seasonFilePath.replace(/\\/g, "/")}`).href
     );
 
-    const collections = ["challenges", "eliminations", "events"] as const;
-    for (const col of collections) {
+    for (const col of GAMEPLAY_COLLECTIONS) {
       const key = `SEASON_${season.seasonNum}_${col.toUpperCase()}`;
       const data = mod[key];
       if (data) {
-        const colDir = path.join(outputDir, "firestore", col);
-        fs.mkdirSync(colDir, { recursive: true });
-        fs.writeFileSync(
-          path.join(colDir, `${season.seasonKey}.json`),
-          JSON.stringify(data, null, 2),
+        writeJson(
+          path.join(outputDir, "firestore", col, `${season.seasonKey}.json`),
+          data,
         );
         console.log(
           `  ${season.seasonKey}/${col}: ${Object.keys(data).length} entries`,
@@ -465,11 +443,9 @@ async function main(): Promise<void> {
     );
   }
 
-  const compsOutDir = path.join(outputDir, "firestore", "competitions");
-  fs.mkdirSync(compsOutDir, { recursive: true });
-  fs.writeFileSync(
-    path.join(compsOutDir, "all.json"),
-    JSON.stringify(transformedComps, null, 2),
+  writeJson(
+    path.join(outputDir, "firestore", "competitions", "all.json"),
+    transformedComps,
   );
   console.log();
 
@@ -497,16 +473,11 @@ async function main(): Promise<void> {
     }
   }
 
-  const draftsOutDir = path.join(outputDir, "rtdb");
-  fs.mkdirSync(draftsOutDir, { recursive: true });
-  fs.writeFileSync(
-    path.join(draftsOutDir, "drafts.json"),
-    JSON.stringify(transformedDrafts, null, 2),
-  );
+  writeJson(path.join(outputDir, "rtdb", "drafts.json"), transformedDrafts);
   if (deletedDrafts.length > 0) {
-    fs.writeFileSync(
-      path.join(draftsOutDir, "deleted_drafts.json"),
-      JSON.stringify(deletedDrafts, null, 2),
+    writeJson(
+      path.join(outputDir, "rtdb", "deleted_drafts.json"),
+      deletedDrafts,
     );
   }
   console.log();
@@ -517,10 +488,7 @@ async function main(): Promise<void> {
     for (const w of warnings) {
       console.log(`  ⚠ ${w}`);
     }
-    fs.writeFileSync(
-      path.join(outputDir, "warnings.json"),
-      JSON.stringify(warnings, null, 2),
-    );
+    writeJson(path.join(outputDir, "warnings.json"), warnings);
     console.log();
   }
 
@@ -568,8 +536,7 @@ async function main(): Promise<void> {
     await db.collection("seasons").doc(season.seasonKey).set(data);
     console.log(`  [OK] seasons/${season.seasonKey}`);
 
-    // Upload challenges, eliminations, events
-    for (const col of ["challenges", "eliminations", "events"]) {
+    for (const col of GAMEPLAY_COLLECTIONS) {
       const colPath = path.join(
         outputDir,
         "firestore",

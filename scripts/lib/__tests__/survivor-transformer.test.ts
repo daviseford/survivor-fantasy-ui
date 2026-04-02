@@ -1,5 +1,8 @@
-import { describe, expect, it } from "vitest";
-import { fetchSeasonData } from "../survivor-client";
+import { beforeAll, describe, expect, it } from "vitest";
+import {
+  type SurvivorSeasonData,
+  fetchSeasonData,
+} from "../survivor-client";
 import { transformPlayers, transformResults } from "../survivor-transformer";
 
 // Integration tests using real survivoR data
@@ -10,10 +13,9 @@ describe("transformPlayers", { timeout: 60000 }, () => {
     const result = transformPlayers(data, 46);
 
     expect(result.seasonNum).toBe(46);
-    expect(result.players.length).toBe(18);
-    expect(result.unmatched.length).toBe(0);
+    expect(result.players).toHaveLength(18);
+    expect(result.unmatched).toHaveLength(0);
 
-    // Check first player has expected fields
     const player = result.players[0];
     expect(player.localName).toBeTruthy();
     expect(player.castawayId).toMatch(/^US\d+$/);
@@ -24,9 +26,8 @@ describe("transformPlayers", { timeout: 60000 }, () => {
     const data = await fetchSeasonData(1);
     const result = transformPlayers(data, 1);
 
-    expect(result.players.length).toBe(16);
+    expect(result.players).toHaveLength(16);
 
-    // Verify Sonja Christopher is in the list
     const sonja = result.players.find((p) => p.localName.includes("Sonja"));
     expect(sonja).toBeDefined();
     expect(sonja!.localName).toBe("Sonja Christopher");
@@ -38,19 +39,17 @@ describe("transformPlayers", { timeout: 60000 }, () => {
     const result = transformPlayers(data, 48);
 
     expect(result.seasonNum).toBe(48);
-    expect(result.players.length).toBe(18);
-    expect(result.unmatched.length).toBe(0);
+    expect(result.players).toHaveLength(18);
+    expect(result.unmatched).toHaveLength(0);
 
     for (const player of result.players) {
       expect(player.localName).toBeTruthy();
       expect(player.castawayId).toMatch(/^US\d+$/);
-      // Full names should have at least first + last
       expect(player.localName).toContain(" ");
     }
   });
 
   it("returning players with same name have distinct castaway_id values", async () => {
-    // Season 50 has returning players
     const data = await fetchSeasonData(50);
     const result = transformPlayers(data, 50);
 
@@ -61,31 +60,38 @@ describe("transformPlayers", { timeout: 60000 }, () => {
 });
 
 describe("transformResults", { timeout: 60000 }, () => {
-  it("transforms Season 46 episodes", async () => {
-    const data = await fetchSeasonData(46);
-    const result = transformResults(data, 46);
+  let s46Data: SurvivorSeasonData;
+  let s48Data: SurvivorSeasonData;
 
-    expect(result.episodes.length).toBe(13);
+  beforeAll(async () => {
+    [s46Data, s48Data] = await Promise.all([
+      fetchSeasonData(46),
+      fetchSeasonData(48),
+    ]);
+  });
+
+  it("transforms Season 46 episodes", () => {
+    const result = transformResults(s46Data, 46);
+
+    expect(result.episodes).toHaveLength(13);
     expect(result.episodes[0].order).toBe(1);
     expect(result.episodes[0].title).toBeTruthy();
 
-    // Should have a finale
     const finale = result.episodes.find((e) => e.isFinale);
     expect(finale).toBeDefined();
 
-    // Should detect merge at episode 6 (Mergatory), not 7 (Merged)
+    // Merge should be detected at episode 6 (Mergatory), not 7 (Merged)
     const mergeEp = result.episodes.find((e) => e.mergeOccurs);
     expect(mergeEp).toBeDefined();
     expect(mergeEp!.order).toBe(6);
 
     // Episodes 6-13 should be post-merge
     const postMerge = result.episodes.filter((e) => e.postMerge);
-    expect(postMerge.length).toBe(8); // episodes 6-13
+    expect(postMerge).toHaveLength(8);
   });
 
-  it("transforms Season 46 challenges with winning castaway IDs", async () => {
-    const data = await fetchSeasonData(46);
-    const result = transformResults(data, 46);
+  it("transforms Season 46 challenges with winning castaway IDs", () => {
+    const result = transformResults(s46Data, 46);
 
     expect(result.challenges.length).toBeGreaterThan(0);
 
@@ -95,15 +101,14 @@ describe("transformResults", { timeout: 60000 }, () => {
     );
     expect(tribalChallenges.length).toBeGreaterThan(0);
     for (const c of tribalChallenges) {
-      expect(c.winnerCastawayIds.length).toBeLessThanOrEqual(8);
       expect(c.winnerCastawayIds.length).toBeGreaterThan(0);
+      expect(c.winnerCastawayIds.length).toBeLessThanOrEqual(8);
     }
 
-    // Combined challenges should be split — no "combined" variant in output
+    // Combined challenges should be split -- no "combined" variant in output
     const combined = result.challenges.filter((c) => c.variant === "combined");
-    expect(combined.length).toBe(0);
+    expect(combined).toHaveLength(0);
 
-    // Should have both immunity and reward challenges
     const immunities = result.challenges.filter(
       (c) => c.variant === "immunity",
     );
@@ -113,35 +118,31 @@ describe("transformResults", { timeout: 60000 }, () => {
     expect(rewards.length).toBeGreaterThan(0);
   });
 
-  it("uses castaway IDs (not names) for challenge winners and events", async () => {
-    const data = await fetchSeasonData(46);
-    const playerResult = transformPlayers(data, 46);
-    const result = transformResults(data, 46);
+  it("uses castaway IDs (not names) for challenge winners and events", () => {
+    const playerResult = transformPlayers(s46Data, 46);
+    const result = transformResults(s46Data, 46);
 
     const castawayIds = new Set(playerResult.players.map((p) => p.castawayId));
 
-    // Every challenge winner ID should be in the castaway IDs set
     for (const chal of result.challenges) {
       for (const id of chal.winnerCastawayIds) {
-        expect(castawayIds.has(id)).toBe(true);
+        expect(castawayIds).toContain(id);
       }
     }
 
-    // Every event castaway ID should be in the castaway IDs set
     for (const ev of result.events) {
-      expect(castawayIds.has(ev.castawayId)).toBe(true);
+      expect(castawayIds).toContain(ev.castawayId);
     }
   });
 
-  it("transforms Season 46 eliminations with correct variants", async () => {
-    const data = await fetchSeasonData(46);
-    const result = transformResults(data, 46);
+  it("transforms Season 46 eliminations with correct variants", () => {
+    const result = transformResults(s46Data, 46);
 
     // Winner should NOT be in eliminations (17, not 18)
-    expect(result.eliminations.length).toBe(17);
+    expect(result.eliminations).toHaveLength(17);
 
-    // The winner (Kenzie Petty) should not appear — check by ID
-    const playerResult = transformPlayers(data, 46);
+    // The winner (Kenzie Petty) should not appear
+    const playerResult = transformPlayers(s46Data, 46);
     const kenzie = playerResult.players.find((p) =>
       p.localName.includes("Kenzie"),
     );
@@ -150,32 +151,30 @@ describe("transformResults", { timeout: 60000 }, () => {
     );
     expect(winnerElim).toBeUndefined();
 
-    // Should have tribal eliminations
     const tribals = result.eliminations.filter((e) => e.variant === "tribal");
     expect(tribals.length).toBeGreaterThan(0);
 
-    // Should have FTC runner-ups as final_tribal_council
+    // FTC runner-ups should be final_tribal_council
     const ftc = result.eliminations.filter(
       (e) => e.variant === "final_tribal_council",
     );
     expect(ftc.length).toBeGreaterThanOrEqual(2);
 
-    // No eliminations should have variant "other" for fire-making
+    // No fire-making eliminations should have variant "other"
     const others = result.eliminations.filter((e) => e.variant === "other");
-    expect(others.length).toBe(0);
+    expect(others).toHaveLength(0);
   });
 
-  it("transforms Season 46 events (advantages, journeys, merge, winner)", async () => {
-    const data = await fetchSeasonData(46);
-    const result = transformResults(data, 46);
+  it("transforms Season 46 events (advantages, journeys, merge, winner)", () => {
+    const result = transformResults(s46Data, 46);
 
     expect(result.events.length).toBeGreaterThan(0);
 
-    // Should have journey events (S46 has 9 journey records)
+    // S46 has 9 journey records
     const journeyEvents = result.events.filter(
       (e) => e.action === "go_on_journey",
     );
-    expect(journeyEvents.length).toBe(9);
+    expect(journeyEvents).toHaveLength(9);
 
     // Journey advantage winners should get specific win actions (e.g., win_extra_vote)
     const journeyWins = result.events.filter(
@@ -188,16 +187,16 @@ describe("transformResults", { timeout: 60000 }, () => {
     );
     expect(journeyWins.length).toBeGreaterThan(0);
 
-    // Should have beware advantage lifecycle events (S46 has 4 beware idols)
+    // S46 has 4 beware idols
     const findBeware = result.events.filter(
       (e) => e.action === "find_beware_advantage",
     );
-    expect(findBeware.length).toBe(4);
+    expect(findBeware).toHaveLength(4);
 
     const acceptBeware = result.events.filter(
       (e) => e.action === "accept_beware_advantage",
     );
-    expect(acceptBeware.length).toBe(4);
+    expect(acceptBeware).toHaveLength(4);
 
     const fulfillBeware = result.events.filter(
       (e) => e.action === "fulfill_beware_advantage",
@@ -223,7 +222,7 @@ describe("transformResults", { timeout: 60000 }, () => {
         e.action === "use_advantage" ||
         e.action === "win_advantage",
     );
-    expect(genericActions.length).toBe(0);
+    expect(genericActions).toHaveLength(0);
 
     // Moriah's Shot in the Dark (ep6, unsuccessful)
     const sitd = result.events.filter(
@@ -231,49 +230,45 @@ describe("transformResults", { timeout: 60000 }, () => {
         e.action === "use_shot_in_the_dark_successfully" ||
         e.action === "use_shot_in_the_dark_unsuccessfully",
     );
-    expect(sitd.length).toBe(1);
+    expect(sitd).toHaveLength(1);
     expect(sitd[0].action).toBe("use_shot_in_the_dark_unsuccessfully");
     expect(sitd[0].episodeNum).toBe(6);
 
-    // Should detect merge event on episode 6 (not 7)
+    // Merge event should be on episode 6 (not 7)
     const mergeEvents = result.events.filter((e) => e.action === "make_merge");
     expect(mergeEvents.length).toBeGreaterThan(0);
     for (const e of mergeEvents) {
       expect(e.episodeNum).toBe(6);
     }
 
-    // Should detect winner
     const winEvents = result.events.filter((e) => e.action === "win_survivor");
-    expect(winEvents.length).toBe(1);
+    expect(winEvents).toHaveLength(1);
   });
 
   it("handles Season 1 with no advantages (empty, not error)", async () => {
     const data = await fetchSeasonData(1);
     const result = transformResults(data, 1);
 
-    // Season 1 has no advantage events
     const idolEvents = result.events.filter(
       (e) => e.action === "find_idol" || e.action === "use_idol",
     );
-    expect(idolEvents.length).toBe(0);
+    expect(idolEvents).toHaveLength(0);
 
-    // But should still have merge and winner events
+    // Should still have merge and winner events
     const mergeEvents = result.events.filter((e) => e.action === "make_merge");
     expect(mergeEvents.length).toBeGreaterThan(0);
   });
 
-  it("transforms Season 48 episodes", async () => {
-    const data = await fetchSeasonData(48);
-    const result = transformResults(data, 48);
+  it("transforms Season 48 episodes", () => {
+    const result = transformResults(s48Data, 48);
 
     expect(result.episodes.length).toBeGreaterThanOrEqual(13);
     expect(result.episodes[0].order).toBe(1);
     expect(result.episodes[0].title).toBeTruthy();
   });
 
-  it("transforms Season 48 challenges with winning castaway IDs", async () => {
-    const data = await fetchSeasonData(48);
-    const result = transformResults(data, 48);
+  it("transforms Season 48 challenges with winning castaway IDs", () => {
+    const result = transformResults(s48Data, 48);
 
     expect(result.challenges.length).toBeGreaterThan(0);
 
@@ -283,21 +278,20 @@ describe("transformResults", { timeout: 60000 }, () => {
     expect(withWinners.length).toBeGreaterThan(0);
   });
 
-  it("all S48 challenge winner IDs and event castaway IDs exist in the player list", async () => {
-    const data = await fetchSeasonData(48);
-    const playerResult = transformPlayers(data, 48);
-    const result = transformResults(data, 48);
+  it("all S48 challenge winner IDs and event castaway IDs exist in the player list", () => {
+    const playerResult = transformPlayers(s48Data, 48);
+    const result = transformResults(s48Data, 48);
 
     const castawayIds = new Set(playerResult.players.map((p) => p.castawayId));
 
     for (const chal of result.challenges) {
       for (const id of chal.winnerCastawayIds) {
-        expect(castawayIds.has(id)).toBe(true);
+        expect(castawayIds).toContain(id);
       }
     }
 
     for (const ev of result.events) {
-      expect(castawayIds.has(ev.castawayId)).toBe(true);
+      expect(castawayIds).toContain(ev.castawayId);
     }
   });
 });

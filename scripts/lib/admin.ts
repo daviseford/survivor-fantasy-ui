@@ -4,9 +4,10 @@ import { getAuth } from "firebase-admin/auth";
 import * as fs from "fs";
 import * as path from "path";
 
-config(); // Load .env for VITE_FIREBASE_DATABASE_URL etc.
+config();
 
-const keyPath = path.join(process.cwd(), "firebase-private-key.json");
+const PROJECT_ROOT = path.resolve(import.meta.dirname, "..", "..");
+const keyPath = path.join(PROJECT_ROOT, "firebase-private-key.json");
 
 if (!fs.existsSync(keyPath)) {
   console.error(

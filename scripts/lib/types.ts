@@ -23,6 +23,15 @@ export interface ScrapeResult {
 
 // --- Gameplay scrape types ---
 
+export type ScrapedChallengeVariant = "reward" | "immunity" | "combined";
+
+export type ScrapedEliminationVariant =
+  | "tribal"
+  | "medical"
+  | "quitter"
+  | "final_tribal_council"
+  | "other";
+
 export interface ScrapedEpisode {
   order: number;
   title: string;
@@ -35,7 +44,7 @@ export interface ScrapedEpisode {
 
 export interface ScrapedChallenge {
   episodeNum: number;
-  variant: "reward" | "immunity" | "combined";
+  variant: ScrapedChallengeVariant;
   winnerCastawayIds: string[];
   winnerTribe: string | null;
   order: number;
@@ -45,7 +54,7 @@ export interface ScrapedElimination {
   episodeNum: number;
   castawayId: string;
   voteString: string;
-  variant: "tribal" | "medical" | "quitter" | "final_tribal_council" | "other";
+  variant: ScrapedEliminationVariant;
   finishText: string;
   order: number;
 }
@@ -55,12 +64,6 @@ export interface ScrapedGameEvent {
   castawayId: string;
   action: string;
   multiplier: number | null;
-}
-
-/** Raw tribe history parsed from votetable tribebox2/tribeicon1 patterns */
-export interface PlayerTribeHistory {
-  tribebox2: string;
-  tribeicons: string[];
 }
 
 export interface ScrapeResultsOutput {

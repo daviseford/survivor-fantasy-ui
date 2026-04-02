@@ -12,6 +12,24 @@ export interface ValidationResult {
   warnings: string[];
 }
 
+/** Collect duplicate messages from an array by a derived key. */
+function findDuplicates<T>(
+  items: T[],
+  toKey: (item: T) => string,
+  toMessage: (item: T) => string,
+): string[] {
+  const seen = new Set<string>();
+  const messages: string[] = [];
+  for (const item of items) {
+    const key = toKey(item);
+    if (seen.has(key)) {
+      messages.push(toMessage(item));
+    }
+    seen.add(key);
+  }
+  return messages;
+}
+
 /**
  * Validate season data against sanity checks:
  * - Episode count monotonicity (cannot decrease)
@@ -72,41 +90,32 @@ export function validateSeasonData(
     }
   }
 
-  // Duplicate challenge IDs (by episodeNum + order)
-  const challengeKeys = new Set<string>();
-  for (const c of resultsData.challenges) {
-    const key = `challenge_ep${c.episodeNum}_o${c.order}`;
-    if (challengeKeys.has(key)) {
-      errors.push(
-        `Duplicate challenge: episode ${c.episodeNum}, order ${c.order}`,
-      );
-    }
-    challengeKeys.add(key);
-  }
+  // Duplicate detection
+  errors.push(
+    ...findDuplicates(
+      resultsData.challenges,
+      (c) => `ep${c.episodeNum}_o${c.order}`,
+      (c) => `Duplicate challenge: episode ${c.episodeNum}, order ${c.order}`,
+    ),
+  );
 
-  // Duplicate elimination IDs (by episodeNum + order)
-  const elimKeys = new Set<string>();
-  for (const e of resultsData.eliminations) {
-    const key = `elim_ep${e.episodeNum}_o${e.order}`;
-    if (elimKeys.has(key)) {
-      errors.push(
+  errors.push(
+    ...findDuplicates(
+      resultsData.eliminations,
+      (e) => `ep${e.episodeNum}_o${e.order}`,
+      (e) =>
         `Duplicate elimination: episode ${e.episodeNum}, order ${e.order}`,
-      );
-    }
-    elimKeys.add(key);
-  }
+    ),
+  );
 
-  // Duplicate event IDs (by episodeNum + castawayId + action)
-  const eventKeys = new Set<string>();
-  for (const ev of resultsData.events) {
-    const key = `event_ep${ev.episodeNum}_${ev.castawayId}_${ev.action}`;
-    if (eventKeys.has(key)) {
-      warnings.push(
+  warnings.push(
+    ...findDuplicates(
+      resultsData.events,
+      (ev) => `ep${ev.episodeNum}_${ev.castawayId}_${ev.action}`,
+      (ev) =>
         `Duplicate event: "${ev.action}" for ${ev.castawayId} in episode ${ev.episodeNum}`,
-      );
-    }
-    eventKeys.add(key);
-  }
+    ),
+  );
 
   return { valid: errors.length === 0, errors, warnings };
 }

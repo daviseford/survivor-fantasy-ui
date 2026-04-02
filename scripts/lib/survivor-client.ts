@@ -37,6 +37,7 @@ export function filterBySeason<T extends { version?: string; season?: number }>(
   data: T[],
   seasonNum: number,
 ): T[] {
+  // Math.round needed because survivoR JSON encodes integers as floats (e.g., season: 48.0)
   return data.filter(
     (d) => d.version === "US" && Math.round(d.season ?? 0) === seasonNum,
   );

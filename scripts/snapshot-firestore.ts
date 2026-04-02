@@ -16,6 +16,7 @@ import { getFirestore } from "firebase-admin/firestore";
 import * as fs from "fs";
 import * as path from "path";
 
+// Trigger Firebase Admin init (read-only usage)
 import "./lib/admin.js";
 
 const COLLECTIONS = [
@@ -25,6 +26,10 @@ const COLLECTIONS = [
   "events",
 ] as const;
 
+function writeJson(filePath: string, data: unknown): void {
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+}
+
 async function snapshotSeason(
   db: FirebaseFirestore.Firestore,
   seasonNum: number,
@@ -33,27 +38,26 @@ async function snapshotSeason(
   const seasonKey = `season_${seasonNum}`;
   const seasonDir = path.join(outDir, seasonKey);
 
-  if (!fs.existsSync(seasonDir)) {
-    fs.mkdirSync(seasonDir, { recursive: true });
-  }
+  fs.mkdirSync(seasonDir, { recursive: true });
 
   for (const collection of COLLECTIONS) {
     const doc = await db.collection(collection).doc(seasonKey).get();
     const data = doc.exists ? doc.data() : null;
-    const outPath = path.join(seasonDir, `${collection}.json`);
-    fs.writeFileSync(outPath, JSON.stringify(data, null, 2));
+    writeJson(path.join(seasonDir, `${collection}.json`), data);
 
-    const count =
-      data && collection !== "seasons"
-        ? Object.keys(data).length
-        : data
-          ? "exists"
-          : "missing";
-    console.log(`  ${seasonKey}/${collection}: ${count}`);
+    let status: string;
+    if (!data) {
+      status = "missing";
+    } else if (collection === "seasons") {
+      status = "exists";
+    } else {
+      status = String(Object.keys(data).length);
+    }
+    console.log(`  ${seasonKey}/${collection}: ${status}`);
   }
 }
 
-async function main() {
+async function main(): Promise<void> {
   const db = getFirestore();
   const args = process.argv.slice(2).map(Number).filter(Boolean);
 
@@ -88,24 +92,17 @@ async function main() {
   const draftsSnapshot = await rtdb.ref("drafts").once("value");
   const draftsData = draftsSnapshot.val();
   const draftCount = draftsData ? Object.keys(draftsData).length : 0;
-  fs.writeFileSync(
-    path.join(outDir, "rtdb_drafts.json"),
-    JSON.stringify(draftsData, null, 2),
-  );
+  writeJson(path.join(outDir, "rtdb_drafts.json"), draftsData);
   console.log(`  rtdb/drafts: ${draftCount} drafts`);
 
-  // Also snapshot competitions from Firestore
+  // Snapshot competitions from Firestore
   console.log("\n  Snapshotting competitions...");
   const competitionsSnap = await db.collection("competitions").get();
-  const competitions: Record<string, unknown> = {};
-  competitionsSnap.forEach((doc) => {
-    competitions[doc.id] = doc.data();
-  });
-  fs.writeFileSync(
-    path.join(outDir, "competitions.json"),
-    JSON.stringify(competitions, null, 2),
+  const competitions = Object.fromEntries(
+    competitionsSnap.docs.map((doc) => [doc.id, doc.data()]),
   );
-  console.log(`  competitions: ${Object.keys(competitions).length}`);
+  writeJson(path.join(outDir, "competitions.json"), competitions);
+  console.log(`  competitions: ${competitionsSnap.docs.length}`);
 
   // Write a manifest
   const manifest = {
@@ -114,10 +111,7 @@ async function main() {
     collections: [...COLLECTIONS],
     extras: ["rtdb_drafts", "competitions"],
   };
-  fs.writeFileSync(
-    path.join(outDir, "manifest.json"),
-    JSON.stringify(manifest, null, 2),
-  );
+  writeJson(path.join(outDir, "manifest.json"), manifest);
 
   console.log(`\nSnapshot complete: ${outDir}/`);
 }

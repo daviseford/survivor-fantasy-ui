@@ -13,20 +13,14 @@ import { pushSeasonToFirestore } from "./lib/firebase-push.js";
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, "..");
 
-/**
- * Parse registered season numbers from src/data/seasons.ts.
- */
-function getRegisteredSeasons(seasonsFilePath: string): number[] {
-  const content = fs.readFileSync(seasonsFilePath, "utf-8");
+/** Parse registered season numbers from the seasons file content. */
+function getRegisteredSeasons(content: string): number[] {
   const matches = [...content.matchAll(/season_(\d+):/g)];
-  return matches.map((m) => Number(m[1]));
+  return matches.map((m) => Number(m[1])).sort((a, b) => a - b);
 }
 
-/**
- * Extract the season image from seasons.ts for Firestore push.
- */
-function getSeasonImg(seasonsFilePath: string, seasonNum: number): string {
-  const content = fs.readFileSync(seasonsFilePath, "utf-8");
+/** Extract the season image URL from the seasons file content. */
+function getSeasonImg(content: string, seasonNum: number): string {
   const seasonBlock = content.match(
     new RegExp(
       `season_${seasonNum}:\\s*\\{[\\s\\S]*?img:\\s*"([^"]*)"[\\s\\S]*?\\}`,
@@ -36,13 +30,11 @@ function getSeasonImg(seasonsFilePath: string, seasonNum: number): string {
 }
 
 async function main(): Promise<void> {
-  const args = process.argv.slice(2);
-  const dryRun = args.includes("--dry-run");
+  const dryRun = process.argv.includes("--dry-run");
 
   const seasonsFilePath = path.join(PROJECT_ROOT, "src", "data", "seasons.ts");
-  const seasonNums = getRegisteredSeasons(seasonsFilePath).sort(
-    (a, b) => a - b,
-  );
+  const seasonsContent = fs.readFileSync(seasonsFilePath, "utf-8");
+  const seasonNums = getRegisteredSeasons(seasonsContent);
 
   console.log(
     `Found ${seasonNums.length} registered seasons: ${seasonNums.join(", ")}`,
@@ -51,19 +43,15 @@ async function main(): Promise<void> {
     console.log("[DRY RUN] Will log what would be pushed without writing.\n");
   }
 
-  let success = 0;
-  let failed = 0;
   const failures: number[] = [];
 
   for (const seasonNum of seasonNums) {
-    const seasonImg = getSeasonImg(seasonsFilePath, seasonNum);
+    const seasonImg = getSeasonImg(seasonsContent, seasonNum);
     console.log(`\n--- Season ${seasonNum} ---`);
 
     try {
       await pushSeasonToFirestore(seasonNum, dryRun, seasonImg);
-      success++;
     } catch (err) {
-      failed++;
       failures.push(seasonNum);
       console.error(
         `  [ERROR] Season ${seasonNum} failed:`,
@@ -72,8 +60,9 @@ async function main(): Promise<void> {
     }
   }
 
+  const succeeded = seasonNums.length - failures.length;
   console.log(`\n${"=".repeat(40)}`);
-  console.log(`Done. ${success} succeeded, ${failed} failed.`);
+  console.log(`Done. ${succeeded} succeeded, ${failures.length} failed.`);
   if (failures.length > 0) {
     console.log(`Failed seasons: ${failures.join(", ")}`);
   }
