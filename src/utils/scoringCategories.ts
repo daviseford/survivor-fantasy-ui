@@ -4,7 +4,8 @@ import { EnhancedScores } from "./scoringUtils";
 export type ScoringCategory =
   | "immunity"
   | "reward"
-  | "idolsAndAdvantages"
+  | "idols"
+  | "advantages"
   | "milestones"
   | "eliminations"
   | "other";
@@ -19,41 +20,43 @@ export const ScoringCategoryMap: Record<PlayerAction, ScoringCategory> = {
   reward: "reward",
   immunity: "immunity",
 
-  // Idols & Advantages — Find
-  find_idol: "idolsAndAdvantages",
-  find_extra_vote: "idolsAndAdvantages",
-  find_steal_a_vote: "idolsAndAdvantages",
-  find_block_a_vote: "idolsAndAdvantages",
-  find_bank_your_vote: "idolsAndAdvantages",
-  find_idol_nullifier: "idolsAndAdvantages",
-  find_knowledge_is_power: "idolsAndAdvantages",
-  find_safety_without_power: "idolsAndAdvantages",
-  find_control_the_vote: "idolsAndAdvantages",
-  find_amulet: "idolsAndAdvantages",
-  find_challenge_advantage: "idolsAndAdvantages",
-  find_other_advantage: "idolsAndAdvantages",
-  find_beware_advantage: "idolsAndAdvantages",
-  accept_beware_advantage: "idolsAndAdvantages",
-  fulfill_beware_advantage: "idolsAndAdvantages",
+  // Idols — Find / Use / Win
+  find_idol: "idols",
+  use_idol: "idols",
+  win_idol: "idols",
+  votes_negated_by_idol: "idols",
+  find_idol_nullifier: "idols",
+  use_idol_nullifier: "idols",
 
-  // Idols & Advantages — Use
-  use_idol: "idolsAndAdvantages",
-  use_extra_vote: "idolsAndAdvantages",
-  use_steal_a_vote: "idolsAndAdvantages",
-  use_block_a_vote: "idolsAndAdvantages",
-  use_bank_your_vote: "idolsAndAdvantages",
-  use_idol_nullifier: "idolsAndAdvantages",
-  use_knowledge_is_power: "idolsAndAdvantages",
-  use_safety_without_power: "idolsAndAdvantages",
-  use_control_the_vote: "idolsAndAdvantages",
-  votes_negated_by_idol: "idolsAndAdvantages",
+  // Advantages — Find
+  find_extra_vote: "advantages",
+  find_steal_a_vote: "advantages",
+  find_block_a_vote: "advantages",
+  find_bank_your_vote: "advantages",
+  find_knowledge_is_power: "advantages",
+  find_safety_without_power: "advantages",
+  find_control_the_vote: "advantages",
+  find_amulet: "advantages",
+  find_challenge_advantage: "advantages",
+  find_other_advantage: "advantages",
+  find_beware_advantage: "advantages",
+  accept_beware_advantage: "advantages",
+  fulfill_beware_advantage: "advantages",
 
-  // Idols & Advantages — Win
-  win_extra_vote: "idolsAndAdvantages",
-  win_steal_a_vote: "idolsAndAdvantages",
-  win_block_a_vote: "idolsAndAdvantages",
-  win_idol: "idolsAndAdvantages",
-  win_other_advantage: "idolsAndAdvantages",
+  // Advantages — Use
+  use_extra_vote: "advantages",
+  use_steal_a_vote: "advantages",
+  use_block_a_vote: "advantages",
+  use_bank_your_vote: "advantages",
+  use_knowledge_is_power: "advantages",
+  use_safety_without_power: "advantages",
+  use_control_the_vote: "advantages",
+
+  // Advantages — Win
+  win_extra_vote: "advantages",
+  win_steal_a_vote: "advantages",
+  win_block_a_vote: "advantages",
+  win_other_advantage: "advantages",
 
   // Milestones
   make_merge: "milestones",
@@ -74,7 +77,8 @@ export const ScoringCategoryMap: Record<PlayerAction, ScoringCategory> = {
 export const CategoryColors: Record<ScoringCategory, string> = {
   immunity: "var(--mantine-color-blue-6)",
   reward: "var(--mantine-color-yellow-4)",
-  idolsAndAdvantages: "var(--mantine-color-violet-6)",
+  idols: "var(--mantine-color-violet-6)",
+  advantages: "var(--mantine-color-grape-6)",
   milestones: "var(--mantine-color-lime-6)",
   eliminations: "var(--mantine-color-red-6)",
   other: "var(--mantine-color-gray-6)",
@@ -83,7 +87,8 @@ export const CategoryColors: Record<ScoringCategory, string> = {
 export const CategoryLabels: Record<ScoringCategory, string> = {
   immunity: "Immunity",
   reward: "Reward",
-  idolsAndAdvantages: "Idols & Advantages",
+  idols: "Idols",
+  advantages: "Advantages",
   milestones: "Milestones",
   eliminations: "Elimination",
   other: "Other",
@@ -92,7 +97,8 @@ export const CategoryLabels: Record<ScoringCategory, string> = {
 export const ScoringCategories: ScoringCategory[] = [
   "immunity",
   "reward",
-  "idolsAndAdvantages",
+  "idols",
+  "advantages",
   "milestones",
   "eliminations",
   "other",
@@ -104,7 +110,8 @@ export const aggregateByScoringCategory = (
   const totals: Record<ScoringCategory, number> = {
     immunity: 0,
     reward: 0,
-    idolsAndAdvantages: 0,
+    idols: 0,
+    advantages: 0,
     milestones: 0,
     eliminations: 0,
     other: 0,

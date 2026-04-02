@@ -17,14 +17,16 @@ const SCORING_CATEGORIES = [
     ],
   },
   {
-    label: "Idols and Advantages Found",
+    label: "Idols Found",
+    actions: ["find_idol", "find_idol_nullifier"],
+  },
+  {
+    label: "Advantages Found",
     actions: [
-      "find_idol",
       "find_extra_vote",
       "find_steal_a_vote",
       "find_block_a_vote",
       "find_bank_your_vote",
-      "find_idol_nullifier",
       "find_knowledge_is_power",
       "find_safety_without_power",
       "find_control_the_vote",
@@ -34,18 +36,24 @@ const SCORING_CATEGORIES = [
     ],
   },
   {
-    label: "Idols and Advantages Used",
+    label: "Idols Used",
+    actions: ["use_idol", "use_idol_nullifier"],
+  },
+  {
+    label: "Advantages Used",
     actions: [
-      "use_idol",
       "use_extra_vote",
       "use_steal_a_vote",
       "use_block_a_vote",
       "use_bank_your_vote",
-      "use_idol_nullifier",
       "use_knowledge_is_power",
       "use_safety_without_power",
       "use_control_the_vote",
     ],
+  },
+  {
+    label: "Idols Won",
+    actions: ["win_idol"],
   },
   {
     label: "Advantages Won",
@@ -53,7 +61,6 @@ const SCORING_CATEGORIES = [
       "win_extra_vote",
       "win_steal_a_vote",
       "win_block_a_vote",
-      "win_idol",
       "win_other_advantage",
     ],
   },

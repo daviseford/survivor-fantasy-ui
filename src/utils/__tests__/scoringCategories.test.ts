@@ -25,7 +25,7 @@ describe("ScoringCategoryMap", () => {
 });
 
 describe("aggregateByScoringCategory", () => {
-  it("aggregates actions across all 6 categories", () => {
+  it("aggregates actions across all 7 categories", () => {
     const scores: EnhancedScores[] = [
       {
         episode_num: 1,
@@ -46,7 +46,8 @@ describe("aggregateByScoringCategory", () => {
     expect(result).toEqual([
       { category: "immunity", points: 2 },
       { category: "reward", points: 1 },
-      { category: "idolsAndAdvantages", points: 1 },
+      { category: "idols", points: 1 },
+      { category: "advantages", points: 0 },
       { category: "milestones", points: 2 },
       { category: "eliminations", points: 3 },
       { category: "other", points: 0.5 },
@@ -77,15 +78,14 @@ describe("aggregateByScoringCategory", () => {
 
     expect(result.find((r) => r.category === "reward")?.points).toBe(1);
     expect(result.find((r) => r.category === "immunity")?.points).toBe(2);
-    expect(
-      result.find((r) => r.category === "idolsAndAdvantages")?.points,
-    ).toBe(3);
+    expect(result.find((r) => r.category === "idols")?.points).toBe(3);
+    expect(result.find((r) => r.category === "advantages")?.points).toBe(0);
     expect(result.find((r) => r.category === "milestones")?.points).toBe(0);
     expect(result.find((r) => r.category === "eliminations")?.points).toBe(0);
     expect(result.find((r) => r.category === "other")?.points).toBe(0);
   });
 
-  it("maps specific advantage actions to idolsAndAdvantages", () => {
+  it("maps advantage actions to advantages and idol actions to idols", () => {
     const scores: EnhancedScores[] = [
       {
         episode_num: 1,
@@ -101,9 +101,8 @@ describe("aggregateByScoringCategory", () => {
     ];
 
     const result = aggregateByScoringCategory(scores);
-    expect(
-      result.find((r) => r.category === "idolsAndAdvantages")?.points,
-    ).toBe(7);
+    expect(result.find((r) => r.category === "idols")?.points).toBe(2);
+    expect(result.find((r) => r.category === "advantages")?.points).toBe(5);
   });
 
   it("returns all categories with 0 points for empty actions", () => {
@@ -113,7 +112,7 @@ describe("aggregateByScoringCategory", () => {
 
     const result = aggregateByScoringCategory(scores);
 
-    expect(result).toHaveLength(6);
+    expect(result).toHaveLength(7);
     for (const breakdown of result) {
       expect(breakdown.points).toBe(0);
     }
@@ -122,7 +121,7 @@ describe("aggregateByScoringCategory", () => {
   it("returns all categories with 0 points for empty array", () => {
     const result = aggregateByScoringCategory([]);
 
-    expect(result).toHaveLength(6);
+    expect(result).toHaveLength(7);
     for (const breakdown of result) {
       expect(breakdown.points).toBe(0);
     }
