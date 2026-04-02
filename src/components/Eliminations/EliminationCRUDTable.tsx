@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Alert,
   Code,
   Group,
   NumberInput,
@@ -43,9 +44,9 @@ export const EliminationCRUDTable = () => {
     if (!slimUser?.isAdmin) return;
 
     modals.openConfirmModal({
-      title: "Do you want to delete this elimination?",
+      title: `Delete elimination ${e.order}?`,
       children: <Code block>{JSON.stringify(e, null, 2)}</Code>,
-      labels: { confirm: "Delete", cancel: "Cancel" },
+      labels: { confirm: "Delete elimination", cancel: "Keep it" },
       confirmProps: { color: "red" },
       onConfirm: async () => {
         const ref = doc(db, `eliminations/${season?.id}`);
@@ -201,10 +202,18 @@ export const EliminationCRUDTable = () => {
             {slimUser?.isAdmin && (
               <Table.Td>
                 <Group gap="xs">
-                  <ActionIcon color="green" onClick={() => saveEdit(e)}>
+                  <ActionIcon
+                    color="green"
+                    onClick={() => saveEdit(e)}
+                    aria-label="Save elimination"
+                  >
                     <IconCheck />
                   </ActionIcon>
-                  <ActionIcon color="gray" onClick={cancelEdit}>
+                  <ActionIcon
+                    color="gray"
+                    onClick={cancelEdit}
+                    aria-label="Cancel editing elimination"
+                  >
                     <IconX />
                   </ActionIcon>
                 </Group>
@@ -227,10 +236,18 @@ export const EliminationCRUDTable = () => {
           {slimUser?.isAdmin && (
             <Table.Td>
               <Group gap="xs">
-                <ActionIcon color="blue" onClick={() => startEdit(e)}>
+                <ActionIcon
+                  color="blue"
+                  onClick={() => startEdit(e)}
+                  aria-label={`Edit elimination ${e.order}`}
+                >
                   <IconPencil />
                 </ActionIcon>
-                <ActionIcon color="red" onClick={() => handleDelete(e)}>
+                <ActionIcon
+                  color="red"
+                  onClick={() => handleDelete(e)}
+                  aria-label={`Delete elimination ${e.order}`}
+                >
                   <IconTrash />
                 </ActionIcon>
               </Group>
@@ -253,7 +270,19 @@ export const EliminationCRUDTable = () => {
             {slimUser?.isAdmin && <Table.Th>Actions</Table.Th>}
           </Table.Tr>
         </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
+        <Table.Tbody>
+          {rows.length > 0 ? (
+            rows
+          ) : (
+            <Table.Tr>
+              <Table.Td colSpan={6}>
+                <Alert color="blue" variant="light">
+                  No eliminations recorded yet.
+                </Alert>
+              </Table.Td>
+            </Table.Tr>
+          )}
+        </Table.Tbody>
       </Table>
     </TableScrollContainer>
   );

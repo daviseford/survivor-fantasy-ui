@@ -1,15 +1,15 @@
 import {
   Accordion,
+  Alert,
   Box,
   Button,
   Center,
-  Code,
   Group,
   Loader,
   NumberInput,
+  Paper,
   Select,
   SimpleGrid,
-  Spoiler,
   Text,
   TextInput,
   Title,
@@ -166,11 +166,11 @@ export const CreateElimination = () => {
     <Accordion defaultValue="create-elimination">
       <Accordion.Item value="create-elimination">
         <Accordion.Control>
-          <Title order={4}>Create a new Elimination</Title>
+          <Title order={4}>Add Elimination</Title>
         </Accordion.Control>
         <Accordion.Panel>
           <SimpleGrid cols={{ base: 1, md: 2 }}>
-            <Box maw={340} mx="auto">
+            <Box maw={420} mx="auto">
               <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
                 <TextInput
                   withAsterisk
@@ -189,7 +189,7 @@ export const CreateElimination = () => {
 
                 <Select
                   withAsterisk
-                  label="Elimination Variant"
+                  label="Elimination Type"
                   data={dropdownOptions}
                   searchable
                   {...form.getInputProps("variant")}
@@ -211,18 +211,24 @@ export const CreateElimination = () => {
                 />
 
                 <Group justify="flex-end" mt="md">
-                  <Button type="submit">Submit</Button>
+                  <Button type="submit">Save Elimination</Button>
                 </Group>
               </form>
             </Box>
             <Box>
-              <Spoiler
-                maxHeight={0}
-                showLabel="Show payload"
-                hideLabel="Hide payload"
-              >
-                <Code block>{JSON.stringify(form.values, null, 2)}</Code>
-              </Spoiler>
+              <Paper withBorder p="md" radius="md">
+                <Title order={5} mb="xs">
+                  What happens next
+                </Title>
+                <Text size="sm" c="dimmed">
+                  Saving an elimination also removes that player from team
+                  assignments for this episode onward.
+                </Text>
+                <Alert color="blue" variant="light" mt="md">
+                  Enter eliminations in season order. This keeps prop bets,
+                  scoring, and team state aligned.
+                </Alert>
+              </Paper>
             </Box>
           </SimpleGrid>
         </Accordion.Panel>

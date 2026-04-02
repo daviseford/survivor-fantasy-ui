@@ -1,15 +1,16 @@
 import {
   Accordion,
+  Alert,
   Box,
   Button,
   Center,
   Checkbox,
-  Code,
   Group,
   Loader,
+  Paper,
   NumberInput,
   SimpleGrid,
-  Spoiler,
+  Text,
   TextInput,
   Title,
 } from "@mantine/core";
@@ -89,11 +90,11 @@ export const CreateEpisode = () => {
     <Accordion defaultValue="create-episode">
       <Accordion.Item value="create-episode">
         <Accordion.Control>
-          <Title order={4}>Create a new Episode</Title>
+          <Title order={4}>Add Episode</Title>
         </Accordion.Control>
         <Accordion.Panel>
           <SimpleGrid cols={{ base: 1, md: 2 }}>
-            <Box maw={340} mx="auto">
+            <Box maw={420} mx="auto">
               <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
                 <TextInput
                   withAsterisk
@@ -112,6 +113,7 @@ export const CreateEpisode = () => {
                 <TextInput
                   label="Episode Name"
                   placeholder="e.g. The Marooning"
+                  description="Optional, but useful for keeping the season timeline readable."
                   {...form.getInputProps("name")}
                 />
 
@@ -133,29 +135,26 @@ export const CreateEpisode = () => {
                 </Group>
 
                 <Group justify="flex-end" mt="md">
-                  <Button type="submit">Submit</Button>
+                  <Button type="submit">Save Episode</Button>
                 </Group>
               </form>
             </Box>
             <Box>
-              <Spoiler
-                maxHeight={0}
-                showLabel="Show payload"
-                hideLabel="Hide payload"
-              >
-                <Code block>
-                  {JSON.stringify(
-                    {
-                      id: `episode_${form.values.order}`,
-                      season_id: season.id,
-                      season_num: season.order,
-                      ...form.values,
-                    },
-                    null,
-                    2,
-                  )}
-                </Code>
-              </Spoiler>
+              <Paper withBorder p="md" radius="md">
+                <Title order={5} mb="xs">
+                  Before you save
+                </Title>
+                <Text size="sm" c="dimmed">
+                  Start here whenever a new episode airs. The episode record
+                  sets the context for events, challenges, and eliminations.
+                </Text>
+                <Alert color="blue" variant="light" mt="md">
+                  If the merge happens in this episode, turn on{" "}
+                  <strong>Merge occurs</strong>. If the merge has already
+                  happened, keep <strong>Post-merge</strong> on for future
+                  episodes.
+                </Alert>
+              </Paper>
             </Box>
           </SimpleGrid>
         </Accordion.Panel>

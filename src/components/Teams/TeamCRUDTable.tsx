@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Alert,
   Box,
   Code,
   ColorInput,
@@ -217,10 +218,18 @@ export const TeamCRUDTable = () => {
           {slimUser?.isAdmin && (
             <Table.Td>
               <Group gap="xs">
-                <ActionIcon color="green" onClick={() => saveEdit(team)}>
+                <ActionIcon
+                  color="green"
+                  onClick={() => saveEdit(team)}
+                  aria-label="Save team"
+                >
                   <IconCheck />
                 </ActionIcon>
-                <ActionIcon color="gray" onClick={cancelEdit}>
+                <ActionIcon
+                  color="gray"
+                  onClick={cancelEdit}
+                  aria-label="Cancel editing team"
+                >
                   <IconX />
                 </ActionIcon>
               </Group>
@@ -248,12 +257,20 @@ export const TeamCRUDTable = () => {
         {slimUser?.isAdmin && (
           <Table.Td>
             <Group gap="xs">
-              <ActionIcon color="blue" onClick={() => startEdit(team)}>
-                <IconPencil />
-              </ActionIcon>
-              <ActionIcon color="red" onClick={() => handleDelete(team)}>
-                <IconTrash />
-              </ActionIcon>
+                <ActionIcon
+                  color="blue"
+                  onClick={() => startEdit(team)}
+                  aria-label={`Edit team ${team.name}`}
+                >
+                  <IconPencil />
+                </ActionIcon>
+                <ActionIcon
+                  color="red"
+                  onClick={() => handleDelete(team)}
+                  aria-label={`Delete team ${team.name}`}
+                >
+                  <IconTrash />
+                </ActionIcon>
             </Group>
           </Table.Td>
         )}
@@ -272,7 +289,19 @@ export const TeamCRUDTable = () => {
             {slimUser?.isAdmin && <Table.Th>Actions</Table.Th>}
           </Table.Tr>
         </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
+        <Table.Tbody>
+          {rows.length > 0 ? (
+            rows
+          ) : (
+            <Table.Tr>
+              <Table.Td colSpan={4}>
+                <Alert color="blue" variant="light">
+                  No teams yet. Add a team above before assigning players.
+                </Alert>
+              </Table.Td>
+            </Table.Tr>
+          )}
+        </Table.Tbody>
       </Table>
     </TableScrollContainer>
   );

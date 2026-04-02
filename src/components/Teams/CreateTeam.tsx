@@ -3,12 +3,12 @@ import {
   Box,
   Button,
   Center,
-  Code,
   ColorInput,
   Group,
   Loader,
+  Paper,
   SimpleGrid,
-  Spoiler,
+  Text,
   TextInput,
   Title,
 } from "@mantine/core";
@@ -98,11 +98,11 @@ export const CreateTeam = () => {
     <Accordion>
       <Accordion.Item value="create-team">
         <Accordion.Control>
-          <Title order={4}>Create a new Team</Title>
+          <Title order={4}>Add Team</Title>
         </Accordion.Control>
         <Accordion.Panel>
           <SimpleGrid cols={{ base: 1, md: 2 }}>
-            <Box maw={340} mx="auto">
+            <Box maw={420} mx="auto">
               <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
                 <TextInput
                   withAsterisk
@@ -127,28 +127,20 @@ export const CreateTeam = () => {
                 />
 
                 <Group justify="flex-end" mt="md">
-                  <Button type="submit">Submit</Button>
+                  <Button type="submit">Save Team</Button>
                 </Group>
               </form>
             </Box>
             <Box>
-              <Spoiler
-                maxHeight={0}
-                showLabel="Show payload"
-                hideLabel="Hide payload"
-              >
-                <Code block>
-                  {JSON.stringify(
-                    {
-                      ...form.values,
-                      season_id: season.id,
-                      season_num: season.order,
-                    },
-                    null,
-                    2,
-                  )}
-                </Code>
-              </Spoiler>
+              <Paper withBorder p="md" radius="md">
+                <Title order={5} mb="xs">
+                  Team setup
+                </Title>
+                <Text size="sm" c="dimmed">
+                  Create tribe or team records here first, then assign players
+                  by episode below.
+                </Text>
+              </Paper>
             </Box>
           </SimpleGrid>
         </Accordion.Panel>
