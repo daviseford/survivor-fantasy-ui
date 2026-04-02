@@ -57,7 +57,6 @@ function getRegisteredSeasons(seasonsFilePath: string): number[] {
  */
 function getSeasonImg(seasonsFilePath: string, seasonNum: number): string {
   const content = fs.readFileSync(seasonsFilePath, "utf-8");
-  // Match the img field in the season entry
   const seasonBlock = content.match(
     new RegExp(
       `season_${seasonNum}:\\s*\\{[\\s\\S]*?img:\\s*"([^"]*)"[\\s\\S]*?\\}`,
@@ -67,12 +66,10 @@ function getSeasonImg(seasonsFilePath: string, seasonNum: number): string {
 }
 
 /**
- * Count episodes in an existing season file by matching episode object entries.
+ * Count episodes in season file content by matching episode object entries.
  * Uses a pattern that only matches the episode definition (not episode_id refs).
  */
-function countExistingEpisodes(filePath: string): number {
-  if (!fs.existsSync(filePath)) return 0;
-  const content = fs.readFileSync(filePath, "utf-8");
+function countEpisodes(content: string): number {
   const matches = content.match(/^\s+id: "episode_\d+",$/gm);
   return matches?.length ?? 0;
 }
@@ -128,13 +125,15 @@ async function main(): Promise<void> {
   const playerData = transformPlayers(seasonData, seasonNum);
   const resultsData = transformResults(seasonData, seasonNum);
 
-  // Preserve existing player images from the current file
   const seasonKey = `season_${seasonNum}`;
   const seasonDir = path.join(PROJECT_ROOT, "src", "data", seasonKey);
   const seasonFilePath = path.join(seasonDir, "index.ts");
+  const existingContent = fs.existsSync(seasonFilePath)
+    ? fs.readFileSync(seasonFilePath, "utf-8")
+    : undefined;
 
-  if (fs.existsSync(seasonFilePath)) {
-    const existingContent = fs.readFileSync(seasonFilePath, "utf-8");
+  // Preserve existing player images from the current file
+  if (existingContent) {
     const existingPlayers = extractExistingPlayers(existingContent);
     const imgMap = new Map(
       existingPlayers.filter((p) => p.img).map((p) => [p.name, p.img]),
@@ -143,11 +142,9 @@ async function main(): Promise<void> {
     if (imgMap.size > 0) {
       console.log(`  Preserving ${imgMap.size} existing player images.`);
       for (const player of playerData.players) {
-        if (!player.imageUrl) {
-          const existingImg = imgMap.get(player.localName);
-          if (existingImg) {
-            player.imageUrl = existingImg;
-          }
+        const existingImg = imgMap.get(player.localName);
+        if (!player.imageUrl && existingImg) {
+          player.imageUrl = existingImg;
         }
       }
     }
@@ -160,8 +157,7 @@ async function main(): Promise<void> {
     seasonNum,
   );
 
-  if (!isNewSeason && fs.existsSync(seasonFilePath)) {
-    const existingContent = fs.readFileSync(seasonFilePath, "utf-8");
+  if (!isNewSeason && existingContent !== undefined) {
     if (existingContent === generatedContent) {
       const result: SyncResult = {
         changed: false,
@@ -181,9 +177,10 @@ async function main(): Promise<void> {
 
   // Phase 4: Validate
   console.log("\nPhase 4: Validating data...");
-  const existingEpisodeCount = isNewSeason
-    ? undefined
-    : countExistingEpisodes(seasonFilePath);
+  const existingEpisodeCount =
+    isNewSeason || !existingContent
+      ? undefined
+      : countEpisodes(existingContent);
   const validation = validateSeasonData(
     playerData,
     resultsData,
@@ -218,7 +215,6 @@ async function main(): Promise<void> {
   // Phase 5: Write + Push
   console.log("\nPhase 5: Writing file and pushing to Firestore...");
 
-  // Write the generated file
   if (!fs.existsSync(seasonDir)) {
     fs.mkdirSync(seasonDir, { recursive: true });
   }
@@ -249,9 +245,9 @@ async function main(): Promise<void> {
     seasonNum,
     isNewSeason,
     firestorePushed,
-    ...(firestoreError
-      ? { error: `Firestore push failed: ${firestoreError}` }
-      : {}),
+    error: firestoreError
+      ? `Firestore push failed: ${firestoreError}`
+      : undefined,
     summary: {
       episodes: resultsData.episodes.length,
       challenges: resultsData.challenges.length,

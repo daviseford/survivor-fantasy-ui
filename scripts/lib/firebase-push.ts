@@ -10,13 +10,31 @@ import * as path from "path";
 // Import to trigger shared Firebase Admin initialization
 import "./admin.js";
 
+interface FirestoreDocument {
+  collection: string;
+  docId: string;
+  data: Record<string, unknown>;
+}
+
+function getSeasonExport(
+  mod: Record<string, unknown>,
+  seasonNum: number,
+  suffix: string,
+): unknown {
+  return mod[`SEASON_${seasonNum}_${suffix}`];
+}
+
+function truncate(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength) + "...";
+}
+
 export async function pushSeasonToFirestore(
   seasonNum: number,
   dryRun = false,
   seasonImg = "",
 ): Promise<void> {
   const projectRoot = path.resolve(import.meta.dirname, "..", "..");
-
   const seasonKey = `season_${seasonNum}`;
   const seasonDataPath = path.resolve(
     projectRoot,
@@ -32,35 +50,28 @@ export async function pushSeasonToFirestore(
     );
   }
 
-  // Dynamically import the season data (use file:// URL for Windows compatibility)
+  // Use file:// URL for Windows compatibility with dynamic import
   const mod = await import(
     new URL(`file:///${seasonDataPath.replace(/\\/g, "/")}`).href
   );
 
-  const playersKey = `SEASON_${seasonNum}_PLAYERS`;
-  const episodesKey = `SEASON_${seasonNum}_EPISODES`;
-  const challengesKey = `SEASON_${seasonNum}_CHALLENGES`;
-  const eliminationsKey = `SEASON_${seasonNum}_ELIMINATIONS`;
-  const eventsKey = `SEASON_${seasonNum}_EVENTS`;
-  const lookupKey = `SEASON_${seasonNum}_CASTAWAY_LOOKUP`;
-
-  const players = mod[playersKey];
-  const episodes = mod[episodesKey];
-  const challenges = mod[challengesKey];
-  const eliminations = mod[eliminationsKey];
-  const events = mod[eventsKey];
-  const castawayLookup = mod[lookupKey];
+  const players = getSeasonExport(mod, seasonNum, "PLAYERS");
+  const episodes = getSeasonExport(mod, seasonNum, "EPISODES");
+  const challenges = getSeasonExport(mod, seasonNum, "CHALLENGES");
+  const eliminations = getSeasonExport(mod, seasonNum, "ELIMINATIONS");
+  const events = getSeasonExport(mod, seasonNum, "EVENTS");
+  const castawayLookup = getSeasonExport(mod, seasonNum, "CASTAWAY_LOOKUP");
 
   if (!players || !episodes) {
     throw new Error(
-      `Missing required exports (${playersKey}, ${episodesKey}) in ${seasonDataPath}`,
+      `Missing required exports (SEASON_${seasonNum}_PLAYERS, SEASON_${seasonNum}_EPISODES) in ${seasonDataPath}`,
     );
   }
 
-  // Build the documents to upload
-  const documents = [
+  const documents: FirestoreDocument[] = [
     {
-      path: `seasons/${seasonKey}`,
+      collection: "seasons",
+      docId: seasonKey,
       data: {
         id: seasonKey,
         order: seasonNum,
@@ -72,44 +83,44 @@ export async function pushSeasonToFirestore(
       },
     },
     {
-      path: `challenges/${seasonKey}`,
-      data: challenges || {},
+      collection: "challenges",
+      docId: seasonKey,
+      data: (challenges || {}) as Record<string, unknown>,
     },
     {
-      path: `eliminations/${seasonKey}`,
-      data: eliminations || {},
+      collection: "eliminations",
+      docId: seasonKey,
+      data: (eliminations || {}) as Record<string, unknown>,
     },
     {
-      path: `events/${seasonKey}`,
-      data: events || {},
+      collection: "events",
+      docId: seasonKey,
+      data: (events || {}) as Record<string, unknown>,
     },
   ];
 
   if (dryRun) {
     console.log(`\n[DRY RUN] Would upload the following to Firestore:\n`);
     for (const doc of documents) {
-      const dataStr = JSON.stringify(doc.data, null, 2);
-      const preview =
-        dataStr.length > 200 ? dataStr.slice(0, 200) + "..." : dataStr;
-      console.log(`  ${doc.path}:`);
+      const preview = truncate(JSON.stringify(doc.data, null, 2), 200);
+      console.log(`  ${doc.collection}/${doc.docId}:`);
       console.log(`    ${preview}\n`);
     }
     return;
   }
 
   const db = getFirestore();
-
   console.log(`\nUploading season ${seasonNum} data to Firestore...\n`);
 
   const failures: string[] = [];
   for (const doc of documents) {
+    const docPath = `${doc.collection}/${doc.docId}`;
     try {
-      const [collection, docId] = doc.path.split("/");
-      await db.collection(collection).doc(docId).set(doc.data);
-      console.log(`  [OK] ${doc.path}`);
+      await db.collection(doc.collection).doc(doc.docId).set(doc.data);
+      console.log(`  [OK] ${docPath}`);
     } catch (err) {
-      console.error(`  [FAIL] ${doc.path}:`, err);
-      failures.push(doc.path);
+      console.error(`  [FAIL] ${docPath}:`, err);
+      failures.push(docPath);
     }
   }
 
