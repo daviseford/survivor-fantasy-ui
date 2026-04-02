@@ -24,10 +24,13 @@ service cloud.firestore {
     }
 
     // Competitions: authenticated read, creator/admin update, admin delete
+    // Once finished is true, it cannot be reverted to false (one-way transition).
+    // Admin SDK bypasses rules for data corrections.
     match /competitions/{competitionId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated() && request.resource.data.creator_uid == request.auth.uid;
-      allow update: if isAdmin() || (isAuthenticated() && request.auth.uid == resource.data.creator_uid && request.resource.data.creator_uid == resource.data.creator_uid);
+      allow update: if (isAdmin() || (isAuthenticated() && request.auth.uid == resource.data.creator_uid && request.resource.data.creator_uid == resource.data.creator_uid))
+        && !(resource.data.finished == true && request.resource.data.finished == false);
       allow delete: if isAdmin();
     }
 
