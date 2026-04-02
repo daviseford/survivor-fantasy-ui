@@ -162,20 +162,20 @@ export const ChallengeCRUDTable = () => {
             {slimUser?.isAdmin && (
               <Table.Td>
                 <Group gap="xs">
-                <ActionIcon
-                  color="green"
-                  onClick={saveEdit}
-                  aria-label="Save challenge"
-                >
-                  <IconCheck />
-                </ActionIcon>
-                <ActionIcon
-                  color="gray"
-                  onClick={cancelEdit}
-                  aria-label="Cancel editing challenge"
-                >
-                  <IconX />
-                </ActionIcon>
+                  <ActionIcon
+                    color="green"
+                    onClick={saveEdit}
+                    aria-label="Save challenge"
+                  >
+                    <IconCheck />
+                  </ActionIcon>
+                  <ActionIcon
+                    color="gray"
+                    onClick={cancelEdit}
+                    aria-label="Cancel editing challenge"
+                  >
+                    <IconX />
+                  </ActionIcon>
                 </Group>
               </Table.Td>
             )}

@@ -257,20 +257,20 @@ export const TeamCRUDTable = () => {
         {slimUser?.isAdmin && (
           <Table.Td>
             <Group gap="xs">
-                <ActionIcon
-                  color="blue"
-                  onClick={() => startEdit(team)}
-                  aria-label={`Edit team ${team.name}`}
-                >
-                  <IconPencil />
-                </ActionIcon>
-                <ActionIcon
-                  color="red"
-                  onClick={() => handleDelete(team)}
-                  aria-label={`Delete team ${team.name}`}
-                >
-                  <IconTrash />
-                </ActionIcon>
+              <ActionIcon
+                color="blue"
+                onClick={() => startEdit(team)}
+                aria-label={`Edit team ${team.name}`}
+              >
+                <IconPencil />
+              </ActionIcon>
+              <ActionIcon
+                color="red"
+                onClick={() => handleDelete(team)}
+                aria-label={`Delete team ${team.name}`}
+              >
+                <IconTrash />
+              </ActionIcon>
             </Group>
           </Table.Td>
         )}

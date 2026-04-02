@@ -191,9 +191,8 @@ export const CreateGameEvent = () => {
                   Use this for player moments
                 </Title>
                 <Text size="sm" c="dimmed">
-                  This form records scoring actions like idol finds,
-                  advantages, and other player events tied to a specific
-                  episode.
+                  This form records scoring actions like idol finds, advantages,
+                  and other player events tied to a specific episode.
                 </Text>
                 {currentAction?.multiplier && (
                   <Alert color="blue" variant="light" mt="md">

@@ -179,20 +179,20 @@ export const GameEventsCRUDTable = () => {
             {slimUser?.isAdmin && (
               <Table.Td>
                 <Group gap="xs">
-                <ActionIcon
-                  color="green"
-                  onClick={saveEdit}
-                  aria-label="Save event"
-                >
-                  <IconCheck />
-                </ActionIcon>
-                <ActionIcon
-                  color="gray"
-                  onClick={cancelEdit}
-                  aria-label="Cancel editing event"
-                >
-                  <IconX />
-                </ActionIcon>
+                  <ActionIcon
+                    color="green"
+                    onClick={saveEdit}
+                    aria-label="Save event"
+                  >
+                    <IconCheck />
+                  </ActionIcon>
+                  <ActionIcon
+                    color="gray"
+                    onClick={cancelEdit}
+                    aria-label="Cancel editing event"
+                  >
+                    <IconX />
+                  </ActionIcon>
                 </Group>
               </Table.Td>
             )}

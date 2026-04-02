@@ -465,9 +465,7 @@ export const TeamPlayerManager = () => {
                     { value: NO_TEAM_ID, label: "No Team" },
                   ]}
                   value={snapshot[cid] ?? NO_TEAM_ID}
-                  onChange={(value) =>
-                    handleManualAssignmentChange(cid, value)
-                  }
+                  onChange={(value) => handleManualAssignmentChange(cid, value)}
                   searchable
                   clearable={false}
                 />

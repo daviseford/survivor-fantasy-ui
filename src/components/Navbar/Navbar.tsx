@@ -103,8 +103,9 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
                 to={child.link}
                 label={child.label}
                 leftSection={
-                  <child.icon className={classes.linkIcon} stroke={1.5} />
+                  <child.icon className={classes.childLinkIcon} stroke={1.5} />
                 }
+                className={classes.childLink}
                 active={childIsActive || undefined}
                 onClick={onNavigate}
               />

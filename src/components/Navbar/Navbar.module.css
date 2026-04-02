@@ -27,6 +27,16 @@
   height: rem(18px);
 }
 
+.childLink {
+  font-size: var(--mantine-font-size-sm);
+  min-height: rem(36px);
+}
+
+.childLinkIcon {
+  width: rem(14px);
+  height: rem(14px);
+}
+
 .metaIcon {
   width: rem(14px);
   height: rem(14px);
