@@ -248,18 +248,52 @@ export const DraftComponent = () => {
     } satisfies Draft["draft_picks"][number];
 
     try {
-      await update(ref(rt_db, `drafts/${draft.id}`), {
-        [`draft_picks/${draft.current_pick_number}`]: draftPick,
-        "state/current_pick_number": nextPickNumber,
-        ...(isFinalPick ? { "state/finished": true } : {}),
-      });
+      await set(
+        ref(
+          rt_db,
+          `drafts/${draft.id}/draft_picks/${draft.current_pick_number}`,
+        ),
+        draftPick,
+      );
     } catch (err) {
       notifications.show({
-        title: "Failed to draft player",
+        title: "Failed to write draft pick",
         message: err instanceof Error ? err.message : "Unknown error",
         color: "red",
         icon: <IconX size={16} />,
       });
+      return;
+    }
+
+    try {
+      await set(
+        ref(rt_db, `drafts/${draft.id}/state/current_pick_number`),
+        nextPickNumber,
+      );
+    } catch (err) {
+      notifications.show({
+        title: "Failed to advance pick number",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+        icon: <IconX size={16} />,
+      });
+      return;
+    }
+
+    if (isFinalPick) {
+      try {
+        await set(
+          ref(rt_db, `drafts/${draft.id}/state/finished`),
+          true,
+        );
+      } catch (err) {
+        notifications.show({
+          title: "Failed to finish draft",
+          message: err instanceof Error ? err.message : "Unknown error",
+          color: "red",
+          icon: <IconX size={16} />,
+        });
+      }
     }
   };
 
