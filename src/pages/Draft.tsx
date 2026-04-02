@@ -76,24 +76,23 @@ export const DraftComponent = () => {
   const { draft } = useDraft();
   const { data: competition } = useCompetition(draft?.competiton_id);
 
-  // Track draft.started transitions to trigger the reveal animation.
-  // If the component mounts with started already true (late joiner), skip animation.
-  const prevStartedRef = useRef(draft?.started ?? false);
-  const [isRevealing, setIsRevealing] = useState(false);
+  const sawNotStartedRef = useRef(false);
+  const [revealDone, setRevealDone] = useState(false);
 
   useEffect(() => {
-    const wasStarted = prevStartedRef.current;
-    const isStarted = draft?.started ?? false;
-
-    if (!wasStarted && isStarted) {
-      setIsRevealing(true);
+    if (draft?.started === false) {
+      sawNotStartedRef.current = true;
     }
-
-    prevStartedRef.current = isStarted;
   }, [draft?.started]);
 
+  const isRevealing = !!(
+    draft?.started &&
+    sawNotStartedRef.current &&
+    !revealDone
+  );
+
   const handleRevealComplete = useCallback(() => {
-    setIsRevealing(false);
+    setRevealDone(true);
   }, []);
 
   const userHasSubmittedPropBets = Boolean(
