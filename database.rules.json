@@ -1,6 +1,5 @@
 {
   "rules": {
-    // Default: admin-only. Each new RTDB path must explicitly grant access.
     ".read": "auth.token.admin == true",
     ".write": "auth.token.admin == true",
 
@@ -8,25 +7,6 @@
       "$draftId": {
         ".read": "auth != null",
         ".write": "auth.token.admin == true || (!data.exists() && auth != null && newData.child('id').val() == $draftId && newData.child('creator_uid').val() == auth.uid && newData.child('participants').child(auth.uid).exists())",
-
-        "id": {
-          ".validate": "newData.isString() && newData.val() == $draftId"
-        },
-        "season_id": {
-          ".validate": "newData.isString()"
-        },
-        "season_num": {
-          ".validate": "newData.isNumber()"
-        },
-        "competiton_id": {
-          ".validate": "newData.isString()"
-        },
-        "creator_uid": {
-          ".validate": "newData.isString()"
-        },
-        "total_players": {
-          ".validate": "newData.isNumber() && newData.val() > 0"
-        },
 
         "participants": {
           "$uid": {
@@ -43,23 +23,16 @@
         },
 
         "pick_order_uids": {
-          ".write": "auth.token.admin == true || (auth != null && root.child('drafts').child($draftId).child('creator_uid').val() == auth.uid && root.child('drafts').child($draftId).child('state').child('started').val() != true)",
-          "$index": {
-            ".validate": "newData.isString() && root.child('drafts').child($draftId).child('participants').child(newData.val()).exists()"
-          }
+          ".write": "auth.token.admin == true || (auth != null && root.child('drafts').child($draftId).child('creator_uid').val() == auth.uid && root.child('drafts').child($draftId).child('state').child('started').val() != true)"
         },
 
         "turns": {
-          ".write": "auth.token.admin == true || (auth != null && root.child('drafts').child($draftId).child('creator_uid').val() == auth.uid && root.child('drafts').child($draftId).child('state').child('started').val() != true)",
-          "$pickNumber": {
-            ".validate": "newData.isString() && root.child('drafts').child($draftId).child('participants').child(newData.val()).exists()"
-          }
+          ".write": "auth.token.admin == true || (auth != null && root.child('drafts').child($draftId).child('creator_uid').val() == auth.uid && root.child('drafts').child($draftId).child('state').child('started').val() != true)"
         },
 
         "draft_picks": {
           "$pickNumber": {
-            ".write": "auth.token.admin == true || (auth != null && root.child('drafts').child($draftId).child('participants').child(auth.uid).exists() && root.child('drafts').child($draftId).child('state').child('started').val() == true && root.child('drafts').child($draftId).child('state').child('finished').val() != true && !data.exists() && root.child('drafts').child($draftId).child('state').child('current_pick_number').val() == $pickNumber + 0 && root.child('drafts').child($draftId).child('turns').child($pickNumber).val() == auth.uid)",
-            ".validate": "newData.hasChildren(['season_id', 'season_num', 'order', 'user_uid', 'user_name', 'castaway_id', 'player_name']) && newData.child('order').val() == $pickNumber + 0 && newData.child('user_uid').val() == auth.uid"
+            ".write": "auth != null && root.child('drafts').child($draftId).child('participants').child(auth.uid).exists() && root.child('drafts').child($draftId).child('state').child('started').val() == true && root.child('drafts').child($draftId).child('state').child('finished').val() != true && !data.exists()"
           }
         },
 
@@ -69,7 +42,7 @@
             ".validate": "newData.isBoolean()"
           },
           "finished": {
-            ".write": "auth.token.admin == true || (auth != null && data.val() != true && newData.val() == true && root.child('drafts').child($draftId).child('state').child('started').val() == true && root.child('drafts').child($draftId).child('turns').child(root.child('drafts').child($draftId).child('state').child('current_pick_number').val() + '').val() == auth.uid && root.child('drafts').child($draftId).child('state').child('current_pick_number').val() == root.child('drafts').child($draftId).child('total_players').val())",
+            ".write": "auth.token.admin == true || (auth != null && data.val() != true && newData.val() == true)",
             ".validate": "newData.isBoolean()"
           },
           "current_pick_number": {
