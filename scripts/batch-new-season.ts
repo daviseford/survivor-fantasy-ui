@@ -470,11 +470,7 @@ async function main(): Promise<void> {
     for (const entry of results) {
       console.log(`  Pushing season ${entry.seasonNum}...`);
       try {
-        await pushSeasonToFirestore(
-          entry.seasonNum,
-          dryRun,
-          entry.logoPath,
-        );
+        await pushSeasonToFirestore(entry.seasonNum, dryRun, entry.logoPath);
       } catch (err) {
         console.error(
           `  ✗ Firestore push failed for season ${entry.seasonNum}: ${toErrorMessage(err)}`,

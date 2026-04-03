@@ -116,7 +116,9 @@ async function main(): Promise<void> {
   console.log(`\nSnapshot complete: ${outDir}/`);
 }
 
-main().catch((err) => {
-  console.error("Snapshot failed:", err);
-  process.exit(1);
-});
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error("Snapshot failed:", err);
+    process.exit(1);
+  });

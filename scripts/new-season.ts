@@ -96,9 +96,7 @@ async function fetchWikiSupplemental(
   // Batch-resolve image URLs and download
   console.log(`\n  Resolving ${imageFileNames.size} image URLs...`);
   const imageUrls = await fetchImageUrls([...imageFileNames.values()]);
-  console.log(
-    `  Resolved ${imageUrls.size}/${imageFileNames.size} image URLs`,
-  );
+  console.log(`  Resolved ${imageUrls.size}/${imageFileNames.size} image URLs`);
 
   const imgDirPath = imageDir(projectRoot, seasonKey);
   let downloaded = 0;
@@ -235,7 +233,11 @@ async function main(): Promise<void> {
 
   // Step 4
   logStep(4, "Generating season data file");
-  const fileContent = generateFullSeasonFile(playerData, resultsData, seasonNum);
+  const fileContent = generateFullSeasonFile(
+    playerData,
+    resultsData,
+    seasonNum,
+  );
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }

@@ -81,7 +81,8 @@ export const DraftOrderReveal = ({ pickOrder, onComplete }: Props) => {
         const shuffledUnlockedNames = shuffleNames(unlockedNames);
 
         unlockedIndexes.forEach((slotIndex, orderIndex) => {
-          next[slotIndex] = shuffledUnlockedNames[orderIndex] ?? next[slotIndex];
+          next[slotIndex] =
+            shuffledUnlockedNames[orderIndex] ?? next[slotIndex];
         });
 
         return next;

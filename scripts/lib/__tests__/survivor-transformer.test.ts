@@ -1,8 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import {
-  type SurvivorSeasonData,
-  fetchSeasonData,
-} from "../survivor-client";
+import { type SurvivorSeasonData, fetchSeasonData } from "../survivor-client";
 import { transformPlayers, transformResults } from "../survivor-transformer";
 
 // Integration tests using real survivoR data
