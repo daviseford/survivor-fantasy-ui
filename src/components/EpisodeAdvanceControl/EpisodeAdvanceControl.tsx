@@ -25,15 +25,15 @@ type Props = {
   competition: Competition;
   season: Season;
   isCreator: boolean;
-  hasWinner?: boolean;
+  hasWinner: boolean;
 };
 
 const EpisodePickerModal = ({
   season,
-  competitionId,
+  onConfirm,
 }: {
   season: Season;
-  competitionId: Competition["id"];
+  onConfirm: (episode: number) => void;
 }) => {
   const [selected, setSelected] = useState<string>("0");
 
@@ -44,21 +44,6 @@ const EpisodePickerModal = ({
       label: `Episode ${e.order} — ${e.name}`,
     })),
   ];
-
-  const handleConfirm = async () => {
-    modals.closeAll();
-    try {
-      await updateDoc(doc(db, "competitions", competitionId), {
-        current_episode: parseInt(selected),
-      });
-    } catch (err) {
-      notifications.show({
-        title: "Failed to switch mode",
-        message: err instanceof Error ? err.message : "Unknown error",
-        color: "red",
-      });
-    }
-  };
 
   return (
     <Stack gap="md">
@@ -77,7 +62,14 @@ const EpisodePickerModal = ({
         <Button variant="light" color="gray" onClick={() => modals.closeAll()}>
           Cancel
         </Button>
-        <Button onClick={handleConfirm}>Switch to Watch-Along</Button>
+        <Button
+          onClick={() => {
+            modals.closeAll();
+            onConfirm(Number(selected));
+          }}
+        >
+          Switch to Watch-Along
+        </Button>
       </Group>
     </Stack>
   );
@@ -115,7 +107,7 @@ export const EpisodeAdvanceControl = ({
       modals.open({
         title: "Switch to Watch-Along",
         children: (
-          <EpisodePickerModal season={season} competitionId={competition.id} />
+          <EpisodePickerModal season={season} onConfirm={updateEpisode} />
         ),
       });
     };
