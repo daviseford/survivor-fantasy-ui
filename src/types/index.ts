@@ -208,7 +208,6 @@ export type Competition = {
    */
   prop_bets?: PropBetsEntry[];
 
-  started: boolean;
   current_episode: number | null;
   finished: boolean;
 };

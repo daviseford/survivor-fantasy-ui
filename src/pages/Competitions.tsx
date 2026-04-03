@@ -28,7 +28,7 @@ import { useUser } from "../hooks/useUser";
 import { Competition } from "../types";
 import classes from "./Competitions.module.css";
 
-type SortField = "name" | "season" | "participants";
+type SortField = "name" | "season" | "participants" | "status";
 type SortDir = "asc" | "desc";
 
 const SortableHeader = ({
@@ -103,6 +103,9 @@ export const Competitions = () => {
         case "participants":
           cmp = a.participants.length - b.participants.length;
           break;
+        case "status":
+          cmp = Number(a.finished) - Number(b.finished);
+          break;
       }
       return sortDir === "asc" ? cmp : -cmp;
     };
@@ -149,6 +152,11 @@ export const Competitions = () => {
       </Table.Td>
       <Table.Td>
         <Text size="sm">{formatParticipants(x)}</Text>
+      </Table.Td>
+      <Table.Td>
+        <Badge variant="light" color={x.finished ? "green" : "blue"} size="sm">
+          {x.finished ? "Complete" : "In Progress"}
+        </Badge>
       </Table.Td>
       <Table.Td w={36}>
         <IconChevronRight size={16} className={classes.chevron} />
@@ -245,6 +253,13 @@ export const Competitions = () => {
                 <SortableHeader
                   label="Participants"
                   field="participants"
+                  sortField={sortField}
+                  sortDir={sortDir}
+                  onSort={handleSort}
+                />
+                <SortableHeader
+                  label="Status"
+                  field="status"
                   sortField={sortField}
                   sortDir={sortDir}
                   onSort={handleSort}

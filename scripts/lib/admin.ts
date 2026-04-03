@@ -4,7 +4,7 @@ import { getAuth } from "firebase-admin/auth";
 import * as fs from "fs";
 import * as path from "path";
 
-config();
+config({ override: true });
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, "..", "..");
 const keyPath = path.join(PROJECT_ROOT, "firebase-private-key.json");

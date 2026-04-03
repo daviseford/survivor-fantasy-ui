@@ -26,7 +26,9 @@ import {
   PerUserPerEpisodeScoringTable,
   ScoringLegendTable,
 } from "../components/ScoringTables";
+import { useAutoFinishCompetition } from "../hooks/useAutoFinishCompetition";
 import { useCompetition } from "../hooks/useCompetition";
+import { useEvents } from "../hooks/useEvents";
 import { usePropBetScoring } from "../hooks/useGetPropBetScoring";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
@@ -66,6 +68,14 @@ export const SingleCompetition = () => {
   const { activeKeys: activePropBetKeys } = usePropBetScoring();
 
   const { data: season } = useSeason(competition?.season_id);
+  const { data: unfilteredEvents } = useEvents(competition?.season_id);
+
+  useAutoFinishCompetition({
+    events: unfilteredEvents,
+    competition,
+    episodes: season?.episodes ?? [],
+    slimUser,
+  });
 
   if (!competition || !season) return null;
 
