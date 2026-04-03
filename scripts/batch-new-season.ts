@@ -489,7 +489,7 @@ async function main(): Promise<void> {
     }
   }
 
-  if (results.length > 0 && !dryRun) {
+  if (results.length > 0 && !dryRun && !skipWiki) {
     const metadataPath = path.join(PROJECT_ROOT, "data", "batch-metadata.json");
     writeFileWithDirs(metadataPath, JSON.stringify(results, null, 2));
     console.log(`\n  Metadata written to: ${metadataPath}`);

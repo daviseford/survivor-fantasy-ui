@@ -13,9 +13,9 @@
  *   yarn tsx scripts/push-seasons.ts --collections events,challenges  # push specific collections
  */
 
+import { getFirestore } from "firebase-admin/firestore";
 import * as fs from "fs";
 import * as path from "path";
-import { getFirestore } from "firebase-admin/firestore";
 import "./lib/admin.js";
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, "..");
@@ -155,9 +155,11 @@ async function main(): Promise<void> {
   const collectionsStr = flags.get("collections");
   const collections = new Set<Collection>(
     collectionsStr
-      ? (collectionsStr.split(",").filter((c) =>
-          (VALID_COLLECTIONS as readonly string[]).includes(c),
-        ) as Collection[])
+      ? (collectionsStr
+          .split(",")
+          .filter((c) =>
+            (VALID_COLLECTIONS as readonly string[]).includes(c),
+          ) as Collection[])
       : [...VALID_COLLECTIONS],
   );
 
@@ -169,7 +171,9 @@ async function main(): Promise<void> {
   }
 
   const seasonNums =
-    positional.length > 0 ? positional.sort((a, b) => a - b) : discoverSeasons();
+    positional.length > 0
+      ? positional.sort((a, b) => a - b)
+      : discoverSeasons();
 
   console.log(`Pushing ${seasonNums.length} season(s) to Firestore`);
   console.log(`  Collections: ${[...collections].join(", ")}`);
@@ -191,7 +195,9 @@ async function main(): Promise<void> {
     totalFailed += result.failed.length;
 
     if (!dryRun && result.pushed.length > 0) {
-      console.log(`    [OK] ${result.pushed.map((p) => p.split("/")[0]).join(", ")}`);
+      console.log(
+        `    [OK] ${result.pushed.map((p) => p.split("/")[0]).join(", ")}`,
+      );
     }
     if (result.failed.length > 0) {
       console.log(`    [FAIL] ${result.failed.join(", ")}`);
