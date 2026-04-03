@@ -1,4 +1,4 @@
-import { Avatar, Paper, SimpleGrid, Text } from "@mantine/core";
+import { Image, Paper, SimpleGrid, Text } from "@mantine/core";
 import { useSeason } from "../hooks/useSeason";
 import { Player } from "../types";
 
@@ -26,13 +26,14 @@ const PlayerCard = (props: Player) => {
       bg="var(--mantine-color-body)"
       ta="center"
     >
-      <Avatar
+      <Image
         src={props.img}
-        size={100}
-        radius={100}
-        mx="auto"
         alt={props.full_name}
-        imageProps={{ loading: "lazy" }}
+        radius="md"
+        loading="lazy"
+        fit="cover"
+        h={140}
+        style={{ objectPosition: "center top" }}
       />
       <Text ta="center" fw={600} mt="sm" size="sm">
         {props.full_name}
