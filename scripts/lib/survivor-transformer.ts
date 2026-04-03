@@ -199,6 +199,19 @@ function transformEpisodes(
 
 // --- Challenge transformation ---
 
+/** Determine whether a reward challenge is individual or team/tribal. */
+function getRewardVariant(
+  first: SurvivorChallengeResult,
+  winners: SurvivorChallengeResult[],
+): "reward" | "team_reward" {
+  const ot = first.outcome_type;
+  if (ot === "Individual") return "reward";
+  if (ot === "Tribal" || ot === "Team") return "team_reward";
+  // Fallback for null/empty outcome_type on early seasons
+  if (winners.some((w) => w.won_individual_reward === 1)) return "reward";
+  return "team_reward";
+}
+
 /** Determine whether an immunity challenge is individual or team/tribal. */
 function getImmunityVariant(
   first: SurvivorChallengeResult,
@@ -262,7 +275,7 @@ function transformChallenges(
         rewardWinners,
         first,
         epNum,
-        "reward",
+        getRewardVariant(first, rewardWinners),
         challenges,
         order,
       );
@@ -270,7 +283,7 @@ function transformChallenges(
       const winners = entries.filter((e) => e.result.startsWith("Won"));
       const variant = type.includes("immunity")
         ? getImmunityVariant(first, winners)
-        : "reward";
+        : getRewardVariant(first, winners);
       order += emitChallengeEntries(
         winners,
         first,

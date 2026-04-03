@@ -397,7 +397,7 @@ export const SEASON_26_CHALLENGES = {
     season_num: 26,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "reward",
+    variant: "team_reward",
     order: 0,
     winning_castaways: [
       "US0246",
@@ -459,7 +459,7 @@ export const SEASON_26_CHALLENGES = {
     season_num: 26,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "reward",
+    variant: "team_reward",
     order: 3,
     winning_castaways: [
       "US0246",
@@ -499,7 +499,7 @@ export const SEASON_26_CHALLENGES = {
     season_num: 26,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "reward",
+    variant: "team_reward",
     order: 5,
     winning_castaways: [
       "US0246",
@@ -519,7 +519,7 @@ export const SEASON_26_CHALLENGES = {
     season_num: 26,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "reward",
+    variant: "team_reward",
     order: 6,
     winning_castaways: [
       "US0246",
@@ -559,7 +559,7 @@ export const SEASON_26_CHALLENGES = {
     season_num: 26,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "reward",
+    variant: "team_reward",
     order: 8,
     winning_castaways: [
       "US0246",
@@ -614,7 +614,7 @@ export const SEASON_26_CHALLENGES = {
     season_num: 26,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "reward",
+    variant: "team_reward",
     order: 11,
     winning_castaways: [
       "US0246",
@@ -660,7 +660,7 @@ export const SEASON_26_CHALLENGES = {
     season_num: 26,
     episode_id: "episode_9",
     episode_num: 9,
-    variant: "reward",
+    variant: "team_reward",
     order: 14,
     winning_castaways: ["US0246", "US0348", "US0393", "US0394", "US0395"],
   },
@@ -680,7 +680,7 @@ export const SEASON_26_CHALLENGES = {
     season_num: 26,
     episode_id: "episode_10",
     episode_num: 10,
-    variant: "reward",
+    variant: "team_reward",
     order: 16,
     winning_castaways: ["US0246", "US0337", "US0346", "US0348", "US0394"],
   },

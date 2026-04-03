@@ -396,7 +396,7 @@ export const SEASON_24_CHALLENGES = {
     season_num: 24,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "reward",
+    variant: "team_reward",
     order: 1,
     winning_castaways: [
       "US0356",
@@ -416,7 +416,7 @@ export const SEASON_24_CHALLENGES = {
     season_num: 24,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "reward",
+    variant: "team_reward",
     order: 2,
     winning_castaways: [
       "US0356",
@@ -456,7 +456,7 @@ export const SEASON_24_CHALLENGES = {
     season_num: 24,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "reward",
+    variant: "team_reward",
     order: 4,
     winning_castaways: [
       "US0358",
@@ -492,7 +492,7 @@ export const SEASON_24_CHALLENGES = {
     season_num: 24,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "reward",
+    variant: "team_reward",
     order: 6,
     winning_castaways: [
       "US0358",
@@ -529,7 +529,7 @@ export const SEASON_24_CHALLENGES = {
     season_num: 24,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "reward",
+    variant: "team_reward",
     order: 8,
     winning_castaways: [
       "US0361",
@@ -565,7 +565,7 @@ export const SEASON_24_CHALLENGES = {
     season_num: 24,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "reward",
+    variant: "team_reward",
     order: 10,
     winning_castaways: [
       "US0361",
@@ -583,7 +583,7 @@ export const SEASON_24_CHALLENGES = {
     season_num: 24,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "reward",
+    variant: "team_reward",
     order: 11,
     winning_castaways: [
       "US0362",
@@ -610,7 +610,7 @@ export const SEASON_24_CHALLENGES = {
     season_num: 24,
     episode_id: "episode_8",
     episode_num: 8,
-    variant: "reward",
+    variant: "team_reward",
     order: 13,
     winning_castaways: ["US0361", "US0363", "US0368", "US0370", "US0371"],
   },
@@ -630,7 +630,7 @@ export const SEASON_24_CHALLENGES = {
     season_num: 24,
     episode_id: "episode_9",
     episode_num: 9,
-    variant: "reward",
+    variant: "team_reward",
     order: 15,
     winning_castaways: ["US0362", "US0364", "US0365", "US0366", "US0367"],
   },

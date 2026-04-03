@@ -75,7 +75,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0517",
     full_name: "Stephanie Gonzalez",
-    img: "",
+    img: "/images/season_36/Stephanie-Gonzalez.jpg",
     description: "Age: 26 | Hometown: Ocala, Florida",
     age: 26,
     hometown: "Ocala, Florida",
@@ -84,7 +84,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0518",
     full_name: "Jacob Derwin",
-    img: "",
+    img: "/images/season_36/Jacob-Derwin.jpg",
     description: "Age: 22 | Hometown: Brooklyn, New York",
     age: 22,
     hometown: "Brooklyn, New York",
@@ -92,7 +92,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0519",
     full_name: "Morgan Ricke",
-    img: "",
+    img: "/images/season_36/Morgan-Ricke.jpg",
     description: "Age: 29 | Hometown: Orlando, Florida",
     age: 29,
     hometown: "Orlando, Florida",
@@ -100,7 +100,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0520",
     full_name: "Brendan Shapiro",
-    img: "",
+    img: "/images/season_36/Brendan-Shapiro.jpg",
     description: "Age: 40 | Hometown: Herndon, Virginia",
     age: 40,
     hometown: "Herndon, Virginia",
@@ -108,7 +108,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0521",
     full_name: "Stephanie Johnson",
-    img: "",
+    img: "/images/season_36/Stephanie-Johnson.jpg",
     description: "Age: 34 | Hometown: Chicago, Illinois",
     age: 34,
     hometown: "Chicago, Illinois",
@@ -116,7 +116,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0522",
     full_name: "James Lim",
-    img: "",
+    img: "/images/season_36/James-Lim.jpg",
     description: "Age: 24 | Hometown: New York City, New York",
     age: 24,
     hometown: "New York City, New York",
@@ -124,7 +124,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0523",
     full_name: "Bradley Kleihege",
-    img: "",
+    img: "/images/season_36/Bradley-Kleihege.jpg",
     description: "Age: 26 | Hometown: Los Angeles, California",
     age: 26,
     hometown: "Los Angeles, California",
@@ -132,15 +132,16 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0524",
     full_name: "Chris Noble",
-    img: "",
+    img: "/images/season_36/Chris-Noble.jpg",
     description: "Age: 27 | Hometown: Brooklyn, New York",
     age: 27,
     hometown: "Brooklyn, New York",
+    nickname: "Chris",
   }),
   buildPlayer({
     castaway_id: "US0525",
     full_name: "Libby Vincek",
-    img: "",
+    img: "/images/season_36/Libby-Vincek.jpg",
     description: "Age: 24 | Hometown: Houston, Texas",
     age: 24,
     hometown: "Houston, Texas",
@@ -148,7 +149,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0526",
     full_name: "Desiree Afuye",
-    img: "",
+    img: "/images/season_36/Desiree-Afuye.jpg",
     description: "Age: 21 | Hometown: Brooklyn, New York",
     age: 21,
     hometown: "Brooklyn, New York",
@@ -156,7 +157,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0527",
     full_name: "Jenna Bowman",
-    img: "",
+    img: "/images/season_36/Jenna-Bowman.jpg",
     description: "Age: 23 | Hometown: Venice Beach, California",
     age: 23,
     hometown: "Venice Beach, California",
@@ -164,7 +165,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0528",
     full_name: "Michael Yerger",
-    img: "",
+    img: "/images/season_36/Michael-Yerger.jpg",
     description: "Age: 18 | Hometown: Los Angeles, California",
     age: 18,
     hometown: "Los Angeles, California",
@@ -172,7 +173,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0529",
     full_name: "Chelsea Townsend",
-    img: "",
+    img: "/images/season_36/Chelsea-Townsend.jpg",
     description: "Age: 25 | Hometown: Los Angeles, California",
     age: 25,
     hometown: "Los Angeles, California",
@@ -180,7 +181,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0530",
     full_name: "Kellyn Bechtold",
-    img: "",
+    img: "/images/season_36/Kellyn-Bechtold.jpg",
     description: "Age: 30 | Hometown: Denver, Colorado",
     age: 30,
     hometown: "Denver, Colorado",
@@ -188,7 +189,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0531",
     full_name: "Sebastian Noel",
-    img: "",
+    img: "/images/season_36/Sebastian-Noel.jpg",
     description: "Age: 22 | Hometown: Satellite Beach, Florida",
     age: 22,
     hometown: "Satellite Beach, Florida",
@@ -196,7 +197,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0532",
     full_name: "Donathan Hurley",
-    img: "",
+    img: "/images/season_36/Donathan-Hurley.jpg",
     description: "Age: 25 | Hometown: Kimper, Kentucky",
     age: 25,
     hometown: "Kimper, Kentucky",
@@ -204,7 +205,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0533",
     full_name: "Angela Perkins",
-    img: "",
+    img: "/images/season_36/Angela-Perkins.jpg",
     description: "Age: 42 | Hometown: Cincinnati, Ohio",
     age: 42,
     hometown: "Cincinnati, Ohio",
@@ -212,7 +213,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0534",
     full_name: "Laurel Johnson",
-    img: "",
+    img: "/images/season_36/Laurel-Johnson.jpg",
     description: "Age: 29 | Hometown: Minneapolis, Minnesota",
     age: 29,
     hometown: "Minneapolis, Minnesota",
@@ -220,7 +221,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0535",
     full_name: "Domenick Abbate",
-    img: "",
+    img: "/images/season_36/Domenick-Abbate.jpg",
     description: "Age: 38 | Hometown: Nesconset, New York",
     age: 38,
     hometown: "Nesconset, New York",
@@ -228,7 +229,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0536",
     full_name: "Wendell Holland",
-    img: "",
+    img: "/images/season_36/Wendell-Holland.jpg",
     description: "Age: 33 | Hometown: Philadelphia, Pennsylvania",
     age: 33,
     hometown: "Philadelphia, Pennsylvania",

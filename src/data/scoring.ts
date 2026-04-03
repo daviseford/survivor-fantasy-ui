@@ -15,8 +15,14 @@ export const BASE_PLAYER_SCORING: CategorizedPlayerScoring[] = [
   // --- Challenges ---
   {
     action: "reward",
+    fixed_value: 2,
+    description: "Win an individual reward challenge.",
+    category: "Challenges",
+  },
+  {
+    action: "team_reward",
     fixed_value: 1,
-    description: "Win a reward challenge.",
+    description: "Win a team or tribal reward challenge.",
     category: "Challenges",
   },
   {

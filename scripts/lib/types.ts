@@ -25,6 +25,7 @@ export interface ScrapeResult {
 
 export type ScrapedChallengeVariant =
   | "reward"
+  | "team_reward"
   | "immunity"
   | "team_immunity"
   | "combined";

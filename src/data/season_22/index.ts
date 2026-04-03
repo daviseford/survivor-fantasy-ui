@@ -395,7 +395,7 @@ export const SEASON_22_CHALLENGES = {
     season_num: 22,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "reward",
+    variant: "team_reward",
     order: 1,
     winning_castaways: [
       "US0300",
@@ -435,7 +435,7 @@ export const SEASON_22_CHALLENGES = {
     season_num: 22,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "reward",
+    variant: "team_reward",
     order: 3,
     winning_castaways: [
       "US0300",
@@ -483,7 +483,7 @@ export const SEASON_22_CHALLENGES = {
     season_num: 22,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "reward",
+    variant: "team_reward",
     order: 6,
     winning_castaways: [
       "US0055",
@@ -530,7 +530,7 @@ export const SEASON_22_CHALLENGES = {
     season_num: 22,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "reward",
+    variant: "team_reward",
     order: 9,
     winning_castaways: [
       "US0325",
@@ -576,7 +576,7 @@ export const SEASON_22_CHALLENGES = {
     season_num: 22,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "reward",
+    variant: "team_reward",
     order: 12,
     winning_castaways: [
       "US0055",
@@ -620,7 +620,7 @@ export const SEASON_22_CHALLENGES = {
     season_num: 22,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "reward",
+    variant: "team_reward",
     order: 15,
     winning_castaways: [
       "US0055",
@@ -664,7 +664,7 @@ export const SEASON_22_CHALLENGES = {
     season_num: 22,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "reward",
+    variant: "team_reward",
     order: 18,
     winning_castaways: [
       "US0055",

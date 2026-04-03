@@ -18,6 +18,7 @@ export type CategoryBreakdown = {
 export const ScoringCategoryMap: Record<PlayerAction, ScoringCategory> = {
   // Challenges
   reward: "reward",
+  team_reward: "reward",
   immunity: "immunity",
   team_immunity: "immunity",
 

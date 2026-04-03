@@ -714,7 +714,7 @@ describe("getPropBetScoresForUser", () => {
       );
     });
 
-    it("ignores pre-merge and large-group reward results", () => {
+    it("ignores pre-merge and team reward results", () => {
       const comp: Competition = {
         ...baseCompetition,
         prop_bets: [
@@ -727,14 +727,21 @@ describe("getPropBetScoresForUser", () => {
         ],
       };
       const challenges = {
-        c1: makeChallenge("1", 2, [ALICE, BOB, CHARLIE], "reward"),
-        c2: makeChallenge("2", 8, [BOB], "reward"),
+        c1: makeChallenge(
+          "1",
+          8,
+          [ALICE, BOB, CHARLIE],
+          "team_reward" as Challenge["variant"],
+        ),
+        c2: makeChallenge("2", 2, [ALICE], "reward"),
+        c3: makeChallenge("3", 8, [BOB], "reward"),
       };
 
       const answer = getStatus("propbet_rewards", {
         competition: comp,
         challenges,
       });
+      // team_reward excluded, pre-merge excluded, only BOB's post-merge reward counts
       expect(answer.status).toBe("pending");
     });
   });
