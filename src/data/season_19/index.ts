@@ -75,7 +75,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0282",
     full_name: "Marisa Calihan",
-    img: "/images/season_19/Marisa-Calihan.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Cincinnati, Ohio",
     age: 26,
     hometown: "Cincinnati, Ohio",
@@ -83,7 +83,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0283",
     full_name: "Mike Borassi",
-    img: "/images/season_19/Mike-Borassi.jpg",
+    img: "",
     description: "Age: 62 | Hometown: Marina del Rey, California",
     age: 62,
     hometown: "Marina del Rey, California",
@@ -91,7 +91,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0284",
     full_name: "Betsy Bolan",
-    img: "/images/season_19/Betsy-Bolan.jpg",
+    img: "",
     description: "Age: 48 | Hometown: Campton, New Hampshire",
     age: 48,
     hometown: "Campton, New Hampshire",
@@ -99,16 +99,15 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0285",
     full_name: "Ben Browning",
-    img: "/images/season_19/Ben-Browning.jpg",
+    img: "",
     description: "Age: 28 | Hometown: Los Angeles, California",
     age: 28,
     hometown: "Los Angeles, California",
-    nickname: "Ben",
   }),
   buildPlayer({
     castaway_id: "US0286",
     full_name: "Yasmin Giles",
-    img: "/images/season_19/Yasmin-Giles.jpg",
+    img: "",
     description: "Age: 33 | Hometown: Los Angeles, California",
     age: 33,
     hometown: "Los Angeles, California",
@@ -116,7 +115,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0287",
     full_name: "Ashley Trainer",
-    img: "/images/season_19/Ashley-Trainer.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Maple Grove, Minnesota",
     age: 22,
     hometown: "Maple Grove, Minnesota",
@@ -124,7 +123,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0288",
     full_name: "Russell Swan",
-    img: "/images/season_19/Russell-Swan.jpg",
+    img: "",
     description: "Age: 42 | Hometown: Glenside, Pennsylvania",
     age: 42,
     hometown: "Glenside, Pennsylvania",
@@ -133,7 +132,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0289",
     full_name: "Elizabeth Kim",
-    img: "/images/season_19/Elizabeth-Kim.jpg",
+    img: "",
     description: "Age: 33 | Hometown: New York City, New York",
     age: 33,
     hometown: "New York City, New York",
@@ -142,7 +141,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0290",
     full_name: "Erik Cardona",
-    img: "/images/season_19/Erik-Cardona.jpg",
+    img: "",
     description: "Age: 28 | Hometown: Los Angeles, California",
     age: 28,
     hometown: "Los Angeles, California",
@@ -150,7 +149,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0291",
     full_name: "Kelly Sharbaugh",
-    img: "/images/season_19/Kelly-Sharbaugh.jpg",
+    img: "",
     description: "Age: 25 | Hometown: San Diego, California",
     age: 25,
     hometown: "San Diego, California",
@@ -158,7 +157,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0292",
     full_name: "Laura Morett",
-    img: "/images/season_19/Laura-Morett.jpg",
+    img: "",
     description: "Age: 39 | Hometown: Salem, Oregon",
     age: 39,
     hometown: "Salem, Oregon",
@@ -166,7 +165,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0293",
     full_name: "John Fincher",
-    img: "/images/season_19/John-Fincher.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Santa Monica, California",
     age: 25,
     hometown: "Santa Monica, California",
@@ -174,16 +173,15 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0294",
     full_name: "Dave Ball",
-    img: "/images/season_19/Dave-Ball.jpg",
+    img: "",
     description: "Age: 38 | Hometown: Los Angeles, California",
     age: 38,
     hometown: "Los Angeles, California",
-    nickname: "Dave",
   }),
   buildPlayer({
     castaway_id: "US0295",
     full_name: "Monica Padilla",
-    img: "/images/season_19/Monica-Padilla.jpg",
+    img: "",
     description: "Age: 25 | Hometown: San Diego, California",
     age: 25,
     hometown: "San Diego, California",
@@ -200,7 +198,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0297",
     full_name: "Jaison Robinson",
-    img: "/images/season_19/Jaison-Robinson.jpg",
+    img: "",
     description: "Age: 28 | Hometown: Chicago, Illinois",
     age: 28,
     hometown: "Chicago, Illinois",
@@ -208,7 +206,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0298",
     full_name: "Brett Clouser",
-    img: "/images/season_19/Brett-Clouser.jpg",
+    img: "",
     description: "Age: 23 | Hometown: Los Angeles, California",
     age: 23,
     hometown: "Los Angeles, California",
@@ -216,16 +214,15 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0299",
     full_name: "Mick Trimming",
-    img: "/images/season_19/Mick-Trimming.jpg",
+    img: "",
     description: "Age: 33 | Hometown: Los Angeles, California",
     age: 33,
     hometown: "Los Angeles, California",
-    nickname: "Mick",
   }),
   buildPlayer({
     castaway_id: "US0300",
     full_name: "Russell Hantz",
-    img: "/images/season_19/Russell-Hantz.jpg",
+    img: "",
     description: "Age: 36 | Hometown: Dayton, Texas",
     age: 36,
     hometown: "Dayton, Texas",
@@ -234,7 +231,7 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0301",
     full_name: "Natalie White",
-    img: "/images/season_19/Natalie-White.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Van Buren, Arkansas",
     age: 26,
     hometown: "Van Buren, Arkansas",
@@ -432,7 +429,7 @@ export const SEASON_19_CHALLENGES = {
     season_num: 19,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 1,
     winning_castaways: [
       "US0286",
@@ -453,7 +450,7 @@ export const SEASON_19_CHALLENGES = {
     season_num: 19,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 2,
     winning_castaways: [
       "US0286",
@@ -495,7 +492,7 @@ export const SEASON_19_CHALLENGES = {
     season_num: 19,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 4,
     winning_castaways: [
       "US0286",
@@ -558,7 +555,7 @@ export const SEASON_19_CHALLENGES = {
     season_num: 19,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 7,
     winning_castaways: [
       "US0287",
@@ -595,7 +592,7 @@ export const SEASON_19_CHALLENGES = {
     season_num: 19,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 9,
     winning_castaways: [
       "US0288",
@@ -634,7 +631,7 @@ export const SEASON_19_CHALLENGES = {
     season_num: 19,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 11,
     winning_castaways: [
       "US0290",

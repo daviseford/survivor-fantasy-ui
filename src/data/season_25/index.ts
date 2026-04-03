@@ -63,7 +63,7 @@ export const SEASON_25_CASTAWAY_LOOKUP: CastawayLookup = {
   US0383: { full_name: "Abi-Maria Gomes", castaway: "Abi-Maria" },
   US0384: { full_name: "Malcolm Freberg", castaway: "Malcolm" },
   US0385: { full_name: "Lisa Whelchel", castaway: "Lisa" },
-  US0022: { full_name: "Michael Skupin", castaway: "Mike" },
+  US0022: { full_name: "Michael Skupin", castaway: "Michael" },
   US0386: { full_name: "Denise Stapley", castaway: "Denise" },
 };
 
@@ -71,16 +71,15 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0372",
     full_name: "Zane Knight",
-    img: "/images/season_25/Zane-Knight.jpg",
+    img: "",
     description: "Age: 28 | Hometown: Danville, Virginia",
     age: 28,
     hometown: "Danville, Virginia",
-    nickname: "Zane",
   }),
   buildPlayer({
     castaway_id: "US0373",
     full_name: "Roxanne Morris",
-    img: "/images/season_25/Roxanne-Morris.jpg",
+    img: "",
     description: "Age: 28 | Hometown: Brooklyn, New York",
     age: 28,
     hometown: "Brooklyn, New York",
@@ -89,16 +88,15 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0374",
     full_name: "Angie Layton",
-    img: "/images/season_25/Angie-Layton.jpg",
+    img: "",
     description: "Age: 20 | Hometown: Provo, Utah",
     age: 20,
     hometown: "Provo, Utah",
-    nickname: "Angie",
   }),
   buildPlayer({
     castaway_id: "US0288",
     full_name: "Russell Swan",
-    img: "/images/season_25/Russell-Swan.jpg",
+    img: "",
     description: "Age: 45 | Hometown: Glenside, Pennsylvania",
     age: 45,
     hometown: "Glenside, Pennsylvania",
@@ -106,7 +104,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0375",
     full_name: "Dana Lambert",
-    img: "/images/season_25/Dana-Lambert.jpg",
+    img: "",
     description: "Age: 32 | Hometown: Winston-Salem, North Carolina",
     age: 32,
     hometown: "Winston-Salem, North Carolina",
@@ -114,7 +112,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0376",
     full_name: "Sarah Dawson",
-    img: "/images/season_25/Sarah-Dawson.jpg",
+    img: "",
     description: "Age: 28 | Hometown: Silver Spring, Maryland",
     age: 28,
     hometown: "Silver Spring, Maryland",
@@ -123,7 +121,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0377",
     full_name: "Katie Hanson",
-    img: "/images/season_25/Katie-Hanson.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Newark, Delaware",
     age: 22,
     hometown: "Newark, Delaware",
@@ -140,16 +138,15 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0379",
     full_name: "Jeff Kent",
-    img: "/images/season_25/Jeff-Kent.jpg",
+    img: "",
     description: "Age: 44 | Hometown: Austin, Texas",
     age: 44,
     hometown: "Austin, Texas",
-    nickname: "Jeff",
   }),
   buildPlayer({
     castaway_id: "US0380",
     full_name: "Artis Silvester",
-    img: "/images/season_25/Artis-Silvester.jpg",
+    img: "",
     description: "Age: 53 | Hometown: Terrytown, Louisiana",
     age: 53,
     hometown: "Terrytown, Louisiana",
@@ -157,7 +154,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0381",
     full_name: "Peter Yurkowski",
-    img: "/images/season_25/Peter-Yurkowski.jpg",
+    img: "",
     description: "Age: 24 | Hometown: Holmdel, New Jersey",
     age: 24,
     hometown: "Holmdel, New Jersey",
@@ -166,7 +163,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0196",
     full_name: "Jonathan Penner",
-    img: "/images/season_25/Jonathan-Penner.jpg",
+    img: "",
     description: "Age: 50 | Hometown: Los Angeles, California",
     age: 50,
     hometown: "Los Angeles, California",
@@ -174,7 +171,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0382",
     full_name: "Carter Williams",
-    img: "/images/season_25/Carter-Williams.jpg",
+    img: "",
     description: "Age: 23 | Hometown: Shawnee, Kansas",
     age: 23,
     hometown: "Shawnee, Kansas",
@@ -182,7 +179,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0383",
     full_name: "Abi-Maria Gomes",
-    img: "/images/season_25/Abi-Maria-Gomes.jpg",
+    img: "",
     description: "Age: 32 | Hometown: Los Angeles, California",
     age: 32,
     hometown: "Los Angeles, California",
@@ -190,7 +187,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0384",
     full_name: "Malcolm Freberg",
-    img: "/images/season_25/Malcolm-Freberg.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Hermosa Beach, California",
     age: 25,
     hometown: "Hermosa Beach, California",
@@ -198,7 +195,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0385",
     full_name: "Lisa Whelchel",
-    img: "/images/season_25/Lisa-Whelchel.jpg",
+    img: "",
     description: "Age: 49 | Hometown: Dallas, Texas",
     age: 49,
     hometown: "Dallas, Texas",
@@ -206,16 +203,15 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0022",
     full_name: "Michael Skupin",
-    img: "/images/season_25/Michael-Skupin.jpg",
+    img: "",
     description: "Age: 50 | Hometown: White Lake, Michigan",
     age: 50,
     hometown: "White Lake, Michigan",
-    nickname: "Mike",
   }),
   buildPlayer({
     castaway_id: "US0386",
     full_name: "Denise Stapley",
-    img: "/images/season_25/Denise-Stapley.jpg",
+    img: "",
     description: "Age: 41 | Hometown: Cedar Rapids, Iowa",
     age: 41,
     hometown: "Cedar Rapids, Iowa",
@@ -382,7 +378,7 @@ export const SEASON_25_CHALLENGES = {
     season_num: 25,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 0,
     winning_castaways: [
       "US0196",
@@ -399,7 +395,7 @@ export const SEASON_25_CHALLENGES = {
     season_num: 25,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 1,
     winning_castaways: [
       "US0022",
@@ -450,7 +446,7 @@ export const SEASON_25_CHALLENGES = {
     season_num: 25,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 4,
     winning_castaways: [
       "US0022",
@@ -484,7 +480,7 @@ export const SEASON_25_CHALLENGES = {
     season_num: 25,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 6,
     winning_castaways: [
       "US0196",
@@ -501,7 +497,7 @@ export const SEASON_25_CHALLENGES = {
     season_num: 25,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 7,
     winning_castaways: [
       "US0022",
@@ -552,7 +548,7 @@ export const SEASON_25_CHALLENGES = {
     season_num: 25,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 10,
     winning_castaways: [
       "US0022",
@@ -604,7 +600,7 @@ export const SEASON_25_CHALLENGES = {
     season_num: 25,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 13,
     winning_castaways: [
       "US0022",
@@ -632,7 +628,7 @@ export const SEASON_25_CHALLENGES = {
     season_num: 25,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 15,
     winning_castaways: [
       "US0022",

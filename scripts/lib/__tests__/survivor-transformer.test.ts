@@ -1,8 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import {
-  type SurvivorSeasonData,
-  fetchSeasonData,
-} from "../survivor-client";
+import { type SurvivorSeasonData, fetchSeasonData } from "../survivor-client";
 import { transformPlayers, transformResults } from "../survivor-transformer";
 
 // Integration tests using real survivoR data
@@ -109,13 +106,38 @@ describe("transformResults", { timeout: 60000 }, () => {
     const combined = result.challenges.filter((c) => c.variant === "combined");
     expect(combined).toHaveLength(0);
 
-    const immunities = result.challenges.filter(
+    const individualImmunities = result.challenges.filter(
       (c) => c.variant === "immunity",
     );
-    expect(immunities.length).toBeGreaterThan(0);
+    expect(individualImmunities.length).toBeGreaterThan(0);
+
+    const teamImmunities = result.challenges.filter(
+      (c) => c.variant === "team_immunity",
+    );
+    expect(teamImmunities.length).toBeGreaterThan(0);
 
     const rewards = result.challenges.filter((c) => c.variant === "reward");
     expect(rewards.length).toBeGreaterThan(0);
+  });
+
+  it("splits immunity challenges into individual and team variants", () => {
+    const result = transformResults(s46Data, 46);
+
+    // Pre-merge tribal immunity challenges should be team_immunity
+    const teamImmunities = result.challenges.filter(
+      (c) => c.variant === "team_immunity",
+    );
+    for (const c of teamImmunities) {
+      expect(c.winnerCastawayIds.length).toBeGreaterThan(1);
+    }
+
+    // Post-merge individual immunity challenges should be immunity
+    const individualImmunities = result.challenges.filter(
+      (c) => c.variant === "immunity",
+    );
+    for (const c of individualImmunities) {
+      expect(c.winnerCastawayIds.length).toBeLessThanOrEqual(2);
+    }
   });
 
   it("uses castaway IDs (not names) for challenge winners and events", () => {

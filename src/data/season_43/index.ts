@@ -64,14 +64,14 @@ export const SEASON_43_CASTAWAY_LOOKUP: CastawayLookup = {
   US0634: { full_name: "Jesse Lopez", castaway: "Jesse" },
   US0642: { full_name: "Owen Knight", castaway: "Owen" },
   US0627: { full_name: "Cassidy Clark", castaway: "Cassidy" },
-  US0638: { full_name: "Mike Gabler", castaway: "Mike" },
+  US0638: { full_name: "Mike Gabler", castaway: "Gabler" },
 };
 
 export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0639",
     full_name: "Morriah Young",
-    img: "/images/season_43/Morriah-Young.jpg",
+    img: "",
     description: "Age: 28 | Hometown: Philadelphia, Pennsylvania",
     age: 28,
     hometown: "Philadelphia, Pennsylvania",
@@ -79,7 +79,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0635",
     full_name: "Justine Brennan",
-    img: "/images/season_43/Justine-Brennan.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Marina Del Ray, California",
     age: 29,
     hometown: "Marina Del Ray, California",
@@ -87,7 +87,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0640",
     full_name: "Nneka Ejere",
-    img: "/images/season_43/Nneka-Ejere.jpg",
+    img: "",
     description: "Age: 43 | Hometown: Weatherford, Texas",
     age: 43,
     hometown: "Weatherford, Texas",
@@ -95,7 +95,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0637",
     full_name: "Lindsay Carmine",
-    img: "/images/season_43/Lindsay-Carmine.jpg",
+    img: "",
     description: "Age: 42 | Hometown: Downington, Pennsylvania",
     age: 42,
     hometown: "Downington, Pennsylvania",
@@ -103,7 +103,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0631",
     full_name: "Geo Bustamante",
-    img: "/images/season_43/Geo-Bustamante.jpg",
+    img: "",
     description: "Age: 35 | Hometown: Honalulu, Hawaii",
     age: 35,
     hometown: "Honalulu, Hawaii",
@@ -111,16 +111,15 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0630",
     full_name: "Elie Scott",
-    img: "/images/season_43/Elie-Scott.jpg",
+    img: "",
     description: "Age: 31 | Hometown: Salt Lake City, Utah",
     age: 31,
     hometown: "Salt Lake City, Utah",
-    nickname: "Elie",
   }),
   buildPlayer({
     castaway_id: "US0629",
     full_name: "Dwight Moore",
-    img: "/images/season_43/Dwight-Moore.jpg",
+    img: "",
     description: "Age: 21 | Hometown: Collierville, Tennasse",
     age: 21,
     hometown: "Collierville, Tennasse",
@@ -128,7 +127,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0633",
     full_name: "Jeanine Zheng",
-    img: "/images/season_43/Jeanine-Zheng.jpg",
+    img: "",
     description: "Age: 24 | Hometown: San Francisco, California",
     age: 24,
     hometown: "San Francisco, California",
@@ -136,7 +135,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0632",
     full_name: "James Jones",
-    img: "/images/season_43/James-Jones.jpg",
+    img: "",
     description: "Age: 36 | Hometown: Philadelphia, Pennsylvania",
     age: 36,
     hometown: "Philadelphia, Pennsylvania",
@@ -144,7 +143,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0643",
     full_name: "Ryan Medrano",
-    img: "/images/season_43/Ryan-Medrano.jpg",
+    img: "",
     description: "Age: 24 | Hometown: El Paso, Texas",
     age: 24,
     hometown: "El Paso, Texas",
@@ -152,7 +151,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0641",
     full_name: "Noelle Lambert",
-    img: "/images/season_43/Noelle-Lambert.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Manchester, New Hampshire",
     age: 25,
     hometown: "Manchester, New Hampshire",
@@ -160,7 +159,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0644",
     full_name: "Sami Layadi",
-    img: "/images/season_43/Sami-Layadi.jpg",
+    img: "",
     description: "Age: 19 | Hometown: Las Vegas, Nevada",
     age: 19,
     hometown: "Las Vegas, Nevada",
@@ -168,7 +167,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0628",
     full_name: "Cody Assenmacher",
-    img: "/images/season_43/Cody-Assenmacher.jpg",
+    img: "",
     description: "Age: 35 | Hometown: Honalulu, Hawaii",
     age: 35,
     hometown: "Honalulu, Hawaii",
@@ -176,7 +175,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0636",
     full_name: "Karla Cruz Godoy",
-    img: "/images/season_43/Karla-Cruz-Godoy.jpg",
+    img: "",
     description: "Age: 28 | Hometown: Dewark, Delaware",
     age: 28,
     hometown: "Dewark, Delaware",
@@ -184,7 +183,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0634",
     full_name: "Jesse Lopez",
-    img: "/images/season_43/Jesse-Lopez.jpg",
+    img: "",
     description: "Age: 30 | Hometown: Durham, North Carolina",
     age: 30,
     hometown: "Durham, North Carolina",
@@ -192,7 +191,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0642",
     full_name: "Owen Knight",
-    img: "/images/season_43/Owen-Knight.jpg",
+    img: "",
     description: "Age: 29 | Hometown: New Orleans, Louisiana",
     age: 29,
     hometown: "New Orleans, Louisiana",
@@ -200,7 +199,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0627",
     full_name: "Cassidy Clark",
-    img: "/images/season_43/Cassidy-Clark.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Austin, Texas",
     age: 26,
     hometown: "Austin, Texas",
@@ -208,11 +207,11 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0638",
     full_name: "Mike Gabler",
-    img: "/images/season_43/Mike-Gabler.jpg",
+    img: "",
     description: "Age: 51 | Hometown: Meridian, Idaho",
     age: 51,
     hometown: "Meridian, Idaho",
-    nickname: "Mike",
+    nickname: "Gabler",
   }),
 ] satisfies Player<CastawayIdType, SeasonNumber>[];
 
@@ -373,7 +372,7 @@ export const SEASON_43_CHALLENGES = {
     season_num: 43,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 1,
     winning_castaways: [
       "US0627",
@@ -390,7 +389,7 @@ export const SEASON_43_CHALLENGES = {
     season_num: 43,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 2,
     winning_castaways: [
       "US0628",
@@ -407,7 +406,7 @@ export const SEASON_43_CHALLENGES = {
     season_num: 43,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 3,
     winning_castaways: ["US0630", "US0633", "US0638", "US0642", "US0644"],
   },
@@ -417,7 +416,7 @@ export const SEASON_43_CHALLENGES = {
     season_num: 43,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 4,
     winning_castaways: [
       "US0627",
@@ -461,7 +460,7 @@ export const SEASON_43_CHALLENGES = {
     season_num: 43,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 7,
     winning_castaways: ["US0630", "US0633", "US0638", "US0642", "US0644"],
   },
@@ -471,7 +470,7 @@ export const SEASON_43_CHALLENGES = {
     season_num: 43,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 8,
     winning_castaways: [
       "US0627",
@@ -525,7 +524,7 @@ export const SEASON_43_CHALLENGES = {
     season_num: 43,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 12,
     winning_castaways: ["US0630", "US0633", "US0638", "US0642", "US0644"],
   },
@@ -535,7 +534,7 @@ export const SEASON_43_CHALLENGES = {
     season_num: 43,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 13,
     winning_castaways: ["US0628", "US0629", "US0634", "US0641"],
   },
@@ -545,7 +544,7 @@ export const SEASON_43_CHALLENGES = {
     season_num: 43,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 14,
     winning_castaways: ["US0630", "US0633", "US0638", "US0642", "US0644"],
   },
@@ -555,7 +554,7 @@ export const SEASON_43_CHALLENGES = {
     season_num: 43,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 15,
     winning_castaways: ["US0628", "US0629", "US0634", "US0641"],
   },
@@ -585,7 +584,7 @@ export const SEASON_43_CHALLENGES = {
     season_num: 43,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 18,
     winning_castaways: [
       "US0629",

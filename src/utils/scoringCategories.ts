@@ -19,6 +19,7 @@ export const ScoringCategoryMap: Record<PlayerAction, ScoringCategory> = {
   // Challenges
   reward: "reward",
   immunity: "immunity",
+  team_immunity: "immunity",
 
   // Idols — Find / Use / Win
   find_idol: "idols",

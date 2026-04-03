@@ -56,7 +56,7 @@ export const SEASON_20_CASTAWAY_LOOKUP: CastawayLookup = {
   US0150: { full_name: "Tom Westman", castaway: "Tom" },
   US0274: { full_name: "Tyson Apostol", castaway: "Tyson" },
   US0231: { full_name: "James Clement", castaway: "James" },
-  US0055: { full_name: "Rob Mariano", castaway: "Rob" },
+  US0055: { full_name: "Rob Mariano", castaway: "Boston Rob" },
   US0277: { full_name: "Benjamin Wade", castaway: "Coach" },
   US0236: { full_name: "Courtney Yates", castaway: "Courtney" },
   US0281: { full_name: "James Thomas Jr.", castaway: "J.T." },
@@ -75,7 +75,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0263",
     full_name: "Jessica Kiper",
-    img: "/images/season_20/Jessica-Kiper.jpg",
+    img: "",
     description: "Age: 30 | Hometown: Los Angeles, California",
     age: 30,
     hometown: "Los Angeles, California",
@@ -84,7 +84,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0144",
     full_name: "Stephenie LaGrossa",
-    img: "/images/season_20/Stephenie-LaGrossa.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Philadelphia, Pennsylvania",
     age: 29,
     hometown: "Philadelphia, Pennsylvania",
@@ -92,7 +92,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0258",
     full_name: "Randy Bailey",
-    img: "/images/season_20/Randy-Bailey.jpg",
+    img: "",
     description: "Age: 50 | Hometown: Austin, Texas",
     age: 50,
     hometown: "Austin, Texas",
@@ -100,7 +100,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0179",
     full_name: "Cirie Fields",
-    img: "/images/season_20/Cirie-Fields.jpg",
+    img: "",
     description: "Age: 39 | Hometown: Norwalk, Connecticut",
     age: 39,
     hometown: "Norwalk, Connecticut",
@@ -108,7 +108,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0150",
     full_name: "Tom Westman",
-    img: "/images/season_20/Tom-Westman.jpg",
+    img: "",
     description: "Age: 45 | Hometown: New York City, New York",
     age: 45,
     hometown: "New York City, New York",
@@ -116,7 +116,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0274",
     full_name: "Tyson Apostol",
-    img: "/images/season_20/Tyson-Apostol.jpg",
+    img: "",
     description: "Age: 30 | Hometown: Heber City, Utah",
     age: 30,
     hometown: "Heber City, Utah",
@@ -124,7 +124,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0231",
     full_name: "James Clement",
-    img: "/images/season_20/James-Clement.jpg",
+    img: "",
     description: "Age: 32 | Hometown: Lafayette, Louisiana",
     age: 32,
     hometown: "Lafayette, Louisiana",
@@ -132,16 +132,16 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0055",
     full_name: "Rob Mariano",
-    img: "/images/season_20/Rob-Mariano.jpg",
+    img: "",
     description: "Age: 33 | Hometown: Pensacola, Florida",
     age: 33,
     hometown: "Pensacola, Florida",
-    nickname: "Rob",
+    nickname: "Boston Rob",
   }),
   buildPlayer({
     castaway_id: "US0277",
     full_name: "Benjamin Wade",
-    img: "/images/season_20/Benjamin-Wade.jpg",
+    img: "",
     description: "Age: 38 | Hometown: Susanville, California",
     age: 38,
     hometown: "Susanville, California",
@@ -150,7 +150,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0236",
     full_name: "Courtney Yates",
-    img: "/images/season_20/Courtney-Yates.jpg",
+    img: "",
     description: "Age: 28 | Hometown: New York City, New York",
     age: 28,
     hometown: "New York City, New York",
@@ -167,7 +167,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0235",
     full_name: "Amanda Kimmel",
-    img: "/images/season_20/Amanda-Kimmel.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Los Angeles, California",
     age: 25,
     hometown: "Los Angeles, California",
@@ -175,7 +175,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0195",
     full_name: "Candice Woodcock",
-    img: "/images/season_20/Candice-Woodcock.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Washington, D.C.",
     age: 26,
     hometown: "Washington, D.C.",
@@ -183,7 +183,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0181",
     full_name: "Danielle DiLorenzo",
-    img: "/images/season_20/Danielle-DiLorenzo.jpg",
+    img: "",
     description: "Age: 28 | Hometown: Los Angeles, California",
     age: 28,
     hometown: "Los Angeles, California",
@@ -191,7 +191,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0107",
     full_name: "Rupert Boneham",
-    img: "/images/season_20/Rupert-Boneham.jpg",
+    img: "",
     description: "Age: 45 | Hometown: Indianapolis, Indiana",
     age: 45,
     hometown: "Indianapolis, Indiana",
@@ -199,7 +199,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0031",
     full_name: "Colby Donaldson",
-    img: "/images/season_20/Colby-Donaldson.jpg",
+    img: "",
     description: "Age: 35 | Hometown: Los Angeles, California",
     age: 35,
     hometown: "Los Angeles, California",
@@ -207,7 +207,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0025",
     full_name: "Jerri Manthey",
-    img: "/images/season_20/Jerri-Manthey.jpg",
+    img: "",
     description: "Age: 38 | Hometown: Los Angeles, California",
     age: 38,
     hometown: "Los Angeles, California",
@@ -215,7 +215,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0300",
     full_name: "Russell Hantz",
-    img: "/images/season_20/Russell-Hantz.jpg",
+    img: "",
     description: "Age: 36 | Hometown: Dayton, Texas",
     age: 36,
     hometown: "Dayton, Texas",
@@ -223,7 +223,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0197",
     full_name: "Parvati Shallow",
-    img: "/images/season_20/Parvati-Shallow.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Los Angeles, California",
     age: 26,
     hometown: "Los Angeles, California",
@@ -231,7 +231,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0112",
     full_name: "Sandra Diaz-Twine",
-    img: "/images/season_20/Sandra-Diaz-Twine.jpg",
+    img: "",
     description: "Age: 35 | Hometown: Fayetteville, North Carolina",
     age: 35,
     hometown: "Fayetteville, North Carolina",
@@ -419,7 +419,7 @@ export const SEASON_20_CHALLENGES = {
     season_num: 20,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 1,
     winning_castaways: [
       "US0025",
@@ -440,7 +440,7 @@ export const SEASON_20_CHALLENGES = {
     season_num: 20,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 2,
     winning_castaways: [
       "US0025",
@@ -482,7 +482,7 @@ export const SEASON_20_CHALLENGES = {
     season_num: 20,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 4,
     winning_castaways: [
       "US0031",
@@ -540,7 +540,7 @@ export const SEASON_20_CHALLENGES = {
     season_num: 20,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 7,
     winning_castaways: [
       "US0025",
@@ -580,7 +580,7 @@ export const SEASON_20_CHALLENGES = {
     season_num: 20,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 9,
     winning_castaways: [
       "US0025",
@@ -631,7 +631,7 @@ export const SEASON_20_CHALLENGES = {
     season_num: 20,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 13,
     winning_castaways: ["US0031", "US0107", "US0195", "US0235", "US0281"],
   },
@@ -651,7 +651,7 @@ export const SEASON_20_CHALLENGES = {
     season_num: 20,
     episode_id: "episode_8",
     episode_num: 8,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 15,
     winning_castaways: ["US0031", "US0107", "US0195", "US0235", "US0281"],
   },
@@ -678,7 +678,7 @@ export const SEASON_20_CHALLENGES = {
     season_num: 20,
     episode_id: "episode_9",
     episode_num: 9,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 17,
     winning_castaways: ["US0031", "US0107", "US0195", "US0235", "US0281"],
   },

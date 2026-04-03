@@ -26,46 +26,46 @@ the way it does.
 Points earned by the castaways on your roster, summed across the season. This is the core
 engine that rewards drafting well.
 
-| Category | Action | Points | Notes |
-|----------|--------|--------|-------|
-| Challenges | Reward win | 1 | Individual wins only (post-merge) |
-| Challenges | Immunity win | 2 | Individual wins only (post-merge) |
-| Milestones | Eliminated | episode_num | 1 pt per episode survived |
-| Milestones | Make merge | 2 | ~8-10 players per season |
-| Milestones | Make FTC | 4 | 3 players per season |
-| Milestones | Win Survivor | 20 | 1 player per season |
-| Milestones | Medical evacuation | 5 | Consolation for losing your player |
-| Milestones | Quitter | -2 | Penalty for giving up |
-| Idols | Find idol | 1 | |
-| Idols | Play idol | 2 | |
-| Idols | Votes negated | 1 x multiplier | Bonus per vote nullified |
-| Idols | Find/use idol nullifier | 1 / 2 | |
-| Advantages | Find any advantage | 1 | Flat across all types |
-| Advantages | Use any advantage | 2 | Flat across all types |
-| Other | Journey | 0.5 | Participation credit |
-| Other | Beware find/accept/fulfill | 0.5 each | |
-| Other | SITD unsuccessful | 1 | "It was worth a shot" |
-| Other | SITD successful | 6 | Lottery-ticket moment |
+| Category   | Action                     | Points         | Notes                              |
+| ---------- | -------------------------- | -------------- | ---------------------------------- |
+| Challenges | Reward win                 | 1              | Individual wins only (post-merge)  |
+| Challenges | Immunity win               | 2              | Individual wins only (post-merge)  |
+| Milestones | Eliminated                 | episode_num    | 1 pt per episode survived          |
+| Milestones | Make merge                 | 2              | ~8-10 players per season           |
+| Milestones | Make FTC                   | 4              | 3 players per season               |
+| Milestones | Win Survivor               | 20             | 1 player per season                |
+| Milestones | Medical evacuation         | 5              | Consolation for losing your player |
+| Milestones | Quitter                    | -2             | Penalty for giving up              |
+| Idols      | Find idol                  | 1              |                                    |
+| Idols      | Play idol                  | 2              |                                    |
+| Idols      | Votes negated              | 1 x multiplier | Bonus per vote nullified           |
+| Idols      | Find/use idol nullifier    | 1 / 2          |                                    |
+| Advantages | Find any advantage         | 1              | Flat across all types              |
+| Advantages | Use any advantage          | 2              | Flat across all types              |
+| Other      | Journey                    | 0.5            | Participation credit               |
+| Other      | Beware find/accept/fulfill | 0.5 each       |                                    |
+| Other      | SITD unsuccessful          | 1              | "It was worth a shot"              |
+| Other      | SITD successful            | 6              | Lottery-ticket moment              |
 
 ### Pillar 2: Prop Bets
 
 Pre-season predictions made during the draft. These are separate from roster scoring and
 reward knowledge of the cast, the show's patterns, and gut instinct.
 
-| Prop Bet | Points | Difficulty |
-|----------|--------|-----------|
-| Season winner | 8 | Very hard (1/18 odds) |
-| FTC finalist | 5 | Hard (3/18 odds) |
-| First eliminated | 4 | Hard (1/18 odds) |
-| Most post-merge immunities | 5 | Medium |
-| Most idol finds | 4 | Medium-hard |
-| First idol found | 4 | Hard |
-| First successful idol play | 4 | Hard |
-| Medical evacuation Y/N | 2 | ~50/50 historically |
-| SITD success Y/N | 3 | ~50/50 historically |
-| Most post-merge rewards | 3 | Medium |
-| Quit Y/N | 2 | ~50/50 historically |
-| **Total possible** | **44** | |
+| Prop Bet                   | Points | Difficulty            |
+| -------------------------- | ------ | --------------------- |
+| Season winner              | 8      | Very hard (1/18 odds) |
+| FTC finalist               | 5      | Hard (3/18 odds)      |
+| First eliminated           | 4      | Hard (1/18 odds)      |
+| Most post-merge immunities | 5      | Medium                |
+| Most idol finds            | 4      | Medium-hard           |
+| First idol found           | 4      | Hard                  |
+| First successful idol play | 4      | Hard                  |
+| Medical evacuation Y/N     | 2      | ~50/50 historically   |
+| SITD success Y/N           | 3      | ~50/50 historically   |
+| Most post-merge rewards    | 3      | Medium                |
+| Quit Y/N                   | 2      | ~50/50 historically   |
+| **Total possible**         | **44** |                       |
 
 ### Pillar 3: The Draft
 
@@ -103,12 +103,12 @@ Using survivoR data from the last 5 completed seasons, we simulated 5-player tea
 matchups:
 
 | Season | Best 5 (no winner) | Mediocre 4 + Winner | Worst 4 + Winner |
-|--------|-------------------|---------------------|-----------------|
-| S45 | **110 pts** | 93 pts | 57 pts |
-| S46 | **101 pts** | 92 pts | 55 pts |
-| S47 | 109 pts | **116 pts** | 64 pts |
-| S48 | **111 pts** | 100 pts | 61 pts |
-| S49 | **106 pts** | 105 pts | 61 pts |
+| ------ | ------------------ | ------------------- | ---------------- |
+| S45    | **110 pts**        | 93 pts              | 57 pts           |
+| S46    | **101 pts**        | 92 pts              | 55 pts           |
+| S47    | 109 pts            | **116 pts**         | 64 pts           |
+| S48    | **111 pts**        | 100 pts             | 61 pts           |
+| S49    | **106 pts**        | 105 pts             | 61 pts           |
 
 Key findings:
 
@@ -127,13 +127,13 @@ Key findings:
 Immunity at 2 pts and reward at 1 pt are modest but accumulate. The immunity challenge
 beast is a real Survivor archetype, and recent seasons show concentrated distributions:
 
-| Season | Immunity Winners |
-|--------|-----------------|
-| S47 | Rachel LaMont (4), Kyle Ostwald (4) |
-| S48 | Joe Hunter (4), Kyle Fraser (2), Kamilla (2) |
-| S49 | Savannah Louie (4), Sophie (2) |
-| S46 | Maria Shrime Gonzalez (3), Kenzie (2), Charlie (2) |
-| S45 | Dee Valladares (3), Bruce (2), Austin (2) |
+| Season | Immunity Winners                                   |
+| ------ | -------------------------------------------------- |
+| S47    | Rachel LaMont (4), Kyle Ostwald (4)                |
+| S48    | Joe Hunter (4), Kyle Fraser (2), Kamilla (2)       |
+| S49    | Savannah Louie (4), Sophie (2)                     |
+| S46    | Maria Shrime Gonzalez (3), Kenzie (2), Charlie (2) |
+| S45    | Dee Valladares (3), Bruce (2), Austin (2)          |
 
 A 4-immunity winner earns 8 bonus points — meaningful but not game-breaking. Combined
 with the elimination floor and merge/FTC milestones, challenge performance creates a

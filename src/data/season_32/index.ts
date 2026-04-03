@@ -48,7 +48,7 @@ const buildPlayer = <T extends CastawayIdType>(
 
 export const SEASON_32_CASTAWAY_LOOKUP: CastawayLookup = {
   US0461: { full_name: "Darnell Hamilton", castaway: "Darnell" },
-  US0462: { full_name: "Jennifer Lanzetti", castaway: "Jenny" },
+  US0462: { full_name: "Jennifer Lanzetti", castaway: "Jennifer" },
   US0463: { full_name: "Elisabeth Markham", castaway: "Liz" },
   US0464: { full_name: "Caleb Reynolds", castaway: "Caleb" },
   US0465: { full_name: "Alecia Holden", castaway: "Alecia" },
@@ -71,7 +71,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0461",
     full_name: "Darnell Hamilton",
-    img: "/images/season_32/Darnell-Hamilton.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Chicago, Illinois",
     age: 27,
     hometown: "Chicago, Illinois",
@@ -79,16 +79,15 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0462",
     full_name: "Jennifer Lanzetti",
-    img: "/images/season_32/Jennifer-Lanzetti.jpg",
+    img: "",
     description: "Age: 38 | Hometown: Salt Lake City, Utah",
     age: 38,
     hometown: "Salt Lake City, Utah",
-    nickname: "Jenny",
   }),
   buildPlayer({
     castaway_id: "US0463",
     full_name: "Elisabeth Markham",
-    img: "/images/season_32/Elisabeth-Markham.jpg",
+    img: "",
     description: "Age: 27 | Hometown: New York City, New York",
     age: 27,
     hometown: "New York City, New York",
@@ -97,7 +96,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0464",
     full_name: "Caleb Reynolds",
-    img: "/images/season_32/Caleb-Reynolds.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Hopkinsville, Kentucky",
     age: 27,
     hometown: "Hopkinsville, Kentucky",
@@ -105,7 +104,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0465",
     full_name: "Alecia Holden",
-    img: "/images/season_32/Alecia-Holden.jpg",
+    img: "",
     description: "Age: 24 | Hometown: Dallas, Texas",
     age: 24,
     hometown: "Dallas, Texas",
@@ -113,7 +112,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0466",
     full_name: "Anna Khait",
-    img: "/images/season_32/Anna-Khait.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Brooklyn, New York",
     age: 26,
     hometown: "Brooklyn, New York",
@@ -121,7 +120,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0467",
     full_name: "Peter Baggenstos",
-    img: "/images/season_32/Peter-Baggenstos.jpg",
+    img: "",
     description: "Age: 34 | Hometown: Minneapolis, Minnesota",
     age: 34,
     hometown: "Minneapolis, Minnesota",
@@ -129,7 +128,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0468",
     full_name: "Neal Gottlieb",
-    img: "/images/season_32/Neal-Gottlieb.jpg",
+    img: "",
     description: "Age: 38 | Hometown: Sausalito, California",
     age: 38,
     hometown: "Sausalito, California",
@@ -137,25 +136,23 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0469",
     full_name: "Nick Maiorano",
-    img: "/images/season_32/Nick-Maiorano.jpg",
+    img: "",
     description: "Age: 30 | Hometown: Redondo Beach, California",
     age: 30,
     hometown: "Redondo Beach, California",
-    nickname: "Nick",
   }),
   buildPlayer({
     castaway_id: "US0470",
     full_name: "Debbie Wanner",
-    img: "/images/season_32/Debbie-Wanner.jpg",
+    img: "",
     description: "Age: 49 | Hometown: Reading, Pennsylvania",
     age: 49,
     hometown: "Reading, Pennsylvania",
-    nickname: "Debbie",
   }),
   buildPlayer({
     castaway_id: "US0471",
     full_name: "Scot Pollard",
-    img: "/images/season_32/Scot-Pollard.jpg",
+    img: "",
     description: "Age: 40 | Hometown: Carmel, Indiana",
     age: 40,
     hometown: "Carmel, Indiana",
@@ -163,7 +160,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0472",
     full_name: "Julia Sokolowski",
-    img: "/images/season_32/Julia-Sokolowski.jpg",
+    img: "",
     description: "Age: 19 | Hometown: Boston, Massachusetts",
     age: 19,
     hometown: "Boston, Massachusetts",
@@ -171,7 +168,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0473",
     full_name: "Kyle Jason",
-    img: "/images/season_32/Kyle-Jason.jpg",
+    img: "",
     description: "Age: 31 | Hometown: Detroit, Michigan",
     age: 31,
     hometown: "Detroit, Michigan",
@@ -180,7 +177,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0474",
     full_name: "Joseph Del Campo",
-    img: "/images/season_32/Joseph-Del-Campo.jpg",
+    img: "",
     description: "Age: 71 | Hometown: Vero Beach, Florida",
     age: 71,
     hometown: "Vero Beach, Florida",
@@ -189,7 +186,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0475",
     full_name: "Cydney Gillon",
-    img: "/images/season_32/Cydney-Gillon.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Douglasville, Georgia",
     age: 22,
     hometown: "Douglasville, Georgia",
@@ -197,7 +194,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0476",
     full_name: "Tai Trang",
-    img: "/images/season_32/Tai-Trang.jpg",
+    img: "",
     description: "Age: 51 | Hometown: San Francisco, California",
     age: 51,
     hometown: "San Francisco, California",
@@ -205,7 +202,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0477",
     full_name: "Aubry Bracco",
-    img: "/images/season_32/Aubry-Bracco.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Cambridge, Massachusetts",
     age: 29,
     hometown: "Cambridge, Massachusetts",
@@ -213,7 +210,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0478",
     full_name: "Michele Fitzgerald",
-    img: "/images/season_32/Michele-Fitzgerald.jpg",
+    img: "",
     description: "Age: 24 | Hometown: Freehold, New Jersey",
     age: 24,
     hometown: "Freehold, New Jersey",
@@ -380,7 +377,7 @@ export const SEASON_32_CHALLENGES = {
     season_num: 32,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 0,
     winning_castaways: [
       "US0463",
@@ -397,7 +394,7 @@ export const SEASON_32_CHALLENGES = {
     season_num: 32,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 1,
     winning_castaways: [
       "US0464",
@@ -448,7 +445,7 @@ export const SEASON_32_CHALLENGES = {
     season_num: 32,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 4,
     winning_castaways: [
       "US0463",
@@ -465,7 +462,7 @@ export const SEASON_32_CHALLENGES = {
     season_num: 32,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 5,
     winning_castaways: [
       "US0464",
@@ -516,7 +513,7 @@ export const SEASON_32_CHALLENGES = {
     season_num: 32,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 8,
     winning_castaways: [
       "US0464",
@@ -533,7 +530,7 @@ export const SEASON_32_CHALLENGES = {
     season_num: 32,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 9,
     winning_castaways: ["US0465", "US0471", "US0473", "US0475"],
   },
@@ -597,7 +594,7 @@ export const SEASON_32_CHALLENGES = {
     season_num: 32,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 14,
     winning_castaways: ["US0467", "US0468", "US0470", "US0474", "US0477"],
   },
@@ -607,7 +604,7 @@ export const SEASON_32_CHALLENGES = {
     season_num: 32,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 15,
     winning_castaways: ["US0466", "US0469", "US0472", "US0476", "US0478"],
   },
@@ -617,7 +614,7 @@ export const SEASON_32_CHALLENGES = {
     season_num: 32,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 16,
     winning_castaways: [
       "US0468",
@@ -651,7 +648,7 @@ export const SEASON_32_CHALLENGES = {
     season_num: 32,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 18,
     winning_castaways: [
       "US0468",

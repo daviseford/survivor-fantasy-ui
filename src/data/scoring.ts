@@ -22,7 +22,13 @@ export const BASE_PLAYER_SCORING: CategorizedPlayerScoring[] = [
   {
     action: "immunity",
     fixed_value: 3,
-    description: "Win an immunity challenge.",
+    description: "Win an individual immunity challenge.",
+    category: "Challenges",
+  },
+  {
+    action: "team_immunity",
+    fixed_value: 2,
+    description: "Win a team or tribal immunity challenge.",
     category: "Challenges",
   },
   // --- Milestones ---

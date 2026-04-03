@@ -71,7 +71,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0338",
     full_name: "Semhar Tadesse",
-    img: "/images/season_23/Semhar-Tadesse.jpg",
+    img: "",
     description: "Age: 24 | Hometown: Los Angeles, California",
     age: 24,
     hometown: "Los Angeles, California",
@@ -79,7 +79,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0339",
     full_name: "Christine Shields Markoski",
-    img: "/images/season_23/Christine-Shields-Markoski.jpg",
+    img: "",
     description: "Age: 39 | Hometown: Merrick, New York",
     age: 39,
     hometown: "Merrick, New York",
@@ -87,7 +87,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0340",
     full_name: "Mark Caruso",
-    img: "/images/season_23/Mark-Caruso.jpg",
+    img: "",
     description: "Age: 48 | Hometown: Forest Hills, New York",
     age: 48,
     hometown: "Forest Hills, New York",
@@ -96,7 +96,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0341",
     full_name: "Stacey Powell",
-    img: "/images/season_23/Stacey-Powell.jpg",
+    img: "",
     description: "Age: 44 | Hometown: Grand Prairie, Texas",
     age: 44,
     hometown: "Grand Prairie, Texas",
@@ -104,7 +104,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0342",
     full_name: "Elyse Umemoto",
-    img: "/images/season_23/Elyse-Umemoto.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Las Vegas, Nevada",
     age: 27,
     hometown: "Las Vegas, Nevada",
@@ -112,7 +112,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0343",
     full_name: "Mikayla Wingle",
-    img: "/images/season_23/Mikayla-Wingle.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Tampa, Florida",
     age: 22,
     hometown: "Tampa, Florida",
@@ -120,7 +120,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0344",
     full_name: "Keith Tollefson",
-    img: "/images/season_23/Keith-Tollefson.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Edina, Minnesota",
     age: 26,
     hometown: "Edina, Minnesota",
@@ -128,16 +128,15 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0345",
     full_name: "Jim Rice",
-    img: "/images/season_23/Jim-Rice.jpg",
+    img: "",
     description: "Age: 35 | Hometown: Denver, Colorado",
     age: 35,
     hometown: "Denver, Colorado",
-    nickname: "Jim",
   }),
   buildPlayer({
     castaway_id: "US0346",
     full_name: "Dawn Meehan",
-    img: "/images/season_23/Dawn-Meehan.jpg",
+    img: "",
     description: "Age: 41 | Hometown: South Jordan, Utah",
     age: 41,
     hometown: "South Jordan, Utah",
@@ -145,7 +144,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0347",
     full_name: "Whitney Duncan",
-    img: "/images/season_23/Whitney-Duncan.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Nashville, Tennessee",
     age: 27,
     hometown: "Nashville, Tennessee",
@@ -153,7 +152,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0348",
     full_name: "John Cochran",
-    img: "/images/season_23/John-Cochran.jpg",
+    img: "",
     description: "Age: 24 | Hometown: Washington, D.C.",
     age: 24,
     hometown: "Washington, D.C.",
@@ -162,7 +161,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0349",
     full_name: "Edna Ma",
-    img: "/images/season_23/Edna-Ma.jpg",
+    img: "",
     description: "Age: 35 | Hometown: Los Angeles, California",
     age: 35,
     hometown: "Los Angeles, California",
@@ -170,7 +169,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0350",
     full_name: "Brandon Hantz",
-    img: "/images/season_23/Brandon-Hantz.jpg",
+    img: "",
     description: "Age: 19 | Hometown: Katy, Texas",
     age: 19,
     hometown: "Katy, Texas",
@@ -178,16 +177,15 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0351",
     full_name: "Rick Nelson",
-    img: "/images/season_23/Rick-Nelson.jpg",
+    img: "",
     description: "Age: 51 | Hometown: Aurora, Utah",
     age: 51,
     hometown: "Aurora, Utah",
-    nickname: "Rick",
   }),
   buildPlayer({
     castaway_id: "US0201",
     full_name: "Oscar Lusth",
-    img: "/images/season_23/Oscar-Lusth.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Venice, California",
     age: 29,
     hometown: "Venice, California",
@@ -196,7 +194,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0352",
     full_name: "Albert Destrade",
-    img: "/images/season_23/Albert-Destrade.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Plantation, Florida",
     age: 26,
     hometown: "Plantation, Florida",
@@ -204,7 +202,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0277",
     full_name: "Benjamin Wade",
-    img: "/images/season_23/Benjamin-Wade.jpg",
+    img: "",
     description: "Age: 39 | Hometown: Susanville, California",
     age: 39,
     hometown: "Susanville, California",
@@ -213,7 +211,7 @@ export const SEASON_23_PLAYERS = [
   buildPlayer({
     castaway_id: "US0353",
     full_name: "Sophie Clarke",
-    img: "/images/season_23/Sophie-Clarke.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Willsboro, New York",
     age: 22,
     hometown: "Willsboro, New York",
@@ -410,7 +408,7 @@ export const SEASON_23_CHALLENGES = {
     season_num: 23,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 1,
     winning_castaways: [
       "US0277",
@@ -430,7 +428,7 @@ export const SEASON_23_CHALLENGES = {
     season_num: 23,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 2,
     winning_castaways: [
       "US0201",
@@ -478,7 +476,7 @@ export const SEASON_23_CHALLENGES = {
     season_num: 23,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 5,
     winning_castaways: [
       "US0277",
@@ -526,7 +524,7 @@ export const SEASON_23_CHALLENGES = {
     season_num: 23,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 8,
     winning_castaways: [
       "US0201",
@@ -572,7 +570,7 @@ export const SEASON_23_CHALLENGES = {
     season_num: 23,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 11,
     winning_castaways: [
       "US0277",
@@ -618,7 +616,7 @@ export const SEASON_23_CHALLENGES = {
     season_num: 23,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 14,
     winning_castaways: [
       "US0201",
@@ -662,7 +660,7 @@ export const SEASON_23_CHALLENGES = {
     season_num: 23,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 17,
     winning_castaways: [
       "US0277",

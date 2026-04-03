@@ -15,6 +15,7 @@ For the broader structural audit, see [scoring-audit-2026-04-01.md](./scoring-au
 ## The Core Problem: The Flat Advantage Economy
 
 Right now, every advantage in the game scores identically:
+
 - **1 pt to find** (whether it's a Hidden Immunity Idol or a Knowledge is Power)
 - **2 pts to play** (whether it's a common Extra Vote or a unicorn Idol Nullifier)
 
@@ -22,19 +23,19 @@ The frequency data tells a very different story about how rare these events actu
 
 ### Advantage Frequency Table (50 US Seasons)
 
-| Advantage | Times Found | Seasons Present | Per-Season Rate | Times Played |
-|-----------|------------|-----------------|-----------------|-------------|
-| Hidden Immunity Idol | 195 | 37 | 5.3/season | 120 |
-| Extra Vote | 16 | 10 | 1.6/season | 12 |
-| Amulet | 9 | 3 | 3.0/season | 4 |
-| Challenge Advantage | 8 | 5 | 1.6/season | 8 |
-| Steal a Vote | 7 | 7 | 1.0/season | 5 |
-| Knowledge is Power | 5 | 4 | 1.3/season | 3 |
-| Idol Nullifier | 4 | 4 | 1.0/season | 2 |
-| Block a Vote | 4 | 4 | 1.0/season | 3 |
-| Bank Your Vote | 3 | 3 | 1.0/season | 2 |
-| Safety Without Power | 3 | 3 | 1.0/season | 1 |
-| Control the Vote | 1 | 1 | ultra-rare | 1 |
+| Advantage            | Times Found | Seasons Present | Per-Season Rate | Times Played |
+| -------------------- | ----------- | --------------- | --------------- | ------------ |
+| Hidden Immunity Idol | 195         | 37              | 5.3/season      | 120          |
+| Extra Vote           | 16          | 10              | 1.6/season      | 12           |
+| Amulet               | 9           | 3               | 3.0/season      | 4            |
+| Challenge Advantage  | 8           | 5               | 1.6/season      | 8            |
+| Steal a Vote         | 7           | 7               | 1.0/season      | 5            |
+| Knowledge is Power   | 5           | 4               | 1.3/season      | 3            |
+| Idol Nullifier       | 4           | 4               | 1.0/season      | 2            |
+| Block a Vote         | 4           | 4               | 1.0/season      | 3            |
+| Bank Your Vote       | 3           | 3               | 1.0/season      | 2            |
+| Safety Without Power | 3           | 3               | 1.0/season      | 1            |
+| Control the Vote     | 1           | 1               | ultra-rare      | 1            |
 
 Finding a Hidden Immunity Idol (195 times across 37 seasons) currently earns the same
 1 point as finding a Steal a Vote (7 times across 7 seasons). That's a **28x frequency
@@ -46,32 +47,32 @@ difference** for the same reward.
 
 These are the bread and butter. Keep them at current values.
 
-| Action | Current | Proposed | Rationale |
-|--------|---------|----------|-----------|
-| find_idol | 1 | **1** | 5.3/season — common, plus the votes_negated multiplier already rewards big plays |
-| use_idol | 2 | **2** | |
-| win_idol | 1 | **1** | |
-| find_extra_vote | 1 | **1** | 1.6/season across 10 seasons — most common non-idol advantage |
-| use_extra_vote | 2 | **2** | |
-| win_extra_vote | 1 | **1** | |
+| Action          | Current | Proposed | Rationale                                                                        |
+| --------------- | ------- | -------- | -------------------------------------------------------------------------------- |
+| find_idol       | 1       | **1**    | 5.3/season — common, plus the votes_negated multiplier already rewards big plays |
+| use_idol        | 2       | **2**    |                                                                                  |
+| win_idol        | 1       | **1**    |                                                                                  |
+| find_extra_vote | 1       | **1**    | 1.6/season across 10 seasons — most common non-idol advantage                    |
+| use_extra_vote  | 2       | **2**    |                                                                                  |
+| win_extra_vote  | 1       | **1**    |                                                                                  |
 
 ### Tier 2 — Uncommon (appeared in <10 seasons, ~1 per season when present)
 
 These are meaningfully rarer than idols and Extra Votes. Finding one should feel more
 rewarding. Playing one is a real strategic moment.
 
-| Action | Current | Proposed | Rationale |
-|--------|---------|----------|-----------|
-| find_steal_a_vote | 1 | **2** | 7 found in 7 seasons |
-| use_steal_a_vote | 2 | **3** | |
-| win_steal_a_vote | 1 | **2** | |
-| find_block_a_vote | 1 | **2** | 4 found in 4 seasons |
-| use_block_a_vote | 2 | **3** | |
-| win_block_a_vote | 1 | **2** | |
-| find_challenge_advantage | 1 | **2** | 8 found in 5 seasons |
-| find_amulet | 1 | **2** | 9 found in 3 seasons (always in sets of 3) |
-| find_other_advantage | 1 | **2** | By definition rare/one-off |
-| win_other_advantage | 1 | **2** | |
+| Action                   | Current | Proposed | Rationale                                  |
+| ------------------------ | ------- | -------- | ------------------------------------------ |
+| find_steal_a_vote        | 1       | **2**    | 7 found in 7 seasons                       |
+| use_steal_a_vote         | 2       | **3**    |                                            |
+| win_steal_a_vote         | 1       | **2**    |                                            |
+| find_block_a_vote        | 1       | **2**    | 4 found in 4 seasons                       |
+| use_block_a_vote         | 2       | **3**    |                                            |
+| win_block_a_vote         | 1       | **2**    |                                            |
+| find_challenge_advantage | 1       | **2**    | 8 found in 5 seasons                       |
+| find_amulet              | 1       | **2**    | 9 found in 3 seasons (always in sets of 3) |
+| find_other_advantage     | 1       | **2**    | By definition rare/one-off                 |
+| win_other_advantage      | 1       | **2**    |                                            |
 
 ### Tier 3 — Rare (appeared in <=4 seasons, truly unicorn events)
 
@@ -79,18 +80,18 @@ These are the unicorns. When someone plays one, it should feel like a big moment
 the scorecard. A Knowledge is Power play has happened 3 times in 50 seasons. An
 Idol Nullifier has been played twice. These deserve to stand out.
 
-| Action | Current | Proposed | Rationale |
-|--------|---------|----------|-----------|
-| find_knowledge_is_power | 1 | **2** | 5 found in 4 seasons |
-| use_knowledge_is_power | 2 | **4** | 3 plays in 50 seasons |
-| find_idol_nullifier | 1 | **2** | 4 found in 4 seasons |
-| use_idol_nullifier | 2 | **4** | 2 plays in 50 seasons |
-| find_bank_your_vote | 1 | **2** | 3 found in 3 seasons |
-| use_bank_your_vote | 2 | **4** | 2 plays in 50 seasons |
-| find_safety_without_power | 1 | **2** | 3 found in 3 seasons |
-| use_safety_without_power | 2 | **4** | 1 play in 50 seasons |
-| find_control_the_vote | 1 | **2** | 1 found in 1 season |
-| use_control_the_vote | 2 | **4** | 1 play in 50 seasons |
+| Action                    | Current | Proposed | Rationale             |
+| ------------------------- | ------- | -------- | --------------------- |
+| find_knowledge_is_power   | 1       | **2**    | 5 found in 4 seasons  |
+| use_knowledge_is_power    | 2       | **4**    | 3 plays in 50 seasons |
+| find_idol_nullifier       | 1       | **2**    | 4 found in 4 seasons  |
+| use_idol_nullifier        | 2       | **4**    | 2 plays in 50 seasons |
+| find_bank_your_vote       | 1       | **2**    | 3 found in 3 seasons  |
+| use_bank_your_vote        | 2       | **4**    | 2 plays in 50 seasons |
+| find_safety_without_power | 1       | **2**    | 3 found in 3 seasons  |
+| use_safety_without_power  | 2       | **4**    | 1 play in 50 seasons  |
+| find_control_the_vote     | 1       | **2**    | 1 found in 1 season   |
+| use_control_the_vote      | 2       | **4**    | 1 play in 50 seasons  |
 
 ### Net Impact of Tiering
 
@@ -112,20 +113,20 @@ This is the most skill-correlated recurring event in the game.
 
 Recent immunity win distributions:
 
-| Season | Distribution |
-|--------|-------------|
-| S49 | Savannah (4), Sophie (2), Steven (1), Sophi (1) |
-| S48 | Joe (4), Kyle (2), Kamilla (2), David (1), Eva (1) |
-| S47 | Rachel (4), Kyle (4), Sue (1), Gabe (1), Genevieve (1) |
-| S46 | Maria (3), Kenzie (2), Charlie (2), Hunter (1), Ben (1) |
-| S45 | Dee (3), Bruce (2), Austin (2), Kellie (1), Drew (1) |
+| Season | Distribution                                            |
+| ------ | ------------------------------------------------------- |
+| S49    | Savannah (4), Sophie (2), Steven (1), Sophi (1)         |
+| S48    | Joe (4), Kyle (2), Kamilla (2), David (1), Eva (1)      |
+| S47    | Rachel (4), Kyle (4), Sue (1), Gabe (1), Genevieve (1)  |
+| S46    | Maria (3), Kenzie (2), Charlie (2), Hunter (1), Ben (1) |
+| S45    | Dee (3), Bruce (2), Austin (2), Kellie (1), Drew (1)    |
 
 ### Proposed Change
 
-| Action | Current | Proposed |
-|--------|---------|----------|
-| immunity | 2 | **3** |
-| reward | 1 | **1** (unchanged) |
+| Action   | Current | Proposed          |
+| -------- | ------- | ----------------- |
+| immunity | 2       | **3**             |
+| reward   | 1       | **1** (unchanged) |
 
 ### Impact
 
@@ -159,11 +160,11 @@ your vote until conditions are met), this undersells the drama.
 
 ### Proposed Change
 
-| Action | Current | Proposed | Rationale |
-|--------|---------|----------|-----------|
-| find_beware_advantage | 0.5 | **1** | Finding it is a real event |
-| accept_beware_advantage | 0.5 | **1** | Accepting the risk matters |
-| fulfill_beware_advantage | 0.5 | **2** | Completing the gauntlet deserves the most |
+| Action                   | Current | Proposed | Rationale                                 |
+| ------------------------ | ------- | -------- | ----------------------------------------- |
+| find_beware_advantage    | 0.5     | **1**    | Finding it is a real event                |
+| accept_beware_advantage  | 0.5     | **1**    | Accepting the risk matters                |
+| fulfill_beware_advantage | 0.5     | **2**    | Completing the gauntlet deserves the most |
 
 Total lifecycle: 4 pts (up from 1.5 pts). Still modest, but the saga now feels
 meaningful on the scorecard.
@@ -225,53 +226,53 @@ bonus.
 
 Some parts of the current system are well-calibrated and should not change:
 
-| Action | Value | Why It Works |
-|--------|-------|-------------|
-| win_survivor | 20 | Team simulations show this is balanced (see philosophy doc) |
-| votes_negated_by_idol | 1x multiplier | Elegant — naturally rewards high-stakes plays |
-| eliminated | ep_num | The survival floor is the backbone of the system |
-| make_merge | 2 | Right-sized for ~50% of cast reaching it |
-| make_final_tribal_council | 4 | Appropriate gap above merge |
-| go_on_journey | 0.5 | Correctly low — it's a boat ride |
-| use_shot_in_the_dark_successfully | 6 | Rarest event in the game — lottery-ticket pricing is correct |
-| use_shot_in_the_dark_unsuccessfully | 1 | Nice flavor award |
-| medically_evacuated | 5 | Consolation prize works at this level |
-| quitter | -2 | Mild penalty is appropriate |
+| Action                              | Value         | Why It Works                                                 |
+| ----------------------------------- | ------------- | ------------------------------------------------------------ |
+| win_survivor                        | 20            | Team simulations show this is balanced (see philosophy doc)  |
+| votes_negated_by_idol               | 1x multiplier | Elegant — naturally rewards high-stakes plays                |
+| eliminated                          | ep_num        | The survival floor is the backbone of the system             |
+| make_merge                          | 2             | Right-sized for ~50% of cast reaching it                     |
+| make_final_tribal_council           | 4             | Appropriate gap above merge                                  |
+| go_on_journey                       | 0.5           | Correctly low — it's a boat ride                             |
+| use_shot_in_the_dark_successfully   | 6             | Rarest event in the game — lottery-ticket pricing is correct |
+| use_shot_in_the_dark_unsuccessfully | 1             | Nice flavor award                                            |
+| medically_evacuated                 | 5             | Consolation prize works at this level                        |
+| quitter                             | -2            | Mild penalty is appropriate                                  |
 
 ## Summary of All Proposed Changes
 
-| Action | Current | Proposed | Change |
-|--------|---------|----------|--------|
-| **Challenges** | | | |
-| immunity | 2 | **3** | +1 |
-| **Tier 2 Advantages (Uncommon)** | | | |
-| find_steal_a_vote | 1 | **2** | +1 |
-| use_steal_a_vote | 2 | **3** | +1 |
-| win_steal_a_vote | 1 | **2** | +1 |
-| find_block_a_vote | 1 | **2** | +1 |
-| use_block_a_vote | 2 | **3** | +1 |
-| win_block_a_vote | 1 | **2** | +1 |
-| find_challenge_advantage | 1 | **2** | +1 |
-| find_amulet | 1 | **2** | +1 |
-| find_other_advantage | 1 | **2** | +1 |
-| win_other_advantage | 1 | **2** | +1 |
-| **Tier 3 Advantages (Rare)** | | | |
-| find_knowledge_is_power | 1 | **2** | +1 |
-| use_knowledge_is_power | 2 | **4** | +2 |
-| find_idol_nullifier | 1 | **2** | +1 |
-| use_idol_nullifier | 2 | **4** | +2 |
-| find_bank_your_vote | 1 | **2** | +1 |
-| use_bank_your_vote | 2 | **4** | +2 |
-| find_safety_without_power | 1 | **2** | +1 |
-| use_safety_without_power | 2 | **4** | +2 |
-| find_control_the_vote | 1 | **2** | +1 |
-| use_control_the_vote | 2 | **4** | +2 |
-| **Beware Advantage** | | | |
-| find_beware_advantage | 0.5 | **1** | +0.5 |
-| accept_beware_advantage | 0.5 | **1** | +0.5 |
-| fulfill_beware_advantage | 0.5 | **2** | +1.5 |
-| **Everything Else** | | | |
-| (all other actions) | — | **unchanged** | — |
+| Action                           | Current | Proposed      | Change |
+| -------------------------------- | ------- | ------------- | ------ |
+| **Challenges**                   |         |               |        |
+| immunity                         | 2       | **3**         | +1     |
+| **Tier 2 Advantages (Uncommon)** |         |               |        |
+| find_steal_a_vote                | 1       | **2**         | +1     |
+| use_steal_a_vote                 | 2       | **3**         | +1     |
+| win_steal_a_vote                 | 1       | **2**         | +1     |
+| find_block_a_vote                | 1       | **2**         | +1     |
+| use_block_a_vote                 | 2       | **3**         | +1     |
+| win_block_a_vote                 | 1       | **2**         | +1     |
+| find_challenge_advantage         | 1       | **2**         | +1     |
+| find_amulet                      | 1       | **2**         | +1     |
+| find_other_advantage             | 1       | **2**         | +1     |
+| win_other_advantage              | 1       | **2**         | +1     |
+| **Tier 3 Advantages (Rare)**     |         |               |        |
+| find_knowledge_is_power          | 1       | **2**         | +1     |
+| use_knowledge_is_power           | 2       | **4**         | +2     |
+| find_idol_nullifier              | 1       | **2**         | +1     |
+| use_idol_nullifier               | 2       | **4**         | +2     |
+| find_bank_your_vote              | 1       | **2**         | +1     |
+| use_bank_your_vote               | 2       | **4**         | +2     |
+| find_safety_without_power        | 1       | **2**         | +1     |
+| use_safety_without_power         | 2       | **4**         | +2     |
+| find_control_the_vote            | 1       | **2**         | +1     |
+| use_control_the_vote             | 2       | **4**         | +2     |
+| **Beware Advantage**             |         |               |        |
+| find_beware_advantage            | 0.5     | **1**         | +0.5   |
+| accept_beware_advantage          | 0.5     | **1**         | +0.5   |
+| fulfill_beware_advantage         | 0.5     | **2**         | +1.5   |
+| **Everything Else**              |         |               |        |
+| (all other actions)              | —       | **unchanged** | —      |
 
 ## Data Sources
 

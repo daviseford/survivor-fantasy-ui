@@ -64,14 +64,14 @@ export const SEASON_22_CASTAWAY_LOOKUP: CastawayLookup = {
   US0335: { full_name: "Ashley Underwood", castaway: "Ashley" },
   US0336: { full_name: "Natalie Tenerelli", castaway: "Natalie" },
   US0337: { full_name: "Phillip Sheppard", castaway: "Phillip" },
-  US0055: { full_name: "Rob Mariano", castaway: "Rob" },
+  US0055: { full_name: "Rob Mariano", castaway: "Boston Rob" },
 };
 
 export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0322",
     full_name: "Francesca Hogi",
-    img: "/images/season_22/Francesca-Hogi.jpg",
+    img: "",
     description: "Age: 36 | Hometown: Washington, D.C.",
     age: 36,
     hometown: "Washington, D.C.",
@@ -79,7 +79,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0300",
     full_name: "Russell Hantz",
-    img: "/images/season_22/Russell-Hantz.jpg",
+    img: "",
     description: "Age: 37 | Hometown: Dayton, Texas",
     age: 37,
     hometown: "Dayton, Texas",
@@ -87,7 +87,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0324",
     full_name: "Kristina Kell",
-    img: "/images/season_22/Kristina-Kell.jpg",
+    img: "",
     description: "Age: 46 | Hometown: Malibu, California",
     age: 46,
     hometown: "Malibu, California",
@@ -95,7 +95,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0325",
     full_name: "Krista Klumpp",
-    img: "/images/season_22/Krista-Klumpp.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Columbia, South Carolina",
     age: 25,
     hometown: "Columbia, South Carolina",
@@ -103,7 +103,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0326",
     full_name: "Stephanie Valencia",
-    img: "/images/season_22/Stephanie-Valencia.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Long Beach, California",
     age: 26,
     hometown: "Long Beach, California",
@@ -111,7 +111,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0327",
     full_name: "Sarita White",
-    img: "/images/season_22/Sarita-White.jpg",
+    img: "",
     description: "Age: 36 | Hometown: Santa Monica, California",
     age: 36,
     hometown: "Santa Monica, California",
@@ -119,16 +119,15 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0323",
     full_name: "Matt Elrod",
-    img: "/images/season_22/Matt-Elrod.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Nashville, Tennessee",
     age: 22,
     hometown: "Nashville, Tennessee",
-    nickname: "Matt",
   }),
   buildPlayer({
     castaway_id: "US0328",
     full_name: "Mike Chiesl",
-    img: "/images/season_22/Mike-Chiesl.jpg",
+    img: "",
     description: "Age: 31 | Hometown: Del Mar, California",
     age: 31,
     hometown: "Del Mar, California",
@@ -136,7 +135,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0329",
     full_name: "David Murphy",
-    img: "/images/season_22/David-Murphy.jpg",
+    img: "",
     description: "Age: 31 | Hometown: West Hollywood, California",
     age: 31,
     hometown: "West Hollywood, California",
@@ -144,7 +143,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0330",
     full_name: "Julie Wolfe",
-    img: "/images/season_22/Julie-Wolfe.jpg",
+    img: "",
     description: "Age: 50 | Hometown: Oceanside, California",
     age: 50,
     hometown: "Oceanside, California",
@@ -152,7 +151,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0331",
     full_name: "Ralph Kiser",
-    img: "/images/season_22/Ralph-Kiser.jpg",
+    img: "",
     description: "Age: 45 | Hometown: Lebanon, Virginia",
     age: 45,
     hometown: "Lebanon, Virginia",
@@ -160,16 +159,15 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0332",
     full_name: "Steve Wright",
-    img: "/images/season_22/Steve-Wright.jpg",
+    img: "",
     description: "Age: 51 | Hometown: Huntington Beach, California",
     age: 51,
     hometown: "Huntington Beach, California",
-    nickname: "Steve",
   }),
   buildPlayer({
     castaway_id: "US0334",
     full_name: "Grant Mattos",
-    img: "/images/season_22/Grant-Mattos.jpg",
+    img: "",
     description: "Age: 29 | Hometown: West Hollywood, California",
     age: 29,
     hometown: "West Hollywood, California",
@@ -177,7 +175,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0333",
     full_name: "Andrea Boehlke",
-    img: "/images/season_22/Andrea-Boehlke.jpg",
+    img: "",
     description: "Age: 21 | Hometown: Random Lake, Wisconsin",
     age: 21,
     hometown: "Random Lake, Wisconsin",
@@ -185,7 +183,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0335",
     full_name: "Ashley Underwood",
-    img: "/images/season_22/Ashley-Underwood.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Benton, Maine",
     age: 25,
     hometown: "Benton, Maine",
@@ -193,7 +191,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0336",
     full_name: "Natalie Tenerelli",
-    img: "/images/season_22/Natalie-Tenerelli.jpg",
+    img: "",
     description: "Age: 19 | Hometown: Acton, California",
     age: 19,
     hometown: "Acton, California",
@@ -201,7 +199,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0337",
     full_name: "Phillip Sheppard",
-    img: "/images/season_22/Phillip-Sheppard.jpg",
+    img: "",
     description: "Age: 52 | Hometown: Santa Monica, California",
     age: 52,
     hometown: "Santa Monica, California",
@@ -209,11 +207,11 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0055",
     full_name: "Rob Mariano",
-    img: "/images/season_22/Rob-Mariano.jpg",
+    img: "",
     description: "Age: 34 | Hometown: Pensacola, Florida",
     age: 34,
     hometown: "Pensacola, Florida",
-    nickname: "Rob",
+    nickname: "Boston Rob",
   }),
 ] satisfies Player<CastawayIdType, SeasonNumber>[];
 
@@ -377,7 +375,7 @@ export const SEASON_22_CHALLENGES = {
     season_num: 22,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 0,
     winning_castaways: [
       "US0300",
@@ -417,7 +415,7 @@ export const SEASON_22_CHALLENGES = {
     season_num: 22,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 2,
     winning_castaways: [
       "US0300",
@@ -467,7 +465,7 @@ export const SEASON_22_CHALLENGES = {
     season_num: 22,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 5,
     winning_castaways: [
       "US0055",
@@ -513,7 +511,7 @@ export const SEASON_22_CHALLENGES = {
     season_num: 22,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 8,
     winning_castaways: [
       "US0325",
@@ -561,7 +559,7 @@ export const SEASON_22_CHALLENGES = {
     season_num: 22,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 11,
     winning_castaways: [
       "US0055",
@@ -605,7 +603,7 @@ export const SEASON_22_CHALLENGES = {
     season_num: 22,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 14,
     winning_castaways: [
       "US0055",
@@ -649,7 +647,7 @@ export const SEASON_22_CHALLENGES = {
     season_num: 22,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 17,
     winning_castaways: [
       "US0055",

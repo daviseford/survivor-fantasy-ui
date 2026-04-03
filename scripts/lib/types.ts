@@ -23,7 +23,11 @@ export interface ScrapeResult {
 
 // --- Gameplay scrape types ---
 
-export type ScrapedChallengeVariant = "reward" | "immunity" | "combined";
+export type ScrapedChallengeVariant =
+  | "reward"
+  | "immunity"
+  | "team_immunity"
+  | "combined";
 
 export type ScrapedEliminationVariant =
   | "tribal"
