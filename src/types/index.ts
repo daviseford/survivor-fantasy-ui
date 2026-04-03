@@ -231,6 +231,7 @@ export type GameEvent<
 
 export const ChallengeWinActions = [
   "reward",
+  "team_reward",
   "immunity",
   "team_immunity",
 ] as const;

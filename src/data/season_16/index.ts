@@ -429,7 +429,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "reward",
+    variant: "team_reward",
     order: 2,
     winning_castaways: [
       "US0238",
@@ -470,7 +470,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "reward",
+    variant: "team_reward",
     order: 4,
     winning_castaways: [
       "US0125",
@@ -490,7 +490,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "reward",
+    variant: "team_reward",
     order: 5,
     winning_castaways: [
       "US0125",
@@ -530,7 +530,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "reward",
+    variant: "team_reward",
     order: 7,
     winning_castaways: [
       "US0125",
@@ -568,7 +568,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "reward",
+    variant: "team_reward",
     order: 9,
     winning_castaways: [
       "US0127",
@@ -606,7 +606,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "reward",
+    variant: "team_reward",
     order: 11,
     winning_castaways: [
       "US0127",
@@ -642,7 +642,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "reward",
+    variant: "team_reward",
     order: 13,
     winning_castaways: [
       "US0125",
@@ -693,7 +693,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_8",
     episode_num: 8,
-    variant: "reward",
+    variant: "team_reward",
     order: 16,
     winning_castaways: [
       "US0127",
@@ -720,7 +720,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_10",
     episode_num: 10,
-    variant: "reward",
+    variant: "team_reward",
     order: 18,
     winning_castaways: ["US0201", "US0235", "US0244", "US0246"],
   },

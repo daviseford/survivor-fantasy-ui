@@ -4,7 +4,7 @@ import { BASE_PLAYER_SCORING } from "../../data/scoring";
 const SCORING_CATEGORIES = [
   {
     label: "Challenges",
-    actions: ["reward", "immunity", "team_immunity"],
+    actions: ["reward", "team_reward", "immunity", "team_immunity"],
   },
   {
     label: "Milestones",

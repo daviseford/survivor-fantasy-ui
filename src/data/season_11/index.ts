@@ -375,7 +375,7 @@ export const SEASON_11_CHALLENGES = {
     season_num: 11,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "reward",
+    variant: "team_reward",
     order: 0,
     winning_castaways: [
       "US0141",
@@ -415,7 +415,7 @@ export const SEASON_11_CHALLENGES = {
     season_num: 11,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "reward",
+    variant: "team_reward",
     order: 2,
     winning_castaways: [
       "US0141",
@@ -453,7 +453,7 @@ export const SEASON_11_CHALLENGES = {
     season_num: 11,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "reward",
+    variant: "team_reward",
     order: 4,
     winning_castaways: [
       "US0141",
@@ -509,7 +509,7 @@ export const SEASON_11_CHALLENGES = {
     season_num: 11,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "reward",
+    variant: "team_reward",
     order: 7,
     winning_castaways: [
       "US0141",
@@ -545,7 +545,7 @@ export const SEASON_11_CHALLENGES = {
     season_num: 11,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "reward",
+    variant: "team_reward",
     order: 9,
     winning_castaways: [
       "US0144",
@@ -573,7 +573,7 @@ export const SEASON_11_CHALLENGES = {
     season_num: 11,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "reward",
+    variant: "team_reward",
     order: 11,
     winning_castaways: ["US0141", "US0158", "US0159", "US0161", "US0166"],
   },
@@ -630,7 +630,7 @@ export const SEASON_11_CHALLENGES = {
     season_num: 11,
     episode_id: "episode_10",
     episode_num: 10,
-    variant: "reward",
+    variant: "team_reward",
     order: 16,
     winning_castaways: ["US0144", "US0161", "US0162", "US0166"],
   },

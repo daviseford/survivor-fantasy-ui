@@ -375,7 +375,7 @@ export const SEASON_15_CHALLENGES = {
     season_num: 15,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "reward",
+    variant: "team_reward",
     order: 1,
     winning_castaways: [
       "US0224",
@@ -394,7 +394,7 @@ export const SEASON_15_CHALLENGES = {
     season_num: 15,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "reward",
+    variant: "team_reward",
     order: 2,
     winning_castaways: [
       "US0224",
@@ -432,7 +432,7 @@ export const SEASON_15_CHALLENGES = {
     season_num: 15,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "reward",
+    variant: "team_reward",
     order: 4,
     winning_castaways: [
       "US0225",
@@ -466,7 +466,7 @@ export const SEASON_15_CHALLENGES = {
     season_num: 15,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "reward",
+    variant: "team_reward",
     order: 6,
     winning_castaways: [
       "US0226",
@@ -520,7 +520,7 @@ export const SEASON_15_CHALLENGES = {
     season_num: 15,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "reward",
+    variant: "team_reward",
     order: 9,
     winning_castaways: [
       "US0227",
@@ -558,7 +558,7 @@ export const SEASON_15_CHALLENGES = {
     season_num: 15,
     episode_id: "episode_8",
     episode_num: 8,
-    variant: "reward",
+    variant: "team_reward",
     order: 12,
     winning_castaways: ["US0229", "US0231", "US0235", "US0237"],
   },
@@ -578,7 +578,7 @@ export const SEASON_15_CHALLENGES = {
     season_num: 15,
     episode_id: "episode_9",
     episode_num: 9,
-    variant: "reward",
+    variant: "team_reward",
     order: 14,
     winning_castaways: ["US0230", "US0232", "US0235", "US0236"],
   },
