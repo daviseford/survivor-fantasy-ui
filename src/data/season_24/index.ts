@@ -71,7 +71,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0354",
     full_name: "Kourtney Moon",
-    img: "/images/season_24/Kourtney-Moon.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Austin, Texas",
     age: 29,
     hometown: "Austin, Texas",
@@ -79,7 +79,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0355",
     full_name: "Nina Acosta",
-    img: "/images/season_24/Nina-Acosta.jpg",
+    img: "",
     description: "Age: 51 | Hometown: Clovis, California",
     age: 51,
     hometown: "Clovis, California",
@@ -87,25 +87,23 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0356",
     full_name: "Matt Quinlan",
-    img: "/images/season_24/Matt-Quinlan.jpg",
+    img: "",
     description: "Age: 33 | Hometown: San Francisco, California",
     age: 33,
     hometown: "San Francisco, California",
-    nickname: "Matt",
   }),
   buildPlayer({
     castaway_id: "US0357",
     full_name: "Bill Posley",
-    img: "/images/season_24/Bill-Posley.jpg",
+    img: "",
     description: "Age: 28 | Hometown: Venice, California",
     age: 28,
     hometown: "Venice, California",
-    nickname: "Bill",
   }),
   buildPlayer({
     castaway_id: "US0358",
     full_name: "Monica Culpepper",
-    img: "/images/season_24/Monica-Culpepper.jpg",
+    img: "",
     description: "Age: 41 | Hometown: Tampa, Florida",
     age: 41,
     hometown: "Tampa, Florida",
@@ -121,7 +119,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0360",
     full_name: "Jonas Otsuji",
-    img: "/images/season_24/Jonas-Otsuji.jpg",
+    img: "",
     description: "Age: 37 | Hometown: Lehi, Utah",
     age: 37,
     hometown: "Lehi, Utah",
@@ -129,7 +127,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0361",
     full_name: "Michael Jefferson",
-    img: "/images/season_24/Michael-Jefferson.jpg",
+    img: "",
     description: "Age: 30 | Hometown: Seattle, Washington",
     age: 30,
     hometown: "Seattle, Washington",
@@ -137,7 +135,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0362",
     full_name: "Jay Byars",
-    img: "/images/season_24/Jay-Byars.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Gaffney, South Carolina",
     age: 25,
     hometown: "Gaffney, South Carolina",
@@ -145,7 +143,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0363",
     full_name: "Leif Manson",
-    img: "/images/season_24/Leif-Manson.jpg",
+    img: "",
     description: "Age: 27 | Hometown: San Diego, California",
     age: 27,
     hometown: "San Diego, California",
@@ -153,7 +151,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0364",
     full_name: "Troy Robertson",
-    img: "/images/season_24/Troy-Robertson.jpg",
+    img: "",
     description: "Age: 50 | Hometown: Miami, Florida",
     age: 50,
     hometown: "Miami, Florida",
@@ -162,16 +160,15 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0365",
     full_name: "Kat Edorsson",
-    img: "/images/season_24/Kat-Edorsson.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Orlando, Florida",
     age: 22,
     hometown: "Orlando, Florida",
-    nickname: "Kat",
   }),
   buildPlayer({
     castaway_id: "US0366",
     full_name: "Greg Smith",
-    img: "/images/season_24/Greg-Smith.jpg",
+    img: "",
     description: "Age: 64 | Hometown: Houston, Texas",
     age: 64,
     hometown: "Houston, Texas",
@@ -180,7 +177,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0367",
     full_name: "Alicia Rosa",
-    img: "/images/season_24/Alicia-Rosa.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Chicago, Illinois",
     age: 25,
     hometown: "Chicago, Illinois",
@@ -188,7 +185,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0368",
     full_name: "Christina Cha",
-    img: "/images/season_24/Christina-Cha.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Hollywood, California",
     age: 29,
     hometown: "Hollywood, California",
@@ -196,7 +193,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0369",
     full_name: "Chelsea Meissner",
-    img: "/images/season_24/Chelsea-Meissner.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Charleston, South Carolina",
     age: 26,
     hometown: "Charleston, South Carolina",
@@ -204,7 +201,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0370",
     full_name: "Sabrina Thompson",
-    img: "/images/season_24/Sabrina-Thompson.jpg",
+    img: "",
     description: "Age: 33 | Hometown: Brooklyn, New York",
     age: 33,
     hometown: "Brooklyn, New York",
@@ -212,11 +209,10 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0371",
     full_name: "Kim Spradlin",
-    img: "/images/season_24/Kim-Spradlin.jpg",
+    img: "",
     description: "Age: 29 | Hometown: San Antonio, Texas",
     age: 29,
     hometown: "San Antonio, Texas",
-    nickname: "Kim",
   }),
 ] satisfies Player<CastawayIdType, SeasonNumber>[];
 
@@ -380,7 +376,7 @@ export const SEASON_24_CHALLENGES = {
     season_num: 24,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 0,
     winning_castaways: [
       "US0356",
@@ -440,7 +436,7 @@ export const SEASON_24_CHALLENGES = {
     season_num: 24,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 3,
     winning_castaways: [
       "US0356",
@@ -478,7 +474,7 @@ export const SEASON_24_CHALLENGES = {
     season_num: 24,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 5,
     winning_castaways: [
       "US0358",
@@ -514,7 +510,7 @@ export const SEASON_24_CHALLENGES = {
     season_num: 24,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 7,
     winning_castaways: [
       "US0357",
@@ -551,7 +547,7 @@ export const SEASON_24_CHALLENGES = {
     season_num: 24,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 9,
     winning_castaways: [
       "US0361",

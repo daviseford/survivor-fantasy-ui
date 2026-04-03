@@ -75,7 +75,7 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0571",
     full_name: "Ronnie Bardah",
-    img: "/images/season_39/Ronnie-Bardah.jpg",
+    img: "",
     description: "Age: 36 | Hometown: Henderson, Nevada",
     age: 36,
     hometown: "Henderson, Nevada",
@@ -83,7 +83,7 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0572",
     full_name: "Molly Byman",
-    img: "/images/season_39/Molly-Byman.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Durham, North Carolina",
     age: 27,
     hometown: "Durham, North Carolina",
@@ -91,16 +91,15 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0573",
     full_name: "Vince Moua",
-    img: "/images/season_39/Vince-Moua.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Palo Alto, California",
     age: 27,
     hometown: "Palo Alto, California",
-    nickname: "Vince",
   }),
   buildPlayer({
     castaway_id: "US0574",
     full_name: "Chelsea Walker",
-    img: "/images/season_39/Chelsea-Walker.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Los Angeles, California",
     age: 27,
     hometown: "Los Angeles, California",
@@ -108,11 +107,10 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0575",
     full_name: "Tom Laidlaw",
-    img: "/images/season_39/Tom-Laidlaw.jpg",
+    img: "",
     description: "Age: 60 | Hometown: Greenwich, Connecticut",
     age: 60,
     hometown: "Greenwich, Connecticut",
-    nickname: "Tom",
   }),
   buildPlayer({
     castaway_id: "US0576",
@@ -125,7 +123,7 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0577",
     full_name: "Jack Nichting",
-    img: "/images/season_39/Jack-Nichting.jpg",
+    img: "",
     description: "Age: 23 | Hometown: Harrisonburg, Virginia",
     age: 23,
     hometown: "Harrisonburg, Virginia",
@@ -133,7 +131,7 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0578",
     full_name: "Kellee Kim",
-    img: "/images/season_39/Kellee-Kim.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Philadelphia, Pennsylvania",
     age: 29,
     hometown: "Philadelphia, Pennsylvania",
@@ -141,7 +139,7 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0579",
     full_name: "Jamal Shipman",
-    img: "/images/season_39/Jamal-Shipman.jpg",
+    img: "",
     description: "Age: 33 | Hometown: Providence, Rhode Island",
     age: 33,
     hometown: "Providence, Rhode Island",
@@ -149,7 +147,7 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0580",
     full_name: "Aaron Meredith",
-    img: "/images/season_39/Aaron-Meredith.jpg",
+    img: "",
     description: "Age: 36 | Hometown: Warwick, Rhode Island",
     age: 36,
     hometown: "Warwick, Rhode Island",
@@ -157,7 +155,7 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0581",
     full_name: "Missy Byrd",
-    img: "/images/season_39/Missy-Byrd.jpg",
+    img: "",
     description: "Age: 24 | Hometown: Tacoma, Washington",
     age: 24,
     hometown: "Tacoma, Washington",
@@ -165,7 +163,7 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0582",
     full_name: "Elizabeth Beisel",
-    img: "/images/season_39/Elizabeth-Beisel.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Saunderstown, Rhode Island",
     age: 26,
     hometown: "Saunderstown, Rhode Island",
@@ -173,7 +171,7 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0583",
     full_name: "Karishma Patel",
-    img: "/images/season_39/Karishma-Patel.jpg",
+    img: "",
     description: "Age: 37 | Hometown: Houston, Texas",
     age: 37,
     hometown: "Houston, Texas",
@@ -181,7 +179,7 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0584",
     full_name: "Elaine Stott",
-    img: "/images/season_39/Elaine-Stott.jpg",
+    img: "",
     description: "Age: 41 | Hometown: Rockholds, Kentucky",
     age: 41,
     hometown: "Rockholds, Kentucky",
@@ -189,16 +187,15 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0585",
     full_name: "Dan Spilo",
-    img: "/images/season_39/Dan-Spilo.jpg",
+    img: "",
     description: "Age: 48 | Hometown: Los Angeles, California",
     age: 48,
     hometown: "Los Angeles, California",
-    nickname: "Dan",
   }),
   buildPlayer({
     castaway_id: "US0586",
     full_name: "Janet Carbin",
-    img: "/images/season_39/Janet-Carbin.jpg",
+    img: "",
     description: "Age: 59 | Hometown: Palm Bay, Florida",
     age: 59,
     hometown: "Palm Bay, Florida",
@@ -206,7 +203,7 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0587",
     full_name: "Lauren Beck",
-    img: "/images/season_39/Lauren-Beck.jpg",
+    img: "",
     description: "Age: 28 | Hometown: Glendale, California",
     age: 28,
     hometown: "Glendale, California",
@@ -214,7 +211,7 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0588",
     full_name: "Noura Salman",
-    img: "/images/season_39/Noura-Salman.jpg",
+    img: "",
     description: "Age: 36 | Hometown: North Potomac, Maryland",
     age: 36,
     hometown: "North Potomac, Maryland",
@@ -222,7 +219,7 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0589",
     full_name: "Dean Kowalski",
-    img: "/images/season_39/Dean-Kowalski.jpg",
+    img: "",
     description: "Age: 28 | Hometown: New York City, New York",
     age: 28,
     hometown: "New York City, New York",
@@ -230,11 +227,10 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0590",
     full_name: "Tommy Sheehan",
-    img: "/images/season_39/Tommy-Sheehan.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Long Beach, New York",
     age: 26,
     hometown: "Long Beach, New York",
-    nickname: "Tommy",
   }),
 ] satisfies Player<CastawayIdType, SeasonNumber>[];
 
@@ -388,7 +384,7 @@ export const SEASON_39_CHALLENGES = {
     season_num: 39,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 0,
     winning_castaways: [
       "US0572",
@@ -430,7 +426,7 @@ export const SEASON_39_CHALLENGES = {
     season_num: 39,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 2,
     winning_castaways: [
       "US0573",
@@ -470,7 +466,7 @@ export const SEASON_39_CHALLENGES = {
     season_num: 39,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 4,
     winning_castaways: [
       "US0576",
@@ -510,7 +506,7 @@ export const SEASON_39_CHALLENGES = {
     season_num: 39,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 6,
     winning_castaways: [
       "US0576",
@@ -569,7 +565,7 @@ export const SEASON_39_CHALLENGES = {
     season_num: 39,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 9,
     winning_castaways: [
       "US0576",
@@ -607,7 +603,7 @@ export const SEASON_39_CHALLENGES = {
     season_num: 39,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 11,
     winning_castaways: [
       "US0577",
@@ -643,7 +639,7 @@ export const SEASON_39_CHALLENGES = {
     season_num: 39,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 13,
     winning_castaways: [
       "US0580",

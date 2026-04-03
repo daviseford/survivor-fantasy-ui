@@ -229,7 +229,11 @@ export type GameEvent<
   castaway_id: Id;
 };
 
-export const ChallengeWinActions = ["reward", "immunity"] as const;
+export const ChallengeWinActions = [
+  "reward",
+  "immunity",
+  "team_immunity",
+] as const;
 
 export type ChallengeWinAction = (typeof ChallengeWinActions)[number];
 

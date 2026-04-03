@@ -75,7 +75,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0517",
     full_name: "Stephanie Gonzalez",
-    img: "/images/season_36/Stephanie-Gonzalez.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Ocala, Florida",
     age: 26,
     hometown: "Ocala, Florida",
@@ -84,7 +84,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0518",
     full_name: "Jacob Derwin",
-    img: "/images/season_36/Jacob-Derwin.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Brooklyn, New York",
     age: 22,
     hometown: "Brooklyn, New York",
@@ -92,7 +92,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0519",
     full_name: "Morgan Ricke",
-    img: "/images/season_36/Morgan-Ricke.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Orlando, Florida",
     age: 29,
     hometown: "Orlando, Florida",
@@ -100,7 +100,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0520",
     full_name: "Brendan Shapiro",
-    img: "/images/season_36/Brendan-Shapiro.jpg",
+    img: "",
     description: "Age: 40 | Hometown: Herndon, Virginia",
     age: 40,
     hometown: "Herndon, Virginia",
@@ -108,7 +108,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0521",
     full_name: "Stephanie Johnson",
-    img: "/images/season_36/Stephanie-Johnson.jpg",
+    img: "",
     description: "Age: 34 | Hometown: Chicago, Illinois",
     age: 34,
     hometown: "Chicago, Illinois",
@@ -116,7 +116,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0522",
     full_name: "James Lim",
-    img: "/images/season_36/James-Lim.jpg",
+    img: "",
     description: "Age: 24 | Hometown: New York City, New York",
     age: 24,
     hometown: "New York City, New York",
@@ -124,7 +124,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0523",
     full_name: "Bradley Kleihege",
-    img: "/images/season_36/Bradley-Kleihege.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Los Angeles, California",
     age: 26,
     hometown: "Los Angeles, California",
@@ -132,16 +132,15 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0524",
     full_name: "Chris Noble",
-    img: "/images/season_36/Chris-Noble.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Brooklyn, New York",
     age: 27,
     hometown: "Brooklyn, New York",
-    nickname: "Chris",
   }),
   buildPlayer({
     castaway_id: "US0525",
     full_name: "Libby Vincek",
-    img: "/images/season_36/Libby-Vincek.jpg",
+    img: "",
     description: "Age: 24 | Hometown: Houston, Texas",
     age: 24,
     hometown: "Houston, Texas",
@@ -149,7 +148,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0526",
     full_name: "Desiree Afuye",
-    img: "/images/season_36/Desiree-Afuye.jpg",
+    img: "",
     description: "Age: 21 | Hometown: Brooklyn, New York",
     age: 21,
     hometown: "Brooklyn, New York",
@@ -157,7 +156,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0527",
     full_name: "Jenna Bowman",
-    img: "/images/season_36/Jenna-Bowman.jpg",
+    img: "",
     description: "Age: 23 | Hometown: Venice Beach, California",
     age: 23,
     hometown: "Venice Beach, California",
@@ -165,7 +164,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0528",
     full_name: "Michael Yerger",
-    img: "/images/season_36/Michael-Yerger.jpg",
+    img: "",
     description: "Age: 18 | Hometown: Los Angeles, California",
     age: 18,
     hometown: "Los Angeles, California",
@@ -173,7 +172,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0529",
     full_name: "Chelsea Townsend",
-    img: "/images/season_36/Chelsea-Townsend.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Los Angeles, California",
     age: 25,
     hometown: "Los Angeles, California",
@@ -181,7 +180,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0530",
     full_name: "Kellyn Bechtold",
-    img: "/images/season_36/Kellyn-Bechtold.jpg",
+    img: "",
     description: "Age: 30 | Hometown: Denver, Colorado",
     age: 30,
     hometown: "Denver, Colorado",
@@ -189,7 +188,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0531",
     full_name: "Sebastian Noel",
-    img: "/images/season_36/Sebastian-Noel.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Satellite Beach, Florida",
     age: 22,
     hometown: "Satellite Beach, Florida",
@@ -197,7 +196,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0532",
     full_name: "Donathan Hurley",
-    img: "/images/season_36/Donathan-Hurley.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Kimper, Kentucky",
     age: 25,
     hometown: "Kimper, Kentucky",
@@ -205,7 +204,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0533",
     full_name: "Angela Perkins",
-    img: "/images/season_36/Angela-Perkins.jpg",
+    img: "",
     description: "Age: 42 | Hometown: Cincinnati, Ohio",
     age: 42,
     hometown: "Cincinnati, Ohio",
@@ -213,7 +212,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0534",
     full_name: "Laurel Johnson",
-    img: "/images/season_36/Laurel-Johnson.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Minneapolis, Minnesota",
     age: 29,
     hometown: "Minneapolis, Minnesota",
@@ -221,7 +220,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0535",
     full_name: "Domenick Abbate",
-    img: "/images/season_36/Domenick-Abbate.jpg",
+    img: "",
     description: "Age: 38 | Hometown: Nesconset, New York",
     age: 38,
     hometown: "Nesconset, New York",
@@ -229,7 +228,7 @@ export const SEASON_36_PLAYERS = [
   buildPlayer({
     castaway_id: "US0536",
     full_name: "Wendell Holland",
-    img: "/images/season_36/Wendell-Holland.jpg",
+    img: "",
     description: "Age: 33 | Hometown: Philadelphia, Pennsylvania",
     age: 33,
     hometown: "Philadelphia, Pennsylvania",
@@ -407,7 +406,7 @@ export const SEASON_36_CHALLENGES = {
     season_num: 36,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 1,
     winning_castaways: [
       "US0519",
@@ -428,7 +427,7 @@ export const SEASON_36_CHALLENGES = {
     season_num: 36,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 2,
     winning_castaways: [
       "US0519",
@@ -470,7 +469,7 @@ export const SEASON_36_CHALLENGES = {
     season_num: 36,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 4,
     winning_castaways: [
       "US0520",
@@ -529,7 +528,7 @@ export const SEASON_36_CHALLENGES = {
     season_num: 36,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 7,
     winning_castaways: [
       "US0522",
@@ -567,7 +566,7 @@ export const SEASON_36_CHALLENGES = {
     season_num: 36,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 9,
     winning_castaways: [
       "US0522",
@@ -586,7 +585,7 @@ export const SEASON_36_CHALLENGES = {
     season_num: 36,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 10,
     winning_castaways: ["US0523", "US0525", "US0529", "US0532", "US0535"],
   },
@@ -596,7 +595,7 @@ export const SEASON_36_CHALLENGES = {
     season_num: 36,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 11,
     winning_castaways: ["US0524", "US0527", "US0531", "US0534", "US0536"],
   },
@@ -626,7 +625,7 @@ export const SEASON_36_CHALLENGES = {
     season_num: 36,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 14,
     winning_castaways: ["US0526", "US0528", "US0530", "US0533"],
   },
@@ -636,7 +635,7 @@ export const SEASON_36_CHALLENGES = {
     season_num: 36,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 15,
     winning_castaways: ["US0524", "US0527", "US0531", "US0534", "US0536"],
   },

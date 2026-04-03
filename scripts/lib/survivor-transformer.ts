@@ -17,6 +17,7 @@ import type {
 } from "./survivor-types.js";
 import type {
   ScrapedChallenge,
+  ScrapedChallengeVariant,
   ScrapedElimination,
   ScrapedEpisode,
   ScrapedGameEvent,
@@ -198,6 +199,19 @@ function transformEpisodes(
 
 // --- Challenge transformation ---
 
+/** Determine whether an immunity challenge is individual or team/tribal. */
+function getImmunityVariant(
+  first: SurvivorChallengeResult,
+  winners: SurvivorChallengeResult[],
+): "immunity" | "team_immunity" {
+  const ot = first.outcome_type;
+  if (ot === "Individual") return "immunity";
+  if (ot === "Tribal" || ot === "Team") return "team_immunity";
+  // Fallback for null/empty outcome_type on early seasons
+  if (winners.some((w) => w.won_individual_immunity === 1)) return "immunity";
+  return "team_immunity";
+}
+
 function transformChallenges(
   results: SurvivorChallengeResult[],
 ): ScrapedChallenge[] {
@@ -240,7 +254,7 @@ function transformChallenges(
         immunityWinners,
         first,
         epNum,
-        "immunity",
+        getImmunityVariant(first, immunityWinners),
         challenges,
         order,
       );
@@ -253,8 +267,10 @@ function transformChallenges(
         order,
       );
     } else {
-      const variant = type.includes("immunity") ? "immunity" : "reward";
       const winners = entries.filter((e) => e.result.startsWith("Won"));
+      const variant = type.includes("immunity")
+        ? getImmunityVariant(first, winners)
+        : "reward";
       order += emitChallengeEntries(
         winners,
         first,
@@ -274,7 +290,7 @@ function emitChallengeEntries(
   winners: SurvivorChallengeResult[],
   first: SurvivorChallengeResult,
   epNum: number,
-  variant: "reward" | "immunity" | "combined",
+  variant: ScrapedChallengeVariant,
   challenges: ScrapedChallenge[],
   startOrder: number,
 ): number {
@@ -313,7 +329,7 @@ function transformEliminations(
   // Filter to eliminated players — exclude the winner (they were never eliminated)
   // Sort by order (elimination order)
   const eliminated = castaways
-    .filter((c) => c.result !== "" && !c.winner)
+    .filter((c) => c.result != null && c.result !== "" && !c.winner)
     .sort((a, b) => a.order - b.order);
 
   return eliminated.map((c, idx) => {

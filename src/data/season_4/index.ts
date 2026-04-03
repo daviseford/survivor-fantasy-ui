@@ -49,9 +49,9 @@ export const SEASON_4_CASTAWAY_LOOKUP: CastawayLookup = {
   US0050: { full_name: "Patricia Jackson", castaway: "Patricia" },
   US0051: { full_name: "Hunter Ellis", castaway: "Hunter" },
   US0052: { full_name: "Sarah Jones", castaway: "Sarah" },
-  US0053: { full_name: "Gabriel Cade", castaway: "Gabe" },
+  US0053: { full_name: "Gabriel Cade", castaway: "Gabriel" },
   US0054: { full_name: "Gina Crews", castaway: "Gina" },
-  US0055: { full_name: "Rob Mariano", castaway: "Rob" },
+  US0055: { full_name: "Rob Mariano", castaway: "Boston Rob" },
   US0056: { full_name: "John Carroll", castaway: "John" },
   US0057: { full_name: "Zoe Zanidakis", castaway: "Zoe" },
   US0058: { full_name: "Tammy Leitner", castaway: "Tammy" },
@@ -60,14 +60,14 @@ export const SEASON_4_CASTAWAY_LOOKUP: CastawayLookup = {
   US0061: { full_name: "Paschal English", castaway: "Paschal" },
   US0062: { full_name: "Kathy Vavrick-O'Brien", castaway: "Kathy" },
   US0063: { full_name: "Neleh Dennis", castaway: "Neleh" },
-  US0064: { full_name: "Vecepia Towery", castaway: "Vee" },
+  US0064: { full_name: "Vecepia Towery", castaway: "Vecepia" },
 };
 
 export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0049",
     full_name: "Peter Harkey",
-    img: "/images/season_4/Peter-Harkey.jpg",
+    img: "",
     description: "Age: 44 | Hometown: Millis, Massachusetts",
     age: 44,
     hometown: "Millis, Massachusetts",
@@ -75,7 +75,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0050",
     full_name: "Patricia Jackson",
-    img: "/images/season_4/Patricia-Jackson.jpg",
+    img: "",
     description: "Age: 49 | Hometown: Lugoff, South Carolina",
     age: 49,
     hometown: "Lugoff, South Carolina",
@@ -83,7 +83,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0051",
     full_name: "Hunter Ellis",
-    img: "/images/season_4/Hunter-Ellis.jpg",
+    img: "",
     description: "Age: 33 | Hometown: La Jolla, California",
     age: 33,
     hometown: "La Jolla, California",
@@ -91,7 +91,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0052",
     full_name: "Sarah Jones",
-    img: "/images/season_4/Sarah-Jones.jpg",
+    img: "",
     description: "Age: 24 | Hometown: Newport Beach, California",
     age: 24,
     hometown: "Newport Beach, California",
@@ -99,16 +99,15 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0053",
     full_name: "Gabriel Cade",
-    img: "/images/season_4/Gabriel-Cade.jpg",
+    img: "",
     description: "Age: 23 | Hometown: Hollywood, California",
     age: 23,
     hometown: "Hollywood, California",
-    nickname: "Gabe",
   }),
   buildPlayer({
     castaway_id: "US0054",
     full_name: "Gina Crews",
-    img: "/images/season_4/Gina-Crews.jpg",
+    img: "",
     description: "Age: 28 | Hometown: Gainesville, Florida",
     age: 28,
     hometown: "Gainesville, Florida",
@@ -116,16 +115,16 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0055",
     full_name: "Rob Mariano",
-    img: "/images/season_4/Rob-Mariano.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Canton, Massachusetts",
     age: 25,
     hometown: "Canton, Massachusetts",
-    nickname: "Rob",
+    nickname: "Boston Rob",
   }),
   buildPlayer({
     castaway_id: "US0056",
     full_name: "John Carroll",
-    img: "/images/season_4/John-Carroll.jpg",
+    img: "",
     description: "Age: 36 | Hometown: Omaha, Nebraska",
     age: 36,
     hometown: "Omaha, Nebraska",
@@ -133,7 +132,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0057",
     full_name: "Zoe Zanidakis",
-    img: "/images/season_4/Zoe-Zanidakis.jpg",
+    img: "",
     description: "Age: 35 | Hometown: Monhegan, Maine",
     age: 35,
     hometown: "Monhegan, Maine",
@@ -141,16 +140,15 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0058",
     full_name: "Tammy Leitner",
-    img: "/images/season_4/Tammy-Leitner.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Mesa, Arizona",
     age: 29,
     hometown: "Mesa, Arizona",
-    nickname: "Tammy",
   }),
   buildPlayer({
     castaway_id: "US0059",
     full_name: "Robert DeCanio",
-    img: "/images/season_4/Robert-DeCanio.jpg",
+    img: "",
     description: "Age: 38 | Hometown: College Point, New York",
     age: 38,
     hometown: "College Point, New York",
@@ -158,7 +156,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0060",
     full_name: "Sean Rector",
-    img: "/images/season_4/Sean-Rector.jpg",
+    img: "",
     description: "Age: 30 | Hometown: Los Angeles, California",
     age: 30,
     hometown: "Los Angeles, California",
@@ -166,7 +164,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0061",
     full_name: "Paschal English",
-    img: "/images/season_4/Paschal-English.jpg",
+    img: "",
     description: "Age: 56 | Hometown: Thomaston, Georgia",
     age: 56,
     hometown: "Thomaston, Georgia",
@@ -182,7 +180,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0063",
     full_name: "Neleh Dennis",
-    img: "/images/season_4/Neleh-Dennis.jpg",
+    img: "",
     description: "Age: 21 | Hometown: Layton, Utah",
     age: 21,
     hometown: "Layton, Utah",
@@ -190,11 +188,10 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0064",
     full_name: "Vecepia Towery",
-    img: "/images/season_4/Vecepia-Towery.jpg",
+    img: "",
     description: "Age: 36 | Hometown: Hayward, California",
     age: 36,
     hometown: "Hayward, California",
-    nickname: "Vee",
   }),
 ] satisfies Player<CastawayIdType, SeasonNumber>[];
 
@@ -358,7 +355,7 @@ export const SEASON_4_CHALLENGES = {
     season_num: 4,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 0,
     winning_castaways: [
       "US0053",
@@ -396,7 +393,7 @@ export const SEASON_4_CHALLENGES = {
     season_num: 4,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 2,
     winning_castaways: [
       "US0053",
@@ -434,7 +431,7 @@ export const SEASON_4_CHALLENGES = {
     season_num: 4,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 4,
     winning_castaways: [
       "US0053",
@@ -453,7 +450,7 @@ export const SEASON_4_CHALLENGES = {
     season_num: 4,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 5,
     winning_castaways: [
       "US0053",
@@ -482,7 +479,7 @@ export const SEASON_4_CHALLENGES = {
     season_num: 4,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 7,
     winning_castaways: ["US0054", "US0061", "US0062", "US0063"],
   },
@@ -502,7 +499,7 @@ export const SEASON_4_CHALLENGES = {
     season_num: 4,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 9,
     winning_castaways: [
       "US0055",

@@ -71,7 +71,7 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0407",
     full_name: "David Samson",
-    img: "/images/season_28/David-Samson.jpg",
+    img: "",
     description: "Age: 45 | Hometown: Plantation, Florida",
     age: 45,
     hometown: "Plantation, Florida",
@@ -79,7 +79,7 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0408",
     full_name: "Garrett Adelstein",
-    img: "/images/season_28/Garrett-Adelstein.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Santa Monica, California",
     age: 27,
     hometown: "Santa Monica, California",
@@ -87,7 +87,7 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0409",
     full_name: "Brice Johnston",
-    img: "/images/season_28/Brice-Johnston.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Philadelphia, Pennsylvania",
     age: 27,
     hometown: "Philadelphia, Pennsylvania",
@@ -95,7 +95,7 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0410",
     full_name: "J'Tia Taylor",
-    img: "/images/season_28/J'Tia-Taylor.jpg",
+    img: "",
     description: "Age: 31 | Hometown: Chicago, Illinois",
     age: 31,
     hometown: "Chicago, Illinois",
@@ -103,16 +103,15 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0411",
     full_name: "Cliff Robinson",
-    img: "/images/season_28/Cliff-Robinson.jpg",
+    img: "",
     description: "Age: 46 | Hometown: Buffalo, New York",
     age: 46,
     hometown: "Buffalo, New York",
-    nickname: "Cliff",
   }),
   buildPlayer({
     castaway_id: "US0412",
     full_name: "Lindsey Ogle",
-    img: "/images/season_28/Lindsey-Ogle.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Kokomo, Indiana",
     age: 29,
     hometown: "Kokomo, Indiana",
@@ -120,7 +119,7 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0413",
     full_name: "Alexis Maxwell",
-    img: "/images/season_28/Alexis-Maxwell.jpg",
+    img: "",
     description: "Age: 21 | Hometown: Addison, Illinois",
     age: 21,
     hometown: "Addison, Illinois",
@@ -128,7 +127,7 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0414",
     full_name: "Sarah Lacina",
-    img: "/images/season_28/Sarah-Lacina.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Cedar Rapids, Iowa",
     age: 29,
     hometown: "Cedar Rapids, Iowa",
@@ -136,7 +135,7 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0415",
     full_name: "Morgan McLeod",
-    img: "/images/season_28/Morgan-McLeod.jpg",
+    img: "",
     description: "Age: 21 | Hometown: San Jose, California",
     age: 21,
     hometown: "San Jose, California",
@@ -144,16 +143,15 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0416",
     full_name: "LJ McKanas",
-    img: "/images/season_28/LJ-McKanas.jpg",
+    img: "",
     description: "Age: 34 | Hometown: Boston, Massachusetts",
     age: 34,
     hometown: "Boston, Massachusetts",
-    nickname: "LJ",
   }),
   buildPlayer({
     castaway_id: "US0417",
     full_name: "Jeremiah Wood",
-    img: "/images/season_28/Jeremiah-Wood.jpg",
+    img: "",
     description: "Age: 34 | Hometown: Dobson, North Carolina",
     age: 34,
     hometown: "Dobson, North Carolina",
@@ -161,7 +159,7 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0418",
     full_name: "Jefra Bland",
-    img: "/images/season_28/Jefra-Bland.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Campbellsville, Kentucky",
     age: 22,
     hometown: "Campbellsville, Kentucky",
@@ -169,7 +167,7 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0419",
     full_name: "Latasha Fox",
-    img: "/images/season_28/Latasha-Fox.jpg",
+    img: "",
     description: "Age: 37 | Hometown: St. Louis, Missouri",
     age: 37,
     hometown: "St. Louis, Missouri",
@@ -178,16 +176,15 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0420",
     full_name: "Trish Hegarty",
-    img: "/images/season_28/Trish-Hegarty.jpg",
+    img: "",
     description: "Age: 48 | Hometown: Needham, Massachusetts",
     age: 48,
     hometown: "Needham, Massachusetts",
-    nickname: "Trish",
   }),
   buildPlayer({
     castaway_id: "US0421",
     full_name: "Spencer Bledsoe",
-    img: "/images/season_28/Spencer-Bledsoe.jpg",
+    img: "",
     description: "Age: 21 | Hometown: Chicago, Illinois",
     age: 21,
     hometown: "Chicago, Illinois",
@@ -195,7 +192,7 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0422",
     full_name: "Kassandra McQuillen",
-    img: "/images/season_28/Kassandra-McQuillen.jpg",
+    img: "",
     description: "Age: 41 | Hometown: Tehachapi, California",
     age: 41,
     hometown: "Tehachapi, California",
@@ -213,11 +210,10 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0424",
     full_name: "Tony Vlachos",
-    img: "/images/season_28/Tony-Vlachos.jpg",
+    img: "",
     description: "Age: 39 | Hometown: Jersey City, New Jersey",
     age: 39,
     hometown: "Jersey City, New Jersey",
-    nickname: "Tony",
   }),
 ] satisfies Player<CastawayIdType, SeasonNumber>[];
 
@@ -371,7 +367,7 @@ export const SEASON_28_CHALLENGES = {
     season_num: 28,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 0,
     winning_castaways: [
       "US0409",
@@ -405,7 +401,7 @@ export const SEASON_28_CHALLENGES = {
     season_num: 28,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 2,
     winning_castaways: [
       "US0411",
@@ -439,7 +435,7 @@ export const SEASON_28_CHALLENGES = {
     season_num: 28,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 4,
     winning_castaways: [
       "US0411",
@@ -456,7 +452,7 @@ export const SEASON_28_CHALLENGES = {
     season_num: 28,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 5,
     winning_castaways: ["US0410", "US0419", "US0421", "US0422"],
   },
@@ -520,7 +516,7 @@ export const SEASON_28_CHALLENGES = {
     season_num: 28,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 10,
     winning_castaways: [
       "US0411",
@@ -537,7 +533,7 @@ export const SEASON_28_CHALLENGES = {
     season_num: 28,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 11,
     winning_castaways: ["US0413", "US0415", "US0416", "US0417", "US0418"],
   },
@@ -565,7 +561,7 @@ export const SEASON_28_CHALLENGES = {
     season_num: 28,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 13,
     winning_castaways: [
       "US0411",
@@ -593,7 +589,7 @@ export const SEASON_28_CHALLENGES = {
     season_num: 28,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 15,
     winning_castaways: ["US0416", "US0418", "US0420", "US0423", "US0424"],
   },

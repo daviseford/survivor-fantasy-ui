@@ -52,7 +52,7 @@ export const SEASON_16_CASTAWAY_LOOKUP: CastawayLookup = {
   US0111: { full_name: "Jon Dalton", castaway: "Jonny Fairplay" },
   US0238: { full_name: "Mary Sartain", castaway: "Mary" },
   US0218: { full_name: "Yau-Man Chan", castaway: "Yau-Man" },
-  US0239: { full_name: "Michael Bortone", castaway: "Mikey B." },
+  US0239: { full_name: "Michael Bortone", castaway: "Mikey B" },
   US0240: { full_name: "Joel Anderson", castaway: "Joel" },
   US0196: { full_name: "Jonathan Penner", castaway: "Jonathan" },
   US0241: { full_name: "Chet Welch", castaway: "Chet" },
@@ -75,7 +75,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0111",
     full_name: "Jon Dalton",
-    img: "/images/season_16/Jon-Dalton.jpg",
+    img: "",
     description: "Age: 33 | Hometown: Los Angeles, California",
     age: 33,
     hometown: "Los Angeles, California",
@@ -84,7 +84,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0238",
     full_name: "Mary Sartain",
-    img: "/images/season_16/Mary-Sartain.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Emeryville, California",
     age: 29,
     hometown: "Emeryville, California",
@@ -92,7 +92,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0218",
     full_name: "Yau-Man Chan",
-    img: "/images/season_16/Yau-Man-Chan.jpg",
+    img: "",
     description: "Age: 55 | Hometown: Martinez, California",
     age: 55,
     hometown: "Martinez, California",
@@ -100,16 +100,16 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0239",
     full_name: "Michael Bortone",
-    img: "/images/season_16/Michael-Bortone.jpg",
+    img: "",
     description: "Age: 34 | Hometown: Los Angeles, California",
     age: 34,
     hometown: "Los Angeles, California",
-    nickname: "Mikey B.",
+    nickname: "Mikey B",
   }),
   buildPlayer({
     castaway_id: "US0240",
     full_name: "Joel Anderson",
-    img: "/images/season_16/Joel-Anderson.jpg",
+    img: "",
     description: "Age: 32 | Hometown: Avondale, Arizona",
     age: 32,
     hometown: "Avondale, Arizona",
@@ -117,7 +117,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0196",
     full_name: "Jonathan Penner",
-    img: "/images/season_16/Jonathan-Penner.jpg",
+    img: "",
     description: "Age: 45 | Hometown: Los Angeles, California",
     age: 45,
     hometown: "Los Angeles, California",
@@ -125,7 +125,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0241",
     full_name: "Chet Welch",
-    img: "/images/season_16/Chet-Welch.jpg",
+    img: "",
     description: "Age: 48 | Hometown: Ford City, Pennsylvania",
     age: 48,
     hometown: "Ford City, Pennsylvania",
@@ -133,7 +133,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0242",
     full_name: "Kathleen Sleckman",
-    img: "/images/season_16/Kathleen-Sleckman.jpg",
+    img: "",
     description: "Age: 45 | Hometown: Glen Ellyn, Illinois",
     age: 45,
     hometown: "Glen Ellyn, Illinois",
@@ -142,7 +142,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0243",
     full_name: "Tracy Hughes-Wolf",
-    img: "/images/season_16/Tracy-Hughes-Wolf.jpg",
+    img: "",
     description: "Age: 43 | Hometown: Fredericksburg, Virginia",
     age: 43,
     hometown: "Fredericksburg, Virginia",
@@ -150,7 +150,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0125",
     full_name: "Ami Cusack",
-    img: "/images/season_16/Ami-Cusack.jpg",
+    img: "",
     description: "Age: 34 | Hometown: Golden, Colorado",
     age: 34,
     hometown: "Golden, Colorado",
@@ -158,7 +158,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0127",
     full_name: "Eliza Orlins",
-    img: "/images/season_16/Eliza-Orlins.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Manhattan, New York",
     age: 25,
     hometown: "Manhattan, New York",
@@ -166,7 +166,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0201",
     full_name: "Oscar Lusth",
-    img: "/images/season_16/Oscar-Lusth.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Venice, California",
     age: 26,
     hometown: "Venice, California",
@@ -175,7 +175,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0244",
     full_name: "Jason Siska",
-    img: "/images/season_16/Jason-Siska.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Fox River Grove, Illinois",
     age: 22,
     hometown: "Fox River Grove, Illinois",
@@ -183,7 +183,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0231",
     full_name: "James Clement",
-    img: "/images/season_16/James-Clement.jpg",
+    img: "",
     description: "Age: 30 | Hometown: Lafayette, Louisiana",
     age: 30,
     hometown: "Lafayette, Louisiana",
@@ -191,7 +191,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0245",
     full_name: "Alexis Jones",
-    img: "/images/season_16/Alexis-Jones.jpg",
+    img: "",
     description: "Age: 24 | Hometown: Beverly Hills, California",
     age: 24,
     hometown: "Beverly Hills, California",
@@ -199,7 +199,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0246",
     full_name: "Erik Reichenbach",
-    img: "/images/season_16/Erik-Reichenbach.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Ypsilanti, Michigan",
     age: 22,
     hometown: "Ypsilanti, Michigan",
@@ -207,7 +207,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0247",
     full_name: "Natalie Bolton",
-    img: "/images/season_16/Natalie-Bolton.jpg",
+    img: "",
     description: "Age: 32 | Hometown: West Hollywood, California",
     age: 32,
     hometown: "West Hollywood, California",
@@ -215,7 +215,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0179",
     full_name: "Cirie Fields",
-    img: "/images/season_16/Cirie-Fields.jpg",
+    img: "",
     description: "Age: 37 | Hometown: Norwalk, Connecticut",
     age: 37,
     hometown: "Norwalk, Connecticut",
@@ -223,7 +223,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0235",
     full_name: "Amanda Kimmel",
-    img: "/images/season_16/Amanda-Kimmel.jpg",
+    img: "",
     description: "Age: 23 | Hometown: Los Angeles, California",
     age: 23,
     hometown: "Los Angeles, California",
@@ -231,7 +231,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0197",
     full_name: "Parvati Shallow",
-    img: "/images/season_16/Parvati-Shallow.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Los Angeles, California",
     age: 25,
     hometown: "Los Angeles, California",
@@ -408,7 +408,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 1,
     winning_castaways: [
       "US0238",
@@ -450,7 +450,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 3,
     winning_castaways: [
       "US0125",
@@ -510,7 +510,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 6,
     winning_castaways: [
       "US0239",
@@ -549,7 +549,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 8,
     winning_castaways: [
       "US0125",
@@ -587,7 +587,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 10,
     winning_castaways: [
       "US0127",
@@ -624,7 +624,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 12,
     winning_castaways: [
       "US0127",
@@ -659,7 +659,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 14,
     winning_castaways: [
       "US0127",
@@ -676,7 +676,7 @@ export const SEASON_16_CHALLENGES = {
     season_num: 16,
     episode_id: "episode_8",
     episode_num: 8,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 15,
     winning_castaways: [
       "US0127",

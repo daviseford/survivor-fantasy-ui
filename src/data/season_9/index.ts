@@ -49,14 +49,14 @@ const buildPlayer = <T extends CastawayIdType>(
 export const SEASON_9_CASTAWAY_LOOKUP: CastawayLookup = {
   US0113: { full_name: "Brook Geraghty", castaway: "Brook" },
   US0114: { full_name: "Dolly Neely", castaway: "Dolly" },
-  US0115: { full_name: "John Palyok", castaway: "J.P." },
+  US0115: { full_name: "John Palyok", castaway: "John P." },
   US0116: { full_name: "Mia Galeotalanza", castaway: "Mia" },
   US0117: { full_name: "Brady Finta", castaway: "Brady" },
-  US0118: { full_name: "Travis Sampson", castaway: "Bubba" },
+  US0118: { full_name: "Travis Sampson", castaway: "Travis" },
   US0119: { full_name: "Lisa Keiffer", castaway: "Lisa" },
   US0120: { full_name: "John Kenney", castaway: "John K." },
   US0121: { full_name: "Rory Freeman", castaway: "Rory" },
-  US0122: { full_name: "Lea Masters", castaway: "Sarge" },
+  US0122: { full_name: "Lea Masters", castaway: "Lea" },
   US0123: { full_name: "James Crittenden", castaway: "Chad" },
   US0124: { full_name: "Leann Slaby", castaway: "Leann" },
   US0125: { full_name: "Ami Cusack", castaway: "Ami" },
@@ -71,7 +71,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0113",
     full_name: "Brook Geraghty",
-    img: "/images/season_9/Brook-Geraghty.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Winthrop, Massachusetts",
     age: 27,
     hometown: "Winthrop, Massachusetts",
@@ -79,25 +79,24 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0114",
     full_name: "Dolly Neely",
-    img: "/images/season_9/Dolly-Neely.jpg",
+    img: "",
     description: "Age: 25 | Hometown: Lake Latonka, Pennsylvania",
     age: 25,
     hometown: "Lake Latonka, Pennsylvania",
-    nickname: "Dolly",
   }),
   buildPlayer({
     castaway_id: "US0115",
     full_name: "John Palyok",
-    img: "/images/season_9/John-Palyok.jpg",
+    img: "",
     description: "Age: 31 | Hometown: Los Angeles, California",
     age: 31,
     hometown: "Los Angeles, California",
-    nickname: "J.P.",
+    nickname: "John P.",
   }),
   buildPlayer({
     castaway_id: "US0116",
     full_name: "Mia Galeotalanza",
-    img: "/images/season_9/Mia-Galeotalanza.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Boston, Massachusetts",
     age: 29,
     hometown: "Boston, Massachusetts",
@@ -105,7 +104,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0117",
     full_name: "Brady Finta",
-    img: "/images/season_9/Brady-Finta.jpg",
+    img: "",
     description: "Age: 33 | Hometown: Huntington Beach, California",
     age: 33,
     hometown: "Huntington Beach, California",
@@ -113,16 +112,15 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0118",
     full_name: "Travis Sampson",
-    img: "/images/season_9/Travis-Sampson.jpg",
+    img: "",
     description: "Age: 33 | Hometown: Johnson City, Tennessee",
     age: 33,
     hometown: "Johnson City, Tennessee",
-    nickname: "Bubba",
   }),
   buildPlayer({
     castaway_id: "US0119",
     full_name: "Lisa Keiffer",
-    img: "/images/season_9/Lisa-Keiffer.jpg",
+    img: "",
     description: "Age: 44 | Hometown: Mandeville, Louisiana",
     age: 44,
     hometown: "Mandeville, Louisiana",
@@ -130,7 +128,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0120",
     full_name: "John Kenney",
-    img: "/images/season_9/John-Kenney.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Los Angeles, California",
     age: 22,
     hometown: "Los Angeles, California",
@@ -139,7 +137,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0121",
     full_name: "Rory Freeman",
-    img: "/images/season_9/Rory-Freeman.jpg",
+    img: "",
     description: "Age: 35 | Hometown: Des Moines, Iowa",
     age: 35,
     hometown: "Des Moines, Iowa",
@@ -147,11 +145,10 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0122",
     full_name: "Lea Masters",
-    img: "/images/season_9/Lea-Masters.jpg",
+    img: "",
     description: "Age: 40 | Hometown: Columbia, South Carolina",
     age: 40,
     hometown: "Columbia, South Carolina",
-    nickname: "Sarge",
   }),
   buildPlayer({
     castaway_id: "US0123",
@@ -165,7 +162,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0124",
     full_name: "Leann Slaby",
-    img: "/images/season_9/Leann-Slaby.jpg",
+    img: "",
     description: "Age: 35 | Hometown: Kansasville, Wisconsin",
     age: 35,
     hometown: "Kansasville, Wisconsin",
@@ -173,7 +170,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0125",
     full_name: "Ami Cusack",
-    img: "/images/season_9/Ami-Cusack.jpg",
+    img: "",
     description: "Age: 31 | Hometown: Lakewood, Colorado",
     age: 31,
     hometown: "Lakewood, Colorado",
@@ -181,7 +178,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0126",
     full_name: "Julie Berry",
-    img: "/images/season_9/Julie-Berry.jpg",
+    img: "",
     description: "Age: 23 | Hometown: Gorham, Maine",
     age: 23,
     hometown: "Gorham, Maine",
@@ -189,7 +186,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0127",
     full_name: "Eliza Orlins",
-    img: "/images/season_9/Eliza-Orlins.jpg",
+    img: "",
     description: "Age: 21 | Hometown: Syracuse, New York",
     age: 21,
     hometown: "Syracuse, New York",
@@ -197,7 +194,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0128",
     full_name: "Scout Cloud Lee",
-    img: "/images/season_9/Scout-Cloud-Lee.jpg",
+    img: "",
     description: "Age: 59 | Hometown: Stillwater, Oklahoma",
     age: 59,
     hometown: "Stillwater, Oklahoma",
@@ -205,7 +202,7 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0129",
     full_name: "Twila Tanner",
-    img: "/images/season_9/Twila-Tanner.jpg",
+    img: "",
     description: "Age: 41 | Hometown: Marshall, Missouri",
     age: 41,
     hometown: "Marshall, Missouri",
@@ -213,11 +210,10 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0130",
     full_name: "Chris Daugherty",
-    img: "/images/season_9/Chris-Daugherty.jpg",
+    img: "",
     description: "Age: 33 | Hometown: South Vienna, Ohio",
     age: 33,
     hometown: "South Vienna, Ohio",
-    nickname: "Chris",
   }),
 ] satisfies Player<CastawayIdType, SeasonNumber>[];
 
@@ -381,7 +377,7 @@ export const SEASON_9_CHALLENGES = {
     season_num: 9,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 0,
     winning_castaways: [
       "US0114",
@@ -441,7 +437,7 @@ export const SEASON_9_CHALLENGES = {
     season_num: 9,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 3,
     winning_castaways: [
       "US0115",
@@ -499,7 +495,7 @@ export const SEASON_9_CHALLENGES = {
     season_num: 9,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 7,
     winning_castaways: [
       "US0119",
@@ -534,7 +530,7 @@ export const SEASON_9_CHALLENGES = {
     season_num: 9,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 9,
     winning_castaways: [
       "US0120",
@@ -568,7 +564,7 @@ export const SEASON_9_CHALLENGES = {
     season_num: 9,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 11,
     winning_castaways: [
       "US0120",
@@ -595,7 +591,7 @@ export const SEASON_9_CHALLENGES = {
     season_num: 9,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 13,
     winning_castaways: ["US0121", "US0124", "US0125", "US0127", "US0128"],
   },
