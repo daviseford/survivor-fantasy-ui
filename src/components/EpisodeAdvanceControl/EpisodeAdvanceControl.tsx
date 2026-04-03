@@ -170,8 +170,8 @@ export const EpisodeAdvanceControl = ({
   const switchToLive = () => {
     const willAutoFinish = hasWinner && !competition.finished;
     const warningText = willAutoFinish
-      ? "This will reveal all episodes including results. This competition will be automatically marked as complete because the season has ended. This cannot be undone."
-      : "This will reveal all episodes including results. Are you sure?";
+      ? `This will reveal all ${totalEpisodes} episodes including results. This competition will be automatically marked as complete because the season has ended. This cannot be undone.`
+      : `This will reveal all ${totalEpisodes} episodes including results. Are you sure?`;
 
     modals.openConfirmModal({
       title: "Switch to Live?",
@@ -224,7 +224,7 @@ export const EpisodeAdvanceControl = ({
           </Text>
         )}
 
-        <Group gap="xs">
+        <Group gap="xs" wrap="wrap">
           <Button
             variant="light"
             color="gray"
@@ -246,10 +246,10 @@ export const EpisodeAdvanceControl = ({
               ? "Reveal Episode 1"
               : `Reveal Episode ${currentEpisode + 1}`}
           </Button>
-          <Button variant="subtle" size="sm" onClick={switchToLive}>
-            Switch to Live
-          </Button>
         </Group>
+        <Button variant="subtle" size="compact-sm" onClick={switchToLive} p={0}>
+          Switch to Live
+        </Button>
       </Stack>
     </Paper>
   );

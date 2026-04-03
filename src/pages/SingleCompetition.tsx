@@ -2,6 +2,7 @@ import {
   Accordion,
   Badge,
   Box,
+  Button,
   Divider,
   Group,
   Paper,
@@ -10,6 +11,7 @@ import {
   Title,
 } from "@mantine/core";
 import {
+  IconArrowLeft,
   IconChartDonut,
   IconChartLine,
   IconClipboardList,
@@ -17,6 +19,7 @@ import {
   IconTrophy,
   IconUsers,
 } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
 import { EpisodeAdvanceControl } from "../components/EpisodeAdvanceControl";
 import { PlayerGroupGrid } from "../components/MyPlayers";
 import { PropBetScoring } from "../components/PropBetTables";
@@ -88,6 +91,16 @@ export const SingleCompetition = () => {
 
   return (
     <Stack gap="xl" p="lg">
+      <Button
+        component={Link}
+        to="/competitions"
+        variant="subtle"
+        leftSection={<IconArrowLeft size={16} />}
+        w="fit-content"
+        px={0}
+      >
+        Back to competitions
+      </Button>
       <Box>
         <Group gap="xs" mb={4}>
           <Badge variant="light" size="sm">
