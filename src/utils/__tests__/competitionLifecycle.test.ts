@@ -207,6 +207,52 @@ describe("shouldAutoFinish", () => {
     ).toBe(false);
   });
 
+  // --- Mode toggle: finished competition scenarios ---
+
+  it("returns false for finished competition in Live mode (current_episode: null)", () => {
+    expect(
+      shouldAutoFinish({
+        events: eventsWithWinner,
+        competition: makeCompetition({ finished: true, current_episode: null }),
+        episodes,
+        slimUser: makeUser(),
+      }),
+    ).toBe(false);
+  });
+
+  it("returns false for finished competition in Watch-Along mode (current_episode: 5)", () => {
+    expect(
+      shouldAutoFinish({
+        events: eventsWithWinner,
+        competition: makeCompetition({ finished: true, current_episode: 5 }),
+        episodes,
+        slimUser: makeUser(),
+      }),
+    ).toBe(false);
+  });
+
+  it("returns false for finished competition in Watch-Along at episode 0", () => {
+    expect(
+      shouldAutoFinish({
+        events: eventsWithWinner,
+        competition: makeCompetition({ finished: true, current_episode: 0 }),
+        episodes,
+        slimUser: makeUser(),
+      }),
+    ).toBe(false);
+  });
+
+  it("returns false for finished competition in Watch-Along at finale", () => {
+    expect(
+      shouldAutoFinish({
+        events: eventsWithWinner,
+        competition: makeCompetition({ finished: true, current_episode: 13 }),
+        episodes,
+        slimUser: makeUser(),
+      }),
+    ).toBe(false);
+  });
+
   it("returns true when events is empty record but later populated with winner", () => {
     // First call with no events
     expect(

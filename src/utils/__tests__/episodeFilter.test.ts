@@ -131,3 +131,28 @@ describe("filterRecordByEpisode", () => {
     expect(filterRecordByEpisode({}, 3)).toEqual({});
   });
 });
+
+describe("mode toggle: rewatch scenario", () => {
+  const episodes = [makeEpisode(1), makeEpisode(2), makeEpisode(3)];
+  const events: Record<string, GameEvent> = {
+    event_1: makeEvent("1", 1),
+    event_2: makeEvent("2", 2),
+    event_3: makeEvent("3", 3),
+  };
+
+  it("filters correctly when a finished competition switches to Watch-Along mid-season", () => {
+    // Simulates a rewatch: finished competition toggled to Watch-Along at episode 2
+    const filteredEpisodes = filterEpisodesByMax(episodes, 2);
+    const filteredEvents = filterRecordByEpisode(events, 2);
+    expect(filteredEpisodes).toHaveLength(2);
+    expect(Object.keys(filteredEvents)).toEqual(["event_1", "event_2"]);
+  });
+
+  it("reveals all data when switched back to Live (null)", () => {
+    // Simulates toggling from Watch-Along back to Live
+    const filteredEpisodes = filterEpisodesByMax(episodes, null);
+    const filteredEvents = filterRecordByEpisode(events, null);
+    expect(filteredEpisodes).toEqual(episodes);
+    expect(filteredEvents).toEqual(events);
+  });
+});
