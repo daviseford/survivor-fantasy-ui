@@ -67,7 +67,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0081",
     full_name: "Ryan Aiken",
-    img: "/images/season_6/Ryan-Aiken.jpg",
+    img: "",
     description: "Age: 23 | Hometown: Ellicott City, Maryland",
     age: 23,
     hometown: "Ellicott City, Maryland",
@@ -75,7 +75,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0082",
     full_name: "Janet Koth",
-    img: "/images/season_6/Janet-Koth.jpg",
+    img: "",
     description: "Age: 46 | Hometown: Manchester, Missouri",
     age: 46,
     hometown: "Manchester, Missouri",
@@ -83,7 +83,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0083",
     full_name: "Daniel Lue",
-    img: "/images/season_6/Daniel-Lue.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Houston, Texas",
     age: 26,
     hometown: "Houston, Texas",
@@ -91,7 +91,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0084",
     full_name: "JoAnna Ward",
-    img: "/images/season_6/JoAnna-Ward.jpg",
+    img: "",
     description: "Age: 31 | Hometown: Orangeburg, South Carolina",
     age: 31,
     hometown: "Orangeburg, South Carolina",
@@ -99,7 +99,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0085",
     full_name: "Jeanne Hebert",
-    img: "/images/season_6/Jeanne-Hebert.jpg",
+    img: "",
     description: "Age: 40 | Hometown: North Attleboro, Massachusetts",
     age: 40,
     hometown: "North Attleboro, Massachusetts",
@@ -107,7 +107,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0086",
     full_name: "Shawna Mitchell",
-    img: "/images/season_6/Shawna-Mitchell.jpg",
+    img: "",
     description: "Age: 23 | Hometown: Los Angeles, California",
     age: 23,
     hometown: "Los Angeles, California",
@@ -115,7 +115,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0087",
     full_name: "Roger Sexton",
-    img: "/images/season_6/Roger-Sexton.jpg",
+    img: "",
     description: "Age: 56 | Hometown: Valencia, California",
     age: 56,
     hometown: "Valencia, California",
@@ -123,16 +123,15 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0088",
     full_name: "Dave Johnson",
-    img: "/images/season_6/Dave-Johnson.jpg",
+    img: "",
     description: "Age: 23 | Hometown: Pasadena, California",
     age: 23,
     hometown: "Pasadena, California",
-    nickname: "Dave",
   }),
   buildPlayer({
     castaway_id: "US0089",
     full_name: "Deena Bennett",
-    img: "/images/season_6/Deena-Bennett.jpg",
+    img: "",
     description: "Age: 35 | Hometown: Riverside, California",
     age: 35,
     hometown: "Riverside, California",
@@ -140,16 +139,15 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0090",
     full_name: "Alex Bell",
-    img: "/images/season_6/Alex-Bell.jpg",
+    img: "",
     description: "Age: 32 | Hometown: Los Angeles, California",
     age: 32,
     hometown: "Los Angeles, California",
-    nickname: "Alex",
   }),
   buildPlayer({
     castaway_id: "US0091",
     full_name: "Christy Smith",
-    img: "/images/season_6/Christy-Smith.jpg",
+    img: "",
     description: "Age: 24 | Hometown: Basalt, Colorado",
     age: 24,
     hometown: "Basalt, Colorado",
@@ -157,7 +155,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0092",
     full_name: "Heidi Strobel",
-    img: "/images/season_6/Heidi-Strobel.jpg",
+    img: "",
     description: "Age: 24 | Hometown: Jefferson City, Missouri",
     age: 24,
     hometown: "Jefferson City, Missouri",
@@ -165,7 +163,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0093",
     full_name: "Butch Lockley",
-    img: "/images/season_6/Butch-Lockley.jpg",
+    img: "",
     description: "Age: 50 | Hometown: Olney, Illinois",
     age: 50,
     hometown: "Olney, Illinois",
@@ -173,16 +171,15 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0094",
     full_name: "Rob Cesternino",
-    img: "/images/season_6/Rob-Cesternino.jpg",
+    img: "",
     description: "Age: 24 | Hometown: Wantagh, New York",
     age: 24,
     hometown: "Wantagh, New York",
-    nickname: "Rob",
   }),
   buildPlayer({
     castaway_id: "US0095",
     full_name: "Matthew von Ertfelda",
-    img: "/images/season_6/Matthew-von-Ertfelda.jpg",
+    img: "",
     description: "Age: 33 | Hometown: Washington, D.C.",
     age: 33,
     hometown: "Washington, D.C.",
@@ -190,7 +187,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0096",
     full_name: "Jenna Morasca",
-    img: "/images/season_6/Jenna-Morasca.jpg",
+    img: "",
     description: "Age: 21 | Hometown: Bridgeville, Pennsylvania",
     age: 21,
     hometown: "Bridgeville, Pennsylvania",
@@ -357,7 +354,7 @@ export const SEASON_6_CHALLENGES = {
     season_num: 6,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 0,
     winning_castaways: [
       "US0082",
@@ -395,7 +392,7 @@ export const SEASON_6_CHALLENGES = {
     season_num: 6,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 2,
     winning_castaways: [
       "US0083",
@@ -431,7 +428,7 @@ export const SEASON_6_CHALLENGES = {
     season_num: 6,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 4,
     winning_castaways: [
       "US0084",
@@ -466,7 +463,7 @@ export const SEASON_6_CHALLENGES = {
     season_num: 6,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 6,
     winning_castaways: [
       "US0087",
@@ -500,7 +497,7 @@ export const SEASON_6_CHALLENGES = {
     season_num: 6,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 8,
     winning_castaways: [
       "US0086",
@@ -527,7 +524,7 @@ export const SEASON_6_CHALLENGES = {
     season_num: 6,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 10,
     winning_castaways: ["US0087", "US0088", "US0091", "US0092", "US0093"],
   },

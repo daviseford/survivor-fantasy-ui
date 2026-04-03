@@ -76,7 +76,7 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0223",
     full_name: "Ashley Massaro",
-    img: "/images/season_15/Ashley-Massaro.jpg",
+    img: "",
     description: "Age: 28 | Hometown: East Northport, New York",
     age: 28,
     hometown: "East Northport, New York",
@@ -84,7 +84,7 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0224",
     full_name: "Leslie Nease",
-    img: "/images/season_15/Leslie-Nease.jpg",
+    img: "",
     description: "Age: 38 | Hometown: Tega Cay, South Carolina",
     age: 38,
     hometown: "Tega Cay, South Carolina",
@@ -92,7 +92,7 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0225",
     full_name: "Dave Cruser",
-    img: "/images/season_15/Dave-Cruser.jpg",
+    img: "",
     description: "Age: 37 | Hometown: Simi Valley, California",
     age: 37,
     hometown: "Simi Valley, California",
@@ -100,7 +100,7 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0226",
     full_name: "Aaron Reisberger",
-    img: "/images/season_15/Aaron-Reisberger.jpg",
+    img: "",
     description: "Age: 32 | Hometown: Venice, California",
     age: 32,
     hometown: "Venice, California",
@@ -108,7 +108,7 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0227",
     full_name: "Sherea Lloyd",
-    img: "/images/season_15/Sherea-Lloyd.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Atlanta, Georgia",
     age: 26,
     hometown: "Atlanta, Georgia",
@@ -116,7 +116,7 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0228",
     full_name: "Jaime Dugan",
-    img: "/images/season_15/Jaime-Dugan.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Columbia, South Carolina",
     age: 22,
     hometown: "Columbia, South Carolina",
@@ -124,7 +124,7 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0229",
     full_name: "Jean-Robert Bellande",
-    img: "/images/season_15/Jean-Robert-Bellande.jpg",
+    img: "",
     description: "Age: 36 | Hometown: Las Vegas, Nevada",
     age: 36,
     hometown: "Las Vegas, Nevada",
@@ -141,7 +141,7 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0231",
     full_name: "James Clement",
-    img: "/images/season_15/James-Clement.jpg",
+    img: "",
     description: "Age: 30 | Hometown: Lafayette, Louisiana",
     age: 30,
     hometown: "Lafayette, Louisiana",
@@ -149,7 +149,7 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0232",
     full_name: "Erik Huffman",
-    img: "/images/season_15/Erik-Huffman.jpg",
+    img: "",
     description: "Age: 26 | Hometown: Nashville, Tennessee",
     age: 26,
     hometown: "Nashville, Tennessee",
@@ -157,7 +157,7 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0233",
     full_name: "Peih-Gee Law",
-    img: "/images/season_15/Peih-Gee-Law.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Marina del Rey, California",
     age: 29,
     hometown: "Marina del Rey, California",
@@ -165,7 +165,7 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0234",
     full_name: "Denise Martin",
-    img: "/images/season_15/Denise-Martin.jpg",
+    img: "",
     description: "Age: 40 | Hometown: Douglas, Massachusetts",
     age: 40,
     hometown: "Douglas, Massachusetts",
@@ -173,7 +173,7 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0235",
     full_name: "Amanda Kimmel",
-    img: "/images/season_15/Amanda-Kimmel.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Los Angeles, California",
     age: 22,
     hometown: "Los Angeles, California",
@@ -181,7 +181,7 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0236",
     full_name: "Courtney Yates",
-    img: "/images/season_15/Courtney-Yates.jpg",
+    img: "",
     description: "Age: 26 | Hometown: New York City, New York",
     age: 26,
     hometown: "New York City, New York",
@@ -189,7 +189,7 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0237",
     full_name: "Todd Herzog",
-    img: "/images/season_15/Todd-Herzog.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Pleasant Grove, Utah",
     age: 22,
     hometown: "Pleasant Grove, Utah",
@@ -356,7 +356,7 @@ export const SEASON_15_CHALLENGES = {
     season_num: 15,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 0,
     winning_castaways: [
       "US0224",
@@ -413,7 +413,7 @@ export const SEASON_15_CHALLENGES = {
     season_num: 15,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 3,
     winning_castaways: [
       "US0224",
@@ -449,7 +449,7 @@ export const SEASON_15_CHALLENGES = {
     season_num: 15,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 5,
     winning_castaways: [
       "US0225",
@@ -484,7 +484,7 @@ export const SEASON_15_CHALLENGES = {
     season_num: 15,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 7,
     winning_castaways: [
       "US0226",
@@ -502,7 +502,7 @@ export const SEASON_15_CHALLENGES = {
     season_num: 15,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 8,
     winning_castaways: [
       "US0227",
@@ -538,7 +538,7 @@ export const SEASON_15_CHALLENGES = {
     season_num: 15,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 10,
     winning_castaways: ["US0228", "US0231", "US0232", "US0233"],
   },

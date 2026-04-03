@@ -4,13 +4,17 @@ import { findAbandonedDrafts } from "../draft-cleanup";
 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 const NOW = 1_700_000_000_000;
 
-function makeDraft(overrides: {
-  finished?: boolean;
-  created_at?: number | null;
-} = {}) {
+function makeDraft(
+  overrides: {
+    finished?: boolean;
+    created_at?: number | null;
+  } = {},
+) {
   return {
     state: { finished: overrides.finished ?? false },
-    ...(overrides.created_at !== null ? { created_at: overrides.created_at ?? NOW } : {}),
+    ...(overrides.created_at !== null
+      ? { created_at: overrides.created_at ?? NOW }
+      : {}),
   };
 }
 
@@ -25,7 +29,10 @@ describe("findAbandonedDrafts", () => {
 
   it("keeps finished draft regardless of age", () => {
     const drafts = {
-      draft_done: makeDraft({ finished: true, created_at: NOW - 30 * SEVEN_DAYS_MS }),
+      draft_done: makeDraft({
+        finished: true,
+        created_at: NOW - 30 * SEVEN_DAYS_MS,
+      }),
     };
     const result = findAbandonedDrafts(drafts, NOW);
     expect(result.toDelete).toEqual([]);
@@ -61,7 +68,10 @@ describe("findAbandonedDrafts", () => {
   it("correctly categorizes a mix of drafts", () => {
     const drafts = {
       draft_delete: makeDraft({ created_at: NOW - SEVEN_DAYS_MS - 1 }),
-      draft_keep_finished: makeDraft({ finished: true, created_at: NOW - 100 * 24 * 60 * 60 * 1000 }),
+      draft_keep_finished: makeDraft({
+        finished: true,
+        created_at: NOW - 100 * 24 * 60 * 60 * 1000,
+      }),
       draft_keep_recent: makeDraft({ created_at: NOW - 1000 }),
       draft_backfill: makeDraft({ created_at: null }),
     };

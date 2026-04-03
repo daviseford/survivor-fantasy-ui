@@ -75,7 +75,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0131",
     full_name: "Jonathan Libby",
-    img: "/images/season_10/Jonathan-Libby.jpg",
+    img: "",
     description: "Age: 23 | Hometown: Dallas, Texas",
     age: 23,
     hometown: "Dallas, Texas",
@@ -83,7 +83,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0132",
     full_name: "Wanda Shirk",
-    img: "/images/season_10/Wanda-Shirk.jpg",
+    img: "",
     description: "Age: 55 | Hometown: Ulysses, Pennsylvania",
     age: 55,
     hometown: "Ulysses, Pennsylvania",
@@ -91,7 +91,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0133",
     full_name: "Jolanda Jones",
-    img: "/images/season_10/Jolanda-Jones.jpg",
+    img: "",
     description: "Age: 38 | Hometown: Houston, Texas",
     age: 38,
     hometown: "Houston, Texas",
@@ -99,7 +99,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0134",
     full_name: "Ashlee Ashby",
-    img: "/images/season_10/Ashlee-Ashby.jpg",
+    img: "",
     description: "Age: 22 | Hometown: Easley, South Carolina",
     age: 22,
     hometown: "Easley, South Carolina",
@@ -107,7 +107,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0135",
     full_name: "Jeff Wilson",
-    img: "/images/season_10/Jeff-Wilson.jpg",
+    img: "",
     description: "Age: 21 | Hometown: Ventura, California",
     age: 21,
     hometown: "Ventura, California",
@@ -124,7 +124,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0137",
     full_name: "Willard Smith",
-    img: "/images/season_10/Willard-Smith.jpg",
+    img: "",
     description: "Age: 56 | Hometown: Bellevue, Washington",
     age: 56,
     hometown: "Bellevue, Washington",
@@ -132,16 +132,15 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0138",
     full_name: "Angie Jakusz",
-    img: "/images/season_10/Angie-Jakusz.jpg",
+    img: "",
     description: "Age: 24 | Hometown: New Orleans, Louisiana",
     age: 24,
     hometown: "New Orleans, Louisiana",
-    nickname: "Angie",
   }),
   buildPlayer({
     castaway_id: "US0139",
     full_name: "James Miller",
-    img: "/images/season_10/James-Miller.jpg",
+    img: "",
     description: "Age: 33 | Hometown: Mobile, Alabama",
     age: 33,
     hometown: "Mobile, Alabama",
@@ -149,7 +148,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0140",
     full_name: "Ibrehem Rahman",
-    img: "/images/season_10/Ibrehem-Rahman.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Birmingham, Alabama",
     age: 27,
     hometown: "Birmingham, Alabama",
@@ -157,7 +156,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0141",
     full_name: "Bobby Jon Drinkard",
-    img: "/images/season_10/Bobby-Jon-Drinkard.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Los Angeles, California",
     age: 27,
     hometown: "Los Angeles, California",
@@ -166,7 +165,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0142",
     full_name: "Coby Archa",
-    img: "/images/season_10/Coby-Archa.jpg",
+    img: "",
     description: "Age: 32 | Hometown: Athens, Texas",
     age: 32,
     hometown: "Athens, Texas",
@@ -174,7 +173,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0143",
     full_name: "Janu Tornell",
-    img: "/images/season_10/Janu-Tornell.jpg",
+    img: "",
     description: "Age: 39 | Hometown: Las Vegas, Nevada",
     age: 39,
     hometown: "Las Vegas, Nevada",
@@ -182,7 +181,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0144",
     full_name: "Stephenie LaGrossa",
-    img: "/images/season_10/Stephenie-LaGrossa.jpg",
+    img: "",
     description: "Age: 24 | Hometown: Toms River, New Jersey",
     age: 24,
     hometown: "Toms River, New Jersey",
@@ -190,7 +189,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0145",
     full_name: "Gregg Carey",
-    img: "/images/season_10/Gregg-Carey.jpg",
+    img: "",
     description: "Age: 27 | Hometown: Chicago, Illinois",
     age: 27,
     hometown: "Chicago, Illinois",
@@ -198,7 +197,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0146",
     full_name: "Caryn Groedel",
-    img: "/images/season_10/Caryn-Groedel.jpg",
+    img: "",
     description: "Age: 46 | Hometown: Solon, Ohio",
     age: 46,
     hometown: "Solon, Ohio",
@@ -206,7 +205,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0147",
     full_name: "Jennifer Lyon",
-    img: "/images/season_10/Jennifer-Lyon.jpg",
+    img: "",
     description: "Age: 32 | Hometown: Encino, California",
     age: 32,
     hometown: "Encino, California",
@@ -215,7 +214,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0148",
     full_name: "Ian Rosenberger",
-    img: "/images/season_10/Ian-Rosenberger.jpg",
+    img: "",
     description: "Age: 23 | Hometown: Ambridge, Pennsylvania",
     age: 23,
     hometown: "Ambridge, Pennsylvania",
@@ -223,7 +222,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0149",
     full_name: "Katie Gallagher",
-    img: "/images/season_10/Katie-Gallagher.jpg",
+    img: "",
     description: "Age: 29 | Hometown: Merced, California",
     age: 29,
     hometown: "Merced, California",
@@ -231,7 +230,7 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0150",
     full_name: "Tom Westman",
-    img: "/images/season_10/Tom-Westman.jpg",
+    img: "",
     description: "Age: 40 | Hometown: Sayville, New York",
     age: 40,
     hometown: "Sayville, New York",
@@ -408,7 +407,7 @@ export const SEASON_10_CHALLENGES = {
     season_num: 10,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 1,
     winning_castaways: [
       "US0137",
@@ -467,7 +466,7 @@ export const SEASON_10_CHALLENGES = {
     season_num: 10,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 4,
     winning_castaways: [
       "US0137",
@@ -505,7 +504,7 @@ export const SEASON_10_CHALLENGES = {
     season_num: 10,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 6,
     winning_castaways: [
       "US0137",
@@ -545,7 +544,7 @@ export const SEASON_10_CHALLENGES = {
     season_num: 10,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 8,
     winning_castaways: [
       "US0137",
@@ -595,7 +594,7 @@ export const SEASON_10_CHALLENGES = {
     season_num: 10,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 11,
     winning_castaways: [
       "US0142",
@@ -633,7 +632,7 @@ export const SEASON_10_CHALLENGES = {
     season_num: 10,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 13,
     winning_castaways: [
       "US0142",
@@ -671,7 +670,7 @@ export const SEASON_10_CHALLENGES = {
     season_num: 10,
     episode_id: "episode_8",
     episode_num: 8,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 15,
     winning_castaways: [
       "US0142",

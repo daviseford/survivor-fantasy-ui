@@ -663,6 +663,24 @@ describe("getPropBetScoresForUser", () => {
       const answer = getStatus("propbet_immunities", { challenges });
       expect(answer.status).toBe("leading");
     });
+
+    it("excludes team_immunity challenges from individual immunity count", () => {
+      const challenges = {
+        c1: makeChallenge("1", 8, [ALICE], "immunity"),
+        c2: makeChallenge(
+          "2",
+          9,
+          [BOB, CHARLIE, ALICE],
+          "team_immunity" as Challenge["variant"],
+        ),
+      };
+      const answer = getStatus("propbet_immunities", {
+        challenges,
+        hasFinaleOccurred: true,
+      });
+      // Only ALICE's individual immunity should count, not the team_immunity
+      expect(answer.status).toBe("definitive_correct");
+    });
   });
 
   describe("propbet_rewards", () => {

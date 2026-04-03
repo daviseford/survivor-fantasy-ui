@@ -103,8 +103,7 @@ export function validateSeasonData(
     ...findDuplicates(
       resultsData.eliminations,
       (e) => `ep${e.episodeNum}_o${e.order}`,
-      (e) =>
-        `Duplicate elimination: episode ${e.episodeNum}, order ${e.order}`,
+      (e) => `Duplicate elimination: episode ${e.episodeNum}, order ${e.order}`,
     ),
   );
 

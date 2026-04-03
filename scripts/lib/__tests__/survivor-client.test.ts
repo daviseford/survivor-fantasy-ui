@@ -3,9 +3,7 @@ import { fetchSeasonData } from "../survivor-client";
 
 const CASTAWAY_ID_FORMAT = /^US\d{4}$/;
 
-function expectValidCastawayIds(
-  castaways: { castaway_id: string }[],
-): void {
+function expectValidCastawayIds(castaways: { castaway_id: string }[]): void {
   for (const c of castaways) {
     expect(c.castaway_id).toMatch(CASTAWAY_ID_FORMAT);
   }

@@ -302,9 +302,7 @@ export const getPropBetScoresForUser = (
   // --- propbet_immunities ---
   const immunities = Object.values(challenges).filter(
     (x) =>
-      x.variant === "immunity" &&
-      postMergeEpisodeNumbers.has(x.episode_num) &&
-      x.winning_castaways.length <= 2,
+      x.variant === "immunity" && postMergeEpisodeNumbers.has(x.episode_num),
   );
   const allImmunityWinners = immunities.flatMap((x) => x.winning_castaways);
   const rankedImmunityWinners = entries(countBy(allImmunityWinners)).sort(
