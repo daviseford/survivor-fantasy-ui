@@ -3,6 +3,12 @@
     "mantine": {
       "command": "npx",
       "args": ["@mantine/mcp-server"]
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"],
+      "env": {}
     }
   }
 }
