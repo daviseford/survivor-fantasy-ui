@@ -1,7 +1,6 @@
 import {
   Accordion,
   Alert,
-  Image,
   Avatar,
   Badge,
   Box,
@@ -10,6 +9,7 @@ import {
   CopyButton,
   Divider,
   Group,
+  Image,
   Paper,
   Select,
   SimpleGrid,
@@ -825,14 +825,12 @@ export const DraftComponent = () => {
                                 </Center>
                                 {p.description && (
                                   <Text ta="center" c="dimmed">
-                                    {p.description
-                                      .split(" | ")
-                                      .map((x, i) => (
-                                        <span key={i}>
-                                          {x}
-                                          <br />
-                                        </span>
-                                      ))}
+                                    {p.description.split(" | ").map((x, i) => (
+                                      <span key={i}>
+                                        {x}
+                                        <br />
+                                      </span>
+                                    ))}
                                   </Text>
                                 )}
                               </Stack>

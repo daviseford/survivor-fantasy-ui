@@ -1,3 +1,5 @@
+/* Hero */
+
 .wrapper {
   position: relative;
   box-sizing: border-box;
@@ -18,8 +20,8 @@
 
 .inner {
   position: relative;
-  padding-top: clamp(3rem, 8vw, 6rem);
-  padding-bottom: clamp(2.5rem, 7vw, 5rem);
+  padding-top: clamp(1.5rem, 4vw, 2.5rem);
+  padding-bottom: clamp(1rem, 3vw, 1.5rem);
 }
 
 .eyebrow {
@@ -30,23 +32,23 @@
 
 .title {
   font-family: var(--mantine-font-family);
-  font-size: clamp(2.8rem, 8vw, 4.75rem);
+  font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 900;
-  line-height: 1.02;
+  line-height: 1.08;
   margin: 0;
   padding: 0;
   color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-  letter-spacing: -0.05em;
+  letter-spacing: -0.04em;
 }
 
 .description {
-  margin-top: var(--mantine-spacing-lg);
+  margin-top: var(--mantine-spacing-sm);
   max-width: 34rem;
-  font-size: clamp(1.05rem, 2.2vw, 1.45rem);
+  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
 }
 
 .controls {
-  margin-top: clamp(1.5rem, 4vw, 2.5rem);
+  margin-top: clamp(1rem, 2.5vw, 1.5rem);
 }
 
 .control {
@@ -61,13 +63,7 @@
   }
 }
 
-.spoilerFree {
-  flex-wrap: nowrap;
-}
-
-.spoilerLabel {
-  color: light-dark(var(--mantine-color-grape-7), var(--mantine-color-grape-4));
-}
+/* How It Works */
 
 .howItWorksWrapper {
   background: linear-gradient(
@@ -108,4 +104,215 @@
     var(--mantine-color-gray-2),
     var(--mantine-color-dark-4)
   );
+}
+
+/* Feature Sections — Backgrounds */
+
+.featureSectionLight {
+  background: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-8)
+  );
+}
+
+.featureSectionTinted {
+  background: light-dark(
+    color-mix(
+      in srgb,
+      var(--mantine-color-gray-0) 85%,
+      var(--mantine-color-blue-0)
+    ),
+    var(--mantine-color-dark-7)
+  );
+}
+
+.watchAlongWrapper {
+  background: light-dark(
+    color-mix(in srgb, var(--mantine-color-grape-0) 50%, white),
+    color-mix(
+      in srgb,
+      var(--mantine-color-dark-7) 82%,
+      var(--mantine-color-grape-9)
+    )
+  );
+}
+
+/* Feature Sections — Content Sizes */
+
+.featureContent {
+  padding-top: clamp(3rem, 7vw, 5rem);
+  padding-bottom: clamp(3rem, 7vw, 5rem);
+}
+
+.compactContent {
+  padding-top: clamp(2rem, 5vw, 3.5rem);
+  padding-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+.watchAlongContent {
+  padding-top: clamp(3.5rem, 8vw, 6rem);
+  padding-bottom: clamp(3.5rem, 8vw, 6rem);
+  text-align: center;
+}
+
+/* Feature Sections — Typography */
+
+.featureEyebrow {
+  letter-spacing: 0.1em;
+}
+
+.featureTitle {
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+  letter-spacing: -0.03em;
+}
+
+.featureDescription {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.65;
+  max-width: 38rem;
+}
+
+.watchAlongTitle {
+  font-size: clamp(2.2rem, 6vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+  letter-spacing: -0.04em;
+}
+
+.watchAlongDescription {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.7;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Stat callouts */
+
+.statCard {
+  text-align: center;
+  background: light-dark(
+    color-mix(
+      in srgb,
+      var(--mantine-color-white) 85%,
+      var(--mantine-color-blue-0)
+    ),
+    color-mix(
+      in srgb,
+      var(--mantine-color-dark-6) 88%,
+      var(--mantine-color-blue-9)
+    )
+  );
+  border-color: light-dark(
+    var(--mantine-color-gray-2),
+    var(--mantine-color-dark-4)
+  );
+}
+
+.statNumber {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+/* Scoring category badges */
+
+.categoryBadge {
+  padding: 5px 14px 5px 8px;
+  border-radius: 999px;
+  background: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-5)
+  );
+  border: 1px solid
+    light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
+}
+
+/* Watch-along accent cards */
+
+.watchAlongCard {
+  text-align: left;
+  height: 100%;
+  background: light-dark(
+    color-mix(
+      in srgb,
+      var(--mantine-color-white) 92%,
+      var(--mantine-color-grape-0)
+    ),
+    color-mix(
+      in srgb,
+      var(--mantine-color-dark-6) 90%,
+      var(--mantine-color-grape-9)
+    )
+  );
+  border: 1px solid
+    light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
+  border-left: 3px solid;
+}
+
+/* Prop bet list */
+
+.propBetItem {
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  border-radius: var(--mantine-radius-md);
+  background: light-dark(
+    color-mix(
+      in srgb,
+      var(--mantine-color-white) 85%,
+      var(--mantine-color-orange-0)
+    ),
+    color-mix(
+      in srgb,
+      var(--mantine-color-dark-6) 88%,
+      var(--mantine-color-orange-9)
+    )
+  );
+  border: 1px solid
+    light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
+}
+
+/* Draft section */
+
+.draftCallout {
+  font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+  font-weight: 700;
+  line-height: 1.3;
+  color: light-dark(var(--mantine-color-dark-7), var(--mantine-color-gray-2));
+}
+
+.draftHighlight {
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md);
+  border-radius: var(--mantine-radius-md);
+  background: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-6)
+  );
+}
+
+/* Closing CTA */
+
+.ctaSection {
+  background: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-8)
+  );
+}
+
+.ctaContent {
+  padding-top: clamp(3rem, 7vw, 5rem);
+  padding-bottom: clamp(4rem, 8vw, 6rem);
+  text-align: center;
+}
+
+.ctaTitle {
+  font-size: clamp(2rem, 5.5vw, 3rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+  letter-spacing: -0.04em;
 }
