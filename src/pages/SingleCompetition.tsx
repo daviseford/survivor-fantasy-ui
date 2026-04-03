@@ -82,6 +82,9 @@ export const SingleCompetition = () => {
   const episodeCount = season.episodes?.length ?? 0;
   const isCreator = slimUser?.uid === competition.creator_uid;
   const isWatchAlong = competition.current_episode != null;
+  const hasWinner = Object.values(unfilteredEvents).some(
+    (e) => e.action === "win_survivor",
+  );
 
   return (
     <Stack gap="xl" p="lg">
@@ -106,6 +109,7 @@ export const SingleCompetition = () => {
         competition={competition}
         season={season}
         isCreator={isCreator}
+        hasWinner={hasWinner}
       />
 
       <Section
