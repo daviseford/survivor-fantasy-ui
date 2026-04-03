@@ -21,8 +21,18 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 - **E2E interactive:** `yarn e2e:ui` (Playwright UI mode)
 - **New season (preferred):** `yarn new-season <season_number> [--force] [--push]` (scrapes players + results, generates full season file, registers in seasons.ts, optionally pushes to Firestore)
 - **Add season (slash command):** `/add-season <season_number>` — preferred way to add a new season in Claude Code; wraps `yarn new-season` with validation, progress reporting, and post-generation verification
+- **Batch new seasons:** `yarn tsx scripts/batch-new-season.ts [season_numbers...] [--force] [--skip-wiki] [--push] [--dry-run]` (generate multiple seasons in one run; fetches survivoR tables once, then iterates)
+- **Push seasons to Firestore:** `yarn tsx scripts/push-seasons.ts [season_numbers...] [--dry-run] [--collections events,challenges]` (push existing local season data to Firestore without regenerating)
+- **Push all seasons:** `yarn tsx scripts/push-all-seasons.ts [--dry-run]` (push all registered seasons to Firestore)
 - **Snapshot Firestore:** `yarn tsx scripts/snapshot-firestore.ts` (backup Firestore + RTDB to `data/firestore-snapshots/`)
+- **Validate Firestore sync:** `yarn tsx scripts/validate-firestore-sync.ts [season_numbers...] [--snapshot <dir>]` (compare local season data against Firestore snapshot to detect missing/mismatched events)
+- **Compare Firestore:** `yarn tsx scripts/compare-firestore.ts <season_number>` (read-only comparison of scraped results vs Firestore data)
+- **Sync season (CI):** `yarn tsx scripts/sync-season.ts` (automated sync for active season — detects new episodes, validates, pushes to Firestore)
 - **Migrate to castaway_id:** `yarn tsx scripts/migrate-to-castaway-id.ts [--upload]` (translate Firestore/RTDB from player names to castaway_id; writes to `data/migration-output/` for review, `--upload` pushes to Firebase)
+- **Migrate competition state:** `yarn tsx scripts/migrate-competition-state.ts [--upload]` (backfill competition lifecycle state — sets `finished` based on win_survivor event; dry-run by default)
+- **Cleanup abandoned drafts:** `yarn tsx scripts/cleanup-abandoned-drafts.ts` (delete drafts from RTDB that are unfinished and older than 7 days)
+- **Set admin claim:** `yarn tsx scripts/set-admin-claim.ts <uid>` (set Firebase Auth admin custom claim on a user)
+- **Optimize images:** `yarn tsx scripts/optimize-images.ts` (resize and compress all images in `public/images/`)
 
 ## Data Source
 
