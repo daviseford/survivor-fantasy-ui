@@ -89,9 +89,7 @@ export async function fetchWikitext(pageName: string): Promise<string | null> {
 }
 
 /** Query the MediaWiki imageinfo API for the given pipe-separated titles. */
-async function queryImageInfo(
-  titles: string,
-): Promise<ImageInfoPages | null> {
+async function queryImageInfo(titles: string): Promise<ImageInfoPages | null> {
   const params = new URLSearchParams({
     action: "query",
     titles,

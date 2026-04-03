@@ -8,9 +8,9 @@
  * Usage: yarn tsx scripts/cleanup-abandoned-drafts.ts
  */
 
-import "./lib/admin.js";
 import { getDatabase } from "firebase-admin/database";
 import * as fs from "fs";
+import "./lib/admin.js";
 import { findAbandonedDrafts } from "./lib/draft-cleanup.js";
 
 interface CleanupResult {
@@ -31,16 +31,25 @@ async function main(): Promise<void> {
 
   if (!allDrafts || Object.keys(allDrafts).length === 0) {
     console.log("No drafts found in RTDB.");
-    writeResult({ backfilled: 0, deleted: [], skippedFinished: 0, skippedTooRecent: 0 });
+    writeResult({
+      backfilled: 0,
+      deleted: [],
+      skippedFinished: 0,
+      skippedTooRecent: 0,
+    });
     return;
   }
 
   console.log(`Found ${Object.keys(allDrafts).length} total drafts.`);
 
-  const { toDelete, toBackfill, skippedFinished, skippedTooRecent } = findAbandonedDrafts(
-    allDrafts as Record<string, { state?: { finished?: boolean }; created_at?: number }>,
-    now,
-  );
+  const { toDelete, toBackfill, skippedFinished, skippedTooRecent } =
+    findAbandonedDrafts(
+      allDrafts as Record<
+        string,
+        { state?: { finished?: boolean }; created_at?: number }
+      >,
+      now,
+    );
 
   // Backfill missing created_at
   if (toBackfill.length > 0) {
@@ -56,7 +65,9 @@ async function main(): Promise<void> {
   for (const id of toDelete) {
     console.log(`  - ${id}`);
   }
-  console.log(`Skipped: ${skippedFinished} finished, ${skippedTooRecent} too recent, ${toBackfill.length} backfilled`);
+  console.log(
+    `Skipped: ${skippedFinished} finished, ${skippedTooRecent} too recent, ${toBackfill.length} backfilled`,
+  );
 
   // Delete
   for (const id of toDelete) {
@@ -65,7 +76,12 @@ async function main(): Promise<void> {
 
   console.log(`\nDeleted ${toDelete.length} abandoned drafts.`);
 
-  writeResult({ backfilled: toBackfill.length, deleted: toDelete, skippedFinished, skippedTooRecent });
+  writeResult({
+    backfilled: toBackfill.length,
+    deleted: toDelete,
+    skippedFinished,
+    skippedTooRecent,
+  });
   process.exit(0);
 }
 

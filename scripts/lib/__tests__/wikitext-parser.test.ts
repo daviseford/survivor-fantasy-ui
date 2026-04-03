@@ -233,9 +233,7 @@ describe("parseContestantPage", () => {
 
   it("parses a returning player for their first season (Colby for S2)", () => {
     const info = parseContestantPage(COLBY_DONALDSON_WIKITEXT, 2);
-    expect(info).toEqual(
-      expect.objectContaining({ previousSeasons: [] }),
-    );
+    expect(info).toEqual(expect.objectContaining({ previousSeasons: [] }));
   });
 
   it("returns null for wikitext without Contestant template", () => {
