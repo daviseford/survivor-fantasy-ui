@@ -344,7 +344,7 @@ export const SEASON_50_CHALLENGES = {
     season_num: 50,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "reward",
+    variant: "team_reward",
     order: 0,
     winning_castaways: [
       "US0009",
@@ -363,7 +363,7 @@ export const SEASON_50_CHALLENGES = {
     season_num: 50,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "reward",
+    variant: "team_reward",
     order: 1,
     winning_castaways: ["US0277"],
   },
@@ -420,7 +420,7 @@ export const SEASON_50_CHALLENGES = {
     season_num: 50,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "reward",
+    variant: "team_reward",
     order: 5,
     winning_castaways: ["US0550"],
   },
@@ -430,7 +430,7 @@ export const SEASON_50_CHALLENGES = {
     season_num: 50,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "reward",
+    variant: "team_reward",
     order: 6,
     winning_castaways: [
       "US0277",
@@ -448,7 +448,7 @@ export const SEASON_50_CHALLENGES = {
     season_num: 50,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "reward",
+    variant: "team_reward",
     order: 7,
     winning_castaways: [
       "US0031",
@@ -467,7 +467,7 @@ export const SEASON_50_CHALLENGES = {
     season_num: 50,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "reward",
+    variant: "team_reward",
     order: 8,
     winning_castaways: [
       "US0179",
@@ -485,7 +485,7 @@ export const SEASON_50_CHALLENGES = {
     season_num: 50,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "reward",
+    variant: "team_reward",
     order: 9,
     winning_castaways: [
       "US0277",
@@ -577,7 +577,7 @@ export const SEASON_50_CHALLENGES = {
     season_num: 50,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "reward",
+    variant: "team_reward",
     order: 14,
     winning_castaways: [
       "US0179",
@@ -595,7 +595,7 @@ export const SEASON_50_CHALLENGES = {
     season_num: 50,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "reward",
+    variant: "team_reward",
     order: 15,
     winning_castaways: [
       "US0031",
@@ -649,7 +649,7 @@ export const SEASON_50_CHALLENGES = {
     season_num: 50,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "reward",
+    variant: "team_reward",
     order: 18,
     winning_castaways: [
       "US0031",
@@ -695,7 +695,7 @@ export const SEASON_50_CHALLENGES = {
     season_num: 50,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "reward",
+    variant: "team_reward",
     order: 21,
     winning_castaways: ["US0144", "US0515", "US0615", "US0695", "US0724"],
   },

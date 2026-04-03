@@ -415,7 +415,7 @@ export const SEASON_27_CHALLENGES = {
     season_num: 27,
     episode_id: "episode_1",
     episode_num: 1,
-    variant: "reward",
+    variant: "team_reward",
     order: 1,
     winning_castaways: [
       "US0010",
@@ -464,7 +464,7 @@ export const SEASON_27_CHALLENGES = {
     season_num: 27,
     episode_id: "episode_2",
     episode_num: 2,
-    variant: "reward",
+    variant: "team_reward",
     order: 4,
     winning_castaways: [
       "US0010",
@@ -513,7 +513,7 @@ export const SEASON_27_CHALLENGES = {
     season_num: 27,
     episode_id: "episode_3",
     episode_num: 3,
-    variant: "reward",
+    variant: "team_reward",
     order: 7,
     winning_castaways: [
       "US0010",
@@ -561,7 +561,7 @@ export const SEASON_27_CHALLENGES = {
     season_num: 27,
     episode_id: "episode_4",
     episode_num: 4,
-    variant: "reward",
+    variant: "team_reward",
     order: 10,
     winning_castaways: [
       "US0010",
@@ -600,7 +600,7 @@ export const SEASON_27_CHALLENGES = {
     season_num: 27,
     episode_id: "episode_5",
     episode_num: 5,
-    variant: "reward",
+    variant: "team_reward",
     order: 13,
     winning_castaways: ["US0402", "US0403", "US0404", "US0405", "US0406"],
   },
@@ -637,7 +637,7 @@ export const SEASON_27_CHALLENGES = {
     season_num: 27,
     episode_id: "episode_6",
     episode_num: 6,
-    variant: "reward",
+    variant: "team_reward",
     order: 16,
     winning_castaways: [
       "US0010",
@@ -681,7 +681,7 @@ export const SEASON_27_CHALLENGES = {
     season_num: 27,
     episode_id: "episode_7",
     episode_num: 7,
-    variant: "reward",
+    variant: "team_reward",
     order: 19,
     winning_castaways: [
       "US0010",

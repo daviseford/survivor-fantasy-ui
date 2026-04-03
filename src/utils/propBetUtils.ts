@@ -325,10 +325,7 @@ export const getPropBetScoresForUser = (
 
   // --- propbet_rewards ---
   const rewards = Object.values(challenges).filter(
-    (x) =>
-      x.variant === "reward" &&
-      postMergeEpisodeNumbers.has(x.episode_num) &&
-      x.winning_castaways.length <= 2,
+    (x) => x.variant === "reward" && postMergeEpisodeNumbers.has(x.episode_num),
   );
   const allRewardWinners = rewards.flatMap((x) => x.winning_castaways);
   const rankedRewardWinners = entries(countBy(allRewardWinners)).sort(

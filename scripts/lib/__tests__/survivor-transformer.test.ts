@@ -116,8 +116,15 @@ describe("transformResults", { timeout: 60000 }, () => {
     );
     expect(teamImmunities.length).toBeGreaterThan(0);
 
-    const rewards = result.challenges.filter((c) => c.variant === "reward");
-    expect(rewards.length).toBeGreaterThan(0);
+    const individualRewards = result.challenges.filter(
+      (c) => c.variant === "reward",
+    );
+    expect(individualRewards.length).toBeGreaterThan(0);
+
+    const teamRewards = result.challenges.filter(
+      (c) => c.variant === "team_reward",
+    );
+    expect(teamRewards.length).toBeGreaterThan(0);
   });
 
   it("splits immunity challenges into individual and team variants", () => {
@@ -136,6 +143,26 @@ describe("transformResults", { timeout: 60000 }, () => {
       (c) => c.variant === "immunity",
     );
     for (const c of individualImmunities) {
+      expect(c.winnerCastawayIds.length).toBeLessThanOrEqual(2);
+    }
+  });
+
+  it("splits reward challenges into individual and team variants", () => {
+    const result = transformResults(s46Data, 46);
+
+    // Pre-merge tribal reward challenges should be team_reward
+    const teamRewards = result.challenges.filter(
+      (c) => c.variant === "team_reward",
+    );
+    for (const c of teamRewards) {
+      expect(c.winnerCastawayIds.length).toBeGreaterThan(1);
+    }
+
+    // Post-merge individual reward challenges should be reward
+    const individualRewards = result.challenges.filter(
+      (c) => c.variant === "reward",
+    );
+    for (const c of individualRewards) {
       expect(c.winnerCastawayIds.length).toBeLessThanOrEqual(2);
     }
   });

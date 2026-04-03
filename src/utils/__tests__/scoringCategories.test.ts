@@ -30,11 +30,12 @@ describe("aggregateByScoringCategory", () => {
     const scores: EnhancedScores[] = [
       {
         episode_num: 1,
-        total: 11.5,
+        total: 12.5,
         actions: [
           { action: "immunity", points_awarded: 3 },
           { action: "team_immunity", points_awarded: 2 },
-          { action: "reward", points_awarded: 1 },
+          { action: "reward", points_awarded: 2 },
+          { action: "team_reward", points_awarded: 1 },
           { action: "find_idol", points_awarded: 1 },
           { action: "make_merge", points_awarded: 2 },
           { action: "eliminated", points_awarded: 3 },
@@ -47,7 +48,7 @@ describe("aggregateByScoringCategory", () => {
 
     expect(result).toEqual([
       { category: "immunity", points: 5 },
-      { category: "reward", points: 1 },
+      { category: "reward", points: 3 },
       { category: "idols", points: 1 },
       { category: "advantages", points: 0 },
       { category: "milestones", points: 2 },

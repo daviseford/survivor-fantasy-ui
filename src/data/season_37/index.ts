@@ -75,15 +75,16 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0537",
     full_name: "Pat Cusack",
-    img: "",
+    img: "/images/season_37/Pat-Cusack.jpg",
     description: "Age: 41 | Hometown: Watervliet, New York",
     age: 41,
     hometown: "Watervliet, New York",
+    nickname: "Pat",
   }),
   buildPlayer({
     castaway_id: "US0538",
     full_name: "Jessica Peet",
-    img: "",
+    img: "/images/season_37/Jessica-Peet.jpg",
     description: "Age: 19 | Hometown: Lakeland, Florida",
     age: 19,
     hometown: "Lakeland, Florida",
@@ -91,7 +92,7 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0539",
     full_name: "Jeremy Crawford",
-    img: "",
+    img: "/images/season_37/Jeremy-Crawford.jpg",
     description: "Age: 40 | Hometown: New York City, New York",
     age: 40,
     hometown: "New York City, New York",
@@ -99,7 +100,7 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0540",
     full_name: "Bi Nguyen",
-    img: "",
+    img: "/images/season_37/Bi-Nguyen.jpg",
     description: "Age: 28 | Hometown: Houston, Texas",
     age: 28,
     hometown: "Houston, Texas",
@@ -107,7 +108,7 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0541",
     full_name: "Natalia Azoqa",
-    img: "",
+    img: "/images/season_37/Natalia-Azoqa.jpg",
     description: "Age: 26 | Hometown: Irvine, California",
     age: 26,
     hometown: "Irvine, California",
@@ -115,7 +116,7 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0542",
     full_name: "Natalie Cole",
-    img: "",
+    img: "/images/season_37/Natalie-Cole.jpg",
     description: "Age: 57 | Hometown: Los Angeles, California",
     age: 57,
     hometown: "Los Angeles, California",
@@ -123,7 +124,7 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0543",
     full_name: "Lyrsa Torres",
-    img: "",
+    img: "/images/season_37/Lyrsa-Torres.jpg",
     description: "Age: 36 | Hometown: Boston, Massachusetts",
     age: 36,
     hometown: "Boston, Massachusetts",
@@ -131,7 +132,7 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0544",
     full_name: "Elizabeth Olson",
-    img: "",
+    img: "/images/season_37/Elizabeth-Olson.jpg",
     description: "Age: 31 | Hometown: Longview, Texas",
     age: 31,
     hometown: "Longview, Texas",
@@ -139,7 +140,7 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0545",
     full_name: "John Hennigan",
-    img: "",
+    img: "/images/season_37/John-Hennigan.jpg",
     description: "Age: 38 | Hometown: Los Angeles, California",
     age: 38,
     hometown: "Los Angeles, California",
@@ -147,15 +148,16 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0546",
     full_name: "Dan Rengering",
-    img: "",
+    img: "/images/season_37/Dan-Rengering.jpg",
     description: "Age: 28 | Hometown: Gainesville, Florida",
     age: 28,
     hometown: "Gainesville, Florida",
+    nickname: "Dan",
   }),
   buildPlayer({
     castaway_id: "US0547",
     full_name: "Alec Merlino",
-    img: "",
+    img: "/images/season_37/Alec-Merlino.jpg",
     description: "Age: 24 | Hometown: San Clemente, California",
     age: 24,
     hometown: "San Clemente, California",
@@ -163,7 +165,7 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0548",
     full_name: "Carl Boudreaux",
-    img: "",
+    img: "/images/season_37/Carl-Boudreaux.jpg",
     description: "Age: 41 | Hometown: Houston, Texas",
     age: 41,
     hometown: "Houston, Texas",
@@ -171,15 +173,16 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0549",
     full_name: "Gabby Pascuzzi",
-    img: "",
+    img: "/images/season_37/Gabby-Pascuzzi.jpg",
     description: "Age: 25 | Hometown: Denver, Colorado",
     age: 25,
     hometown: "Denver, Colorado",
+    nickname: "Gabby",
   }),
   buildPlayer({
     castaway_id: "US0550",
     full_name: "Christian Hubicki",
-    img: "",
+    img: "/images/season_37/Christian-Hubicki.jpg",
     description: "Age: 32 | Hometown: Tallahassee, Florida",
     age: 32,
     hometown: "Tallahassee, Florida",
@@ -187,15 +190,16 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0551",
     full_name: "Davie Rickenbacker",
-    img: "",
+    img: "/images/season_37/Davie-Rickenbacker.jpg",
     description: "Age: 30 | Hometown: Atlanta, Georgia",
     age: 30,
     hometown: "Atlanta, Georgia",
+    nickname: "Davie",
   }),
   buildPlayer({
     castaway_id: "US0552",
     full_name: "Alison Raybould",
-    img: "",
+    img: "/images/season_37/Alison-Raybould.jpg",
     description: "Age: 28 | Hometown: Chapel Hill, North Carolina",
     age: 28,
     hometown: "Chapel Hill, North Carolina",
@@ -203,7 +207,7 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0553",
     full_name: "Kara Kay",
-    img: "",
+    img: "/images/season_37/Kara-Kay.jpg",
     description: "Age: 30 | Hometown: San Diego, California",
     age: 30,
     hometown: "San Diego, California",
@@ -211,7 +215,7 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0554",
     full_name: "Angelina Keeley",
-    img: "",
+    img: "/images/season_37/Angelina-Keeley.jpg",
     description: "Age: 28 | Hometown: San Clemente, California",
     age: 28,
     hometown: "San Clemente, California",
@@ -219,18 +223,20 @@ export const SEASON_37_PLAYERS = [
   buildPlayer({
     castaway_id: "US0555",
     full_name: "Mike White",
-    img: "",
+    img: "/images/season_37/Mike-White.jpg",
     description: "Age: 47 | Hometown: Los Angeles, California",
     age: 47,
     hometown: "Los Angeles, California",
+    nickname: "Mike",
   }),
   buildPlayer({
     castaway_id: "US0556",
     full_name: "Nick Wilson",
-    img: "",
+    img: "/images/season_37/Nick-Wilson.jpg",
     description: "Age: 27 | Hometown: Williamsburg, Kentucky",
     age: 27,
     hometown: "Williamsburg, Kentucky",
+    nickname: "Nick",
   }),
 ] satisfies Player<CastawayIdType, SeasonNumber>[];
 
