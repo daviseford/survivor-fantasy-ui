@@ -56,6 +56,10 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 - **Hooks per entity:** Each Firestore/RTDB entity has a dedicated hook (`useSeason`, `useCompetition`, `useDraft`, `useChallenges`, `useEliminations`, `useEvents`). Hooks read route params via `useParams()` with optional ID override. All onSnapshot hooks include error callbacks.
 - **CSS Modules** for component-scoped styles (`.module.css` files), PostCSS with `postcss-preset-mantine`.
 
+## Spoiler-Free Experience
+
+**This is a core feature.** The app supports "watch along" mode where users progress through episodes at their own pace. Results (eliminations, challenge wins, idol plays, scores, player status) must NEVER be revealed beyond the episode a user's competition is currently on. When building or modifying any UI that displays game data, always scope it to the competition's current episode. This applies to leaderboards, player cards, scoring breakdowns, and all result-bearing UI.
+
 ## Admin Credentials
 
 The `.env` file contains real admin credentials (USERNAME/PASSWORD). **NEVER use these to modify production season data** (episodes, challenges, eliminations, events, teams). Read-only operations and screenshots are safe. Ask before any write operations.
