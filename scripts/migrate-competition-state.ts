@@ -47,9 +47,25 @@ async function main(): Promise<void> {
       (e: unknown) => (e as { action: string }).action === "win_survivor",
     );
 
+    // For watch-along competitions, respect the episode gate:
+    // only mark finished if current_episode has reached the finale episode.
+    // For live competitions (current_episode is null), just check for a winner.
+    let newFinished = hasWinner;
+    if (hasWinner && comp.current_episode != null) {
+      const seasonsDoc = await db.collection("seasons").doc(seasonId).get();
+      const seasonData = seasonsDoc.exists ? (seasonsDoc.data() ?? {}) : {};
+      const episodes = (seasonData.episodes ?? []) as {
+        order: number;
+        finale: boolean;
+      }[];
+      const finaleEpisode = episodes.find((e) => e.finale);
+      if (finaleEpisode && comp.current_episode < finaleEpisode.order) {
+        newFinished = false;
+      }
+    }
+
     const oldStarted = comp.started;
     const oldFinished = comp.finished;
-    const newFinished = hasWinner;
 
     const changes: string[] = [];
 
