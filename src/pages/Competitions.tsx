@@ -4,6 +4,8 @@ import {
   Button,
   Center,
   Group,
+  Select,
+  SegmentedControl,
   Skeleton,
   Stack,
   Table,
@@ -75,6 +77,8 @@ export const Competitions = () => {
 
   const [sortField, setSortField] = useState<SortField>("season");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const [seasonFilter, setSeasonFilter] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const handleSort = (field: SortField) => {
     if (field === sortField) {
@@ -89,6 +93,22 @@ export const Competitions = () => {
     () => (allCompetitions?.length ? allCompetitions : competitions) || [],
     [allCompetitions, competitions],
   );
+
+  const seasonOptions = useMemo(() => {
+    const nums = [...new Set(_comps.map((c) => c.season_num))].sort(
+      (a, b) => b - a,
+    );
+    return nums.map((n) => ({ value: String(n), label: `Season ${n}` }));
+  }, [_comps]);
+
+  const filtered = useMemo(() => {
+    return _comps.filter((c) => {
+      if (seasonFilter && c.season_num !== Number(seasonFilter)) return false;
+      if (statusFilter === "complete" && !c.finished) return false;
+      if (statusFilter === "in_progress" && c.finished) return false;
+      return true;
+    });
+  }, [_comps, seasonFilter, statusFilter]);
 
   const sorted = useMemo(() => {
     const compareFn = (a: Competition, b: Competition) => {
@@ -109,8 +129,8 @@ export const Competitions = () => {
       }
       return sortDir === "asc" ? cmp : -cmp;
     };
-    return _comps.slice().sort(compareFn);
-  }, [_comps, sortField, sortDir]);
+    return filtered.slice().sort(compareFn);
+  }, [filtered, sortField, sortDir]);
 
   const formatParticipants = (comp: Competition) => {
     const names = comp.participants.map((p) => p.displayName ?? p.email);
@@ -190,7 +210,7 @@ export const Competitions = () => {
 
   return (
     <Stack gap="lg" p="md">
-      <Group justify="space-between" align="flex-end">
+      <Group justify="space-between" align="flex-start">
         <div>
           <Title order={2}>Competitions</Title>
           <Text c="dimmed" size="sm">
@@ -199,14 +219,31 @@ export const Competitions = () => {
               : "Your active and past competitions"}
           </Text>
         </div>
-        <Button
-          component={Link}
-          to="/seasons"
-          variant="light"
-          size="compact-sm"
-        >
+        <Button component={Link} to="/seasons" size="sm">
           Browse seasons
         </Button>
+      </Group>
+
+      <Group gap="sm">
+        <Select
+          placeholder="All seasons"
+          data={seasonOptions}
+          value={seasonFilter}
+          onChange={setSeasonFilter}
+          clearable
+          size="sm"
+          w={160}
+        />
+        <SegmentedControl
+          size="sm"
+          value={statusFilter}
+          onChange={setStatusFilter}
+          data={[
+            { label: "All", value: "all" },
+            { label: "In Progress", value: "in_progress" },
+            { label: "Complete", value: "complete" },
+          ]}
+        />
       </Group>
 
       {isLoading && (

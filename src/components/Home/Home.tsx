@@ -10,6 +10,7 @@ import {
   Title,
 } from "@mantine/core";
 import {
+  IconEyeOff,
   IconFlame,
   IconSearch,
   IconTargetArrow,
@@ -51,6 +52,20 @@ export const Home = () => {
             >
               Browse seasons
             </Button>
+          </Group>
+
+          <Group gap="xs" mt="lg" className={classes.spoilerFree}>
+            <ThemeIcon size={28} radius="xl" variant="light" color="grape">
+              <IconEyeOff size={16} />
+            </ThemeIcon>
+            <Text size="sm">
+              <Text component="span" fw={600} className={classes.spoilerLabel}>
+                Spoiler-free mode
+              </Text>{" "}
+              <Text component="span" c="dimmed">
+                — watch at your own pace, reveal episodes when you're ready
+              </Text>
+            </Text>
           </Group>
         </Container>
       </div>

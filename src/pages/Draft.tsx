@@ -1,7 +1,7 @@
 import {
   Accordion,
   Alert,
-  AspectRatio,
+  Image,
   Avatar,
   Badge,
   Box,
@@ -791,64 +791,55 @@ export const DraftComponent = () => {
                     }}
                   >
                     <Stack gap={8} align="center">
-                      <AspectRatio ratio={1} w={96}>
-                        <Box
-                          component="img"
-                          src={p.img}
-                          alt={p.full_name}
-                          onClick={() => {
-                            modals.open({
-                              withCloseButton: false,
-                              children: (
-                                <Stack>
-                                  <Center>
-                                    <Title order={3}>{p.full_name}</Title>
-                                  </Center>
-                                  <Center>
-                                    <Box
-                                      component="img"
-                                      src={p.img}
-                                      alt={p.full_name}
-                                      style={{
-                                        width: "100%",
-                                        maxWidth: 320,
-                                        aspectRatio: "1 / 1",
-                                        objectFit: "cover",
-                                        objectPosition: "center top",
-                                        borderRadius:
-                                          "var(--mantine-radius-md)",
-                                        display: "block",
-                                      }}
-                                    />
-                                  </Center>
-                                  {p.description && (
-                                    <Text ta="center" c="dimmed">
-                                      {p.description
-                                        .split(" | ")
-                                        .map((x, i) => (
-                                          <span key={i}>
-                                            {x}
-                                            <br />
-                                          </span>
-                                        ))}
-                                    </Text>
-                                  )}
-                                </Stack>
-                              ),
-                            });
-                          }}
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            objectPosition: "center top",
-                            borderRadius: "var(--mantine-radius-md)",
-                            display: "block",
-                            cursor: "pointer",
-                            filter: isDrafted ? "grayscale(1)" : "none",
-                          }}
-                        />
-                      </AspectRatio>
+                      <Image
+                        src={p.img}
+                        alt={p.full_name}
+                        radius="md"
+                        fit="cover"
+                        h={140}
+                        style={{
+                          objectPosition: "center top",
+                          cursor: "pointer",
+                          filter: isDrafted ? "grayscale(1)" : "none",
+                        }}
+                        onClick={() => {
+                          modals.open({
+                            withCloseButton: false,
+                            children: (
+                              <Stack>
+                                <Center>
+                                  <Title order={3}>{p.full_name}</Title>
+                                </Center>
+                                <Center>
+                                  <Image
+                                    src={p.img}
+                                    alt={p.full_name}
+                                    radius="md"
+                                    fit="cover"
+                                    maw={320}
+                                    style={{
+                                      objectPosition: "center top",
+                                      aspectRatio: "1 / 1",
+                                    }}
+                                  />
+                                </Center>
+                                {p.description && (
+                                  <Text ta="center" c="dimmed">
+                                    {p.description
+                                      .split(" | ")
+                                      .map((x, i) => (
+                                        <span key={i}>
+                                          {x}
+                                          <br />
+                                        </span>
+                                      ))}
+                                  </Text>
+                                )}
+                              </Stack>
+                            ),
+                          });
+                        }}
+                      />
                       <Text
                         ta="center"
                         fw={600}
