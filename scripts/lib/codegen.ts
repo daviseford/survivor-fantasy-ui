@@ -58,11 +58,18 @@ export function extractExistingPlayers(
   const objectRegex =
     /buildPlayer\(\{\s*\n?\s*name:\s*(?:"([^"]+)"|'([^']+)'),\s*\n?\s*img:\s*(?:"([^"]+)"|'([^']+)'|(`[^`]+`))/g;
 
+  // CastawayId-style: buildPlayer({ castaway_id: "...", full_name: "Name", img: "..." })
+  const castawayIdRegex =
+    /buildPlayer\(\{\s*\n?\s*castaway_id:\s*"[^"]+",\s*\n?\s*full_name:\s*(?:"([^"]+)"|'([^']+)'),\s*\n?\s*img:\s*(?:"([^"]+)"|'([^']+)'|(`[^`]+`))/g;
+
   let match: RegExpExecArray | null;
   while ((match = positionalRegex.exec(fileContent)) !== null) {
     players.push(resolvePlayerMatch(match, imgConst));
   }
   while ((match = objectRegex.exec(fileContent)) !== null) {
+    players.push(resolvePlayerMatch(match, imgConst));
+  }
+  while ((match = castawayIdRegex.exec(fileContent)) !== null) {
     players.push(resolvePlayerMatch(match, imgConst));
   }
 
