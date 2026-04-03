@@ -83,11 +83,14 @@ function toErrorMessage(err: unknown): string {
   return err instanceof Error ? err.message : String(err);
 }
 
+/** All possible season numbers. */
+function getAllSeasons(): number[] {
+  return Array.from({ length: TOTAL_SEASONS }, (_, i) => i + 1);
+}
+
 /** Determine which seasons are missing (no data file yet) */
 function getMissingSeasons(): number[] {
-  return Array.from({ length: TOTAL_SEASONS }, (_, i) => i + 1).filter(
-    (n) => !seasonExists(n),
-  );
+  return getAllSeasons().filter((n) => !seasonExists(n));
 }
 
 /** Fetch player images and bios from the Survivor Wiki */
@@ -326,7 +329,12 @@ async function main(): Promise<void> {
   const skipWiki = flags.has("--skip-wiki");
   const push = flags.has("--push");
 
-  let seasonNums = positional.length > 0 ? positional : getMissingSeasons();
+  let seasonNums =
+    positional.length > 0
+      ? positional
+      : force
+        ? getAllSeasons()
+        : getMissingSeasons();
 
   if (seasonNums.length === 0) {
     console.log("All seasons already exist. Use --force to regenerate.");

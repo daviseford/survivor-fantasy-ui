@@ -1,5 +1,18 @@
 [
   {
+    "seasonNum": 1,
+    "location": "Pulau Tiga, Sabah, Borneo, Malaysia",
+    "filmingDates": "March 13, 2000 - April 20, 2000",
+    "seasonRun": "May 31, 2000 - August 23, 2000",
+    "playerCount": 16,
+    "episodeCount": 14,
+    "challengeCount": 26,
+    "eliminationCount": 15,
+    "eventCount": 13,
+    "logoPath": "/images/season_1/season-1-logo.png",
+    "warnings": 0
+  },
+  {
     "seasonNum": 2,
     "location": "Herbert River, Goshen Station, Queensland, Australia",
     "filmingDates": "October 23, 2000 - December 3, 2000",
@@ -91,6 +104,19 @@
     "warnings": 0
   },
   {
+    "seasonNum": 9,
+    "location": "Efate, Shefa Province, Vanuatu",
+    "filmingDates": "June 26, 2004 - August 3, 2004",
+    "seasonRun": "September 16, 2004 - December 12, 2004",
+    "playerCount": 18,
+    "episodeCount": 15,
+    "challengeCount": 28,
+    "eliminationCount": 17,
+    "eventCount": 13,
+    "logoPath": "/images/season_9/season-9-logo.png",
+    "warnings": 0
+  },
+  {
     "seasonNum": 10,
     "location": "Koror, Palau",
     "filmingDates": "November 1, 2004 - December 9, 2004",
@@ -151,7 +177,7 @@
     "episodeCount": 15,
     "challengeCount": 27,
     "eliminationCount": 18,
-    "eventCount": 21,
+    "eventCount": 22,
     "logoPath": "/images/season_14/season-14-logo.png",
     "warnings": 0
   },
@@ -177,7 +203,7 @@
     "episodeCount": 15,
     "challengeCount": 27,
     "eliminationCount": 19,
-    "eventCount": 17,
+    "eventCount": 18,
     "logoPath": "/images/season_16/season-16-logo.png",
     "warnings": 0
   },
@@ -190,7 +216,7 @@
     "episodeCount": 14,
     "challengeCount": 26,
     "eliminationCount": 17,
-    "eventCount": 18,
+    "eventCount": 19,
     "logoPath": "/images/season_17/season-17-logo.png",
     "warnings": 0
   },
@@ -216,7 +242,7 @@
     "episodeCount": 16,
     "challengeCount": 24,
     "eliminationCount": 19,
-    "eventCount": 22,
+    "eventCount": 23,
     "logoPath": "/images/season_19/season-19-logo.png",
     "warnings": 0
   },
@@ -229,7 +255,7 @@
     "episodeCount": 15,
     "challengeCount": 27,
     "eliminationCount": 19,
-    "eventCount": 28,
+    "eventCount": 32,
     "logoPath": "/images/season_20/season-20-logo.png",
     "warnings": 0
   },
@@ -242,7 +268,7 @@
     "episodeCount": 16,
     "challengeCount": 26,
     "eliminationCount": 19,
-    "eventCount": 23,
+    "eventCount": 24,
     "logoPath": "/images/season_21/season-21-logo.png",
     "warnings": 0
   },
@@ -255,7 +281,7 @@
     "episodeCount": 15,
     "challengeCount": 37,
     "eliminationCount": 17,
-    "eventCount": 22,
+    "eventCount": 24,
     "logoPath": "/images/season_22/season-22-logo.png",
     "warnings": 0
   },
@@ -281,7 +307,7 @@
     "episodeCount": 15,
     "challengeCount": 26,
     "eliminationCount": 17,
-    "eventCount": 21,
+    "eventCount": 22,
     "logoPath": "/images/season_24/season-24-logo.png",
     "warnings": 0
   },
@@ -294,7 +320,7 @@
     "episodeCount": 15,
     "challengeCount": 30,
     "eliminationCount": 17,
-    "eventCount": 20,
+    "eventCount": 22,
     "logoPath": "/images/season_25/season-25-logo.png",
     "warnings": 0
   },
@@ -307,7 +333,7 @@
     "episodeCount": 15,
     "challengeCount": 26,
     "eliminationCount": 19,
-    "eventCount": 26,
+    "eventCount": 29,
     "logoPath": "/images/season_26/season-26-logo.png",
     "warnings": 0
   },
@@ -320,7 +346,7 @@
     "episodeCount": 15,
     "challengeCount": 38,
     "eliminationCount": 19,
-    "eventCount": 19,
+    "eventCount": 20,
     "logoPath": "/images/season_27/season-27-logo.png",
     "warnings": 0
   },
@@ -346,7 +372,7 @@
     "episodeCount": 15,
     "challengeCount": 27,
     "eliminationCount": 17,
-    "eventCount": 24,
+    "eventCount": 27,
     "logoPath": "/images/season_29/season-29-logo.png",
     "warnings": 0
   },
@@ -359,7 +385,7 @@
     "episodeCount": 15,
     "challengeCount": 33,
     "eliminationCount": 17,
-    "eventCount": 25,
+    "eventCount": 28,
     "logoPath": "/images/season_30/season-30-logo.png",
     "warnings": 0
   },
@@ -372,7 +398,7 @@
     "episodeCount": 15,
     "challengeCount": 33,
     "eliminationCount": 19,
-    "eventCount": 30,
+    "eventCount": 34,
     "logoPath": "/images/season_31/season-31-logo.png",
     "warnings": 0
   },
@@ -398,7 +424,7 @@
     "episodeCount": 14,
     "challengeCount": 33,
     "eliminationCount": 19,
-    "eventCount": 33,
+    "eventCount": 37,
     "logoPath": "/images/season_33/season-33-logo.png",
     "warnings": 0
   },
@@ -411,9 +437,9 @@
     "episodeCount": 13,
     "challengeCount": 36,
     "eliminationCount": 19,
-    "eventCount": 34,
+    "eventCount": 38,
     "logoPath": "/images/season_34/season-34-logo.png",
-    "warnings": 0
+    "warnings": 1
   },
   {
     "seasonNum": 35,
@@ -424,7 +450,7 @@
     "episodeCount": 14,
     "challengeCount": 37,
     "eliminationCount": 17,
-    "eventCount": 39,
+    "eventCount": 44,
     "logoPath": "/images/season_35/season-35-logo.png",
     "warnings": 0
   },
@@ -437,7 +463,7 @@
     "episodeCount": 14,
     "challengeCount": 30,
     "eliminationCount": 19,
-    "eventCount": 37,
+    "eventCount": 41,
     "logoPath": "/images/season_36/season-36-logo.png",
     "warnings": 0
   },
@@ -450,9 +476,9 @@
     "episodeCount": 14,
     "challengeCount": 36,
     "eliminationCount": 19,
-    "eventCount": 37,
+    "eventCount": 39,
     "logoPath": "/images/season_37/season-37-logo.png",
-    "warnings": 0
+    "warnings": 2
   },
   {
     "seasonNum": 38,
@@ -463,9 +489,9 @@
     "episodeCount": 14,
     "challengeCount": 34,
     "eliminationCount": 17,
-    "eventCount": 41,
+    "eventCount": 45,
     "logoPath": "/images/season_38/season-38-logo.png",
-    "warnings": 0
+    "warnings": 1
   },
   {
     "seasonNum": 39,
@@ -476,7 +502,7 @@
     "episodeCount": 14,
     "challengeCount": 26,
     "eliminationCount": 19,
-    "eventCount": 42,
+    "eventCount": 46,
     "logoPath": "/images/season_39/season-39-logo.png",
     "warnings": 0
   },
@@ -489,9 +515,9 @@
     "episodeCount": 14,
     "challengeCount": 32,
     "eliminationCount": 19,
-    "eventCount": 57,
+    "eventCount": 62,
     "logoPath": "/images/season_40/season-40-logo.png",
-    "warnings": 0
+    "warnings": 1
   },
   {
     "seasonNum": 41,
@@ -528,7 +554,7 @@
     "episodeCount": 13,
     "challengeCount": 32,
     "eliminationCount": 17,
-    "eventCount": 62,
+    "eventCount": 64,
     "logoPath": "/images/season_43/season-43-logo.png",
     "warnings": 0
   },
@@ -541,7 +567,7 @@
     "episodeCount": 13,
     "challengeCount": 33,
     "eliminationCount": 17,
-    "eventCount": 63,
+    "eventCount": 67,
     "logoPath": "/images/season_44/season-44-logo.png",
     "warnings": 0
   },
@@ -554,8 +580,21 @@
     "episodeCount": 13,
     "challengeCount": 35,
     "eliminationCount": 17,
-    "eventCount": 62,
+    "eventCount": 64,
     "logoPath": "/images/season_45/season-45-logo.png",
+    "warnings": 0
+  },
+  {
+    "seasonNum": 46,
+    "location": "Mamanuca Islands, Fiji",
+    "filmingDates": "June 1, 2023 - June 26, 2023",
+    "seasonRun": "February 28, 2024 - May 22, 2024",
+    "playerCount": 18,
+    "episodeCount": 13,
+    "challengeCount": 34,
+    "eliminationCount": 17,
+    "eventCount": 52,
+    "logoPath": "/images/season_46/season-46-logo.png",
     "warnings": 0
   },
   {
@@ -569,6 +608,45 @@
     "eliminationCount": 17,
     "eventCount": 74,
     "logoPath": "/images/season_47/season-47-logo.png",
+    "warnings": 2
+  },
+  {
+    "seasonNum": 48,
+    "location": "Mamanuca Islands, Fiji",
+    "filmingDates": "June 27, 2024 - July 22, 2024",
+    "seasonRun": "February 26, 2025 - May 21, 2025",
+    "playerCount": 18,
+    "episodeCount": 13,
+    "challengeCount": 39,
+    "eliminationCount": 17,
+    "eventCount": 71,
+    "logoPath": "/images/season_48/season-48-logo.png",
+    "warnings": 0
+  },
+  {
+    "seasonNum": 49,
+    "location": "Mamanuca Islands, Fiji",
+    "filmingDates": "April 20, 2025 - May 15, 2025",
+    "seasonRun": "September 24, 2025 - December 17, 2025",
+    "playerCount": 18,
+    "episodeCount": 13,
+    "challengeCount": 36,
+    "eliminationCount": 17,
+    "eventCount": 58,
+    "logoPath": "/images/season_49/season-49-logo.png",
+    "warnings": 0
+  },
+  {
+    "seasonNum": 50,
+    "location": "Mamanuca Islands, Fiji",
+    "filmingDates": "June 5, 2025 - June 30, 2025",
+    "seasonRun": "February 25, 2026 - May 20, 2026",
+    "playerCount": 24,
+    "episodeCount": 6,
+    "challengeCount": 22,
+    "eliminationCount": 10,
+    "eventCount": 31,
+    "logoPath": "/images/season_50/season-50-logo.png",
     "warnings": 0
   }
 ]
