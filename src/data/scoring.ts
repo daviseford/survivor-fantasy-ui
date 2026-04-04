@@ -69,6 +69,12 @@ export const BASE_PLAYER_SCORING: CategorizedPlayerScoring[] = [
     category: "Milestones",
   },
   {
+    action: "ejected",
+    fixed_value: -5,
+    description: "Removed from the game by production.",
+    category: "Milestones",
+  },
+  {
     action: "quitter",
     fixed_value: -2,
     description:

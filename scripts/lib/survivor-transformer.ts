@@ -57,12 +57,18 @@ function buildCastawayIdMap(
   return map;
 }
 
-/** Resolve a short name or full_name to castaway_id, falling back to the input. */
+/** Resolve a short name or full_name to castaway_id. */
 function resolveCastawayId(
   nameOrId: string,
   idMap: Map<string, string>,
 ): string {
-  return idMap.get(nameOrId) ?? nameOrId;
+  const resolved = idMap.get(nameOrId);
+  if (!resolved) {
+    throw new Error(
+      `Could not resolve "${nameOrId}" to a castaway_id. Check survivoR data for name mismatches.`,
+    );
+  }
+  return resolved;
 }
 
 /**
@@ -360,9 +366,7 @@ function transformEliminations(
   });
 }
 
-function mapResultToVariant(
-  result: string,
-): "tribal" | "medical" | "quitter" | "final_tribal_council" | "other" {
+function mapResultToVariant(result: string): ScrapedEliminationVariant {
   const lower = result.toLowerCase();
   if (lower.includes("sole survivor") || lower.includes("winner"))
     return "final_tribal_council";
@@ -370,7 +374,9 @@ function mapResultToVariant(
     return "final_tribal_council";
   if (lower.includes("medically evacuated") || lower.includes("medical"))
     return "medical";
-  if (lower.includes("quit")) return "quitter";
+  if (lower.includes("quit") || lower.includes("withdrew")) return "quitter";
+  if (lower.includes("ejected")) return "ejected";
+  if (lower.includes("switched")) return "switched";
   // Covers "voted out", "Xth voted out", "eliminated", and fire-making
   if (
     lower.includes("voted out") ||
@@ -378,7 +384,9 @@ function mapResultToVariant(
     lower.includes("fire")
   )
     return "tribal";
-  return "tribal";
+  throw new Error(
+    `Unknown elimination result "${result}". Add handling to mapResultToVariant.`,
+  );
 }
 
 // --- Event transformation ---

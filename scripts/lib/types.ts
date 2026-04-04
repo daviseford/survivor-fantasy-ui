@@ -34,6 +34,8 @@ export type ScrapedEliminationVariant =
   | "tribal"
   | "medical"
   | "quitter"
+  | "ejected"
+  | "switched"
   | "final_tribal_council"
   | "other";
 

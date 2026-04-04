@@ -893,7 +893,7 @@ export const SEASON_27_ELIMINATIONS = {
     episode_num: 1,
     order: 2,
     castaway_id: "US0107",
-    variant: "tribal",
+    variant: "switched",
   },
   elimination_3: {
     id: "elimination_3",

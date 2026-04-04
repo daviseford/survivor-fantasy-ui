@@ -13,6 +13,7 @@ const SCORING_CATEGORIES = [
       "make_final_tribal_council",
       "win_survivor",
       "medically_evacuated",
+      "ejected",
       "quitter",
     ],
   },
