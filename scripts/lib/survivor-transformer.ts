@@ -400,9 +400,11 @@ const ADVANTAGE_TYPE_TO_FIND: Record<string, string> = {
   "Control the Vote": "find_control_the_vote",
   Amulet: "find_amulet",
   "Challenge Advantage": "find_challenge_advantage",
+  "Advantage Menu": "find_other_advantage",
   "Choose your Champion": "find_other_advantage",
   "Goodwill Advantage": "find_other_advantage",
   "Inheritance Advantage": "find_other_advantage",
+  "Reward Stealer": "find_other_advantage",
 };
 
 /** Map advantage_details.advantage_type → specific use action. */
@@ -422,23 +424,37 @@ const ADVANTAGE_TYPE_TO_USE: Record<string, string> = {
   "Control the Vote": "use_control_the_vote",
   Amulet: "use_amulet",
   "Challenge Advantage": "use_challenge_advantage",
+  "Advantage Menu": "use_other_advantage",
   "Choose your Champion": "use_other_advantage",
   "Goodwill Advantage": "use_other_advantage",
   "Inheritance Advantage": "use_other_advantage",
+  "Reward Stealer": "use_other_advantage",
 };
 
 /** Non-scoring vote events — explicitly skipped. */
 const IGNORED_VOTE_EVENTS = new Set([
   "Beware advantage",
+  "Abstain to gain",
+  "Countback",
   "Deadlock",
   "Do or die",
+  "Exiled",
   "Final 3 tribal",
+  "Fire challenge",
   "Fire challenge (f4)",
   "First out in challenge",
+  "Ghost island game",
+  "Island of the idols game",
   "Journey challenge",
+  "Kidnapped",
   "Lost vote at survivor auction",
   "Lost vote on journey",
+  "Nature quiz",
   "Player quit",
+  "Quit",
+  "Rock draw",
+  "Unanimous decision",
+  "Won immunity challenge",
   "Sacrificed vote to extend idol",
   "Sacrificed vote to extend idol; goodwill advantage",
   "Summit",
@@ -484,11 +500,17 @@ const JOURNEY_REWARD_TO_WIN: Record<string, string> = {
 
 /** Non-scoring advantage lifecycle events — explicitly skipped. */
 const IGNORED_ADVANTAGE_EVENTS = new Set([
+  "Absorbed",
+  "Activated",
   "Banked",
   "Became hidden immunity idol",
   "Became steal a vote",
+  "Destroyed",
+  "Discarded",
   "Expired",
   "Left game with advantage",
+  "Medically evacuated with advantage",
+  "Quit with advantage",
 ]);
 
 /** Idol advantage types (for beware lifecycle detection). */
