@@ -33,10 +33,12 @@ export type Episode<SeasonNumber = number> = {
 };
 
 export const EliminationVariants = [
+  "ejected",
   "final_tribal_council",
   "medical",
   "other",
   "quitter",
+  "switched",
   "tribal",
 ] as const;
 
@@ -285,6 +287,7 @@ export const GameEventActions = [
 export type GameEventAction = (typeof GameEventActions)[number];
 
 export const GameProgressActions = [
+  "ejected",
   "eliminated",
   "medically_evacuated",
   "quitter",

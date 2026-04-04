@@ -936,7 +936,7 @@ export const SEASON_39_ELIMINATIONS = {
     episode_num: 13,
     order: 15,
     castaway_id: "US0585",
-    variant: "tribal",
+    variant: "ejected",
   },
   elimination_16: {
     id: "elimination_16",

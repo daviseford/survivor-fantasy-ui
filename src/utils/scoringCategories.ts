@@ -71,6 +71,7 @@ export const ScoringCategoryMap: Record<PlayerAction, ScoringCategory> = {
   win_survivor: "milestones",
 
   // Eliminations
+  ejected: "eliminations",
   eliminated: "eliminations",
   medically_evacuated: "eliminations",
   quitter: "eliminations",

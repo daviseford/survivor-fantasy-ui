@@ -56,6 +56,7 @@ export const getEnhancedSurvivorPoints = (
   // if the player was eliminated, give them points based on episode number
   _eliminations?.forEach((e) => {
     if (e.castaway_id !== castawayId) return;
+    if (e.variant === "switched") return; // Not a real elimination
 
     addToScores("eliminated", e.episode_num);
 
@@ -66,6 +67,8 @@ export const getEnhancedSurvivorPoints = (
       );
     } else if (e.variant === "quitter") {
       addToScores("quitter", addFixedActionPoints("quitter"));
+    } else if (e.variant === "ejected") {
+      addToScores("ejected", addFixedActionPoints("ejected"));
     }
   });
 
