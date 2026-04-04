@@ -205,15 +205,33 @@ export const BASE_PLAYER_SCORING: CategorizedPlayerScoring[] = [
     category: "Advantages",
   },
   {
+    action: "use_amulet",
+    fixed_value: 3,
+    description: "Play an Amulet advantage at Tribal Council.",
+    category: "Advantages",
+  },
+  {
     action: "find_challenge_advantage",
     fixed_value: 2,
     description: "Find a Challenge Advantage.",
     category: "Advantages",
   },
   {
+    action: "use_challenge_advantage",
+    fixed_value: 3,
+    description: "Play a Challenge Advantage.",
+    category: "Advantages",
+  },
+  {
     action: "find_other_advantage",
     fixed_value: 2,
     description: "Find a rare or one-off advantage.",
+    category: "Advantages",
+  },
+  {
+    action: "use_other_advantage",
+    fixed_value: 3,
+    description: "Play a rare or one-off advantage.",
     category: "Advantages",
   },
   {
@@ -238,6 +256,18 @@ export const BASE_PLAYER_SCORING: CategorizedPlayerScoring[] = [
     action: "win_other_advantage",
     fixed_value: 2,
     description: "Win a rare or one-off advantage from a journey or challenge.",
+    category: "Advantages",
+  },
+  {
+    action: "voted_out_with_idol",
+    fixed_value: -3,
+    description: "Voted out while holding an unplayed idol.",
+    category: "Idols",
+  },
+  {
+    action: "voted_out_with_advantage",
+    fixed_value: -2,
+    description: "Voted out while holding an unplayed advantage.",
     category: "Advantages",
   },
   // --- Other ---
