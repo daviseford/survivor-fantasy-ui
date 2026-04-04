@@ -72,7 +72,7 @@ export const SEASON_50_CASTAWAY_LOOKUP: CastawayLookup = {
   US0668: { full_name: "Emily Flippen", castaway: "Emily" },
   US0722: { full_name: "Joe Hunter", castaway: "Joe" },
   US0615: { full_name: "Jonathan Young", castaway: "Jonathan" },
-  US0201: { full_name: "Oscar Lusth", castaway: "Ozzy" },
+  US0201: { full_name: "Oscar Lusth", castaway: "Oscar" },
   US0560: { full_name: "Rick Devens", castaway: "Rick" },
   US0745: { full_name: "Rizo Velovic", castaway: "Rizo" },
   US0144: { full_name: "Stephenie LaGrossa Kendrick", castaway: "Stephenie" },
@@ -87,7 +87,6 @@ export const SEASON_50_PLAYERS = [
     description: "Age: 47 | Hometown: Woodland, California",
     age: 47,
     hometown: "Woodland, California",
-    nickname: "Jenna",
   }),
   buildPlayer({
     castaway_id: "US0726",
@@ -112,7 +111,6 @@ export const SEASON_50_PLAYERS = [
     description: "Age: 31 | Hometown: Germantown, Tennessee",
     age: 31,
     hometown: "Germantown, Tennessee",
-    nickname: "Q",
   }),
   buildPlayer({
     castaway_id: "US0555",
@@ -121,7 +119,6 @@ export const SEASON_50_PLAYERS = [
     description: "Age: 54 | Hometown: Hanalei, Hawaii",
     age: 54,
     hometown: "Hanalei, Hawaii",
-    nickname: "Mike",
   }),
   buildPlayer({
     castaway_id: "US0554",
@@ -138,7 +135,6 @@ export const SEASON_50_PLAYERS = [
     description: "Age: 27 | Hometown: Boston, Massachusetts",
     age: 27,
     hometown: "Boston, Massachusetts",
-    nickname: "Charlie",
   }),
   buildPlayer({
     castaway_id: "US0724",
@@ -179,7 +175,6 @@ export const SEASON_50_PLAYERS = [
     description: "Age: 54 | Hometown: The Villages, Florida",
     age: 54,
     hometown: "The Villages, Florida",
-    nickname: "Chrissy",
   }),
   buildPlayer({
     castaway_id: "US0550",
@@ -204,7 +199,6 @@ export const SEASON_50_PLAYERS = [
     description: "Age: 53 | Hometown: Susanville, California",
     age: 53,
     hometown: "Susanville, California",
-    nickname: "Coach",
   }),
   buildPlayer({
     castaway_id: "US0666",
@@ -213,7 +207,6 @@ export const SEASON_50_PLAYERS = [
     description: "Age: 28 | Hometown: Miami, Florida",
     age: 28,
     hometown: "Miami, Florida",
-    nickname: "Dee",
   }),
   buildPlayer({
     castaway_id: "US0668",
@@ -230,7 +223,6 @@ export const SEASON_50_PLAYERS = [
     description: "Age: 45 | Hometown: West Sacramento, California",
     age: 45,
     hometown: "West Sacramento, California",
-    nickname: "Joe",
   }),
   buildPlayer({
     castaway_id: "US0615",
@@ -247,7 +239,6 @@ export const SEASON_50_PLAYERS = [
     description: "Age: 43 | Hometown: Guanajuato, Guanajuato",
     age: 43,
     hometown: "Guanajuato, Guanajuato",
-    nickname: "Ozzy",
   }),
   buildPlayer({
     castaway_id: "US0560",
@@ -256,7 +247,6 @@ export const SEASON_50_PLAYERS = [
     description: "Age: 41 | Hometown: Macon, Georgia",
     age: 41,
     hometown: "Macon, Georgia",
-    nickname: "Rick",
   }),
   buildPlayer({
     castaway_id: "US0745",
