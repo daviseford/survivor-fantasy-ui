@@ -4,7 +4,7 @@ Data source: [doehm/survivoR](https://github.com/doehm/survivoR) R package (`dev
 
 Base URL: `https://raw.githubusercontent.com/doehm/survivoR/master/dev/json/{table}.json`
 
-All tables return JSON arrays. Most tables have `version` (filter to `"US"`) and `season` fields. The `castaway_id` field (format `US0001`) is the universal join key across tables.
+All tables return JSON arrays. Most tables have `version` (filter to `"US"`) and `season` fields. The `castaway_id` field (format `US0001`) is the universal join key across tables. For how the automated CI pipeline fetches, transforms, and syncs this data, see [CI Auto-Sync Pipeline](solutions/workflow-issues/ci-auto-sync-pipeline-validation-and-formatting-fix.md).
 
 ## Tables We Fetch (8)
 
@@ -74,7 +74,7 @@ Per-castaway, per-challenge outcomes with granular win-type flags.
 
 12,247 US rows. Seasons 1-50. The `won_*` flags enable splitting combined challenges and filtering tribal wins to the correct subset.
 
-### vote_history.json (CRITICAL — currently unused by transformer)
+### vote_history.json (CRITICAL)
 
 Every tribal council vote cast.
 
@@ -107,7 +107,7 @@ Advantage lifecycle events: found, played, transferred, expired.
 
 591 US rows. Seasons 11-50. Note: `played_for`, `played_for_id`, `success`, `votes_nullified` fields appear on some records (especially "Played" events) but are absent on others.
 
-### advantage_details.json (HIGH — not yet fetched)
+### advantage_details.json (CRITICAL)
 
 Advantage catalog: what type each advantage is.
 

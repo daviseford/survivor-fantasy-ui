@@ -61,7 +61,7 @@ A GitHub Action (`.github/workflows/sync-survivor-data.yml`) runs daily at 14:00
 3. Creates or updates a PR with the changes
 4. Pushes updated data to Firestore
 
-This means active seasons are kept in sync automatically — no manual updates needed during a season's airing.
+This means active seasons are kept in sync automatically — no manual updates needed during a season's airing. See [CI Auto-Sync Pipeline — How It Works, How to Test It, and Lessons Learned](solutions/workflow-issues/ci-auto-sync-pipeline-validation-and-formatting-fix.md) for architecture details, testing strategies, and known gotchas.
 
 ## What Gets Generated
 
