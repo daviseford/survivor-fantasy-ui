@@ -71,7 +71,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0443",
     full_name: "So Kim",
-    img: "",
+    img: "/images/season_30/So-Kim.jpg",
     description: "Age: 31 | Hometown: Long Beach, California",
     age: 31,
     hometown: "Long Beach, California",
@@ -87,7 +87,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0445",
     full_name: "Nina Poersch",
-    img: "",
+    img: "/images/season_30/Nina-Poersch.jpg",
     description: "Age: 51 | Hometown: Palmdale, California",
     age: 51,
     hometown: "Palmdale, California",
@@ -95,7 +95,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0446",
     full_name: "Lindsey Cascaddan",
-    img: "",
+    img: "/images/season_30/Lindsey-Cascaddan.jpg",
     description: "Age: 24 | Hometown: College Park, Florida",
     age: 24,
     hometown: "College Park, Florida",
@@ -103,7 +103,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0447",
     full_name: "Max Dawson",
-    img: "",
+    img: "/images/season_30/Max-Dawson.jpg",
     description: "Age: 37 | Hometown: Topanga, California",
     age: 37,
     hometown: "Topanga, California",
@@ -111,7 +111,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0448",
     full_name: "Joaquin Souberbielle",
-    img: "",
+    img: "/images/season_30/Joaquin-Souberbielle.jpg",
     description: "Age: 27 | Hometown: Valley Stream, New York",
     age: 27,
     hometown: "Valley Stream, New York",
@@ -119,7 +119,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0449",
     full_name: "Kelly Remington",
-    img: "",
+    img: "/images/season_30/Kelly-Remington.jpg",
     description: "Age: 44 | Hometown: Grand Island, New York",
     age: 44,
     hometown: "Grand Island, New York",
@@ -127,7 +127,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0450",
     full_name: "Hali Ford",
-    img: "",
+    img: "/images/season_30/Hali-Ford.jpg",
     description: "Age: 25 | Hometown: San Francisco, California",
     age: 25,
     hometown: "San Francisco, California",
@@ -135,7 +135,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0451",
     full_name: "Joe Anglim",
-    img: "",
+    img: "/images/season_30/Joe-Anglim.jpg",
     description: "Age: 25 | Hometown: Scottsdale, Arizona",
     age: 25,
     hometown: "Scottsdale, Arizona",
@@ -143,7 +143,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0452",
     full_name: "Jenn Brown",
-    img: "",
+    img: "/images/season_30/Jenn-Brown.jpg",
     description: "Age: 22 | Hometown: Long Beach, California",
     age: 22,
     hometown: "Long Beach, California",
@@ -151,7 +151,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0453",
     full_name: "Shirin Oskooi",
-    img: "",
+    img: "/images/season_30/Shirin-Oskooi.jpg",
     description: "Age: 31 | Hometown: San Francisco, California",
     age: 31,
     hometown: "San Francisco, California",
@@ -159,7 +159,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0454",
     full_name: "Tyler Fredrickson",
-    img: "",
+    img: "/images/season_30/Tyler-Fredrickson.jpg",
     description: "Age: 33 | Hometown: Los Angeles, California",
     age: 33,
     hometown: "Los Angeles, California",
@@ -167,7 +167,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0455",
     full_name: "Dan Foley",
-    img: "",
+    img: "/images/season_30/Dan-Foley.jpg",
     description: "Age: 47 | Hometown: Gorham, Maine",
     age: 47,
     hometown: "Gorham, Maine",
@@ -175,7 +175,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0456",
     full_name: "Sierra Dawn Thomas",
-    img: "",
+    img: "/images/season_30/Sierra-Dawn-Thomas.jpg",
     description: "Age: 27 | Hometown: Roy, Utah",
     age: 27,
     hometown: "Roy, Utah",
@@ -183,7 +183,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0457",
     full_name: "Rodney Lavoie Jr.",
-    img: "",
+    img: "/images/season_30/Rodney-Lavoie-Jr..jpg",
     description: "Age: 24 | Hometown: Boston, Massachusetts",
     age: 24,
     hometown: "Boston, Massachusetts",
@@ -191,7 +191,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0458",
     full_name: "Will Sims II",
-    img: "",
+    img: "/images/season_30/Will-Sims-II.jpg",
     description: "Age: 41 | Hometown: Sherman Oaks, California",
     age: 41,
     hometown: "Sherman Oaks, California",
@@ -199,7 +199,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0459",
     full_name: "Carolyn Rivera",
-    img: "",
+    img: "/images/season_30/Carolyn-Rivera.jpg",
     description: "Age: 52 | Hometown: Tampa, Florida",
     age: 52,
     hometown: "Tampa, Florida",
@@ -207,7 +207,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0460",
     full_name: "Mike Holloway",
-    img: "",
+    img: "/images/season_30/Mike-Holloway.jpg",
     description: "Age: 38 | Hometown: North Richland Hills, Texas",
     age: 38,
     hometown: "North Richland Hills, Texas",

@@ -64,14 +64,14 @@ export const SEASON_43_CASTAWAY_LOOKUP: CastawayLookup = {
   US0634: { full_name: "Jesse Lopez", castaway: "Jesse" },
   US0642: { full_name: "Owen Knight", castaway: "Owen" },
   US0627: { full_name: "Cassidy Clark", castaway: "Cassidy" },
-  US0638: { full_name: "Mike Gabler", castaway: "Gabler" },
+  US0638: { full_name: "Mike Gabler", castaway: "Mike" },
 };
 
 export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0639",
     full_name: "Morriah Young",
-    img: "",
+    img: "/images/season_43/Morriah-Young.jpg",
     description: "Age: 28 | Hometown: Philadelphia, Pennsylvania",
     age: 28,
     hometown: "Philadelphia, Pennsylvania",
@@ -79,7 +79,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0635",
     full_name: "Justine Brennan",
-    img: "",
+    img: "/images/season_43/Justine-Brennan.jpg",
     description: "Age: 29 | Hometown: Marina Del Ray, California",
     age: 29,
     hometown: "Marina Del Ray, California",
@@ -87,7 +87,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0640",
     full_name: "Nneka Ejere",
-    img: "",
+    img: "/images/season_43/Nneka-Ejere.jpg",
     description: "Age: 43 | Hometown: Weatherford, Texas",
     age: 43,
     hometown: "Weatherford, Texas",
@@ -95,7 +95,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0637",
     full_name: "Lindsay Carmine",
-    img: "",
+    img: "/images/season_43/Lindsay-Carmine.jpg",
     description: "Age: 42 | Hometown: Downington, Pennsylvania",
     age: 42,
     hometown: "Downington, Pennsylvania",
@@ -103,7 +103,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0631",
     full_name: "Geo Bustamante",
-    img: "",
+    img: "/images/season_43/Geo-Bustamante.jpg",
     description: "Age: 35 | Hometown: Honalulu, Hawaii",
     age: 35,
     hometown: "Honalulu, Hawaii",
@@ -111,15 +111,16 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0630",
     full_name: "Elie Scott",
-    img: "",
+    img: "/images/season_43/Elie-Scott.jpg",
     description: "Age: 31 | Hometown: Salt Lake City, Utah",
     age: 31,
     hometown: "Salt Lake City, Utah",
+    nickname: "Elie",
   }),
   buildPlayer({
     castaway_id: "US0629",
     full_name: "Dwight Moore",
-    img: "",
+    img: "/images/season_43/Dwight-Moore.jpg",
     description: "Age: 21 | Hometown: Collierville, Tennasse",
     age: 21,
     hometown: "Collierville, Tennasse",
@@ -127,7 +128,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0633",
     full_name: "Jeanine Zheng",
-    img: "",
+    img: "/images/season_43/Jeanine-Zheng.jpg",
     description: "Age: 24 | Hometown: San Francisco, California",
     age: 24,
     hometown: "San Francisco, California",
@@ -135,7 +136,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0632",
     full_name: "James Jones",
-    img: "",
+    img: "/images/season_43/James-Jones.jpg",
     description: "Age: 36 | Hometown: Philadelphia, Pennsylvania",
     age: 36,
     hometown: "Philadelphia, Pennsylvania",
@@ -143,7 +144,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0643",
     full_name: "Ryan Medrano",
-    img: "",
+    img: "/images/season_43/Ryan-Medrano.jpg",
     description: "Age: 24 | Hometown: El Paso, Texas",
     age: 24,
     hometown: "El Paso, Texas",
@@ -151,7 +152,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0641",
     full_name: "Noelle Lambert",
-    img: "",
+    img: "/images/season_43/Noelle-Lambert.jpg",
     description: "Age: 25 | Hometown: Manchester, New Hampshire",
     age: 25,
     hometown: "Manchester, New Hampshire",
@@ -159,7 +160,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0644",
     full_name: "Sami Layadi",
-    img: "",
+    img: "/images/season_43/Sami-Layadi.jpg",
     description: "Age: 19 | Hometown: Las Vegas, Nevada",
     age: 19,
     hometown: "Las Vegas, Nevada",
@@ -167,7 +168,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0628",
     full_name: "Cody Assenmacher",
-    img: "",
+    img: "/images/season_43/Cody-Assenmacher.jpg",
     description: "Age: 35 | Hometown: Honalulu, Hawaii",
     age: 35,
     hometown: "Honalulu, Hawaii",
@@ -175,7 +176,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0636",
     full_name: "Karla Cruz Godoy",
-    img: "",
+    img: "/images/season_43/Karla-Cruz-Godoy.jpg",
     description: "Age: 28 | Hometown: Dewark, Delaware",
     age: 28,
     hometown: "Dewark, Delaware",
@@ -183,7 +184,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0634",
     full_name: "Jesse Lopez",
-    img: "",
+    img: "/images/season_43/Jesse-Lopez.jpg",
     description: "Age: 30 | Hometown: Durham, North Carolina",
     age: 30,
     hometown: "Durham, North Carolina",
@@ -191,7 +192,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0642",
     full_name: "Owen Knight",
-    img: "",
+    img: "/images/season_43/Owen-Knight.jpg",
     description: "Age: 29 | Hometown: New Orleans, Louisiana",
     age: 29,
     hometown: "New Orleans, Louisiana",
@@ -199,7 +200,7 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0627",
     full_name: "Cassidy Clark",
-    img: "",
+    img: "/images/season_43/Cassidy-Clark.jpg",
     description: "Age: 26 | Hometown: Austin, Texas",
     age: 26,
     hometown: "Austin, Texas",
@@ -207,11 +208,11 @@ export const SEASON_43_PLAYERS = [
   buildPlayer({
     castaway_id: "US0638",
     full_name: "Mike Gabler",
-    img: "",
+    img: "/images/season_43/Mike-Gabler.jpg",
     description: "Age: 51 | Hometown: Meridian, Idaho",
     age: 51,
     hometown: "Meridian, Idaho",
-    nickname: "Gabler",
+    nickname: "Mike",
   }),
 ] satisfies Player<CastawayIdType, SeasonNumber>[];
 

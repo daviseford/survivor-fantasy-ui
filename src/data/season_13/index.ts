@@ -75,7 +75,7 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0183",
     full_name: "Sekou Bunch",
-    img: "",
+    img: "/images/season_13/Sekou-Bunch.jpg",
     description: "Age: 45 | Hometown: Los Angeles, California",
     age: 45,
     hometown: "Los Angeles, California",
@@ -92,7 +92,7 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0185",
     full_name: "Cecilia Mansilla",
-    img: "",
+    img: "/images/season_13/Cecilia-Mansilla.jpg",
     description: "Age: 29 | Hometown: Oakland, California",
     age: 29,
     hometown: "Oakland, California",
@@ -109,7 +109,7 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0187",
     full_name: "Stephannie Favor",
-    img: "",
+    img: "/images/season_13/Stephannie-Favor.jpg",
     description: "Age: 35 | Hometown: Columbia, South Carolina",
     age: 35,
     hometown: "Columbia, South Carolina",
@@ -126,7 +126,7 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0189",
     full_name: "Cristina Coria",
-    img: "",
+    img: "/images/season_13/Cristina-Coria.jpg",
     description: "Age: 35 | Hometown: Santa Monica, California",
     age: 35,
     hometown: "Santa Monica, California",
@@ -134,7 +134,7 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0190",
     full_name: "Jessica Smith",
-    img: "",
+    img: "/images/season_13/Jessica-Smith.jpg",
     description: "Age: 27 | Hometown: Chico, California",
     age: 27,
     hometown: "Chico, California",
@@ -142,7 +142,7 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0191",
     full_name: "Brad Virata",
-    img: "",
+    img: "/images/season_13/Brad-Virata.jpg",
     description: "Age: 29 | Hometown: Santa Monica, California",
     age: 29,
     hometown: "Santa Monica, California",
@@ -150,7 +150,7 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0192",
     full_name: "Rebecca Borman",
-    img: "",
+    img: "/images/season_13/Rebecca-Borman.jpg",
     description: "Age: 34 | Hometown: Laurelton, New York",
     age: 34,
     hometown: "Laurelton, New York",
@@ -175,7 +175,7 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0195",
     full_name: "Candice Woodcock",
-    img: "",
+    img: "/images/season_13/Candice-Woodcock.jpg",
     description: "Age: 23 | Hometown: Washington, D.C.",
     age: 23,
     hometown: "Washington, D.C.",
@@ -183,7 +183,7 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0196",
     full_name: "Jonathan Penner",
-    img: "",
+    img: "/images/season_13/Jonathan-Penner.jpg",
     description: "Age: 44 | Hometown: Los Angeles, California",
     age: 44,
     hometown: "Los Angeles, California",
@@ -191,7 +191,7 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0197",
     full_name: "Parvati Shallow",
-    img: "",
+    img: "/images/season_13/Parvati-Shallow.jpg",
     description: "Age: 23 | Hometown: West Hollywood, California",
     age: 23,
     hometown: "West Hollywood, California",
@@ -199,7 +199,7 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0198",
     full_name: "Adam Gentry",
-    img: "",
+    img: "/images/season_13/Adam-Gentry.jpg",
     description: "Age: 28 | Hometown: San Diego, California",
     age: 28,
     hometown: "San Diego, California",
@@ -207,7 +207,7 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0199",
     full_name: "Sundra Oakley",
-    img: "",
+    img: "/images/season_13/Sundra-Oakley.jpg",
     description: "Age: 31 | Hometown: Los Angeles, California",
     age: 31,
     hometown: "Los Angeles, California",
@@ -224,7 +224,7 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0201",
     full_name: "Oscar Lusth",
-    img: "",
+    img: "/images/season_13/Oscar-Lusth.jpg",
     description: "Age: 24 | Hometown: Venice, California",
     age: 24,
     hometown: "Venice, California",
@@ -233,7 +233,7 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0202",
     full_name: "Yul Kwon",
-    img: "",
+    img: "/images/season_13/Yul-Kwon.jpg",
     description: "Age: 31 | Hometown: San Mateo, California",
     age: 31,
     hometown: "San Mateo, California",

@@ -71,7 +71,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0425",
     full_name: "Nadiya Anderson",
-    img: "",
+    img: "/images/season_29/Nadiya-Anderson.jpg",
     description: "Age: 28 | Hometown: Edgewater, New Jersey",
     age: 28,
     hometown: "Edgewater, New Jersey",
@@ -79,7 +79,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0426",
     full_name: "Val Collins",
-    img: "",
+    img: "/images/season_29/Val-Collins.jpg",
     description: "Age: 35 | Hometown: Foxboro, Massachusetts",
     age: 35,
     hometown: "Foxboro, Massachusetts",
@@ -87,7 +87,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0427",
     full_name: "John Rocker",
-    img: "",
+    img: "/images/season_29/John-Rocker.jpg",
     description: "Age: 39 | Hometown: Atlanta, Georgia",
     age: 39,
     hometown: "Atlanta, Georgia",
@@ -95,7 +95,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0428",
     full_name: "Drew Christy",
-    img: "",
+    img: "/images/season_29/Drew-Christy.jpg",
     description: "Age: 25 | Hometown: Winter Park, Florida",
     age: 25,
     hometown: "Winter Park, Florida",
@@ -103,7 +103,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0429",
     full_name: "Kelley Wentworth",
-    img: "",
+    img: "/images/season_29/Kelley-Wentworth.jpg",
     description: "Age: 28 | Hometown: Seattle, Washington",
     age: 28,
     hometown: "Seattle, Washington",
@@ -111,7 +111,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0430",
     full_name: "Dale Wentworth",
-    img: "",
+    img: "/images/season_29/Dale-Wentworth.jpg",
     description: "Age: 55 | Hometown: Ephrata, Washington",
     age: 55,
     hometown: "Ephrata, Washington",
@@ -119,7 +119,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0431",
     full_name: "Julie McGee",
-    img: "",
+    img: "/images/season_29/Julie-McGee.jpg",
     description: "Age: 34 | Hometown: Atlanta, Georgia",
     age: 34,
     hometown: "Atlanta, Georgia",
@@ -127,7 +127,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0432",
     full_name: "Josh Canfield",
-    img: "",
+    img: "/images/season_29/Josh-Canfield.jpg",
     description: "Age: 32 | Hometown: New York City, New York",
     age: 32,
     hometown: "New York City, New York",
@@ -135,7 +135,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0433",
     full_name: "Jeremy Collins",
-    img: "",
+    img: "/images/season_29/Jeremy-Collins.jpg",
     description: "Age: 36 | Hometown: Foxboro, Massachusetts",
     age: 36,
     hometown: "Foxboro, Massachusetts",
@@ -143,7 +143,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0434",
     full_name: "Wes Nale",
-    img: "",
+    img: "/images/season_29/Wes-Nale.jpg",
     description: "Age: 23 | Hometown: Shreveport, Louisiana",
     age: 23,
     hometown: "Shreveport, Louisiana",
@@ -151,7 +151,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0435",
     full_name: "Reed Kelly",
-    img: "",
+    img: "/images/season_29/Reed-Kelly.jpg",
     description: "Age: 31 | Hometown: New York City, New York",
     age: 31,
     hometown: "New York City, New York",
@@ -159,7 +159,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0436",
     full_name: "Alec Christy",
-    img: "",
+    img: "/images/season_29/Alec-Christy.jpg",
     description: "Age: 22 | Hometown: Winter Park, Florida",
     age: 22,
     hometown: "Winter Park, Florida",
@@ -167,7 +167,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0437",
     full_name: "Jon Misch",
-    img: "",
+    img: "/images/season_29/Jon-Misch.jpg",
     description: "Age: 26 | Hometown: Waterford, Michigan",
     age: 26,
     hometown: "Waterford, Michigan",
@@ -175,7 +175,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0438",
     full_name: "Baylor Wilson",
-    img: "",
+    img: "/images/season_29/Baylor-Wilson.jpg",
     description: "Age: 20 | Hometown: Nashville, Tennessee",
     age: 20,
     hometown: "Nashville, Tennessee",
@@ -183,7 +183,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0439",
     full_name: "Keith Nale",
-    img: "",
+    img: "/images/season_29/Keith-Nale.jpg",
     description: "Age: 53 | Hometown: Shreveport, Louisiana",
     age: 53,
     hometown: "Shreveport, Louisiana",
@@ -191,7 +191,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0440",
     full_name: "Missy Payne",
-    img: "",
+    img: "/images/season_29/Missy-Payne.jpg",
     description: "Age: 47 | Hometown: Dallas, Texas",
     age: 47,
     hometown: "Dallas, Texas",
@@ -199,7 +199,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0441",
     full_name: "Jaclyn Schultz",
-    img: "",
+    img: "/images/season_29/Jaclyn-Schultz.jpg",
     description: "Age: 25 | Hometown: Las Vegas, Nevada",
     age: 25,
     hometown: "Las Vegas, Nevada",
@@ -207,7 +207,7 @@ export const SEASON_29_PLAYERS = [
   buildPlayer({
     castaway_id: "US0442",
     full_name: "Natalie Anderson",
-    img: "",
+    img: "/images/season_29/Natalie-Anderson.jpg",
     description: "Age: 28 | Hometown: Edgewater, New Jersey",
     age: 28,
     hometown: "Edgewater, New Jersey",

@@ -71,7 +71,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0248",
     full_name: "Michelle Chase",
-    img: "",
+    img: "/images/season_17/Michelle-Chase.jpg",
     description: "Age: 24 | Hometown: Los Angeles, California",
     age: 24,
     hometown: "Los Angeles, California",
@@ -79,7 +79,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0249",
     full_name: "Gillian Larson",
-    img: "",
+    img: "/images/season_17/Gillian-Larson.jpg",
     description: "Age: 61 | Hometown: Temecula, California",
     age: 61,
     hometown: "Temecula, California",
@@ -95,7 +95,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0251",
     full_name: "Jacquie Berg",
-    img: "",
+    img: "/images/season_17/Jacquie-Berg.jpg",
     description: "Age: 25 | Hometown: Santa Barbara, California",
     age: 25,
     hometown: "Santa Barbara, California",
@@ -103,7 +103,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0252",
     full_name: "Danny Brown",
-    img: "",
+    img: "/images/season_17/Danny-Brown.jpg",
     description: "Age: 25 | Hometown: Portland, Oregon",
     age: 25,
     hometown: "Portland, Oregon",
@@ -112,7 +112,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0253",
     full_name: "Kelly Czarnecki",
-    img: "",
+    img: "/images/season_17/Kelly-Czarnecki.jpg",
     description: "Age: 22 | Hometown: Buffalo Grove, Illinois",
     age: 22,
     hometown: "Buffalo Grove, Illinois",
@@ -120,7 +120,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0254",
     full_name: "Ace Gordon",
-    img: "",
+    img: "/images/season_17/Ace-Gordon.jpg",
     description: "Age: 27 | Hometown: Naples, Florida",
     age: 27,
     hometown: "Naples, Florida",
@@ -128,7 +128,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0255",
     full_name: "Dan Kay",
-    img: "",
+    img: "/images/season_17/Dan-Kay.jpg",
     description: "Age: 32 | Hometown: Boston, Massachusetts",
     age: 32,
     hometown: "Boston, Massachusetts",
@@ -136,7 +136,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0256",
     full_name: "Marcus Lehman",
-    img: "",
+    img: "/images/season_17/Marcus-Lehman.jpg",
     description: "Age: 28 | Hometown: Atlanta, Georgia",
     age: 28,
     hometown: "Atlanta, Georgia",
@@ -144,7 +144,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0257",
     full_name: "Charlie Herschel",
-    img: "",
+    img: "/images/season_17/Charlie-Herschel.jpg",
     description: "Age: 29 | Hometown: New York City, New York",
     age: 29,
     hometown: "New York City, New York",
@@ -152,7 +152,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0258",
     full_name: "Randy Bailey",
-    img: "",
+    img: "/images/season_17/Randy-Bailey.jpg",
     description: "Age: 49 | Hometown: Eagle Rock, Missouri",
     age: 49,
     hometown: "Eagle Rock, Missouri",
@@ -160,7 +160,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0259",
     full_name: "Corinne Kaplan",
-    img: "",
+    img: "/images/season_17/Corinne-Kaplan.jpg",
     description: "Age: 29 | Hometown: Los Angeles, California",
     age: 29,
     hometown: "Los Angeles, California",
@@ -168,7 +168,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0260",
     full_name: "Crystal Cox",
-    img: "",
+    img: "/images/season_17/Crystal-Cox.jpg",
     description: "Age: 29 | Hometown: Durham, North Carolina",
     age: 29,
     hometown: "Durham, North Carolina",
@@ -176,7 +176,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0261",
     full_name: "Ken Hoang",
-    img: "",
+    img: "/images/season_17/Ken-Hoang.jpg",
     description: "Age: 22 | Hometown: Westminster, California",
     age: 22,
     hometown: "Westminster, California",
@@ -184,7 +184,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0262",
     full_name: "Matty Whitmore",
-    img: "",
+    img: "/images/season_17/Matty-Whitmore.jpg",
     description: "Age: 29 | Hometown: Pacific Palisades, California",
     age: 29,
     hometown: "Pacific Palisades, California",
@@ -192,7 +192,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0263",
     full_name: "Jessica Kiper",
-    img: "",
+    img: "/images/season_17/Jessica-Kiper.jpg",
     description: "Age: 29 | Hometown: Brooklyn, New York",
     age: 29,
     hometown: "Brooklyn, New York",
@@ -201,7 +201,7 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0264",
     full_name: "Susie Smith",
-    img: "",
+    img: "/images/season_17/Susie-Smith.jpg",
     description: "Age: 47 | Hometown: Charles City, Iowa",
     age: 47,
     hometown: "Charles City, Iowa",

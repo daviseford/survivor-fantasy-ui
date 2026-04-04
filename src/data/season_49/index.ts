@@ -63,7 +63,7 @@ export const SEASON_49_CASTAWAY_LOOKUP: CastawayLookup = {
   US0740: { full_name: "Kristina Mills", castaway: "Kristina" },
   US0745: { full_name: "Rizo Velovic", castaway: "Rizo" },
   US0746: { full_name: "Sage Ahrens-Nichols", castaway: "Sage" },
-  US0749: { full_name: "Sophi Balerdi", castaway: "Sophi" },
+  US0749: { full_name: "Sophi Balerdi", castaway: "Sophi/Soph" },
   US0747: { full_name: "Savannah Louie", castaway: "Savannah" },
 };
 
@@ -71,7 +71,7 @@ export const SEASON_49_PLAYERS = [
   buildPlayer({
     castaway_id: "US0744",
     full_name: "Nicole Mazullo",
-    img: "",
+    img: "/images/season_49/Nicole-Mazullo.jpg",
     description: "Age: 26 | Hometown: Philadelphia, Pennsylvania",
     age: 26,
     hometown: "Philadelphia, Pennsylvania",
@@ -79,15 +79,16 @@ export const SEASON_49_PLAYERS = [
   buildPlayer({
     castaway_id: "US0735",
     full_name: "Annie Davis",
-    img: "",
+    img: "/images/season_49/Annie-Davis.jpg",
     description: "Age: 49 | Hometown: Austin, Texas",
     age: 49,
     hometown: "Austin, Texas",
+    nickname: "Annie",
   }),
   buildPlayer({
     castaway_id: "US0736",
     full_name: "Jake Latimer",
-    img: "",
+    img: "/images/season_49/Jake-Latimer.jpg",
     description: "Age: 35 | Hometown: St. Albert, Alberta",
     age: 35,
     hometown: "St. Albert, Alberta",
@@ -95,7 +96,7 @@ export const SEASON_49_PLAYERS = [
   buildPlayer({
     castaway_id: "US0739",
     full_name: "Jeremiah Ing",
-    img: "",
+    img: "/images/season_49/Jeremiah-Ing.jpg",
     description: "Age: 38 | Hometown: Toronto, Ontario",
     age: 38,
     hometown: "Toronto, Ontario",
@@ -103,7 +104,7 @@ export const SEASON_49_PLAYERS = [
   buildPlayer({
     castaway_id: "US0741",
     full_name: "Matt Williams",
-    img: "",
+    img: "/images/season_49/Matt-Williams.jpg",
     description: "Age: 52 | Hometown: St. George, Utah",
     age: 52,
     hometown: "St. George, Utah",
@@ -111,7 +112,7 @@ export const SEASON_49_PLAYERS = [
   buildPlayer({
     castaway_id: "US0737",
     full_name: "Jason Treul",
-    img: "",
+    img: "/images/season_49/Jason-Treul.jpg",
     description: "Age: 32 | Hometown: Santa Ana, California",
     age: 32,
     hometown: "Santa Ana, California",
@@ -119,7 +120,7 @@ export const SEASON_49_PLAYERS = [
   buildPlayer({
     castaway_id: "US0748",
     full_name: "Shannon Fairweather",
-    img: "",
+    img: "/images/season_49/Shannon-Fairweather.jpg",
     description: "Age: 27 | Hometown: Boston, Massachusetts",
     age: 27,
     hometown: "Boston, Massachusetts",
@@ -127,7 +128,7 @@ export const SEASON_49_PLAYERS = [
   buildPlayer({
     castaway_id: "US0743",
     full_name: "Nate Moore",
-    img: "",
+    img: "/images/season_49/Nate-Moore.jpg",
     description: "Age: 47 | Hometown: Hermosa Beach, California",
     age: 47,
     hometown: "Hermosa Beach, California",
@@ -135,15 +136,16 @@ export const SEASON_49_PLAYERS = [
   buildPlayer({
     castaway_id: "US0742",
     full_name: "MC Chukwujekwu",
-    img: "",
+    img: "/images/season_49/MC-Chukwujekwu.jpg",
     description: "Age: 29 | Hometown: San Diego, California",
     age: 29,
     hometown: "San Diego, California",
+    nickname: "MC",
   }),
   buildPlayer({
     castaway_id: "US0734",
     full_name: "Alex Moore",
-    img: "",
+    img: "/images/season_49/Alex-Moore.jpg",
     description: "Age: 26 | Hometown: Washington, District of Columbia",
     age: 26,
     hometown: "Washington, District of Columbia",
@@ -151,7 +153,7 @@ export const SEASON_49_PLAYERS = [
   buildPlayer({
     castaway_id: "US0738",
     full_name: "Jawan Pitts",
-    img: "",
+    img: "/images/season_49/Jawan-Pitts.jpg",
     description: "Age: 28 | Hometown: Los Angeles, California",
     age: 28,
     hometown: "Los Angeles, California",
@@ -159,15 +161,16 @@ export const SEASON_49_PLAYERS = [
   buildPlayer({
     castaway_id: "US0750",
     full_name: "Sophie Segreti",
-    img: "",
+    img: "/images/season_49/Sophie-Segreti.jpg",
     description: "Age: 31 | Hometown: New York, New York",
     age: 31,
     hometown: "New York, New York",
+    nickname: "Sophie",
   }),
   buildPlayer({
     castaway_id: "US0751",
     full_name: "Steven Ramm",
-    img: "",
+    img: "/images/season_49/Steven-Ramm.jpg",
     description: "Age: 35 | Hometown: Denver, Colorado",
     age: 35,
     hometown: "Denver, Colorado",
@@ -175,7 +178,7 @@ export const SEASON_49_PLAYERS = [
   buildPlayer({
     castaway_id: "US0740",
     full_name: "Kristina Mills",
-    img: "",
+    img: "/images/season_49/Kristina-Mills.jpg",
     description: "Age: 35 | Hometown: Edmond, Oklahoma",
     age: 35,
     hometown: "Edmond, Oklahoma",
@@ -183,7 +186,7 @@ export const SEASON_49_PLAYERS = [
   buildPlayer({
     castaway_id: "US0745",
     full_name: "Rizo Velovic",
-    img: "",
+    img: "/images/season_49/Rizo-Velovic.jpg",
     description: "Age: 25 | Hometown: Yonkers, New York",
     age: 25,
     hometown: "Yonkers, New York",
@@ -191,7 +194,7 @@ export const SEASON_49_PLAYERS = [
   buildPlayer({
     castaway_id: "US0746",
     full_name: "Sage Ahrens-Nichols",
-    img: "",
+    img: "/images/season_49/Sage-Ahrens-Nichols.jpg",
     description: "Age: 30 | Hometown: Olympia, Washington",
     age: 30,
     hometown: "Olympia, Washington",
@@ -199,15 +202,16 @@ export const SEASON_49_PLAYERS = [
   buildPlayer({
     castaway_id: "US0749",
     full_name: "Sophi Balerdi",
-    img: "",
+    img: "/images/season_49/Sophi-Balerdi.jpg",
     description: "Age: 27 | Hometown: Miami, Florida",
     age: 27,
     hometown: "Miami, Florida",
+    nickname: "Sophi/Soph",
   }),
   buildPlayer({
     castaway_id: "US0747",
     full_name: "Savannah Louie",
-    img: "",
+    img: "/images/season_49/Savannah-Louie.jpg",
     description: "Age: 31 | Hometown: Atlanta, Georgia",
     age: 31,
     hometown: "Atlanta, Georgia",

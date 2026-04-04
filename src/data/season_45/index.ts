@@ -71,7 +71,7 @@ export const SEASON_45_PLAYERS = [
   buildPlayer({
     castaway_id: "US0669",
     full_name: "Hannah Rose",
-    img: "",
+    img: "/images/season_45/Hannah-Rose.jpg",
     description: "Age: 33 | Hometown: Baltimore City, Maryland",
     age: 33,
     hometown: "Baltimore City, Maryland",
@@ -79,7 +79,7 @@ export const SEASON_45_PLAYERS = [
   buildPlayer({
     castaway_id: "US0665",
     full_name: "Brandon Donlon",
-    img: "",
+    img: "/images/season_45/Brandon-Donlon.jpg",
     description: "Age: 25 | Hometown: Sicklerville, New Jersey",
     age: 25,
     hometown: "Sicklerville, New Jersey",
@@ -87,7 +87,7 @@ export const SEASON_45_PLAYERS = [
   buildPlayer({
     castaway_id: "US0677",
     full_name: "Sabiyah Broderick",
-    img: "",
+    img: "/images/season_45/Sabiyah-Broderick.jpg",
     description: "Age: 27 | Hometown: Jacksonville, North Carolina",
     age: 27,
     hometown: "Jacksonville, North Carolina",
@@ -95,7 +95,7 @@ export const SEASON_45_PLAYERS = [
   buildPlayer({
     castaway_id: "US0678",
     full_name: "Sean Edwards",
-    img: "",
+    img: "/images/season_45/Sean-Edwards.jpg",
     description: "Age: 34 | Hometown: Provo-Orem, Utah",
     age: 34,
     hometown: "Provo-Orem, Utah",
@@ -103,15 +103,16 @@ export const SEASON_45_PLAYERS = [
   buildPlayer({
     castaway_id: "US0664",
     full_name: "Brando Meyer",
-    img: "",
+    img: "/images/season_45/Brando-Meyer.jpg",
     description: "Age: 23 | Hometown: Seattle, Washington",
     age: 23,
     hometown: "Seattle, Washington",
+    nickname: "Brando",
   }),
   buildPlayer({
     castaway_id: "US0670",
     full_name: "J. Maya",
-    img: "",
+    img: "/images/season_45/J.-Maya.jpg",
     description: "Age: 24 | Hometown: Los Angeles, California",
     age: 24,
     hometown: "Los Angeles, California",
@@ -120,15 +121,16 @@ export const SEASON_45_PLAYERS = [
   buildPlayer({
     castaway_id: "US0679",
     full_name: "Sifu Alsup",
-    img: "",
+    img: "/images/season_45/Sifu-Alsup.jpg",
     description: "Age: 30 | Hometown: O'Fallon, Illinois",
     age: 30,
     hometown: "O'Fallon, Illinois",
+    nickname: "Sifu",
   }),
   buildPlayer({
     castaway_id: "US0673",
     full_name: "Kaleb Gebrewold",
-    img: "",
+    img: "/images/season_45/Kaleb-Gebrewold.jpg",
     description: "Age: 29 | Hometown: Vancouver, British Columbia",
     age: 29,
     hometown: "Vancouver, British Columbia",
@@ -136,7 +138,7 @@ export const SEASON_45_PLAYERS = [
   buildPlayer({
     castaway_id: "US0675",
     full_name: "Kellie Nalbandian",
-    img: "",
+    img: "/images/season_45/Kellie-Nalbandian.jpg",
     description: "Age: 30 | Hometown: New York, New York",
     age: 30,
     hometown: "New York, New York",
@@ -144,7 +146,7 @@ export const SEASON_45_PLAYERS = [
   buildPlayer({
     castaway_id: "US0676",
     full_name: "Kendra McQuarrie",
-    img: "",
+    img: "/images/season_45/Kendra-McQuarrie.jpg",
     description: "Age: 30 | Hometown: Steamboat Springs, Colorado",
     age: 30,
     hometown: "Steamboat Springs, Colorado",
@@ -152,7 +154,7 @@ export const SEASON_45_PLAYERS = [
   buildPlayer({
     castaway_id: "US0657",
     full_name: "Bruce Perreault",
-    img: "",
+    img: "/images/season_45/Bruce-Perreault.jpg",
     description: "Age: 46 | Hometown: Warwick, Rhode Island",
     age: 46,
     hometown: "Warwick, Rhode Island",
@@ -160,7 +162,7 @@ export const SEASON_45_PLAYERS = [
   buildPlayer({
     castaway_id: "US0668",
     full_name: "Emily Flippen",
-    img: "",
+    img: "/images/season_45/Emily-Flippen.jpg",
     description: "Age: 28 | Hometown: Laurel, Maryland",
     age: 28,
     hometown: "Laurel, Maryland",
@@ -168,23 +170,25 @@ export const SEASON_45_PLAYERS = [
   buildPlayer({
     castaway_id: "US0667",
     full_name: "Drew Basile",
-    img: "",
+    img: "/images/season_45/Drew-Basile.jpg",
     description: "Age: 23 | Hometown: Philadelphia, Pensylvania",
     age: 23,
     hometown: "Philadelphia, Pensylvania",
+    nickname: "Drew",
   }),
   buildPlayer({
     castaway_id: "US0672",
     full_name: "Julie Alley",
-    img: "",
+    img: "/images/season_45/Julie-Alley.jpg",
     description: "Age: 49 | Hometown: Brentwood, Tennessee",
     age: 49,
     hometown: "Brentwood, Tennessee",
+    nickname: "Julie",
   }),
   buildPlayer({
     castaway_id: "US0674",
     full_name: "Katurah Topps",
-    img: "",
+    img: "/images/season_45/Katurah-Topps.jpg",
     description: "Age: 34 | Hometown: Brooklyn, New York",
     age: 34,
     hometown: "Brooklyn, New York",
@@ -192,7 +196,7 @@ export const SEASON_45_PLAYERS = [
   buildPlayer({
     castaway_id: "US0671",
     full_name: "Jake O'Kane",
-    img: "",
+    img: "/images/season_45/Jake-O'Kane.jpg",
     description: "Age: 26 | Hometown: Boston, Massachusetts",
     age: 26,
     hometown: "Boston, Massachusetts",
@@ -200,7 +204,7 @@ export const SEASON_45_PLAYERS = [
   buildPlayer({
     castaway_id: "US0663",
     full_name: "Austin Li Coon",
-    img: "",
+    img: "/images/season_45/Austin-Li-Coon.jpg",
     description: "Age: 26 | Hometown: Chicago, Illinois",
     age: 26,
     hometown: "Chicago, Illinois",
@@ -208,10 +212,11 @@ export const SEASON_45_PLAYERS = [
   buildPlayer({
     castaway_id: "US0666",
     full_name: "Dee Valladares",
-    img: "",
+    img: "/images/season_45/Dee-Valladares.jpg",
     description: "Age: 26 | Hometown: Miami, Florida",
     age: 26,
     hometown: "Miami, Florida",
+    nickname: "Dee",
   }),
 ] satisfies Player<CastawayIdType, SeasonNumber>[];
 

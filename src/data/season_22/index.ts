@@ -71,7 +71,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0322",
     full_name: "Francesca Hogi",
-    img: "",
+    img: "/images/season_22/Francesca-Hogi.jpg",
     description: "Age: 36 | Hometown: Washington, D.C.",
     age: 36,
     hometown: "Washington, D.C.",
@@ -79,7 +79,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0300",
     full_name: "Russell Hantz",
-    img: "",
+    img: "/images/season_22/Russell-Hantz.jpg",
     description: "Age: 37 | Hometown: Dayton, Texas",
     age: 37,
     hometown: "Dayton, Texas",
@@ -87,7 +87,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0324",
     full_name: "Kristina Kell",
-    img: "",
+    img: "/images/season_22/Kristina-Kell.jpg",
     description: "Age: 46 | Hometown: Malibu, California",
     age: 46,
     hometown: "Malibu, California",
@@ -95,7 +95,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0325",
     full_name: "Krista Klumpp",
-    img: "",
+    img: "/images/season_22/Krista-Klumpp.jpg",
     description: "Age: 25 | Hometown: Columbia, South Carolina",
     age: 25,
     hometown: "Columbia, South Carolina",
@@ -103,7 +103,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0326",
     full_name: "Stephanie Valencia",
-    img: "",
+    img: "/images/season_22/Stephanie-Valencia.jpg",
     description: "Age: 26 | Hometown: Long Beach, California",
     age: 26,
     hometown: "Long Beach, California",
@@ -111,7 +111,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0327",
     full_name: "Sarita White",
-    img: "",
+    img: "/images/season_22/Sarita-White.jpg",
     description: "Age: 36 | Hometown: Santa Monica, California",
     age: 36,
     hometown: "Santa Monica, California",
@@ -119,7 +119,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0323",
     full_name: "Matt Elrod",
-    img: "",
+    img: "/images/season_22/Matt-Elrod.jpg",
     description: "Age: 22 | Hometown: Nashville, Tennessee",
     age: 22,
     hometown: "Nashville, Tennessee",
@@ -127,7 +127,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0328",
     full_name: "Mike Chiesl",
-    img: "",
+    img: "/images/season_22/Mike-Chiesl.jpg",
     description: "Age: 31 | Hometown: Del Mar, California",
     age: 31,
     hometown: "Del Mar, California",
@@ -135,7 +135,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0329",
     full_name: "David Murphy",
-    img: "",
+    img: "/images/season_22/David-Murphy.jpg",
     description: "Age: 31 | Hometown: West Hollywood, California",
     age: 31,
     hometown: "West Hollywood, California",
@@ -143,7 +143,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0330",
     full_name: "Julie Wolfe",
-    img: "",
+    img: "/images/season_22/Julie-Wolfe.jpg",
     description: "Age: 50 | Hometown: Oceanside, California",
     age: 50,
     hometown: "Oceanside, California",
@@ -151,7 +151,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0331",
     full_name: "Ralph Kiser",
-    img: "",
+    img: "/images/season_22/Ralph-Kiser.jpg",
     description: "Age: 45 | Hometown: Lebanon, Virginia",
     age: 45,
     hometown: "Lebanon, Virginia",
@@ -159,7 +159,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0332",
     full_name: "Steve Wright",
-    img: "",
+    img: "/images/season_22/Steve-Wright.jpg",
     description: "Age: 51 | Hometown: Huntington Beach, California",
     age: 51,
     hometown: "Huntington Beach, California",
@@ -167,7 +167,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0334",
     full_name: "Grant Mattos",
-    img: "",
+    img: "/images/season_22/Grant-Mattos.jpg",
     description: "Age: 29 | Hometown: West Hollywood, California",
     age: 29,
     hometown: "West Hollywood, California",
@@ -175,7 +175,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0333",
     full_name: "Andrea Boehlke",
-    img: "",
+    img: "/images/season_22/Andrea-Boehlke.jpg",
     description: "Age: 21 | Hometown: Random Lake, Wisconsin",
     age: 21,
     hometown: "Random Lake, Wisconsin",
@@ -183,7 +183,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0335",
     full_name: "Ashley Underwood",
-    img: "",
+    img: "/images/season_22/Ashley-Underwood.jpg",
     description: "Age: 25 | Hometown: Benton, Maine",
     age: 25,
     hometown: "Benton, Maine",
@@ -191,7 +191,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0336",
     full_name: "Natalie Tenerelli",
-    img: "",
+    img: "/images/season_22/Natalie-Tenerelli.jpg",
     description: "Age: 19 | Hometown: Acton, California",
     age: 19,
     hometown: "Acton, California",
@@ -199,7 +199,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0337",
     full_name: "Phillip Sheppard",
-    img: "",
+    img: "/images/season_22/Phillip-Sheppard.jpg",
     description: "Age: 52 | Hometown: Santa Monica, California",
     age: 52,
     hometown: "Santa Monica, California",
@@ -207,7 +207,7 @@ export const SEASON_22_PLAYERS = [
   buildPlayer({
     castaway_id: "US0055",
     full_name: "Rob Mariano",
-    img: "",
+    img: "/images/season_22/Rob-Mariano.jpg",
     description: "Age: 34 | Hometown: Pensacola, Florida",
     age: 34,
     hometown: "Pensacola, Florida",

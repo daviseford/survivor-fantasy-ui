@@ -71,7 +71,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0372",
     full_name: "Zane Knight",
-    img: "",
+    img: "/images/season_25/Zane-Knight.jpg",
     description: "Age: 28 | Hometown: Danville, Virginia",
     age: 28,
     hometown: "Danville, Virginia",
@@ -79,7 +79,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0373",
     full_name: "Roxanne Morris",
-    img: "",
+    img: "/images/season_25/Roxanne-Morris.jpg",
     description: "Age: 28 | Hometown: Brooklyn, New York",
     age: 28,
     hometown: "Brooklyn, New York",
@@ -88,7 +88,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0374",
     full_name: "Angie Layton",
-    img: "",
+    img: "/images/season_25/Angie-Layton.jpg",
     description: "Age: 20 | Hometown: Provo, Utah",
     age: 20,
     hometown: "Provo, Utah",
@@ -96,7 +96,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0288",
     full_name: "Russell Swan",
-    img: "",
+    img: "/images/season_25/Russell-Swan.jpg",
     description: "Age: 45 | Hometown: Glenside, Pennsylvania",
     age: 45,
     hometown: "Glenside, Pennsylvania",
@@ -104,7 +104,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0375",
     full_name: "Dana Lambert",
-    img: "",
+    img: "/images/season_25/Dana-Lambert.jpg",
     description: "Age: 32 | Hometown: Winston-Salem, North Carolina",
     age: 32,
     hometown: "Winston-Salem, North Carolina",
@@ -112,7 +112,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0376",
     full_name: "Sarah Dawson",
-    img: "",
+    img: "/images/season_25/Sarah-Dawson.jpg",
     description: "Age: 28 | Hometown: Silver Spring, Maryland",
     age: 28,
     hometown: "Silver Spring, Maryland",
@@ -121,7 +121,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0377",
     full_name: "Katie Hanson",
-    img: "",
+    img: "/images/season_25/Katie-Hanson.jpg",
     description: "Age: 22 | Hometown: Newark, Delaware",
     age: 22,
     hometown: "Newark, Delaware",
@@ -138,7 +138,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0379",
     full_name: "Jeff Kent",
-    img: "",
+    img: "/images/season_25/Jeff-Kent.jpg",
     description: "Age: 44 | Hometown: Austin, Texas",
     age: 44,
     hometown: "Austin, Texas",
@@ -146,7 +146,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0380",
     full_name: "Artis Silvester",
-    img: "",
+    img: "/images/season_25/Artis-Silvester.jpg",
     description: "Age: 53 | Hometown: Terrytown, Louisiana",
     age: 53,
     hometown: "Terrytown, Louisiana",
@@ -154,7 +154,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0381",
     full_name: "Peter Yurkowski",
-    img: "",
+    img: "/images/season_25/Peter-Yurkowski.jpg",
     description: "Age: 24 | Hometown: Holmdel, New Jersey",
     age: 24,
     hometown: "Holmdel, New Jersey",
@@ -163,7 +163,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0196",
     full_name: "Jonathan Penner",
-    img: "",
+    img: "/images/season_25/Jonathan-Penner.jpg",
     description: "Age: 50 | Hometown: Los Angeles, California",
     age: 50,
     hometown: "Los Angeles, California",
@@ -171,7 +171,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0382",
     full_name: "Carter Williams",
-    img: "",
+    img: "/images/season_25/Carter-Williams.jpg",
     description: "Age: 23 | Hometown: Shawnee, Kansas",
     age: 23,
     hometown: "Shawnee, Kansas",
@@ -187,7 +187,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0384",
     full_name: "Malcolm Freberg",
-    img: "",
+    img: "/images/season_25/Malcolm-Freberg.jpg",
     description: "Age: 25 | Hometown: Hermosa Beach, California",
     age: 25,
     hometown: "Hermosa Beach, California",
@@ -195,7 +195,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0385",
     full_name: "Lisa Whelchel",
-    img: "",
+    img: "/images/season_25/Lisa-Whelchel.jpg",
     description: "Age: 49 | Hometown: Dallas, Texas",
     age: 49,
     hometown: "Dallas, Texas",
@@ -203,7 +203,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0022",
     full_name: "Michael Skupin",
-    img: "",
+    img: "/images/season_25/Michael-Skupin.jpg",
     description: "Age: 50 | Hometown: White Lake, Michigan",
     age: 50,
     hometown: "White Lake, Michigan",
@@ -211,7 +211,7 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0386",
     full_name: "Denise Stapley",
-    img: "",
+    img: "/images/season_25/Denise-Stapley.jpg",
     description: "Age: 41 | Hometown: Cedar Rapids, Iowa",
     age: 41,
     hometown: "Cedar Rapids, Iowa",

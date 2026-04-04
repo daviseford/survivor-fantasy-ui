@@ -75,7 +75,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0111",
     full_name: "Jon Dalton",
-    img: "",
+    img: "/images/season_16/Jon-Dalton.jpg",
     description: "Age: 33 | Hometown: Los Angeles, California",
     age: 33,
     hometown: "Los Angeles, California",
@@ -84,7 +84,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0238",
     full_name: "Mary Sartain",
-    img: "",
+    img: "/images/season_16/Mary-Sartain.jpg",
     description: "Age: 29 | Hometown: Emeryville, California",
     age: 29,
     hometown: "Emeryville, California",
@@ -100,7 +100,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0239",
     full_name: "Michael Bortone",
-    img: "",
+    img: "/images/season_16/Michael-Bortone.jpg",
     description: "Age: 34 | Hometown: Los Angeles, California",
     age: 34,
     hometown: "Los Angeles, California",
@@ -109,7 +109,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0240",
     full_name: "Joel Anderson",
-    img: "",
+    img: "/images/season_16/Joel-Anderson.jpg",
     description: "Age: 32 | Hometown: Avondale, Arizona",
     age: 32,
     hometown: "Avondale, Arizona",
@@ -117,7 +117,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0196",
     full_name: "Jonathan Penner",
-    img: "",
+    img: "/images/season_16/Jonathan-Penner.jpg",
     description: "Age: 45 | Hometown: Los Angeles, California",
     age: 45,
     hometown: "Los Angeles, California",
@@ -125,7 +125,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0241",
     full_name: "Chet Welch",
-    img: "",
+    img: "/images/season_16/Chet-Welch.jpg",
     description: "Age: 48 | Hometown: Ford City, Pennsylvania",
     age: 48,
     hometown: "Ford City, Pennsylvania",
@@ -133,7 +133,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0242",
     full_name: "Kathleen Sleckman",
-    img: "",
+    img: "/images/season_16/Kathleen-Sleckman.jpg",
     description: "Age: 45 | Hometown: Glen Ellyn, Illinois",
     age: 45,
     hometown: "Glen Ellyn, Illinois",
@@ -150,7 +150,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0125",
     full_name: "Ami Cusack",
-    img: "",
+    img: "/images/season_16/Ami-Cusack.jpg",
     description: "Age: 34 | Hometown: Golden, Colorado",
     age: 34,
     hometown: "Golden, Colorado",
@@ -158,7 +158,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0127",
     full_name: "Eliza Orlins",
-    img: "",
+    img: "/images/season_16/Eliza-Orlins.jpg",
     description: "Age: 25 | Hometown: Manhattan, New York",
     age: 25,
     hometown: "Manhattan, New York",
@@ -166,7 +166,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0201",
     full_name: "Oscar Lusth",
-    img: "",
+    img: "/images/season_16/Oscar-Lusth.jpg",
     description: "Age: 26 | Hometown: Venice, California",
     age: 26,
     hometown: "Venice, California",
@@ -175,7 +175,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0244",
     full_name: "Jason Siska",
-    img: "",
+    img: "/images/season_16/Jason-Siska.jpg",
     description: "Age: 22 | Hometown: Fox River Grove, Illinois",
     age: 22,
     hometown: "Fox River Grove, Illinois",
@@ -183,7 +183,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0231",
     full_name: "James Clement",
-    img: "",
+    img: "/images/season_16/James-Clement.jpg",
     description: "Age: 30 | Hometown: Lafayette, Louisiana",
     age: 30,
     hometown: "Lafayette, Louisiana",
@@ -191,7 +191,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0245",
     full_name: "Alexis Jones",
-    img: "",
+    img: "/images/season_16/Alexis-Jones.jpg",
     description: "Age: 24 | Hometown: Beverly Hills, California",
     age: 24,
     hometown: "Beverly Hills, California",
@@ -199,7 +199,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0246",
     full_name: "Erik Reichenbach",
-    img: "",
+    img: "/images/season_16/Erik-Reichenbach.jpg",
     description: "Age: 22 | Hometown: Ypsilanti, Michigan",
     age: 22,
     hometown: "Ypsilanti, Michigan",
@@ -207,7 +207,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0247",
     full_name: "Natalie Bolton",
-    img: "",
+    img: "/images/season_16/Natalie-Bolton.jpg",
     description: "Age: 32 | Hometown: West Hollywood, California",
     age: 32,
     hometown: "West Hollywood, California",
@@ -215,7 +215,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0179",
     full_name: "Cirie Fields",
-    img: "",
+    img: "/images/season_16/Cirie-Fields.jpg",
     description: "Age: 37 | Hometown: Norwalk, Connecticut",
     age: 37,
     hometown: "Norwalk, Connecticut",
@@ -223,7 +223,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0235",
     full_name: "Amanda Kimmel",
-    img: "",
+    img: "/images/season_16/Amanda-Kimmel.jpg",
     description: "Age: 23 | Hometown: Los Angeles, California",
     age: 23,
     hometown: "Los Angeles, California",
@@ -231,7 +231,7 @@ export const SEASON_16_PLAYERS = [
   buildPlayer({
     castaway_id: "US0197",
     full_name: "Parvati Shallow",
-    img: "",
+    img: "/images/season_16/Parvati-Shallow.jpg",
     description: "Age: 25 | Hometown: Los Angeles, California",
     age: 25,
     hometown: "Los Angeles, California",

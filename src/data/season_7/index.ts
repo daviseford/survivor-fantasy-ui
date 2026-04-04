@@ -67,7 +67,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0097",
     full_name: "Nicole Delma",
-    img: "",
+    img: "/images/season_7/Nicole-Delma.jpg",
     description: "Age: 24 | Hometown: Hermosa Beach, California",
     age: 24,
     hometown: "Hermosa Beach, California",
@@ -75,7 +75,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0098",
     full_name: "Ryan Shoulders",
-    img: "",
+    img: "/images/season_7/Ryan-Shoulders.jpg",
     description: "Age: 23 | Hometown: Clarksville, Tennessee",
     age: 23,
     hometown: "Clarksville, Tennessee",
@@ -84,7 +84,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0101",
     full_name: "Michelle Tesauro",
-    img: "",
+    img: "/images/season_7/Michelle-Tesauro.jpg",
     description: "Age: 22 | Hometown: Washington, D.C.",
     age: 22,
     hometown: "Washington, D.C.",
@@ -92,7 +92,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0102",
     full_name: "Trish Dunn",
-    img: "",
+    img: "/images/season_7/Trish-Dunn.jpg",
     description: "Age: 42 | Hometown: Annapolis, Maryland",
     age: 42,
     hometown: "Annapolis, Maryland",
@@ -100,7 +100,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0103",
     full_name: "Shawn Cohen",
-    img: "",
+    img: "/images/season_7/Shawn-Cohen.jpg",
     description: "Age: 28 | Hometown: Hollywood, California",
     age: 28,
     hometown: "Hollywood, California",
@@ -108,7 +108,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0104",
     full_name: "Osten Taylor",
-    img: "",
+    img: "/images/season_7/Osten-Taylor.jpg",
     description: "Age: 27 | Hometown: Boston, Massachusetts",
     age: 27,
     hometown: "Boston, Massachusetts",
@@ -116,7 +116,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0105",
     full_name: "Andrew Savage",
-    img: "",
+    img: "/images/season_7/Andrew-Savage.jpg",
     description: "Age: 39 | Hometown: Chicago, Illinois",
     age: 39,
     hometown: "Chicago, Illinois",
@@ -124,7 +124,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0106",
     full_name: "Ryan Opray",
-    img: "",
+    img: "/images/season_7/Ryan-Opray.jpg",
     description: "Age: 30 | Hometown: Los Gatos, California",
     age: 30,
     hometown: "Los Gatos, California",
@@ -133,7 +133,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0107",
     full_name: "Rupert Boneham",
-    img: "",
+    img: "/images/season_7/Rupert-Boneham.jpg",
     description: "Age: 39 | Hometown: Indianapolis, Indiana",
     age: 39,
     hometown: "Indianapolis, Indiana",
@@ -141,7 +141,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0108",
     full_name: "Tijuana Bradley",
-    img: "",
+    img: "/images/season_7/Tijuana-Bradley.jpg",
     description: "Age: 26 | Hometown: St. Louis, Missouri",
     age: 26,
     hometown: "St. Louis, Missouri",
@@ -149,7 +149,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0109",
     full_name: "Christa Hastie",
-    img: "",
+    img: "/images/season_7/Christa-Hastie.jpg",
     description: "Age: 24 | Hometown: Los Angeles, California",
     age: 24,
     hometown: "Los Angeles, California",
@@ -157,7 +157,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0100",
     full_name: "Burton Roberts",
-    img: "",
+    img: "/images/season_7/Burton-Roberts.jpg",
     description: "Age: 31 | Hometown: San Francisco, California",
     age: 31,
     hometown: "San Francisco, California",
@@ -165,7 +165,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0110",
     full_name: "Darrah Johnson",
-    img: "",
+    img: "/images/season_7/Darrah-Johnson.jpg",
     description: "Age: 22 | Hometown: Liberty, Mississippi",
     age: 22,
     hometown: "Liberty, Mississippi",
@@ -173,7 +173,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0111",
     full_name: "Jon Dalton",
-    img: "",
+    img: "/images/season_7/Jon-Dalton.jpg",
     description: "Age: 29 | Hometown: Los Angeles, California",
     age: 29,
     hometown: "Los Angeles, California",
@@ -182,7 +182,7 @@ export const SEASON_7_PLAYERS = [
   buildPlayer({
     castaway_id: "US0099",
     full_name: "Lillian Morris",
-    img: "",
+    img: "/images/season_7/Lillian-Morris.jpg",
     description: "Age: 51 | Hometown: Loveland, Ohio",
     age: 51,
     hometown: "Loveland, Ohio",

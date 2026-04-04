@@ -237,6 +237,7 @@ async function main(): Promise<void> {
     playerData,
     resultsData,
     seasonNum,
+    outputPath,
   );
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });

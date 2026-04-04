@@ -71,7 +71,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0461",
     full_name: "Darnell Hamilton",
-    img: "",
+    img: "/images/season_32/Darnell-Hamilton.jpg",
     description: "Age: 27 | Hometown: Chicago, Illinois",
     age: 27,
     hometown: "Chicago, Illinois",
@@ -79,7 +79,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0462",
     full_name: "Jennifer Lanzetti",
-    img: "",
+    img: "/images/season_32/Jennifer-Lanzetti.jpg",
     description: "Age: 38 | Hometown: Salt Lake City, Utah",
     age: 38,
     hometown: "Salt Lake City, Utah",
@@ -87,7 +87,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0463",
     full_name: "Elisabeth Markham",
-    img: "",
+    img: "/images/season_32/Elisabeth-Markham.jpg",
     description: "Age: 27 | Hometown: New York City, New York",
     age: 27,
     hometown: "New York City, New York",
@@ -96,7 +96,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0464",
     full_name: "Caleb Reynolds",
-    img: "",
+    img: "/images/season_32/Caleb-Reynolds.jpg",
     description: "Age: 27 | Hometown: Hopkinsville, Kentucky",
     age: 27,
     hometown: "Hopkinsville, Kentucky",
@@ -104,7 +104,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0465",
     full_name: "Alecia Holden",
-    img: "",
+    img: "/images/season_32/Alecia-Holden.jpg",
     description: "Age: 24 | Hometown: Dallas, Texas",
     age: 24,
     hometown: "Dallas, Texas",
@@ -112,7 +112,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0466",
     full_name: "Anna Khait",
-    img: "",
+    img: "/images/season_32/Anna-Khait.jpg",
     description: "Age: 26 | Hometown: Brooklyn, New York",
     age: 26,
     hometown: "Brooklyn, New York",
@@ -120,7 +120,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0467",
     full_name: "Peter Baggenstos",
-    img: "",
+    img: "/images/season_32/Peter-Baggenstos.jpg",
     description: "Age: 34 | Hometown: Minneapolis, Minnesota",
     age: 34,
     hometown: "Minneapolis, Minnesota",
@@ -128,7 +128,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0468",
     full_name: "Neal Gottlieb",
-    img: "",
+    img: "/images/season_32/Neal-Gottlieb.jpg",
     description: "Age: 38 | Hometown: Sausalito, California",
     age: 38,
     hometown: "Sausalito, California",
@@ -136,7 +136,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0469",
     full_name: "Nick Maiorano",
-    img: "",
+    img: "/images/season_32/Nick-Maiorano.jpg",
     description: "Age: 30 | Hometown: Redondo Beach, California",
     age: 30,
     hometown: "Redondo Beach, California",
@@ -144,7 +144,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0470",
     full_name: "Debbie Wanner",
-    img: "",
+    img: "/images/season_32/Debbie-Wanner.jpg",
     description: "Age: 49 | Hometown: Reading, Pennsylvania",
     age: 49,
     hometown: "Reading, Pennsylvania",
@@ -152,7 +152,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0471",
     full_name: "Scot Pollard",
-    img: "",
+    img: "/images/season_32/Scot-Pollard.jpg",
     description: "Age: 40 | Hometown: Carmel, Indiana",
     age: 40,
     hometown: "Carmel, Indiana",
@@ -160,7 +160,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0472",
     full_name: "Julia Sokolowski",
-    img: "",
+    img: "/images/season_32/Julia-Sokolowski.jpg",
     description: "Age: 19 | Hometown: Boston, Massachusetts",
     age: 19,
     hometown: "Boston, Massachusetts",
@@ -168,7 +168,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0473",
     full_name: "Kyle Jason",
-    img: "",
+    img: "/images/season_32/Kyle-Jason.jpg",
     description: "Age: 31 | Hometown: Detroit, Michigan",
     age: 31,
     hometown: "Detroit, Michigan",
@@ -177,7 +177,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0474",
     full_name: "Joseph Del Campo",
-    img: "",
+    img: "/images/season_32/Joseph-Del-Campo.jpg",
     description: "Age: 71 | Hometown: Vero Beach, Florida",
     age: 71,
     hometown: "Vero Beach, Florida",
@@ -186,7 +186,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0475",
     full_name: "Cydney Gillon",
-    img: "",
+    img: "/images/season_32/Cydney-Gillon.jpg",
     description: "Age: 22 | Hometown: Douglasville, Georgia",
     age: 22,
     hometown: "Douglasville, Georgia",
@@ -194,7 +194,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0476",
     full_name: "Tai Trang",
-    img: "",
+    img: "/images/season_32/Tai-Trang.jpg",
     description: "Age: 51 | Hometown: San Francisco, California",
     age: 51,
     hometown: "San Francisco, California",
@@ -202,7 +202,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0477",
     full_name: "Aubry Bracco",
-    img: "",
+    img: "/images/season_32/Aubry-Bracco.jpg",
     description: "Age: 29 | Hometown: Cambridge, Massachusetts",
     age: 29,
     hometown: "Cambridge, Massachusetts",
@@ -210,7 +210,7 @@ export const SEASON_32_PLAYERS = [
   buildPlayer({
     castaway_id: "US0478",
     full_name: "Michele Fitzgerald",
-    img: "",
+    img: "/images/season_32/Michele-Fitzgerald.jpg",
     description: "Age: 24 | Hometown: Freehold, New Jersey",
     age: 24,
     hometown: "Freehold, New Jersey",

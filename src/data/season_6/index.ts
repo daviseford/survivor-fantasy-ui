@@ -67,7 +67,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0081",
     full_name: "Ryan Aiken",
-    img: "",
+    img: "/images/season_6/Ryan-Aiken.jpg",
     description: "Age: 23 | Hometown: Ellicott City, Maryland",
     age: 23,
     hometown: "Ellicott City, Maryland",
@@ -75,7 +75,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0082",
     full_name: "Janet Koth",
-    img: "",
+    img: "/images/season_6/Janet-Koth.jpg",
     description: "Age: 46 | Hometown: Manchester, Missouri",
     age: 46,
     hometown: "Manchester, Missouri",
@@ -83,7 +83,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0083",
     full_name: "Daniel Lue",
-    img: "",
+    img: "/images/season_6/Daniel-Lue.jpg",
     description: "Age: 26 | Hometown: Houston, Texas",
     age: 26,
     hometown: "Houston, Texas",
@@ -91,7 +91,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0084",
     full_name: "JoAnna Ward",
-    img: "",
+    img: "/images/season_6/JoAnna-Ward.jpg",
     description: "Age: 31 | Hometown: Orangeburg, South Carolina",
     age: 31,
     hometown: "Orangeburg, South Carolina",
@@ -99,7 +99,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0085",
     full_name: "Jeanne Hebert",
-    img: "",
+    img: "/images/season_6/Jeanne-Hebert.jpg",
     description: "Age: 40 | Hometown: North Attleboro, Massachusetts",
     age: 40,
     hometown: "North Attleboro, Massachusetts",
@@ -107,7 +107,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0086",
     full_name: "Shawna Mitchell",
-    img: "",
+    img: "/images/season_6/Shawna-Mitchell.jpg",
     description: "Age: 23 | Hometown: Los Angeles, California",
     age: 23,
     hometown: "Los Angeles, California",
@@ -115,7 +115,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0087",
     full_name: "Roger Sexton",
-    img: "",
+    img: "/images/season_6/Roger-Sexton.jpg",
     description: "Age: 56 | Hometown: Valencia, California",
     age: 56,
     hometown: "Valencia, California",
@@ -123,7 +123,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0088",
     full_name: "Dave Johnson",
-    img: "",
+    img: "/images/season_6/Dave-Johnson.jpg",
     description: "Age: 23 | Hometown: Pasadena, California",
     age: 23,
     hometown: "Pasadena, California",
@@ -131,7 +131,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0089",
     full_name: "Deena Bennett",
-    img: "",
+    img: "/images/season_6/Deena-Bennett.jpg",
     description: "Age: 35 | Hometown: Riverside, California",
     age: 35,
     hometown: "Riverside, California",
@@ -139,7 +139,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0090",
     full_name: "Alex Bell",
-    img: "",
+    img: "/images/season_6/Alex-Bell.jpg",
     description: "Age: 32 | Hometown: Los Angeles, California",
     age: 32,
     hometown: "Los Angeles, California",
@@ -147,7 +147,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0091",
     full_name: "Christy Smith",
-    img: "",
+    img: "/images/season_6/Christy-Smith.jpg",
     description: "Age: 24 | Hometown: Basalt, Colorado",
     age: 24,
     hometown: "Basalt, Colorado",
@@ -155,7 +155,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0092",
     full_name: "Heidi Strobel",
-    img: "",
+    img: "/images/season_6/Heidi-Strobel.jpg",
     description: "Age: 24 | Hometown: Jefferson City, Missouri",
     age: 24,
     hometown: "Jefferson City, Missouri",
@@ -163,7 +163,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0093",
     full_name: "Butch Lockley",
-    img: "",
+    img: "/images/season_6/Butch-Lockley.jpg",
     description: "Age: 50 | Hometown: Olney, Illinois",
     age: 50,
     hometown: "Olney, Illinois",
@@ -171,7 +171,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0094",
     full_name: "Rob Cesternino",
-    img: "",
+    img: "/images/season_6/Rob-Cesternino.jpg",
     description: "Age: 24 | Hometown: Wantagh, New York",
     age: 24,
     hometown: "Wantagh, New York",
@@ -179,7 +179,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0095",
     full_name: "Matthew von Ertfelda",
-    img: "",
+    img: "/images/season_6/Matthew-von-Ertfelda.jpg",
     description: "Age: 33 | Hometown: Washington, D.C.",
     age: 33,
     hometown: "Washington, D.C.",
@@ -187,7 +187,7 @@ export const SEASON_6_PLAYERS = [
   buildPlayer({
     castaway_id: "US0096",
     full_name: "Jenna Morasca",
-    img: "",
+    img: "/images/season_6/Jenna-Morasca.jpg",
     description: "Age: 21 | Hometown: Bridgeville, Pennsylvania",
     age: 21,
     hometown: "Bridgeville, Pennsylvania",

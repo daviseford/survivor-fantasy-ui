@@ -73,7 +73,7 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0203",
     full_name: "Jessica deBen",
-    img: "",
+    img: "/images/season_14/Jessica-deBen.jpg",
     description: "Age: 27 | Hometown: Los Angeles, California",
     age: 27,
     hometown: "Los Angeles, California",
@@ -81,7 +81,7 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0204",
     full_name: "Erica Durousseau",
-    img: "",
+    img: "/images/season_14/Erica-Durousseau.jpg",
     description: "Age: 27 | Hometown: Baton Rouge, Louisiana",
     age: 27,
     hometown: "Baton Rouge, Louisiana",
@@ -89,7 +89,7 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0205",
     full_name: "Sylvia Kwan",
-    img: "",
+    img: "/images/season_14/Sylvia-Kwan.jpg",
     description: "Age: 52 | Hometown: Ross, California",
     age: 52,
     hometown: "Ross, California",
@@ -97,7 +97,7 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0206",
     full_name: "Gary Stritesky",
-    img: "",
+    img: "/images/season_14/Gary-Stritesky.jpg",
     description: "Age: 55 | Hometown: Ramsey, Minnesota",
     age: 55,
     hometown: "Ramsey, Minnesota",
@@ -105,7 +105,7 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0207",
     full_name: "Liliana Gomez",
-    img: "",
+    img: "/images/season_14/Liliana-Gomez.jpg",
     description: "Age: 25 | Hometown: Los Angeles, California",
     age: 25,
     hometown: "Los Angeles, California",
@@ -113,7 +113,7 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0208",
     full_name: "Rita Verreos",
-    img: "",
+    img: "/images/season_14/Rita-Verreos.jpg",
     description: "Age: 38 | Hometown: San Antonio, Texas",
     age: 38,
     hometown: "San Antonio, Texas",
@@ -121,7 +121,7 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0209",
     full_name: "Anthony Robinson",
-    img: "",
+    img: "/images/season_14/Anthony-Robinson.jpg",
     description: "Age: 32 | Hometown: Compton, California",
     age: 32,
     hometown: "Compton, California",
@@ -147,7 +147,7 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0212",
     full_name: "Michelle Yi",
-    img: "",
+    img: "/images/season_14/Michelle-Yi.jpg",
     description: "Age: 23 | Hometown: Cincinnati, Ohio",
     age: 23,
     hometown: "Cincinnati, Ohio",
@@ -155,7 +155,7 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0213",
     full_name: "Edgardo Rivera",
-    img: "",
+    img: "/images/season_14/Edgardo-Rivera.jpg",
     description: "Age: 28 | Hometown: Miami Beach, Florida",
     age: 28,
     hometown: "Miami Beach, Florida",
@@ -163,7 +163,7 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0214",
     full_name: "Mookie Lee",
-    img: "",
+    img: "/images/season_14/Mookie-Lee.jpg",
     description: "Age: 25 | Hometown: Chicago, Illinois",
     age: 25,
     hometown: "Chicago, Illinois",
@@ -171,7 +171,7 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0215",
     full_name: "Alex Angarita",
-    img: "",
+    img: "/images/season_14/Alex-Angarita.jpg",
     description: "Age: 28 | Hometown: Los Angeles, California",
     age: 28,
     hometown: "Los Angeles, California",
@@ -179,7 +179,7 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0216",
     full_name: "Stacy Kimball",
-    img: "",
+    img: "/images/season_14/Stacy-Kimball.jpg",
     description: "Age: 27 | Hometown: Boulder, Colorado",
     age: 27,
     hometown: "Boulder, Colorado",
@@ -213,7 +213,7 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0220",
     full_name: "Cassandra Franklin",
-    img: "",
+    img: "/images/season_14/Cassandra-Franklin.jpg",
     description: "Age: 42 | Hometown: Los Angeles, California",
     age: 42,
     hometown: "Los Angeles, California",
@@ -221,7 +221,7 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0221",
     full_name: "Earl Cole",
-    img: "",
+    img: "/images/season_14/Earl-Cole.jpg",
     description: "Age: 35 | Hometown: Santa Monica, California",
     age: 35,
     hometown: "Santa Monica, California",

@@ -67,7 +67,7 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0266",
     full_name: "Carolina Eastwood",
-    img: "",
+    img: "/images/season_18/Carolina-Eastwood.jpg",
     description: "Age: 26 | Hometown: West Hollywood, California",
     age: 26,
     hometown: "West Hollywood, California",
@@ -75,7 +75,7 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0267",
     full_name: "Candace Smith",
-    img: "",
+    img: "/images/season_18/Candace-Smith.jpg",
     description: "Age: 31 | Hometown: Los Angeles, California",
     age: 31,
     hometown: "Los Angeles, California",
@@ -83,7 +83,7 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0268",
     full_name: "Jerry Sims",
-    img: "",
+    img: "/images/season_18/Jerry-Sims.jpg",
     description: "Age: 49 | Hometown: Rock Hill, South Carolina",
     age: 49,
     hometown: "Rock Hill, South Carolina",
@@ -91,7 +91,7 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0269",
     full_name: "Sandy Burgin",
-    img: "",
+    img: "/images/season_18/Sandy-Burgin.jpg",
     description: "Age: 53 | Hometown: Louisville, Kentucky",
     age: 53,
     hometown: "Louisville, Kentucky",
@@ -99,7 +99,7 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0270",
     full_name: "Spencer Duhm",
-    img: "",
+    img: "/images/season_18/Spencer-Duhm.jpg",
     description: "Age: 19 | Hometown: Gainesville, Florida",
     age: 19,
     hometown: "Gainesville, Florida",
@@ -107,7 +107,7 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0271",
     full_name: "Sydney Wheeler",
-    img: "",
+    img: "/images/season_18/Sydney-Wheeler.jpg",
     description: "Age: 24 | Hometown: San Diego, California",
     age: 24,
     hometown: "San Diego, California",
@@ -115,7 +115,7 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0272",
     full_name: "Joe Dowdle",
-    img: "",
+    img: "/images/season_18/Joe-Dowdle.jpg",
     description: "Age: 26 | Hometown: Austin, Texas",
     age: 26,
     hometown: "Austin, Texas",
@@ -123,7 +123,7 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0273",
     full_name: "Brendan Synnott",
-    img: "",
+    img: "/images/season_18/Brendan-Synnott.jpg",
     description: "Age: 30 | Hometown: Vail, Colorado",
     age: 30,
     hometown: "Vail, Colorado",
@@ -131,7 +131,7 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0274",
     full_name: "Tyson Apostol",
-    img: "",
+    img: "/images/season_18/Tyson-Apostol.jpg",
     description: "Age: 29 | Hometown: Heber City, Utah",
     age: 29,
     hometown: "Heber City, Utah",
@@ -139,7 +139,7 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0275",
     full_name: "Sierra Reed",
-    img: "",
+    img: "/images/season_18/Sierra-Reed.jpg",
     description: "Age: 23 | Hometown: Los Angeles, California",
     age: 23,
     hometown: "Los Angeles, California",
@@ -156,7 +156,7 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0277",
     full_name: "Benjamin Wade",
-    img: "",
+    img: "/images/season_18/Benjamin-Wade.jpg",
     description: "Age: 37 | Hometown: Bolivar, Missouri",
     age: 37,
     hometown: "Bolivar, Missouri",
@@ -174,7 +174,7 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0279",
     full_name: "Erinn Lobdell",
-    img: "",
+    img: "/images/season_18/Erinn-Lobdell.jpg",
     description: "Age: 26 | Hometown: Milwaukee, Wisconsin",
     age: 26,
     hometown: "Milwaukee, Wisconsin",
@@ -182,7 +182,7 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0280",
     full_name: "Stephen Fishbach",
-    img: "",
+    img: "/images/season_18/Stephen-Fishbach.jpg",
     description: "Age: 29 | Hometown: New York City, New York",
     age: 29,
     hometown: "New York City, New York",

@@ -75,7 +75,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0263",
     full_name: "Jessica Kiper",
-    img: "",
+    img: "/images/season_20/Jessica-Kiper.jpg",
     description: "Age: 30 | Hometown: Los Angeles, California",
     age: 30,
     hometown: "Los Angeles, California",
@@ -84,7 +84,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0144",
     full_name: "Stephenie LaGrossa",
-    img: "",
+    img: "/images/season_20/Stephenie-LaGrossa.jpg",
     description: "Age: 29 | Hometown: Philadelphia, Pennsylvania",
     age: 29,
     hometown: "Philadelphia, Pennsylvania",
@@ -92,7 +92,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0258",
     full_name: "Randy Bailey",
-    img: "",
+    img: "/images/season_20/Randy-Bailey.jpg",
     description: "Age: 50 | Hometown: Austin, Texas",
     age: 50,
     hometown: "Austin, Texas",
@@ -100,7 +100,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0179",
     full_name: "Cirie Fields",
-    img: "",
+    img: "/images/season_20/Cirie-Fields.jpg",
     description: "Age: 39 | Hometown: Norwalk, Connecticut",
     age: 39,
     hometown: "Norwalk, Connecticut",
@@ -108,7 +108,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0150",
     full_name: "Tom Westman",
-    img: "",
+    img: "/images/season_20/Tom-Westman.jpg",
     description: "Age: 45 | Hometown: New York City, New York",
     age: 45,
     hometown: "New York City, New York",
@@ -116,7 +116,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0274",
     full_name: "Tyson Apostol",
-    img: "",
+    img: "/images/season_20/Tyson-Apostol.jpg",
     description: "Age: 30 | Hometown: Heber City, Utah",
     age: 30,
     hometown: "Heber City, Utah",
@@ -124,7 +124,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0231",
     full_name: "James Clement",
-    img: "",
+    img: "/images/season_20/James-Clement.jpg",
     description: "Age: 32 | Hometown: Lafayette, Louisiana",
     age: 32,
     hometown: "Lafayette, Louisiana",
@@ -132,7 +132,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0055",
     full_name: "Rob Mariano",
-    img: "",
+    img: "/images/season_20/Rob-Mariano.jpg",
     description: "Age: 33 | Hometown: Pensacola, Florida",
     age: 33,
     hometown: "Pensacola, Florida",
@@ -141,7 +141,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0277",
     full_name: "Benjamin Wade",
-    img: "",
+    img: "/images/season_20/Benjamin-Wade.jpg",
     description: "Age: 38 | Hometown: Susanville, California",
     age: 38,
     hometown: "Susanville, California",
@@ -150,7 +150,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0236",
     full_name: "Courtney Yates",
-    img: "",
+    img: "/images/season_20/Courtney-Yates.jpg",
     description: "Age: 28 | Hometown: New York City, New York",
     age: 28,
     hometown: "New York City, New York",
@@ -167,7 +167,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0235",
     full_name: "Amanda Kimmel",
-    img: "",
+    img: "/images/season_20/Amanda-Kimmel.jpg",
     description: "Age: 25 | Hometown: Los Angeles, California",
     age: 25,
     hometown: "Los Angeles, California",
@@ -175,7 +175,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0195",
     full_name: "Candice Woodcock",
-    img: "",
+    img: "/images/season_20/Candice-Woodcock.jpg",
     description: "Age: 26 | Hometown: Washington, D.C.",
     age: 26,
     hometown: "Washington, D.C.",
@@ -183,7 +183,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0181",
     full_name: "Danielle DiLorenzo",
-    img: "",
+    img: "/images/season_20/Danielle-DiLorenzo.jpg",
     description: "Age: 28 | Hometown: Los Angeles, California",
     age: 28,
     hometown: "Los Angeles, California",
@@ -191,7 +191,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0107",
     full_name: "Rupert Boneham",
-    img: "",
+    img: "/images/season_20/Rupert-Boneham.jpg",
     description: "Age: 45 | Hometown: Indianapolis, Indiana",
     age: 45,
     hometown: "Indianapolis, Indiana",
@@ -199,7 +199,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0031",
     full_name: "Colby Donaldson",
-    img: "",
+    img: "/images/season_20/Colby-Donaldson.jpg",
     description: "Age: 35 | Hometown: Los Angeles, California",
     age: 35,
     hometown: "Los Angeles, California",
@@ -207,7 +207,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0025",
     full_name: "Jerri Manthey",
-    img: "",
+    img: "/images/season_20/Jerri-Manthey.jpg",
     description: "Age: 38 | Hometown: Los Angeles, California",
     age: 38,
     hometown: "Los Angeles, California",
@@ -215,7 +215,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0300",
     full_name: "Russell Hantz",
-    img: "",
+    img: "/images/season_20/Russell-Hantz.jpg",
     description: "Age: 36 | Hometown: Dayton, Texas",
     age: 36,
     hometown: "Dayton, Texas",
@@ -223,7 +223,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0197",
     full_name: "Parvati Shallow",
-    img: "",
+    img: "/images/season_20/Parvati-Shallow.jpg",
     description: "Age: 26 | Hometown: Los Angeles, California",
     age: 26,
     hometown: "Los Angeles, California",

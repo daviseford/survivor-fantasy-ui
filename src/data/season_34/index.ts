@@ -75,7 +75,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0406",
     full_name: "Ciera Eastin",
-    img: "",
+    img: "/images/season_34/Ciera-Eastin.jpg",
     description: "Age: 27 | Hometown: Salem, Oregon",
     age: 27,
     hometown: "Salem, Oregon",
@@ -83,7 +83,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0424",
     full_name: "Tony Vlachos",
-    img: "",
+    img: "/images/season_34/Tony-Vlachos.jpg",
     description: "Age: 42 | Hometown: Jersey City, New Jersey",
     age: 42,
     hometown: "Jersey City, New Jersey",
@@ -91,7 +91,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0464",
     full_name: "Caleb Reynolds",
-    img: "",
+    img: "/images/season_34/Caleb-Reynolds.jpg",
     description: "Age: 28 | Hometown: Hopkinsville, Kentucky",
     age: 28,
     hometown: "Hopkinsville, Kentucky",
@@ -99,7 +99,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0384",
     full_name: "Malcolm Freberg",
-    img: "",
+    img: "/images/season_34/Malcolm-Freberg.jpg",
     description: "Age: 29 | Hometown: Hermosa Beach, California",
     age: 29,
     hometown: "Hermosa Beach, California",
@@ -124,7 +124,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0023",
     full_name: "Jeff Varner",
-    img: "",
+    img: "/images/season_34/Jeff-Varner.jpg",
     description: "Age: 50 | Hometown: High Point, North Carolina",
     age: 50,
     hometown: "High Point, North Carolina",
@@ -132,7 +132,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0450",
     full_name: "Hali Ford",
-    img: "",
+    img: "/images/season_34/Hali-Ford.jpg",
     description: "Age: 26 | Hometown: Knoxville, Tennessee",
     age: 26,
     hometown: "Knoxville, Tennessee",
@@ -140,7 +140,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0201",
     full_name: "Oscar Lusth",
-    img: "",
+    img: "/images/season_34/Oscar-Lusth.jpg",
     description: "Age: 34 | Hometown: Venice, California",
     age: 34,
     hometown: "Venice, California",
@@ -149,7 +149,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0470",
     full_name: "Debbie Wanner",
-    img: "",
+    img: "/images/season_34/Debbie-Wanner.jpg",
     description: "Age: 51 | Hometown: Reading, Pennsylvania",
     age: 51,
     hometown: "Reading, Pennsylvania",
@@ -157,7 +157,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0490",
     full_name: "Zeke Smith",
-    img: "",
+    img: "/images/season_34/Zeke-Smith.jpg",
     description: "Age: 28 | Hometown: Brooklyn, New York",
     age: 28,
     hometown: "Brooklyn, New York",
@@ -165,7 +165,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0456",
     full_name: "Sierra Dawn Thomas",
-    img: "",
+    img: "/images/season_34/Sierra-Dawn-Thomas.jpg",
     description: "Age: 29 | Hometown: Roy, Utah",
     age: 29,
     hometown: "Roy, Utah",
@@ -173,7 +173,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0333",
     full_name: "Andrea Boehlke",
-    img: "",
+    img: "/images/season_34/Andrea-Boehlke.jpg",
     description: "Age: 27 | Hometown: New York City, New York",
     age: 27,
     hometown: "New York City, New York",
@@ -181,7 +181,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0485",
     full_name: "Michaela Bradshaw",
-    img: "",
+    img: "/images/season_34/Michaela-Bradshaw.jpg",
     description: "Age: 25 | Hometown: Fort Worth, Texas",
     age: 25,
     hometown: "Fort Worth, Texas",
@@ -189,7 +189,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0179",
     full_name: "Cirie Fields",
-    img: "",
+    img: "/images/season_34/Cirie-Fields.jpg",
     description: "Age: 45 | Hometown: Norwalk, Connecticut",
     age: 45,
     hometown: "Norwalk, Connecticut",
@@ -197,7 +197,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0477",
     full_name: "Aubry Bracco",
-    img: "",
+    img: "/images/season_34/Aubry-Bracco.jpg",
     description: "Age: 30 | Hometown: Cambridge, Massachusetts",
     age: 30,
     hometown: "Cambridge, Massachusetts",
@@ -205,7 +205,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0476",
     full_name: "Tai Trang",
-    img: "",
+    img: "/images/season_34/Tai-Trang.jpg",
     description: "Age: 52 | Hometown: San Francisco, California",
     age: 52,
     hometown: "San Francisco, California",
@@ -213,7 +213,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0364",
     full_name: "Troy Robertson",
-    img: "",
+    img: "/images/season_34/Troy-Robertson.jpg",
     description: "Age: 54 | Hometown: Miami, Florida",
     age: 54,
     hometown: "Miami, Florida",
@@ -222,7 +222,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0401",
     full_name: "Brad Culpepper",
-    img: "",
+    img: "/images/season_34/Brad-Culpepper.jpg",
     description: "Age: 47 | Hometown: Tampa, Florida",
     age: 47,
     hometown: "Tampa, Florida",
@@ -230,7 +230,7 @@ export const SEASON_34_PLAYERS = [
   buildPlayer({
     castaway_id: "US0414",
     full_name: "Sarah Lacina",
-    img: "",
+    img: "/images/season_34/Sarah-Lacina.jpg",
     description: "Age: 32 | Hometown: Marion, Iowa",
     age: 32,
     hometown: "Marion, Iowa",
