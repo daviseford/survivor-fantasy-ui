@@ -37,7 +37,7 @@ const SCORING_CATEGORIES = [
   },
   {
     label: "Idols Used",
-    actions: ["use_idol", "use_idol_nullifier"],
+    actions: ["use_idol", "use_idol_nullifier", "voted_out_with_idol"],
   },
   {
     label: "Advantages Used",
@@ -49,6 +49,10 @@ const SCORING_CATEGORIES = [
       "use_knowledge_is_power",
       "use_safety_without_power",
       "use_control_the_vote",
+      "use_amulet",
+      "use_challenge_advantage",
+      "use_other_advantage",
+      "voted_out_with_advantage",
     ],
   },
   {

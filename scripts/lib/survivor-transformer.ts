@@ -400,6 +400,9 @@ const ADVANTAGE_TYPE_TO_FIND: Record<string, string> = {
   "Control the Vote": "find_control_the_vote",
   Amulet: "find_amulet",
   "Challenge Advantage": "find_challenge_advantage",
+  "Choose your Champion": "find_other_advantage",
+  "Goodwill Advantage": "find_other_advantage",
+  "Inheritance Advantage": "find_other_advantage",
 };
 
 /** Map advantage_details.advantage_type → specific use action. */
@@ -417,7 +420,30 @@ const ADVANTAGE_TYPE_TO_USE: Record<string, string> = {
   "Knowledge is Power": "use_knowledge_is_power",
   "Safety without Power": "use_safety_without_power",
   "Control the Vote": "use_control_the_vote",
+  Amulet: "use_amulet",
+  "Challenge Advantage": "use_challenge_advantage",
+  "Choose your Champion": "use_other_advantage",
+  "Goodwill Advantage": "use_other_advantage",
+  "Inheritance Advantage": "use_other_advantage",
 };
+
+/** Non-scoring vote events — explicitly skipped. */
+const IGNORED_VOTE_EVENTS = new Set([
+  "Beware advantage",
+  "Deadlock",
+  "Do or die",
+  "Final 3 tribal",
+  "Fire challenge (f4)",
+  "First out in challenge",
+  "Journey challenge",
+  "Lost vote at survivor auction",
+  "Lost vote on journey",
+  "Player quit",
+  "Sacrificed vote to extend idol",
+  "Sacrificed vote to extend idol; goodwill advantage",
+  "Summit",
+  "Vote blocked",
+]);
 
 /** Map vote_history.vote_event → specific use action. */
 const VOTE_EVENT_TO_USE: Record<string, string> = {
@@ -433,14 +459,37 @@ const VOTE_EVENT_TO_USE: Record<string, string> = {
   "Control the vote": "use_control_the_vote",
 };
 
+/** Journey rewards that don't grant a new advantage — explicitly skipped. */
+const IGNORED_JOURNEY_REWARDS = new Set([
+  "Regained vote",
+  "Returned to camp",
+  "Sanctuary feast",
+]);
+
 /** Map journeys.reward → specific win action. */
 const JOURNEY_REWARD_TO_WIN: Record<string, string> = {
   "Extra vote": "win_extra_vote",
+  "Extra Vote": "win_extra_vote",
   "Block a Vote": "win_block_a_vote",
+  "Block a vote": "win_block_a_vote",
   "Steal a Vote": "win_steal_a_vote",
+  "Bank your vote": "win_other_advantage",
+  "Safety Without Power": "win_other_advantage",
   Idol: "win_idol",
   "Hidden Immunity Idol": "win_idol",
+  "Knowledge is Power": "win_other_advantage",
+  Amulet: "win_other_advantage",
+  "Challenge advantage": "win_other_advantage",
 };
+
+/** Non-scoring advantage lifecycle events — explicitly skipped. */
+const IGNORED_ADVANTAGE_EVENTS = new Set([
+  "Banked",
+  "Became hidden immunity idol",
+  "Became steal a vote",
+  "Expired",
+  "Left game with advantage",
+]);
 
 /** Idol advantage types (for beware lifecycle detection). */
 const IDOL_TYPES = new Set([
@@ -486,7 +535,12 @@ function transformEvents(
 
     const castawayId = adv.castaway_id;
     const detail = detailById.get(adv.advantage_id);
-    const advType = detail?.advantage_type ?? "";
+    if (!detail) {
+      throw new Error(
+        `No advantage_details entry for advantage_id ${adv.advantage_id} (${event} by ${castawayId} in episode ${epNum}). Check survivoR data.`,
+      );
+    }
+    const advType = detail.advantage_type;
 
     if (event === "Found (beware)") {
       bewareFoundIds.add(adv.advantage_id);
@@ -511,8 +565,12 @@ function transformEvents(
           multiplier: null,
         });
       }
-      const findAction =
-        ADVANTAGE_TYPE_TO_FIND[advType] ?? "find_other_advantage";
+      const findAction = ADVANTAGE_TYPE_TO_FIND[advType];
+      if (!findAction) {
+        throw new Error(
+          `Unknown advantage type "${advType}" found by ${castawayId} in episode ${epNum}. Add it to ADVANTAGE_TYPE_TO_FIND.`,
+        );
+      }
       events.push({
         episodeNum: epNum,
         castawayId,
@@ -520,7 +578,12 @@ function transformEvents(
         multiplier: null,
       });
     } else if (event === "Played") {
-      const useAction = ADVANTAGE_TYPE_TO_USE[advType] ?? "use_idol";
+      const useAction = ADVANTAGE_TYPE_TO_USE[advType];
+      if (!useAction) {
+        throw new Error(
+          `Unknown advantage type "${advType}" played by ${castawayId} in episode ${epNum}. Add it to ADVANTAGE_TYPE_TO_USE.`,
+        );
+      }
       events.push({
         episodeNum: epNum,
         castawayId,
@@ -537,6 +600,21 @@ function transformEvents(
         action: winAction,
         multiplier: null,
       });
+    } else if (event === "Voted out with advantage") {
+      events.push({
+        episodeNum: epNum,
+        castawayId,
+        action: IDOL_TYPES.has(advType)
+          ? "voted_out_with_idol"
+          : "voted_out_with_advantage",
+        multiplier: null,
+      });
+    } else if (IGNORED_ADVANTAGE_EVENTS.has(event)) {
+      // Non-scoring lifecycle events — skip silently
+    } else {
+      throw new Error(
+        `Unknown advantage event "${event}" for ${advType} by ${castawayId} in episode ${epNum}. Add handling for this event type.`,
+      );
     }
   }
 
@@ -606,14 +684,18 @@ function transformEvents(
 
     if (j.reward) {
       const winAction = JOURNEY_REWARD_TO_WIN[j.reward];
-      // Skip unrecognized rewards that indicate a loss (e.g., "Lost vote")
-      const isUnknownLoss =
-        !winAction && j.reward.toLowerCase().includes("lost");
-      if (!isUnknownLoss) {
+      const isLoss = j.reward.toLowerCase().includes("lost");
+      const isIgnored = IGNORED_JOURNEY_REWARDS.has(j.reward);
+      if (!winAction && !isLoss && !isIgnored) {
+        throw new Error(
+          `Unknown journey reward "${j.reward}" for ${castawayId} in episode ${epNum}. Add it to JOURNEY_REWARD_TO_WIN or IGNORED_JOURNEY_REWARDS.`,
+        );
+      }
+      if (winAction) {
         events.push({
           episodeNum: epNum,
           castawayId,
-          action: winAction ?? "win_other_advantage",
+          action: winAction,
           multiplier: null,
         });
       }
@@ -643,6 +725,10 @@ function transformEvents(
         action: VOTE_EVENT_TO_USE[v.vote_event],
         multiplier: null,
       });
+    } else if (!IGNORED_VOTE_EVENTS.has(v.vote_event)) {
+      throw new Error(
+        `Unknown vote_event "${v.vote_event}" for ${castawayId} in episode ${epNum}. Add it to VOTE_EVENT_TO_USE or IGNORED_VOTE_EVENTS.`,
+      );
     }
   }
 

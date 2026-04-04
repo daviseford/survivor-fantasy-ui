@@ -46,6 +46,8 @@ export const ScoringCategoryMap: Record<PlayerAction, ScoringCategory> = {
   fulfill_beware_advantage: "advantages",
 
   // Advantages — Use
+  use_amulet: "advantages",
+  use_challenge_advantage: "advantages",
   use_extra_vote: "advantages",
   use_steal_a_vote: "advantages",
   use_block_a_vote: "advantages",
@@ -53,6 +55,9 @@ export const ScoringCategoryMap: Record<PlayerAction, ScoringCategory> = {
   use_knowledge_is_power: "advantages",
   use_safety_without_power: "advantages",
   use_control_the_vote: "advantages",
+  use_other_advantage: "advantages",
+  voted_out_with_advantage: "advantages",
+  voted_out_with_idol: "idols",
 
   // Advantages — Win
   win_extra_vote: "advantages",
