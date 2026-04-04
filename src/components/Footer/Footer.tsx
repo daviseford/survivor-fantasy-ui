@@ -34,6 +34,13 @@ export const Footer = () => {
           ))}
         </Group>
       </Container>
+      <Container className={classes.disclaimer}>
+        <Text c="dimmed" size="xs" ta="center">
+          Survivor Fantasy is not affiliated with, endorsed by, or connected to
+          CBS, SEG, or the Survivor TV show. Survivor® is a registered trademark
+          of CBS Broadcasting Inc.
+        </Text>
+      </Container>
     </footer>
   );
 };

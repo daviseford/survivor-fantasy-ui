@@ -25,6 +25,7 @@ import { Logout } from "./components/Auth/Logout";
 import { Footer } from "./components/Footer";
 import { Home } from "./components/Home/Home";
 import { Navbar } from "./components/Navbar";
+import { NotFound } from "./components/NotFound";
 import { Admin } from "./pages/Admin";
 import { Competitions } from "./pages/Competitions";
 import { DraftComponent } from "./pages/Draft";
@@ -134,6 +135,9 @@ export const AppRoutes = () => {
                 {/* Admin */}
                 <Route path="/admin/:seasonId" element={<SeasonAdmin />} />
                 <Route path="/admin" element={<Admin />} />
+
+                {/* 404 catch-all — must be last */}
+                <Route path="*" element={<NotFound />} />
               </Routes>
               <Footer />
             </AppShell.Main>

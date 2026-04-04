@@ -33,6 +33,7 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 - **Cleanup abandoned drafts:** `yarn tsx scripts/cleanup-abandoned-drafts.ts` (delete drafts from RTDB that are unfinished and older than 7 days)
 - **Set admin claim:** `yarn tsx scripts/set-admin-claim.ts <uid>` (set Firebase Auth admin custom claim on a user)
 - **Optimize images:** `yarn tsx scripts/optimize-images.ts` (resize and compress all images in `public/images/`)
+- **Generate web assets:** `yarn tsx scripts/generate-web-assets.ts` (generate favicon PNGs, apple-touch-icon, and OG image from SVG source)
 
 ## Data Source
 
