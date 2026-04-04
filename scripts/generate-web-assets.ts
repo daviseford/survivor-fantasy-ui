@@ -76,7 +76,7 @@ async function generateOgImage() {
       <!-- Subtle pattern overlay -->
       <rect width="${width}" height="${height}" fill="black" opacity="0.08" />
 
-      <!-- Torch icon (scaled up from favicon) -->
+      <!-- Torch icon — same paths as public/favicon.svg but brighter fills for visibility on the blue gradient -->
       <g transform="translate(100, 160) scale(9)">
         <rect x="14" y="16" width="4" height="14" rx="1.5" fill="#c9a96e" opacity="0.9"/>
         <path d="M16 2c-1.5 3-6 6-6 10.5C10 16.1 12.7 18 16 18s6-1.9 6-5.5C22 8 17.5 5 16 2z" fill="#FF6B35" opacity="0.95"/>

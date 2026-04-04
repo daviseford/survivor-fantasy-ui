@@ -1,10 +1,22 @@
 import { Button, Container, Stack, Text, Title } from "@mantine/core";
 import { IconFlame } from "@tabler/icons-react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "./NotFound.module.css";
 
 export const NotFound = () => {
   const navigate = useNavigate();
+
+  // Prevent search engines from indexing soft-404 pages (SPA always returns HTTP 200)
+  useEffect(() => {
+    const meta = document.createElement("meta");
+    meta.name = "robots";
+    meta.content = "noindex";
+    document.head.appendChild(meta);
+    return () => {
+      document.head.removeChild(meta);
+    };
+  }, []);
 
   return (
     <div className={classes.wrapper}>
@@ -21,7 +33,7 @@ export const NotFound = () => {
             size="lg"
             variant="gradient"
             gradient={{ from: "blue", to: "cyan" }}
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/", { replace: true })}
             leftSection={<IconFlame size={20} />}
           >
             Go home
