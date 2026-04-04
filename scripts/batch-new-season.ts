@@ -127,6 +127,9 @@ async function fetchWikiSupplemental(
     if (info.imageFileName) {
       imageFileNames.set(wikiPageTitle, info.imageFileName);
     }
+    if (info.occupation) {
+      player.profession = info.occupation;
+    }
     if (info.nickname) {
       player.nickname = info.nickname;
     }
