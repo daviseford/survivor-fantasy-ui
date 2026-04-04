@@ -1163,7 +1163,7 @@ export const SEASON_33_EVENTS = {
     episode_id: "episode_13",
     episode_num: 13,
     castaway_id: "US0493",
-    action: "use_idol",
+    action: "use_other_advantage",
     multiplier: null,
   },
   event_15: {
