@@ -67,7 +67,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0167",
     full_name: "Tina Scheer",
-    img: "",
+    img: "/images/season_12/Tina-Scheer.jpg",
     description: "Age: 44 | Hometown: Hayward, Wisconsin",
     age: 44,
     hometown: "Hayward, Wisconsin",
@@ -75,7 +75,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0168",
     full_name: "Melinda Hyder",
-    img: "",
+    img: "/images/season_12/Melinda-Hyder.jpg",
     description: "Age: 32 | Hometown: Sevierville, Tennessee",
     age: 32,
     hometown: "Sevierville, Tennessee",
@@ -83,7 +83,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0169",
     full_name: "Misty Giles",
-    img: "",
+    img: "/images/season_12/Misty-Giles.jpg",
     description: "Age: 24 | Hometown: Dallas, Texas",
     age: 24,
     hometown: "Dallas, Texas",
@@ -91,7 +91,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0170",
     full_name: "Ruth Marie Milliman",
-    img: "",
+    img: "/images/season_12/Ruth-Marie-Milliman.jpg",
     description: "Age: 48 | Hometown: Greenville, South Carolina",
     age: 48,
     hometown: "Greenville, South Carolina",
@@ -100,7 +100,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0171",
     full_name: "Bobby Mason",
-    img: "",
+    img: "/images/season_12/Bobby-Mason.jpg",
     description: "Age: 32 | Hometown: Los Angeles, California",
     age: 32,
     hometown: "Los Angeles, California",
@@ -108,7 +108,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0172",
     full_name: "Dan Barry",
-    img: "",
+    img: "/images/season_12/Dan-Barry.jpg",
     description: "Age: 51 | Hometown: South Hadley, Massachusetts",
     age: 51,
     hometown: "South Hadley, Massachusetts",
@@ -116,7 +116,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0173",
     full_name: "Nick Stanbury",
-    img: "",
+    img: "/images/season_12/Nick-Stanbury.jpg",
     description: "Age: 25 | Hometown: Tempe, Arizona",
     age: 25,
     hometown: "Tempe, Arizona",
@@ -124,7 +124,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0174",
     full_name: "Austin Carty",
-    img: "",
+    img: "/images/season_12/Austin-Carty.jpg",
     description: "Age: 24 | Hometown: High Point, North Carolina",
     age: 24,
     hometown: "High Point, North Carolina",
@@ -132,7 +132,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0175",
     full_name: "Sally Schumann",
-    img: "",
+    img: "/images/season_12/Sally-Schumann.jpg",
     description: "Age: 27 | Hometown: Chicago, Illinois",
     age: 27,
     hometown: "Chicago, Illinois",
@@ -140,7 +140,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0176",
     full_name: "Bruce Kanegai",
-    img: "",
+    img: "/images/season_12/Bruce-Kanegai.jpg",
     description: "Age: 57 | Hometown: Simi Valley, California",
     age: 57,
     hometown: "Simi Valley, California",
@@ -148,7 +148,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0177",
     full_name: "Courtney Marit",
-    img: "",
+    img: "/images/season_12/Courtney-Marit.jpg",
     description: "Age: 31 | Hometown: Los Angeles, California",
     age: 31,
     hometown: "Los Angeles, California",
@@ -156,7 +156,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0178",
     full_name: "Shane Powers",
-    img: "",
+    img: "/images/season_12/Shane-Powers.jpg",
     description: "Age: 34 | Hometown: Los Angeles, California",
     age: 34,
     hometown: "Los Angeles, California",
@@ -164,7 +164,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0179",
     full_name: "Cirie Fields",
-    img: "",
+    img: "/images/season_12/Cirie-Fields.jpg",
     description: "Age: 35 | Hometown: Walterboro, South Carolina",
     age: 35,
     hometown: "Walterboro, South Carolina",
@@ -172,7 +172,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0180",
     full_name: "Terry Deitz",
-    img: "",
+    img: "/images/season_12/Terry-Deitz.jpg",
     description: "Age: 46 | Hometown: Simsbury, Connecticut",
     age: 46,
     hometown: "Simsbury, Connecticut",
@@ -180,7 +180,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0181",
     full_name: "Danielle DiLorenzo",
-    img: "",
+    img: "/images/season_12/Danielle-DiLorenzo.jpg",
     description: "Age: 24 | Hometown: Pompano Beach, Florida",
     age: 24,
     hometown: "Pompano Beach, Florida",
@@ -188,7 +188,7 @@ export const SEASON_12_PLAYERS = [
   buildPlayer({
     castaway_id: "US0182",
     full_name: "Aras Baskauskas",
-    img: "",
+    img: "/images/season_12/Aras-Baskauskas.jpg",
     description: "Age: 24 | Hometown: Santa Monica, California",
     age: 24,
     hometown: "Santa Monica, California",

@@ -71,7 +71,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0032",
     full_name: "Tina Wesson",
-    img: "",
+    img: "/images/season_8/Tina-Wesson.jpg",
     description: "Age: 42 | Hometown: Knoxville, Tennessee",
     age: 42,
     hometown: "Knoxville, Tennessee",
@@ -79,7 +79,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0014",
     full_name: "Rudy Boesch",
-    img: "",
+    img: "/images/season_8/Rudy-Boesch.jpg",
     description: "Age: 75 | Hometown: Virginia Beach, Virginia",
     age: 75,
     hometown: "Virginia Beach, Virginia",
@@ -87,7 +87,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0096",
     full_name: "Jenna Morasca",
-    img: "",
+    img: "/images/season_8/Jenna-Morasca.jpg",
     description: "Age: 22 | Hometown: Bridgeville, Pennsylvania",
     age: 22,
     hometown: "Bridgeville, Pennsylvania",
@@ -96,7 +96,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0094",
     full_name: "Rob Cesternino",
-    img: "",
+    img: "/images/season_8/Rob-Cesternino.jpg",
     description: "Age: 25 | Hometown: Plainview, New York",
     age: 25,
     hometown: "Plainview, New York",
@@ -105,7 +105,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0016",
     full_name: "Richard Hatch",
-    img: "",
+    img: "/images/season_8/Richard-Hatch.jpg",
     description: "Age: 42 | Hometown: Middletown, Rhode Island",
     age: 42,
     hometown: "Middletown, Rhode Island",
@@ -113,7 +113,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0013",
     full_name: "Susan Hawk",
-    img: "",
+    img: "/images/season_8/Susan-Hawk.jpg",
     description: "Age: 42 | Hometown: Las Vegas, Nevada",
     age: 42,
     hometown: "Las Vegas, Nevada",
@@ -122,7 +122,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0031",
     full_name: "Colby Donaldson",
-    img: "",
+    img: "/images/season_8/Colby-Donaldson.jpg",
     description: "Age: 29 | Hometown: Los Angeles, California",
     age: 29,
     hometown: "Los Angeles, California",
@@ -130,7 +130,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0048",
     full_name: "Ethan Zohn",
-    img: "",
+    img: "/images/season_8/Ethan-Zohn.jpg",
     description: "Age: 30 | Hometown: New York City, New York",
     age: 30,
     hometown: "New York City, New York",
@@ -138,7 +138,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0025",
     full_name: "Jerri Manthey",
-    img: "",
+    img: "/images/season_8/Jerri-Manthey.jpg",
     description: "Age: 33 | Hometown: Los Angeles, California",
     age: 33,
     hometown: "Los Angeles, California",
@@ -146,7 +146,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0046",
     full_name: "Lex van den Berghe",
-    img: "",
+    img: "/images/season_8/Lex-van-den-Berghe.jpg",
     description: "Age: 40 | Hometown: Santa Cruz, California",
     age: 40,
     hometown: "Santa Cruz, California",
@@ -162,7 +162,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0024",
     full_name: "Alicia Calaway",
-    img: "",
+    img: "/images/season_8/Alicia-Calaway.jpg",
     description: "Age: 35 | Hometown: New York City, New York",
     age: 35,
     hometown: "New York City, New York",
@@ -170,7 +170,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0071",
     full_name: "Shii Ann Huang",
-    img: "",
+    img: "/images/season_8/Shii-Ann-Huang.jpg",
     description: "Age: 29 | Hometown: New York City, New York",
     age: 29,
     hometown: "New York City, New York",
@@ -179,7 +179,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0045",
     full_name: "Tom Buchanan",
-    img: "",
+    img: "/images/season_8/Tom-Buchanan.jpg",
     description: "Age: 48 | Hometown: Rich Valley, Virginia",
     age: 48,
     hometown: "Rich Valley, Virginia",
@@ -187,7 +187,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0107",
     full_name: "Rupert Boneham",
-    img: "",
+    img: "/images/season_8/Rupert-Boneham.jpg",
     description: "Age: 39 | Hometown: Indianapolis, Indiana",
     age: 39,
     hometown: "Indianapolis, Indiana",
@@ -195,7 +195,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0009",
     full_name: "Jenna Lewis",
-    img: "",
+    img: "/images/season_8/Jenna-Lewis.jpg",
     description: "Age: 26 | Hometown: Burbank, California",
     age: 26,
     hometown: "Burbank, California",
@@ -204,7 +204,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0055",
     full_name: "Rob Mariano",
-    img: "",
+    img: "/images/season_8/Rob-Mariano.jpg",
     description: "Age: 27 | Hometown: Canton, Massachusetts",
     age: 27,
     hometown: "Canton, Massachusetts",
@@ -213,7 +213,7 @@ export const SEASON_8_PLAYERS = [
   buildPlayer({
     castaway_id: "US0027",
     full_name: "Amber Brkich",
-    img: "",
+    img: "/images/season_8/Amber-Brkich.jpg",
     description: "Age: 25 | Hometown: Beaver, Pennsylvania",
     age: 25,
     hometown: "Beaver, Pennsylvania",

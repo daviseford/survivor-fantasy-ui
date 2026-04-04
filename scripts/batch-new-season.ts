@@ -410,6 +410,7 @@ async function main(): Promise<void> {
         playerData,
         resultsData,
         seasonNum,
+        outputPath,
       );
 
       if (dryRun) {

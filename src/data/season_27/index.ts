@@ -75,7 +75,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0195",
     full_name: "Candice Cody",
-    img: "",
+    img: "/images/season_27/Candice-Cody.jpg",
     description: "Age: 30 | Hometown: Washington, D.C.",
     age: 30,
     hometown: "Washington, D.C.",
@@ -83,7 +83,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0107",
     full_name: "Rupert Boneham",
-    img: "",
+    img: "/images/season_27/Rupert-Boneham.jpg",
     description: "Age: 49 | Hometown: Indianapolis, Indiana",
     age: 49,
     hometown: "Indianapolis, Indiana",
@@ -91,7 +91,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0398",
     full_name: "Marissa Peterson",
-    img: "",
+    img: "/images/season_27/Marissa-Peterson.jpg",
     description: "Age: 21 | Hometown: Chapel Hill, North Carolina",
     age: 21,
     hometown: "Chapel Hill, North Carolina",
@@ -99,7 +99,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0399",
     full_name: "Rachel Foulger",
-    img: "",
+    img: "/images/season_27/Rachel-Foulger.jpg",
     description: "Age: 33 | Hometown: Provo, Utah",
     age: 33,
     hometown: "Provo, Utah",
@@ -107,7 +107,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0359",
     full_name: "Colton Cumbie",
-    img: "",
+    img: "/images/season_27/Colton-Cumbie.jpg",
     description: "Age: 22 | Hometown: Collinsville, Alabama",
     age: 22,
     hometown: "Collinsville, Alabama",
@@ -115,7 +115,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0400",
     full_name: "John Cody",
-    img: "",
+    img: "/images/season_27/John-Cody.jpg",
     description: "Age: 30 | Hometown: Washington, D.C.",
     age: 30,
     hometown: "Washington, D.C.",
@@ -123,7 +123,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0401",
     full_name: "Brad Culpepper",
-    img: "",
+    img: "/images/season_27/Brad-Culpepper.jpg",
     description: "Age: 44 | Hometown: Tampa, Florida",
     age: 44,
     hometown: "Tampa, Florida",
@@ -131,7 +131,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0365",
     full_name: "Kat Edorsson",
-    img: "",
+    img: "/images/season_27/Kat-Edorsson.jpg",
     description: "Age: 23 | Hometown: Orlando, Florida",
     age: 23,
     hometown: "Orlando, Florida",
@@ -139,7 +139,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0397",
     full_name: "Laura Boneham",
-    img: "",
+    img: "/images/season_27/Laura-Boneham.jpg",
     description: "Age: 44 | Hometown: Indianapolis, Indiana",
     age: 44,
     hometown: "Indianapolis, Indiana",
@@ -148,7 +148,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0182",
     full_name: "Aras Baskauskas",
-    img: "",
+    img: "/images/season_27/Aras-Baskauskas.jpg",
     description: "Age: 31 | Hometown: Santa Monica, California",
     age: 31,
     hometown: "Santa Monica, California",
@@ -156,7 +156,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0402",
     full_name: "Vytas Baskauskas",
-    img: "",
+    img: "/images/season_27/Vytas-Baskauskas.jpg",
     description: "Age: 33 | Hometown: Santa Monica, California",
     age: 33,
     hometown: "Santa Monica, California",
@@ -164,7 +164,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0292",
     full_name: "Laura Morett",
-    img: "",
+    img: "/images/season_27/Laura-Morett.jpg",
     description: "Age: 43 | Hometown: Salem, Oregon",
     age: 43,
     hometown: "Salem, Oregon",
@@ -173,7 +173,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0403",
     full_name: "Caleb Bankston",
-    img: "",
+    img: "/images/season_27/Caleb-Bankston.jpg",
     description: "Age: 26 | Hometown: Collinsville, Alabama",
     age: 26,
     hometown: "Collinsville, Alabama",
@@ -181,7 +181,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0404",
     full_name: "Katie Collins",
-    img: "",
+    img: "/images/season_27/Katie-Collins.jpg",
     description: "Age: 25 | Hometown: New York City, New York",
     age: 25,
     hometown: "New York City, New York",
@@ -189,7 +189,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0405",
     full_name: "Hayden Moss",
-    img: "",
+    img: "/images/season_27/Hayden-Moss.jpg",
     description: "Age: 27 | Hometown: Springtown, Texas",
     age: 27,
     hometown: "Springtown, Texas",
@@ -197,7 +197,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0406",
     full_name: "Ciera Eastin",
-    img: "",
+    img: "/images/season_27/Ciera-Eastin.jpg",
     description: "Age: 24 | Hometown: Salem, Oregon",
     age: 24,
     hometown: "Salem, Oregon",
@@ -205,7 +205,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0032",
     full_name: "Tina Wesson",
-    img: "",
+    img: "/images/season_27/Tina-Wesson.jpg",
     description: "Age: 52 | Hometown: Robbinsville, North Carolina",
     age: 52,
     hometown: "Robbinsville, North Carolina",
@@ -213,7 +213,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0010",
     full_name: "Gervase Peterson",
-    img: "",
+    img: "/images/season_27/Gervase-Peterson.jpg",
     description: "Age: 43 | Hometown: Philadelphia, Pennsylvania",
     age: 43,
     hometown: "Philadelphia, Pennsylvania",
@@ -221,7 +221,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0358",
     full_name: "Monica Culpepper",
-    img: "",
+    img: "/images/season_27/Monica-Culpepper.jpg",
     description: "Age: 42 | Hometown: Tampa, Florida",
     age: 42,
     hometown: "Tampa, Florida",
@@ -229,7 +229,7 @@ export const SEASON_27_PLAYERS = [
   buildPlayer({
     castaway_id: "US0274",
     full_name: "Tyson Apostol",
-    img: "",
+    img: "/images/season_27/Tyson-Apostol.jpg",
     description: "Age: 34 | Hometown: Provo, Utah",
     age: 34,
     hometown: "Provo, Utah",

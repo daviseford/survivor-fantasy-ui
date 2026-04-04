@@ -71,7 +71,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0657",
     full_name: "Bruce Perreault",
-    img: "",
+    img: "/images/season_44/Bruce-Perreault.jpg",
     description: "Age: 45 | Hometown: Warwick, Rhode Island",
     age: 45,
     hometown: "Warwick, Rhode Island",
@@ -79,7 +79,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0649",
     full_name: "Maddy Pomilla",
-    img: "",
+    img: "/images/season_44/Maddy-Pomilla.jpg",
     description: "Age: 28 | Hometown: Brooklyn, New York",
     age: 28,
     hometown: "Brooklyn, New York",
@@ -88,7 +88,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0660",
     full_name: "Helen Li",
-    img: "",
+    img: "/images/season_44/Helen-Li.jpg",
     description: "Age: 28 | Hometown: San Francisco, California",
     age: 28,
     hometown: "San Francisco, California",
@@ -97,7 +97,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0651",
     full_name: "Claire Rafson",
-    img: "",
+    img: "/images/season_44/Claire-Rafson.jpg",
     description: "Age: 25 | Hometown: Brooklyn, New York",
     age: 25,
     hometown: "Brooklyn, New York",
@@ -106,7 +106,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0661",
     full_name: "Sarah Wade",
-    img: "",
+    img: "/images/season_44/Sarah-Wade.jpg",
     description: "Age: 26 | Hometown: Chicago, Illinois",
     age: 26,
     hometown: "Chicago, Illinois",
@@ -115,7 +115,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0650",
     full_name: "Matthew Grinstead-Mayle",
-    img: "",
+    img: "/images/season_44/Matthew-Grinstead-Mayle.jpg",
     description: "Age: 43 | Hometown: Columbus, Ohio",
     age: 43,
     hometown: "Columbus, Ohio",
@@ -124,7 +124,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0655",
     full_name: "Josh Wilder",
-    img: "",
+    img: "/images/season_44/Josh-Wilder.jpg",
     description: "Age: 34 | Hometown: Atlanta, Georgia",
     age: 34,
     hometown: "Atlanta, Georgia",
@@ -133,7 +133,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0656",
     full_name: "Matt Blankinship",
-    img: "",
+    img: "/images/season_44/Matt-Blankinship.jpg",
     description: "Age: 27 | Hometown: San Francisco, California",
     age: 27,
     hometown: "San Francisco, California",
@@ -142,7 +142,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0645",
     full_name: "Brandon Cottom",
-    img: "",
+    img: "/images/season_44/Brandon-Cottom.jpg",
     description: "Age: 29 | Hometown: Newtown, Pennsylvania",
     age: 29,
     hometown: "Newtown, Pennsylvania",
@@ -151,7 +151,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0647",
     full_name: "Kane Fritzler",
-    img: "",
+    img: "/images/season_44/Kane-Fritzler.jpg",
     description: "Age: 24 | Hometown: Saskatoon, Saskatchewan",
     age: 24,
     hometown: "Saskatoon, Saskatchewan",
@@ -160,7 +160,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0653",
     full_name: "Frannie Marin",
-    img: "",
+    img: "/images/season_44/Frannie-Marin.jpg",
     description: "Age: 23 | Hometown: Cambridge, Massachusetts",
     age: 23,
     hometown: "Cambridge, Massachusetts",
@@ -169,7 +169,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0652",
     full_name: "Danny Massa",
-    img: "",
+    img: "/images/season_44/Danny-Massa.jpg",
     description: "Age: 31 | Hometown: Bronx, New York",
     age: 31,
     hometown: "Bronx, New York",
@@ -178,7 +178,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0646",
     full_name: "Jaime Lynn Ruiz",
-    img: "",
+    img: "/images/season_44/Jaime-Lynn-Ruiz.jpg",
     description: "Age: 35 | Hometown: Mesa, Arizona",
     age: 35,
     hometown: "Mesa, Arizona",
@@ -187,7 +187,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0648",
     full_name: "Lauren Harpe",
-    img: "",
+    img: "/images/season_44/Lauren-Harpe.jpg",
     description: "Age: 30 | Hometown: Mont Belvieu, Texas",
     age: 30,
     hometown: "Mont Belvieu, Texas",
@@ -196,7 +196,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0659",
     full_name: "Carson Garrett",
-    img: "",
+    img: "/images/season_44/Carson-Garrett.jpg",
     description: "Age: 20 | Hometown: Atlanta, Georgia",
     age: 20,
     hometown: "Atlanta, Georgia",
@@ -205,7 +205,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0658",
     full_name: "Carolyn Wiger",
-    img: "",
+    img: "/images/season_44/Carolyn-Wiger.jpg",
     description: "Age: 35 | Hometown: Hugo, Minnesota",
     age: 35,
     hometown: "Hugo, Minnesota",
@@ -214,7 +214,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0654",
     full_name: "Heidi Lagares-Greenblatt",
-    img: "",
+    img: "/images/season_44/Heidi-Lagares-Greenblatt.jpg",
     description: "Age: 42 | Hometown: Pittsburgh, Pennsylvania",
     age: 42,
     hometown: "Pittsburgh, Pennsylvania",
@@ -223,7 +223,7 @@ export const SEASON_44_PLAYERS = [
   buildPlayer({
     castaway_id: "US0662",
     full_name: "Yam Yam Arocho",
-    img: "",
+    img: "/images/season_44/Yam-Yam-Arocho.jpg",
     description: "Age: 35 | Hometown: San Juan, Puerto Rico",
     age: 35,
     hometown: "San Juan, Puerto Rico",

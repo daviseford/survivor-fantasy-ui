@@ -571,13 +571,22 @@ export function generateFullSeasonFile(
   playerData: ScrapeResult,
   resultsData: ScrapeResultsOutput,
   seasonNum: number,
+  existingFilePath?: string,
 ): string {
-  // Generate the player section (no existing players, no IMG constant for new seasons)
+  // Preserve existing player img fields if the file already exists
+  let existingPlayers: ExistingPlayerData[] = [];
+  let imgConstant: { prefix: string; constLine: string } | null = null;
+  if (existingFilePath && fs.existsSync(existingFilePath)) {
+    const existingContent = fs.readFileSync(existingFilePath, "utf-8");
+    existingPlayers = extractExistingPlayers(existingContent);
+    imgConstant = detectImgConstant(existingContent);
+  }
+
   const playerSection = generatePlayerSection(
     seasonNum,
     playerData.players,
-    [],
-    null,
+    existingPlayers,
+    imgConstant,
   );
 
   // Extract castaway IDs for cross-referencing in gameplay sections

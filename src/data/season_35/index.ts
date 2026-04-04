@@ -71,7 +71,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0499",
     full_name: "Katrina Radke",
-    img: "",
+    img: "/images/season_35/Katrina-Radke.jpg",
     description: "Age: 46 | Hometown: Excelsior, Minnesota",
     age: 46,
     hometown: "Excelsior, Minnesota",
@@ -79,7 +79,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0500",
     full_name: "Simone Nguyen",
-    img: "",
+    img: "/images/season_35/Simone-Nguyen.jpg",
     description: "Age: 25 | Hometown: New York City, New York",
     age: 25,
     hometown: "New York City, New York",
@@ -87,7 +87,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0501",
     full_name: "Patrick Bolton",
-    img: "",
+    img: "/images/season_35/Patrick-Bolton.jpg",
     description: "Age: 24 | Hometown: Auburn, Alabama",
     age: 24,
     hometown: "Auburn, Alabama",
@@ -95,7 +95,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0502",
     full_name: "Alan Ball",
-    img: "",
+    img: "/images/season_35/Alan-Ball.jpg",
     description: "Age: 32 | Hometown: Houston, Texas",
     age: 32,
     hometown: "Houston, Texas",
@@ -103,7 +103,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0503",
     full_name: "Roark Luskin",
-    img: "",
+    img: "/images/season_35/Roark-Luskin.jpg",
     description: "Age: 27 | Hometown: Santa Monica, California",
     age: 27,
     hometown: "Santa Monica, California",
@@ -120,7 +120,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0505",
     full_name: "Jessica Johnston",
-    img: "",
+    img: "/images/season_35/Jessica-Johnston.jpg",
     description: "Age: 29 | Hometown: Louisville, Kentucky",
     age: 29,
     hometown: "Louisville, Kentucky",
@@ -137,7 +137,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0507",
     full_name: "Cole Medders",
-    img: "",
+    img: "/images/season_35/Cole-Medders.jpg",
     description: "Age: 24 | Hometown: Little Rock, Arkansas",
     age: 24,
     hometown: "Little Rock, Arkansas",
@@ -154,7 +154,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0509",
     full_name: "Joe Mena",
-    img: "",
+    img: "/images/season_35/Joe-Mena.jpg",
     description: "Age: 34 | Hometown: Tolland, Connecticut",
     age: 34,
     hometown: "Tolland, Connecticut",
@@ -162,7 +162,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0510",
     full_name: "Lauren Rimmer",
-    img: "",
+    img: "/images/season_35/Lauren-Rimmer.jpg",
     description: "Age: 35 | Hometown: Beaufort, North Carolina",
     age: 35,
     hometown: "Beaufort, North Carolina",
@@ -170,7 +170,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0511",
     full_name: "Ashley Nolan",
-    img: "",
+    img: "/images/season_35/Ashley-Nolan.jpg",
     description: "Age: 26 | Hometown: Satellite Beach, Florida",
     age: 26,
     hometown: "Satellite Beach, Florida",
@@ -178,7 +178,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0512",
     full_name: "Mike Zahalsky",
-    img: "",
+    img: "/images/season_35/Mike-Zahalsky.jpg",
     description: "Age: 43 | Hometown: Parkland, Florida",
     age: 43,
     hometown: "Parkland, Florida",
@@ -186,7 +186,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0513",
     full_name: "Devon Pinto",
-    img: "",
+    img: "/images/season_35/Devon-Pinto.jpg",
     description: "Age: 23 | Hometown: Solana Beach, California",
     age: 23,
     hometown: "Solana Beach, California",
@@ -194,7 +194,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0514",
     full_name: "Ryan Ulrich",
-    img: "",
+    img: "/images/season_35/Ryan-Ulrich.jpg",
     description: "Age: 23 | Hometown: North Arlington, New Jersey",
     age: 23,
     hometown: "North Arlington, New Jersey",
@@ -202,7 +202,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0515",
     full_name: "Chrissy Hofbeck",
-    img: "",
+    img: "/images/season_35/Chrissy-Hofbeck.jpg",
     description: "Age: 46 | Hometown: Lebanon Township, New Jersey",
     age: 46,
     hometown: "Lebanon Township, New Jersey",
@@ -210,7 +210,7 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0516",
     full_name: "Ben Driebergen",
-    img: "",
+    img: "/images/season_35/Ben-Driebergen.jpg",
     description: "Age: 34 | Hometown: Boise, Idaho",
     age: 34,
     hometown: "Boise, Idaho",

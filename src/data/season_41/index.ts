@@ -71,7 +71,7 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0591",
     full_name: "Eric Abraham",
-    img: "",
+    img: "/images/season_41/Eric-Abraham.jpg",
     description: "Age: 51 | Hometown: San Antonio, Texas",
     age: 51,
     hometown: "San Antonio, Texas",
@@ -80,7 +80,7 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0592",
     full_name: "Sara Wilson",
-    img: "",
+    img: "/images/season_41/Sara-Wilson.jpg",
     description: "Age: 24 | Hometown: Boston, Massachusetts",
     age: 24,
     hometown: "Boston, Massachusetts",
@@ -88,7 +88,7 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0607",
     full_name: "David Voce",
-    img: "",
+    img: "/images/season_41/David-Voce.jpg",
     description: "Age: 35 | Hometown: Chicago, Illinois",
     age: 35,
     hometown: "Chicago, Illinois",
@@ -97,7 +97,7 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0602",
     full_name: "Brad Reese",
-    img: "",
+    img: "/images/season_41/Brad-Reese.jpg",
     description: "Age: 50 | Hometown: Shawnee, Wyoming",
     age: 50,
     hometown: "Shawnee, Wyoming",
@@ -105,7 +105,7 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0603",
     full_name: "Jairus Robinson",
-    img: "",
+    img: "/images/season_41/Jairus-Robinson.jpg",
     description: "Age: 20 | Hometown: Oklahoma City, Oklahoma",
     age: 20,
     hometown: "Oklahoma City, Oklahoma",
@@ -114,7 +114,7 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0595",
     full_name: "Genie Chen",
-    img: "",
+    img: "/images/season_41/Genie-Chen.jpg",
     description: "Age: 46 | Hometown: Portland, Oregon",
     age: 46,
     hometown: "Portland, Oregon",
@@ -122,7 +122,7 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0605",
     full_name: "Sydney Segal",
-    img: "",
+    img: "/images/season_41/Sydney-Segal.jpg",
     description: "Age: 26 | Hometown: Brooklyn, New York",
     age: 26,
     hometown: "Brooklyn, New York",
@@ -130,7 +130,7 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0604",
     full_name: "Tiffany Seely",
-    img: "",
+    img: "/images/season_41/Tiffany-Seely.jpg",
     description: "Age: 47 | Hometown: Plainview, New York",
     age: 47,
     hometown: "Plainview, New York",
@@ -138,7 +138,7 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0600",
     full_name: "Naseer Muttalif",
-    img: "",
+    img: "/images/season_41/Naseer-Muttalif.jpg",
     description: "Age: 37 | Hometown: Morgan Hill, California",
     age: 37,
     hometown: "Morgan Hill, California",
@@ -146,15 +146,16 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0598",
     full_name: "Evvie Jagoda",
-    img: "",
+    img: "/images/season_41/Evvie-Jagoda.jpg",
     description: "Age: 28 | Hometown: Arlington, Massachusetts",
     age: 28,
     hometown: "Arlington, Massachusetts",
+    nickname: "Evvie",
   }),
   buildPlayer({
     castaway_id: "US0606",
     full_name: "Shantel Smith",
-    img: "",
+    img: "/images/season_41/Shantel-Smith.jpg",
     description: "Age: 34 | Hometown: Washington, D.C.",
     age: 34,
     hometown: "Washington, D.C.",
@@ -163,7 +164,7 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0608",
     full_name: "Liana Wallace",
-    img: "",
+    img: "/images/season_41/Liana-Wallace.jpg",
     description: "Age: 20 | Hometown: Washington, D.C.",
     age: 20,
     hometown: "Washington, D.C.",
@@ -171,10 +172,11 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0599",
     full_name: "Danny McCray",
-    img: "",
+    img: "/images/season_41/Danny-McCray.jpg",
     description: "Age: 33 | Hometown: Frisco, Texas",
     age: 33,
     hometown: "Frisco, Texas",
+    nickname: "Danny",
   }),
   buildPlayer({
     castaway_id: "US0596",
@@ -187,7 +189,7 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0593",
     full_name: "Heather Aldret",
-    img: "",
+    img: "/images/season_41/Heather-Aldret.jpg",
     description: "Age: 52 | Hometown: Charleston, South Carolina",
     age: 52,
     hometown: "Charleston, South Carolina",
@@ -195,15 +197,16 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0597",
     full_name: "Xander Hastings",
-    img: "",
+    img: "/images/season_41/Xander-Hastings.jpg",
     description: "Age: 20 | Hometown: Chicago, Illinois",
     age: 20,
     hometown: "Chicago, Illinois",
+    nickname: "Xander",
   }),
   buildPlayer({
     castaway_id: "US0601",
     full_name: "Deshawn Radden",
-    img: "",
+    img: "/images/season_41/Deshawn-Radden.jpg",
     description: "Age: 26 | Hometown: Miami, Florida",
     age: 26,
     hometown: "Miami, Florida",
@@ -211,7 +214,7 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0594",
     full_name: "Erika Casupanan",
-    img: "",
+    img: "/images/season_41/Erika-Casupanan.jpg",
     description: "Age: 32 | Hometown: Toronta, Ontario",
     age: 32,
     hometown: "Toronta, Ontario",

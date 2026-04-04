@@ -75,7 +75,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0402",
     full_name: "Vytas Baskauskas",
-    img: "",
+    img: "/images/season_31/Vytas-Baskauskas.jpg",
     description: "Age: 35 | Hometown: Santa Monica, California",
     age: 35,
     hometown: "Santa Monica, California",
@@ -83,7 +83,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0453",
     full_name: "Shirin Oskooi",
-    img: "",
+    img: "/images/season_31/Shirin-Oskooi.jpg",
     description: "Age: 32 | Hometown: San Francisco, California",
     age: 32,
     hometown: "San Francisco, California",
@@ -99,7 +99,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0023",
     full_name: "Jeff Varner",
-    img: "",
+    img: "/images/season_31/Jeff-Varner.jpg",
     description: "Age: 49 | Hometown: Greensboro, North Carolina",
     age: 49,
     hometown: "Greensboro, North Carolina",
@@ -107,7 +107,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0295",
     full_name: "Monica Padilla",
-    img: "",
+    img: "/images/season_31/Monica-Padilla.jpg",
     description: "Age: 30 | Hometown: Queens, New York",
     age: 30,
     hometown: "Queens, New York",
@@ -115,7 +115,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0180",
     full_name: "Terry Deitz",
-    img: "",
+    img: "/images/season_31/Terry-Deitz.jpg",
     description: "Age: 55 | Hometown: Simsbury, Connecticut",
     age: 55,
     hometown: "Simsbury, Connecticut",
@@ -132,7 +132,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0422",
     full_name: "Kassandra McQuillen",
-    img: "",
+    img: "/images/season_31/Kassandra-McQuillen.jpg",
     description: "Age: 43 | Hometown: Tehachapi, California",
     age: 43,
     hometown: "Tehachapi, California",
@@ -141,7 +141,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0105",
     full_name: "Andrew Savage",
-    img: "",
+    img: "/images/season_31/Andrew-Savage.jpg",
     description: "Age: 51 | Hometown: San Jose, California",
     age: 51,
     hometown: "San Jose, California",
@@ -149,7 +149,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0015",
     full_name: "Kelly Wiglesworth",
-    img: "",
+    img: "/images/season_31/Kelly-Wiglesworth.jpg",
     description: "Age: 37 | Hometown: Greensboro, North Carolina",
     age: 37,
     hometown: "Greensboro, North Carolina",
@@ -157,7 +157,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0406",
     full_name: "Ciera Eastin",
-    img: "",
+    img: "/images/season_31/Ciera-Eastin.jpg",
     description: "Age: 26 | Hometown: Salem, Oregon",
     age: 26,
     hometown: "Salem, Oregon",
@@ -165,7 +165,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0280",
     full_name: "Stephen Fishbach",
-    img: "",
+    img: "/images/season_31/Stephen-Fishbach.jpg",
     description: "Age: 36 | Hometown: New York City, New York",
     age: 36,
     hometown: "New York City, New York",
@@ -173,7 +173,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0451",
     full_name: "Joe Anglim",
-    img: "",
+    img: "/images/season_31/Joe-Anglim.jpg",
     description: "Age: 26 | Hometown: Scottsdale, Arizona",
     age: 26,
     hometown: "Scottsdale, Arizona",
@@ -189,7 +189,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0021",
     full_name: "Kimmi Kappenberg",
-    img: "",
+    img: "/images/season_31/Kimmi-Kappenberg.jpg",
     description: "Age: 42 | Hometown: The Woodlands, Texas",
     age: 42,
     hometown: "The Woodlands, Texas",
@@ -197,7 +197,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0439",
     full_name: "Keith Nale",
-    img: "",
+    img: "/images/season_31/Keith-Nale.jpg",
     description: "Age: 54 | Hometown: Keithville, Louisiana",
     age: 54,
     hometown: "Keithville, Louisiana",
@@ -205,7 +205,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0429",
     full_name: "Kelley Wentworth",
-    img: "",
+    img: "/images/season_31/Kelley-Wentworth.jpg",
     description: "Age: 29 | Hometown: Seattle, Washington",
     age: 29,
     hometown: "Seattle, Washington",
@@ -213,7 +213,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0421",
     full_name: "Spencer Bledsoe",
-    img: "",
+    img: "/images/season_31/Spencer-Bledsoe.jpg",
     description: "Age: 22 | Hometown: Chicago, Illinois",
     age: 22,
     hometown: "Chicago, Illinois",
@@ -221,7 +221,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0419",
     full_name: "Latasha Fox",
-    img: "",
+    img: "/images/season_31/Latasha-Fox.jpg",
     description: "Age: 38 | Hometown: St. Louis, Missouri",
     age: 38,
     hometown: "St. Louis, Missouri",
@@ -230,7 +230,7 @@ export const SEASON_31_PLAYERS = [
   buildPlayer({
     castaway_id: "US0433",
     full_name: "Jeremy Collins",
-    img: "",
+    img: "/images/season_31/Jeremy-Collins.jpg",
     description: "Age: 37 | Hometown: Foxboro, Massachusetts",
     age: 37,
     hometown: "Foxboro, Massachusetts",

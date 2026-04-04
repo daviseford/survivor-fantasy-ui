@@ -67,7 +67,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0033",
     full_name: "Diane Ogden",
-    img: "",
+    img: "/images/season_3/Diane-Ogden.jpg",
     description: "Age: 42 | Hometown: Lincoln, Nebraska",
     age: 42,
     hometown: "Lincoln, Nebraska",
@@ -75,7 +75,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0034",
     full_name: "Jessie Camacho",
-    img: "",
+    img: "/images/season_3/Jessie-Camacho.jpg",
     description: "Age: 26 | Hometown: Orlando, Florida",
     age: 26,
     hometown: "Orlando, Florida",
@@ -83,7 +83,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0035",
     full_name: "Carl Bilancione",
-    img: "",
+    img: "/images/season_3/Carl-Bilancione.jpg",
     description: "Age: 46 | Hometown: Winter Springs, Florida",
     age: 46,
     hometown: "Winter Springs, Florida",
@@ -91,7 +91,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0036",
     full_name: "Linda Spencer",
-    img: "",
+    img: "/images/season_3/Linda-Spencer.jpg",
     description: "Age: 44 | Hometown: Boston, Massachusetts",
     age: 44,
     hometown: "Boston, Massachusetts",
@@ -99,7 +99,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0037",
     full_name: "Silas Gaither",
-    img: "",
+    img: "/images/season_3/Silas-Gaither.jpg",
     description: "Age: 23 | Hometown: Los Angeles, California",
     age: 23,
     hometown: "Los Angeles, California",
@@ -107,7 +107,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0038",
     full_name: "Lindsey Richter",
-    img: "",
+    img: "/images/season_3/Lindsey-Richter.jpg",
     description: "Age: 26 | Hometown: Portland, Oregon",
     age: 26,
     hometown: "Portland, Oregon",
@@ -115,7 +115,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0039",
     full_name: "Clarence Black",
-    img: "",
+    img: "/images/season_3/Clarence-Black.jpg",
     description: "Age: 24 | Hometown: Detroit, Michigan",
     age: 24,
     hometown: "Detroit, Michigan",
@@ -123,7 +123,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0040",
     full_name: "Kelly Goldsmith",
-    img: "",
+    img: "/images/season_3/Kelly-Goldsmith.jpg",
     description: "Age: 22 | Hometown: San Diego, California",
     age: 22,
     hometown: "San Diego, California",
@@ -131,7 +131,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0041",
     full_name: "Brandon Quinton",
-    img: "",
+    img: "/images/season_3/Brandon-Quinton.jpg",
     description: "Age: 25 | Hometown: Dallas, Texas",
     age: 25,
     hometown: "Dallas, Texas",
@@ -139,7 +139,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0042",
     full_name: "Frank Garrison",
-    img: "",
+    img: "/images/season_3/Frank-Garrison.jpg",
     description: "Age: 43 | Hometown: Odessa, New York",
     age: 43,
     hometown: "Odessa, New York",
@@ -147,7 +147,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0043",
     full_name: "Kim Powers",
-    img: "",
+    img: "/images/season_3/Kim-Powers.jpg",
     description: "Age: 29 | Hometown: Conshohocken, Pennsylvania",
     age: 29,
     hometown: "Conshohocken, Pennsylvania",
@@ -156,7 +156,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0044",
     full_name: "Teresa Cooper",
-    img: "",
+    img: "/images/season_3/Teresa-Cooper.jpg",
     description: "Age: 42 | Hometown: Jackson, Georgia",
     age: 42,
     hometown: "Jackson, Georgia",
@@ -164,7 +164,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0045",
     full_name: "Tom Buchanan",
-    img: "",
+    img: "/images/season_3/Tom-Buchanan.jpg",
     description: "Age: 45 | Hometown: Rich Valley, Virginia",
     age: 45,
     hometown: "Rich Valley, Virginia",
@@ -172,7 +172,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0046",
     full_name: "Lex van den Berghe",
-    img: "",
+    img: "/images/season_3/Lex-van-den-Berghe.jpg",
     description: "Age: 38 | Hometown: Santa Cruz, California",
     age: 38,
     hometown: "Santa Cruz, California",
@@ -180,7 +180,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0047",
     full_name: "Kim Johnson",
-    img: "",
+    img: "/images/season_3/Kim-Johnson.jpg",
     description: "Age: 56 | Hometown: Oyster Bay, New York",
     age: 56,
     hometown: "Oyster Bay, New York",
@@ -189,7 +189,7 @@ export const SEASON_3_PLAYERS = [
   buildPlayer({
     castaway_id: "US0048",
     full_name: "Ethan Zohn",
-    img: "",
+    img: "/images/season_3/Ethan-Zohn.jpg",
     description: "Age: 27 | Hometown: Lexington, Massachusetts",
     age: 27,
     hometown: "Lexington, Massachusetts",

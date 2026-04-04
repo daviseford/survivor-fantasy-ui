@@ -71,7 +71,7 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0613",
     full_name: "Jackson Fox",
-    img: "",
+    img: "/images/season_42/Jackson-Fox.jpg",
     description: "Age: 47 | Hometown: Houston, Texas",
     age: 47,
     hometown: "Houston, Texas",
@@ -87,7 +87,7 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0618",
     full_name: "Marya Sherron",
-    img: "",
+    img: "/images/season_42/Marya-Sherron.jpg",
     description: "Age: 47 | Hometown: Noblesville, Indiana",
     age: 47,
     hometown: "Noblesville, Indiana",
@@ -95,7 +95,7 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0614",
     full_name: "Jenny Kim",
-    img: "",
+    img: "/images/season_42/Jenny-Kim.jpg",
     description: "Age: 43 | Hometown: Brooklyn, New York",
     age: 43,
     hometown: "Brooklyn, New York",
@@ -103,7 +103,7 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0624",
     full_name: "Swati Goel",
-    img: "",
+    img: "/images/season_42/Swati-Goel.jpg",
     description: "Age: 19 | Hometown: Palo Alto, California",
     age: 19,
     hometown: "Palo Alto, California",
@@ -111,7 +111,7 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0610",
     full_name: "Daniel Strunk",
-    img: "",
+    img: "/images/season_42/Daniel-Strunk.jpg",
     description: "Age: 30 | Hometown: New Haven, Connecticut",
     age: 30,
     hometown: "New Haven, Connecticut",
@@ -119,7 +119,7 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0617",
     full_name: "Lydia Meredith",
-    img: "",
+    img: "/images/season_42/Lydia-Meredith.jpg",
     description: "Age: 22 | Hometown: Santa Monica, California",
     age: 22,
     hometown: "Santa Monica, California",
@@ -127,7 +127,7 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0609",
     full_name: "Chanelle Howell",
-    img: "",
+    img: "/images/season_42/Chanelle-Howell.jpg",
     description: "Age: 28 | Hometown: New York City, New York",
     age: 28,
     hometown: "New York City, New York",
@@ -135,7 +135,7 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0622",
     full_name: "Rocksroy Bailey",
-    img: "",
+    img: "/images/season_42/Rocksroy-Bailey.jpg",
     description: "Age: 43 | Hometown: Las Vegas, Nevada",
     age: 43,
     hometown: "Las Vegas, Nevada",
@@ -143,15 +143,16 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0625",
     full_name: "Tori Meehan",
-    img: "",
+    img: "/images/season_42/Tori-Meehan.jpg",
     description: "Age: 24 | Hometown: Rogers, Arizona",
     age: 24,
     hometown: "Rogers, Arizona",
+    nickname: "Tori",
   }),
   buildPlayer({
     castaway_id: "US0612",
     full_name: "Hai Giang",
-    img: "",
+    img: "/images/season_42/Hai-Giang.jpg",
     description: "Age: 29 | Hometown: New Orleans, Louisiana",
     age: 29,
     hometown: "New Orleans, Louisiana",
@@ -159,15 +160,16 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0611",
     full_name: "Drea Wheeler",
-    img: "",
+    img: "/images/season_42/Drea-Wheeler.jpg",
     description: "Age: 34 | Hometown: Montreal, Quebec",
     age: 34,
     hometown: "Montreal, Quebec",
+    nickname: "Drea",
   }),
   buildPlayer({
     castaway_id: "US0621",
     full_name: "Omar Zaheer",
-    img: "",
+    img: "/images/season_42/Omar-Zaheer.jpg",
     description: "Age: 31 | Hometown: Whitby, Ontario",
     age: 31,
     hometown: "Whitby, Ontario",
@@ -175,7 +177,7 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0616",
     full_name: "Lindsay Dolashewich",
-    img: "",
+    img: "/images/season_42/Lindsay-Dolashewich.jpg",
     description: "Age: 30 | Hometown: Asbury Park, New Jersey",
     age: 30,
     hometown: "Asbury Park, New Jersey",
@@ -183,7 +185,7 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0615",
     full_name: "Jonathan Young",
-    img: "",
+    img: "/images/season_42/Jonathan-Young.jpg",
     description: "Age: 28 | Hometown: Gulf Shores, Alabama",
     age: 28,
     hometown: "Gulf Shores, Alabama",
@@ -191,7 +193,7 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0623",
     full_name: "Romeo Escobar",
-    img: "",
+    img: "/images/season_42/Romeo-Escobar.jpg",
     description: "Age: 37 | Hometown: Norwalk, California",
     age: 37,
     hometown: "Norwalk, California",
@@ -199,15 +201,16 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0620",
     full_name: "Mike Turner",
-    img: "",
+    img: "/images/season_42/Mike-Turner.jpg",
     description: "Age: 57 | Hometown: Hoboken, New Jersey",
     age: 57,
     hometown: "Hoboken, New Jersey",
+    nickname: "Mike",
   }),
   buildPlayer({
     castaway_id: "US0619",
     full_name: "Maryanne Oketch",
-    img: "",
+    img: "/images/season_42/Maryanne-Oketch.jpg",
     description: "Age: 24 | Hometown: Ajax, Ontario",
     age: 24,
     hometown: "Ajax, Ontario",

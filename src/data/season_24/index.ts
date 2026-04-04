@@ -71,7 +71,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0354",
     full_name: "Kourtney Moon",
-    img: "",
+    img: "/images/season_24/Kourtney-Moon.jpg",
     description: "Age: 29 | Hometown: Austin, Texas",
     age: 29,
     hometown: "Austin, Texas",
@@ -79,7 +79,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0355",
     full_name: "Nina Acosta",
-    img: "",
+    img: "/images/season_24/Nina-Acosta.jpg",
     description: "Age: 51 | Hometown: Clovis, California",
     age: 51,
     hometown: "Clovis, California",
@@ -87,7 +87,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0356",
     full_name: "Matt Quinlan",
-    img: "",
+    img: "/images/season_24/Matt-Quinlan.jpg",
     description: "Age: 33 | Hometown: San Francisco, California",
     age: 33,
     hometown: "San Francisco, California",
@@ -95,7 +95,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0357",
     full_name: "Bill Posley",
-    img: "",
+    img: "/images/season_24/Bill-Posley.jpg",
     description: "Age: 28 | Hometown: Venice, California",
     age: 28,
     hometown: "Venice, California",
@@ -103,7 +103,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0358",
     full_name: "Monica Culpepper",
-    img: "",
+    img: "/images/season_24/Monica-Culpepper.jpg",
     description: "Age: 41 | Hometown: Tampa, Florida",
     age: 41,
     hometown: "Tampa, Florida",
@@ -111,7 +111,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0359",
     full_name: "Colton Cumbie",
-    img: "",
+    img: "/images/season_24/Colton-Cumbie.jpg",
     description: "Age: 21 | Hometown: Monroeville, Alabama",
     age: 21,
     hometown: "Monroeville, Alabama",
@@ -119,7 +119,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0360",
     full_name: "Jonas Otsuji",
-    img: "",
+    img: "/images/season_24/Jonas-Otsuji.jpg",
     description: "Age: 37 | Hometown: Lehi, Utah",
     age: 37,
     hometown: "Lehi, Utah",
@@ -127,7 +127,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0361",
     full_name: "Michael Jefferson",
-    img: "",
+    img: "/images/season_24/Michael-Jefferson.jpg",
     description: "Age: 30 | Hometown: Seattle, Washington",
     age: 30,
     hometown: "Seattle, Washington",
@@ -135,7 +135,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0362",
     full_name: "Jay Byars",
-    img: "",
+    img: "/images/season_24/Jay-Byars.jpg",
     description: "Age: 25 | Hometown: Gaffney, South Carolina",
     age: 25,
     hometown: "Gaffney, South Carolina",
@@ -143,7 +143,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0363",
     full_name: "Leif Manson",
-    img: "",
+    img: "/images/season_24/Leif-Manson.jpg",
     description: "Age: 27 | Hometown: San Diego, California",
     age: 27,
     hometown: "San Diego, California",
@@ -151,7 +151,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0364",
     full_name: "Troy Robertson",
-    img: "",
+    img: "/images/season_24/Troy-Robertson.jpg",
     description: "Age: 50 | Hometown: Miami, Florida",
     age: 50,
     hometown: "Miami, Florida",
@@ -160,7 +160,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0365",
     full_name: "Kat Edorsson",
-    img: "",
+    img: "/images/season_24/Kat-Edorsson.jpg",
     description: "Age: 22 | Hometown: Orlando, Florida",
     age: 22,
     hometown: "Orlando, Florida",
@@ -168,7 +168,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0366",
     full_name: "Greg Smith",
-    img: "",
+    img: "/images/season_24/Greg-Smith.jpg",
     description: "Age: 64 | Hometown: Houston, Texas",
     age: 64,
     hometown: "Houston, Texas",
@@ -177,7 +177,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0367",
     full_name: "Alicia Rosa",
-    img: "",
+    img: "/images/season_24/Alicia-Rosa.jpg",
     description: "Age: 25 | Hometown: Chicago, Illinois",
     age: 25,
     hometown: "Chicago, Illinois",
@@ -185,7 +185,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0368",
     full_name: "Christina Cha",
-    img: "",
+    img: "/images/season_24/Christina-Cha.jpg",
     description: "Age: 29 | Hometown: Hollywood, California",
     age: 29,
     hometown: "Hollywood, California",
@@ -193,7 +193,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0369",
     full_name: "Chelsea Meissner",
-    img: "",
+    img: "/images/season_24/Chelsea-Meissner.jpg",
     description: "Age: 26 | Hometown: Charleston, South Carolina",
     age: 26,
     hometown: "Charleston, South Carolina",
@@ -201,7 +201,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0370",
     full_name: "Sabrina Thompson",
-    img: "",
+    img: "/images/season_24/Sabrina-Thompson.jpg",
     description: "Age: 33 | Hometown: Brooklyn, New York",
     age: 33,
     hometown: "Brooklyn, New York",
@@ -209,7 +209,7 @@ export const SEASON_24_PLAYERS = [
   buildPlayer({
     castaway_id: "US0371",
     full_name: "Kim Spradlin",
-    img: "",
+    img: "/images/season_24/Kim-Spradlin.jpg",
     description: "Age: 29 | Hometown: San Antonio, Texas",
     age: 29,
     hometown: "San Antonio, Texas",

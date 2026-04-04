@@ -67,7 +67,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0017",
     full_name: "Debb Eaton",
-    img: "",
+    img: "/images/season_2/Debb-Eaton.jpg",
     description: "Age: 45 | Hometown: Milan, New Hampshire",
     age: 45,
     hometown: "Milan, New Hampshire",
@@ -75,7 +75,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0018",
     full_name: "Kel Gleason",
-    img: "",
+    img: "/images/season_2/Kel-Gleason.jpg",
     description: "Age: 32 | Hometown: Fort Hood, Texas",
     age: 32,
     hometown: "Fort Hood, Texas",
@@ -83,7 +83,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0019",
     full_name: "Maralyn Hershey",
-    img: "",
+    img: "/images/season_2/Maralyn-Hershey.jpg",
     description: "Age: 51 | Hometown: Wakefield, Virginia",
     age: 51,
     hometown: "Wakefield, Virginia",
@@ -91,7 +91,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0020",
     full_name: "Mitchell Olson",
-    img: "",
+    img: "/images/season_2/Mitchell-Olson.jpg",
     description: "Age: 23 | Hometown: Union City, New Jersey",
     age: 23,
     hometown: "Union City, New Jersey",
@@ -99,7 +99,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0021",
     full_name: "Kimmi Kappenberg",
-    img: "",
+    img: "/images/season_2/Kimmi-Kappenberg.jpg",
     description: "Age: 27 | Hometown: Ronkonkoma, New York",
     age: 27,
     hometown: "Ronkonkoma, New York",
@@ -107,7 +107,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0022",
     full_name: "Michael Skupin",
-    img: "",
+    img: "/images/season_2/Michael-Skupin.jpg",
     description: "Age: 38 | Hometown: White Lake, Michigan",
     age: 38,
     hometown: "White Lake, Michigan",
@@ -115,7 +115,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0023",
     full_name: "Jeff Varner",
-    img: "",
+    img: "/images/season_2/Jeff-Varner.jpg",
     description: "Age: 34 | Hometown: Manhattan, New York",
     age: 34,
     hometown: "Manhattan, New York",
@@ -123,7 +123,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0024",
     full_name: "Alicia Calaway",
-    img: "",
+    img: "/images/season_2/Alicia-Calaway.jpg",
     description: "Age: 32 | Hometown: Manhattan, New York",
     age: 32,
     hometown: "Manhattan, New York",
@@ -131,7 +131,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0025",
     full_name: "Jerri Manthey",
-    img: "",
+    img: "/images/season_2/Jerri-Manthey.jpg",
     description: "Age: 30 | Hometown: Los Angeles, California",
     age: 30,
     hometown: "Los Angeles, California",
@@ -139,7 +139,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0026",
     full_name: "Nick Brown",
-    img: "",
+    img: "/images/season_2/Nick-Brown.jpg",
     description: "Age: 23 | Hometown: Steilacoom, Washington",
     age: 23,
     hometown: "Steilacoom, Washington",
@@ -147,7 +147,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0027",
     full_name: "Amber Brkich",
-    img: "",
+    img: "/images/season_2/Amber-Brkich.jpg",
     description: "Age: 22 | Hometown: Beaver, Pennsylvania",
     age: 22,
     hometown: "Beaver, Pennsylvania",
@@ -155,7 +155,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0028",
     full_name: "Rodger Bingham",
-    img: "",
+    img: "/images/season_2/Rodger-Bingham.jpg",
     description: "Age: 53 | Hometown: Crittenden, Kentucky",
     age: 53,
     hometown: "Crittenden, Kentucky",
@@ -163,7 +163,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0029",
     full_name: "Elisabeth Filarski",
-    img: "",
+    img: "/images/season_2/Elisabeth-Filarski.jpg",
     description: "Age: 23 | Hometown: Newton, Massachusetts",
     age: 23,
     hometown: "Newton, Massachusetts",
@@ -171,7 +171,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0030",
     full_name: "Keith Famie",
-    img: "",
+    img: "/images/season_2/Keith-Famie.jpg",
     description: "Age: 40 | Hometown: West Bloomfield, Michigan",
     age: 40,
     hometown: "West Bloomfield, Michigan",
@@ -179,7 +179,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0031",
     full_name: "Colby Donaldson",
-    img: "",
+    img: "/images/season_2/Colby-Donaldson.jpg",
     description: "Age: 26 | Hometown: Dallas, Texas",
     age: 26,
     hometown: "Dallas, Texas",
@@ -187,7 +187,7 @@ export const SEASON_2_PLAYERS = [
   buildPlayer({
     castaway_id: "US0032",
     full_name: "Tina Wesson",
-    img: "",
+    img: "/images/season_2/Tina-Wesson.jpg",
     description: "Age: 40 | Hometown: Knoxville, Tennessee",
     age: 40,
     hometown: "Knoxville, Tennessee",

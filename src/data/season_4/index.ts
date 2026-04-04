@@ -67,7 +67,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0049",
     full_name: "Peter Harkey",
-    img: "",
+    img: "/images/season_4/Peter-Harkey.jpg",
     description: "Age: 44 | Hometown: Millis, Massachusetts",
     age: 44,
     hometown: "Millis, Massachusetts",
@@ -75,7 +75,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0050",
     full_name: "Patricia Jackson",
-    img: "",
+    img: "/images/season_4/Patricia-Jackson.jpg",
     description: "Age: 49 | Hometown: Lugoff, South Carolina",
     age: 49,
     hometown: "Lugoff, South Carolina",
@@ -83,7 +83,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0051",
     full_name: "Hunter Ellis",
-    img: "",
+    img: "/images/season_4/Hunter-Ellis.jpg",
     description: "Age: 33 | Hometown: La Jolla, California",
     age: 33,
     hometown: "La Jolla, California",
@@ -91,7 +91,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0052",
     full_name: "Sarah Jones",
-    img: "",
+    img: "/images/season_4/Sarah-Jones.jpg",
     description: "Age: 24 | Hometown: Newport Beach, California",
     age: 24,
     hometown: "Newport Beach, California",
@@ -99,7 +99,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0053",
     full_name: "Gabriel Cade",
-    img: "",
+    img: "/images/season_4/Gabriel-Cade.jpg",
     description: "Age: 23 | Hometown: Hollywood, California",
     age: 23,
     hometown: "Hollywood, California",
@@ -107,7 +107,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0054",
     full_name: "Gina Crews",
-    img: "",
+    img: "/images/season_4/Gina-Crews.jpg",
     description: "Age: 28 | Hometown: Gainesville, Florida",
     age: 28,
     hometown: "Gainesville, Florida",
@@ -115,7 +115,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0055",
     full_name: "Rob Mariano",
-    img: "",
+    img: "/images/season_4/Rob-Mariano.jpg",
     description: "Age: 25 | Hometown: Canton, Massachusetts",
     age: 25,
     hometown: "Canton, Massachusetts",
@@ -124,7 +124,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0056",
     full_name: "John Carroll",
-    img: "",
+    img: "/images/season_4/John-Carroll.jpg",
     description: "Age: 36 | Hometown: Omaha, Nebraska",
     age: 36,
     hometown: "Omaha, Nebraska",
@@ -132,7 +132,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0057",
     full_name: "Zoe Zanidakis",
-    img: "",
+    img: "/images/season_4/Zoe-Zanidakis.jpg",
     description: "Age: 35 | Hometown: Monhegan, Maine",
     age: 35,
     hometown: "Monhegan, Maine",
@@ -140,7 +140,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0058",
     full_name: "Tammy Leitner",
-    img: "",
+    img: "/images/season_4/Tammy-Leitner.jpg",
     description: "Age: 29 | Hometown: Mesa, Arizona",
     age: 29,
     hometown: "Mesa, Arizona",
@@ -148,7 +148,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0059",
     full_name: "Robert DeCanio",
-    img: "",
+    img: "/images/season_4/Robert-DeCanio.jpg",
     description: "Age: 38 | Hometown: College Point, New York",
     age: 38,
     hometown: "College Point, New York",
@@ -156,7 +156,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0060",
     full_name: "Sean Rector",
-    img: "",
+    img: "/images/season_4/Sean-Rector.jpg",
     description: "Age: 30 | Hometown: Los Angeles, California",
     age: 30,
     hometown: "Los Angeles, California",
@@ -164,7 +164,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0061",
     full_name: "Paschal English",
-    img: "",
+    img: "/images/season_4/Paschal-English.jpg",
     description: "Age: 56 | Hometown: Thomaston, Georgia",
     age: 56,
     hometown: "Thomaston, Georgia",
@@ -180,7 +180,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0063",
     full_name: "Neleh Dennis",
-    img: "",
+    img: "/images/season_4/Neleh-Dennis.jpg",
     description: "Age: 21 | Hometown: Layton, Utah",
     age: 21,
     hometown: "Layton, Utah",
@@ -188,7 +188,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0064",
     full_name: "Vecepia Towery",
-    img: "",
+    img: "/images/season_4/Vecepia-Towery.jpg",
     description: "Age: 36 | Hometown: Hayward, California",
     age: 36,
     hometown: "Hayward, California",
