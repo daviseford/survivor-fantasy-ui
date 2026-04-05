@@ -8,7 +8,7 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { IconTrophy } from "@tabler/icons-react";
+import { IconFlame } from "@tabler/icons-react";
 import { useMemo } from "react";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useCompetitionMeta } from "../../hooks/useCompetitionMeta";
@@ -83,11 +83,11 @@ export const PlayerGroupGrid = () => {
                   draftedWinner ? (
                     <Badge
                       variant="light"
-                      color="yellow"
+                      color="orange"
                       size="sm"
-                      leftSection={<IconTrophy size={12} />}
+                      leftSection={<IconFlame size={12} />}
                     >
-                      Winner
+                      Sole Survivor
                     </Badge>
                   ) : (
                     <Badge variant="light" color="gray" size="sm">
