@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { db } from "../firebase";
 
 interface CacheEntry {
-  data: DocumentData;
+  data: DocumentData | undefined;
+  loaded: boolean;
   unsub: () => void;
   refCount: number;
-  listeners: Set<(data: DocumentData) => void>;
+  listeners: Set<(data: DocumentData | undefined) => void>;
 }
 
 const cache = new Map<string, CacheEntry>();
@@ -17,17 +18,21 @@ const cache = new Map<string, CacheEntry>();
  * Multiple components calling this with the same `collection/docId` path
  * share a single `onSnapshot` listener. The subscription is ref-counted
  * and closed when all subscribers unmount.
+ *
+ * @param emptyValue - value to use when the document has no data (default: `{}`)
  */
-export function useSharedSnapshot<T = DocumentData>(
+export function useSharedSnapshot<T>(
   collection: string,
   docId: string | undefined,
+  emptyValue?: T,
 ): { data: T } {
   const path = docId ? `${collection}/${docId}` : undefined;
 
   const [data, setData] = useState<T>(() => {
-    if (!path) return {} as T;
+    if (!path) return (emptyValue ?? {}) as T;
     const entry = cache.get(path);
-    return (entry?.data as T) ?? ({} as T);
+    if (entry?.loaded) return (entry.data ?? emptyValue ?? {}) as T;
+    return (emptyValue ?? {}) as T;
   });
 
   useEffect(() => {
@@ -36,13 +41,17 @@ export function useSharedSnapshot<T = DocumentData>(
     const existing = cache.get(path);
 
     if (existing) {
-      // Reuse existing subscription
       existing.refCount++;
-      existing.listeners.add(setData as (data: DocumentData) => void);
-      // Sync current data immediately
-      setData(existing.data as T);
+      existing.listeners.add(
+        setData as (data: DocumentData | undefined) => void,
+      );
+      if (existing.loaded) {
+        setData((existing.data ?? emptyValue ?? {}) as T);
+      }
       return () => {
-        existing.listeners.delete(setData as (data: DocumentData) => void);
+        existing.listeners.delete(
+          setData as (data: DocumentData | undefined) => void,
+        );
         existing.refCount--;
         if (existing.refCount <= 0) {
           existing.unsub();
@@ -51,18 +60,25 @@ export function useSharedSnapshot<T = DocumentData>(
       };
     }
 
-    // Create new subscription
-    const listeners = new Set<(data: DocumentData) => void>();
-    listeners.add(setData as (data: DocumentData) => void);
+    const entry: CacheEntry = {
+      data: undefined,
+      loaded: false,
+      unsub: () => {},
+      refCount: 1,
+      listeners: new Set([setData as (data: DocumentData | undefined) => void]),
+    };
+    cache.set(path, entry);
 
     const ref = doc(db, collection, docId!);
-    const unsub = onSnapshot(
+    entry.unsub = onSnapshot(
       ref,
       (snap) => {
-        const snapData = snap.data() ?? {};
+        const snapData = snap.data();
         entry.data = snapData;
+        entry.loaded = true;
+        const value = (snapData ?? emptyValue ?? {}) as T;
         for (const listener of entry.listeners) {
-          listener(snapData);
+          listener(value as DocumentData | undefined);
         }
       },
       (error) => {
@@ -70,23 +86,17 @@ export function useSharedSnapshot<T = DocumentData>(
       },
     );
 
-    const entry: CacheEntry = {
-      data: {} as DocumentData,
-      unsub,
-      refCount: 1,
-      listeners,
-    };
-    cache.set(path, entry);
-
     return () => {
-      entry.listeners.delete(setData as (data: DocumentData) => void);
+      entry.listeners.delete(
+        setData as (data: DocumentData | undefined) => void,
+      );
       entry.refCount--;
       if (entry.refCount <= 0) {
         entry.unsub();
         cache.delete(path);
       }
     };
-  }, [path, collection, docId]);
+  }, [path, collection, docId, emptyValue]);
 
   return { data };
 }
