@@ -69,7 +69,7 @@ function HeroCard({ meta, live }: { meta: SeasonMeta; live: boolean }) {
     >
       <Card.Section pos="relative">
         {meta.img ? (
-          <Image src={meta.img} height={200} alt={meta.name} />
+          <Image src={meta.img} height={200} w="100%" h={200} alt={meta.name} />
         ) : (
           <div
             className={`${classes.heroImageFallback} ${getEraClass(meta.order)}`}
@@ -124,7 +124,7 @@ function CompactCard({ meta, live }: { meta: SeasonMeta; live: boolean }) {
     >
       <Card.Section pos="relative">
         {meta.img ? (
-          <Image src={meta.img} height={100} alt={meta.name} />
+          <Image src={meta.img} height={100} w="100%" h={100} alt={meta.name} loading="lazy" />
         ) : (
           <div
             className={`${classes.compactImageFallback} ${getEraClass(meta.order)}`}
@@ -220,12 +220,13 @@ export const Seasons = () => {
         <TextInput
           placeholder="Search by name, number, or location..."
           leftSection={<IconSearch size={16} />}
+          aria-label="Search seasons"
           value={search}
           onChange={(e) => setSearch(e.currentTarget.value)}
         />
 
         <Chip.Group multiple value={selectedEras} onChange={setSelectedEras}>
-          <Group gap="xs">
+          <Group gap="xs" aria-label="Filter by era" role="group">
             {ERAS.map((era) => (
               <Chip
                 key={era.label}

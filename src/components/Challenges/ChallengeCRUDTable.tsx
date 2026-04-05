@@ -1,8 +1,9 @@
 import {
   ActionIcon,
   Alert,
-  Code,
   Group,
+  Stack,
+  Text,
   MultiSelect,
   NumberInput,
   Select,
@@ -34,8 +35,20 @@ export const ChallengeCRUDTable = () => {
 
     modals.openConfirmModal({
       title: `Delete challenge ${e.order}?`,
-      children: <Code block>{JSON.stringify(e, null, 2)}</Code>,
+      children: (
+        <Stack gap="xs">
+          <Text size="sm">
+            Remove this challenge from the season. Use this only if it was
+            created by mistake.
+          </Text>
+          <Text size="sm" c="dimmed">
+            {e.variant} &middot; Episode {e.episode_num} &middot;{" "}
+            {e.winning_castaways.length} winner(s)
+          </Text>
+        </Stack>
+      ),
       labels: { confirm: "Delete challenge", cancel: "Keep it" },
+      confirmProps: { color: "red" },
       onConfirm: async () => {
         const ref = doc(db, `challenges/${season?.id}`);
         const newChallenges = { ...challenges };
@@ -163,6 +176,7 @@ export const ChallengeCRUDTable = () => {
               <Table.Td>
                 <Group gap="xs">
                   <ActionIcon
+                    size="lg"
                     color="green"
                     onClick={saveEdit}
                     aria-label="Save challenge"
@@ -170,6 +184,7 @@ export const ChallengeCRUDTable = () => {
                     <IconCheck />
                   </ActionIcon>
                   <ActionIcon
+                    size="lg"
                     color="gray"
                     onClick={cancelEdit}
                     aria-label="Cancel editing challenge"
@@ -197,6 +212,7 @@ export const ChallengeCRUDTable = () => {
             <Table.Td>
               <Group gap="xs">
                 <ActionIcon
+                  size="lg"
                   color="blue"
                   onClick={() => startEdit(e)}
                   aria-label={`Edit challenge ${e.order}`}
@@ -204,6 +220,7 @@ export const ChallengeCRUDTable = () => {
                   <IconPencil />
                 </ActionIcon>
                 <ActionIcon
+                  size="lg"
                   color="red"
                   onClick={() => handleDelete(e)}
                   aria-label={`Delete challenge ${e.order}`}

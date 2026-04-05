@@ -1,8 +1,9 @@
 import {
   ActionIcon,
   Alert,
-  Code,
   Group,
+  Stack,
+  Text,
   NumberInput,
   Select,
   Table,
@@ -45,7 +46,19 @@ export const EliminationCRUDTable = () => {
 
     modals.openConfirmModal({
       title: `Delete elimination ${e.order}?`,
-      children: <Code block>{JSON.stringify(e, null, 2)}</Code>,
+      children: (
+        <Stack gap="xs">
+          <Text size="sm">
+            Remove this elimination from the season. Use this only if it was
+            created by mistake.
+          </Text>
+          <Text size="sm" c="dimmed">
+            {season?.castawayLookup?.[e.castaway_id]?.full_name ??
+              e.castaway_id}{" "}
+            &middot; {e.variant} &middot; Episode {e.episode_num}
+          </Text>
+        </Stack>
+      ),
       labels: { confirm: "Delete elimination", cancel: "Keep it" },
       confirmProps: { color: "red" },
       onConfirm: async () => {
@@ -137,7 +150,7 @@ export const EliminationCRUDTable = () => {
                 onChange={(val) =>
                   setEditValues({ ...editValues, order: Number(val) || 1 })
                 }
-                style={{ width: 70 }}
+                w={70}
               />
             </Table.Td>
             <Table.Td>
@@ -151,7 +164,7 @@ export const EliminationCRUDTable = () => {
                     variant: (val as EliminationVariant) ?? editValues.variant,
                   })
                 }
-                style={{ width: 180 }}
+                w={180}
               />
             </Table.Td>
             <Table.Td>
@@ -166,7 +179,7 @@ export const EliminationCRUDTable = () => {
                     castaway_id: (val as CastawayId) ?? editValues.castaway_id,
                   })
                 }
-                style={{ width: 180 }}
+                w={180}
               />
             </Table.Td>
             <Table.Td>
@@ -181,7 +194,7 @@ export const EliminationCRUDTable = () => {
                     episode_num: Number(val) || 1,
                   })
                 }
-                style={{ width: 70 }}
+                w={70}
               />
             </Table.Td>
             <Table.Td>
@@ -196,13 +209,14 @@ export const EliminationCRUDTable = () => {
                     votes_received: val === "" ? undefined : Number(val),
                   })
                 }
-                style={{ width: 70 }}
+                w={70}
               />
             </Table.Td>
             {slimUser?.isAdmin && (
               <Table.Td>
                 <Group gap="xs">
                   <ActionIcon
+                    size="lg"
                     color="green"
                     onClick={() => saveEdit(e)}
                     aria-label="Save elimination"
@@ -210,6 +224,7 @@ export const EliminationCRUDTable = () => {
                     <IconCheck />
                   </ActionIcon>
                   <ActionIcon
+                    size="lg"
                     color="gray"
                     onClick={cancelEdit}
                     aria-label="Cancel editing elimination"
@@ -237,6 +252,7 @@ export const EliminationCRUDTable = () => {
             <Table.Td>
               <Group gap="xs">
                 <ActionIcon
+                  size="lg"
                   color="blue"
                   onClick={() => startEdit(e)}
                   aria-label={`Edit elimination ${e.order}`}
@@ -244,6 +260,7 @@ export const EliminationCRUDTable = () => {
                   <IconPencil />
                 </ActionIcon>
                 <ActionIcon
+                  size="lg"
                   color="red"
                   onClick={() => handleDelete(e)}
                   aria-label={`Delete elimination ${e.order}`}

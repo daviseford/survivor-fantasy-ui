@@ -28,6 +28,7 @@ export const Footer = () => {
               href={link.link}
               size="sm"
               target="_blank"
+              rel="noopener noreferrer"
             >
               {link.label}
             </Anchor>

@@ -13,6 +13,7 @@ import {
   Title,
   Tooltip,
   UnstyledButton,
+  VisuallyHidden,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import {
@@ -30,7 +31,7 @@ import { useUser } from "../hooks/useUser";
 import { Competition } from "../types";
 import classes from "./Competitions.module.css";
 
-type SortField = "name" | "season" | "participants" | "status";
+type SortField = "name" | "season" | "participants" | "type" | "status";
 type SortDir = "asc" | "desc";
 
 const SortableHeader = ({
@@ -39,12 +40,14 @@ const SortableHeader = ({
   sortField,
   sortDir,
   onSort,
+  className,
 }: {
   label: string;
   field: SortField;
   sortField: SortField;
   sortDir: SortDir;
   onSort: (field: SortField) => void;
+  className?: string;
 }) => {
   const isActive = sortField === field;
   const Icon = isActive && sortDir === "desc" ? IconChevronDown : IconChevronUp;
@@ -54,7 +57,7 @@ const SortableHeader = ({
       : "descending"
     : undefined;
   return (
-    <Table.Th aria-sort={ariaSortValue}>
+    <Table.Th aria-sort={ariaSortValue} className={className}>
       <UnstyledButton
         onClick={() => onSort(field)}
         className={classes.sortButton}
@@ -123,6 +126,11 @@ export const Competitions = () => {
         case "participants":
           cmp = a.participants.length - b.participants.length;
           break;
+        case "type":
+          cmp =
+            Number(a.current_episode != null) -
+            Number(b.current_episode != null);
+          break;
         case "status":
           cmp = Number(a.finished) - Number(b.finished);
           break;
@@ -149,6 +157,7 @@ export const Competitions = () => {
       key={x.id}
       className={classes.clickableRow}
       tabIndex={0}
+      role="link"
       onKeyDown={(e) => {
         if (e.key === "Enter") {
           navigate(`/competitions/${x.id}`);
@@ -160,11 +169,15 @@ export const Competitions = () => {
           {x.competition_name}
         </Text>
         <Text size="xs" c="dimmed">
+          <VisuallyHidden>Created by: </VisuallyHidden>
           {x.participants.find((p) => p.uid === x.creator_uid)?.displayName}
         </Text>
       </Table.Td>
       <Table.Td>
-        <Tooltip label={`Season ${x.season_num}`}>
+        <Tooltip
+          label={`Season ${x.season_num}`}
+          events={{ hover: true, focus: true, touch: true }}
+        >
           <Badge variant="light" size="sm">
             S{x.season_num}
           </Badge>
@@ -173,7 +186,7 @@ export const Competitions = () => {
       <Table.Td>
         <Text size="sm">{formatParticipants(x)}</Text>
       </Table.Td>
-      <Table.Td>
+      <Table.Td className={classes.typeCell}>
         <Badge
           variant="light"
           color={x.current_episode != null ? "violet" : "cyan"}
@@ -187,8 +200,12 @@ export const Competitions = () => {
           {x.finished ? "Complete" : "In Progress"}
         </Badge>
       </Table.Td>
-      <Table.Td w={36}>
-        <IconChevronRight size={16} className={classes.chevron} />
+      <Table.Td w={36} role="presentation">
+        <IconChevronRight
+          size={16}
+          className={classes.chevron}
+          aria-hidden="true"
+        />
       </Table.Td>
     </Table.Tr>
   ));
@@ -228,12 +245,12 @@ export const Competitions = () => {
               : "Your active and past competitions"}
           </Text>
         </div>
-        <Button component={Link} to="/seasons" size="sm">
+        <Button component={Link} to="/seasons" size="sm" variant="subtle">
           Browse seasons
         </Button>
       </Group>
 
-      <Group gap="sm">
+      <div className={classes.filterControls}>
         <Select
           placeholder="All seasons"
           data={seasonOptions}
@@ -241,19 +258,20 @@ export const Competitions = () => {
           onChange={setSeasonFilter}
           clearable
           size="sm"
-          w={160}
+          w={isMobile ? "100%" : 160}
         />
         <SegmentedControl
           size="sm"
           value={statusFilter}
           onChange={setStatusFilter}
+          fullWidth={isMobile}
           data={[
             { label: "All", value: "all" },
             { label: "In Progress", value: "in_progress" },
             { label: "Complete", value: "complete" },
           ]}
         />
-      </Group>
+      </div>
 
       {isLoading && (
         <Stack gap="xs">
@@ -266,13 +284,23 @@ export const Competitions = () => {
 
       {!isLoading && sorted.length === 0 && (
         <Center py="xl">
-          <Stack align="center" gap="xs">
-            <Text c="dimmed" ta="center">
-              No competitions yet.
+          <Stack align="center" gap="sm">
+            <Text c="dimmed" ta="center" size="lg">
+              Ready to outwit your friends?
             </Text>
             <Text size="sm" c="dimmed" ta="center">
-              Start a draft from a season page to create your first competition.
+              Pick a season, start a draft, and see who has the best Survivor
+              instincts.
             </Text>
+            <Button
+              component={Link}
+              to="/seasons"
+              variant="light"
+              size="sm"
+              mt="xs"
+            >
+              Browse seasons
+            </Button>
           </Stack>
         </Center>
       )}
@@ -303,7 +331,14 @@ export const Competitions = () => {
                   sortDir={sortDir}
                   onSort={handleSort}
                 />
-                <Table.Th>Type</Table.Th>
+                <SortableHeader
+                  label="Type"
+                  field="type"
+                  sortField={sortField}
+                  sortDir={sortDir}
+                  onSort={handleSort}
+                  className={classes.typeCell}
+                />
                 <SortableHeader
                   label="Status"
                   field="status"

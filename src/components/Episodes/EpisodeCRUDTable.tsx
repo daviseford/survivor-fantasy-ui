@@ -157,6 +157,7 @@ export const EpisodeCRUDTable = () => {
             <Table.Td>
               <Group gap="xs">
                 <ActionIcon
+                  size="lg"
                   color="green"
                   onClick={saveEdit}
                   aria-label="Save episode"
@@ -164,6 +165,7 @@ export const EpisodeCRUDTable = () => {
                   <IconCheck />
                 </ActionIcon>
                 <ActionIcon
+                  size="lg"
                   color="gray"
                   onClick={cancelEdit}
                   aria-label="Cancel editing episode"
@@ -204,6 +206,7 @@ export const EpisodeCRUDTable = () => {
           <Table.Td>
             <Group gap="xs">
               <ActionIcon
+                size="lg"
                 color="blue"
                 onClick={() => startEdit(e)}
                 aria-label={`Edit episode ${e.order}`}
@@ -211,6 +214,7 @@ export const EpisodeCRUDTable = () => {
                 <IconPencil />
               </ActionIcon>
               <ActionIcon
+                size="lg"
                 color="red"
                 onClick={() => handleDelete(e)}
                 aria-label={`Delete episode ${e.order}`}

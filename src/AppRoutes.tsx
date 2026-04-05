@@ -100,7 +100,7 @@ export const AppRoutes = () => {
               </Group>
             </AppShell.Header>
 
-            <AppShell.Navbar p="md">
+            <AppShell.Navbar p="md" aria-label="Main navigation">
               <Navbar onNavigate={close} />
             </AppShell.Navbar>
 

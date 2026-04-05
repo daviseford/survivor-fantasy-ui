@@ -31,7 +31,7 @@ export const Home = () => {
   return (
     <>
       {/* Hero */}
-      <div className={classes.wrapper}>
+      <section aria-label="Hero" className={classes.wrapper}>
         <Container size={700} className={classes.inner}>
           <Text className={classes.eyebrow} size="sm" fw={700} tt="uppercase">
             Fantasy Survivor for friends
@@ -73,12 +73,13 @@ export const Home = () => {
             )}
           </Group>
         </Container>
-      </div>
+      </section>
 
       {/* How It Works */}
       <section className={classes.howItWorksWrapper}>
         <Container size={700} className={classes.howItWorks}>
-          <Text
+          <Title
+            order={2}
             size="sm"
             fw={600}
             c="dimmed"
@@ -88,7 +89,7 @@ export const Home = () => {
             lts={1}
           >
             How it works
-          </Text>
+          </Title>
           <SimpleGrid cols={{ base: 1, sm: 3 }}>
             <Paper className={classes.step} withBorder radius="lg" p="lg">
               <Stack gap="sm" align="flex-start">
@@ -194,7 +195,7 @@ export const Home = () => {
               mt="sm"
               onClick={() => navigate("/seasons")}
               leftSection={<IconSearch size={18} />}
-              style={{ alignSelf: "flex-start" }}
+              className={classes.selfStart}
             >
               Browse all seasons
             </Button>
@@ -259,9 +260,11 @@ export const Home = () => {
                   className={classes.watchAlongCard}
                   radius="md"
                   p="md"
-                  style={{
-                    borderLeftColor: `var(--mantine-color-${item.color}-5)`,
-                  }}
+                  style={
+                    {
+                      "--card-accent": `var(--mantine-color-${item.color}-5)`,
+                    } as React.CSSProperties
+                  }
                 >
                   <Stack gap="xs">
                     <Text fw={700} size="sm">
@@ -513,7 +516,7 @@ export const Home = () => {
               mt="sm"
               onClick={() => navigate("/seasons")}
               leftSection={<IconUsers size={18} />}
-              style={{ alignSelf: "flex-start" }}
+              className={classes.selfStart}
             >
               Pick a season and draft
             </Button>
@@ -533,7 +536,7 @@ export const Home = () => {
               c="dimmed"
               maw={420}
               ta="center"
-              style={{ lineHeight: 1.6 }}
+              className={classes.ctaDescription}
             >
               Pick a season, invite your friends, and find out who really knows
               Survivor best.
