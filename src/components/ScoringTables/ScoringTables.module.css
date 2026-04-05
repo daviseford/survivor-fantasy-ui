@@ -1,0 +1,19 @@
+/* ── Sticky column styles for per-episode scoring tables ── */
+
+.stickyCell {
+  position: sticky;
+  z-index: 2;
+  background-color: inherit;
+}
+
+.stickyHeaderCell {
+  position: sticky;
+  z-index: 3;
+  background-color: var(--mantine-color-body);
+}
+
+/* Visual divider on the last sticky column */
+.stickyDivider {
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.08);
+  clip-path: inset(0 -4px 0 0);
+}

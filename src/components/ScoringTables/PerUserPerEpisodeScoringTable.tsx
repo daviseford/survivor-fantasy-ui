@@ -3,9 +3,13 @@ import { IconTrophy } from "@tabler/icons-react";
 import { useEffect, useRef } from "react";
 import { PropBetQuestionKey, PropBetsQuestions } from "../../data/propbets";
 import { useCompetition } from "../../hooks/useCompetition";
+import { useDragScroll } from "../../hooks/useDragScroll";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useUser } from "../../hooks/useUser";
 import { PropBetScores } from "../../utils/propBetUtils";
+import classes from "./ScoringTables.module.css";
+
+const STICKY_OFFSETS = { rank: 0, total: 50, participant: 130 } as const;
 
 export const PerUserPerEpisodeScoringTable = () => {
   const { data: competition } = useCompetition();
@@ -19,6 +23,7 @@ export const PerUserPerEpisodeScoringTable = () => {
   } = useScoringCalculations();
 
   const scrollRef = useRef<HTMLDivElement>(null);
+  useDragScroll(scrollRef);
   useEffect(() => {
     const viewport = scrollRef.current?.querySelector<HTMLDivElement>(
       ".mantine-ScrollArea-viewport",
@@ -44,8 +49,18 @@ export const PerUserPerEpisodeScoringTable = () => {
         : undefined;
 
     return (
-      <Table.Tr key={uid} style={{ backgroundColor: bgColor }}>
-        <Table.Td fw={600} ta="center">
+      <Table.Tr
+        key={uid}
+        style={{
+          backgroundColor: bgColor ?? "var(--mantine-color-body)",
+        }}
+      >
+        <Table.Td
+          fw={600}
+          ta="center"
+          className={classes.stickyCell}
+          style={{ left: STICKY_OFFSETS.rank }}
+        >
           {isLeader ? (
             <span aria-label="1st place">
               <IconTrophy
@@ -60,12 +75,20 @@ export const PerUserPerEpisodeScoringTable = () => {
             </Text>
           )}
         </Table.Td>
-        <Table.Td ta="center">
+        <Table.Td
+          ta="center"
+          className={classes.stickyCell}
+          style={{ left: STICKY_OFFSETS.total }}
+        >
           <Text span fw={700} size="sm">
             {values.total}
           </Text>
         </Table.Td>
-        <Table.Td fw={isLeader ? 700 : 500}>
+        <Table.Td
+          fw={isLeader ? 700 : 500}
+          className={`${classes.stickyCell} ${classes.stickyDivider}`}
+          style={{ left: STICKY_OFFSETS.participant }}
+        >
           {user?.displayName || user?.email}
         </Table.Td>
 
@@ -108,13 +131,29 @@ export const PerUserPerEpisodeScoringTable = () => {
       >
         <Table.Thead>
           <Table.Tr>
-            <Table.Th w={50} ta="center">
+            <Table.Th
+              w={50}
+              ta="center"
+              className={classes.stickyHeaderCell}
+              style={{ left: STICKY_OFFSETS.rank }}
+            >
               #
             </Table.Th>
-            <Table.Th w={80} ta="center">
+            <Table.Th
+              w={80}
+              ta="center"
+              className={classes.stickyHeaderCell}
+              style={{ left: STICKY_OFFSETS.total }}
+            >
               Total
             </Table.Th>
-            <Table.Th>Participant</Table.Th>
+            <Table.Th
+              w={150}
+              className={`${classes.stickyHeaderCell} ${classes.stickyDivider}`}
+              style={{ left: STICKY_OFFSETS.participant }}
+            >
+              Participant
+            </Table.Th>
             {filteredEpisodes.map((x) => (
               <Table.Th key={x.id} w={60} ta="center">
                 Ep {x.order}
