@@ -25,6 +25,8 @@ type SortDir = "asc" | "desc";
 const getBadgeColor = (action: string) => {
   if (action === "eliminated") return "red";
   if (action === "win_survivor") return "green";
+  if (action.includes("fire")) return "orange";
+  if (action === "duel") return "blue";
   if (action.includes("idol") || action.includes("advantage")) return "violet";
   if (
     action.includes("immunity") ||

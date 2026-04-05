@@ -232,6 +232,7 @@ export type GameEvent<
 };
 
 export const ChallengeWinActions = [
+  "duel",
   "reward",
   "team_reward",
   "immunity",
@@ -256,7 +257,9 @@ export const GameEventActions = [
   "find_safety_without_power",
   "find_steal_a_vote",
   "fulfill_beware_advantage",
-  "go_on_journey",
+  "journey_lost_vote",
+  "journey_risked_vote",
+  "journey_won_game",
   "make_final_tribal_council",
   "make_merge",
   "use_amulet",
@@ -277,6 +280,7 @@ export const GameEventActions = [
   "voted_out_with_idol",
   "votes_negated_by_idol",
   "win_block_a_vote",
+  "win_fire_making",
   "win_extra_vote",
   "win_idol",
   "win_other_advantage",

@@ -219,22 +219,34 @@ describe("transformResults", { timeout: 60000 }, () => {
 
     expect(result.events.length).toBeGreaterThan(0);
 
-    // S46 has 9 journey records
-    const journeyEvents = result.events.filter(
-      (e) => e.action === "go_on_journey",
+    // S46 has journey records — players who risked should get journey_risked_vote
+    const riskedVoteEvents = result.events.filter(
+      (e) => e.action === "journey_risked_vote",
     );
-    expect(journeyEvents).toHaveLength(9);
+    expect(riskedVoteEvents.length).toBeGreaterThan(0);
 
-    // Journey advantage winners should get specific win actions (e.g., win_extra_vote)
+    // Players who won a journey game should get journey_won_game
+    const wonGameEvents = result.events.filter(
+      (e) => e.action === "journey_won_game",
+    );
+    expect(wonGameEvents.length).toBeGreaterThan(0);
+
+    // Journey advantage winners should still get specific win actions (e.g., win_extra_vote)
     const journeyWins = result.events.filter(
       (e) =>
         e.action.startsWith("win_") &&
         e.action !== "win_survivor" &&
-        journeyEvents.some(
+        riskedVoteEvents.some(
           (j) => j.castawayId === e.castawayId && j.episodeNum === e.episodeNum,
         ),
     );
     expect(journeyWins.length).toBeGreaterThan(0);
+
+    // No go_on_journey events should exist
+    const oldJourneyEvents = result.events.filter(
+      (e) => e.action === "go_on_journey",
+    );
+    expect(oldJourneyEvents).toHaveLength(0);
 
     // S46 has 4 beware idols
     const findBeware = result.events.filter(

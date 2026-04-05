@@ -254,7 +254,17 @@ function transformChallenges(
     const type = first.challenge_type.toLowerCase();
     const isCombined = type.includes("immunity") && type.includes("reward");
 
-    if (isCombined) {
+    if (type === "duel") {
+      const winners = entries.filter((e) => e.won_duel === 1);
+      order += emitChallengeEntries(
+        winners,
+        first,
+        epNum,
+        "duel",
+        challenges,
+        order,
+      );
+    } else if (isCombined) {
       // Split combined challenges into separate immunity + reward entries
       const immunityWinners = entries.filter(
         (e) =>
@@ -448,8 +458,6 @@ const IGNORED_VOTE_EVENTS = new Set([
   "Do or die",
   "Exiled",
   "Final 3 tribal",
-  "Fire challenge",
-  "Fire challenge (f4)",
   "First out in challenge",
   "Ghost island game",
   "Island of the idols game",
@@ -504,6 +512,7 @@ const JOURNEY_REWARD_TO_WIN: Record<string, string> = {
   "Knowledge is Power": "win_other_advantage",
   Amulet: "win_other_advantage",
   "Challenge advantage": "win_other_advantage",
+  "Inheritance advantage": "win_other_advantage",
 };
 
 /** Non-scoring advantage lifecycle events — explicitly skipped. */
@@ -700,28 +709,56 @@ function transformEvents(
     }
   }
 
-  // Journey events (S41+)
+  // Journey events (S41+) — risk/reward scoring
   for (const j of journeys) {
     const epNum = Math.round(j.episode);
     const castawayId = j.castaway_id;
 
-    events.push({
-      episodeNum: epNum,
-      castawayId,
-      action: "go_on_journey",
-      multiplier: null,
-    });
+    // Parse reward parts (handles compound rewards like "Amulet; Lost vote")
+    const rewardParts = j.reward ? j.reward.split("; ") : [];
+    const hasLoss = rewardParts.some((p) => p.toLowerCase().includes("lost"));
+    const winParts = rewardParts.filter(
+      (p) =>
+        !p.toLowerCase().includes("lost") && !IGNORED_JOURNEY_REWARDS.has(p),
+    );
+    const winActions = winParts
+      .map((p) => {
+        const action = JOURNEY_REWARD_TO_WIN[p];
+        if (!action && !IGNORED_JOURNEY_REWARDS.has(p)) {
+          throw new Error(
+            `Unknown journey reward part "${p}" (from "${j.reward}") for ${castawayId} in episode ${epNum}. Add it to JOURNEY_REWARD_TO_WIN or IGNORED_JOURNEY_REWARDS.`,
+          );
+        }
+        return action;
+      })
+      .filter(Boolean);
 
-    if (j.reward) {
-      const winAction = JOURNEY_REWARD_TO_WIN[j.reward];
-      const isLoss = j.reward.toLowerCase().includes("lost");
-      const isIgnored = IGNORED_JOURNEY_REWARDS.has(j.reward);
-      if (!winAction && !isLoss && !isIgnored) {
-        throw new Error(
-          `Unknown journey reward "${j.reward}" for ${castawayId} in episode ${epNum}. Add it to JOURNEY_REWARD_TO_WIN or IGNORED_JOURNEY_REWARDS.`,
-        );
-      }
-      if (winAction) {
+    // Determine if the player risked their vote
+    // S44+: explicit chose_to_play field; S41-S43: infer from outcome
+    const risked =
+      j.chose_to_play !== undefined
+        ? j.chose_to_play === true
+        : j.lost_vote || winActions.length > 0;
+
+    if (risked) {
+      events.push({
+        episodeNum: epNum,
+        castawayId,
+        action: "journey_risked_vote",
+        multiplier: null,
+      });
+    }
+
+    if (winActions.length > 0) {
+      events.push({
+        episodeNum: epNum,
+        castawayId,
+        action: "journey_won_game",
+        multiplier: null,
+      });
+
+      // Emit the specific win action(s) for the reward type(s)
+      for (const winAction of winActions) {
         events.push({
           episodeNum: epNum,
           castawayId,
@@ -729,6 +766,15 @@ function transformEvents(
           multiplier: null,
         });
       }
+    }
+
+    if (j.lost_vote) {
+      events.push({
+        episodeNum: epNum,
+        castawayId,
+        action: "journey_lost_vote",
+        multiplier: null,
+      });
     }
   }
 
@@ -748,6 +794,19 @@ function transformEvents(
           : "use_shot_in_the_dark_unsuccessfully",
         multiplier: null,
       });
+    } else if (
+      v.vote_event === "Fire challenge" ||
+      v.vote_event === "Fire challenge (f4)"
+    ) {
+      if (v.vote_event_outcome === "Won") {
+        events.push({
+          episodeNum: epNum,
+          castawayId,
+          action: "win_fire_making",
+          multiplier: null,
+        });
+      }
+      // "Lost", "Saved", "Immune", "Vote not required" → no event
     } else if (VOTE_EVENT_TO_USE[v.vote_event]) {
       events.push({
         episodeNum: epNum,

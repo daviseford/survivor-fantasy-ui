@@ -4,7 +4,7 @@ import { BASE_PLAYER_SCORING } from "../../data/scoring";
 const SCORING_CATEGORIES = [
   {
     label: "Challenges",
-    actions: ["reward", "team_reward", "immunity", "team_immunity"],
+    actions: ["reward", "team_reward", "immunity", "team_immunity", "duel"],
   },
   {
     label: "Milestones",
@@ -76,6 +76,7 @@ const SCORING_CATEGORIES = [
       "eliminated",
       "use_shot_in_the_dark_unsuccessfully",
       "use_shot_in_the_dark_successfully",
+      "win_fire_making",
     ],
   },
   {
@@ -84,7 +85,9 @@ const SCORING_CATEGORIES = [
       "find_beware_advantage",
       "accept_beware_advantage",
       "fulfill_beware_advantage",
-      "go_on_journey",
+      "journey_risked_vote",
+      "journey_won_game",
+      "journey_lost_vote",
     ],
   },
 ] as const;

@@ -17,6 +17,7 @@ export type CategoryBreakdown = {
 
 export const ScoringCategoryMap: Record<PlayerAction, ScoringCategory> = {
   // Challenges
+  duel: "other",
   reward: "reward",
   team_reward: "reward",
   immunity: "immunity",
@@ -79,7 +80,10 @@ export const ScoringCategoryMap: Record<PlayerAction, ScoringCategory> = {
   // Other
   use_shot_in_the_dark_successfully: "other",
   use_shot_in_the_dark_unsuccessfully: "other",
-  go_on_journey: "other",
+  journey_lost_vote: "other",
+  journey_risked_vote: "other",
+  journey_won_game: "other",
+  win_fire_making: "other",
 };
 
 export const CategoryColors: Record<ScoringCategory, string> = {
@@ -128,6 +132,7 @@ export const aggregateByScoringCategory = (
   for (const episode of enhancedScores) {
     for (const { action, points_awarded } of episode.actions) {
       const category = ScoringCategoryMap[action];
+      if (!category) continue;
       totals[category] += points_awarded;
     }
   }
