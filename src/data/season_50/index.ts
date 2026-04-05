@@ -41,7 +41,10 @@ type SeasonNumber = 50;
 
 const buildPlayer = <T extends CastawayIdType>(
   p: { castaway_id: T; full_name: string; img: string } & Partial<
-    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "castaway_id" | "full_name" | "img">
+    Omit<
+      Player<T, SeasonNumber>,
+      "season_id" | "season_num" | "castaway_id" | "full_name" | "img"
+    >
   >,
 ): Player<T, SeasonNumber> => ({
   ...p,
@@ -50,30 +53,30 @@ const buildPlayer = <T extends CastawayIdType>(
 });
 
 export const SEASON_50_CASTAWAY_LOOKUP: CastawayLookup = {
-  "US0009": { full_name: "Jenna Lewis-Dougherty", castaway: "Jenna" },
-  "US0726": { full_name: "Kyle Fraser", castaway: "Kyle" },
-  "US0747": { full_name: "Savannah Louie", castaway: "Savannah" },
-  "US0691": { full_name: "Q Burdette", castaway: "Q" },
-  "US0555": { full_name: "Mike White", castaway: "Mike" },
-  "US0554": { full_name: "Angelina Keeley", castaway: "Angelina" },
-  "US0682": { full_name: "Charlie Davis", castaway: "Charlie" },
-  "US0724": { full_name: "Kamilla Karthigesu", castaway: "Kamilla" },
-  "US0703": { full_name: "Genevieve Mushaluk", castaway: "Genevieve" },
-  "US0031": { full_name: "Colby Donaldson", castaway: "Colby" },
-  "US0477": { full_name: "Aubry Bracco", castaway: "Aubry" },
-  "US0515": { full_name: "Chrissy Hofbeck", castaway: "Chrissy" },
-  "US0550": { full_name: "Christian Hubicki", castaway: "Christian" },
-  "US0179": { full_name: "Cirie Fields", castaway: "Cirie" },
-  "US0277": { full_name: "Coach Wade", castaway: "Coach" },
-  "US0666": { full_name: "Dee Valladares", castaway: "Dee" },
-  "US0668": { full_name: "Emily Flippen", castaway: "Emily" },
-  "US0722": { full_name: "Joe Hunter", castaway: "Joe" },
-  "US0615": { full_name: "Jonathan Young", castaway: "Jonathan" },
-  "US0201": { full_name: "Oscar Lusth", castaway: "Oscar" },
-  "US0560": { full_name: "Rick Devens", castaway: "Rick" },
-  "US0745": { full_name: "Rizo Velovic", castaway: "Rizo" },
-  "US0144": { full_name: "Stephenie LaGrossa Kendrick", castaway: "Stephenie" },
-  "US0695": { full_name: "Tiffany Ervin", castaway: "Tiffany" },
+  US0009: { full_name: "Jenna Lewis-Dougherty", castaway: "Jenna" },
+  US0726: { full_name: "Kyle Fraser", castaway: "Kyle" },
+  US0747: { full_name: "Savannah Louie", castaway: "Savannah" },
+  US0691: { full_name: "Q Burdette", castaway: "Q" },
+  US0555: { full_name: "Mike White", castaway: "Mike" },
+  US0554: { full_name: "Angelina Keeley", castaway: "Angelina" },
+  US0682: { full_name: "Charlie Davis", castaway: "Charlie" },
+  US0724: { full_name: "Kamilla Karthigesu", castaway: "Kamilla" },
+  US0703: { full_name: "Genevieve Mushaluk", castaway: "Genevieve" },
+  US0031: { full_name: "Colby Donaldson", castaway: "Colby" },
+  US0477: { full_name: "Aubry Bracco", castaway: "Aubry" },
+  US0515: { full_name: "Chrissy Hofbeck", castaway: "Chrissy" },
+  US0550: { full_name: "Christian Hubicki", castaway: "Christian" },
+  US0179: { full_name: "Cirie Fields", castaway: "Cirie" },
+  US0277: { full_name: "Coach Wade", castaway: "Coach" },
+  US0666: { full_name: "Dee Valladares", castaway: "Dee" },
+  US0668: { full_name: "Emily Flippen", castaway: "Emily" },
+  US0722: { full_name: "Joe Hunter", castaway: "Joe" },
+  US0615: { full_name: "Jonathan Young", castaway: "Jonathan" },
+  US0201: { full_name: "Oscar Lusth", castaway: "Oscar" },
+  US0560: { full_name: "Rick Devens", castaway: "Rick" },
+  US0745: { full_name: "Rizo Velovic", castaway: "Rizo" },
+  US0144: { full_name: "Stephenie LaGrossa Kendrick", castaway: "Stephenie" },
+  US0695: { full_name: "Tiffany Ervin", castaway: "Tiffany" },
 };
 
 export const SEASON_50_PLAYERS = [
@@ -362,9 +365,7 @@ export const SEASON_50_CHALLENGES = {
     episode_num: 1,
     variant: "team_reward",
     order: 1,
-    winning_castaways: [
-      "US0277",
-    ],
+    winning_castaways: ["US0277"],
   },
   challenge_2: {
     id: "challenge_2",
@@ -374,9 +375,7 @@ export const SEASON_50_CHALLENGES = {
     episode_num: 1,
     variant: "team_immunity",
     order: 2,
-    winning_castaways: [
-      "US0550",
-    ],
+    winning_castaways: ["US0550"],
   },
   challenge_3: {
     id: "challenge_3",
@@ -423,9 +422,7 @@ export const SEASON_50_CHALLENGES = {
     episode_num: 1,
     variant: "team_reward",
     order: 5,
-    winning_castaways: [
-      "US0550",
-    ],
+    winning_castaways: ["US0550"],
   },
   challenge_6: {
     id: "challenge_6",
@@ -690,11 +687,7 @@ export const SEASON_50_CHALLENGES = {
     episode_num: 6,
     variant: "immunity",
     order: 20,
-    winning_castaways: [
-      "US0144",
-      "US0550",
-      "US0666",
-    ],
+    winning_castaways: ["US0144", "US0550", "US0666"],
   },
   challenge_21: {
     id: "challenge_21",
@@ -704,13 +697,7 @@ export const SEASON_50_CHALLENGES = {
     episode_num: 6,
     variant: "team_reward",
     order: 21,
-    winning_castaways: [
-      "US0144",
-      "US0515",
-      "US0615",
-      "US0695",
-      "US0724",
-    ],
+    winning_castaways: ["US0144", "US0515", "US0615", "US0695", "US0724"],
   },
 } satisfies Record<Challenge["id"], Challenge<CastawayIdType, SeasonNumber>>;
 
@@ -815,7 +802,10 @@ export const SEASON_50_ELIMINATIONS = {
     castaway_id: "US0031",
     variant: "tribal",
   },
-} satisfies Record<Elimination["id"], Elimination<CastawayIdType, SeasonNumber>>;
+} satisfies Record<
+  Elimination["id"],
+  Elimination<CastawayIdType, SeasonNumber>
+>;
 
 export const SEASON_50_EVENTS = {
   event_1: {

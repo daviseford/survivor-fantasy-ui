@@ -14,10 +14,8 @@ const SEASON_ID = "season_50";
  * - WATCH_ALONG_COMP: in-progress with watch-along mode and prop bets
  * - COMPLETE_COMP: finished competition with full scoring data
  */
-const WATCH_ALONG_COMP =
-  "competition_21a81dc5-b0a2-4a54-a10a-b36adaa2b710"; // Amanda and Davis 49
-const COMPLETE_COMP =
-  "competition_966233a0-66d9-4500-a134-a085d0532b58"; // Ford Family (S46)
+const WATCH_ALONG_COMP = "competition_21a81dc5-b0a2-4a54-a10a-b36adaa2b710"; // Amanda and Davis 49
+const COMPLETE_COMP = "competition_966233a0-66d9-4500-a134-a085d0532b58"; // Ford Family (S46)
 
 /** Routes that don't require authentication */
 export const PUBLIC_ROUTES = [
@@ -46,7 +44,10 @@ export const ALL_ROUTES = [...PUBLIC_ROUTES, ...ADMIN_ROUTES];
  * Each entry defines a page name and DOM selectors for key sections.
  * The audit spec scrolls to each section and takes a focused screenshot.
  */
-export const SCROLL_SECTIONS: Record<string, { label: string; selector: string }[]> = {
+export const SCROLL_SECTIONS: Record<
+  string,
+  { label: string; selector: string }[]
+> = {
   "competition-watch-along": [
     { label: "header", selector: "h2" },
     { label: "teams", selector: "h3:has-text('Teams')" },
@@ -60,6 +61,9 @@ export const SCROLL_SECTIONS: Record<string, { label: string; selector: string }
     { label: "standings", selector: "h3:has-text('Standings')" },
     { label: "prop-bets", selector: "h3:has-text('Prop Bets')" },
     { label: "player-scores", selector: "h3:has-text('Player Scores')" },
-    { label: "scoring-breakdown", selector: "h3:has-text('Scoring Breakdown')" },
+    {
+      label: "scoring-breakdown",
+      selector: "h3:has-text('Scoring Breakdown')",
+    },
   ],
 };

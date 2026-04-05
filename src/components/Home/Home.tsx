@@ -157,10 +157,10 @@ export const Home = () => {
 
             <Text className={classes.featureDescription} c="dimmed">
               From the original Borneo to the latest New Era twists, all 50 US
-              seasons are ready to play. Browse by era, search by name
-              or location, and start a competition on any season — past or
-              present. The currently airing season gets live updates as each
-              episode airs, so you're never behind.
+              seasons are ready to play. Browse by era, search by name or
+              location, and start a competition on any season — past or present.
+              The currently airing season gets live updates as each episode
+              airs, so you're never behind.
             </Text>
 
             <SimpleGrid cols={{ base: 2, sm: 4 }} mt="sm">

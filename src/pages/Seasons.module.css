@@ -26,7 +26,8 @@
   font-weight: 900;
   color: color-mix(in srgb, var(--mantine-color-white) 95%, transparent);
   line-height: 1;
-  text-shadow: 0 2px 8px color-mix(in srgb, var(--mantine-color-black) 20%, transparent);
+  text-shadow: 0 2px 8px
+    color-mix(in srgb, var(--mantine-color-black) 20%, transparent);
 }
 
 .heroSubtitle {
@@ -35,7 +36,8 @@
   color: color-mix(in srgb, var(--mantine-color-white) 85%, transparent);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  text-shadow: 0 1px 4px color-mix(in srgb, var(--mantine-color-black) 20%, transparent);
+  text-shadow: 0 1px 4px
+    color-mix(in srgb, var(--mantine-color-black) 20%, transparent);
 }
 
 /* ── Compact (Browse Grid) Cards ── */
@@ -65,7 +67,8 @@
   font-weight: 900;
   color: color-mix(in srgb, var(--mantine-color-white) 95%, transparent);
   line-height: 1;
-  text-shadow: 0 1px 4px color-mix(in srgb, var(--mantine-color-black) 15%, transparent);
+  text-shadow: 0 1px 4px
+    color-mix(in srgb, var(--mantine-color-black) 15%, transparent);
 }
 
 .compactSubtitle {
@@ -74,7 +77,8 @@
   color: color-mix(in srgb, var(--mantine-color-white) 80%, transparent);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  text-shadow: 0 1px 3px color-mix(in srgb, var(--mantine-color-black) 15%, transparent);
+  text-shadow: 0 1px 3px
+    color-mix(in srgb, var(--mantine-color-black) 15%, transparent);
   max-width: 90%;
   text-align: center;
   overflow: hidden;

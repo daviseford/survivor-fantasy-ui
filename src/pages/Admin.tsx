@@ -386,10 +386,10 @@ export const Admin = () => {
                 {competitions.map((c) => (
                   <Table.Tr key={c.id}>
                     <Table.Td fw={600}>
-                          <Text fw={600} lineClamp={1}>
-                            {c.competition_name}
-                          </Text>
-                        </Table.Td>
+                      <Text fw={600} lineClamp={1}>
+                        {c.competition_name}
+                      </Text>
+                    </Table.Td>
                     <Table.Td>
                       <Badge variant="light" size="sm">
                         S{c.season_num}
