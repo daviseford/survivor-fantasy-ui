@@ -228,7 +228,7 @@ export const EpisodeAdvanceControl = ({
           <Button
             variant="light"
             color="gray"
-            size="compact-sm"
+            size="sm"
             leftSection={<IconChevronLeft size={14} />}
             disabled={!canGoBack}
             onClick={goBackEpisode}
@@ -237,7 +237,7 @@ export const EpisodeAdvanceControl = ({
           </Button>
           <Button
             variant="filled"
-            size="compact-sm"
+            size="sm"
             rightSection={<IconChevronRight size={14} />}
             disabled={!canAdvance}
             onClick={advanceEpisode}

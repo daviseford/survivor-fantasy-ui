@@ -154,7 +154,7 @@ export const Admin = () => {
 
           <SimpleGrid cols={{ base: 1, sm: 3 }}>
             <Paper withBorder radius="md" p="md">
-              <Text size="xs" tt="uppercase" c="dimmed" fw={700}>
+              <Text size="sm" tt="uppercase" c="dimmed" fw={700}>
                 Latest Season
               </Text>
               <Text fw={700} mt={6}>
@@ -168,7 +168,7 @@ export const Admin = () => {
             </Paper>
 
             <Paper withBorder radius="md" p="md">
-              <Text size="xs" tt="uppercase" c="dimmed" fw={700}>
+              <Text size="sm" tt="uppercase" c="dimmed" fw={700}>
                 Competition Count
               </Text>
               <Text fw={700} mt={6}>
@@ -180,7 +180,7 @@ export const Admin = () => {
             </Paper>
 
             <Paper withBorder radius="md" p="md">
-              <Text size="xs" tt="uppercase" c="dimmed" fw={700}>
+              <Text size="sm" tt="uppercase" c="dimmed" fw={700}>
                 Recommended Next Step
               </Text>
               <Text fw={700} mt={6}>
@@ -207,7 +207,7 @@ export const Admin = () => {
                 component={Link}
                 to={`/admin/${latestSeason.id}?tab=events`}
               >
-                Jump to Events
+                Jump to S{latestSeason.order} Events
               </Button>
             </Group>
           )}
@@ -364,8 +364,8 @@ export const Admin = () => {
           Competitions
         </Title>
         <Text c="dimmed" size="sm" mb="md">
-          Archive cleanup lives here. Delete only when you want to remove the
-          competition and its draft data together.
+          Delete competitions and their associated draft data. This action is
+          permanent.
         </Text>
         {competitions.length === 0 ? (
           <Text c="dimmed" size="sm">
@@ -385,7 +385,11 @@ export const Admin = () => {
               <Table.Tbody>
                 {competitions.map((c) => (
                   <Table.Tr key={c.id}>
-                    <Table.Td fw={600}>{c.competition_name}</Table.Td>
+                    <Table.Td fw={600}>
+                          <Text fw={600} lineClamp={1}>
+                            {c.competition_name}
+                          </Text>
+                        </Table.Td>
                     <Table.Td>
                       <Badge variant="light" size="sm">
                         S{c.season_num}
@@ -401,6 +405,7 @@ export const Admin = () => {
                     <Table.Td>
                       <ActionIcon
                         color="red"
+                        variant="subtle"
                         onClick={() => handleDeleteCompetition(c)}
                         aria-label={`Delete ${c.competition_name}`}
                       >

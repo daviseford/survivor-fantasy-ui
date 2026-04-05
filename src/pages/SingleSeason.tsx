@@ -1,4 +1,5 @@
 import {
+  Alert,
   Badge,
   Button,
   Center,
@@ -10,9 +11,9 @@ import {
   Title,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { IconLogin, IconUserPlus } from "@tabler/icons-react";
+import { IconAlertCircle, IconLogin, IconUserPlus } from "@tabler/icons-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCreateDraft } from "../hooks/useCreateDraft";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
@@ -41,7 +42,23 @@ export const SingleSeason = () => {
       </Center>
     );
 
-  if (!season) return <div>Error: Missing season data</div>;
+  if (!season)
+    return (
+      <Stack gap="md" p="md" maw={480}>
+        <Alert
+          icon={<IconAlertCircle size={18} />}
+          title="Season not found"
+          color="red"
+          variant="light"
+        >
+          We couldn't find this season. It may have been removed or the link may
+          be incorrect.
+        </Alert>
+        <Button component={Link} to="/seasons" variant="light" size="sm">
+          Back to Seasons
+        </Button>
+      </Stack>
+    );
 
   return (
     <Stack gap="lg" p="md">
@@ -63,7 +80,7 @@ export const SingleSeason = () => {
         </div>
 
         {slimUser ? (
-          <Stack gap={4} align="flex-end">
+          <Stack gap={4} align="flex-end" w={{ base: "100%", sm: "auto" }}>
             <Button
               size="sm"
               onClick={handleCreateDraft}

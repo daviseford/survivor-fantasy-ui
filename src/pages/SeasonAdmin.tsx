@@ -1,4 +1,5 @@
 import {
+  Alert,
   Badge,
   Button,
   Center,
@@ -13,6 +14,7 @@ import {
   rem,
 } from "@mantine/core";
 import {
+  IconAlertCircle,
   IconArrowLeft,
   IconCalendar,
   IconKarate,
@@ -52,7 +54,7 @@ const VALID_TABS = [
 type TabValue = (typeof VALID_TABS)[number];
 const DEFAULT_TAB: TabValue = "episodes";
 
-const iconStyle = { width: rem(12), height: rem(12) };
+const iconStyle = { width: rem(16), height: rem(16) };
 
 export const SeasonAdmin = () => {
   const { slimUser } = useUser();
@@ -86,7 +88,20 @@ export const SeasonAdmin = () => {
   }
 
   if (!season) {
-    return <Text c="red">Season not found: {seasonId}</Text>;
+    return (
+      <Stack gap="md" p="md">
+        <Alert
+          color="red"
+          icon={<IconAlertCircle size={16} />}
+          title="Season not found"
+        >
+          No season matched "{seasonId}".
+        </Alert>
+        <Button component={Link} to="/admin" variant="light" w="fit-content">
+          Back to dashboard
+        </Button>
+      </Stack>
+    );
   }
 
   const seasonOptions =
@@ -155,30 +170,35 @@ export const SeasonAdmin = () => {
           <Tabs.Tab
             value="episodes"
             leftSection={<IconList style={iconStyle} />}
+            aria-label="Episodes"
           >
             <Text visibleFrom="sm">Episodes</Text>
           </Tabs.Tab>
           <Tabs.Tab
             value="events"
             leftSection={<IconCalendar style={iconStyle} />}
+            aria-label="Events"
           >
             <Text visibleFrom="sm">Events</Text>
           </Tabs.Tab>
           <Tabs.Tab
             value="challenges"
             leftSection={<IconKarate style={iconStyle} />}
+            aria-label="Challenges"
           >
             <Text visibleFrom="sm">Challenges</Text>
           </Tabs.Tab>
           <Tabs.Tab
             value="eliminations"
             leftSection={<IconUserX style={iconStyle} />}
+            aria-label="Eliminations"
           >
             <Text visibleFrom="sm">Eliminations</Text>
           </Tabs.Tab>
           <Tabs.Tab
             value="teams"
             leftSection={<IconUsersGroup style={iconStyle} />}
+            aria-label="Teams"
           >
             <Text visibleFrom="sm">Teams</Text>
           </Tabs.Tab>

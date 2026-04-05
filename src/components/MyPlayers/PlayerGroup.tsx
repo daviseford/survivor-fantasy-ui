@@ -29,6 +29,7 @@ export const PlayerGroup = ({ uid }: { uid: SlimUser["uid"] }) => {
               size={isMobile ? "md" : "lg"}
               style={avatarStyle}
               alt={p.full_name}
+              imageProps={{ loading: "lazy" }}
             />
           </Tooltip>
         );

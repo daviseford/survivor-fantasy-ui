@@ -1,4 +1,4 @@
-import { Anchor, Container, Group, Text } from "@mantine/core";
+import { Anchor, Container, Group, Text, VisuallyHidden } from "@mantine/core";
 
 import classes from "./Footer.module.css";
 
@@ -31,6 +31,7 @@ export const Footer = () => {
               rel="noopener noreferrer"
             >
               {link.label}
+              <VisuallyHidden> (opens in a new tab)</VisuallyHidden>
             </Anchor>
           ))}
         </Group>

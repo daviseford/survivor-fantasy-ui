@@ -69,7 +69,7 @@ function HeroCard({ meta, live }: { meta: SeasonMeta; live: boolean }) {
     >
       <Card.Section pos="relative">
         {meta.img ? (
-          <Image src={meta.img} height={200} w="100%" h={200} alt={meta.name} />
+          <Image src={meta.img} height={200} w="100%" h={200} alt={meta.name} loading="lazy" />
         ) : (
           <div
             className={`${classes.heroImageFallback} ${getEraClass(meta.order)}`}

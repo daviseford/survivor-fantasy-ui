@@ -3,8 +3,9 @@ import {
   Badge,
   Box,
   Button,
-  Divider,
+  Center,
   Group,
+  Loader,
   Paper,
   Stack,
   Text,
@@ -59,7 +60,6 @@ const Section = ({
           )}
         </div>
       </Group>
-      <Divider />
       {children}
     </Stack>
   </Paper>
@@ -80,7 +80,13 @@ export const SingleCompetition = () => {
     slimUser,
   });
 
-  if (!competition || !season) return null;
+  if (!competition || !season) {
+    return (
+      <Center h="60vh">
+        <Loader size="lg" />
+      </Center>
+    );
+  }
 
   const episodeCount = season.episodes?.length ?? 0;
   const isCreator = slimUser?.uid === competition.creator_uid;
@@ -97,7 +103,6 @@ export const SingleCompetition = () => {
         variant="subtle"
         leftSection={<IconArrowLeft size={16} />}
         w="fit-content"
-        px={0}
       >
         Back to competitions
       </Button>

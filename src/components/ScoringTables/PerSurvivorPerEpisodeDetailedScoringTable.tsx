@@ -54,11 +54,18 @@ const SortableHeader = ({
 }) => {
   const isActive = sortField === field;
   const Icon = isActive && sortDir === "desc" ? IconChevronDown : IconChevronUp;
+  const sorted = isActive;
+  const ariaSortValue = sorted
+    ? sortDir === "asc"
+      ? "ascending"
+      : "descending"
+    : "none";
   return (
-    <Table.Th w={width}>
+    <Table.Th w={width} aria-sort={ariaSortValue}>
       <UnstyledButton
         onClick={() => onSort(field)}
         style={{ display: "flex", alignItems: "center", gap: 4 }}
+        aria-label={`Sort by ${label}`}
       >
         {label}
         {isActive && <Icon size={14} />}
@@ -296,6 +303,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
       <Group gap="md" mb="xs" px="md" wrap="wrap">
         <Group gap={4}>
           <Box
+            aria-hidden="true"
             w={12}
             h={12}
             style={{
@@ -310,6 +318,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
         </Group>
         <Group gap={4}>
           <Box
+            aria-hidden="true"
             w={12}
             h={12}
             style={{

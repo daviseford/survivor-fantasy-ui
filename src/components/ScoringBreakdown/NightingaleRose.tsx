@@ -137,6 +137,8 @@ export const NightingaleRose = ({ data, size }: NightingaleRoseProps) => {
         onClick={handleDismiss}
       >
         <svg
+          role="img"
+          aria-label="Scoring breakdown chart"
           viewBox={`0 0 ${size} ${size}`}
           width="100%"
           style={{ maxWidth: size, display: "block", margin: "0 auto" }}
@@ -244,6 +246,7 @@ export const NightingaleRose = ({ data, size }: NightingaleRoseProps) => {
         {ScoringCategories.map((category) => (
           <Group key={category} gap={4}>
             <Box
+              aria-hidden="true"
               w={12}
               h={12}
               style={{
