@@ -35,10 +35,7 @@ type SeasonNumber = 49;
 
 const buildPlayer = <T extends CastawayIdType>(
   p: { castaway_id: T; full_name: string; img: string } & Partial<
-    Omit<
-      Player<T, SeasonNumber>,
-      "season_id" | "season_num" | "castaway_id" | "full_name" | "img"
-    >
+    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "castaway_id" | "full_name" | "img">
   >,
 ): Player<T, SeasonNumber> => ({
   ...p,
@@ -47,24 +44,24 @@ const buildPlayer = <T extends CastawayIdType>(
 });
 
 export const SEASON_49_CASTAWAY_LOOKUP: CastawayLookup = {
-  US0744: { full_name: "Nicole Mazullo", castaway: "Nicole" },
-  US0735: { full_name: "Annie Davis", castaway: "Annie" },
-  US0736: { full_name: "Jake Latimer", castaway: "Jake" },
-  US0739: { full_name: "Jeremiah Ing", castaway: "Jeremiah" },
-  US0741: { full_name: "Matt Williams", castaway: "Matt" },
-  US0737: { full_name: "Jason Treul", castaway: "Jason" },
-  US0748: { full_name: "Shannon Fairweather", castaway: "Shannon" },
-  US0743: { full_name: "Nate Moore", castaway: "Nate" },
-  US0742: { full_name: "MC Chukwujekwu", castaway: "MC" },
-  US0734: { full_name: "Alex Moore", castaway: "Alex" },
-  US0738: { full_name: "Jawan Pitts", castaway: "Jawan" },
-  US0750: { full_name: "Sophie Segreti", castaway: "Sophie" },
-  US0751: { full_name: "Steven Ramm", castaway: "Steven" },
-  US0740: { full_name: "Kristina Mills", castaway: "Kristina" },
-  US0745: { full_name: "Rizo Velovic", castaway: "Rizo" },
-  US0746: { full_name: "Sage Ahrens-Nichols", castaway: "Sage" },
-  US0749: { full_name: "Sophi Balerdi", castaway: "Sophi" },
-  US0747: { full_name: "Savannah Louie", castaway: "Savannah" },
+  "US0744": { full_name: "Nicole Mazullo", castaway: "Nicole" },
+  "US0735": { full_name: "Annie Davis", castaway: "Annie" },
+  "US0736": { full_name: "Jake Latimer", castaway: "Jake" },
+  "US0739": { full_name: "Jeremiah Ing", castaway: "Jeremiah" },
+  "US0741": { full_name: "Matt Williams", castaway: "Matt" },
+  "US0737": { full_name: "Jason Treul", castaway: "Jason" },
+  "US0748": { full_name: "Shannon Fairweather", castaway: "Shannon" },
+  "US0743": { full_name: "Nate Moore", castaway: "Nate" },
+  "US0742": { full_name: "MC Chukwujekwu", castaway: "MC" },
+  "US0734": { full_name: "Alex Moore", castaway: "Alex" },
+  "US0738": { full_name: "Jawan Pitts", castaway: "Jawan" },
+  "US0750": { full_name: "Sophie Segreti", castaway: "Sophie" },
+  "US0751": { full_name: "Steven Ramm", castaway: "Steven" },
+  "US0740": { full_name: "Kristina Mills", castaway: "Kristina" },
+  "US0745": { full_name: "Rizo Velovic", castaway: "Rizo" },
+  "US0746": { full_name: "Sage Ahrens-Nichols", castaway: "Sage" },
+  "US0749": { full_name: "Sophi Balerdi", castaway: "Sophi/Soph" },
+  "US0747": { full_name: "Savannah Louie", castaway: "Savannah" },
 };
 
 export const SEASON_49_PLAYERS = [
@@ -72,144 +69,166 @@ export const SEASON_49_PLAYERS = [
     castaway_id: "US0744",
     full_name: "Nicole Mazullo",
     img: "/images/season_49/Nicole-Mazullo.jpg",
-    description: "Age: 26 | Hometown: Philadelphia, Pennsylvania",
+    description: "Age: 26 | Hometown: Philadelphia, Pennsylvania | Occupation: Financial Crime Consultant",
     age: 26,
+    profession: "Financial Crime Consultant",
     hometown: "Philadelphia, Pennsylvania",
   }),
   buildPlayer({
     castaway_id: "US0735",
     full_name: "Annie Davis",
     img: "/images/season_49/Annie-Davis.jpg",
-    description: "Age: 49 | Hometown: Austin, Texas",
+    description: "Age: 49 | Hometown: Austin, Texas | Occupation: Musician",
     age: 49,
+    profession: "Musician",
     hometown: "Austin, Texas",
+    nickname: "Annie",
   }),
   buildPlayer({
     castaway_id: "US0736",
     full_name: "Jake Latimer",
     img: "/images/season_49/Jake-Latimer.jpg",
-    description: "Age: 35 | Hometown: St. Albert, Alberta",
+    description: "Age: 35 | Hometown: St. Albert, Alberta | Occupation: Correctional Officer",
     age: 35,
+    profession: "Correctional Officer",
     hometown: "St. Albert, Alberta",
   }),
   buildPlayer({
     castaway_id: "US0739",
     full_name: "Jeremiah Ing",
     img: "/images/season_49/Jeremiah-Ing.jpg",
-    description: "Age: 38 | Hometown: Toronto, Ontario",
+    description: "Age: 38 | Hometown: Toronto, Ontario | Occupation: Global Events Manager",
     age: 38,
+    profession: "Global Events Manager",
     hometown: "Toronto, Ontario",
   }),
   buildPlayer({
     castaway_id: "US0741",
     full_name: "Matt Williams",
     img: "/images/season_49/Matt-Williams.jpg",
-    description: "Age: 52 | Hometown: St. George, Utah",
+    description: "Age: 52 | Hometown: St. George, Utah | Occupation: Airport Ramp Agent",
     age: 52,
+    profession: "Airport Ramp Agent",
     hometown: "St. George, Utah",
   }),
   buildPlayer({
     castaway_id: "US0737",
     full_name: "Jason Treul",
     img: "/images/season_49/Jason-Treul.jpg",
-    description: "Age: 32 | Hometown: Santa Ana, California",
+    description: "Age: 32 | Hometown: Santa Ana, California | Occupation: Law Clerk",
     age: 32,
+    profession: "Law Clerk",
     hometown: "Santa Ana, California",
   }),
   buildPlayer({
     castaway_id: "US0748",
     full_name: "Shannon Fairweather",
     img: "/images/season_49/Shannon-Fairweather.jpg",
-    description: "Age: 27 | Hometown: Boston, Massachusetts",
+    description: "Age: 27 | Hometown: Boston, Massachusetts | Occupation: Wellness Specialist",
     age: 27,
+    profession: "Wellness Specialist",
     hometown: "Boston, Massachusetts",
   }),
   buildPlayer({
     castaway_id: "US0743",
     full_name: "Nate Moore",
     img: "/images/season_49/Nate-Moore.jpg",
-    description: "Age: 47 | Hometown: Hermosa Beach, California",
+    description: "Age: 47 | Hometown: Hermosa Beach, California | Occupation: Film Producer",
     age: 47,
+    profession: "Film Producer",
     hometown: "Hermosa Beach, California",
   }),
   buildPlayer({
     castaway_id: "US0742",
     full_name: "MC Chukwujekwu",
     img: "/images/season_49/MC-Chukwujekwu.jpg",
-    description: "Age: 29 | Hometown: San Diego, California",
+    description: "Age: 29 | Hometown: San Diego, California | Occupation: Fitness Trainer",
     age: 29,
+    profession: "Fitness Trainer",
     hometown: "San Diego, California",
+    nickname: "MC",
   }),
   buildPlayer({
     castaway_id: "US0734",
     full_name: "Alex Moore",
     img: "/images/season_49/Alex-Moore.jpg",
-    description: "Age: 26 | Hometown: Washington, District of Columbia",
+    description: "Age: 26 | Hometown: Washington, District of Columbia | Occupation: Political Communications Director",
     age: 26,
+    profession: "Political Communications Director",
     hometown: "Washington, District of Columbia",
   }),
   buildPlayer({
     castaway_id: "US0738",
     full_name: "Jawan Pitts",
     img: "/images/season_49/Jawan-Pitts.jpg",
-    description: "Age: 28 | Hometown: Los Angeles, California",
+    description: "Age: 28 | Hometown: Los Angeles, California | Occupation: Video Editor",
     age: 28,
+    profession: "Video Editor",
     hometown: "Los Angeles, California",
   }),
   buildPlayer({
     castaway_id: "US0750",
     full_name: "Sophie Segreti",
     img: "/images/season_49/Sophie-Segreti.jpg",
-    description: "Age: 31 | Hometown: New York, New York",
+    description: "Age: 31 | Hometown: New York, New York | Occupation: Strategy Associate",
     age: 31,
+    profession: "Strategy Associate",
     hometown: "New York, New York",
+    nickname: "Sophie",
   }),
   buildPlayer({
     castaway_id: "US0751",
     full_name: "Steven Ramm",
     img: "/images/season_49/Steven-Ramm.jpg",
-    description: "Age: 35 | Hometown: Denver, Colorado",
+    description: "Age: 35 | Hometown: Denver, Colorado | Occupation: Rocket Scientist",
     age: 35,
+    profession: "Rocket Scientist",
     hometown: "Denver, Colorado",
   }),
   buildPlayer({
     castaway_id: "US0740",
     full_name: "Kristina Mills",
     img: "/images/season_49/Kristina-Mills.jpg",
-    description: "Age: 35 | Hometown: Edmond, Oklahoma",
+    description: "Age: 35 | Hometown: Edmond, Oklahoma | Occupation: MBA Career Coach",
     age: 35,
+    profession: "MBA Career Coach",
     hometown: "Edmond, Oklahoma",
   }),
   buildPlayer({
     castaway_id: "US0745",
     full_name: "Rizo Velovic",
     img: "/images/season_49/Rizo-Velovic.jpg",
-    description: "Age: 25 | Hometown: Yonkers, New York",
+    description: "Age: 25 | Hometown: Yonkers, New York | Occupation: Tech Sales",
     age: 25,
+    profession: "Tech Sales",
     hometown: "Yonkers, New York",
   }),
   buildPlayer({
     castaway_id: "US0746",
     full_name: "Sage Ahrens-Nichols",
     img: "/images/season_49/Sage-Ahrens-Nichols.jpg",
-    description: "Age: 30 | Hometown: Olympia, Washington",
+    description: "Age: 30 | Hometown: Olympia, Washington | Occupation: Clinical Social Worker",
     age: 30,
+    profession: "Clinical Social Worker",
     hometown: "Olympia, Washington",
   }),
   buildPlayer({
     castaway_id: "US0749",
     full_name: "Sophi Balerdi",
     img: "/images/season_49/Sophi-Balerdi.jpg",
-    description: "Age: 27 | Hometown: Miami, Florida",
+    description: "Age: 27 | Hometown: Miami, Florida | Occupation: Entrepreneur",
     age: 27,
+    profession: "Entrepreneur",
     hometown: "Miami, Florida",
+    nickname: "Sophi/Soph",
   }),
   buildPlayer({
     castaway_id: "US0747",
     full_name: "Savannah Louie",
     img: "/images/season_49/Savannah-Louie.jpg",
-    description: "Age: 31 | Hometown: Atlanta, Georgia",
+    description: "Age: 31 | Hometown: Atlanta, Georgia | Occupation: Former Reporter",
     age: 31,
+    profession: "Former Reporter",
     hometown: "Atlanta, Georgia",
   }),
 ] satisfies Player<CastawayIdType, SeasonNumber>[];
@@ -373,7 +392,9 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 1,
     variant: "team_reward",
     order: 1,
-    winning_castaways: ["US0745"],
+    winning_castaways: [
+      "US0745",
+    ],
   },
   challenge_2: {
     id: "challenge_2",
@@ -659,7 +680,12 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 6,
     variant: "team_reward",
     order: 18,
-    winning_castaways: ["US0734", "US0740", "US0743", "US0750"],
+    winning_castaways: [
+      "US0734",
+      "US0740",
+      "US0743",
+      "US0750",
+    ],
   },
   challenge_19: {
     id: "challenge_19",
@@ -669,7 +695,12 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 6,
     variant: "team_immunity",
     order: 19,
-    winning_castaways: ["US0742", "US0745", "US0747", "US0749"],
+    winning_castaways: [
+      "US0742",
+      "US0745",
+      "US0747",
+      "US0749",
+    ],
   },
   challenge_20: {
     id: "challenge_20",
@@ -679,7 +710,12 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 6,
     variant: "team_immunity",
     order: 20,
-    winning_castaways: ["US0734", "US0740", "US0743", "US0750"],
+    winning_castaways: [
+      "US0734",
+      "US0740",
+      "US0743",
+      "US0750",
+    ],
   },
   challenge_21: {
     id: "challenge_21",
@@ -689,7 +725,13 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 7,
     variant: "team_reward",
     order: 21,
-    winning_castaways: ["US0743", "US0745", "US0749", "US0750", "US0751"],
+    winning_castaways: [
+      "US0743",
+      "US0745",
+      "US0749",
+      "US0750",
+      "US0751",
+    ],
   },
   challenge_22: {
     id: "challenge_22",
@@ -699,7 +741,9 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 7,
     variant: "immunity",
     order: 22,
-    winning_castaways: ["US0750"],
+    winning_castaways: [
+      "US0750",
+    ],
   },
   challenge_23: {
     id: "challenge_23",
@@ -707,9 +751,15 @@ export const SEASON_49_CHALLENGES = {
     season_num: 49,
     episode_id: "episode_8",
     episode_num: 8,
-    variant: "immunity",
+    variant: "team_immunity",
     order: 23,
-    winning_castaways: ["US0734", "US0740", "US0747", "US0749", "US0751"],
+    winning_castaways: [
+      "US0734",
+      "US0740",
+      "US0747",
+      "US0749",
+      "US0751",
+    ],
   },
   challenge_24: {
     id: "challenge_24",
@@ -719,7 +769,13 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 8,
     variant: "team_reward",
     order: 24,
-    winning_castaways: ["US0734", "US0740", "US0747", "US0749", "US0751"],
+    winning_castaways: [
+      "US0734",
+      "US0740",
+      "US0747",
+      "US0749",
+      "US0751",
+    ],
   },
   challenge_25: {
     id: "challenge_25",
@@ -729,7 +785,12 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 9,
     variant: "team_reward",
     order: 25,
-    winning_castaways: ["US0734", "US0740", "US0747", "US0750"],
+    winning_castaways: [
+      "US0734",
+      "US0740",
+      "US0747",
+      "US0750",
+    ],
   },
   challenge_26: {
     id: "challenge_26",
@@ -739,7 +800,10 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 9,
     variant: "immunity",
     order: 26,
-    winning_castaways: ["US0747", "US0751"],
+    winning_castaways: [
+      "US0747",
+      "US0751",
+    ],
   },
   challenge_27: {
     id: "challenge_27",
@@ -749,7 +813,12 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 10,
     variant: "team_reward",
     order: 27,
-    winning_castaways: ["US0746", "US0749", "US0750", "US0751"],
+    winning_castaways: [
+      "US0746",
+      "US0749",
+      "US0750",
+      "US0751",
+    ],
   },
   challenge_28: {
     id: "challenge_28",
@@ -759,7 +828,9 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 10,
     variant: "immunity",
     order: 28,
-    winning_castaways: ["US0750"],
+    winning_castaways: [
+      "US0750",
+    ],
   },
   challenge_29: {
     id: "challenge_29",
@@ -769,7 +840,9 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 11,
     variant: "immunity",
     order: 29,
-    winning_castaways: ["US0751"],
+    winning_castaways: [
+      "US0751",
+    ],
   },
   challenge_30: {
     id: "challenge_30",
@@ -779,7 +852,9 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 11,
     variant: "reward",
     order: 30,
-    winning_castaways: ["US0751"],
+    winning_castaways: [
+      "US0751",
+    ],
   },
   challenge_31: {
     id: "challenge_31",
@@ -789,7 +864,9 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 12,
     variant: "reward",
     order: 31,
-    winning_castaways: ["US0747"],
+    winning_castaways: [
+      "US0747",
+    ],
   },
   challenge_32: {
     id: "challenge_32",
@@ -799,7 +876,9 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 12,
     variant: "immunity",
     order: 32,
-    winning_castaways: ["US0747"],
+    winning_castaways: [
+      "US0747",
+    ],
   },
   challenge_33: {
     id: "challenge_33",
@@ -809,7 +888,9 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 33,
-    winning_castaways: ["US0747"],
+    winning_castaways: [
+      "US0747",
+    ],
   },
   challenge_34: {
     id: "challenge_34",
@@ -819,7 +900,9 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 13,
     variant: "reward",
     order: 34,
-    winning_castaways: ["US0747"],
+    winning_castaways: [
+      "US0747",
+    ],
   },
   challenge_35: {
     id: "challenge_35",
@@ -829,7 +912,9 @@ export const SEASON_49_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 35,
-    winning_castaways: ["US0749"],
+    winning_castaways: [
+      "US0749",
+    ],
   },
 } satisfies Record<Challenge["id"], Challenge<CastawayIdType, SeasonNumber>>;
 
@@ -1004,10 +1089,7 @@ export const SEASON_49_ELIMINATIONS = {
     castaway_id: "US0749",
     variant: "final_tribal_council",
   },
-} satisfies Record<
-  Elimination["id"],
-  Elimination<CastawayIdType, SeasonNumber>
->;
+} satisfies Record<Elimination["id"], Elimination<CastawayIdType, SeasonNumber>>;
 
 export const SEASON_49_EVENTS = {
   event_1: {
