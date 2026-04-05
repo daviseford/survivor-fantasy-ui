@@ -46,6 +46,7 @@ import type {
   SurvivorVoteHistory,
 } from "./lib/survivor-types.js";
 import type { ScrapedPlayer } from "./lib/types.js";
+import { validateSeasonData } from "./lib/validate-season.js";
 import {
   delay,
   downloadImage,
@@ -403,6 +404,20 @@ async function main(): Promise<void> {
       console.log(
         `  survivoR: ${playerData.players.length} players, ${resultsData.episodes.length} episodes, ${resultsData.challenges.length} challenges, ${resultsData.eliminations.length} eliminations, ${resultsData.events.length} events`,
       );
+
+      // Validate before writing
+      const validation = validateSeasonData(playerData, resultsData);
+      if (validation.warnings.length > 0) {
+        for (const w of validation.warnings) console.warn(`  ⚠ ${w}`);
+      }
+      if (!validation.valid) {
+        for (const e of validation.errors) console.error(`  ✗ ${e}`);
+        console.error(
+          `  Skipping season ${seasonNum} due to validation errors`,
+        );
+        failures.push({ seasonNum, error: validation.errors.join("; ") });
+        continue;
+      }
 
       if (!skipWiki) {
         console.log("  Fetching wiki supplemental...");
