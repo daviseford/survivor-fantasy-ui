@@ -80,6 +80,8 @@ export interface SurvivorVoteHistory extends SurvivorBaseRecord {
   tribe: string;
   castaway: string;
   vote: string;
+  vote_event?: string;
+  vote_event_outcome?: string;
   nullified: boolean;
   tie: boolean;
   voted_out: string;
@@ -131,6 +133,9 @@ export interface SurvivorJourney extends SurvivorBaseRecord {
   castaway: string;
   reward: string | null; // "Extra vote", "Block a Vote", "Lost vote", etc.
   lost_vote: boolean;
+  chose_to_play?: boolean; // S44+ only
+  game_played?: string; // S44+ only
+  event?: string; // "Risked vote", "Did not risk vote", etc. (S44+ only)
 }
 
 /** Table names available from survivoR */

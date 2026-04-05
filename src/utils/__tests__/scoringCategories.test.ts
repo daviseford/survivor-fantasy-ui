@@ -39,7 +39,7 @@ describe("aggregateByScoringCategory", () => {
           { action: "find_idol", points_awarded: 1 },
           { action: "make_merge", points_awarded: 2 },
           { action: "eliminated", points_awarded: 3 },
-          { action: "go_on_journey", points_awarded: 0.5 },
+          { action: "journey_risked_vote", points_awarded: 1 },
         ],
       },
     ];
@@ -53,7 +53,7 @@ describe("aggregateByScoringCategory", () => {
       { category: "advantages", points: 0 },
       { category: "milestones", points: 2 },
       { category: "eliminations", points: 3 },
-      { category: "other", points: 0.5 },
+      { category: "other", points: 1 },
     ]);
   });
 

@@ -14,6 +14,12 @@ export type CategorizedPlayerScoring = PlayerScoring & {
 export const BASE_PLAYER_SCORING: CategorizedPlayerScoring[] = [
   // --- Challenges ---
   {
+    action: "duel",
+    fixed_value: 2,
+    description: "Win a duel (Redemption Island, Edge of Extinction, etc.).",
+    category: "Challenges",
+  },
+  {
     action: "reward",
     fixed_value: 2,
     description: "Win an individual reward challenge.",
@@ -311,9 +317,27 @@ export const BASE_PLAYER_SCORING: CategorizedPlayerScoring[] = [
     category: "Other",
   },
   {
-    action: "go_on_journey",
-    fixed_value: 0.5,
-    description: "This one's easy. Just go on a boat ride.",
+    action: "journey_risked_vote",
+    fixed_value: 1,
+    description: "Risked their vote on a journey.",
+    category: "Other",
+  },
+  {
+    action: "journey_won_game",
+    fixed_value: 1,
+    description: "Won the journey game.",
+    category: "Other",
+  },
+  {
+    action: "journey_lost_vote",
+    fixed_value: -1,
+    description: "Lost their vote on a journey.",
+    category: "Other",
+  },
+  {
+    action: "win_fire_making",
+    fixed_value: 5,
+    description: "Won fire-making challenge.",
     category: "Other",
   },
 ];

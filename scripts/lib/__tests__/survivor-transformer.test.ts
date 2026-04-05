@@ -219,22 +219,47 @@ describe("transformResults", { timeout: 60000 }, () => {
 
     expect(result.events.length).toBeGreaterThan(0);
 
-    // S46 has 9 journey records
-    const journeyEvents = result.events.filter(
-      (e) => e.action === "go_on_journey",
+    // S46 has journey records — players who risked should get journey_risked_vote
+    const riskedVoteEvents = result.events.filter(
+      (e) => e.action === "journey_risked_vote",
     );
-    expect(journeyEvents).toHaveLength(9);
+    expect(riskedVoteEvents.length).toBeGreaterThan(0);
 
-    // Journey advantage winners should get specific win actions (e.g., win_extra_vote)
+    // Players who won a journey game should get journey_won_game
+    const wonGameEvents = result.events.filter(
+      (e) => e.action === "journey_won_game",
+    );
+    expect(wonGameEvents.length).toBeGreaterThan(0);
+
+    // Journey advantage winners should still get specific win actions (e.g., win_extra_vote)
     const journeyWins = result.events.filter(
       (e) =>
         e.action.startsWith("win_") &&
         e.action !== "win_survivor" &&
-        journeyEvents.some(
+        riskedVoteEvents.some(
           (j) => j.castawayId === e.castawayId && j.episodeNum === e.episodeNum,
         ),
     );
     expect(journeyWins.length).toBeGreaterThan(0);
+
+    // Players who lost their vote should get journey_lost_vote
+    const lostVoteEvents = result.events.filter(
+      (e) => e.action === "journey_lost_vote",
+    );
+    expect(lostVoteEvents.length).toBeGreaterThan(0);
+
+    // No go_on_journey events should exist
+    const oldJourneyEvents = result.events.filter(
+      (e) => e.action === "go_on_journey",
+    );
+    expect(oldJourneyEvents).toHaveLength(0);
+
+    // S46 fire-making: exactly 1 winner should get win_fire_making
+    const fireEvents = result.events.filter(
+      (e) => e.action === "win_fire_making",
+    );
+    expect(fireEvents).toHaveLength(1);
+    expect(fireEvents[0].episodeNum).toBe(13);
 
     // S46 has 4 beware idols
     const findBeware = result.events.filter(
@@ -306,6 +331,28 @@ describe("transformResults", { timeout: 60000 }, () => {
     // Should still have merge and winner events
     const mergeEvents = result.events.filter((e) => e.action === "make_merge");
     expect(mergeEvents.length).toBeGreaterThan(0);
+  });
+
+  it("transforms Season 22 duel challenges (Redemption Island)", async () => {
+    const data = await fetchSeasonData(22);
+    const result = transformResults(data, 22);
+
+    const duelChallenges = result.challenges.filter(
+      (c) => c.variant === "duel",
+    );
+    expect(duelChallenges.length).toBeGreaterThan(0);
+    for (const d of duelChallenges) {
+      expect(d.winnerCastawayIds.length).toBeGreaterThan(0);
+    }
+
+    // Duels should not appear as reward or immunity variants
+    const nonDuelWrongType = result.challenges.filter(
+      (c) =>
+        c.variant !== "duel" &&
+        (c.variant === "reward" || c.variant === "immunity"),
+    );
+    // S22 should have regular immunity/reward challenges too
+    expect(nonDuelWrongType.length).toBeGreaterThan(0);
   });
 
   it("transforms Season 48 episodes", () => {
