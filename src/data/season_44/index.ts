@@ -1178,7 +1178,7 @@ export const SEASON_44_EVENTS = {
     episode_id: "episode_1",
     episode_num: 1,
     castaway_id: "US0648",
-    action: "journey_risked_vote",
+    action: "go_on_journey",
     multiplier: null,
   },
   event_26: {
@@ -1188,7 +1188,7 @@ export const SEASON_44_EVENTS = {
     episode_id: "episode_1",
     episode_num: 1,
     castaway_id: "US0648",
-    action: "journey_won_game",
+    action: "journey_risked_vote",
     multiplier: null,
   },
   event_27: {
@@ -1198,7 +1198,7 @@ export const SEASON_44_EVENTS = {
     episode_id: "episode_1",
     episode_num: 1,
     castaway_id: "US0648",
-    action: "win_other_advantage",
+    action: "journey_won_game",
     multiplier: null,
   },
   event_28: {
@@ -1207,8 +1207,8 @@ export const SEASON_44_EVENTS = {
     season_num: 44,
     episode_id: "episode_1",
     episode_num: 1,
-    castaway_id: "US0656",
-    action: "journey_risked_vote",
+    castaway_id: "US0648",
+    action: "win_other_advantage",
     multiplier: null,
   },
   event_29: {
@@ -1218,7 +1218,7 @@ export const SEASON_44_EVENTS = {
     episode_id: "episode_1",
     episode_num: 1,
     castaway_id: "US0656",
-    action: "journey_lost_vote",
+    action: "go_on_journey",
     multiplier: null,
   },
   event_30: {
@@ -1227,7 +1227,7 @@ export const SEASON_44_EVENTS = {
     season_num: 44,
     episode_id: "episode_1",
     episode_num: 1,
-    castaway_id: "US0661",
+    castaway_id: "US0656",
     action: "journey_risked_vote",
     multiplier: null,
   },
@@ -1237,8 +1237,8 @@ export const SEASON_44_EVENTS = {
     season_num: 44,
     episode_id: "episode_1",
     episode_num: 1,
-    castaway_id: "US0661",
-    action: "journey_won_game",
+    castaway_id: "US0656",
+    action: "journey_lost_vote",
     multiplier: null,
   },
   event_32: {
@@ -1248,7 +1248,7 @@ export const SEASON_44_EVENTS = {
     episode_id: "episode_1",
     episode_num: 1,
     castaway_id: "US0661",
-    action: "win_other_advantage",
+    action: "go_on_journey",
     multiplier: null,
   },
   event_33: {
@@ -1258,37 +1258,37 @@ export const SEASON_44_EVENTS = {
     episode_id: "episode_1",
     episode_num: 1,
     castaway_id: "US0661",
-    action: "journey_lost_vote",
+    action: "journey_risked_vote",
     multiplier: null,
   },
   event_34: {
     id: "event_34",
     season_id: "season_44",
     season_num: 44,
-    episode_id: "episode_4",
-    episode_num: 4,
-    castaway_id: "US0646",
-    action: "journey_risked_vote",
+    episode_id: "episode_1",
+    episode_num: 1,
+    castaway_id: "US0661",
+    action: "journey_won_game",
     multiplier: null,
   },
   event_35: {
     id: "event_35",
     season_id: "season_44",
     season_num: 44,
-    episode_id: "episode_4",
-    episode_num: 4,
-    castaway_id: "US0646",
-    action: "journey_won_game",
+    episode_id: "episode_1",
+    episode_num: 1,
+    castaway_id: "US0661",
+    action: "win_other_advantage",
     multiplier: null,
   },
   event_36: {
     id: "event_36",
     season_id: "season_44",
     season_num: 44,
-    episode_id: "episode_4",
-    episode_num: 4,
-    castaway_id: "US0646",
-    action: "win_idol",
+    episode_id: "episode_1",
+    episode_num: 1,
+    castaway_id: "US0661",
+    action: "journey_lost_vote",
     multiplier: null,
   },
   event_37: {
@@ -1297,8 +1297,8 @@ export const SEASON_44_EVENTS = {
     season_num: 44,
     episode_id: "episode_4",
     episode_num: 4,
-    castaway_id: "US0655",
-    action: "journey_risked_vote",
+    castaway_id: "US0646",
+    action: "go_on_journey",
     multiplier: null,
   },
   event_38: {
@@ -1307,8 +1307,8 @@ export const SEASON_44_EVENTS = {
     season_num: 44,
     episode_id: "episode_4",
     episode_num: 4,
-    castaway_id: "US0655",
-    action: "journey_won_game",
+    castaway_id: "US0646",
+    action: "journey_risked_vote",
     multiplier: null,
   },
   event_39: {
@@ -1317,8 +1317,8 @@ export const SEASON_44_EVENTS = {
     season_num: 44,
     episode_id: "episode_4",
     episode_num: 4,
-    castaway_id: "US0655",
-    action: "win_idol",
+    castaway_id: "US0646",
+    action: "journey_won_game",
     multiplier: null,
   },
   event_40: {
@@ -1327,8 +1327,8 @@ export const SEASON_44_EVENTS = {
     season_num: 44,
     episode_id: "episode_4",
     episode_num: 4,
-    castaway_id: "US0659",
-    action: "journey_risked_vote",
+    castaway_id: "US0646",
+    action: "win_idol",
     multiplier: null,
   },
   event_41: {
@@ -1337,8 +1337,8 @@ export const SEASON_44_EVENTS = {
     season_num: 44,
     episode_id: "episode_4",
     episode_num: 4,
-    castaway_id: "US0659",
-    action: "journey_won_game",
+    castaway_id: "US0655",
+    action: "go_on_journey",
     multiplier: null,
   },
   event_42: {
@@ -1347,12 +1347,132 @@ export const SEASON_44_EVENTS = {
     season_num: 44,
     episode_id: "episode_4",
     episode_num: 4,
-    castaway_id: "US0659",
-    action: "win_idol",
+    castaway_id: "US0655",
+    action: "journey_risked_vote",
     multiplier: null,
   },
   event_43: {
     id: "event_43",
+    season_id: "season_44",
+    season_num: 44,
+    episode_id: "episode_4",
+    episode_num: 4,
+    castaway_id: "US0655",
+    action: "journey_won_game",
+    multiplier: null,
+  },
+  event_44: {
+    id: "event_44",
+    season_id: "season_44",
+    season_num: 44,
+    episode_id: "episode_4",
+    episode_num: 4,
+    castaway_id: "US0655",
+    action: "win_idol",
+    multiplier: null,
+  },
+  event_45: {
+    id: "event_45",
+    season_id: "season_44",
+    season_num: 44,
+    episode_id: "episode_4",
+    episode_num: 4,
+    castaway_id: "US0659",
+    action: "go_on_journey",
+    multiplier: null,
+  },
+  event_46: {
+    id: "event_46",
+    season_id: "season_44",
+    season_num: 44,
+    episode_id: "episode_4",
+    episode_num: 4,
+    castaway_id: "US0659",
+    action: "journey_risked_vote",
+    multiplier: null,
+  },
+  event_47: {
+    id: "event_47",
+    season_id: "season_44",
+    season_num: 44,
+    episode_id: "episode_4",
+    episode_num: 4,
+    castaway_id: "US0659",
+    action: "journey_won_game",
+    multiplier: null,
+  },
+  event_48: {
+    id: "event_48",
+    season_id: "season_44",
+    season_num: 44,
+    episode_id: "episode_4",
+    episode_num: 4,
+    castaway_id: "US0659",
+    action: "win_idol",
+    multiplier: null,
+  },
+  event_49: {
+    id: "event_49",
+    season_id: "season_44",
+    season_num: 44,
+    episode_id: "episode_5",
+    episode_num: 5,
+    castaway_id: "US0645",
+    action: "go_on_journey",
+    multiplier: null,
+  },
+  event_50: {
+    id: "event_50",
+    season_id: "season_44",
+    season_num: 44,
+    episode_id: "episode_5",
+    episode_num: 5,
+    castaway_id: "US0645",
+    action: "journey_risked_vote",
+    multiplier: null,
+  },
+  event_51: {
+    id: "event_51",
+    season_id: "season_44",
+    season_num: 44,
+    episode_id: "episode_5",
+    episode_num: 5,
+    castaway_id: "US0652",
+    action: "go_on_journey",
+    multiplier: null,
+  },
+  event_52: {
+    id: "event_52",
+    season_id: "season_44",
+    season_num: 44,
+    episode_id: "episode_5",
+    episode_num: 5,
+    castaway_id: "US0652",
+    action: "journey_risked_vote",
+    multiplier: null,
+  },
+  event_53: {
+    id: "event_53",
+    season_id: "season_44",
+    season_num: 44,
+    episode_id: "episode_5",
+    episode_num: 5,
+    castaway_id: "US0658",
+    action: "go_on_journey",
+    multiplier: null,
+  },
+  event_54: {
+    id: "event_54",
+    season_id: "season_44",
+    season_num: 44,
+    episode_id: "episode_5",
+    episode_num: 5,
+    castaway_id: "US0658",
+    action: "journey_risked_vote",
+    multiplier: null,
+  },
+  event_55: {
+    id: "event_55",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_1",
@@ -1361,8 +1481,8 @@ export const SEASON_44_EVENTS = {
     action: "use_shot_in_the_dark_successfully",
     multiplier: null,
   },
-  event_44: {
-    id: "event_44",
+  event_56: {
+    id: "event_56",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_1",
@@ -1371,8 +1491,8 @@ export const SEASON_44_EVENTS = {
     action: "use_bank_your_vote",
     multiplier: null,
   },
-  event_45: {
-    id: "event_45",
+  event_57: {
+    id: "event_57",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_1",
@@ -1381,8 +1501,8 @@ export const SEASON_44_EVENTS = {
     action: "use_shot_in_the_dark_unsuccessfully",
     multiplier: null,
   },
-  event_46: {
-    id: "event_46",
+  event_58: {
+    id: "event_58",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_3",
@@ -1391,8 +1511,8 @@ export const SEASON_44_EVENTS = {
     action: "use_shot_in_the_dark_unsuccessfully",
     multiplier: null,
   },
-  event_47: {
-    id: "event_47",
+  event_59: {
+    id: "event_59",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_7",
@@ -1401,8 +1521,8 @@ export const SEASON_44_EVENTS = {
     action: "use_safety_without_power",
     multiplier: null,
   },
-  event_48: {
-    id: "event_48",
+  event_60: {
+    id: "event_60",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_7",
@@ -1411,8 +1531,8 @@ export const SEASON_44_EVENTS = {
     action: "use_control_the_vote",
     multiplier: null,
   },
-  event_49: {
-    id: "event_49",
+  event_61: {
+    id: "event_61",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_7",
@@ -1421,8 +1541,8 @@ export const SEASON_44_EVENTS = {
     action: "use_safety_without_power",
     multiplier: null,
   },
-  event_50: {
-    id: "event_50",
+  event_62: {
+    id: "event_62",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_7",
@@ -1431,8 +1551,8 @@ export const SEASON_44_EVENTS = {
     action: "use_safety_without_power",
     multiplier: null,
   },
-  event_51: {
-    id: "event_51",
+  event_63: {
+    id: "event_63",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_7",
@@ -1441,8 +1561,8 @@ export const SEASON_44_EVENTS = {
     action: "use_safety_without_power",
     multiplier: null,
   },
-  event_52: {
-    id: "event_52",
+  event_64: {
+    id: "event_64",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_7",
@@ -1451,8 +1571,8 @@ export const SEASON_44_EVENTS = {
     action: "use_safety_without_power",
     multiplier: null,
   },
-  event_53: {
-    id: "event_53",
+  event_65: {
+    id: "event_65",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_7",
@@ -1461,8 +1581,8 @@ export const SEASON_44_EVENTS = {
     action: "use_safety_without_power",
     multiplier: null,
   },
-  event_54: {
-    id: "event_54",
+  event_66: {
+    id: "event_66",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_9",
@@ -1471,8 +1591,8 @@ export const SEASON_44_EVENTS = {
     action: "use_extra_vote",
     multiplier: null,
   },
-  event_55: {
-    id: "event_55",
+  event_67: {
+    id: "event_67",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_13",
@@ -1481,8 +1601,8 @@ export const SEASON_44_EVENTS = {
     action: "win_fire_making",
     multiplier: null,
   },
-  event_56: {
-    id: "event_56",
+  event_68: {
+    id: "event_68",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_6",
@@ -1491,8 +1611,8 @@ export const SEASON_44_EVENTS = {
     action: "make_merge",
     multiplier: null,
   },
-  event_57: {
-    id: "event_57",
+  event_69: {
+    id: "event_69",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_6",
@@ -1501,8 +1621,8 @@ export const SEASON_44_EVENTS = {
     action: "make_merge",
     multiplier: null,
   },
-  event_58: {
-    id: "event_58",
+  event_70: {
+    id: "event_70",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_6",
@@ -1511,8 +1631,8 @@ export const SEASON_44_EVENTS = {
     action: "make_merge",
     multiplier: null,
   },
-  event_59: {
-    id: "event_59",
+  event_71: {
+    id: "event_71",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_6",
@@ -1521,8 +1641,8 @@ export const SEASON_44_EVENTS = {
     action: "make_merge",
     multiplier: null,
   },
-  event_60: {
-    id: "event_60",
+  event_72: {
+    id: "event_72",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_6",
@@ -1531,8 +1651,8 @@ export const SEASON_44_EVENTS = {
     action: "make_merge",
     multiplier: null,
   },
-  event_61: {
-    id: "event_61",
+  event_73: {
+    id: "event_73",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_6",
@@ -1541,8 +1661,8 @@ export const SEASON_44_EVENTS = {
     action: "make_merge",
     multiplier: null,
   },
-  event_62: {
-    id: "event_62",
+  event_74: {
+    id: "event_74",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_6",
@@ -1551,8 +1671,8 @@ export const SEASON_44_EVENTS = {
     action: "make_merge",
     multiplier: null,
   },
-  event_63: {
-    id: "event_63",
+  event_75: {
+    id: "event_75",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_6",
@@ -1561,8 +1681,8 @@ export const SEASON_44_EVENTS = {
     action: "make_merge",
     multiplier: null,
   },
-  event_64: {
-    id: "event_64",
+  event_76: {
+    id: "event_76",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_6",
@@ -1571,8 +1691,8 @@ export const SEASON_44_EVENTS = {
     action: "make_merge",
     multiplier: null,
   },
-  event_65: {
-    id: "event_65",
+  event_77: {
+    id: "event_77",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_6",
@@ -1581,8 +1701,8 @@ export const SEASON_44_EVENTS = {
     action: "make_merge",
     multiplier: null,
   },
-  event_66: {
-    id: "event_66",
+  event_78: {
+    id: "event_78",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_6",
@@ -1591,8 +1711,8 @@ export const SEASON_44_EVENTS = {
     action: "make_merge",
     multiplier: null,
   },
-  event_67: {
-    id: "event_67",
+  event_79: {
+    id: "event_79",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_6",
@@ -1601,8 +1721,8 @@ export const SEASON_44_EVENTS = {
     action: "make_merge",
     multiplier: null,
   },
-  event_68: {
-    id: "event_68",
+  event_80: {
+    id: "event_80",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_13",
@@ -1611,8 +1731,8 @@ export const SEASON_44_EVENTS = {
     action: "win_survivor",
     multiplier: null,
   },
-  event_69: {
-    id: "event_69",
+  event_81: {
+    id: "event_81",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_13",
@@ -1621,8 +1741,8 @@ export const SEASON_44_EVENTS = {
     action: "make_final_tribal_council",
     multiplier: null,
   },
-  event_70: {
-    id: "event_70",
+  event_82: {
+    id: "event_82",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_13",
@@ -1631,8 +1751,8 @@ export const SEASON_44_EVENTS = {
     action: "make_final_tribal_council",
     multiplier: null,
   },
-  event_71: {
-    id: "event_71",
+  event_83: {
+    id: "event_83",
     season_id: "season_44",
     season_num: 44,
     episode_id: "episode_13",

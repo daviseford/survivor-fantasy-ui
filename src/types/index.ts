@@ -257,6 +257,7 @@ export const GameEventActions = [
   "find_safety_without_power",
   "find_steal_a_vote",
   "fulfill_beware_advantage",
+  "go_on_journey",
   "journey_lost_vote",
   "journey_risked_vote",
   "journey_won_game",

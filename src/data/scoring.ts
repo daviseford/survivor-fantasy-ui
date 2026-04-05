@@ -317,6 +317,12 @@ export const BASE_PLAYER_SCORING: CategorizedPlayerScoring[] = [
     category: "Other",
   },
   {
+    action: "go_on_journey",
+    fixed_value: 0.5,
+    description: "This one's easy. Just go on a boat ride.",
+    category: "Other",
+  },
+  {
     action: "journey_risked_vote",
     fixed_value: 1,
     description: "Risked their vote on a journey.",
