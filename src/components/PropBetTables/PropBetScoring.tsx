@@ -1,4 +1,14 @@
-import { Badge, Group, Table, TableScrollContainer, Text } from "@mantine/core";
+import {
+  Badge,
+  Group,
+  Paper,
+  SimpleGrid,
+  Stack,
+  Table,
+  TableScrollContainer,
+  Text,
+} from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import {
   PropBetQuestionKey,
   PropBetQuestionObj,
@@ -17,7 +27,7 @@ const resolveAnswer = (answer: string, lookup?: CastawayLookup): string => {
   return lookup[answer as CastawayId]?.full_name ?? answer;
 };
 
-const AnswerTd = ({
+const AnswerDisplay = ({
   score,
   lookup,
 }: {
@@ -25,63 +35,115 @@ const AnswerTd = ({
   lookup?: CastawayLookup;
 }) => {
   const display = resolveAnswer(score.answer, lookup);
-  return (
-    <Table.Td>
-      <Group gap="sm">
-        {score.status === "definitive_correct" && (
-          <>
-            <Text size="sm" fw={600}>
-              {display}
-            </Text>
-            <Badge variant="light" color="green" size="sm">
-              +{score.points_awarded}
-            </Badge>
-          </>
-        )}
 
-        {score.status === "definitive_incorrect" && (
-          <Text size="sm" c="red.4" td="line-through">
-            {display}
-          </Text>
-        )}
-
-        {score.status === "leading" && (
-          <>
-            <Text size="sm" fw={500} c="yellow.6">
-              {display}
-            </Text>
-            <Badge variant="outline" color="yellow" size="xs">
-              Leading
-            </Badge>
-          </>
-        )}
-
-        {score.status === "pending" && (
-          <Text size="sm" c="dimmed">
-            {display}
-          </Text>
-        )}
+  if (score.status === "definitive_correct") {
+    return (
+      <Group gap="sm" wrap="nowrap">
+        <Text size="sm" fw={600}>
+          {display}
+        </Text>
+        <Badge variant="light" color="green" size="sm">
+          +{score.points_awarded}
+        </Badge>
       </Group>
-    </Table.Td>
+    );
+  }
+
+  if (score.status === "definitive_incorrect") {
+    return (
+      <Text size="sm" c="red.4" td="line-through">
+        {display}
+      </Text>
+    );
+  }
+
+  if (score.status === "leading") {
+    return (
+      <Group gap="sm" wrap="nowrap">
+        <Text size="sm" fw={500} c="yellow.6">
+          {display}
+        </Text>
+        <Badge variant="outline" color="yellow" size="xs">
+          Leading
+        </Badge>
+      </Group>
+    );
+  }
+
+  return (
+    <Text size="sm" c="dimmed">
+      {display}
+    </Text>
   );
 };
 
-export const PropBetScoring = () => {
-  const { slimUser } = useUser();
-  const { data: scores, activeKeys } = usePropBetScoring();
-  const { data: competition } = useCompetition();
-  const { data: season } = useSeason(competition?.season_id);
+const AnswerTd = ({
+  score,
+  lookup,
+}: {
+  score: PropBetAnswer;
+  lookup?: CastawayLookup;
+}) => (
+  <Table.Td>
+    <AnswerDisplay score={score} lookup={lookup} />
+  </Table.Td>
+);
 
-  if (!slimUser || !competition || activeKeys.length === 0) return null;
+/** Mobile: one card per user with all their prop bet answers stacked. */
+const PropBetCards = ({
+  scores,
+  activeKeys,
+  lookup,
+}: {
+  scores: Record<string, PropBetScores>;
+  activeKeys: PropBetQuestionKey[];
+  lookup?: CastawayLookup;
+}) => (
+  <SimpleGrid cols={1} spacing="md">
+    {Object.entries(scores).map(([uid, s]) => {
+      const userName = getFirstAnswer(s, activeKeys).user_name;
+      return (
+        <Paper key={uid} p="sm" radius="md" withBorder>
+          <Text fw={700} mb="xs">
+            {userName}
+          </Text>
+          <Stack gap={6}>
+            {activeKeys.map((key) => {
+              const question = PropBetsQuestions[key];
+              const answer = s[key];
+              return (
+                <Group key={key} justify="space-between" wrap="nowrap" gap="xs">
+                  <Text size="xs" c="dimmed" style={{ flex: "0 1 auto" }}>
+                    {question.description}
+                  </Text>
+                  <div style={{ flexShrink: 0 }}>
+                    <AnswerDisplay score={answer} lookup={lookup} />
+                  </div>
+                </Group>
+              );
+            })}
+          </Stack>
+        </Paper>
+      );
+    })}
+  </SimpleGrid>
+);
 
-  const lookup = season?.castawayLookup;
-
+/** Desktop: standard table with questions as columns. */
+const PropBetTable = ({
+  scores,
+  activeKeys,
+  lookup,
+}: {
+  scores: Record<string, PropBetScores>;
+  activeKeys: PropBetQuestionKey[];
+  lookup?: CastawayLookup;
+}) => {
   const rows = Object.entries(scores).map(([uid, s]) => (
     <Table.Tr key={uid}>
       <Table.Td>
         <strong>{getFirstAnswer(s, activeKeys).user_name}</strong>
       </Table.Td>
-
       {activeKeys.map((key) => (
         <AnswerTd key={key} score={s[key]} lookup={lookup} />
       ))}
@@ -102,6 +164,28 @@ export const PropBetScoring = () => {
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
     </TableScrollContainer>
+  );
+};
+
+export const PropBetScoring = () => {
+  const { slimUser } = useUser();
+  const { data: scores, activeKeys } = usePropBetScoring();
+  const { data: competition } = useCompetition();
+  const { data: season } = useSeason(competition?.season_id);
+  const isMobile = useMediaQuery("(max-width: 48em)");
+
+  if (!slimUser || !competition || activeKeys.length === 0) return null;
+
+  const lookup = season?.castawayLookup;
+
+  if (isMobile) {
+    return (
+      <PropBetCards scores={scores} activeKeys={activeKeys} lookup={lookup} />
+    );
+  }
+
+  return (
+    <PropBetTable scores={scores} activeKeys={activeKeys} lookup={lookup} />
   );
 };
 
