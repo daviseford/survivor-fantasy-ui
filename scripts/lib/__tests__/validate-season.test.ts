@@ -25,7 +25,6 @@ function makeEpisode(overrides: Partial<ScrapedEpisode> = {}): ScrapedEpisode {
     order: 1,
     title: "Ep 1",
     airDate: "",
-    isCombinedChallenge: false,
     isFinale: false,
     postMerge: false,
     mergeOccurs: false,

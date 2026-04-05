@@ -195,7 +195,6 @@ function transformEpisodes(
       order: epNum,
       title: ep.episode_title || `Episode ${epNum}`,
       airDate: new Date(ep.episode_date).toISOString().split("T")[0],
-      isCombinedChallenge: false,
       isFinale: hasWinner && epNum === maxEpNum,
       postMerge: postMergeEpisodes.has(epNum),
       mergeOccurs: mergeEpisodes.has(epNum),
@@ -314,7 +313,7 @@ function transformChallenges(
         order,
       );
     } else {
-      const winners = entries.filter((e) => e.result.startsWith("Won"));
+      const winners = entries.filter((e) => e.won === 1);
       order += emitHybridChallengeEntries(
         winners,
         first,
@@ -401,7 +400,7 @@ function emitChallengeEntries(
   challenges: ScrapedChallenge[],
   startOrder: number,
 ): number {
-  if (first.outcome_type === "Tribal" && winners.length > 0) {
+  if (first.outcome_type?.includes("Tribal") && winners.length > 0) {
     const winnersByTribe = groupBy(winners, (w) => w.tribe);
 
     let idx = 0;
@@ -555,19 +554,23 @@ const IGNORED_VOTE_EVENTS = new Set([
   "Vote blocked",
 ]);
 
-/** Map vote_history.vote_event → specific use action. */
-const VOTE_EVENT_TO_USE: Record<string, string> = {
-  "Extra vote": "use_extra_vote",
-  "Steal a vote": "use_steal_a_vote",
-  "Block a vote": "use_block_a_vote",
-  "Played block a vote": "use_block_a_vote",
-  "Vote blocker": "use_block_a_vote",
-  "Bank your vote": "use_bank_your_vote",
-  "Played bank your vote": "use_bank_your_vote",
-  "Played banked vote": "use_bank_your_vote",
-  "Safety without power": "use_safety_without_power",
-  "Control the vote": "use_control_the_vote",
-};
+/**
+ * Vote events that correspond to advantage plays — these are already scored
+ * via the advantage_movement "Played" path and must NOT be scored again here.
+ * Kept as a set for the vote_history loop to skip silently.
+ */
+const ADVANTAGE_PLAY_VOTE_EVENTS = new Set([
+  "Extra vote",
+  "Steal a vote",
+  "Block a vote",
+  "Played block a vote",
+  "Vote blocker",
+  "Bank your vote",
+  "Played bank your vote",
+  "Played banked vote",
+  "Safety without power",
+  "Control the vote",
+]);
 
 /** Journey rewards that don't grant a new advantage — explicitly skipped. */
 const IGNORED_JOURNEY_REWARDS = new Set([
@@ -606,6 +609,7 @@ const IGNORED_ADVANTAGE_EVENTS = new Set([
   "Left game with advantage",
   "Medically evacuated with advantage",
   "Quit with advantage",
+  "Transferred", // Recipient's "Received" event handles the scoring
 ]);
 
 /** Idol advantage types (for beware lifecycle detection). */
@@ -735,7 +739,12 @@ function transformEvents(
     }
   }
 
-  // Derive votes_negated_by_idol from nullified votes + idol plays
+  // Derive votes_negated_by_idol from nullified votes + idol plays.
+  //
+  // Strategy: prefer the structured `votes_nullified` / `played_for_id` fields
+  // on the advantage_movement record (present on newer survivoR data). Fall back
+  // to matching nullified vote_history entries against the idol target.
+
   // Group nullified votes by (episode, target castaway_id)
   const nullifiedByEp = new Map<number, Map<string, number>>();
   for (const v of voteHistory) {
@@ -747,26 +756,43 @@ function transformEvents(
   }
 
   // Collect idol plays from advantage_movement
-  const idolPlays = advantageMovement
-    .filter(
-      (a) =>
-        a.event === "Played" &&
-        IDOL_TYPES.has(detailById.get(a.advantage_id)?.advantage_type ?? ""),
-    )
-    .map((a) => ({
-      epNum: Math.round(a.episode),
-      castawayId: a.castaway_id,
-    }));
+  const idolPlays = advantageMovement.filter(
+    (a) =>
+      a.event === "Played" &&
+      IDOL_TYPES.has(detailById.get(a.advantage_id)?.advantage_type ?? ""),
+  );
 
-  for (const play of idolPlays) {
-    const targets = nullifiedByEp.get(play.epNum);
+  for (const adv of idolPlays) {
+    const epNum = Math.round(adv.episode);
+
+    // If survivoR provides votes_nullified directly, use it
+    if (adv.votes_nullified != null && adv.votes_nullified > 0) {
+      events.push({
+        episodeNum: epNum,
+        castawayId: adv.castaway_id,
+        action: "votes_negated_by_idol",
+        multiplier: adv.votes_nullified,
+      });
+      // Consume the matching nullified entries so they aren't double-matched
+      const protectedId = adv.played_for_id ?? adv.castaway_id;
+      const targets = nullifiedByEp.get(epNum);
+      if (targets) targets.delete(protectedId);
+      continue;
+    }
+
+    // Fallback: match against nullified vote_history entries
+    const targets = nullifiedByEp.get(epNum);
     if (!targets || targets.size === 0) continue;
 
-    // Prefer self-play (idol player is the target), else single remaining target
+    // Determine who the idol was played for — played_for_id when available,
+    // otherwise assume self-play
+    const protectedId = adv.played_for_id ?? adv.castaway_id;
+
     let matchedTarget: string | undefined;
-    if (targets.has(play.castawayId)) {
-      matchedTarget = play.castawayId;
+    if (targets.has(protectedId)) {
+      matchedTarget = protectedId;
     } else if (targets.size === 1) {
+      // Only one unmatched target left — take it
       matchedTarget = targets.keys().next().value;
     }
 
@@ -775,14 +801,14 @@ function transformEvents(
       targets.delete(matchedTarget);
 
       events.push({
-        episodeNum: play.epNum,
-        castawayId: play.castawayId,
+        episodeNum: epNum,
+        castawayId: adv.castaway_id,
         action: "votes_negated_by_idol",
         multiplier: negatedCount,
       });
     } else {
       warnings.push(
-        `Episode ${play.epNum}: could not match idol play by ${play.castawayId} to nullified votes (${targets.size} unmatched targets)`,
+        `Episode ${epNum}: could not match idol play by ${adv.castaway_id} to nullified votes (${targets.size} unmatched targets)`,
       );
     }
   }
@@ -821,8 +847,10 @@ function transformEvents(
     // Determine if the player risked their vote
     // S44+: explicit chose_to_play field; S41-S43: infer from outcome
     // For S41-S43: risked+lost nets to 0 points (+1 risk, -1 lost vote)
+    // Filter out ignored rewards (e.g., "Returned to camp") before inferring risk
     const hasNonLossReward = rewardParts.some(
-      (p) => !p.toLowerCase().includes("lost"),
+      (p) =>
+        !p.toLowerCase().includes("lost") && !IGNORED_JOURNEY_REWARDS.has(p),
     );
     const risked =
       j.chose_to_play !== undefined
@@ -896,16 +924,11 @@ function transformEvents(
         });
       }
       // "Lost", "Saved", "Immune", "Vote not required" → no event
-    } else if (VOTE_EVENT_TO_USE[v.vote_event]) {
-      events.push({
-        episodeNum: epNum,
-        castawayId,
-        action: VOTE_EVENT_TO_USE[v.vote_event],
-        multiplier: null,
-      });
+    } else if (ADVANTAGE_PLAY_VOTE_EVENTS.has(v.vote_event)) {
+      // Already scored via advantage_movement "Played" events — skip to avoid double-counting
     } else if (!IGNORED_VOTE_EVENTS.has(v.vote_event)) {
       throw new Error(
-        `Unknown vote_event "${v.vote_event}" for ${castawayId} in episode ${epNum}. Add it to VOTE_EVENT_TO_USE or IGNORED_VOTE_EVENTS.`,
+        `Unknown vote_event "${v.vote_event}" for ${castawayId} in episode ${epNum}. Add it to ADVANTAGE_PLAY_VOTE_EVENTS or IGNORED_VOTE_EVENTS.`,
       );
     }
   }

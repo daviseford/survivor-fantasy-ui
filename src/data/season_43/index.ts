@@ -35,10 +35,7 @@ type SeasonNumber = 43;
 
 const buildPlayer = <T extends CastawayIdType>(
   p: { castaway_id: T; full_name: string; img: string } & Partial<
-    Omit<
-      Player<T, SeasonNumber>,
-      "season_id" | "season_num" | "castaway_id" | "full_name" | "img"
-    >
+    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "castaway_id" | "full_name" | "img">
   >,
 ): Player<T, SeasonNumber> => ({
   ...p,
@@ -47,24 +44,24 @@ const buildPlayer = <T extends CastawayIdType>(
 });
 
 export const SEASON_43_CASTAWAY_LOOKUP: CastawayLookup = {
-  US0639: { full_name: "Morriah Young", castaway: "Morriah" },
-  US0635: { full_name: "Justine Brennan", castaway: "Justine" },
-  US0640: { full_name: "Nneka Ejere", castaway: "Nneka" },
-  US0637: { full_name: "Lindsay Carmine", castaway: "Lindsay" },
-  US0631: { full_name: "Geo Bustamante", castaway: "Geo" },
-  US0630: { full_name: "Elie Scott", castaway: "Elie" },
-  US0629: { full_name: "Dwight Moore", castaway: "Dwight" },
-  US0633: { full_name: "Jeanine Zheng", castaway: "Jeanine" },
-  US0632: { full_name: "James Jones", castaway: "James" },
-  US0643: { full_name: "Ryan Medrano", castaway: "Ryan" },
-  US0641: { full_name: "Noelle Lambert", castaway: "Noelle" },
-  US0644: { full_name: "Sami Layadi", castaway: "Sami" },
-  US0628: { full_name: "Cody Assenmacher", castaway: "Cody" },
-  US0636: { full_name: "Karla Cruz Godoy", castaway: "Karla" },
-  US0634: { full_name: "Jesse Lopez", castaway: "Jesse" },
-  US0642: { full_name: "Owen Knight", castaway: "Owen" },
-  US0627: { full_name: "Cassidy Clark", castaway: "Cassidy" },
-  US0638: { full_name: "Mike Gabler", castaway: "Gabler" },
+  "US0639": { full_name: "Morriah Young", castaway: "Morriah" },
+  "US0635": { full_name: "Justine Brennan", castaway: "Justine" },
+  "US0640": { full_name: "Nneka Ejere", castaway: "Nneka" },
+  "US0637": { full_name: "Lindsay Carmine", castaway: "Lindsay" },
+  "US0631": { full_name: "Geo Bustamante", castaway: "Geo" },
+  "US0630": { full_name: "Elie Scott", castaway: "Elie" },
+  "US0629": { full_name: "Dwight Moore", castaway: "Dwight" },
+  "US0633": { full_name: "Jeanine Zheng", castaway: "Jeanine" },
+  "US0632": { full_name: "James Jones", castaway: "James" },
+  "US0643": { full_name: "Ryan Medrano", castaway: "Ryan" },
+  "US0641": { full_name: "Noelle Lambert", castaway: "Noelle" },
+  "US0644": { full_name: "Sami Layadi", castaway: "Sami" },
+  "US0628": { full_name: "Cody Assenmacher", castaway: "Cody" },
+  "US0636": { full_name: "Karla Cruz Godoy", castaway: "Karla" },
+  "US0634": { full_name: "Jesse Lopez", castaway: "Jesse" },
+  "US0642": { full_name: "Owen Knight", castaway: "Owen" },
+  "US0627": { full_name: "Cassidy Clark", castaway: "Cassidy" },
+  "US0638": { full_name: "Mike Gabler", castaway: "Gabler" },
 };
 
 export const SEASON_43_PLAYERS = [
@@ -408,7 +405,13 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 2,
     variant: "team_immunity",
     order: 3,
-    winning_castaways: ["US0630", "US0633", "US0638", "US0642", "US0644"],
+    winning_castaways: [
+      "US0630",
+      "US0633",
+      "US0638",
+      "US0642",
+      "US0644",
+    ],
   },
   challenge_4: {
     id: "challenge_4",
@@ -435,7 +438,13 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 2,
     variant: "team_reward",
     order: 5,
-    winning_castaways: ["US0630", "US0633", "US0638", "US0642", "US0644"],
+    winning_castaways: [
+      "US0630",
+      "US0633",
+      "US0638",
+      "US0642",
+      "US0644",
+    ],
   },
   challenge_6: {
     id: "challenge_6",
@@ -462,7 +471,13 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 3,
     variant: "team_immunity",
     order: 7,
-    winning_castaways: ["US0630", "US0633", "US0638", "US0642", "US0644"],
+    winning_castaways: [
+      "US0630",
+      "US0633",
+      "US0638",
+      "US0642",
+      "US0644",
+    ],
   },
   challenge_8: {
     id: "challenge_8",
@@ -489,7 +504,13 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 3,
     variant: "team_reward",
     order: 9,
-    winning_castaways: ["US0630", "US0633", "US0638", "US0642", "US0644"],
+    winning_castaways: [
+      "US0630",
+      "US0633",
+      "US0638",
+      "US0642",
+      "US0644",
+    ],
   },
   challenge_10: {
     id: "challenge_10",
@@ -516,7 +537,12 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 4,
     variant: "team_reward",
     order: 11,
-    winning_castaways: ["US0628", "US0629", "US0634", "US0641"],
+    winning_castaways: [
+      "US0628",
+      "US0629",
+      "US0634",
+      "US0641",
+    ],
   },
   challenge_12: {
     id: "challenge_12",
@@ -526,7 +552,13 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 4,
     variant: "team_immunity",
     order: 12,
-    winning_castaways: ["US0630", "US0633", "US0638", "US0642", "US0644"],
+    winning_castaways: [
+      "US0630",
+      "US0633",
+      "US0638",
+      "US0642",
+      "US0644",
+    ],
   },
   challenge_13: {
     id: "challenge_13",
@@ -536,7 +568,12 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 4,
     variant: "team_immunity",
     order: 13,
-    winning_castaways: ["US0628", "US0629", "US0634", "US0641"],
+    winning_castaways: [
+      "US0628",
+      "US0629",
+      "US0634",
+      "US0641",
+    ],
   },
   challenge_14: {
     id: "challenge_14",
@@ -546,7 +583,13 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 5,
     variant: "team_immunity",
     order: 14,
-    winning_castaways: ["US0630", "US0633", "US0638", "US0642", "US0644"],
+    winning_castaways: [
+      "US0630",
+      "US0633",
+      "US0638",
+      "US0642",
+      "US0644",
+    ],
   },
   challenge_15: {
     id: "challenge_15",
@@ -556,7 +599,12 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 5,
     variant: "team_immunity",
     order: 15,
-    winning_castaways: ["US0628", "US0629", "US0634", "US0641"],
+    winning_castaways: [
+      "US0628",
+      "US0629",
+      "US0634",
+      "US0641",
+    ],
   },
   challenge_16: {
     id: "challenge_16",
@@ -566,7 +614,13 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 5,
     variant: "team_reward",
     order: 16,
-    winning_castaways: ["US0630", "US0633", "US0638", "US0642", "US0644"],
+    winning_castaways: [
+      "US0630",
+      "US0633",
+      "US0638",
+      "US0642",
+      "US0644",
+    ],
   },
   challenge_17: {
     id: "challenge_17",
@@ -576,7 +630,12 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 5,
     variant: "team_reward",
     order: 17,
-    winning_castaways: ["US0628", "US0629", "US0634", "US0641"],
+    winning_castaways: [
+      "US0628",
+      "US0629",
+      "US0634",
+      "US0641",
+    ],
   },
   challenge_18: {
     id: "challenge_18",
@@ -622,7 +681,9 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 7,
     variant: "immunity",
     order: 20,
-    winning_castaways: ["US0638"],
+    winning_castaways: [
+      "US0638",
+    ],
   },
   challenge_21: {
     id: "challenge_21",
@@ -632,7 +693,9 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 8,
     variant: "immunity",
     order: 21,
-    winning_castaways: ["US0642"],
+    winning_castaways: [
+      "US0642",
+    ],
   },
   challenge_22: {
     id: "challenge_22",
@@ -642,7 +705,10 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 9,
     variant: "immunity",
     order: 22,
-    winning_castaways: ["US0628", "US0636"],
+    winning_castaways: [
+      "US0628",
+      "US0636",
+    ],
   },
   challenge_23: {
     id: "challenge_23",
@@ -652,7 +718,13 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 9,
     variant: "team_reward",
     order: 23,
-    winning_castaways: ["US0627", "US0628", "US0634", "US0638", "US0643"],
+    winning_castaways: [
+      "US0627",
+      "US0628",
+      "US0634",
+      "US0638",
+      "US0643",
+    ],
   },
   challenge_24: {
     id: "challenge_24",
@@ -662,7 +734,9 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 10,
     variant: "reward",
     order: 24,
-    winning_castaways: ["US0641"],
+    winning_castaways: [
+      "US0641",
+    ],
   },
   challenge_25: {
     id: "challenge_25",
@@ -672,7 +746,9 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 10,
     variant: "immunity",
     order: 25,
-    winning_castaways: ["US0627"],
+    winning_castaways: [
+      "US0627",
+    ],
   },
   challenge_26: {
     id: "challenge_26",
@@ -682,7 +758,10 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 11,
     variant: "immunity",
     order: 26,
-    winning_castaways: ["US0636", "US0642"],
+    winning_castaways: [
+      "US0636",
+      "US0642",
+    ],
   },
   challenge_27: {
     id: "challenge_27",
@@ -692,7 +771,11 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 12,
     variant: "team_reward",
     order: 27,
-    winning_castaways: ["US0628", "US0634", "US0636"],
+    winning_castaways: [
+      "US0628",
+      "US0634",
+      "US0636",
+    ],
   },
   challenge_28: {
     id: "challenge_28",
@@ -702,7 +785,9 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 12,
     variant: "immunity",
     order: 28,
-    winning_castaways: ["US0627"],
+    winning_castaways: [
+      "US0627",
+    ],
   },
   challenge_29: {
     id: "challenge_29",
@@ -712,7 +797,9 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 29,
-    winning_castaways: ["US0642"],
+    winning_castaways: [
+      "US0642",
+    ],
   },
   challenge_30: {
     id: "challenge_30",
@@ -722,7 +809,9 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 13,
     variant: "reward",
     order: 30,
-    winning_castaways: ["US0642"],
+    winning_castaways: [
+      "US0642",
+    ],
   },
   challenge_31: {
     id: "challenge_31",
@@ -732,7 +821,9 @@ export const SEASON_43_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 31,
-    winning_castaways: ["US0627"],
+    winning_castaways: [
+      "US0627",
+    ],
   },
 } satisfies Record<Challenge["id"], Challenge<CastawayIdType, SeasonNumber>>;
 
@@ -907,10 +998,7 @@ export const SEASON_43_ELIMINATIONS = {
     castaway_id: "US0627",
     variant: "final_tribal_council",
   },
-} satisfies Record<
-  Elimination["id"],
-  Elimination<CastawayIdType, SeasonNumber>
->;
+} satisfies Record<Elimination["id"], Elimination<CastawayIdType, SeasonNumber>>;
 
 export const SEASON_43_EVENTS = {
   event_1: {
@@ -1237,9 +1325,9 @@ export const SEASON_43_EVENTS = {
     id: "event_33",
     season_id: "season_43",
     season_num: 43,
-    episode_id: "episode_12",
-    episode_num: 12,
-    castaway_id: "US0636",
+    episode_id: "episode_11",
+    episode_num: 11,
+    castaway_id: "US0642",
     action: "votes_negated_by_idol",
     multiplier: 1,
   },
@@ -1249,7 +1337,7 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_12",
     episode_num: 12,
-    castaway_id: "US0634",
+    castaway_id: "US0636",
     action: "votes_negated_by_idol",
     multiplier: 1,
   },
@@ -1257,11 +1345,11 @@ export const SEASON_43_EVENTS = {
     id: "event_35",
     season_id: "season_43",
     season_num: 43,
-    episode_id: "episode_1",
-    episode_num: 1,
-    castaway_id: "US0629",
-    action: "go_on_journey",
-    multiplier: null,
+    episode_id: "episode_12",
+    episode_num: 12,
+    castaway_id: "US0634",
+    action: "votes_negated_by_idol",
+    multiplier: 1,
   },
   event_36: {
     id: "event_36",
@@ -1270,7 +1358,7 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_1",
     episode_num: 1,
     castaway_id: "US0629",
-    action: "journey_risked_vote",
+    action: "go_on_journey",
     multiplier: null,
   },
   event_37: {
@@ -1280,7 +1368,7 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_1",
     episode_num: 1,
     castaway_id: "US0629",
-    action: "journey_lost_vote",
+    action: "journey_risked_vote",
     multiplier: null,
   },
   event_38: {
@@ -1289,8 +1377,8 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_1",
     episode_num: 1,
-    castaway_id: "US0636",
-    action: "go_on_journey",
+    castaway_id: "US0629",
+    action: "journey_lost_vote",
     multiplier: null,
   },
   event_39: {
@@ -1299,7 +1387,7 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_1",
     episode_num: 1,
-    castaway_id: "US0638",
+    castaway_id: "US0636",
     action: "go_on_journey",
     multiplier: null,
   },
@@ -1310,7 +1398,7 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_1",
     episode_num: 1,
     castaway_id: "US0638",
-    action: "journey_risked_vote",
+    action: "go_on_journey",
     multiplier: null,
   },
   event_41: {
@@ -1320,7 +1408,7 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_1",
     episode_num: 1,
     castaway_id: "US0638",
-    action: "journey_won_game",
+    action: "journey_risked_vote",
     multiplier: null,
   },
   event_42: {
@@ -1330,17 +1418,17 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_1",
     episode_num: 1,
     castaway_id: "US0638",
-    action: "win_idol",
+    action: "journey_won_game",
     multiplier: null,
   },
   event_43: {
     id: "event_43",
     season_id: "season_43",
     season_num: 43,
-    episode_id: "episode_2",
-    episode_num: 2,
-    castaway_id: "US0632",
-    action: "go_on_journey",
+    episode_id: "episode_1",
+    episode_num: 1,
+    castaway_id: "US0638",
+    action: "win_idol",
     multiplier: null,
   },
   event_44: {
@@ -1349,7 +1437,7 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_2",
     episode_num: 2,
-    castaway_id: "US0641",
+    castaway_id: "US0632",
     action: "go_on_journey",
     multiplier: null,
   },
@@ -1360,7 +1448,7 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_2",
     episode_num: 2,
     castaway_id: "US0641",
-    action: "journey_risked_vote",
+    action: "go_on_journey",
     multiplier: null,
   },
   event_46: {
@@ -1370,7 +1458,7 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_2",
     episode_num: 2,
     castaway_id: "US0641",
-    action: "journey_won_game",
+    action: "journey_risked_vote",
     multiplier: null,
   },
   event_47: {
@@ -1380,7 +1468,7 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_2",
     episode_num: 2,
     castaway_id: "US0641",
-    action: "win_steal_a_vote",
+    action: "journey_won_game",
     multiplier: null,
   },
   event_48: {
@@ -1389,17 +1477,17 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_2",
     episode_num: 2,
-    castaway_id: "US0642",
-    action: "go_on_journey",
+    castaway_id: "US0641",
+    action: "win_steal_a_vote",
     multiplier: null,
   },
   event_49: {
     id: "event_49",
     season_id: "season_43",
     season_num: 43,
-    episode_id: "episode_3",
-    episode_num: 3,
-    castaway_id: "US0631",
+    episode_id: "episode_2",
+    episode_num: 2,
+    castaway_id: "US0642",
     action: "go_on_journey",
     multiplier: null,
   },
@@ -1410,7 +1498,7 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_3",
     episode_num: 3,
     castaway_id: "US0631",
-    action: "journey_risked_vote",
+    action: "go_on_journey",
     multiplier: null,
   },
   event_51: {
@@ -1420,7 +1508,7 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_3",
     episode_num: 3,
     castaway_id: "US0631",
-    action: "journey_won_game",
+    action: "journey_risked_vote",
     multiplier: null,
   },
   event_52: {
@@ -1430,7 +1518,7 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_3",
     episode_num: 3,
     castaway_id: "US0631",
-    action: "win_other_advantage",
+    action: "journey_won_game",
     multiplier: null,
   },
   event_53: {
@@ -1439,8 +1527,8 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_3",
     episode_num: 3,
-    castaway_id: "US0633",
-    action: "go_on_journey",
+    castaway_id: "US0631",
+    action: "win_other_advantage",
     multiplier: null,
   },
   event_54: {
@@ -1450,7 +1538,7 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_3",
     episode_num: 3,
     castaway_id: "US0633",
-    action: "journey_risked_vote",
+    action: "go_on_journey",
     multiplier: null,
   },
   event_55: {
@@ -1460,7 +1548,7 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_3",
     episode_num: 3,
     castaway_id: "US0633",
-    action: "journey_lost_vote",
+    action: "journey_risked_vote",
     multiplier: null,
   },
   event_56: {
@@ -1469,8 +1557,8 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_3",
     episode_num: 3,
-    castaway_id: "US0634",
-    action: "go_on_journey",
+    castaway_id: "US0633",
+    action: "journey_lost_vote",
     multiplier: null,
   },
   event_57: {
@@ -1480,7 +1568,7 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_3",
     episode_num: 3,
     castaway_id: "US0634",
-    action: "journey_risked_vote",
+    action: "go_on_journey",
     multiplier: null,
   },
   event_58: {
@@ -1490,31 +1578,21 @@ export const SEASON_43_EVENTS = {
     episode_id: "episode_3",
     episode_num: 3,
     castaway_id: "US0634",
-    action: "journey_lost_vote",
+    action: "journey_risked_vote",
     multiplier: null,
   },
   event_59: {
     id: "event_59",
     season_id: "season_43",
     season_num: 43,
-    episode_id: "episode_9",
-    episode_num: 9,
-    castaway_id: "US0641",
-    action: "use_steal_a_vote",
+    episode_id: "episode_3",
+    episode_num: 3,
+    castaway_id: "US0634",
+    action: "journey_lost_vote",
     multiplier: null,
   },
   event_60: {
     id: "event_60",
-    season_id: "season_43",
-    season_num: 43,
-    episode_id: "episode_9",
-    episode_num: 9,
-    castaway_id: "US0642",
-    action: "use_steal_a_vote",
-    multiplier: null,
-  },
-  event_61: {
-    id: "event_61",
     season_id: "season_43",
     season_num: 43,
     episode_id: "episode_11",
@@ -1523,8 +1601,8 @@ export const SEASON_43_EVENTS = {
     action: "use_shot_in_the_dark_unsuccessfully",
     multiplier: null,
   },
-  event_62: {
-    id: "event_62",
+  event_61: {
+    id: "event_61",
     season_id: "season_43",
     season_num: 43,
     episode_id: "episode_13",
@@ -1533,13 +1611,23 @@ export const SEASON_43_EVENTS = {
     action: "win_fire_making",
     multiplier: null,
   },
+  event_62: {
+    id: "event_62",
+    season_id: "season_43",
+    season_num: 43,
+    episode_id: "episode_6",
+    episode_num: 6,
+    castaway_id: "US0627",
+    action: "make_merge",
+    multiplier: null,
+  },
   event_63: {
     id: "event_63",
     season_id: "season_43",
     season_num: 43,
     episode_id: "episode_6",
     episode_num: 6,
-    castaway_id: "US0627",
+    castaway_id: "US0628",
     action: "make_merge",
     multiplier: null,
   },
@@ -1549,7 +1637,7 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_6",
     episode_num: 6,
-    castaway_id: "US0628",
+    castaway_id: "US0629",
     action: "make_merge",
     multiplier: null,
   },
@@ -1559,7 +1647,7 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_6",
     episode_num: 6,
-    castaway_id: "US0629",
+    castaway_id: "US0630",
     action: "make_merge",
     multiplier: null,
   },
@@ -1569,7 +1657,7 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_6",
     episode_num: 6,
-    castaway_id: "US0630",
+    castaway_id: "US0632",
     action: "make_merge",
     multiplier: null,
   },
@@ -1579,7 +1667,7 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_6",
     episode_num: 6,
-    castaway_id: "US0632",
+    castaway_id: "US0633",
     action: "make_merge",
     multiplier: null,
   },
@@ -1589,7 +1677,7 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_6",
     episode_num: 6,
-    castaway_id: "US0633",
+    castaway_id: "US0634",
     action: "make_merge",
     multiplier: null,
   },
@@ -1599,7 +1687,7 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_6",
     episode_num: 6,
-    castaway_id: "US0634",
+    castaway_id: "US0636",
     action: "make_merge",
     multiplier: null,
   },
@@ -1609,7 +1697,7 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_6",
     episode_num: 6,
-    castaway_id: "US0636",
+    castaway_id: "US0638",
     action: "make_merge",
     multiplier: null,
   },
@@ -1619,7 +1707,7 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_6",
     episode_num: 6,
-    castaway_id: "US0638",
+    castaway_id: "US0641",
     action: "make_merge",
     multiplier: null,
   },
@@ -1629,7 +1717,7 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_6",
     episode_num: 6,
-    castaway_id: "US0641",
+    castaway_id: "US0642",
     action: "make_merge",
     multiplier: null,
   },
@@ -1639,7 +1727,7 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_6",
     episode_num: 6,
-    castaway_id: "US0642",
+    castaway_id: "US0643",
     action: "make_merge",
     multiplier: null,
   },
@@ -1649,22 +1737,12 @@ export const SEASON_43_EVENTS = {
     season_num: 43,
     episode_id: "episode_6",
     episode_num: 6,
-    castaway_id: "US0643",
+    castaway_id: "US0644",
     action: "make_merge",
     multiplier: null,
   },
   event_75: {
     id: "event_75",
-    season_id: "season_43",
-    season_num: 43,
-    episode_id: "episode_6",
-    episode_num: 6,
-    castaway_id: "US0644",
-    action: "make_merge",
-    multiplier: null,
-  },
-  event_76: {
-    id: "event_76",
     season_id: "season_43",
     season_num: 43,
     episode_id: "episode_13",
@@ -1673,8 +1751,8 @@ export const SEASON_43_EVENTS = {
     action: "win_survivor",
     multiplier: null,
   },
-  event_77: {
-    id: "event_77",
+  event_76: {
+    id: "event_76",
     season_id: "season_43",
     season_num: 43,
     episode_id: "episode_13",
@@ -1683,8 +1761,8 @@ export const SEASON_43_EVENTS = {
     action: "make_final_tribal_council",
     multiplier: null,
   },
-  event_78: {
-    id: "event_78",
+  event_77: {
+    id: "event_77",
     season_id: "season_43",
     season_num: 43,
     episode_id: "episode_13",
@@ -1693,8 +1771,8 @@ export const SEASON_43_EVENTS = {
     action: "make_final_tribal_council",
     multiplier: null,
   },
-  event_79: {
-    id: "event_79",
+  event_78: {
+    id: "event_78",
     season_id: "season_43",
     season_num: 43,
     episode_id: "episode_13",
