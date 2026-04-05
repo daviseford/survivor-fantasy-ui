@@ -943,7 +943,7 @@ const NameYourCompetition = ({ onSubmit }: Props) => {
   const form = useForm({
     initialValues: {
       name: "",
-      watchAlong: false,
+      watchAlong: true,
     },
     validate: {
       name: isNotEmpty("Give it a fun name!"),
