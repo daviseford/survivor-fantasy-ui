@@ -45,8 +45,12 @@ Routes covered (defined in `e2e/helpers.ts`):
 - `/seasons` (season list)
 - `/seasons/season_50` (single season)
 - `/competitions` (user competitions — requires auth)
+- `/competitions/:id` — watch-along competition (S49, in-progress with prop bets)
+- `/competitions/:id` — complete competition (S46 Ford Family, finished with full scoring)
 - `/admin` (admin dashboard — requires admin)
 - `/admin/season_50` (season admin — requires admin)
+
+For long pages (competition detail), additional **per-section screenshots** are captured by scrolling to each major section (teams, standings, prop bets, player scores, scoring breakdown). This catches overflow, alignment, and truncation issues that full-page screenshots miss because the viewport only sees one section at a time.
 
 All routes render with full auth — admin pages show real data, not "Unauthorized."
 
@@ -54,7 +58,7 @@ All routes render with full auth — admin pages show real data, not "Unauthoriz
 
 **Launch subagents in parallel** — one per page group. Each subagent reads the relevant screenshots AND source files, then performs both audit and critique analysis for its pages.
 
-Launch **3 subagents simultaneously** using the Agent tool in a single message:
+Launch **5 subagents simultaneously** using the Agent tool in a single message:
 
 #### Subagent 1: Public pages (home, seasons, single-season)
 
@@ -77,9 +81,20 @@ Launch **3 subagents simultaneously** using the Agent tool in a single message:
 - Run `/audit`, `/adapt` and `/critique` analysis
 - Return findings as a structured list with P0-P3 severity
 
-**Also launch a 4th subagent in parallel** for shared components:
+**Also launch a 4th subagent in parallel** for competition detail pages:
 
-#### Subagent 4: Shared components
+#### Subagent 4: Competition detail pages (watch-along + complete)
+
+- Read screenshots: `audit-competition-watch-along-*` and `audit-competition-complete-*` (all viewports and color schemes)
+- Read per-section screenshots: `audit-competition-*-header-*`, `audit-competition-*-teams-*`, `audit-competition-*-standings-*`, `audit-competition-*-prop-bets-*`, `audit-competition-*-player-scores-*`, `audit-competition-*-scoring-breakdown-*`
+- Read source: `src/pages/SingleCompetition.tsx`, `src/components/PropBetTables/PropBetScoring.tsx`, `src/components/EpisodeAdvanceControl/EpisodeAdvanceControl.tsx`, `src/components/ScoringTables/PerUserPerEpisodeScoringTable.tsx`, `src/components/ScoringTables/PerSurvivorPerEpisodeDetailedScoringTable.tsx`, `src/components/ScoringTables/ScoringLegendTable.tsx`, `src/components/ScoringBreakdown/ScoringBreakdownSection.tsx`
+- Pay special attention to: table overflow on mobile, button alignment and sizing, padding/gutter usage on narrow screens, prop bet readability, watch-along controls layout
+- Run `/audit`, `/adapt` and `/critique` analysis
+- Return findings as a structured list with P0-P3 severity
+
+**Also launch a 5th subagent in parallel** for shared components:
+
+#### Subagent 5: Shared components
 
 - Read source: `src/components/Navbar/Navbar.tsx`, `Navbar.module.css`, `src/components/Footer/Footer.tsx`, `Footer.module.css`, `src/theme.ts`, `src/AppRoutes.tsx`, `AppRoutes.module.css`
 - Audit for: theming consistency, dark mode correctness, responsive design, a11y of shared chrome
@@ -93,7 +108,7 @@ Each subagent should report back:
 
 ### Phase 4: Triage & Prioritize
 
-Merge findings from all 4 subagents. Deduplicate (same issue found by multiple agents). Compile into a single prioritized list:
+Merge findings from all 5 subagents. Deduplicate (same issue found by multiple agents). Compile into a single prioritized list:
 
 - **P0** — Accessibility blockers, broken layouts, critical UX issues
 - **P1** — Significant design inconsistencies, poor contrast, layout problems
