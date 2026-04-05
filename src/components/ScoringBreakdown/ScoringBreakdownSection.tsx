@@ -82,6 +82,7 @@ export const ScoringBreakdownSection = () => {
   return (
     <div>
       <SegmentedControl
+        aria-label="Scoring breakdown view"
         value={viewMode}
         onChange={(v) => setViewMode(v as ViewMode)}
         data={[

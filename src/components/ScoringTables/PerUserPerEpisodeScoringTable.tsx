@@ -36,11 +36,13 @@ export const PerUserPerEpisodeScoringTable = () => {
       <Table.Tr key={uid} style={{ backgroundColor: bgColor }}>
         <Table.Td fw={600} ta="center">
           {isLeader ? (
-            <IconTrophy
-              size={16}
-              color="var(--mantine-color-yellow-6)"
-              style={{ verticalAlign: "middle" }}
-            />
+            <span aria-label="1st place">
+              <IconTrophy
+                size={16}
+                color="var(--mantine-color-yellow-6)"
+                style={{ verticalAlign: "middle" }}
+              />
+            </span>
           ) : (
             <Text span c="dimmed" size="sm">
               {i + 1}
@@ -76,6 +78,14 @@ export const PerUserPerEpisodeScoringTable = () => {
       </Table.Tr>
     );
   });
+
+  if (filteredEpisodes.length === 0) {
+    return (
+      <Text c="dimmed" ta="center" py="xl">
+        Advance to Episode 1 to see standings
+      </Text>
+    );
+  }
 
   return (
     <Table.ScrollContainer minWidth={300}>

@@ -51,9 +51,14 @@ const AnswerDisplay = ({
 
   if (score.status === "definitive_incorrect") {
     return (
-      <Text size="sm" c="red.4" td="line-through">
-        {display}
-      </Text>
+      <Group gap={4} wrap="nowrap">
+        <Text size="sm" c="red.4" td="line-through">
+          {display}
+        </Text>
+        <Text size="xs" c="red.4" fw={700} aria-label="Incorrect">
+          ✗
+        </Text>
+      </Group>
     );
   }
 
