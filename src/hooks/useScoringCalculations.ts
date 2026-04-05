@@ -146,6 +146,7 @@ export const useScoringCalculations = () => {
 
   return {
     activePropBetKeys: activeKeys,
+    filteredChallenges,
     filteredEpisodes,
     filteredEliminations,
     filteredEvents,
