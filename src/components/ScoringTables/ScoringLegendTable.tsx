@@ -85,6 +85,7 @@ const SCORING_CATEGORIES = [
       "find_beware_advantage",
       "accept_beware_advantage",
       "fulfill_beware_advantage",
+      "go_on_journey",
       "journey_risked_vote",
       "journey_won_game",
       "journey_lost_vote",

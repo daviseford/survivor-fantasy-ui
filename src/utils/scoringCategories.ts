@@ -80,6 +80,7 @@ export const ScoringCategoryMap: Record<PlayerAction, ScoringCategory> = {
   // Other
   use_shot_in_the_dark_successfully: "other",
   use_shot_in_the_dark_unsuccessfully: "other",
+  go_on_journey: "other",
   journey_lost_vote: "other",
   journey_risked_vote: "other",
   journey_won_game: "other",

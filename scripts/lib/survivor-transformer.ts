@@ -714,6 +714,14 @@ function transformEvents(
     const epNum = Math.round(j.episode);
     const castawayId = j.castaway_id;
 
+    // Base participation event
+    events.push({
+      episodeNum: epNum,
+      castawayId,
+      action: "go_on_journey",
+      multiplier: null,
+    });
+
     // Parse reward parts (handles compound rewards like "Amulet; Lost vote")
     const rewardParts = j.reward ? j.reward.split("; ") : [];
     const winParts = rewardParts.filter(

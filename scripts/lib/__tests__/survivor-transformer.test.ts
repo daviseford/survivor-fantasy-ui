@@ -248,11 +248,11 @@ describe("transformResults", { timeout: 60000 }, () => {
     );
     expect(lostVoteEvents.length).toBeGreaterThan(0);
 
-    // No go_on_journey events should exist
-    const oldJourneyEvents = result.events.filter(
+    // Every journey participant should get go_on_journey (base participation)
+    const goOnJourneyEvents = result.events.filter(
       (e) => e.action === "go_on_journey",
     );
-    expect(oldJourneyEvents).toHaveLength(0);
+    expect(goOnJourneyEvents.length).toBeGreaterThan(0);
 
     // S46 fire-making: exactly 1 winner should get win_fire_making
     const fireEvents = result.events.filter(
