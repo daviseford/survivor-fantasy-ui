@@ -1,5 +1,5 @@
 import { doc, DocumentData, onSnapshot } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { db } from "../firebase";
 
 interface CacheEntry {
@@ -7,7 +7,7 @@ interface CacheEntry {
   loaded: boolean;
   unsub: () => void;
   refCount: number;
-  listeners: Set<(data: DocumentData | undefined) => void>;
+  listeners: Set<(data: DocumentData | undefined, loaded: boolean) => void>;
 }
 
 const cache = new Map<string, CacheEntry>();
@@ -21,19 +21,32 @@ const cache = new Map<string, CacheEntry>();
  *
  * Returns raw `snap.data()` result — `undefined` until the first snapshot
  * arrives, then the document data (or `undefined` if the document doesn't
- * exist). Callers apply their own default values.
+ * exist). `loaded` becomes `true` after the first snapshot or error.
  */
 export function useSharedSnapshot(
   collection: string,
   docId: string | undefined,
-): { data: DocumentData | undefined } {
+): { data: DocumentData | undefined; loaded: boolean } {
   const path = docId ? `${collection}/${docId}` : undefined;
 
-  const [data, setData] = useState<DocumentData | undefined>(() => {
-    if (!path) return undefined;
+  const [state, setState] = useState<{
+    data: DocumentData | undefined;
+    loaded: boolean;
+  }>(() => {
+    if (!path) return { data: undefined, loaded: false };
     const entry = cache.get(path);
-    return entry?.loaded ? entry.data : undefined;
+    return entry?.loaded
+      ? { data: entry.data, loaded: true }
+      : { data: undefined, loaded: false };
   });
+
+  // Stable listener identity per component instance
+  const listener = useMemo(
+    () => (d: DocumentData | undefined, l: boolean) => {
+      setState({ data: d, loaded: l });
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!path) return;
@@ -42,12 +55,12 @@ export function useSharedSnapshot(
 
     if (existing) {
       existing.refCount++;
-      existing.listeners.add(setData);
+      existing.listeners.add(listener);
       if (existing.loaded) {
-        setData(existing.data);
+        listener(existing.data, true);
       }
       return () => {
-        existing.listeners.delete(setData);
+        existing.listeners.delete(listener);
         existing.refCount--;
         if (existing.refCount <= 0) {
           existing.unsub();
@@ -61,7 +74,7 @@ export function useSharedSnapshot(
       loaded: false,
       unsub: () => {},
       refCount: 1,
-      listeners: new Set([setData]),
+      listeners: new Set([listener]),
     };
     cache.set(path, entry);
 
@@ -72,28 +85,28 @@ export function useSharedSnapshot(
         const snapData = snap.data();
         entry.data = snapData;
         entry.loaded = true;
-        for (const listener of entry.listeners) {
-          listener(snapData);
+        for (const l of entry.listeners) {
+          l(snapData, true);
         }
       },
       (error) => {
         console.error(`useSharedSnapshot(${path}): onSnapshot error`, error);
         entry.loaded = true;
-        for (const listener of entry.listeners) {
-          listener(entry.data);
+        for (const l of entry.listeners) {
+          l(entry.data, true);
         }
       },
     );
 
     return () => {
-      entry.listeners.delete(setData);
+      entry.listeners.delete(listener);
       entry.refCount--;
       if (entry.refCount <= 0) {
         entry.unsub();
         cache.delete(path);
       }
     };
-  }, [path, collection, docId]);
+  }, [path, collection, docId, listener]);
 
-  return { data };
+  return state;
 }
