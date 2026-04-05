@@ -2,7 +2,9 @@ import {
   Anchor,
   AppShell,
   Burger,
+  Center,
   Group,
+  Loader,
   MantineProvider,
   Text,
 } from "@mantine/core";
@@ -11,6 +13,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
+import { lazy, Suspense } from "react";
 import {
   Link,
   Navigate,
@@ -26,14 +29,31 @@ import { Footer } from "./components/Footer";
 import { Home } from "./components/Home/Home";
 import { Navbar } from "./components/Navbar";
 import { NotFound } from "./components/NotFound";
-import { Admin } from "./pages/Admin";
-import { Competitions } from "./pages/Competitions";
-import { DraftComponent } from "./pages/Draft";
-import { SeasonAdmin } from "./pages/SeasonAdmin";
-import { Seasons } from "./pages/Seasons";
-import { SingleCompetition } from "./pages/SingleCompetition";
-import { SingleSeason } from "./pages/SingleSeason";
 import { theme } from "./theme";
+
+const Admin = lazy(() =>
+  import("./pages/Admin").then((m) => ({ default: m.Admin })),
+);
+const Competitions = lazy(() =>
+  import("./pages/Competitions").then((m) => ({ default: m.Competitions })),
+);
+const DraftComponent = lazy(() =>
+  import("./pages/Draft").then((m) => ({ default: m.DraftComponent })),
+);
+const SeasonAdmin = lazy(() =>
+  import("./pages/SeasonAdmin").then((m) => ({ default: m.SeasonAdmin })),
+);
+const Seasons = lazy(() =>
+  import("./pages/Seasons").then((m) => ({ default: m.Seasons })),
+);
+const SingleCompetition = lazy(() =>
+  import("./pages/SingleCompetition").then((m) => ({
+    default: m.SingleCompetition,
+  })),
+);
+const SingleSeason = lazy(() =>
+  import("./pages/SingleSeason").then((m) => ({ default: m.SingleSeason })),
+);
 
 // Legacy redirect: /seasons/:id/manage -> /admin/:id (safe to remove once old links age out)
 const RedirectToAdmin = () => {
@@ -105,40 +125,48 @@ export const AppRoutes = () => {
             </AppShell.Navbar>
 
             <AppShell.Main id="main-content" className={classes.main}>
-              <Routes>
-                <Route path="/" element={<Home />} />
+              <Suspense
+                fallback={
+                  <Center h="60vh">
+                    <Loader size="lg" />
+                  </Center>
+                }
+              >
+                <Routes>
+                  <Route path="/" element={<Home />} />
 
-                {/* User stuff */}
-                <Route path="/logout" element={<Logout />} />
+                  {/* User stuff */}
+                  <Route path="/logout" element={<Logout />} />
 
-                {/* Drafting */}
-                <Route
-                  path="/seasons/:seasonId/draft/:draftId"
-                  element={<DraftComponent />}
-                />
+                  {/* Drafting */}
+                  <Route
+                    path="/seasons/:seasonId/draft/:draftId"
+                    element={<DraftComponent />}
+                  />
 
-                {/* Seasons */}
-                <Route
-                  path="/seasons/:seasonId/manage"
-                  element={<RedirectToAdmin />}
-                />
-                <Route path="/seasons/:seasonId" element={<SingleSeason />} />
-                <Route path="/seasons" element={<Seasons />} />
+                  {/* Seasons */}
+                  <Route
+                    path="/seasons/:seasonId/manage"
+                    element={<RedirectToAdmin />}
+                  />
+                  <Route path="/seasons/:seasonId" element={<SingleSeason />} />
+                  <Route path="/seasons" element={<Seasons />} />
 
-                {/* Competitions */}
-                <Route
-                  path="/competitions/:competitionId"
-                  element={<SingleCompetition />}
-                />
-                <Route path="/competitions" element={<Competitions />} />
+                  {/* Competitions */}
+                  <Route
+                    path="/competitions/:competitionId"
+                    element={<SingleCompetition />}
+                  />
+                  <Route path="/competitions" element={<Competitions />} />
 
-                {/* Admin */}
-                <Route path="/admin/:seasonId" element={<SeasonAdmin />} />
-                <Route path="/admin" element={<Admin />} />
+                  {/* Admin */}
+                  <Route path="/admin/:seasonId" element={<SeasonAdmin />} />
+                  <Route path="/admin" element={<Admin />} />
 
-                {/* 404 catch-all — must be last */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+                  {/* 404 catch-all — must be last */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
               <Footer />
             </AppShell.Main>
           </AppShell>
