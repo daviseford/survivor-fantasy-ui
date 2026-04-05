@@ -213,6 +213,14 @@ function getRewardVariant(
   const ot = first.outcome_type;
   if (ot === "Individual") return "reward";
   if (ot === "Tribal" || ot === "Team") return "team_reward";
+  // Hybrid types like "Team / Individual" — classify by majority of winner flags
+  if (ot?.includes("/")) {
+    const teamCount = winners.filter((w) => w.won_team_reward === 1).length;
+    const indCount = winners.filter(
+      (w) => w.won_individual_reward === 1,
+    ).length;
+    return teamCount >= indCount ? "team_reward" : "reward";
+  }
   // Fallback for null/empty outcome_type on early seasons
   if (winners.some((w) => w.won_individual_reward === 1)) return "reward";
   return "team_reward";
@@ -226,6 +234,16 @@ function getImmunityVariant(
   const ot = first.outcome_type;
   if (ot === "Individual") return "immunity";
   if (ot === "Tribal" || ot === "Team") return "team_immunity";
+  // Hybrid types like "Team / Individual" — classify by majority of winner flags
+  if (ot?.includes("/")) {
+    const teamCount = winners.filter(
+      (w) => w.won_team_immunity === 1 || w.won_tribal_immunity === 1,
+    ).length;
+    const indCount = winners.filter(
+      (w) => w.won_individual_immunity === 1,
+    ).length;
+    return teamCount >= indCount ? "team_immunity" : "immunity";
+  }
   // Fallback for null/empty outcome_type on early seasons
   if (winners.some((w) => w.won_individual_immunity === 1)) return "immunity";
   return "team_immunity";
