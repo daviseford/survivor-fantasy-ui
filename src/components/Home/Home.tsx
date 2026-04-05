@@ -22,10 +22,12 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../hooks/useUser";
 import classes from "./Home.module.css";
 
 export const Home = () => {
   const navigate = useNavigate();
+  const { slimUser } = useUser();
   return (
     <>
       {/* Hero */}
@@ -58,6 +60,17 @@ export const Home = () => {
             >
               Pick a season to get started
             </Button>
+            {slimUser && (
+              <Button
+                size="xl"
+                className={classes.control}
+                variant="default"
+                onClick={() => navigate("/competitions")}
+                leftSection={<IconTrophy size={22} />}
+              >
+                Your competitions
+              </Button>
+            )}
           </Group>
         </Container>
       </div>
