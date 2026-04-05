@@ -716,7 +716,6 @@ function transformEvents(
 
     // Parse reward parts (handles compound rewards like "Amulet; Lost vote")
     const rewardParts = j.reward ? j.reward.split("; ") : [];
-    const hasLoss = rewardParts.some((p) => p.toLowerCase().includes("lost"));
     const winParts = rewardParts.filter(
       (p) =>
         !p.toLowerCase().includes("lost") && !IGNORED_JOURNEY_REWARDS.has(p),
@@ -735,10 +734,14 @@ function transformEvents(
 
     // Determine if the player risked their vote
     // S44+: explicit chose_to_play field; S41-S43: infer from outcome
+    // For S41-S43: risked+lost nets to 0 points (+1 risk, -1 lost vote)
+    const hasNonLossReward = rewardParts.some(
+      (p) => !p.toLowerCase().includes("lost"),
+    );
     const risked =
       j.chose_to_play !== undefined
         ? j.chose_to_play === true
-        : j.lost_vote || winActions.length > 0;
+        : j.lost_vote || hasNonLossReward;
 
     if (risked) {
       events.push({
