@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { ALL_ROUTES } from "./helpers";
+import { ALL_ROUTES, SCROLL_SECTIONS } from "./helpers";
 
 /**
  * Take screenshots of every route in both light and dark mode.
@@ -10,6 +10,10 @@ import { ALL_ROUTES } from "./helpers";
  *
  * Screenshots are saved to e2e/screenshots/ with the naming convention:
  *   audit-{route-name}-{viewport}-{colorScheme}.png
+ *
+ * For long pages with SCROLL_SECTIONS defined, additional per-section
+ * screenshots are captured by scrolling to each section:
+ *   audit-{route-name}-{section-label}-{viewport}-{colorScheme}.png
  *
  * The viewport (desktop/mobile) is determined by the Playwright project.
  * Color scheme is toggled via Mantine's data-mantine-color-scheme attribute.
@@ -43,10 +47,26 @@ for (const route of ALL_ROUTES) {
       // Verify the page actually rendered
       await expect(page.locator("body")).not.toBeEmpty();
 
+      // Full-page screenshot
       await page.screenshot({
         path: `e2e/screenshots/audit-${route.name}-${viewportLabel}-${colorScheme}.png`,
         fullPage: true,
       });
+
+      // Per-section screenshots for long pages (e.g., competition detail)
+      const sections = SCROLL_SECTIONS[route.name];
+      if (sections) {
+        for (const section of sections) {
+          const el = page.locator(section.selector).first();
+          if (await el.isVisible().catch(() => false)) {
+            await el.scrollIntoViewIfNeeded();
+            await page.waitForTimeout(500);
+            await page.screenshot({
+              path: `e2e/screenshots/audit-${route.name}-${section.label}-${viewportLabel}-${colorScheme}.png`,
+            });
+          }
+        }
+      }
     });
   }
 }
