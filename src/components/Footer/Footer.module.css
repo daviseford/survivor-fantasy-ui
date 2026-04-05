@@ -34,10 +34,7 @@
   width: rem(20px);
   height: rem(20px);
   opacity: 0.7;
-}
-
-:global([data-mantine-color-scheme="dark"]) .icon {
-  filter: invert(1);
+  filter: light-dark(none, invert(1));
 }
 
 .disclaimer {
