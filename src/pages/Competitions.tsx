@@ -174,6 +174,15 @@ export const Competitions = () => {
         <Text size="sm">{formatParticipants(x)}</Text>
       </Table.Td>
       <Table.Td>
+        <Badge
+          variant="light"
+          color={x.current_episode != null ? "violet" : "cyan"}
+          size="sm"
+        >
+          {x.current_episode != null ? "Watch-Along" : "Live"}
+        </Badge>
+      </Table.Td>
+      <Table.Td>
         <Badge variant="light" color={x.finished ? "green" : "blue"} size="sm">
           {x.finished ? "Complete" : "In Progress"}
         </Badge>
@@ -294,6 +303,7 @@ export const Competitions = () => {
                   sortDir={sortDir}
                   onSort={handleSort}
                 />
+                <Table.Th>Type</Table.Th>
                 <SortableHeader
                   label="Status"
                   field="status"
