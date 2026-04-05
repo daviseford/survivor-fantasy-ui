@@ -19,6 +19,7 @@ import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
 import { CastawayId, PlayerAction } from "../../types";
 import { getNumberWithOrdinal } from "../../utils/misc";
+import { PlayerHoverCard } from "./PlayerHoverCard";
 import classes from "./ScoringTables.module.css";
 
 type SortField = "rank" | "player" | "total" | "draft";
@@ -93,12 +94,18 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
   const { slimUser } = useUser();
 
   const {
+    filteredChallenges,
     filteredEpisodes,
     filteredEliminations: eliminations,
     filteredEvents: events,
     survivorPointsByEpisode,
     survivorPointsTotalSeason,
   } = useScoringCalculations();
+
+  const challengesArray = useMemo(
+    () => Object.values(filteredChallenges),
+    [filteredChallenges],
+  );
 
   const [sortField, setSortField] = useState<SortField>("rank");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
@@ -250,12 +257,22 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
           style={{ left: STICKY_OFFSETS.player, minWidth: 160 }}
         >
           <Group gap={8} wrap="nowrap" align="center">
-            <Avatar
-              size={28}
-              src={playerData?.img}
-              radius={28}
-              style={{ ...avatarStyle, flexShrink: 0 }}
-            />
+            <PlayerHoverCard
+              playerData={playerData}
+              castawayId={castawayId}
+              total={total}
+              episodeScores={episodeScores}
+              challenges={challengesArray}
+              eliminationLabel={eliminationLabel}
+              isNonVotedOut={!!isNonVotedOut}
+            >
+              <Avatar
+                size={28}
+                src={playerData?.img}
+                radius={28}
+                style={{ ...avatarStyle, flexShrink: 0, cursor: "pointer" }}
+              />
+            </PlayerHoverCard>
             <div style={{ minWidth: 0 }}>
               <Text
                 fz="sm"

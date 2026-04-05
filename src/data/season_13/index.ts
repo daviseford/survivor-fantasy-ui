@@ -56,7 +56,7 @@ export const SEASON_13_CASTAWAY_LOOKUP: CastawayLookup = {
   US0187: { full_name: "Stephannie Favor", castaway: "Stephannie" },
   US0188: { full_name: "Anh-Tuan Bui", castaway: "Cao Boi" },
   US0189: { full_name: "Cristina Coria", castaway: "Cristina" },
-  US0190: { full_name: "Jessica Smith", castaway: "Jessica" },
+  US0190: { full_name: "Jessica Smith", castaway: "Flica" },
   US0191: { full_name: "Brad Virata", castaway: "Brad" },
   US0192: { full_name: "Rebecca Borman", castaway: "Rebecca" },
   US0193: { full_name: "Jenny Guzon-Bae", castaway: "Jenny" },
@@ -76,8 +76,10 @@ export const SEASON_13_PLAYERS = [
     castaway_id: "US0183",
     full_name: "Sekou Bunch",
     img: "/images/season_13/Sekou-Bunch.jpg",
-    description: "Age: 45 | Hometown: Los Angeles, California",
+    description:
+      "Age: 45 | Hometown: Los Angeles, California | Occupation: Jazz Musician",
     age: 45,
+    profession: "Jazz Musician",
     hometown: "Los Angeles, California",
   }),
   buildPlayer({
@@ -93,8 +95,10 @@ export const SEASON_13_PLAYERS = [
     castaway_id: "US0185",
     full_name: "Cecilia Mansilla",
     img: "/images/season_13/Cecilia-Mansilla.jpg",
-    description: "Age: 29 | Hometown: Oakland, California",
+    description:
+      "Age: 29 | Hometown: Oakland, California | Occupation: Risk Consultant",
     age: 29,
+    profession: "Risk Consultant",
     hometown: "Oakland, California",
   }),
   buildPlayer({
@@ -110,8 +114,10 @@ export const SEASON_13_PLAYERS = [
     castaway_id: "US0187",
     full_name: "Stephannie Favor",
     img: "/images/season_13/Stephannie-Favor.jpg",
-    description: "Age: 35 | Hometown: Columbia, South Carolina",
+    description:
+      "Age: 35 | Hometown: Columbia, South Carolina | Occupation: Nursing Student",
     age: 35,
+    profession: "Nursing Student",
     hometown: "Columbia, South Carolina",
   }),
   buildPlayer({
@@ -127,40 +133,52 @@ export const SEASON_13_PLAYERS = [
     castaway_id: "US0189",
     full_name: "Cristina Coria",
     img: "/images/season_13/Cristina-Coria.jpg",
-    description: "Age: 35 | Hometown: Santa Monica, California",
+    description:
+      "Age: 35 | Hometown: Santa Monica, California | Occupation: Police Officer",
     age: 35,
+    profession: "Police Officer",
     hometown: "Santa Monica, California",
   }),
   buildPlayer({
     castaway_id: "US0190",
     full_name: "Jessica Smith",
     img: "/images/season_13/Jessica-Smith.jpg",
-    description: "Age: 27 | Hometown: Chico, California",
+    description:
+      "Age: 27 | Hometown: Chico, California | Occupation: Roller Girl",
     age: 27,
+    profession: "Roller Girl",
     hometown: "Chico, California",
+    nickname: "Flica",
   }),
   buildPlayer({
     castaway_id: "US0191",
     full_name: "Brad Virata",
     img: "/images/season_13/Brad-Virata.jpg",
-    description: "Age: 29 | Hometown: Santa Monica, California",
+    description:
+      "Age: 29 | Hometown: Santa Monica, California | Occupation: Fashion Director",
     age: 29,
+    profession: "Fashion Director",
     hometown: "Santa Monica, California",
+    nickname: "Brad",
   }),
   buildPlayer({
     castaway_id: "US0192",
     full_name: "Rebecca Borman",
     img: "/images/season_13/Rebecca-Borman.jpg",
-    description: "Age: 34 | Hometown: Laurelton, New York",
+    description:
+      "Age: 34 | Hometown: Laurelton, New York | Occupation: Make-Up Artist",
     age: 34,
+    profession: "Make-Up Artist",
     hometown: "Laurelton, New York",
   }),
   buildPlayer({
     castaway_id: "US0193",
     full_name: "Jenny Guzon-Bae",
-    img: "",
-    description: "Age: 36 | Hometown: Lake Forest, Illinois",
+    img: "/images/season_13/Jenny-Guzon-Bae.jpg",
+    description:
+      "Age: 36 | Hometown: Lake Forest, Illinois | Occupation: Real Estate Agent",
     age: 36,
+    profession: "Real Estate Agent",
     hometown: "Lake Forest, Illinois",
   }),
   buildPlayer({
@@ -176,40 +194,50 @@ export const SEASON_13_PLAYERS = [
     castaway_id: "US0195",
     full_name: "Candice Woodcock",
     img: "/images/season_13/Candice-Woodcock.jpg",
-    description: "Age: 23 | Hometown: Washington, D.C.",
+    description:
+      "Age: 23 | Hometown: Washington, D.C. | Occupation: Pre-Med Student",
     age: 23,
+    profession: "Pre-Med Student",
     hometown: "Washington, D.C.",
   }),
   buildPlayer({
     castaway_id: "US0196",
     full_name: "Jonathan Penner",
     img: "/images/season_13/Jonathan-Penner.jpg",
-    description: "Age: 44 | Hometown: Los Angeles, California",
+    description:
+      "Age: 44 | Hometown: Los Angeles, California | Occupation: Writer",
     age: 44,
+    profession: "Writer",
     hometown: "Los Angeles, California",
   }),
   buildPlayer({
     castaway_id: "US0197",
     full_name: "Parvati Shallow",
     img: "/images/season_13/Parvati-Shallow.jpg",
-    description: "Age: 23 | Hometown: West Hollywood, California",
+    description:
+      "Age: 23 | Hometown: West Hollywood, California | Occupation: Boxer",
     age: 23,
+    profession: "Boxer",
     hometown: "West Hollywood, California",
   }),
   buildPlayer({
     castaway_id: "US0198",
     full_name: "Adam Gentry",
     img: "/images/season_13/Adam-Gentry.jpg",
-    description: "Age: 28 | Hometown: San Diego, California",
+    description:
+      "Age: 28 | Hometown: San Diego, California | Occupation: Copier Sales",
     age: 28,
+    profession: "Copier Sales",
     hometown: "San Diego, California",
   }),
   buildPlayer({
     castaway_id: "US0199",
     full_name: "Sundra Oakley",
     img: "/images/season_13/Sundra-Oakley.jpg",
-    description: "Age: 31 | Hometown: Los Angeles, California",
+    description:
+      "Age: 31 | Hometown: Los Angeles, California | Occupation: Actress",
     age: 31,
+    profession: "Actress",
     hometown: "Los Angeles, California",
   }),
   buildPlayer({
@@ -225,8 +253,9 @@ export const SEASON_13_PLAYERS = [
     castaway_id: "US0201",
     full_name: "Oscar Lusth",
     img: "/images/season_13/Oscar-Lusth.jpg",
-    description: "Age: 24 | Hometown: Venice, California",
+    description: "Age: 24 | Hometown: Venice, California | Occupation: Waiter",
     age: 24,
+    profession: "Waiter",
     hometown: "Venice, California",
     nickname: "Ozzy",
   }),
@@ -234,8 +263,10 @@ export const SEASON_13_PLAYERS = [
     castaway_id: "US0202",
     full_name: "Yul Kwon",
     img: "/images/season_13/Yul-Kwon.jpg",
-    description: "Age: 31 | Hometown: San Mateo, California",
+    description:
+      "Age: 31 | Hometown: San Mateo, California | Occupation: Management Consultant",
     age: 31,
+    profession: "Management Consultant",
     hometown: "San Mateo, California",
   }),
 ] satisfies Player<CastawayIdType, SeasonNumber>[];
