@@ -21,12 +21,11 @@ import {
   IconTrophy,
   IconUsers,
 } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useUser } from "../../hooks/useUser";
 import classes from "./Home.module.css";
 
 export const Home = () => {
-  const navigate = useNavigate();
   const { slimUser } = useUser();
   return (
     <>
@@ -55,7 +54,8 @@ export const Home = () => {
               className={classes.control}
               variant="gradient"
               gradient={{ from: "blue", to: "cyan" }}
-              onClick={() => navigate("/seasons")}
+              component={Link}
+              to="/seasons"
               leftSection={<IconFlame size={22} />}
             >
               Pick a season to get started
@@ -63,9 +63,10 @@ export const Home = () => {
             {slimUser && (
               <Button
                 size="xl"
-                className={classes.control}
+                className={classes.controlSecondary}
                 variant="default"
-                onClick={() => navigate("/competitions")}
+                component={Link}
+                to="/competitions"
                 leftSection={<IconTrophy size={22} />}
               >
                 Your competitions
@@ -80,7 +81,7 @@ export const Home = () => {
         <Container size={700} className={classes.howItWorks}>
           <Title
             order={2}
-            size="sm"
+            size="lg"
             fw={600}
             c="dimmed"
             ta="center"
@@ -167,7 +168,7 @@ export const Home = () => {
                 [
                   { num: "50", label: "Seasons", color: "orange" },
                   { num: "700+", label: "Castaways", color: "red" },
-                  { num: "4", label: "Eras", color: "yellow" },
+                  { num: "4", label: "Eras", color: "yellow.8" },
                   { num: "Live", label: "Updates", color: "green" },
                 ] as const
               ).map((stat) => (
@@ -193,7 +194,8 @@ export const Home = () => {
               color="orange"
               size="md"
               mt="sm"
-              onClick={() => navigate("/seasons")}
+              component={Link}
+              to="/seasons"
               leftSection={<IconSearch size={18} />}
               className={classes.selfStart}
             >
@@ -283,7 +285,8 @@ export const Home = () => {
               color="grape"
               size="md"
               mt="sm"
-              onClick={() => navigate("/seasons")}
+              component={Link}
+              to="/seasons"
               leftSection={<IconPlayerPlay size={18} />}
             >
               Start a watch-along
@@ -341,12 +344,9 @@ export const Home = () => {
                   wrap="nowrap"
                 >
                   <div
+                    className={classes.categoryDot}
                     style={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
                       backgroundColor: `var(--mantine-color-${cat.color}-5)`,
-                      flexShrink: 0,
                     }}
                   />
                   <Text size="sm" fw={600}>
@@ -514,7 +514,8 @@ export const Home = () => {
               color="cyan"
               size="md"
               mt="sm"
-              onClick={() => navigate("/seasons")}
+              component={Link}
+              to="/seasons"
               leftSection={<IconUsers size={18} />}
               className={classes.selfStart}
             >
@@ -545,7 +546,8 @@ export const Home = () => {
               size="xl"
               variant="gradient"
               gradient={{ from: "blue", to: "cyan" }}
-              onClick={() => navigate("/seasons")}
+              component={Link}
+              to="/seasons"
               leftSection={<IconFlame size={22} />}
             >
               Browse seasons
