@@ -8,7 +8,7 @@ import {
 } from "../types";
 
 const addFixedActionPoints = (action: PlayerAction) =>
-  BASE_PLAYER_SCORING.find((x) => x.action === action)?.fixed_value || 0;
+  BASE_PLAYER_SCORING.find((x) => x.action === action)?.fixed_value ?? 0;
 
 export type ScoringActionEntry = {
   action: PlayerAction;

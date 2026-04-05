@@ -28,8 +28,7 @@ export type ScrapedChallengeVariant =
   | "reward"
   | "team_reward"
   | "immunity"
-  | "team_immunity"
-  | "combined";
+  | "team_immunity";
 
 export type ScrapedEliminationVariant =
   | "tribal"
@@ -44,7 +43,6 @@ export interface ScrapedEpisode {
   order: number;
   title: string;
   airDate: string;
-  isCombinedChallenge: boolean;
   isFinale: boolean;
   postMerge: boolean;
   mergeOccurs: boolean;

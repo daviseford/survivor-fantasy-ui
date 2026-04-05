@@ -102,10 +102,7 @@ describe("transformResults", { timeout: 60000 }, () => {
       expect(c.winnerCastawayIds.length).toBeLessThanOrEqual(8);
     }
 
-    // Combined challenges should be split -- no "combined" variant in output
-    const combined = result.challenges.filter((c) => c.variant === "combined");
-    expect(combined).toHaveLength(0);
-
+    // Combined challenges are split into immunity + reward (no "combined" type exists)
     const individualImmunities = result.challenges.filter(
       (c) => c.variant === "immunity",
     );

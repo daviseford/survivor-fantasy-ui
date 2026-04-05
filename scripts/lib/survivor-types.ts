@@ -111,7 +111,11 @@ export interface SurvivorAdvantageMovement extends SurvivorBaseRecord {
   sequence_id: number;
   day: number | null;
   episode: number;
-  event: string; // "Found", "Found (beware)", "Played", "Received", etc.
+  event: string; // "Found", "Found (beware)", "Played", "Received", "Transferred", etc.
+  played_for?: string | null; // short name of the player the idol was played for
+  played_for_id?: string | null; // castaway_id of the player the idol was played for
+  success?: boolean | null; // whether the idol play was successful (negated votes)
+  votes_nullified?: number | null; // number of votes nullified by this play
   sog_id: number;
 }
 
