@@ -297,32 +297,29 @@ function transformChallenges(
           e.won_team_reward === 1,
       );
 
-      order += emitChallengeEntries(
+      order += emitHybridChallengeEntries(
         immunityWinners,
         first,
         epNum,
-        getImmunityVariant(first, immunityWinners),
+        "immunity",
         challenges,
         order,
       );
-      order += emitChallengeEntries(
+      order += emitHybridChallengeEntries(
         rewardWinners,
         first,
         epNum,
-        getRewardVariant(first, rewardWinners),
+        "reward",
         challenges,
         order,
       );
     } else {
       const winners = entries.filter((e) => e.result.startsWith("Won"));
-      const variant = type.includes("immunity")
-        ? getImmunityVariant(first, winners)
-        : getRewardVariant(first, winners);
-      order += emitChallengeEntries(
+      order += emitHybridChallengeEntries(
         winners,
         first,
         epNum,
-        variant,
+        type.includes("immunity") ? "immunity" : "reward",
         challenges,
         order,
       );
@@ -330,6 +327,69 @@ function transformChallenges(
   }
 
   return challenges;
+}
+
+/**
+ * For hybrid "Team / Individual" outcome types, split winners so each player
+ * gets the higher-scoring variant. Players with an individual flag get
+ * individual credit; the rest get team credit. Non-hybrid challenges pass
+ * through to a single emit.
+ */
+function emitHybridChallengeEntries(
+  winners: SurvivorChallengeResult[],
+  first: SurvivorChallengeResult,
+  epNum: number,
+  kind: "immunity" | "reward",
+  challenges: ScrapedChallenge[],
+  startOrder: number,
+): number {
+  const ot = first.outcome_type;
+  const isHybrid = ot?.includes("/");
+
+  if (isHybrid) {
+    const indField =
+      kind === "immunity" ? "won_individual_immunity" : "won_individual_reward";
+    const indWinners = winners.filter((w) => w[indField] === 1);
+    const teamWinners = winners.filter((w) => w[indField] !== 1);
+
+    let count = 0;
+    if (teamWinners.length > 0) {
+      const variant = kind === "immunity" ? "team_immunity" : "team_reward";
+      count += emitChallengeEntries(
+        teamWinners,
+        first,
+        epNum,
+        variant,
+        challenges,
+        startOrder + count,
+      );
+    }
+    if (indWinners.length > 0) {
+      count += emitChallengeEntries(
+        indWinners,
+        first,
+        epNum,
+        kind,
+        challenges,
+        startOrder + count,
+      );
+    }
+    return count;
+  }
+
+  // Non-hybrid: single variant for all winners
+  const variant =
+    kind === "immunity"
+      ? getImmunityVariant(first, winners)
+      : getRewardVariant(first, winners);
+  return emitChallengeEntries(
+    winners,
+    first,
+    epNum,
+    variant,
+    challenges,
+    startOrder,
+  );
 }
 
 /** Emit challenge entries, splitting tribal challenges by tribe. Returns the order increment. */
