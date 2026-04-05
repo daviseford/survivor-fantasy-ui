@@ -64,7 +64,7 @@ const SortableHeader = ({
         aria-label={`Sort by ${label}`}
       >
         {label}
-        {isActive && <Icon size={14} />}
+        <Icon size={14} style={{ opacity: isActive ? 1 : 0.25 }} />
       </UnstyledButton>
     </Table.Th>
   );
@@ -157,7 +157,8 @@ export const Competitions = () => {
       key={x.id}
       className={classes.clickableRow}
       tabIndex={0}
-      role="link"
+      role="row"
+      aria-label={x.competition_name}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
           navigate(`/competitions/${x.id}`);
@@ -253,6 +254,7 @@ export const Competitions = () => {
       <div className={classes.filterControls}>
         <Select
           placeholder="All seasons"
+          aria-label="Filter by season"
           data={seasonOptions}
           value={seasonFilter}
           onChange={setSeasonFilter}
@@ -262,6 +264,7 @@ export const Competitions = () => {
         />
         <SegmentedControl
           size="sm"
+          aria-label="Filter by status"
           value={statusFilter}
           onChange={setStatusFilter}
           fullWidth={isMobile}
@@ -282,28 +285,36 @@ export const Competitions = () => {
         </Stack>
       )}
 
-      {!isLoading && sorted.length === 0 && (
-        <Center py="xl">
-          <Stack align="center" gap="sm">
-            <Text c="dimmed" ta="center" size="lg">
-              Ready to outwit your friends?
+      {!isLoading &&
+        sorted.length === 0 &&
+        (seasonFilter || statusFilter !== "all" ? (
+          <Center py="xl">
+            <Text c="dimmed" ta="center">
+              No competitions match your filters
             </Text>
-            <Text size="sm" c="dimmed" ta="center">
-              Pick a season, start a draft, and see who has the best Survivor
-              instincts.
-            </Text>
-            <Button
-              component={Link}
-              to="/seasons"
-              variant="light"
-              size="sm"
-              mt="xs"
-            >
-              Browse seasons
-            </Button>
-          </Stack>
-        </Center>
-      )}
+          </Center>
+        ) : (
+          <Center py="xl">
+            <Stack align="center" gap="sm">
+              <Text c="dimmed" ta="center" size="lg">
+                Ready to outwit your friends?
+              </Text>
+              <Text size="sm" c="dimmed" ta="center">
+                Pick a season, start a draft, and see who has the best Survivor
+                instincts.
+              </Text>
+              <Button
+                component={Link}
+                to="/seasons"
+                variant="light"
+                size="sm"
+                mt="xs"
+              >
+                Browse seasons
+              </Button>
+            </Stack>
+          </Center>
+        ))}
 
       {!isLoading && sorted.length > 0 && (
         <Table.ScrollContainer minWidth={300}>
@@ -346,7 +357,9 @@ export const Competitions = () => {
                   sortDir={sortDir}
                   onSort={handleSort}
                 />
-                <Table.Th />
+                <Table.Th>
+                  <VisuallyHidden>Navigate</VisuallyHidden>
+                </Table.Th>
               </Table.Tr>
             </Table.Thead>
 
