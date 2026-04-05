@@ -224,7 +224,7 @@ export const EpisodeAdvanceControl = ({
           </Text>
         )}
 
-        <Group gap="xs">
+        <Group gap="xs" justify="center">
           <Button
             variant="light"
             color="gray"
@@ -246,15 +246,15 @@ export const EpisodeAdvanceControl = ({
               ? "Reveal Ep 1"
               : `Reveal Ep ${currentEpisode + 1}`}
           </Button>
-          <Button
-            variant="subtle"
-            size="compact-sm"
-            onClick={switchToLive}
-            ml="auto"
-          >
-            Switch to Live
-          </Button>
         </Group>
+        <Button
+          variant="subtle"
+          size="compact-sm"
+          onClick={switchToLive}
+          style={{ alignSelf: "center" }}
+        >
+          Switch to Live
+        </Button>
       </Stack>
     </Paper>
   );
