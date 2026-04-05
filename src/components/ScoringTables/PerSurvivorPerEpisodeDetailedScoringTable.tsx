@@ -300,8 +300,11 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
 
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+    const viewport = scrollRef.current?.querySelector<HTMLDivElement>(
+      ".mantine-ScrollArea-viewport",
+    );
+    if (viewport) {
+      viewport.scrollLeft = viewport.scrollWidth;
     }
   }, [filteredEpisodes.length]);
 
