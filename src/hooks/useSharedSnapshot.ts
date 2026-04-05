@@ -86,14 +86,22 @@ export function useSharedSnapshot(
         entry.data = snapData;
         entry.loaded = true;
         for (const l of entry.listeners) {
-          l(snapData, true);
+          try {
+            l(snapData, true);
+          } catch (e) {
+            console.error(`useSharedSnapshot(${path}): listener error`, e);
+          }
         }
       },
       (error) => {
         console.error(`useSharedSnapshot(${path}): onSnapshot error`, error);
         entry.loaded = true;
         for (const l of entry.listeners) {
-          l(entry.data, true);
+          try {
+            l(entry.data, true);
+          } catch (e) {
+            console.error(`useSharedSnapshot(${path}): listener error`, e);
+          }
         }
       },
     );
