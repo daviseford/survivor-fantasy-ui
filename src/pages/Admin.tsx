@@ -3,6 +3,7 @@ import {
   ActionIcon,
   Alert,
   Badge,
+  Box,
   Button,
   Card,
   Center,
@@ -140,7 +141,9 @@ export const Admin = () => {
         <Stack gap="md">
           <div>
             <Group gap="xs" mb={4}>
-              <IconSettings size={22} color="var(--mantine-color-blue-6)" />
+              <Box component="span" c="blue.6" display="inline-flex">
+                <IconSettings size={22} />
+              </Box>
               <Title order={2}>Admin Dashboard</Title>
             </Group>
             <Text c="dimmed" size="sm">

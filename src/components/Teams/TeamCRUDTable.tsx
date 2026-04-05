@@ -2,11 +2,11 @@ import {
   ActionIcon,
   Alert,
   Box,
-  Code,
   ColorInput,
   Group,
   Table,
   TableScrollContainer,
+  Text,
   TextInput,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
@@ -20,19 +20,8 @@ import { useSeason } from "../../hooks/useSeason";
 import { useTeamAssignments } from "../../hooks/useTeamAssignments";
 import { useTeams } from "../../hooks/useTeams";
 import { useUser } from "../../hooks/useUser";
+import { SURVIVOR_SWATCHES } from "../../constants/colors";
 import { CastawayId, Team } from "../../types";
-
-const SURVIVOR_SWATCHES = [
-  "#3B82F6",
-  "#EF4444",
-  "#22C55E",
-  "#EAB308",
-  "#A855F7",
-  "#F97316",
-  "#EC4899",
-  "#14B8A6",
-  "#000000",
-];
 
 export const TeamCRUDTable = () => {
   const { data: season } = useSeason();
@@ -76,7 +65,12 @@ export const TeamCRUDTable = () => {
           Deleting it will set those references to &quot;No Team&quot; (null).
         </>
       ) : (
-        <Code block>{JSON.stringify(team, null, 2)}</Code>
+        <Text size="sm">
+          Delete team &quot;{team.name}&quot;
+          {" "}({Object.values(assignments).reduce((count, snapshot) => {
+            return count + Object.values(snapshot).filter((t) => t === team.id).length;
+          }, 0)} player assignments)
+        </Text>
       ),
       labels: {
         confirm: referenced ? "Delete and clean up" : "Delete",
@@ -219,6 +213,7 @@ export const TeamCRUDTable = () => {
             <Table.Td>
               <Group gap="xs">
                 <ActionIcon
+                  size="lg"
                   color="green"
                   onClick={() => saveEdit(team)}
                   aria-label="Save team"
@@ -226,6 +221,7 @@ export const TeamCRUDTable = () => {
                   <IconCheck />
                 </ActionIcon>
                 <ActionIcon
+                  size="lg"
                   color="gray"
                   onClick={cancelEdit}
                   aria-label="Cancel editing team"
@@ -258,6 +254,7 @@ export const TeamCRUDTable = () => {
           <Table.Td>
             <Group gap="xs">
               <ActionIcon
+                size="lg"
                 color="blue"
                 onClick={() => startEdit(team)}
                 aria-label={`Edit team ${team.name}`}
@@ -265,6 +262,7 @@ export const TeamCRUDTable = () => {
                 <IconPencil />
               </ActionIcon>
               <ActionIcon
+                size="lg"
                 color="red"
                 onClick={() => handleDelete(team)}
                 aria-label={`Delete team ${team.name}`}

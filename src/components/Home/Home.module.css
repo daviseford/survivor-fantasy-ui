@@ -251,7 +251,7 @@
   );
   border: 1px solid
     light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
-  border-left: 3px solid;
+  border-left: 3px solid var(--card-accent, var(--mantine-color-grape-5));
 }
 
 /* Prop bet list */
@@ -314,4 +314,14 @@
   line-height: 1.1;
   color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
   letter-spacing: -0.04em;
+}
+
+.ctaDescription {
+  line-height: 1.6;
+}
+
+/* Utility */
+
+.selfStart {
+  align-self: flex-start;
 }

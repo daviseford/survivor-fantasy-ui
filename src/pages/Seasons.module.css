@@ -24,18 +24,18 @@
 .heroSeasonNumber {
   font-size: rem(64px);
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.95);
+  color: color-mix(in srgb, var(--mantine-color-white) 95%, transparent);
   line-height: 1;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 2px 8px color-mix(in srgb, var(--mantine-color-black) 20%, transparent);
 }
 
 .heroSubtitle {
   font-size: rem(14px);
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.85);
+  color: color-mix(in srgb, var(--mantine-color-white) 85%, transparent);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 4px color-mix(in srgb, var(--mantine-color-black) 20%, transparent);
 }
 
 /* ── Compact (Browse Grid) Cards ── */
@@ -63,18 +63,18 @@
 .compactSeasonNumber {
   font-size: rem(32px);
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.95);
+  color: color-mix(in srgb, var(--mantine-color-white) 95%, transparent);
   line-height: 1;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  text-shadow: 0 1px 4px color-mix(in srgb, var(--mantine-color-black) 15%, transparent);
 }
 
 .compactSubtitle {
   font-size: rem(10px);
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
+  color: color-mix(in srgb, var(--mantine-color-white) 80%, transparent);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  text-shadow: 0 1px 3px color-mix(in srgb, var(--mantine-color-black) 15%, transparent);
   max-width: 90%;
   text-align: center;
   overflow: hidden;

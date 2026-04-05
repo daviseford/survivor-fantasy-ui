@@ -17,6 +17,7 @@ import { useCreateDraft } from "../hooks/useCreateDraft";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
 import { Players } from "./Players";
+import classes from "./SingleSeason.module.css";
 
 export const SingleSeason = () => {
   const navigate = useNavigate();
@@ -79,10 +80,7 @@ export const SingleSeason = () => {
           <Paper
             p="md"
             radius="md"
-            style={{
-              background:
-                "linear-gradient(135deg, var(--mantine-color-blue-6), var(--mantine-color-cyan-6))",
-            }}
+            className={classes.loginBanner}
           >
             <Group gap="md" align="center" wrap="wrap">
               <Text size="sm" c="white" fw={500}>

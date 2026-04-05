@@ -17,21 +17,10 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { doc, setDoc } from "firebase/firestore";
 import { v4 } from "uuid";
+import { SURVIVOR_SWATCHES } from "../../constants/colors";
 import { db } from "../../firebase";
 import { useSeason } from "../../hooks/useSeason";
 import { Team } from "../../types";
-
-const SURVIVOR_SWATCHES = [
-  "#3B82F6", // blue
-  "#EF4444", // red
-  "#22C55E", // green
-  "#EAB308", // yellow
-  "#A855F7", // purple
-  "#F97316", // orange
-  "#EC4899", // pink
-  "#14B8A6", // teal
-  "#000000", // black
-];
 
 export const CreateTeam = () => {
   const { data: season, isLoading } = useSeason();

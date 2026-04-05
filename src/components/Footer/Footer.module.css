@@ -45,5 +45,4 @@
   padding-bottom: var(--mantine-spacing-sm);
   border-top: rem(1px) solid
     light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
-  opacity: 0.7;
 }

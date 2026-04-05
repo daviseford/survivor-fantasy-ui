@@ -121,9 +121,9 @@ const DroppableColumn = ({
       <Group gap="xs" mb="sm">
         {color && (
           <Box
+            w={14}
+            h={14}
             style={{
-              width: 14,
-              height: 14,
               borderRadius: 3,
               backgroundColor: color,
             }}

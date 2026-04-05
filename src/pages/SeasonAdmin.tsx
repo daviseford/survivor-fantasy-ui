@@ -151,36 +151,36 @@ export const SeasonAdmin = () => {
       </Paper>
 
       <Tabs value={activeTab} onChange={handleTabChange}>
-        <Tabs.List grow>
+        <Tabs.List grow aria-label="Season data management">
           <Tabs.Tab
             value="episodes"
             leftSection={<IconList style={iconStyle} />}
           >
-            Episodes
+            <Text visibleFrom="sm">Episodes</Text>
           </Tabs.Tab>
           <Tabs.Tab
             value="events"
             leftSection={<IconCalendar style={iconStyle} />}
           >
-            Events
+            <Text visibleFrom="sm">Events</Text>
           </Tabs.Tab>
           <Tabs.Tab
             value="challenges"
             leftSection={<IconKarate style={iconStyle} />}
           >
-            Challenges
+            <Text visibleFrom="sm">Challenges</Text>
           </Tabs.Tab>
           <Tabs.Tab
             value="eliminations"
             leftSection={<IconUserX style={iconStyle} />}
           >
-            Eliminations
+            <Text visibleFrom="sm">Eliminations</Text>
           </Tabs.Tab>
           <Tabs.Tab
             value="teams"
             leftSection={<IconUsersGroup style={iconStyle} />}
           >
-            Teams
+            <Text visibleFrom="sm">Teams</Text>
           </Tabs.Tab>
         </Tabs.List>
 

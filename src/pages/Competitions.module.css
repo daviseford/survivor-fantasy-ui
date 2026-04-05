@@ -16,3 +16,21 @@
 .chevron {
   color: light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-3));
 }
+
+/* Fix #1: Hide Type column on mobile */
+.typeCell {
+  @media (max-width: $mantine-breakpoint-sm) {
+    display: none;
+  }
+}
+
+/* Fix #8: Stack filter controls on mobile */
+.filterControls {
+  display: flex;
+  flex-direction: row;
+  gap: var(--mantine-spacing-sm);
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,7 @@
+.loginBanner {
+  background: linear-gradient(
+    135deg,
+    var(--mantine-color-blue-6),
+    var(--mantine-color-cyan-6)
+  );
+}
