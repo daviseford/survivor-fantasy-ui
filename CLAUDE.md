@@ -44,7 +44,7 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 ## Architecture
 
 - **React 19 + TypeScript + Vite** SPA with Mantine v9 UI components
-- **Routing:** react-router-dom v6, routes defined in `src/AppRoutes.tsx`
+- **Routing:** react-router-dom v7, routes defined in `src/AppRoutes.tsx`
 - **State/Data:** All hooks use raw Firebase `onSnapshot` for realtime Firestore/RTDB subscriptions (no react-query)
 - **Firebase backend:** Firestore (seasons, competitions), Realtime Database (live drafts), Firebase Auth, hosted on Firebase Hosting
 - **Dual database pattern:** Firestore for persistent read-heavy data (seasons, competitions, game events), Realtime Database for live collaborative state (drafts in progress)
@@ -65,12 +65,12 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 
 The `.env` file contains real admin credentials (USERNAME/PASSWORD). **NEVER use these to modify production season data** (episodes, challenges, eliminations, events, teams). Read-only operations and screenshots are safe. Ask before any write operations.
 
-## Firebase Documentation
+## MCP Servers
 
-Use the Context7 MCP to fetch up-to-date Firebase documentation when working with Firebase features. Available libraries:
+The project configures MCP servers in `.mcp.json`:
 
-- `/websites/firebase_google` — Full Firebase docs (26k+ snippets)
-- `/firebase/firebase-js-sdk` — Firebase JS SDK source/docs
+- **mantine** — Mantine component documentation and guidance
+- **playwright** — Browser automation for E2E testing and screenshots
 
 ## Pre-commit Checklist
 
