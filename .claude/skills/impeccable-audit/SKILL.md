@@ -60,21 +60,21 @@ Launch **3 subagents simultaneously** using the Agent tool in a single message:
 
 - Read screenshots: `audit-home-desktop-light.png`, `audit-seasons-desktop-light.png`, `audit-single-season-desktop-light.png` (plus dark + mobile variants)
 - Read source: `src/components/Home/Home.tsx`, `Home.module.css`, `src/pages/Seasons.tsx`, `src/pages/SingleSeason.tsx`, `src/pages/Players.tsx`
-- Run both `/audit` and `/critique` analysis
+- Run `/audit`, `/adapt` and `/critique` analysis
 - Return findings as a structured list with P0-P3 severity
 
 #### Subagent 2: Auth pages (competitions)
 
 - Read screenshots: `audit-competitions-desktop-light.png` (plus dark + mobile variants)
 - Read source: `src/pages/Competitions.tsx`
-- Run both `/audit` and `/critique` analysis
+- Run `/audit`, `/adapt` and `/critique` analysis
 - Return findings as a structured list with P0-P3 severity
 
 #### Subagent 3: Admin pages (admin dashboard, season admin)
 
 - Read screenshots: `audit-admin-dashboard-desktop-light.png`, `audit-season-admin-desktop-light.png` (plus dark + mobile variants)
 - Read source: `src/pages/Admin.tsx`, `src/pages/SeasonAdmin.tsx`
-- Run both `/audit` and `/critique` analysis
+- Run `/audit`, `/adapt` and `/critique` analysis
 - Return findings as a structured list with P0-P3 severity
 
 **Also launch a 4th subagent in parallel** for shared components:
@@ -151,7 +151,6 @@ If the user approves the changes, commit them following the project's convention
 - **Never modify production season data** — the .env has real admin credentials
 - **Fix incrementally** — apply one impeccable command at a time, verify builds between fixes
 - **Respect dark mode** — when fixing styles, verify changes look correct in BOTH color schemes
-- **Desktop-first screenshots for audit** — use desktop light screenshots as the primary audit input, but verify fixes against all viewport/scheme combinations
 - **Ask before P2+ fixes** — only auto-fix P0 and P1; get user approval for lower-severity improvements
 - **Focus on the component/page files** — when an impeccable command suggests changes, apply them to the relevant component in `src/components/` or `src/pages/`, not to global styles (unless the finding is truly global)
 - **Maximize parallelism** — always launch independent subagents in a single message so they run concurrently. Never wait for one subagent to finish before launching another independent one.

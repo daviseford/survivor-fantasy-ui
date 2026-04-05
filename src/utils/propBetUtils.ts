@@ -99,6 +99,45 @@ export const getPropBetScoresByUser = (
 };
 
 /**
+ * Determines if a player has been eliminated from the game in a way that
+ * ends their chance of winning or reaching FTC. Excludes final_tribal_council
+ * and switched variants (those don't end a player's run).
+ * A player who returned (Edge of Extinction, Redemption Island) is NOT eliminated.
+ */
+const isEliminatedFromGame = (
+  castawayId: string,
+  elims: Elimination[],
+  events: GameEvent[],
+  challenges: Record<Challenge["id"], Challenge>,
+): boolean => {
+  const gameEndingElims = elims.filter(
+    (x) =>
+      x.castaway_id === castawayId &&
+      x.variant !== "final_tribal_council" &&
+      x.variant !== "switched",
+  );
+  if (gameEndingElims.length === 0) return false;
+
+  const lastElimEpisode = Math.max(
+    ...gameEndingElims.map((x) => x.episode_num),
+  );
+
+  const hasLaterEvent = events.some(
+    (x) => x.castaway_id === castawayId && x.episode_num > lastElimEpisode,
+  );
+  if (hasLaterEvent) return false;
+
+  const hasLaterChallengeWin = Object.values(challenges).some(
+    (x) =>
+      x.episode_num > lastElimEpisode &&
+      x.winning_castaways?.includes(castawayId as CastawayId),
+  );
+  if (hasLaterChallengeWin) return false;
+
+  return true;
+};
+
+/**
  * Determines if a player is currently out of the game.
  * A player who was eliminated but later appears in events or challenge wins
  * (e.g., returned from Edge of Extinction) is NOT currently eliminated.
@@ -232,8 +271,12 @@ export const getPropBetScoresForUser = (
     } else {
       setStatus("propbet_winner", "definitive_incorrect");
     }
+  } else if (
+    myPropBets.propbet_winner &&
+    isEliminatedFromGame(myPropBets.propbet_winner, _elims, _events, challenges)
+  ) {
+    setStatus("propbet_winner", "definitive_incorrect");
   }
-  // else: pending (player still alive, no finale yet)
 
   // --- propbet_ftc ---
   const ftcEvent = _events.find(
@@ -245,8 +288,12 @@ export const getPropBetScoresForUser = (
     setStatus("propbet_ftc", "definitive_correct");
   } else if (hasFinaleOccurred) {
     setStatus("propbet_ftc", "definitive_incorrect");
+  } else if (
+    myPropBets.propbet_ftc &&
+    isEliminatedFromGame(myPropBets.propbet_ftc, _elims, _events, challenges)
+  ) {
+    setStatus("propbet_ftc", "definitive_incorrect");
   }
-  // else: pending (player still alive, no finale yet)
 
   // --- propbet_medical_evac ---
   const hasEvac = _elims.some((x) => x.variant === "medical");

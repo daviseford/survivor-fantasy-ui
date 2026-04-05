@@ -163,11 +163,22 @@ describe("getPropBetScoresForUser", () => {
       expect(answer.status).toBe("pending");
     });
 
-    it("returns pending when picked player is eliminated (could return to game)", () => {
+    it("returns definitive_incorrect when picked player is eliminated", () => {
       const elims = {
         e1: makeElimination("1", 5, ALICE, 3),
       };
       const answer = getStatus("propbet_winner", { eliminations: elims });
+      expect(answer.status).toBe("definitive_incorrect");
+    });
+
+    it("returns pending when eliminated player returned to game (has later events)", () => {
+      const elims = {
+        e1: makeElimination("1", 3, ALICE, 2),
+      };
+      const events = {
+        ev1: makeEvent("1", 8, ALICE, "find_idol"),
+      };
+      const answer = getStatus("propbet_winner", { eliminations: elims, events });
       expect(answer.status).toBe("pending");
     });
 
@@ -203,11 +214,22 @@ describe("getPropBetScoresForUser", () => {
       expect(answer.status).toBe("pending");
     });
 
-    it("returns pending when picked player eliminated (could return to game)", () => {
+    it("returns definitive_incorrect when picked player is eliminated", () => {
       const elims = {
         e1: makeElimination("1", 5, ALICE, 3, "tribal"),
       };
       const answer = getStatus("propbet_ftc", { eliminations: elims });
+      expect(answer.status).toBe("definitive_incorrect");
+    });
+
+    it("returns pending when eliminated player returned to game", () => {
+      const elims = {
+        e1: makeElimination("1", 3, ALICE, 2, "tribal"),
+      };
+      const events = {
+        ev1: makeEvent("1", 8, ALICE, "find_idol"),
+      };
+      const answer = getStatus("propbet_ftc", { eliminations: elims, events });
       expect(answer.status).toBe("pending");
     });
 
