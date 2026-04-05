@@ -72,6 +72,10 @@ Use the Context7 MCP to fetch up-to-date Firebase documentation when working wit
 - `/websites/firebase_google` — Full Firebase docs (26k+ snippets)
 - `/firebase/firebase-js-sdk` — Firebase JS SDK source/docs
 
+## Pre-commit Checklist
+
+**Always run `yarn format` before committing.** Generated files (season data, scripts output) and hand-edited files alike must be formatted with Prettier before they are committed. Unformatted code creates noisy diffs that obscure real changes. Run `yarn prepush` (format + lint --fix + tsc) as a final check before opening a PR.
+
 ## Deployment
 
 Merges to `main` auto-deploy to Firebase Hosting via GitHub Actions (`.github/workflows/firebase-hosting-merge.yml`). PRs get preview deploys. Firebase project: `survivor-fantasy-51c4b`.

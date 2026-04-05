@@ -35,7 +35,10 @@ type SeasonNumber = 30;
 
 const buildPlayer = <T extends CastawayIdType>(
   p: { castaway_id: T; full_name: string; img: string } & Partial<
-    Omit<Player<T, SeasonNumber>, "season_id" | "season_num" | "castaway_id" | "full_name" | "img">
+    Omit<
+      Player<T, SeasonNumber>,
+      "season_id" | "season_num" | "castaway_id" | "full_name" | "img"
+    >
   >,
 ): Player<T, SeasonNumber> => ({
   ...p,
@@ -44,24 +47,24 @@ const buildPlayer = <T extends CastawayIdType>(
 });
 
 export const SEASON_30_CASTAWAY_LOOKUP: CastawayLookup = {
-  "US0443": { full_name: "So Kim", castaway: "So" },
-  "US0444": { full_name: "Vince Sly", castaway: "Vince" },
-  "US0445": { full_name: "Nina Poersch", castaway: "Nina" },
-  "US0446": { full_name: "Lindsey Cascaddan", castaway: "Lindsey" },
-  "US0447": { full_name: "Max Dawson", castaway: "Max" },
-  "US0448": { full_name: "Joaquin Souberbielle", castaway: "Joaquin" },
-  "US0449": { full_name: "Kelly Remington", castaway: "Kelly" },
-  "US0450": { full_name: "Hali Ford", castaway: "Hali" },
-  "US0451": { full_name: "Joe Anglim", castaway: "Joe" },
-  "US0452": { full_name: "Jenn Brown", castaway: "Jenn" },
-  "US0453": { full_name: "Shirin Oskooi", castaway: "Shirin" },
-  "US0454": { full_name: "Tyler Fredrickson", castaway: "Tyler" },
-  "US0455": { full_name: "Dan Foley", castaway: "Dan" },
-  "US0456": { full_name: "Sierra Dawn Thomas", castaway: "Sierra" },
-  "US0457": { full_name: "Rodney Lavoie Jr.", castaway: "Rodney" },
-  "US0458": { full_name: "Will Sims II", castaway: "Will" },
-  "US0459": { full_name: "Carolyn Rivera", castaway: "Carolyn" },
-  "US0460": { full_name: "Mike Holloway", castaway: "Mike" },
+  US0443: { full_name: "So Kim", castaway: "So" },
+  US0444: { full_name: "Vince Sly", castaway: "Vince" },
+  US0445: { full_name: "Nina Poersch", castaway: "Nina" },
+  US0446: { full_name: "Lindsey Cascaddan", castaway: "Lindsey" },
+  US0447: { full_name: "Max Dawson", castaway: "Max" },
+  US0448: { full_name: "Joaquin Souberbielle", castaway: "Joaquin" },
+  US0449: { full_name: "Kelly Remington", castaway: "Kelly" },
+  US0450: { full_name: "Hali Ford", castaway: "Hali" },
+  US0451: { full_name: "Joe Anglim", castaway: "Joe" },
+  US0452: { full_name: "Jenn Brown", castaway: "Jenn" },
+  US0453: { full_name: "Shirin Oskooi", castaway: "Shirin" },
+  US0454: { full_name: "Tyler Fredrickson", castaway: "Tyler" },
+  US0455: { full_name: "Dan Foley", castaway: "Dan" },
+  US0456: { full_name: "Sierra Dawn Thomas", castaway: "Sierra" },
+  US0457: { full_name: "Rodney Lavoie Jr.", castaway: "Rodney" },
+  US0458: { full_name: "Will Sims II", castaway: "Will" },
+  US0459: { full_name: "Carolyn Rivera", castaway: "Carolyn" },
+  US0460: { full_name: "Mike Holloway", castaway: "Mike" },
 };
 
 export const SEASON_30_PLAYERS = [
@@ -441,13 +444,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 2,
     variant: "team_immunity",
     order: 4,
-    winning_castaways: [
-      "US0447",
-      "US0448",
-      "US0453",
-      "US0454",
-      "US0459",
-    ],
+    winning_castaways: ["US0447", "US0448", "US0453", "US0454", "US0459"],
   },
   challenge_5: {
     id: "challenge_5",
@@ -457,13 +454,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 2,
     variant: "team_reward",
     order: 5,
-    winning_castaways: [
-      "US0447",
-      "US0448",
-      "US0453",
-      "US0454",
-      "US0459",
-    ],
+    winning_castaways: ["US0447", "US0448", "US0453", "US0454", "US0459"],
   },
   challenge_6: {
     id: "challenge_6",
@@ -490,13 +481,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 3,
     variant: "team_immunity",
     order: 7,
-    winning_castaways: [
-      "US0447",
-      "US0448",
-      "US0453",
-      "US0454",
-      "US0459",
-    ],
+    winning_castaways: ["US0447", "US0448", "US0453", "US0454", "US0459"],
   },
   challenge_8: {
     id: "challenge_8",
@@ -523,13 +508,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 3,
     variant: "team_reward",
     order: 9,
-    winning_castaways: [
-      "US0447",
-      "US0448",
-      "US0453",
-      "US0454",
-      "US0459",
-    ],
+    winning_castaways: ["US0447", "US0448", "US0453", "US0454", "US0459"],
   },
   challenge_10: {
     id: "challenge_10",
@@ -539,13 +518,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 4,
     variant: "team_reward",
     order: 10,
-    winning_castaways: [
-      "US0447",
-      "US0448",
-      "US0453",
-      "US0454",
-      "US0459",
-    ],
+    winning_castaways: ["US0447", "US0448", "US0453", "US0454", "US0459"],
   },
   challenge_11: {
     id: "challenge_11",
@@ -555,12 +528,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 4,
     variant: "team_reward",
     order: 11,
-    winning_castaways: [
-      "US0450",
-      "US0451",
-      "US0452",
-      "US0458",
-    ],
+    winning_castaways: ["US0450", "US0451", "US0452", "US0458"],
   },
   challenge_12: {
     id: "challenge_12",
@@ -570,13 +538,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 4,
     variant: "team_immunity",
     order: 12,
-    winning_castaways: [
-      "US0447",
-      "US0448",
-      "US0453",
-      "US0454",
-      "US0459",
-    ],
+    winning_castaways: ["US0447", "US0448", "US0453", "US0454", "US0459"],
   },
   challenge_13: {
     id: "challenge_13",
@@ -586,12 +548,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 4,
     variant: "team_immunity",
     order: 13,
-    winning_castaways: [
-      "US0450",
-      "US0451",
-      "US0452",
-      "US0458",
-    ],
+    winning_castaways: ["US0450", "US0451", "US0452", "US0458"],
   },
   challenge_14: {
     id: "challenge_14",
@@ -671,9 +628,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 7,
     variant: "immunity",
     order: 18,
-    winning_castaways: [
-      "US0451",
-    ],
+    winning_castaways: ["US0451"],
   },
   challenge_19: {
     id: "challenge_19",
@@ -683,9 +638,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 8,
     variant: "reward",
     order: 19,
-    winning_castaways: [
-      "US0451",
-    ],
+    winning_castaways: ["US0451"],
   },
   challenge_20: {
     id: "challenge_20",
@@ -695,9 +648,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 8,
     variant: "immunity",
     order: 20,
-    winning_castaways: [
-      "US0451",
-    ],
+    winning_castaways: ["US0451"],
   },
   challenge_21: {
     id: "challenge_21",
@@ -707,13 +658,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 9,
     variant: "team_reward",
     order: 21,
-    winning_castaways: [
-      "US0453",
-      "US0454",
-      "US0455",
-      "US0456",
-      "US0460",
-    ],
+    winning_castaways: ["US0453", "US0454", "US0455", "US0456", "US0460"],
   },
   challenge_22: {
     id: "challenge_22",
@@ -723,9 +668,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 9,
     variant: "immunity",
     order: 22,
-    winning_castaways: [
-      "US0454",
-    ],
+    winning_castaways: ["US0454"],
   },
   challenge_23: {
     id: "challenge_23",
@@ -735,9 +678,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 10,
     variant: "immunity",
     order: 23,
-    winning_castaways: [
-      "US0460",
-    ],
+    winning_castaways: ["US0460"],
   },
   challenge_24: {
     id: "challenge_24",
@@ -747,12 +688,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 11,
     variant: "team_reward",
     order: 24,
-    winning_castaways: [
-      "US0454",
-      "US0455",
-      "US0458",
-      "US0459",
-    ],
+    winning_castaways: ["US0454", "US0455", "US0458", "US0459"],
   },
   challenge_25: {
     id: "challenge_25",
@@ -762,10 +698,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 11,
     variant: "immunity",
     order: 25,
-    winning_castaways: [
-      "US0459",
-      "US0460",
-    ],
+    winning_castaways: ["US0459", "US0460"],
   },
   challenge_26: {
     id: "challenge_26",
@@ -775,11 +708,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 12,
     variant: "team_reward",
     order: 26,
-    winning_castaways: [
-      "US0456",
-      "US0459",
-      "US0460",
-    ],
+    winning_castaways: ["US0456", "US0459", "US0460"],
   },
   challenge_27: {
     id: "challenge_27",
@@ -789,9 +718,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 12,
     variant: "immunity",
     order: 27,
-    winning_castaways: [
-      "US0459",
-    ],
+    winning_castaways: ["US0459"],
   },
   challenge_28: {
     id: "challenge_28",
@@ -801,11 +728,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 13,
     variant: "team_reward",
     order: 28,
-    winning_castaways: [
-      "US0458",
-      "US0459",
-      "US0460",
-    ],
+    winning_castaways: ["US0458", "US0459", "US0460"],
   },
   challenge_29: {
     id: "challenge_29",
@@ -815,9 +738,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 13,
     variant: "immunity",
     order: 29,
-    winning_castaways: [
-      "US0460",
-    ],
+    winning_castaways: ["US0460"],
   },
   challenge_30: {
     id: "challenge_30",
@@ -827,9 +748,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 14,
     variant: "reward",
     order: 30,
-    winning_castaways: [
-      "US0460",
-    ],
+    winning_castaways: ["US0460"],
   },
   challenge_31: {
     id: "challenge_31",
@@ -839,9 +758,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 14,
     variant: "immunity",
     order: 31,
-    winning_castaways: [
-      "US0460",
-    ],
+    winning_castaways: ["US0460"],
   },
   challenge_32: {
     id: "challenge_32",
@@ -851,9 +768,7 @@ export const SEASON_30_CHALLENGES = {
     episode_num: 14,
     variant: "immunity",
     order: 32,
-    winning_castaways: [
-      "US0460",
-    ],
+    winning_castaways: ["US0460"],
   },
 } satisfies Record<Challenge["id"], Challenge<CastawayIdType, SeasonNumber>>;
 
@@ -1028,7 +943,10 @@ export const SEASON_30_ELIMINATIONS = {
     castaway_id: "US0459",
     variant: "final_tribal_council",
   },
-} satisfies Record<Elimination["id"], Elimination<CastawayIdType, SeasonNumber>>;
+} satisfies Record<
+  Elimination["id"],
+  Elimination<CastawayIdType, SeasonNumber>
+>;
 
 export const SEASON_30_EVENTS = {
   event_1: {

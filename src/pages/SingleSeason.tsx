@@ -94,11 +94,7 @@ export const SingleSeason = () => {
             </Text>
           </Stack>
         ) : (
-          <Paper
-            p="md"
-            radius="md"
-            className={classes.loginBanner}
-          >
+          <Paper p="md" radius="md" className={classes.loginBanner}>
             <Group gap="md" align="center" wrap="wrap">
               <Text size="sm" c="white" fw={500}>
                 Log in to start a draft with friends

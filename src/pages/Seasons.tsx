@@ -69,7 +69,14 @@ function HeroCard({ meta, live }: { meta: SeasonMeta; live: boolean }) {
     >
       <Card.Section pos="relative">
         {meta.img ? (
-          <Image src={meta.img} height={200} w="100%" h={200} alt={meta.name} loading="lazy" />
+          <Image
+            src={meta.img}
+            height={200}
+            w="100%"
+            h={200}
+            alt={meta.name}
+            loading="lazy"
+          />
         ) : (
           <div
             className={`${classes.heroImageFallback} ${getEraClass(meta.order)}`}
@@ -124,7 +131,14 @@ function CompactCard({ meta, live }: { meta: SeasonMeta; live: boolean }) {
     >
       <Card.Section pos="relative">
         {meta.img ? (
-          <Image src={meta.img} height={100} w="100%" h={100} alt={meta.name} loading="lazy" />
+          <Image
+            src={meta.img}
+            height={100}
+            w="100%"
+            h={100}
+            alt={meta.name}
+            loading="lazy"
+          />
         ) : (
           <div
             className={`${classes.compactImageFallback} ${getEraClass(meta.order)}`}

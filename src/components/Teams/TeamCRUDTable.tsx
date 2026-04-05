@@ -14,13 +14,13 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconPencil, IconTrash, IconX } from "@tabler/icons-react";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
+import { SURVIVOR_SWATCHES } from "../../constants/colors";
 import { db } from "../../firebase";
 import { useChallenges } from "../../hooks/useChallenges";
 import { useSeason } from "../../hooks/useSeason";
 import { useTeamAssignments } from "../../hooks/useTeamAssignments";
 import { useTeams } from "../../hooks/useTeams";
 import { useUser } from "../../hooks/useUser";
-import { SURVIVOR_SWATCHES } from "../../constants/colors";
 import { CastawayId, Team } from "../../types";
 
 export const TeamCRUDTable = () => {
@@ -66,10 +66,14 @@ export const TeamCRUDTable = () => {
         </>
       ) : (
         <Text size="sm">
-          Delete team &quot;{team.name}&quot;
-          {" "}({Object.values(assignments).reduce((count, snapshot) => {
-            return count + Object.values(snapshot).filter((t) => t === team.id).length;
-          }, 0)} player assignments)
+          Delete team &quot;{team.name}&quot; (
+          {Object.values(assignments).reduce((count, snapshot) => {
+            return (
+              count +
+              Object.values(snapshot).filter((t) => t === team.id).length
+            );
+          }, 0)}{" "}
+          player assignments)
         </Text>
       ),
       labels: {

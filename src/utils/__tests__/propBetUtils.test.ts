@@ -178,7 +178,10 @@ describe("getPropBetScoresForUser", () => {
       const events = {
         ev1: makeEvent("1", 8, ALICE, "find_idol"),
       };
-      const answer = getStatus("propbet_winner", { eliminations: elims, events });
+      const answer = getStatus("propbet_winner", {
+        eliminations: elims,
+        events,
+      });
       expect(answer.status).toBe("pending");
     });
 
