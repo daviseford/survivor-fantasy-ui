@@ -2,8 +2,6 @@ import { GameEvent, Season } from "../types";
 import { useSharedSnapshot } from "./useSharedSnapshot";
 
 export const useEvents = (seasonId?: Season["id"]) => {
-  return useSharedSnapshot<Record<GameEvent["id"], GameEvent>>(
-    "events",
-    seasonId,
-  );
+  const { data } = useSharedSnapshot("events", seasonId);
+  return { data: (data ?? {}) as Record<GameEvent["id"], GameEvent> };
 };

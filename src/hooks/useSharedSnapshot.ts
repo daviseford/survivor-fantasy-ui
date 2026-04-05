@@ -19,20 +19,20 @@ const cache = new Map<string, CacheEntry>();
  * share a single `onSnapshot` listener. The subscription is ref-counted
  * and closed when all subscribers unmount.
  *
- * @param emptyValue - value to use when the document has no data (default: `{}`)
+ * Returns raw `snap.data()` result — `undefined` until the first snapshot
+ * arrives, then the document data (or `undefined` if the document doesn't
+ * exist). Callers apply their own default values.
  */
-export function useSharedSnapshot<T>(
+export function useSharedSnapshot(
   collection: string,
   docId: string | undefined,
-  emptyValue?: T,
-): { data: T } {
+): { data: DocumentData | undefined } {
   const path = docId ? `${collection}/${docId}` : undefined;
 
-  const [data, setData] = useState<T>(() => {
-    if (!path) return (emptyValue ?? {}) as T;
+  const [data, setData] = useState<DocumentData | undefined>(() => {
+    if (!path) return undefined;
     const entry = cache.get(path);
-    if (entry?.loaded) return (entry.data ?? emptyValue ?? {}) as T;
-    return (emptyValue ?? {}) as T;
+    return entry?.loaded ? entry.data : undefined;
   });
 
   useEffect(() => {
@@ -42,16 +42,12 @@ export function useSharedSnapshot<T>(
 
     if (existing) {
       existing.refCount++;
-      existing.listeners.add(
-        setData as (data: DocumentData | undefined) => void,
-      );
+      existing.listeners.add(setData);
       if (existing.loaded) {
-        setData((existing.data ?? emptyValue ?? {}) as T);
+        setData(existing.data);
       }
       return () => {
-        existing.listeners.delete(
-          setData as (data: DocumentData | undefined) => void,
-        );
+        existing.listeners.delete(setData);
         existing.refCount--;
         if (existing.refCount <= 0) {
           existing.unsub();
@@ -65,7 +61,7 @@ export function useSharedSnapshot<T>(
       loaded: false,
       unsub: () => {},
       refCount: 1,
-      listeners: new Set([setData as (data: DocumentData | undefined) => void]),
+      listeners: new Set([setData]),
     };
     cache.set(path, entry);
 
@@ -76,27 +72,28 @@ export function useSharedSnapshot<T>(
         const snapData = snap.data();
         entry.data = snapData;
         entry.loaded = true;
-        const value = (snapData ?? emptyValue ?? {}) as T;
         for (const listener of entry.listeners) {
-          listener(value as DocumentData | undefined);
+          listener(snapData);
         }
       },
       (error) => {
         console.error(`useSharedSnapshot(${path}): onSnapshot error`, error);
+        entry.loaded = true;
+        for (const listener of entry.listeners) {
+          listener(entry.data);
+        }
       },
     );
 
     return () => {
-      entry.listeners.delete(
-        setData as (data: DocumentData | undefined) => void,
-      );
+      entry.listeners.delete(setData);
       entry.refCount--;
       if (entry.refCount <= 0) {
         entry.unsub();
         cache.delete(path);
       }
     };
-  }, [path, collection, docId, emptyValue]);
+  }, [path, collection, docId]);
 
   return { data };
 }

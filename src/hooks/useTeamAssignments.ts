@@ -2,5 +2,6 @@ import { Season, TeamAssignments } from "../types";
 import { useSharedSnapshot } from "./useSharedSnapshot";
 
 export const useTeamAssignments = (seasonId?: Season["id"]) => {
-  return useSharedSnapshot<TeamAssignments>("team_assignments", seasonId);
+  const { data } = useSharedSnapshot("team_assignments", seasonId);
+  return { data: (data ?? {}) as TeamAssignments };
 };

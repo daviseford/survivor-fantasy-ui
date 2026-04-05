@@ -6,11 +6,6 @@ export const useSeason = (id?: Season["id"]) => {
   const { seasonId } = useParams();
   const key = (id ?? seasonId) || undefined;
 
-  const { data } = useSharedSnapshot<Season | undefined>(
-    "seasons",
-    key,
-    undefined,
-  );
-
-  return { data, isLoading: !!key && !data };
+  const { data } = useSharedSnapshot("seasons", key);
+  return { data: data as Season | undefined, isLoading: !!key && !data };
 };

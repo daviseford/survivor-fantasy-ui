@@ -6,9 +6,6 @@ export const useCompetition = (id?: Competition["id"]) => {
   const { competitionId } = useParams();
   const key = id ?? competitionId;
 
-  return useSharedSnapshot<Competition | undefined>(
-    "competitions",
-    key,
-    undefined,
-  );
+  const { data } = useSharedSnapshot("competitions", key);
+  return { data: data as Competition | undefined };
 };
