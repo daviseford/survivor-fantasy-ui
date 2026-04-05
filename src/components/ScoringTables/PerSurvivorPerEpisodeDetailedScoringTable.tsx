@@ -13,14 +13,18 @@ import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { useCompetition } from "../../hooks/useCompetition";
+import { useDragScroll } from "../../hooks/useDragScroll";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
 import { CastawayId, PlayerAction } from "../../types";
 import { getNumberWithOrdinal } from "../../utils/misc";
+import classes from "./ScoringTables.module.css";
 
 type SortField = "rank" | "player" | "total" | "draft";
 type SortDir = "asc" | "desc";
+
+const STICKY_OFFSETS = { rank: 0, player: 70, total: 230, pick: 300 } as const;
 
 const getBadgeColor = (action: string) => {
   if (action === "eliminated") return "red";
@@ -44,6 +48,8 @@ const SortableHeader = ({
   sortDir,
   onSort,
   width,
+  className,
+  style,
 }: {
   label: string;
   field: SortField;
@@ -51,6 +57,8 @@ const SortableHeader = ({
   sortDir: SortDir;
   onSort: (field: SortField) => void;
   width?: string;
+  className?: string;
+  style?: React.CSSProperties;
 }) => {
   const isActive = sortField === field;
   const Icon = isActive && sortDir === "desc" ? IconChevronDown : IconChevronUp;
@@ -61,7 +69,12 @@ const SortableHeader = ({
       : "descending"
     : "none";
   return (
-    <Table.Th w={width} aria-sort={ariaSortValue}>
+    <Table.Th
+      w={width}
+      aria-sort={ariaSortValue}
+      className={className}
+      style={style}
+    >
       <UnstyledButton
         onClick={() => onSort(field)}
         style={{ display: "flex", alignItems: "center", gap: 4 }}
@@ -188,10 +201,21 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
       (x) => x.castaway_id === castawayId,
     );
 
-    const isRemovedFromGame =
+    const eliminationLabel = playerElimination
+      ? playerElimination.variant === "medical"
+        ? "Evacuated"
+        : playerElimination.variant === "quitter"
+          ? "Quit"
+          : playerElimination.variant === "ejected"
+            ? "Ejected"
+            : `Out ${getNumberWithOrdinal(playerElimination.order)}`
+      : null;
+
+    const isNonVotedOut =
       playerElimination &&
       (playerElimination.variant === "medical" ||
-        playerElimination.variant === "quitter");
+        playerElimination.variant === "quitter" ||
+        playerElimination.variant === "ejected");
 
     const isWinner = Object.values(events).some(
       (x) => x.castaway_id === castawayId && x.action === "win_survivor",
@@ -206,18 +230,25 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
           ? "var(--mantine-color-gray-light)"
           : isDraftedByCurrentUser
             ? "var(--mantine-color-blue-light)"
-            : "",
+            : "var(--mantine-color-body)",
     };
     const avatarStyle = playerElimination ? { filter: "grayscale(1)" } : {};
 
     return (
       <Table.Tr key={castawayId} style={trStyle}>
-        <Table.Td ta="center">
+        <Table.Td
+          ta="center"
+          className={classes.stickyCell}
+          style={{ left: STICKY_OFFSETS.rank }}
+        >
           <Text span size="sm" fw={500} c="dimmed">
             {defaultRank}
           </Text>
         </Table.Td>
-        <Table.Td style={{ minWidth: 160 }}>
+        <Table.Td
+          className={classes.stickyCell}
+          style={{ left: STICKY_OFFSETS.player, minWidth: 160 }}
+        >
           <Group gap={8} wrap="nowrap" align="center">
             <Avatar
               size={28}
@@ -235,22 +266,41 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
               >
                 {displayName}
               </Text>
-              {draftedBy && (
+              {(draftedBy || playerElimination) && (
                 <Text fz="xs" c="dimmed" lh={1.2} truncate>
-                  {draftedBy.displayName || draftedBy.email}
+                  {draftedBy ? draftedBy.displayName || draftedBy.email : ""}
+                  {draftedBy && playerElimination && " · "}
+                  {eliminationLabel && (
+                    <Text
+                      span
+                      fz="xs"
+                      c={isNonVotedOut ? "red.6" : "dimmed"}
+                      fw={isNonVotedOut ? 600 : undefined}
+                    >
+                      {eliminationLabel}
+                    </Text>
+                  )}
                 </Text>
               )}
             </div>
           </Group>
         </Table.Td>
 
-        <Table.Td ta="center">
+        <Table.Td
+          ta="center"
+          className={classes.stickyCell}
+          style={{ left: STICKY_OFFSETS.total }}
+        >
           <Text span fw={700} size="sm">
             {total}
           </Text>
         </Table.Td>
 
-        <Table.Td ta="center">
+        <Table.Td
+          ta="center"
+          className={`${classes.stickyCell} ${classes.stickyDivider}`}
+          style={{ left: STICKY_OFFSETS.pick }}
+        >
           <Text span size="sm" c="dimmed">
             {getNumberWithOrdinal(draftOrder)}
           </Text>
@@ -281,24 +331,12 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
             </Stack>
           </Table.Td>
         ))}
-        <Table.Td ta="center">
-          {playerElimination && (
-            <Badge
-              size="xs"
-              variant="light"
-              color={isRemovedFromGame ? "red" : "gray"}
-            >
-              {isRemovedFromGame
-                ? "Removed"
-                : `Out ${getNumberWithOrdinal(playerElimination.order)}`}
-            </Badge>
-          )}
-        </Table.Td>
       </Table.Tr>
     );
   });
 
   const scrollRef = useRef<HTMLDivElement>(null);
+  useDragScroll(scrollRef);
   useEffect(() => {
     const viewport = scrollRef.current?.querySelector<HTMLDivElement>(
       ".mantine-ScrollArea-viewport",
@@ -381,6 +419,8 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                 sortDir={sortDir}
                 onSort={handleSort}
                 width="70px"
+                className={classes.stickyHeaderCell}
+                style={{ left: STICKY_OFFSETS.rank }}
               />
               <SortableHeader
                 label="Player"
@@ -388,6 +428,9 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                 sortField={sortField}
                 sortDir={sortDir}
                 onSort={handleSort}
+                width="160px"
+                className={classes.stickyHeaderCell}
+                style={{ left: STICKY_OFFSETS.player }}
               />
               <SortableHeader
                 label="Total"
@@ -396,6 +439,8 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                 sortDir={sortDir}
                 onSort={handleSort}
                 width="70px"
+                className={classes.stickyHeaderCell}
+                style={{ left: STICKY_OFFSETS.total }}
               />
               <SortableHeader
                 label="Pick"
@@ -404,13 +449,14 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
                 sortDir={sortDir}
                 onSort={handleSort}
                 width="60px"
+                className={`${classes.stickyHeaderCell} ${classes.stickyDivider}`}
+                style={{ left: STICKY_OFFSETS.pick }}
               />
               {filteredEpisodes.map((x) => (
                 <Table.Th key={x.id} w={160}>
                   Ep {x.order}
                 </Table.Th>
               ))}
-              <Table.Th w={80}>Status</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>
