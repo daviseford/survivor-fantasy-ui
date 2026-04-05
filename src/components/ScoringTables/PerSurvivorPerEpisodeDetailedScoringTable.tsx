@@ -10,7 +10,7 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
@@ -298,6 +298,13 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
     );
   });
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+    }
+  }, [filteredEpisodes.length]);
+
   return (
     <>
       <Group gap="md" mb="xs" px="md" wrap="wrap">
@@ -352,7 +359,10 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
           </Badge>
         </Group>
       </Group>
-      <Table.ScrollContainer minWidth={500 + filteredEpisodes.length * 170}>
+      <Table.ScrollContainer
+        minWidth={500 + filteredEpisodes.length * 170}
+        ref={scrollRef}
+      >
         <Table
           highlightOnHover
           verticalSpacing="xs"
