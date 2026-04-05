@@ -46,7 +46,7 @@ const Section = ({
   subtitle?: string;
   icon?: React.ReactNode;
 }>) => (
-  <Paper p="lg" radius="md" withBorder>
+  <Paper p={{ base: "sm", sm: "lg" }} radius="md" withBorder>
     <Stack gap="md">
       <Group gap="sm" align="center">
         {icon}
@@ -90,7 +90,7 @@ export const SingleCompetition = () => {
   );
 
   return (
-    <Stack gap="xl" p="lg">
+    <Stack gap="xl" p={{ base: "sm", sm: "lg" }}>
       <Button
         component={Link}
         to="/competitions"
