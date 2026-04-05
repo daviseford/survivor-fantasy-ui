@@ -8,7 +8,7 @@ export const Players = () => {
   if (!season) return null;
 
   return (
-    <SimpleGrid cols={{ base: 1, xs: 2, sm: 3, md: 4 }}>
+    <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4 }}>
       {season.players.map((x) => (
         <PlayerCard {...x} key={x.castaway_id} />
       ))}
@@ -35,7 +35,7 @@ const PlayerCard = (props: Player) => {
         h={{ base: 200, xs: 140 }}
         style={{ objectPosition: "center top" }}
       />
-      <Text fw={600} mt="sm" size="sm">
+      <Text fw={600} mt="sm" size="md">
         {props.full_name}
       </Text>
       {(props.age || props.profession || props.hometown) && (
