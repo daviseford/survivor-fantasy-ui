@@ -73,7 +73,7 @@ export const PlayerHoverCard = ({
       shadow="md"
       openDelay={300}
       closeDelay={150}
-      position="right-start"
+      position="bottom-start"
       withinPortal
     >
       <HoverCard.Target>{children}</HoverCard.Target>
