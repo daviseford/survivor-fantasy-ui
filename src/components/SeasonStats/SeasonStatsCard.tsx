@@ -23,27 +23,33 @@ export const SeasonStatsCard = ({ card }: { card: StatCard }) => {
           </Text>
         )}
 
-        {card.winners.map((w, idx) => (
-          <div key={`${w.id}_${idx}`}>
-            <Group gap="xs" align="baseline" wrap="nowrap">
-              <Text size="lg" fw={700} lh={1.2}>
-                {w.label}
-              </Text>
-              <Text size="xs" c="dimmed">
-                {w.value} {card.unit}
-              </Text>
-            </Group>
-            {w.detail && (
-              <Text size="xs" c="dimmed">
-                {w.detail}
-              </Text>
-            )}
-          </div>
-        ))}
-        {isTied && (
-          <Text size="xs" c="dimmed">
-            Tied
-          </Text>
+        {isTied ? (
+          <>
+            <Text size="sm" fw={700} lh={1.3}>
+              {card.winners.map((w) => w.label).join(", ")}
+            </Text>
+            <Text size="xs" c="dimmed">
+              Tied — {card.winners[0].value} {card.unit}
+            </Text>
+          </>
+        ) : (
+          card.winners.map((w, idx) => (
+            <div key={`${w.id}_${idx}`}>
+              <Group gap="xs" align="baseline" wrap="nowrap">
+                <Text size="lg" fw={700} lh={1.2}>
+                  {w.label}
+                </Text>
+                <Text size="xs" c="dimmed">
+                  {w.value} {card.unit}
+                </Text>
+              </Group>
+              {w.detail && (
+                <Text size="xs" c="dimmed">
+                  {w.detail}
+                </Text>
+              )}
+            </div>
+          ))
         )}
       </Stack>
     </Card>
