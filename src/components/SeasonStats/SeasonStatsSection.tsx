@@ -2,33 +2,74 @@ import { Divider, SimpleGrid, Stack, Table, Text } from "@mantine/core";
 import { RosterStat, SeasonStatsResult } from "../../utils/seasonStats";
 import { SeasonStatsCard } from "./SeasonStatsCard";
 
-const RosterStatRow = ({ stat }: { stat: RosterStat }) => (
-  <Table.Tr>
-    <Table.Td style={{ minWidth: 140 }}>
-      <Text size="xs" fw={600}>
-        {stat.title}
-      </Text>
-      <Text size="xs" c="dimmed">
-        {stat.description}
-      </Text>
-    </Table.Td>
-    {stat.rows.map((row) => (
-      <Table.Td key={row.uid} ta="center">
-        <Text size="sm" fw={700}>
-          {row.value}{" "}
-          <Text span size="xs" c="dimmed" fw={400}>
-            {stat.unit}
-          </Text>
+function getCellColor(
+  value: number,
+  best: number,
+  worst: number,
+  direction: "high" | "low",
+): string | undefined {
+  if (best === worst) return undefined;
+  const isBest = direction === "high" ? value === best : value === worst;
+  const isWorst = direction === "high" ? value === worst : value === best;
+  if (isBest) return "var(--mantine-color-green-light)";
+  if (isWorst) return "var(--mantine-color-red-light)";
+  return undefined;
+}
+
+function getRank(index: number): string {
+  const n = index + 1;
+  const suffix = n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th";
+  return `${n}${suffix}`;
+}
+
+const RosterStatRow = ({
+  stat,
+  showRank,
+}: {
+  stat: RosterStat;
+  showRank: boolean;
+}) => {
+  const values = stat.rows.map((r) => r.value);
+  const best = Math.max(...values);
+  const worst = Math.min(...values);
+
+  return (
+    <Table.Tr>
+      <Table.Td style={{ minWidth: 140 }}>
+        <Text size="xs" fw={600}>
+          {stat.title}
         </Text>
-        {row.detail && (
-          <Text size="xs" c="dimmed">
-            {row.detail}
-          </Text>
-        )}
+        <Text size="xs" c="dimmed">
+          {stat.description}
+        </Text>
       </Table.Td>
-    ))}
-  </Table.Tr>
-);
+      {stat.rows.map((row, idx) => {
+        const bg = getCellColor(row.value, best, worst, stat.direction);
+        const rank = showRank ? getRank(idx) : null;
+        return (
+          <Table.Td key={row.uid} ta="center" bg={bg}>
+            {rank && (
+              <Text size="xs" c="dimmed" fw={500}>
+                {rank}
+              </Text>
+            )}
+            <Text size="sm" fw={700}>
+              {row.value}{" "}
+              <Text span size="xs" c="dimmed" fw={400}>
+                {stat.unit}
+              </Text>
+            </Text>
+            {row.detail && (
+              <Text size="xs" c="dimmed">
+                {row.detail}
+              </Text>
+            )}
+          </Table.Td>
+        );
+      })}
+    </Table.Tr>
+  );
+};
 
 export const SeasonStatsSection = ({ stats }: { stats: SeasonStatsResult }) => {
   const hasCastaway = stats.castawayCards.length > 0;
@@ -37,6 +78,7 @@ export const SeasonStatsSection = ({ stats }: { stats: SeasonStatsResult }) => {
   if (!hasCastaway && !hasRoster) return null;
 
   const participants = hasRoster ? stats.rosterStats[0].rows : [];
+  const showRank = participants.length > 2;
 
   return (
     <Stack gap="md">
@@ -79,7 +121,11 @@ export const SeasonStatsSection = ({ stats }: { stats: SeasonStatsResult }) => {
                 </Table.Thead>
                 <Table.Tbody>
                   {stats.rosterStats.map((stat) => (
-                    <RosterStatRow key={stat.key} stat={stat} />
+                    <RosterStatRow
+                      key={stat.key}
+                      stat={stat}
+                      showRank={showRank}
+                    />
                   ))}
                 </Table.Tbody>
               </Table>

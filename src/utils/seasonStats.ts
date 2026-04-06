@@ -548,6 +548,8 @@ export interface RosterStat {
   title: string;
   description: string;
   unit: string;
+  /** "high" = higher value is better (green), "low" = lower is better */
+  direction: "high" | "low";
   rows: RosterStatRow[];
 }
 
@@ -585,6 +587,7 @@ function computeRosterStats(
     title: "Challenge Points",
     description: "Total points earned from challenge wins across roster",
     unit: "pts",
+    direction: "high",
     rows: [...challengePts.entries()]
       .sort((a, b) => b[1] - a[1])
       .map(([uid, v]) => ({ uid, label: getName(uid), value: v })),
@@ -609,6 +612,7 @@ function computeRosterStats(
       title: "Best Team Night",
       description: "Highest single-episode score across all roster players",
       unit: "pts",
+      direction: "high",
       rows: [...bestEp.entries()]
         .sort((a, b) => b[1].value - a[1].value)
         .map(([uid, d]) => ({
@@ -642,6 +646,7 @@ function computeRosterStats(
     title: "Best Draft Pick",
     description: "Highest-scoring individual castaway on each roster",
     unit: "pts",
+    direction: "high",
     rows: [...bestPick.entries()]
       .sort((a, b) => b[1].value - a[1].value)
       .map(([uid, d]) => ({
@@ -668,6 +673,7 @@ function computeRosterStats(
       title: "Votes Against Roster",
       description: "Total tribal council votes targeting roster players",
       unit: "votes",
+      direction: "low",
       rows: [...voteCounts.entries()]
         .sort((a, b) => b[1] - a[1])
         .map(([uid, v]) => ({ uid, label: getName(uid), value: v })),
