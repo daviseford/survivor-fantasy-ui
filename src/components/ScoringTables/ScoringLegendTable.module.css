@@ -1,0 +1,29 @@
+/* Clip horizontal overflow without creating a scroll container (preserves sticky) */
+.tableWrapper {
+  overflow-x: clip;
+}
+
+/* Opaque background so sticky header doesn't show content behind it */
+.stickyHead {
+  background-color: var(--mantine-color-body);
+}
+
+/* Category header rows — distinct from data rows, no hover highlight */
+.categoryRow {
+  pointer-events: none;
+}
+
+.categoryCell {
+  background-color: light-dark(
+    var(--mantine-color-gray-1),
+    var(--mantine-color-dark-6)
+  );
+  border-left: 3px solid var(--mantine-primary-color-filled);
+}
+
+/* Collapse the description column on narrow screens */
+@media (max-width: 30em) {
+  .descriptionCell {
+    display: none;
+  }
+}
