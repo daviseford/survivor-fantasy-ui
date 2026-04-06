@@ -202,14 +202,6 @@ describe("computeSeasonStats", () => {
       expect(card!.winners[0].detail).toBe("Episode 3");
     });
 
-    it("returns worst single episode", () => {
-      const result = computeSeasonStats(buildInput());
-      const card = findCard(result.castawayCards, "worst_single_episode");
-      expect(card).toBeDefined();
-      expect(card!.winners[0].label).toBe("Dana");
-      expect(card!.winners[0].value).toBe(1);
-    });
-
     it("returns most consistent by lowest stddev", () => {
       const result = computeSeasonStats(buildInput());
       const card = findCard(result.castawayCards, "most_consistent");

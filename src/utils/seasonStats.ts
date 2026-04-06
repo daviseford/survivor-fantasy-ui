@@ -194,42 +194,6 @@ function bestSingleEpisodeCastaway(
   };
 }
 
-function worstSingleEpisodeCastaway(
-  input: SeasonStatsInput,
-  draftedIds: Set<CastawayId>,
-): StatCard | null {
-  let worst: { id: string; value: number; ep: number }[] = [];
-  let worstVal = Infinity;
-  for (const id of draftedIds) {
-    const episodes = input.survivorPointsByEpisode[id];
-    if (!episodes) continue;
-    for (let i = 0; i < episodes.length; i++) {
-      const val = episodes[i].total;
-      if (val < worstVal) {
-        worstVal = val;
-        worst = [{ id, value: val, ep: i + 1 }];
-      } else if (val === worstVal) {
-        worst.push({ id, value: val, ep: i + 1 });
-      }
-    }
-  }
-  if (worst.length === 0) return null;
-  return {
-    key: "worst_single_episode",
-    group: "castaway",
-    tone: "negative",
-    title: "Worst Single Episode",
-    subtitle: "Rough night at tribal",
-    winners: worst.map((w) => ({
-      id: w.id,
-      label: input.resolveName(w.id as CastawayId),
-      value: w.value,
-      detail: `Episode ${w.ep}`,
-    })),
-    unit: "pts",
-  };
-}
-
 function mostConsistentCastaway(
   input: SeasonStatsInput,
   draftedIds: Set<CastawayId>,
@@ -288,6 +252,7 @@ function challengeBeast(
   const entries: [string, number][] = [...counts.entries()];
   const winners = topN(entries, "max");
   if (winners.length === 0 || winners[0].value === 0) return null;
+  if (winners.length >= 3) return null; // Suppress noisy 3+ way ties
 
   const isImmunity = variant === "immunity";
   return {
@@ -334,6 +299,7 @@ function advantagesFound(
   const entries: [string, number][] = [...counts.entries()];
   const winners = topN(entries, "max");
   if (winners.length === 0 || winners[0].value === 0) return null;
+  if (winners.length >= 3) return null; // Suppress noisy 3+ way ties
   return {
     key: "advantages_found",
     group: "castaway",
@@ -376,6 +342,7 @@ function advantagesPlayed(
   const entries: [string, number][] = [...counts.entries()];
   const winners = topN(entries, "max");
   if (winners.length === 0 || winners[0].value === 0) return null;
+  if (winners.length >= 3) return null; // Suppress noisy 3+ way ties
   return {
     key: "advantages_played",
     group: "castaway",
@@ -645,8 +612,8 @@ function rosterVotePressure(
     tone: isMost ? "negative" : "positive",
     title: isMost ? "Most Heat on a Team" : "Safest Roster",
     subtitle: isMost
-      ? "Most tribal votes across roster"
-      : "Fewest tribal votes across roster",
+      ? "Most votes against roster"
+      : "Fewest votes against roster",
     winners: winners.map((w) => ({
       id: w.id,
       label: getParticipantName(input.competition, w.id),
@@ -685,7 +652,6 @@ export function computeSeasonStats(input: SeasonStatsInput): SeasonStatsResult {
     () => leastVotesReceived(input, draftedIds),
     // Negative cards
     () => lowestScoringCastaway(input, draftedIds),
-    () => worstSingleEpisodeCastaway(input, draftedIds),
   ];
 
   for (const fn of cardFns) {

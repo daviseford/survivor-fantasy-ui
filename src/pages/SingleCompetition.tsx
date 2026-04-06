@@ -150,18 +150,6 @@ export const SingleCompetition = () => {
         <PerUserPerEpisodeScoringTable />
       </Section>
 
-      {seasonStats &&
-        (seasonStats.castawayCards.length > 0 ||
-          seasonStats.rosterCards.length > 0) && (
-          <Section
-            title="Season Stats"
-            subtitle="Key storylines and standout performances"
-            icon={<IconFlame size={22} color="var(--mantine-color-orange-6)" />}
-          >
-            <SeasonStatsSection stats={seasonStats} />
-          </Section>
-        )}
-
       {activePropBetKeys.length > 0 && (
         <Section
           title="Prop Bets"
@@ -181,6 +169,24 @@ export const SingleCompetition = () => {
       >
         <PerSurvivorPerEpisodeDetailedScoringTable />
       </Section>
+
+      {seasonStats &&
+        (seasonStats.castawayCards.length > 0 ||
+          seasonStats.rosterCards.length > 0) && (
+          <Accordion variant="subtle" radius="md">
+            <Accordion.Item value="season-stats">
+              <Accordion.Control>
+                <Group gap="sm">
+                  <IconFlame size={18} color="var(--mantine-color-orange-6)" />
+                  <Title order={4}>Season Stats</Title>
+                </Group>
+              </Accordion.Control>
+              <Accordion.Panel>
+                <SeasonStatsSection stats={seasonStats} />
+              </Accordion.Panel>
+            </Accordion.Item>
+          </Accordion>
+        )}
 
       <Section
         title="Scoring Breakdown"
