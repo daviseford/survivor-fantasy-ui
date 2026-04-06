@@ -5,15 +5,10 @@
  * Used by both new-season.ts and batch-new-season.ts.
  */
 
-import * as fs from "fs";
 import * as path from "path";
 import type { ScrapedPlayer } from "./types.js";
-import {
-  delay,
-  downloadImage,
-  fetchImageUrls,
-  resolveWikiPageTitle,
-} from "./wiki-api.js";
+import { delay, downloadImage, fetchImageUrls } from "./wiki-api.js";
+import { resolveWikiPageTitle } from "./wiki-name-resolver.js";
 import { parseContestantPage } from "./wikitext-parser.js";
 
 /** Resolution stats for summary logging. */
@@ -120,10 +115,6 @@ export async function fetchWikiSupplemental(
     );
     const localFileName = name.replace(/\s+/g, "-") + ".jpg";
     const localPath = path.join(imgDirPath, localFileName);
-
-    if (!fs.existsSync(imgDirPath)) {
-      fs.mkdirSync(imgDirPath, { recursive: true });
-    }
 
     const ok = await downloadImage(thumbUrl, localPath);
     if (ok) {

@@ -4,7 +4,7 @@ import {
   extractLastName,
   resolveWikiPageTitle,
   WIKI_NAME_OVERRIDES,
-} from "../wiki-api";
+} from "../wiki-name-resolver";
 
 function makePlayer(
   overrides: Partial<ScrapedPlayer> & { wikiPageTitle: string },
@@ -20,6 +20,14 @@ function makePlayer(
 describe("WIKI_NAME_OVERRIDES", () => {
   it("contains exactly 33 entries", () => {
     expect(Object.keys(WIKI_NAME_OVERRIDES)).toHaveLength(33);
+  });
+
+  it("maps known mismatches correctly (spot check)", () => {
+    expect(WIKI_NAME_OVERRIDES["James Thomas Jr."]).toBe("J.T. Thomas");
+    expect(WIKI_NAME_OVERRIDES["Andria Herd"]).toBe("Dreamz Herd");
+    expect(WIKI_NAME_OVERRIDES["Vince Sly"]).toBe("Vince S.");
+    expect(WIKI_NAME_OVERRIDES["Robert Crowley"]).toBe("Bob Crowley");
+    expect(WIKI_NAME_OVERRIDES["Ricard Foye"]).toBe("Ricard Foyé");
   });
 });
 
@@ -48,6 +56,11 @@ describe("extractLastName", () => {
 
   it("handles single-word names by returning the word", () => {
     expect(extractLastName("Madonna")).toBe("Madonna");
+  });
+
+  it("returns suffix as-is for two-word names (no valid last name to fall back to)", () => {
+    // With only two parts, stripping the suffix would return the first name
+    expect(extractLastName("Someone Jr.")).toBe("Jr.");
   });
 });
 
@@ -109,6 +122,19 @@ describe("resolveWikiPageTitle", () => {
     expect(mockFetch).toHaveBeenNthCalledWith(2, "Nickname Lastname");
   });
 
+  it("skips Layer 3 when castawayShortName is undefined", async () => {
+    mockFetch.mockResolvedValue(null);
+
+    const player = makePlayer({
+      wikiPageTitle: "Richard Hatch",
+      // castawayShortName intentionally omitted
+    });
+    const result = await resolveWikiPageTitle(player, mockFetch);
+
+    expect(result).toBeNull();
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+  });
+
   it("skips Layer 3 when castawayShortName equals first word of full_name", async () => {
     mockFetch.mockResolvedValue(null);
 
@@ -138,11 +164,11 @@ describe("resolveWikiPageTitle", () => {
     expect(mockFetch).toHaveBeenCalledTimes(2);
   });
 
-  it("falls through to Layer 2 when override map entry fetch fails", async () => {
-    // "Andria Herd" is in override map, but wiki fetch for "Dreamz Herd" fails
-    mockFetch.mockResolvedValueOnce(null); // Override fetch fails
-    mockFetch.mockResolvedValueOnce(null); // full_name fails
-    mockFetch.mockResolvedValueOnce("{{Contestant}}"); // castaway+last succeeds
+  it("deduplicates Layer 3 when it would produce the same title as Layer 1", async () => {
+    // "Andria Herd" maps to "Dreamz Herd" in override. Layer 3 with
+    // castawayShortName="Dreamz" + lastName="Herd" also produces "Dreamz Herd".
+    // The dedup logic should skip the redundant fetch.
+    mockFetch.mockResolvedValue(null); // All fetches fail
 
     const player = makePlayer({
       wikiPageTitle: "Andria Herd",
@@ -150,10 +176,11 @@ describe("resolveWikiPageTitle", () => {
     });
     const result = await resolveWikiPageTitle(player, mockFetch);
 
-    expect(result).not.toBeNull();
-    expect(result!.title).toBe("Dreamz Herd");
-    expect(result!.layer).toBe("castaway");
-    // Called 3 times: override, full_name, castaway+last
-    expect(mockFetch).toHaveBeenCalledTimes(3);
+    expect(result).toBeNull();
+    // Only 2 calls: override ("Dreamz Herd") + full_name ("Andria Herd")
+    // Layer 3 skipped because "Dreamz Herd" was already attempted
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+    expect(mockFetch).toHaveBeenNthCalledWith(1, "Dreamz Herd");
+    expect(mockFetch).toHaveBeenNthCalledWith(2, "Andria Herd");
   });
 });
