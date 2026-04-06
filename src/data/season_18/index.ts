@@ -169,9 +169,11 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0276",
     full_name: "Debra Beebe",
-    img: "",
-    description: "Age: 46 | Hometown: Auburn, Alabama",
+    img: "/images/season_18/Debra-Beebe.jpg",
+    description:
+      "Age: 46 | Hometown: Auburn, Alabama | Occupation: Middle School Principal",
     age: 46,
+    profession: "Middle School Principal",
     hometown: "Auburn, Alabama",
     nickname: "Debbie",
   }),
@@ -220,9 +222,11 @@ export const SEASON_18_PLAYERS = [
   buildPlayer({
     castaway_id: "US0281",
     full_name: "James Thomas Jr.",
-    img: "",
-    description: "Age: 24 | Hometown: Mobile, Alabama",
+    img: "/images/season_18/James-Thomas-Jr..jpg",
+    description:
+      "Age: 24 | Hometown: Mobile, Alabama | Occupation: Cattle Rancher",
     age: 24,
+    profession: "Cattle Rancher",
     hometown: "Mobile, Alabama",
     nickname: "J.T.",
   }),

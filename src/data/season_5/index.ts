@@ -116,9 +116,11 @@ export const SEASON_5_PLAYERS = [
   buildPlayer({
     castaway_id: "US0070",
     full_name: "Robert Zbacnik",
-    img: "",
-    description: "Age: 23 | Hometown: Scottsdale, Arizona",
+    img: "/images/season_5/Robert-Zbacnik.jpg",
+    description:
+      "Age: 23 | Hometown: Scottsdale, Arizona | Occupation: Bartender",
     age: 23,
+    profession: "Bartender",
     hometown: "Scottsdale, Arizona",
     nickname: "Robb",
   }),

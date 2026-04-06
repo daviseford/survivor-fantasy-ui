@@ -85,9 +85,11 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0184",
     full_name: "Virgilio Garcia",
-    img: "",
-    description: "Age: 36 | Hometown: New York City, New York",
+    img: "/images/season_13/Virgilio-Garcia.jpg",
+    description:
+      "Age: 36 | Hometown: New York City, New York | Occupation: Heavy Metal Musician",
     age: 36,
+    profession: "Heavy Metal Musician",
     hometown: "New York City, New York",
     nickname: "Billy",
   }),
@@ -104,9 +106,11 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0186",
     full_name: "John Calderon",
-    img: "",
-    description: "Age: 30 | Hometown: Long Beach, California",
+    img: "/images/season_13/John-Calderon.jpg",
+    description:
+      "Age: 30 | Hometown: Long Beach, California | Occupation: Volleyball Pro",
     age: 30,
+    profession: "Volleyball Pro",
     hometown: "Long Beach, California",
     nickname: "J.P.",
   }),
@@ -123,9 +127,11 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0188",
     full_name: "Anh-Tuan Bui",
-    img: "",
-    description: "Age: 42 | Hometown: Christiansburg, Virginia",
+    img: "/images/season_13/Anh-Tuan-Bui.jpg",
+    description:
+      "Age: 42 | Hometown: Christiansburg, Virginia | Occupation: Nail Salon Manager",
     age: 42,
+    profession: "Nail Salon Manager",
     hometown: "Christiansburg, Virginia",
     nickname: "Cao Boi",
   }),
@@ -184,9 +190,11 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0194",
     full_name: "Nathan Gonzalez",
-    img: "",
-    description: "Age: 26 | Hometown: Playa del Rey, California",
+    img: "/images/season_13/Nathan-Gonzalez.jpg",
+    description:
+      "Age: 26 | Hometown: Playa del Rey, California | Occupation: Shoe Salesman",
     age: 26,
+    profession: "Shoe Salesman",
     hometown: "Playa del Rey, California",
     nickname: "Nate",
   }),
@@ -243,9 +251,10 @@ export const SEASON_13_PLAYERS = [
   buildPlayer({
     castaway_id: "US0200",
     full_name: "Rebekah Lee",
-    img: "",
-    description: "Age: 28 | Hometown: Washington, D.C.",
+    img: "/images/season_13/Rebekah-Lee.jpg",
+    description: "Age: 28 | Hometown: Washington, D.C. | Occupation: Attorney",
     age: 28,
+    profession: "Attorney",
     hometown: "Washington, D.C.",
     nickname: "Becky",
   }),

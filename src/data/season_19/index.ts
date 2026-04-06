@@ -218,9 +218,10 @@ export const SEASON_19_PLAYERS = [
   buildPlayer({
     castaway_id: "US0296",
     full_name: "Shannon Waters",
-    img: "",
-    description: "Age: 45 | Hometown: Renton, Washington",
+    img: "/images/season_19/Shannon-Waters.jpg",
+    description: "Age: 45 | Hometown: Renton, Washington | Occupation: Sales",
     age: 45,
+    profession: "Sales",
     hometown: "Renton, Washington",
     nickname: "Shambo",
   }),

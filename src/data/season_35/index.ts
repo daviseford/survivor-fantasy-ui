@@ -120,9 +120,11 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0504",
     full_name: "Alexandrea Elliott",
-    img: "",
-    description: "Age: 24 | Hometown: Los Angeles, California",
+    img: "/images/season_35/Alexandrea-Elliott.jpg",
+    description:
+      "Age: 24 | Hometown: Los Angeles, California | Occupation: Celebrity Assistant",
     age: 24,
+    profession: "Celebrity Assistant",
     hometown: "Los Angeles, California",
     nickname: "Ali",
   }),
@@ -139,9 +141,11 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0506",
     full_name: "Desiree Williams",
-    img: "",
-    description: "Age: 27 | Hometown: Newport News, Virginia",
+    img: "/images/season_35/Desiree-Williams.jpg",
+    description:
+      "Age: 27 | Hometown: Newport News, Virginia | Occupation: Phyiscal Therapist",
     age: 27,
+    profession: "Phyiscal Therapist",
     hometown: "Newport News, Virginia",
     nickname: "Desi",
   }),
@@ -158,9 +162,11 @@ export const SEASON_35_PLAYERS = [
   buildPlayer({
     castaway_id: "US0508",
     full_name: "John Hilsabeck",
-    img: "",
-    description: "Age: 28 | Hometown: Los Angeles, California",
+    img: "/images/season_35/John-Hilsabeck.jpg",
+    description:
+      "Age: 28 | Hometown: Los Angeles, California | Occupation: Firefighter",
     age: 28,
+    profession: "Firefighter",
     hometown: "Los Angeles, California",
     nickname: "JP",
   }),

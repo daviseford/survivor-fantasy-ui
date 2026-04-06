@@ -144,9 +144,11 @@ export const SEASON_25_PLAYERS = [
   buildPlayer({
     castaway_id: "US0378",
     full_name: "Roberta Saint-Amour",
-    img: "",
-    description: "Age: 27 | Hometown: New York City, New York",
+    img: "/images/season_25/Roberta-Saint-Amour.jpg",
+    description:
+      "Age: 27 | Hometown: New York City, New York | Occupation: Investment Banker",
     age: 27,
+    profession: "Investment Banker",
     hometown: "New York City, New York",
     nickname: "RC",
   }),

@@ -85,9 +85,11 @@ export const SEASON_26_PLAYERS = [
   buildPlayer({
     castaway_id: "US0387",
     full_name: "Alexandra Pohevitz",
-    img: "",
-    description: "Age: 25 | Hometown: Oceanside, New York",
+    img: "/images/season_26/Alexandra-Pohevitz.jpg",
+    description:
+      "Age: 25 | Hometown: Oceanside, New York | Occupation: Bartender",
     age: 25,
+    profession: "Bartender",
     hometown: "Oceanside, New York",
     nickname: "Allie",
   }),
@@ -234,9 +236,11 @@ export const SEASON_26_PLAYERS = [
   buildPlayer({
     castaway_id: "US0395",
     full_name: "Edward Fox",
-    img: "",
-    description: "Age: 23 | Hometown: East Brunswick, New Jersey",
+    img: "/images/season_26/Edward-Fox.jpg",
+    description:
+      "Age: 23 | Hometown: East Brunswick, New Jersey | Occupation: Fireman/EMT",
     age: 23,
+    profession: "Fireman/EMT",
     hometown: "East Brunswick, New Jersey",
     nickname: "Eddie",
   }),

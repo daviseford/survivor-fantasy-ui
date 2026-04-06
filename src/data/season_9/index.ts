@@ -176,9 +176,11 @@ export const SEASON_9_PLAYERS = [
   buildPlayer({
     castaway_id: "US0123",
     full_name: "James Crittenden",
-    img: "",
-    description: "Age: 34 | Hometown: Oakland, California",
+    img: "/images/season_9/James-Crittenden.jpg",
+    description:
+      "Age: 34 | Hometown: Oakland, California | Occupation: Teacher",
     age: 34,
+    profession: "Teacher",
     hometown: "Oakland, California",
     nickname: "Chad",
   }),

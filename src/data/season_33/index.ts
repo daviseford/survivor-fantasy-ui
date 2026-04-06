@@ -158,9 +158,11 @@ export const SEASON_33_PLAYERS = [
   buildPlayer({
     castaway_id: "US0487",
     full_name: "Taylor Lee Stocker",
-    img: "",
-    description: "Age: 24 | Hometown: Post Falls, Idaho",
+    img: "/images/season_33/Taylor-Lee-Stocker.jpg",
+    description:
+      "Age: 24 | Hometown: Post Falls, Idaho | Occupation: Snowboard Instructor",
     age: 24,
+    profession: "Snowboard Instructor",
     hometown: "Post Falls, Idaho",
   }),
   buildPlayer({
