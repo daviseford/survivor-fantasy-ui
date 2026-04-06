@@ -546,6 +546,7 @@ export interface RosterStatRow {
 export interface RosterStat {
   key: string;
   title: string;
+  description: string;
   unit: string;
   rows: RosterStatRow[];
 }
@@ -582,6 +583,7 @@ function computeRosterStats(
   stats.push({
     key: "challenge_pts",
     title: "Challenge Points",
+    description: "Total points earned from challenge wins across roster",
     unit: "pts",
     rows: [...challengePts.entries()]
       .sort((a, b) => b[1] - a[1])
@@ -605,6 +607,7 @@ function computeRosterStats(
     stats.push({
       key: "best_night",
       title: "Best Team Night",
+      description: "Highest single-episode score across all roster players",
       unit: "pts",
       rows: [...bestEp.entries()]
         .sort((a, b) => b[1].value - a[1].value)
@@ -637,6 +640,7 @@ function computeRosterStats(
   stats.push({
     key: "best_pick",
     title: "Best Draft Pick",
+    description: "Highest-scoring individual castaway on each roster",
     unit: "pts",
     rows: [...bestPick.entries()]
       .sort((a, b) => b[1].value - a[1].value)
@@ -662,6 +666,7 @@ function computeRosterStats(
     stats.push({
       key: "votes_against",
       title: "Votes Against Roster",
+      description: "Total tribal council votes targeting roster players",
       unit: "votes",
       rows: [...voteCounts.entries()]
         .sort((a, b) => b[1] - a[1])

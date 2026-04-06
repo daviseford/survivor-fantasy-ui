@@ -9,6 +9,9 @@ const RosterStatTable = ({ stat }: { stat: RosterStat }) => (
       <Text size="xs" fw={600}>
         {stat.title}
       </Text>
+      <Text size="xs" c="dimmed">
+        {stat.description}
+      </Text>
     </Table.Td>
     {stat.rows.map((row) => (
       <Table.Td key={row.uid} ta="center">

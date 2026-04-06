@@ -54,5 +54,5 @@
 }
 
 .rosterStatLabel {
-  white-space: nowrap;
+  min-width: 140px;
 }
