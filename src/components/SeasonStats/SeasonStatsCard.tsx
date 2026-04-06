@@ -20,8 +20,8 @@ export const SeasonStatsCard = ({ card }: { card: StatCard }) => {
 
         {isTied ? (
           <div className={classes.tieList}>
-            {card.winners.map((w) => (
-              <Badge key={w.id} variant="light" size="md">
+            {card.winners.map((w, idx) => (
+              <Badge key={`${w.id}_${idx}`} variant="light" size="md">
                 {w.label} — {w.value} {card.unit}
               </Badge>
             ))}
@@ -30,8 +30,8 @@ export const SeasonStatsCard = ({ card }: { card: StatCard }) => {
             </Text>
           </div>
         ) : (
-          card.winners.map((w) => (
-            <div key={w.id}>
+          card.winners.map((w, idx) => (
+            <div key={`${w.id}_${idx}`}>
               <Group gap="xs" align="baseline">
                 <Text className={classes.cardValue}>{w.label}</Text>
                 <Text className={classes.cardUnit}>

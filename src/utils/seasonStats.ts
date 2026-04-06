@@ -234,26 +234,38 @@ function mostConsistentCastaway(
   input: SeasonStatsInput,
   draftedIds: Set<CastawayId>,
 ): StatCard | null {
-  // Require at least 3 episodes for average to be meaningful
-  const entries: [string, number][] = [];
+  // Require at least 3 episodes for consistency to be meaningful
+  const candidates: { id: string; stddev: number; avg: number }[] = [];
   for (const id of draftedIds) {
     const episodes = input.survivorPointsByEpisode[id];
     if (!episodes || episodes.length < 3) continue;
-    const avg = episodes.reduce((s, e) => s + e.total, 0) / episodes.length;
-    entries.push([id, Math.round(avg * 10) / 10]);
+    const totals = episodes.map((e) => e.total);
+    const avg = totals.reduce((s, v) => s + v, 0) / totals.length;
+    const variance =
+      totals.reduce((s, v) => s + (v - avg) ** 2, 0) / totals.length;
+    candidates.push({
+      id,
+      stddev: Math.round(Math.sqrt(variance) * 10) / 10,
+      avg: Math.round(avg * 10) / 10,
+    });
   }
-  const winners = topN(entries, "max");
-  if (winners.length === 0 || winners[0].value === 0) return null;
+  if (candidates.length === 0) return null;
+
+  // Lowest stddev wins; tiebreak by highest average
+  candidates.sort((a, b) => a.stddev - b.stddev || b.avg - a.avg);
+  const bestStddev = candidates[0].stddev;
+  const tied = candidates.filter((c) => c.stddev === bestStddev);
+
   return {
     key: "most_consistent",
     group: "castaway",
     tone: "positive",
     title: "Most Consistent",
     subtitle: "Steady as she goes",
-    winners: winners.map((w) => ({
+    winners: tied.map((w) => ({
       id: w.id,
       label: input.resolveName(w.id as CastawayId),
-      value: w.value,
+      value: w.avg,
     })),
     unit: "avg pts/ep",
   };

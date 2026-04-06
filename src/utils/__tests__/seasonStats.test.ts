@@ -210,12 +210,16 @@ describe("computeSeasonStats", () => {
       expect(card!.winners[0].value).toBe(1);
     });
 
-    it("returns most consistent when enough episodes", () => {
+    it("returns most consistent by lowest stddev", () => {
       const result = computeSeasonStats(buildInput());
       const card = findCard(result.castawayCards, "most_consistent");
       expect(card).toBeDefined();
-      // Alice avg = 10, Charlie avg = 7
-      expect(card!.winners[0].label).toBe("Alice");
+      // Charlie [7,7,7] stddev=0, Dana [1,1,1] stddev=0 — both tied at zero variance
+      expect(card!.winners).toHaveLength(2);
+      expect(card!.winners.map((w) => w.label).sort()).toEqual([
+        "Charlie",
+        "Dana",
+      ]);
     });
 
     it("suppresses consistency with fewer than 3 episodes", () => {
