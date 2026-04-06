@@ -1,0 +1,51 @@
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--mantine-spacing-sm);
+}
+
+.card {
+  padding: var(--mantine-spacing-sm);
+  border-radius: var(--mantine-radius-md);
+  border: 1px solid var(--mantine-color-default-border);
+  background: var(--mantine-color-body);
+}
+
+.cardNegative {
+  border-color: var(--mantine-color-red-3);
+  background: light-dark(
+    var(--mantine-color-red-0),
+    var(--mantine-color-dark-6)
+  );
+}
+
+.cardTitle {
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--mantine-color-dimmed);
+}
+
+.cardValue {
+  font-size: var(--mantine-font-size-xl);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.cardUnit {
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-dimmed);
+  font-weight: 400;
+}
+
+.cardDetail {
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-dimmed);
+}
+
+.tieList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
