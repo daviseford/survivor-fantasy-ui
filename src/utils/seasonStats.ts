@@ -533,92 +533,21 @@ function leastVotesReceived(
 }
 
 // ---------------------------------------------------------------------------
-// Roster cards
+// Roster stats (table format — all participants ranked)
 // ---------------------------------------------------------------------------
 
-function bestSingleTeamEpisode(input: SeasonStatsInput): StatCard | null {
-  if (!input.pointsByUserPerEpisode) return null;
-  let best: { uid: string; value: number; ep: number }[] = [];
-  let bestVal = -Infinity;
-
-  for (const [uid, episodes] of Object.entries(input.pointsByUserPerEpisode)) {
-    for (let i = 0; i < episodes.length; i++) {
-      const val = episodes[i];
-      if (val > bestVal) {
-        bestVal = val;
-        best = [{ uid, value: val, ep: i + 1 }];
-      } else if (val === bestVal) {
-        best.push({ uid, value: val, ep: i + 1 });
-      }
-    }
-  }
-  if (best.length === 0 || bestVal <= 0) return null;
-  return {
-    key: "best_team_episode",
-    group: "roster",
-    tone: "positive",
-    title: "Best Team Night",
-    subtitle: "Highest single-episode roster score",
-    winners: best.map((w) => ({
-      id: w.uid,
-      label: getParticipantName(input.competition, w.uid),
-      value: w.value,
-      detail: `Episode ${w.ep}`,
-    })),
-    unit: "pts",
-  };
+export interface RosterStatRow {
+  uid: string;
+  label: string;
+  value: number;
+  detail?: string;
 }
 
-function heroCard(
-  input: SeasonStatsInput,
-  draftedIds: Set<CastawayId>,
-): StatCard | null {
-  // Find the highest-scoring castaway and attribute to their drafter
-  const ownership = getDraftOwnership(input.competition.draft_picks);
-  let best: {
-    castawayId: CastawayId;
-    uid: string;
-    name: string;
-    value: number;
-  }[] = [];
-  let bestVal = -Infinity;
-
-  for (const id of draftedIds) {
-    const episodes = input.survivorPointsByEpisode[id];
-    if (!episodes) continue;
-    const total = episodes.reduce((s, e) => s + e.total, 0);
-    const owner = ownership.get(id);
-    if (!owner) continue;
-    if (total > bestVal) {
-      bestVal = total;
-      best = [
-        { castawayId: id, uid: owner.uid, name: owner.name, value: total },
-      ];
-    } else if (total === bestVal) {
-      best.push({
-        castawayId: id,
-        uid: owner.uid,
-        name: owner.name,
-        value: total,
-      });
-    }
-  }
-  if (best.length === 0 || bestVal <= 0) return null;
-
-  return {
-    key: "hero_drafter",
-    group: "roster",
-    tone: "positive",
-    title: "Best Draft Pick",
-    subtitle: "Rostered the highest-scoring castaway",
-    winners: best.map((w) => ({
-      id: w.uid,
-      label: getParticipantName(input.competition, w.uid),
-      value: w.value,
-      detail: input.resolveName(w.castawayId),
-    })),
-    unit: "pts",
-  };
+export interface RosterStat {
+  key: string;
+  title: string;
+  unit: string;
+  rows: RosterStatRow[];
 }
 
 const CHALLENGE_POINTS: Record<string, number> = {
@@ -629,98 +558,118 @@ const CHALLENGE_POINTS: Record<string, number> = {
   team_immunity: 2,
 };
 
-function rosterChallengePoints(
+function computeRosterStats(
   input: SeasonStatsInput,
   draftedIds: Set<CastawayId>,
-): StatCard | null {
+): RosterStat[] {
   const ownership = getDraftOwnership(input.competition.draft_picks);
-  const rosterPoints = new Map<string, number>();
+  const uids = input.competition.participant_uids;
+  const getName = (uid: string) => getParticipantName(input.competition, uid);
+  const stats: RosterStat[] = [];
 
+  // Challenge points
+  const challengePts = new Map<string, number>();
+  for (const uid of uids) challengePts.set(uid, 0);
   for (const ch of Object.values(input.filteredChallenges)) {
     const pts = CHALLENGE_POINTS[ch.variant] ?? 0;
     for (const id of ch.winning_castaways) {
       if (!draftedIds.has(id)) continue;
       const owner = ownership.get(id);
-      if (!owner) continue;
-      rosterPoints.set(owner.uid, (rosterPoints.get(owner.uid) ?? 0) + pts);
+      if (owner)
+        challengePts.set(owner.uid, (challengePts.get(owner.uid) ?? 0) + pts);
     }
   }
-
-  const entries: [string, number][] = [...rosterPoints.entries()];
-  const winners = topN(entries, "max");
-  if (winners.length === 0 || winners[0].value === 0) return null;
-  return {
-    key: "roster_challenge_points",
-    group: "roster",
-    tone: "positive",
-    title: "Challenge Domination",
-    subtitle: "Most points from challenges across roster",
-    winners: winners.map((w) => ({
-      id: w.id,
-      label: getParticipantName(input.competition, w.id),
-      value: w.value,
-    })),
+  stats.push({
+    key: "challenge_pts",
+    title: "Challenge Points",
     unit: "pts",
-  };
-}
+    rows: [...challengePts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .map(([uid, v]) => ({ uid, label: getName(uid), value: v })),
+  });
 
-function rosterVotePressure(
-  input: SeasonStatsInput,
-  draftedIds: Set<CastawayId>,
-  direction: "most" | "least",
-): StatCard | null {
-  const votes = Object.values(input.filteredVoteHistory);
-  if (votes.length === 0) return null;
+  // Best single team episode
+  if (input.pointsByUserPerEpisode) {
+    const bestEp = new Map<string, { value: number; ep: number }>();
+    for (const uid of uids) bestEp.set(uid, { value: 0, ep: 0 });
+    for (const [uid, episodes] of Object.entries(
+      input.pointsByUserPerEpisode,
+    )) {
+      for (let i = 0; i < episodes.length; i++) {
+        const cur = bestEp.get(uid);
+        if (!cur || episodes[i] > cur.value) {
+          bestEp.set(uid, { value: episodes[i], ep: i + 1 });
+        }
+      }
+    }
+    stats.push({
+      key: "best_night",
+      title: "Best Team Night",
+      unit: "pts",
+      rows: [...bestEp.entries()]
+        .sort((a, b) => b[1].value - a[1].value)
+        .map(([uid, d]) => ({
+          uid,
+          label: getName(uid),
+          value: d.value,
+          detail: d.value > 0 ? `Ep ${d.ep}` : undefined,
+        })),
+    });
+  }
 
-  const ownership = getDraftOwnership(input.competition.draft_picks);
-  const rosterVotes = new Map<string, number>();
-
-  for (const v of votes) {
-    if (!draftedIds.has(v.target_castaway_id)) continue;
-    const owner = ownership.get(v.target_castaway_id);
+  // Best draft pick (highest-scoring single castaway per roster)
+  const bestPick = new Map<string, { value: number; castaway: string }>();
+  for (const uid of uids) bestPick.set(uid, { value: 0, castaway: "" });
+  for (const id of draftedIds) {
+    const episodes = input.survivorPointsByEpisode[id];
+    if (!episodes) continue;
+    const total = episodes.reduce((s, e) => s + e.total, 0);
+    const owner = ownership.get(id);
     if (!owner) continue;
-    rosterVotes.set(owner.uid, (rosterVotes.get(owner.uid) ?? 0) + 1);
+    const cur = bestPick.get(owner.uid);
+    if (!cur || total > cur.value) {
+      bestPick.set(owner.uid, {
+        value: total,
+        castaway: input.resolveName(id),
+      });
+    }
+  }
+  stats.push({
+    key: "best_pick",
+    title: "Best Draft Pick",
+    unit: "pts",
+    rows: [...bestPick.entries()]
+      .sort((a, b) => b[1].value - a[1].value)
+      .map(([uid, d]) => ({
+        uid,
+        label: getName(uid),
+        value: d.value,
+        detail: d.castaway || undefined,
+      })),
+  });
+
+  // Votes against roster
+  const votes = Object.values(input.filteredVoteHistory);
+  if (votes.length > 0) {
+    const voteCounts = new Map<string, number>();
+    for (const uid of uids) voteCounts.set(uid, 0);
+    for (const v of votes) {
+      if (!draftedIds.has(v.target_castaway_id)) continue;
+      const owner = ownership.get(v.target_castaway_id);
+      if (owner)
+        voteCounts.set(owner.uid, (voteCounts.get(owner.uid) ?? 0) + 1);
+    }
+    stats.push({
+      key: "votes_against",
+      title: "Votes Against Roster",
+      unit: "votes",
+      rows: [...voteCounts.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .map(([uid, v]) => ({ uid, label: getName(uid), value: v })),
+    });
   }
 
-  // For "least", only include rosters with at least one castaway who attended tribal
-  if (direction === "least") {
-    const attendees = getTribalAttendees(votes, draftedIds);
-    const qualifiedUids = new Set<string>();
-    for (const id of attendees) {
-      const owner = ownership.get(id);
-      if (owner) qualifiedUids.add(owner.uid);
-    }
-    // Include qualified uids with 0 votes
-    for (const uid of qualifiedUids) {
-      if (!rosterVotes.has(uid)) rosterVotes.set(uid, 0);
-    }
-    // Remove non-qualified
-    for (const uid of rosterVotes.keys()) {
-      if (!qualifiedUids.has(uid)) rosterVotes.delete(uid);
-    }
-    if (rosterVotes.size < 2) return null;
-  }
-
-  const entries: [string, number][] = [...rosterVotes.entries()];
-  const winners = topN(entries, direction === "most" ? "max" : "min");
-  if (winners.length === 0) return null;
-
-  const isMost = direction === "most";
-  return {
-    key: isMost ? "roster_most_heat" : "roster_safest",
-    group: "roster",
-    tone: isMost ? "negative" : "positive",
-    title: isMost ? "Most Heat on a Team" : "Safest Roster",
-    subtitle: isMost
-      ? "Most votes against roster"
-      : "Fewest votes against roster",
-    winners: winners.map((w) => ({
-      id: w.id,
-      label: getParticipantName(input.competition, w.id),
-      value: w.value,
-    })),
-    unit: "votes",
-  };
+  return stats;
 }
 
 // ---------------------------------------------------------------------------
@@ -729,16 +678,13 @@ function rosterVotePressure(
 
 export interface SeasonStatsResult {
   castawayCards: StatCard[];
-  rosterCards: StatCard[];
-  hasPostMerge: boolean;
+  rosterStats: RosterStat[];
 }
 
 export function computeSeasonStats(input: SeasonStatsInput): SeasonStatsResult {
   const draftedIds = getDraftedCastawayIds(input.competition);
-  const postMergeIds = getPostMergeIds(input.filteredEvents, draftedIds);
 
   const castawayCards: StatCard[] = [];
-  const rosterCards: StatCard[] = [];
 
   // Castaway score/challenge/advantage cards
   const cardFns: (() => StatCard | null)[] = [
@@ -762,19 +708,7 @@ export function computeSeasonStats(input: SeasonStatsInput): SeasonStatsResult {
     if (card) castawayCards.push(card);
   }
 
-  // Roster cards
-  const rosterFns: (() => StatCard | null)[] = [
-    () => bestSingleTeamEpisode(input),
-    () => heroCard(input, draftedIds),
-    () => rosterChallengePoints(input, draftedIds),
-    () => rosterVotePressure(input, draftedIds, "most"),
-    () => rosterVotePressure(input, draftedIds, "least"),
-  ];
+  const rosterStats = computeRosterStats(input, draftedIds);
 
-  for (const fn of rosterFns) {
-    const card = fn();
-    if (card) rosterCards.push(card);
-  }
-
-  return { castawayCards, rosterCards, hasPostMerge: postMergeIds.size >= 3 };
+  return { castawayCards, rosterStats };
 }

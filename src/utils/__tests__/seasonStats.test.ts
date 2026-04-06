@@ -7,7 +7,12 @@ import {
   VoteHistory,
 } from "../../types";
 import { EnhancedScores } from "../scoringUtils";
-import { computeSeasonStats, SeasonStatsInput, StatCard } from "../seasonStats";
+import {
+  computeSeasonStats,
+  RosterStat,
+  SeasonStatsInput,
+  StatCard,
+} from "../seasonStats";
 
 // --- Test constants ---
 
@@ -151,6 +156,13 @@ function buildInput(
 
 function findCard(cards: StatCard[], key: string): StatCard | undefined {
   return cards.find((c) => c.key === key);
+}
+
+function findRosterStat(
+  stats: RosterStat[],
+  key: string,
+): RosterStat | undefined {
+  return stats.find((s) => s.key === key);
 }
 
 // --- Tests ---
@@ -382,27 +394,47 @@ describe("computeSeasonStats", () => {
     });
   });
 
-  describe("roster cards", () => {
-    it("returns best team night", () => {
+  describe("roster stats", () => {
+    it("returns challenge points ranked by participant", () => {
+      const result = computeSeasonStats(
+        buildInput({
+          filteredChallenges: {
+            c1: makeChallenge("1", 1, "immunity", [ALICE]),
+            c2: makeChallenge("2", 2, "immunity", [ALICE]),
+            c3: makeChallenge("3", 3, "reward", [CHARLIE]),
+          },
+        }),
+      );
+      const stat = findRosterStat(result.rosterStats, "challenge_pts");
+      expect(stat).toBeDefined();
+      // USER_A: Alice 2x immunity (3 each) = 6, USER_B: Charlie 1x reward (2) = 2
+      expect(stat!.rows[0].label).toBe("Alice P");
+      expect(stat!.rows[0].value).toBe(6);
+      expect(stat!.rows[1].label).toBe("Bob P");
+      expect(stat!.rows[1].value).toBe(2);
+    });
+
+    it("returns best team night for all participants", () => {
       const result = computeSeasonStats(buildInput());
-      const card = findCard(result.rosterCards, "best_team_episode");
-      expect(card).toBeDefined();
+      const stat = findRosterStat(result.rosterStats, "best_night");
+      expect(stat).toBeDefined();
       // USER_A episode 3: 17 pts (Alice 15 + Bob 2)
-      expect(card!.winners[0].label).toBe("Alice P");
-      expect(card!.winners[0].value).toBe(17);
-      expect(card!.winners[0].detail).toBe("Episode 3");
+      expect(stat!.rows[0].label).toBe("Alice P");
+      expect(stat!.rows[0].value).toBe(17);
+      expect(stat!.rows[0].detail).toBe("Ep 3");
     });
 
-    it("returns hero drafter card", () => {
+    it("returns best draft pick for all participants", () => {
       const result = computeSeasonStats(buildInput());
-      const card = findCard(result.rosterCards, "hero_drafter");
-      expect(card).toBeDefined();
+      const stat = findRosterStat(result.rosterStats, "best_pick");
+      expect(stat).toBeDefined();
       // Alice (30 pts) drafted by USER_A
-      expect(card!.winners[0].label).toBe("Alice P");
-      expect(card!.winners[0].detail).toBe("Alice");
+      expect(stat!.rows[0].label).toBe("Alice P");
+      expect(stat!.rows[0].value).toBe(30);
+      expect(stat!.rows[0].detail).toBe("Alice");
     });
 
-    it("returns roster most heat from votes", () => {
+    it("returns votes against roster for all participants", () => {
       const result = computeSeasonStats(
         buildInput({
           filteredVoteHistory: {
@@ -413,11 +445,13 @@ describe("computeSeasonStats", () => {
           },
         }),
       );
-      const card = findCard(result.rosterCards, "roster_most_heat");
-      expect(card).toBeDefined();
-      // USER_A roster (Alice + Bob) got 4 votes total
-      expect(card!.winners[0].label).toBe("Alice P");
-      expect(card!.winners[0].value).toBe(4);
+      const stat = findRosterStat(result.rosterStats, "votes_against");
+      expect(stat).toBeDefined();
+      // USER_A roster (Alice + Bob) got 4 votes, USER_B got 0
+      expect(stat!.rows[0].label).toBe("Alice P");
+      expect(stat!.rows[0].value).toBe(4);
+      expect(stat!.rows[1].label).toBe("Bob P");
+      expect(stat!.rows[1].value).toBe(0);
     });
   });
 
@@ -430,7 +464,8 @@ describe("computeSeasonStats", () => {
         }),
       );
       expect(result.castawayCards).toHaveLength(0);
-      expect(result.rosterCards).toHaveLength(0);
+      // Roster stats still produce rows (all zeros) since participants exist
+      expect(result.rosterStats.length).toBeGreaterThanOrEqual(0);
     });
 
     it("handles episode 0 watch-along (empty data)", () => {

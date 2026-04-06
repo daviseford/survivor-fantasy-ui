@@ -172,7 +172,7 @@ export const SingleCompetition = () => {
 
       {seasonStats &&
         (seasonStats.castawayCards.length > 0 ||
-          seasonStats.rosterCards.length > 0) && (
+          seasonStats.rosterStats.length > 0) && (
           <Section
             title="Season Stats"
             subtitle="Key storylines and standout performances"
