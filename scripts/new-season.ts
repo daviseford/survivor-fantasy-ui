@@ -202,6 +202,7 @@ async function main(): Promise<void> {
   console.log(`  Challenges: ${resultsData.challenges.length}`);
   console.log(`  Eliminations: ${resultsData.eliminations.length}`);
   console.log(`  Events: ${resultsData.events.length}`);
+  console.log(`  Vote history: ${resultsData.voteHistory.length}`);
   if (resultsData.warnings.length > 0) {
     console.log(`  Warnings: ${resultsData.warnings.length}`);
   }

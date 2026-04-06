@@ -24,6 +24,7 @@ const VALID_COLLECTIONS = [
   "challenges",
   "eliminations",
   "events",
+  "vote_history",
 ] as const;
 type Collection = (typeof VALID_COLLECTIONS)[number];
 
@@ -72,6 +73,7 @@ async function pushSeason(
   const challenges = getSeasonExport(mod, seasonNum, "CHALLENGES");
   const eliminations = getSeasonExport(mod, seasonNum, "ELIMINATIONS");
   const events = getSeasonExport(mod, seasonNum, "EVENTS");
+  const voteHistory = getSeasonExport(mod, seasonNum, "VOTE_HISTORY");
   const castawayLookup = getSeasonExport(mod, seasonNum, "CASTAWAY_LOOKUP");
 
   const allDocs: { collection: Collection; data: Record<string, unknown> }[] = [
@@ -98,6 +100,10 @@ async function pushSeason(
     {
       collection: "events",
       data: (events || {}) as Record<string, unknown>,
+    },
+    {
+      collection: "vote_history",
+      data: (voteHistory || {}) as Record<string, unknown>,
     },
   ];
 

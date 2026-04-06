@@ -22,6 +22,7 @@ import type {
   ScrapedEpisode,
   ScrapedGameEvent,
   ScrapedPlayer,
+  ScrapedVoteRow,
   ScrapeResult,
   ScrapeResultsOutput,
 } from "./types.js";
@@ -144,6 +145,9 @@ export function transformResults(
     warnings,
   );
 
+  const castawayIdSet = new Set(data.castaways.map((c) => c.castaway_id));
+  const voteHistory = transformVoteHistory(data.voteHistory, castawayIdSet);
+
   // Warn about data gaps
   if (data.episodes.length === 0) {
     warnings.push(`No episodes found for Season ${seasonNum} in survivoR`);
@@ -161,6 +165,7 @@ export function transformResults(
     challenges,
     eliminations,
     events,
+    voteHistory,
     warnings,
   };
 }
@@ -620,6 +625,63 @@ const IDOL_TYPES = new Set([
   "Preventative Hidden Immunity Idol",
   "Super Idol",
 ]);
+
+// --- Vote-history transformation ---
+
+/** Vote events that are NOT standard Tribal Council votes — exclude from raw vote export. */
+const NON_TRIBAL_VOTE_EVENTS = new Set([
+  "Shot in the dark",
+  "Fire challenge",
+  "Fire challenge (f4)",
+]);
+
+/**
+ * Transform survivoR vote_history rows into normalized Tribal Council vote rows.
+ * Filters out non-Tribal mechanics so downstream code only sees formal Tribal votes.
+ * Deduplicates by composite key (sogId + voterCastawayId + voteOrder + targetCastawayId).
+ */
+function transformVoteHistory(
+  voteHistory: SurvivorVoteHistory[],
+  castawayIds: Set<string>,
+): ScrapedVoteRow[] {
+  const rows = voteHistory
+    .filter((v) => {
+      // Exclude non-Tribal vote mechanics
+      if (v.vote_event && NON_TRIBAL_VOTE_EVENTS.has(v.vote_event))
+        return false;
+      // Only include rows targeting valid castaways
+      if (!v.vote_id || !v.vote_id.startsWith("US")) return false;
+      // Only include rows from known voters
+      if (!castawayIds.has(v.castaway_id)) return false;
+      return true;
+    })
+    .map((v) => ({
+      episodeNum: Math.round(v.episode),
+      tribe: v.tribe || "",
+      voterCastawayId: v.castaway_id,
+      targetCastawayId: v.vote_id,
+      votedOutCastawayId: v.voted_out_id,
+      nullified: v.nullified,
+      tie: v.tie,
+      sogId: Math.round(v.sog_id),
+      voteOrder: Math.round(v.vote_order),
+    }))
+    .sort(
+      (a, b) =>
+        a.episodeNum - b.episodeNum ||
+        a.sogId - b.sogId ||
+        a.voteOrder - b.voteOrder,
+    );
+
+  // Deduplicate by composite key
+  const seen = new Set<string>();
+  return rows.filter((r) => {
+    const key = `${r.sogId}_${r.voterCastawayId}_${r.voteOrder}_${r.targetCastawayId}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
 
 function transformEvents(
   advantageMovement: SurvivorAdvantageMovement[],

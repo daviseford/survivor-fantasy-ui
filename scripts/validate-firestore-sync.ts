@@ -26,6 +26,15 @@ interface EventRecord {
   multiplier: number | null;
 }
 
+interface VoteRecord {
+  voter_castaway_id: string;
+  target_castaway_id: string;
+  episode_num: number;
+  sog_id: number;
+  vote_order: number;
+  nullified: boolean;
+}
+
 function getLatestSnapshotDir(): string | null {
   if (!fs.existsSync(SNAPSHOT_BASE)) return null;
   const dirs = fs
@@ -60,12 +69,24 @@ function eventKey(e: EventRecord): string {
   return `${e.action}|${e.castaway_id}|ep${e.episode_num}|x${e.multiplier ?? "null"}`;
 }
 
+function voteKey(v: VoteRecord): string {
+  return `sog${v.sog_id}|vo${v.vote_order}|${v.voter_castaway_id}|${v.target_castaway_id}`;
+}
+
+interface CollectionDiff<T> {
+  localOnly: T[];
+  firestoreOnly: T[];
+  localCount: number;
+  firestoreCount: number;
+}
+
 interface SeasonDiff {
   seasonNum: number;
   localOnly: EventRecord[];
   firestoreOnly: EventRecord[];
   localCount: number;
   firestoreCount: number;
+  votes?: CollectionDiff<VoteRecord>;
 }
 
 async function compareEvents(
@@ -101,12 +122,41 @@ async function compareEvents(
     (e) => !localKeys.has(eventKey(e)),
   );
 
+  // Compare vote_history
+  const localVotes: Record<string, VoteRecord> =
+    mod[`SEASON_${seasonNum}_VOTE_HISTORY`] || {};
+  const localVoteList = Object.values(localVotes);
+
+  const firestoreVotePath = path.join(
+    snapshotDir,
+    seasonKey,
+    "vote_history.json",
+  );
+  let firestoreVoteList: VoteRecord[] = [];
+  if (fs.existsSync(firestoreVotePath)) {
+    const raw = JSON.parse(fs.readFileSync(firestoreVotePath, "utf-8"));
+    if (raw) firestoreVoteList = Object.values(raw);
+  }
+
+  const localVoteKeys = new Set(localVoteList.map(voteKey));
+  const firestoreVoteKeys = new Set(firestoreVoteList.map(voteKey));
+
+  const votesDiff: CollectionDiff<VoteRecord> = {
+    localOnly: localVoteList.filter((v) => !firestoreVoteKeys.has(voteKey(v))),
+    firestoreOnly: firestoreVoteList.filter(
+      (v) => !localVoteKeys.has(voteKey(v)),
+    ),
+    localCount: localVoteList.length,
+    firestoreCount: firestoreVoteList.length,
+  };
+
   return {
     seasonNum,
     localOnly,
     firestoreOnly,
     localCount: localList.length,
     firestoreCount: firestoreList.length,
+    votes: votesDiff,
   };
 }
 
@@ -140,42 +190,74 @@ async function main(): Promise<void> {
 
   let totalMissing = 0;
   let totalExtra = 0;
+  let totalVoteMissing = 0;
+  let totalVoteExtra = 0;
   const outOfSync: SeasonDiff[] = [];
 
   for (const seasonNum of seasonNums) {
     const diff = await compareEvents(seasonNum, snapshotDir);
     if (!diff) continue;
 
-    if (diff.localOnly.length > 0 || diff.firestoreOnly.length > 0) {
+    const hasEventDiff =
+      diff.localOnly.length > 0 || diff.firestoreOnly.length > 0;
+    const hasVoteDiff =
+      diff.votes &&
+      (diff.votes.localOnly.length > 0 || diff.votes.firestoreOnly.length > 0);
+
+    if (hasEventDiff || hasVoteDiff) {
       outOfSync.push(diff);
       totalMissing += diff.localOnly.length;
       totalExtra += diff.firestoreOnly.length;
 
-      console.log(
-        `Season ${seasonNum}: ${diff.localOnly.length} missing from Firestore, ${diff.firestoreOnly.length} extra in Firestore (local: ${diff.localCount}, Firestore: ${diff.firestoreCount})`,
-      );
+      if (hasEventDiff) {
+        console.log(
+          `Season ${seasonNum} events: ${diff.localOnly.length} missing from Firestore, ${diff.firestoreOnly.length} extra in Firestore (local: ${diff.localCount}, Firestore: ${diff.firestoreCount})`,
+        );
 
-      for (const e of diff.localOnly) {
-        console.log(
-          `  MISSING: ${e.action} for ${e.castaway_id} ep${e.episode_num}${e.multiplier != null ? ` (x${e.multiplier})` : ""}`,
-        );
+        for (const e of diff.localOnly) {
+          console.log(
+            `  MISSING: ${e.action} for ${e.castaway_id} ep${e.episode_num}${e.multiplier != null ? ` (x${e.multiplier})` : ""}`,
+          );
+        }
+        for (const e of diff.firestoreOnly) {
+          console.log(
+            `  EXTRA:   ${e.action} for ${e.castaway_id} ep${e.episode_num}${e.multiplier != null ? ` (x${e.multiplier})` : ""}`,
+          );
+        }
       }
-      for (const e of diff.firestoreOnly) {
+
+      if (hasVoteDiff && diff.votes) {
+        totalVoteMissing += diff.votes.localOnly.length;
+        totalVoteExtra += diff.votes.firestoreOnly.length;
+
         console.log(
-          `  EXTRA:   ${e.action} for ${e.castaway_id} ep${e.episode_num}${e.multiplier != null ? ` (x${e.multiplier})` : ""}`,
+          `Season ${seasonNum} votes: ${diff.votes.localOnly.length} missing from Firestore, ${diff.votes.firestoreOnly.length} extra in Firestore (local: ${diff.votes.localCount}, Firestore: ${diff.votes.firestoreCount})`,
         );
+
+        for (const v of diff.votes.localOnly) {
+          console.log(
+            `  MISSING: ${v.voter_castaway_id} → ${v.target_castaway_id} ep${v.episode_num}`,
+          );
+        }
+        for (const v of diff.votes.firestoreOnly) {
+          console.log(
+            `  EXTRA:   ${v.voter_castaway_id} → ${v.target_castaway_id} ep${v.episode_num}`,
+          );
+        }
       }
     }
   }
 
+  const totalIssues =
+    totalMissing + totalExtra + totalVoteMissing + totalVoteExtra;
   console.log(
-    `\n${outOfSync.length === 0 ? "All seasons in sync!" : `${outOfSync.length} season(s) out of sync. ${totalMissing} events missing from Firestore, ${totalExtra} extra.`}`,
+    `\n${outOfSync.length === 0 ? "All seasons in sync!" : `${outOfSync.length} season(s) out of sync. Events: ${totalMissing} missing, ${totalExtra} extra. Votes: ${totalVoteMissing} missing, ${totalVoteExtra} extra.`}`,
   );
 
   if (outOfSync.length > 0) {
     const seasonList = outOfSync.map((d) => d.seasonNum).join(" ");
     console.log(
-      `\nTo fix, run:\n  yarn tsx scripts/push-seasons.ts --collections events ${seasonList}`,
+      `\nTo fix, run:\n  yarn tsx scripts/push-seasons.ts --collections events,vote_history ${seasonList}`,
     );
     process.exit(1);
   }

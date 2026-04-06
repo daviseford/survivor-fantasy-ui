@@ -24,6 +24,7 @@ const COLLECTIONS = [
   "challenges",
   "eliminations",
   "events",
+  "vote_history",
 ] as const;
 
 function writeJson(filePath: string, data: unknown): void {
