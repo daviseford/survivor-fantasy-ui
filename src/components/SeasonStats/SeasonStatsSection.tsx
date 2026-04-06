@@ -102,7 +102,7 @@ export const SeasonStatsSection = ({ stats }: { stats: SeasonStatsResult }) => {
         <>
           {hasCastaway && <Divider />}
           <div>
-            <Text size="sm" fw={600} c="dimmed" mb="xs">
+            <Text size="sm" fw={600} c="dimmed">
               Roster Stats
             </Text>
             <Table.ScrollContainer minWidth={400}>

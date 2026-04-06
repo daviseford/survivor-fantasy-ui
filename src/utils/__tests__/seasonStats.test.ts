@@ -447,11 +447,11 @@ describe("computeSeasonStats", () => {
       );
       const stat = findRosterStat(result.rosterStats, "votes_against");
       expect(stat).toBeDefined();
-      // USER_A roster (Alice + Bob) got 4 votes, USER_B got 0
-      expect(stat!.rows[0].label).toBe("Alice P");
-      expect(stat!.rows[0].value).toBe(4);
-      expect(stat!.rows[1].label).toBe("Bob P");
-      expect(stat!.rows[1].value).toBe(0);
+      // Sorted ascending (low direction) — USER_B (0 votes) first, USER_A (4) second
+      expect(stat!.rows[0].label).toBe("Bob P");
+      expect(stat!.rows[0].value).toBe(0);
+      expect(stat!.rows[1].label).toBe("Alice P");
+      expect(stat!.rows[1].value).toBe(4);
     });
   });
 

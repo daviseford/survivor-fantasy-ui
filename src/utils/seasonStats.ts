@@ -5,6 +5,7 @@
  * Returns grouped card descriptors for the SeasonStatsSection UI.
  */
 
+import { BASE_PLAYER_SCORING } from "../data/scoring";
 import {
   CastawayId,
   Challenge,
@@ -12,9 +13,16 @@ import {
   DraftPick,
   Elimination,
   GameEvent,
+  PlayerAction,
   VoteHistory,
 } from "../types";
 import { EnhancedScores } from "./scoringUtils";
+
+const IDOL_ADVANTAGE_ACTIONS = new Set<PlayerAction>(
+  BASE_PLAYER_SCORING.filter(
+    (s) => s.category === "Idols" || s.category === "Advantages",
+  ).map((s) => s.action as PlayerAction),
+);
 
 // ---------------------------------------------------------------------------
 // Card types
@@ -657,6 +665,35 @@ function computeRosterStats(
       })),
   });
 
+  // Idols & Advantages points
+  const advPts = new Map<string, number>();
+  for (const uid of uids) advPts.set(uid, 0);
+  for (const id of draftedIds) {
+    const episodes = input.survivorPointsByEpisode[id];
+    if (!episodes) continue;
+    const owner = ownership.get(id);
+    if (!owner) continue;
+    const pts = episodes.reduce(
+      (sum, ep) =>
+        sum +
+        ep.actions
+          .filter((a) => IDOL_ADVANTAGE_ACTIONS.has(a.action))
+          .reduce((s, a) => s + a.points_awarded, 0),
+      0,
+    );
+    advPts.set(owner.uid, (advPts.get(owner.uid) ?? 0) + pts);
+  }
+  stats.push({
+    key: "idol_advantage_pts",
+    title: "Idol & Advantage Points",
+    description: "Points from finding and playing idols and advantages",
+    unit: "pts",
+    direction: "high",
+    rows: [...advPts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .map(([uid, v]) => ({ uid, label: getName(uid), value: v })),
+  });
+
   // Votes against roster
   const votes = Object.values(input.filteredVoteHistory);
   if (votes.length > 0) {
@@ -675,7 +712,7 @@ function computeRosterStats(
       unit: "votes",
       direction: "low",
       rows: [...voteCounts.entries()]
-        .sort((a, b) => b[1] - a[1])
+        .sort((a, b) => a[1] - b[1])
         .map(([uid, v]) => ({ uid, label: getName(uid), value: v })),
     });
   }
