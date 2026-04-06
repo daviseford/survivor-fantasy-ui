@@ -1,6 +1,12 @@
-import { Challenge, Elimination, Episode, GameEvent } from "../types";
+import {
+  Challenge,
+  Elimination,
+  Episode,
+  GameEvent,
+  VoteHistory,
+} from "../types";
 
-type HasEpisodeNum = Challenge | Elimination | GameEvent;
+type HasEpisodeNum = Challenge | Elimination | GameEvent | VoteHistory;
 
 /**
  * Filters season data by episode boundary for watch-along mode.
