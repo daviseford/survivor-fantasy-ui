@@ -1,4 +1,4 @@
-import { Stack, Text, Title } from "@mantine/core";
+import { Stack, Title } from "@mantine/core";
 import { SeasonStatsResult } from "../../utils/seasonStats";
 import { SeasonStatsCard } from "./SeasonStatsCard";
 import classes from "./SeasonStatsSection.module.css";
@@ -13,12 +13,9 @@ export const SeasonStatsSection = ({ stats }: { stats: SeasonStatsResult }) => {
     <Stack gap="md">
       {hasCastaway && (
         <div>
-          <Title order={5} mb="xs">
+          <Title order={6} c="dimmed" mb={4}>
             Castaway Stats
           </Title>
-          <Text size="xs" c="dimmed" mb="sm">
-            Individual performance across drafted castaways
-          </Text>
           <div className={classes.cardGrid}>
             {stats.castawayCards.map((card) => (
               <SeasonStatsCard key={card.key} card={card} />
@@ -27,13 +24,10 @@ export const SeasonStatsSection = ({ stats }: { stats: SeasonStatsResult }) => {
         </div>
       )}
       {hasRoster && (
-        <div>
-          <Title order={5} mb="xs">
+        <div className={hasCastaway ? classes.sectionDivider : undefined}>
+          <Title order={6} c="dimmed" mb={4}>
             Roster Stats
           </Title>
-          <Text size="xs" c="dimmed" mb="sm">
-            How each team's draft roster is performing
-          </Text>
           <div className={classes.cardGrid}>
             {stats.rosterCards.map((card) => (
               <SeasonStatsCard key={card.key} card={card} />

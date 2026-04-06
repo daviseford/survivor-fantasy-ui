@@ -10,17 +10,12 @@ export const SeasonStatsCard = ({ card }: { card: StatCard }) => {
     <div
       className={`${classes.card} ${isNegative ? classes.cardNegative : ""}`}
     >
-      <Stack gap={4}>
-        <Text className={classes.cardTitle}>{card.title}</Text>
-        {card.subtitle && (
-          <Text size="xs" c="dimmed" mt={-2}>
-            {card.subtitle}
-          </Text>
-        )}
+      <Stack gap={2}>
+        <Text className={classes.cardLabel}>{card.title}</Text>
 
         {card.winners.map((w, idx) => (
           <div key={`${w.id}_${idx}`}>
-            <Group gap="xs" align="baseline">
+            <Group gap={6} align="baseline" wrap="nowrap">
               <Text className={classes.cardValue}>{w.label}</Text>
               <Text className={classes.cardUnit}>
                 {w.value} {card.unit}
