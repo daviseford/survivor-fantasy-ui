@@ -578,7 +578,7 @@ export function generateVoteHistorySection(
   lines.push(`export const SEASON_${seasonNum}_VOTE_HISTORY = {`);
 
   for (const vh of voteHistory) {
-    const id = `vote_${vh.sogId}_${vh.voterCastawayId}_${vh.voteOrder}`;
+    const id = `vote_${vh.sogId}_${vh.voterCastawayId}_${vh.targetCastawayId}_${vh.voteOrder}`;
     const voterValid = castawayIdSet.has(vh.voterCastawayId);
     const targetValid = castawayIdSet.has(vh.targetCastawayId);
 

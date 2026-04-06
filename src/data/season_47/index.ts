@@ -73,188 +73,144 @@ export const SEASON_47_PLAYERS = [
     castaway_id: "US0704",
     full_name: "Jon Lovett",
     img: "/images/season_47/Jon-Lovett.jpg",
-    description:
-      "Age: 41 | Hometown: Los Angeles, California | Occupation: Podcast Host",
+    description: "Age: 41 | Hometown: Los Angeles, California",
     age: 41,
-    profession: "Podcast Host",
     hometown: "Los Angeles, California",
-    nickname: "Jon",
   }),
   buildPlayer({
     castaway_id: "US0715",
     full_name: "TK Foster",
     img: "/images/season_47/TK-Foster.jpg",
-    description:
-      "Age: 31 | Hometown: Upper Marlboro, Maryland | Occupation: Athlete Marketing Manager",
+    description: "Age: 31 | Hometown: Upper Marlboro, Maryland",
     age: 31,
-    profession: "Athlete Marketing Manager",
     hometown: "Upper Marlboro, Maryland",
-    nickname: "TK",
   }),
   buildPlayer({
     castaway_id: "US0700",
     full_name: "Aysha Welch",
     img: "/images/season_47/Aysha-Welch.jpg",
-    description:
-      "Age: 32 | Hometown: Houston, Texas | Occupation: IT Consultant",
+    description: "Age: 32 | Hometown: Houston, Texas",
     age: 32,
-    profession: "IT Consultant",
     hometown: "Houston, Texas",
   }),
   buildPlayer({
     castaway_id: "US0705",
     full_name: "Kishan Patel",
     img: "/images/season_47/Kishan-Patel.jpg",
-    description:
-      "Age: 27 | Hometown: San Francisco, California | Occupation: ER Doctor",
+    description: "Age: 27 | Hometown: San Francisco, California",
     age: 27,
-    profession: "ER Doctor",
     hometown: "San Francisco, California",
   }),
   buildPlayer({
     castaway_id: "US0699",
     full_name: "Anika Dhar",
     img: "/images/season_47/Anika-Dhar.jpg",
-    description:
-      "Age: 26 | Hometown: Los Angeles, California | Occupation: Marketing Manager",
+    description: "Age: 26 | Hometown: Los Angeles, California",
     age: 26,
-    profession: "Marketing Manager",
     hometown: "Los Angeles, California",
   }),
   buildPlayer({
     castaway_id: "US0708",
     full_name: "Rome Cooney",
     img: "/images/season_47/Rome-Cooney.jpg",
-    description:
-      "Age: 30 | Hometown: Phoenix, Arizona | Occupation: E-Sports Commentator",
+    description: "Age: 30 | Hometown: Phoenix, Arizona",
     age: 30,
-    profession: "E-Sports Commentator",
     hometown: "Phoenix, Arizona",
-    nickname: "Rome",
   }),
   buildPlayer({
     castaway_id: "US0714",
     full_name: "Tiyana Hallums",
     img: "/images/season_47/Tiyana-Hallums.jpg",
-    description:
-      "Age: 27 | Hometown: Aiea, Hawaii | Occupation: Flight Attendant",
+    description: "Age: 27 | Hometown: Aiea, Hawaii",
     age: 27,
-    profession: "Flight Attendant",
     hometown: "Aiea, Hawaii",
   }),
   buildPlayer({
     castaway_id: "US0710",
     full_name: "Sierra Wright",
     img: "/images/season_47/Sierra-Wright.jpg",
-    description:
-      "Age: 26 | Hometown: Phoenixville, Pennsylvania | Occupation: Nurse",
+    description: "Age: 26 | Hometown: Phoenixville, Pennsylvania",
     age: 26,
-    profession: "Nurse",
     hometown: "Phoenixville, Pennsylvania",
   }),
   buildPlayer({
     castaway_id: "US0711",
     full_name: "Sol Yi",
     img: "/images/season_47/Sol-Yi.jpg",
-    description:
-      "Age: 43 | Hometown: Norwalk, Connecticut | Occupation: Medical Device Sales",
+    description: "Age: 43 | Hometown: Norwalk, Connecticut",
     age: 43,
-    profession: "Medical Device Sales",
     hometown: "Norwalk, Connecticut",
-    nickname: "Sol",
   }),
   buildPlayer({
     castaway_id: "US0702",
     full_name: "Gabe Ortis",
     img: "/images/season_47/Gabe-Ortis.jpg",
-    description:
-      "Age: 26 | Hometown: Baltimore, Maryland | Occupation: Radio Show Host",
+    description: "Age: 26 | Hometown: Baltimore, Maryland",
     age: 26,
-    profession: "Radio Show Host",
     hometown: "Baltimore, Maryland",
-    nickname: "Gabe",
   }),
   buildPlayer({
     castaway_id: "US0706",
     full_name: "Kyle Ostwald",
     img: "/images/season_47/Kyle-Ostwald.jpg",
-    description:
-      "Age: 31 | Hometown: Cheboygan, Michigan | Occupation: Construction Worker",
+    description: "Age: 31 | Hometown: Cheboygan, Michigan",
     age: 31,
-    profession: "Construction Worker",
     hometown: "Cheboygan, Michigan",
   }),
   buildPlayer({
     castaway_id: "US0701",
     full_name: "Caroline Vidmar",
     img: "/images/season_47/Caroline-Vidmar.jpg",
-    description:
-      "Age: 27 | Hometown: Chicago, Illinois | Occupation: Strategy Consultant",
+    description: "Age: 27 | Hometown: Chicago, Illinois",
     age: 27,
-    profession: "Strategy Consultant",
     hometown: "Chicago, Illinois",
   }),
   buildPlayer({
     castaway_id: "US0698",
     full_name: "Andy Rueda",
     img: "/images/season_47/Andy-Rueda.jpg",
-    description:
-      "Age: 31 | Hometown: Buffalo, New York | Occupation: AI Research Assistant",
+    description: "Age: 31 | Hometown: Buffalo, New York",
     age: 31,
-    profession: "AI Research Assistant",
     hometown: "Buffalo, New York",
-    nickname: "Andy",
   }),
   buildPlayer({
     castaway_id: "US0703",
     full_name: "Genevieve Mushaluk",
     img: "/images/season_47/Genevieve-Mushaluk.jpg",
-    description:
-      "Age: 32 | Hometown: Winnipeg, Manitoba | Occupation: Corporate Lawyer",
+    description: "Age: 32 | Hometown: Winnipeg, Manitoba",
     age: 32,
-    profession: "Corporate Lawyer",
     hometown: "Winnipeg, Manitoba",
   }),
   buildPlayer({
     castaway_id: "US0713",
     full_name: "Teeny Chirichillo",
     img: "/images/season_47/Teeny-Chirichillo.jpg",
-    description:
-      "Age: 23 | Hometown: Manahawkin, New Jersey | Occupation: Freelance Writer",
+    description: "Age: 23 | Hometown: Manahawkin, New Jersey",
     age: 23,
-    profession: "Freelance Writer",
     hometown: "Manahawkin, New Jersey",
   }),
   buildPlayer({
     castaway_id: "US0712",
     full_name: "Sue Smey",
     img: "/images/season_47/Sue-Smey.jpg",
-    description:
-      "Age: 58 | Hometown: Putnam Valley, New York | Occupation: Flight School Owner",
+    description: "Age: 58 | Hometown: Putnam Valley, New York",
     age: 58,
-    profession: "Flight School Owner",
     hometown: "Putnam Valley, New York",
-    nickname: "Sue",
   }),
   buildPlayer({
     castaway_id: "US0709",
     full_name: "Sam Phalen",
     img: "/images/season_47/Sam-Phalen.jpg",
-    description:
-      "Age: 24 | Hometown: Nashville, Tennessee | Occupation: Sports Reporter",
+    description: "Age: 24 | Hometown: Nashville, Tennessee",
     age: 24,
-    profession: "Sports Reporter",
     hometown: "Nashville, Tennessee",
-    nickname: "Sam",
   }),
   buildPlayer({
     castaway_id: "US0707",
     full_name: "Rachel LaMont",
     img: "/images/season_47/Rachel-LaMont.jpg",
-    description:
-      "Age: 34 | Hometown: Southfield, Michigan | Occupation: Graphic Designer",
+    description: "Age: 34 | Hometown: Southfield, Michigan",
     age: 34,
-    profession: "Graphic Designer",
     hometown: "Southfield, Michigan",
   }),
 ] satisfies Player<CastawayIdType, SeasonNumber>[];
@@ -1853,8 +1809,8 @@ export const SEASON_47_EVENTS = {
 } satisfies Record<GameEvent["id"], GameEvent<CastawayIdType, SeasonNumber>>;
 
 export const SEASON_47_VOTE_HISTORY = {
-  vote_1_US0698_1: {
-    id: "vote_1_US0698_1",
+  vote_1_US0698_US0704_1: {
+    id: "vote_1_US0698_US0704_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_1",
@@ -1868,8 +1824,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 1,
     vote_order: 1,
   },
-  vote_1_US0699_1: {
-    id: "vote_1_US0699_1",
+  vote_1_US0699_US0704_1: {
+    id: "vote_1_US0699_US0704_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_1",
@@ -1883,8 +1839,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 1,
     vote_order: 1,
   },
-  vote_1_US0704_1: {
-    id: "vote_1_US0704_1",
+  vote_1_US0704_US0699_1: {
+    id: "vote_1_US0704_US0699_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_1",
@@ -1898,8 +1854,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 1,
     vote_order: 1,
   },
-  vote_1_US0707_1: {
-    id: "vote_1_US0707_1",
+  vote_1_US0707_US0704_1: {
+    id: "vote_1_US0707_US0704_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_1",
@@ -1913,8 +1869,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 1,
     vote_order: 1,
   },
-  vote_1_US0709_1: {
-    id: "vote_1_US0709_1",
+  vote_1_US0709_US0704_1: {
+    id: "vote_1_US0709_US0704_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_1",
@@ -1928,8 +1884,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 1,
     vote_order: 1,
   },
-  vote_1_US0710_1: {
-    id: "vote_1_US0710_1",
+  vote_1_US0710_US0704_1: {
+    id: "vote_1_US0710_US0704_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_1",
@@ -1943,8 +1899,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 1,
     vote_order: 1,
   },
-  vote_2_US0701_1: {
-    id: "vote_2_US0701_1",
+  vote_2_US0701_US0715_1: {
+    id: "vote_2_US0701_US0715_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_2",
@@ -1958,8 +1914,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 2,
     vote_order: 1,
   },
-  vote_2_US0702_1: {
-    id: "vote_2_US0702_1",
+  vote_2_US0702_US0715_1: {
+    id: "vote_2_US0702_US0715_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_2",
@@ -1973,8 +1929,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 2,
     vote_order: 1,
   },
-  vote_2_US0706_1: {
-    id: "vote_2_US0706_1",
+  vote_2_US0706_US0712_1: {
+    id: "vote_2_US0706_US0712_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_2",
@@ -1988,8 +1944,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 2,
     vote_order: 1,
   },
-  vote_2_US0712_1: {
-    id: "vote_2_US0712_1",
+  vote_2_US0712_US0715_1: {
+    id: "vote_2_US0712_US0715_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_2",
@@ -2003,8 +1959,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 2,
     vote_order: 1,
   },
-  vote_2_US0714_1: {
-    id: "vote_2_US0714_1",
+  vote_2_US0714_US0715_1: {
+    id: "vote_2_US0714_US0715_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_2",
@@ -2018,8 +1974,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 2,
     vote_order: 1,
   },
-  vote_2_US0715_1: {
-    id: "vote_2_US0715_1",
+  vote_2_US0715_US0712_1: {
+    id: "vote_2_US0715_US0712_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_2",
@@ -2033,8 +1989,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 2,
     vote_order: 1,
   },
-  vote_3_US0700_1: {
-    id: "vote_3_US0700_1",
+  vote_3_US0700_US0703_1: {
+    id: "vote_3_US0700_US0703_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_3",
@@ -2048,8 +2004,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 3,
     vote_order: 1,
   },
-  vote_3_US0703_1: {
-    id: "vote_3_US0703_1",
+  vote_3_US0703_US0700_1: {
+    id: "vote_3_US0703_US0700_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_3",
@@ -2063,8 +2019,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 3,
     vote_order: 1,
   },
-  vote_3_US0705_1: {
-    id: "vote_3_US0705_1",
+  vote_3_US0705_US0700_1: {
+    id: "vote_3_US0705_US0700_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_3",
@@ -2078,8 +2034,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 3,
     vote_order: 1,
   },
-  vote_3_US0708_1: {
-    id: "vote_3_US0708_1",
+  vote_3_US0708_US0700_1: {
+    id: "vote_3_US0708_US0700_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_3",
@@ -2093,8 +2049,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 3,
     vote_order: 1,
   },
-  vote_3_US0711_1: {
-    id: "vote_3_US0711_1",
+  vote_3_US0711_US0708_1: {
+    id: "vote_3_US0711_US0708_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_3",
@@ -2108,8 +2064,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 3,
     vote_order: 1,
   },
-  vote_3_US0713_1: {
-    id: "vote_3_US0713_1",
+  vote_3_US0713_US0711_1: {
+    id: "vote_3_US0713_US0711_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_3",
@@ -2123,8 +2079,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 3,
     vote_order: 1,
   },
-  vote_4_US0703_1: {
-    id: "vote_4_US0703_1",
+  vote_4_US0703_US0705_1: {
+    id: "vote_4_US0703_US0705_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_4",
@@ -2138,8 +2094,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 4,
     vote_order: 1,
   },
-  vote_4_US0708_1: {
-    id: "vote_4_US0708_1",
+  vote_4_US0708_US0705_1: {
+    id: "vote_4_US0708_US0705_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_4",
@@ -2153,8 +2109,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 4,
     vote_order: 1,
   },
-  vote_4_US0711_1: {
-    id: "vote_4_US0711_1",
+  vote_4_US0711_US0705_1: {
+    id: "vote_4_US0711_US0705_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_4",
@@ -2168,8 +2124,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 4,
     vote_order: 1,
   },
-  vote_5_US0698_1: {
-    id: "vote_5_US0698_1",
+  vote_5_US0698_US0699_1: {
+    id: "vote_5_US0698_US0699_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_5",
@@ -2183,8 +2139,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 5,
     vote_order: 1,
   },
-  vote_5_US0707_1: {
-    id: "vote_5_US0707_1",
+  vote_5_US0707_US0698_1: {
+    id: "vote_5_US0707_US0698_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_5",
@@ -2198,8 +2154,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 5,
     vote_order: 1,
   },
-  vote_5_US0709_1: {
-    id: "vote_5_US0709_1",
+  vote_5_US0709_US0699_1: {
+    id: "vote_5_US0709_US0699_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_5",
@@ -2213,8 +2169,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 5,
     vote_order: 1,
   },
-  vote_5_US0710_1: {
-    id: "vote_5_US0710_1",
+  vote_5_US0710_US0699_1: {
+    id: "vote_5_US0710_US0699_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_5",
@@ -2228,8 +2184,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 5,
     vote_order: 1,
   },
-  vote_6_US0698_1: {
-    id: "vote_6_US0698_1",
+  vote_6_US0698_US0708_1: {
+    id: "vote_6_US0698_US0708_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_6",
@@ -2243,8 +2199,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 6,
     vote_order: 1,
   },
-  vote_6_US0701_1: {
-    id: "vote_6_US0701_1",
+  vote_6_US0701_US0708_1: {
+    id: "vote_6_US0701_US0708_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_6",
@@ -2258,8 +2214,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 6,
     vote_order: 1,
   },
-  vote_6_US0702_1: {
-    id: "vote_6_US0702_1",
+  vote_6_US0702_US0708_1: {
+    id: "vote_6_US0702_US0708_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_6",
@@ -2273,8 +2229,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 6,
     vote_order: 1,
   },
-  vote_6_US0703_1: {
-    id: "vote_6_US0703_1",
+  vote_6_US0703_US0708_1: {
+    id: "vote_6_US0703_US0708_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_6",
@@ -2288,8 +2244,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 6,
     vote_order: 1,
   },
-  vote_6_US0707_1: {
-    id: "vote_6_US0707_1",
+  vote_6_US0707_US0708_1: {
+    id: "vote_6_US0707_US0708_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_6",
@@ -2303,8 +2259,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 6,
     vote_order: 1,
   },
-  vote_6_US0708_1: {
-    id: "vote_6_US0708_1",
+  vote_6_US0708_US0709_1: {
+    id: "vote_6_US0708_US0709_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_6",
@@ -2318,8 +2274,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 6,
     vote_order: 1,
   },
-  vote_6_US0709_1: {
-    id: "vote_6_US0709_1",
+  vote_6_US0709_US0708_1: {
+    id: "vote_6_US0709_US0708_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_6",
@@ -2333,8 +2289,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 6,
     vote_order: 1,
   },
-  vote_6_US0710_1: {
-    id: "vote_6_US0710_1",
+  vote_6_US0710_US0708_1: {
+    id: "vote_6_US0710_US0708_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_6",
@@ -2348,8 +2304,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 6,
     vote_order: 1,
   },
-  vote_6_US0711_1: {
-    id: "vote_6_US0711_1",
+  vote_6_US0711_US0698_1: {
+    id: "vote_6_US0711_US0698_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_6",
@@ -2363,8 +2319,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 6,
     vote_order: 1,
   },
-  vote_6_US0712_1: {
-    id: "vote_6_US0712_1",
+  vote_6_US0712_US0698_1: {
+    id: "vote_6_US0712_US0698_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_6",
@@ -2378,8 +2334,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 6,
     vote_order: 1,
   },
-  vote_6_US0713_1: {
-    id: "vote_6_US0713_1",
+  vote_6_US0713_US0708_1: {
+    id: "vote_6_US0713_US0708_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_6",
@@ -2393,8 +2349,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 6,
     vote_order: 1,
   },
-  vote_6_US0714_1: {
-    id: "vote_6_US0714_1",
+  vote_6_US0714_US0708_1: {
+    id: "vote_6_US0714_US0708_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_6",
@@ -2408,8 +2364,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 6,
     vote_order: 1,
   },
-  vote_7_US0701_1: {
-    id: "vote_7_US0701_1",
+  vote_7_US0701_US0714_1: {
+    id: "vote_7_US0701_US0714_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_7",
@@ -2423,8 +2379,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 7,
     vote_order: 1,
   },
-  vote_7_US0702_1: {
-    id: "vote_7_US0702_1",
+  vote_7_US0702_US0714_1: {
+    id: "vote_7_US0702_US0714_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_7",
@@ -2438,8 +2394,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 7,
     vote_order: 1,
   },
-  vote_7_US0706_1: {
-    id: "vote_7_US0706_1",
+  vote_7_US0706_US0714_1: {
+    id: "vote_7_US0706_US0714_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_7",
@@ -2453,8 +2409,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 7,
     vote_order: 1,
   },
-  vote_7_US0712_1: {
-    id: "vote_7_US0712_1",
+  vote_7_US0712_US0714_1: {
+    id: "vote_7_US0712_US0714_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_7",
@@ -2468,8 +2424,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 7,
     vote_order: 1,
   },
-  vote_7_US0714_1: {
-    id: "vote_7_US0714_1",
+  vote_7_US0714_US0702_1: {
+    id: "vote_7_US0714_US0702_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_7",
@@ -2483,8 +2439,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 7,
     vote_order: 1,
   },
-  vote_8_US0698_1: {
-    id: "vote_8_US0698_1",
+  vote_8_US0698_US0709_1: {
+    id: "vote_8_US0698_US0709_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2498,8 +2454,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 1,
   },
-  vote_8_US0701_1: {
-    id: "vote_8_US0701_1",
+  vote_8_US0701_US0710_1: {
+    id: "vote_8_US0701_US0710_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2513,8 +2469,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 1,
   },
-  vote_8_US0702_1: {
-    id: "vote_8_US0702_1",
+  vote_8_US0702_US0710_1: {
+    id: "vote_8_US0702_US0710_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2528,8 +2484,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 1,
   },
-  vote_8_US0703_1: {
-    id: "vote_8_US0703_1",
+  vote_8_US0703_US0709_1: {
+    id: "vote_8_US0703_US0709_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2543,8 +2499,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 1,
   },
-  vote_8_US0706_1: {
-    id: "vote_8_US0706_1",
+  vote_8_US0706_US0710_1: {
+    id: "vote_8_US0706_US0710_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2558,8 +2514,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 1,
   },
-  vote_8_US0710_1: {
-    id: "vote_8_US0710_1",
+  vote_8_US0710_US0702_1: {
+    id: "vote_8_US0710_US0702_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2573,8 +2529,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 1,
   },
-  vote_8_US0711_1: {
-    id: "vote_8_US0711_1",
+  vote_8_US0711_US0709_1: {
+    id: "vote_8_US0711_US0709_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2588,8 +2544,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 1,
   },
-  vote_8_US0712_1: {
-    id: "vote_8_US0712_1",
+  vote_8_US0712_US0710_1: {
+    id: "vote_8_US0712_US0710_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2603,8 +2559,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 1,
   },
-  vote_8_US0713_1: {
-    id: "vote_8_US0713_1",
+  vote_8_US0713_US0709_1: {
+    id: "vote_8_US0713_US0709_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2618,8 +2574,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 1,
   },
-  vote_8_US0698_2: {
-    id: "vote_8_US0698_2",
+  vote_8_US0698_US0710_2: {
+    id: "vote_8_US0698_US0710_2",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2633,8 +2589,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 2,
   },
-  vote_8_US0701_2: {
-    id: "vote_8_US0701_2",
+  vote_8_US0701_US0710_2: {
+    id: "vote_8_US0701_US0710_2",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2648,8 +2604,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 2,
   },
-  vote_8_US0702_2: {
-    id: "vote_8_US0702_2",
+  vote_8_US0702_US0710_2: {
+    id: "vote_8_US0702_US0710_2",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2663,8 +2619,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 2,
   },
-  vote_8_US0703_2: {
-    id: "vote_8_US0703_2",
+  vote_8_US0703_US0710_2: {
+    id: "vote_8_US0703_US0710_2",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2678,8 +2634,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 2,
   },
-  vote_8_US0706_2: {
-    id: "vote_8_US0706_2",
+  vote_8_US0706_US0710_2: {
+    id: "vote_8_US0706_US0710_2",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2693,8 +2649,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 2,
   },
-  vote_8_US0710_2: {
-    id: "vote_8_US0710_2",
+  vote_8_US0710_US0709_2: {
+    id: "vote_8_US0710_US0709_2",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2708,8 +2664,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 2,
   },
-  vote_8_US0711_2: {
-    id: "vote_8_US0711_2",
+  vote_8_US0711_US0710_2: {
+    id: "vote_8_US0711_US0710_2",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2723,8 +2679,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 2,
   },
-  vote_8_US0712_2: {
-    id: "vote_8_US0712_2",
+  vote_8_US0712_US0710_2: {
+    id: "vote_8_US0712_US0710_2",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2738,8 +2694,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 2,
   },
-  vote_8_US0713_2: {
-    id: "vote_8_US0713_2",
+  vote_8_US0713_US0710_2: {
+    id: "vote_8_US0713_US0710_2",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_8",
@@ -2753,8 +2709,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 8,
     vote_order: 2,
   },
-  vote_9_US0698_1: {
-    id: "vote_9_US0698_1",
+  vote_9_US0698_US0711_1: {
+    id: "vote_9_US0698_US0711_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_9",
@@ -2768,8 +2724,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 9,
     vote_order: 1,
   },
-  vote_9_US0702_1: {
-    id: "vote_9_US0702_1",
+  vote_9_US0702_US0711_1: {
+    id: "vote_9_US0702_US0711_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_9",
@@ -2783,8 +2739,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 9,
     vote_order: 1,
   },
-  vote_9_US0703_1: {
-    id: "vote_9_US0703_1",
+  vote_9_US0703_US0711_1: {
+    id: "vote_9_US0703_US0711_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_9",
@@ -2798,8 +2754,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 9,
     vote_order: 1,
   },
-  vote_9_US0706_1: {
-    id: "vote_9_US0706_1",
+  vote_9_US0706_US0711_1: {
+    id: "vote_9_US0706_US0711_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_9",
@@ -2813,8 +2769,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 9,
     vote_order: 1,
   },
-  vote_9_US0707_1: {
-    id: "vote_9_US0707_1",
+  vote_9_US0707_US0711_1: {
+    id: "vote_9_US0707_US0711_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_9",
@@ -2828,8 +2784,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 9,
     vote_order: 1,
   },
-  vote_9_US0709_1: {
-    id: "vote_9_US0709_1",
+  vote_9_US0709_US0711_1: {
+    id: "vote_9_US0709_US0711_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_9",
@@ -2843,8 +2799,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 9,
     vote_order: 1,
   },
-  vote_9_US0711_1: {
-    id: "vote_9_US0711_1",
+  vote_9_US0711_US0712_1: {
+    id: "vote_9_US0711_US0712_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_9",
@@ -2858,8 +2814,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 9,
     vote_order: 1,
   },
-  vote_9_US0712_1: {
-    id: "vote_9_US0712_1",
+  vote_9_US0712_US0711_1: {
+    id: "vote_9_US0712_US0711_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_9",
@@ -2873,8 +2829,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 9,
     vote_order: 1,
   },
-  vote_9_US0713_1: {
-    id: "vote_9_US0713_1",
+  vote_9_US0713_US0711_1: {
+    id: "vote_9_US0713_US0711_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_9",
@@ -2888,8 +2844,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 9,
     vote_order: 1,
   },
-  vote_10_US0698_1: {
-    id: "vote_10_US0698_1",
+  vote_10_US0698_US0702_1: {
+    id: "vote_10_US0698_US0702_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_10",
@@ -2903,8 +2859,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 10,
     vote_order: 1,
   },
-  vote_10_US0701_1: {
-    id: "vote_10_US0701_1",
+  vote_10_US0701_US0702_1: {
+    id: "vote_10_US0701_US0702_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_10",
@@ -2918,8 +2874,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 10,
     vote_order: 1,
   },
-  vote_10_US0702_1: {
-    id: "vote_10_US0702_1",
+  vote_10_US0702_US0703_1: {
+    id: "vote_10_US0702_US0703_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_10",
@@ -2933,8 +2889,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 10,
     vote_order: 1,
   },
-  vote_10_US0703_1: {
-    id: "vote_10_US0703_1",
+  vote_10_US0703_US0702_1: {
+    id: "vote_10_US0703_US0702_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_10",
@@ -2948,8 +2904,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 10,
     vote_order: 1,
   },
-  vote_10_US0706_1: {
-    id: "vote_10_US0706_1",
+  vote_10_US0706_US0702_1: {
+    id: "vote_10_US0706_US0702_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_10",
@@ -2963,8 +2919,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 10,
     vote_order: 1,
   },
-  vote_10_US0707_1: {
-    id: "vote_10_US0707_1",
+  vote_10_US0707_US0702_1: {
+    id: "vote_10_US0707_US0702_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_10",
@@ -2978,8 +2934,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 10,
     vote_order: 1,
   },
-  vote_10_US0709_1: {
-    id: "vote_10_US0709_1",
+  vote_10_US0709_US0702_1: {
+    id: "vote_10_US0709_US0702_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_10",
@@ -2993,8 +2949,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 10,
     vote_order: 1,
   },
-  vote_10_US0712_1: {
-    id: "vote_10_US0712_1",
+  vote_10_US0712_US0703_1: {
+    id: "vote_10_US0712_US0703_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_10",
@@ -3008,8 +2964,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 10,
     vote_order: 1,
   },
-  vote_10_US0713_1: {
-    id: "vote_10_US0713_1",
+  vote_10_US0713_US0702_1: {
+    id: "vote_10_US0713_US0702_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_10",
@@ -3023,8 +2979,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 10,
     vote_order: 1,
   },
-  vote_11_US0698_1: {
-    id: "vote_11_US0698_1",
+  vote_11_US0698_US0703_1: {
+    id: "vote_11_US0698_US0703_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_11",
@@ -3038,8 +2994,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 11,
     vote_order: 1,
   },
-  vote_11_US0701_1: {
-    id: "vote_11_US0701_1",
+  vote_11_US0701_US0706_1: {
+    id: "vote_11_US0701_US0706_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_11",
@@ -3053,8 +3009,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 11,
     vote_order: 1,
   },
-  vote_11_US0703_1: {
-    id: "vote_11_US0703_1",
+  vote_11_US0703_US0706_1: {
+    id: "vote_11_US0703_US0706_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_11",
@@ -3068,8 +3024,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 11,
     vote_order: 1,
   },
-  vote_11_US0706_1: {
-    id: "vote_11_US0706_1",
+  vote_11_US0706_US0713_1: {
+    id: "vote_11_US0706_US0713_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_11",
@@ -3083,8 +3039,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 11,
     vote_order: 1,
   },
-  vote_11_US0707_1: {
-    id: "vote_11_US0707_1",
+  vote_11_US0707_US0706_1: {
+    id: "vote_11_US0707_US0706_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_11",
@@ -3098,8 +3054,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 11,
     vote_order: 1,
   },
-  vote_11_US0709_1: {
-    id: "vote_11_US0709_1",
+  vote_11_US0709_US0706_1: {
+    id: "vote_11_US0709_US0706_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_11",
@@ -3113,8 +3069,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 11,
     vote_order: 1,
   },
-  vote_11_US0712_1: {
-    id: "vote_11_US0712_1",
+  vote_11_US0712_US0706_1: {
+    id: "vote_11_US0712_US0706_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_11",
@@ -3128,8 +3084,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 11,
     vote_order: 1,
   },
-  vote_11_US0713_1: {
-    id: "vote_11_US0713_1",
+  vote_11_US0713_US0706_1: {
+    id: "vote_11_US0713_US0706_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_11",
@@ -3143,8 +3099,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 11,
     vote_order: 1,
   },
-  vote_12_US0698_1: {
-    id: "vote_12_US0698_1",
+  vote_12_US0698_US0701_1: {
+    id: "vote_12_US0698_US0701_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_12",
@@ -3158,8 +3114,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 12,
     vote_order: 1,
   },
-  vote_12_US0701_1: {
-    id: "vote_12_US0701_1",
+  vote_12_US0701_US0703_1: {
+    id: "vote_12_US0701_US0703_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_12",
@@ -3173,8 +3129,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 12,
     vote_order: 1,
   },
-  vote_12_US0703_1: {
-    id: "vote_12_US0703_1",
+  vote_12_US0703_US0701_1: {
+    id: "vote_12_US0703_US0701_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_12",
@@ -3188,8 +3144,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 12,
     vote_order: 1,
   },
-  vote_12_US0707_1: {
-    id: "vote_12_US0707_1",
+  vote_12_US0707_US0703_1: {
+    id: "vote_12_US0707_US0703_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_12",
@@ -3203,8 +3159,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 12,
     vote_order: 1,
   },
-  vote_12_US0709_1: {
-    id: "vote_12_US0709_1",
+  vote_12_US0709_US0701_1: {
+    id: "vote_12_US0709_US0701_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_12",
@@ -3218,8 +3174,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 12,
     vote_order: 1,
   },
-  vote_12_US0712_1: {
-    id: "vote_12_US0712_1",
+  vote_12_US0712_US0709_1: {
+    id: "vote_12_US0712_US0709_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_12",
@@ -3233,8 +3189,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 12,
     vote_order: 1,
   },
-  vote_12_US0713_1: {
-    id: "vote_12_US0713_1",
+  vote_12_US0713_US0709_1: {
+    id: "vote_12_US0713_US0709_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_12",
@@ -3248,8 +3204,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 12,
     vote_order: 1,
   },
-  vote_13_US0698_1: {
-    id: "vote_13_US0698_1",
+  vote_13_US0698_US0707_1: {
+    id: "vote_13_US0698_US0707_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_13",
@@ -3263,8 +3219,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 13,
     vote_order: 1,
   },
-  vote_13_US0703_1: {
-    id: "vote_13_US0703_1",
+  vote_13_US0703_US0707_1: {
+    id: "vote_13_US0703_US0707_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_13",
@@ -3278,8 +3234,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 13,
     vote_order: 1,
   },
-  vote_13_US0707_1: {
-    id: "vote_13_US0707_1",
+  vote_13_US0707_US0698_1: {
+    id: "vote_13_US0707_US0698_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_13",
@@ -3293,8 +3249,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 13,
     vote_order: 1,
   },
-  vote_13_US0712_1: {
-    id: "vote_13_US0712_1",
+  vote_13_US0712_US0698_1: {
+    id: "vote_13_US0712_US0698_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_13",
@@ -3308,8 +3264,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 13,
     vote_order: 1,
   },
-  vote_13_US0713_1: {
-    id: "vote_13_US0713_1",
+  vote_13_US0713_US0707_1: {
+    id: "vote_13_US0713_US0707_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_13",
@@ -3323,8 +3279,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 13,
     vote_order: 1,
   },
-  vote_14_US0703_1: {
-    id: "vote_14_US0703_1",
+  vote_14_US0703_US0709_1: {
+    id: "vote_14_US0703_US0709_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_13",
@@ -3338,8 +3294,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 14,
     vote_order: 1,
   },
-  vote_14_US0707_1: {
-    id: "vote_14_US0707_1",
+  vote_14_US0707_US0703_1: {
+    id: "vote_14_US0707_US0703_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_13",
@@ -3353,8 +3309,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 14,
     vote_order: 1,
   },
-  vote_14_US0709_1: {
-    id: "vote_14_US0709_1",
+  vote_14_US0709_US0703_1: {
+    id: "vote_14_US0709_US0703_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_13",
@@ -3368,8 +3324,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 14,
     vote_order: 1,
   },
-  vote_14_US0712_1: {
-    id: "vote_14_US0712_1",
+  vote_14_US0712_US0703_1: {
+    id: "vote_14_US0712_US0703_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_13",
@@ -3383,8 +3339,8 @@ export const SEASON_47_VOTE_HISTORY = {
     sog_id: 14,
     vote_order: 1,
   },
-  vote_14_US0713_1: {
-    id: "vote_14_US0713_1",
+  vote_14_US0713_US0709_1: {
+    id: "vote_14_US0713_US0709_1",
     season_id: "season_47",
     season_num: 47,
     episode_id: "episode_13",
