@@ -45,7 +45,11 @@ export const SeasonStatsSection = ({ stats }: { stats: SeasonStatsResult }) => {
           <Text size="sm" fw={600} c="dimmed" mb="xs">
             Castaway Stats
           </Text>
-          <SimpleGrid cols={{ base: 1, xs: 2, md: 3 }} spacing="xs">
+          <SimpleGrid
+            cols={{ base: 2, md: 3 }}
+            spacing="xs"
+            style={{ alignItems: "start" }}
+          >
             {stats.castawayCards.map((card) => (
               <SeasonStatsCard key={card.key} card={card} />
             ))}

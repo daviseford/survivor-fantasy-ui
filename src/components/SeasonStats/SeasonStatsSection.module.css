@@ -1,10 +1,4 @@
 .cardNegative {
-  border-color: light-dark(
-    var(--mantine-color-red-3),
-    var(--mantine-color-red-8)
-  );
-  background: light-dark(
-    var(--mantine-color-red-0),
-    var(--mantine-color-red-9)
-  );
+  border-left: 3px solid
+    light-dark(var(--mantine-color-red-4), var(--mantine-color-red-7));
 }
