@@ -35,6 +35,7 @@ interface SyncResult {
     challenges: number;
     eliminations: number;
     events: number;
+    voteHistory: number;
   };
   warnings?: string[];
 }
@@ -253,6 +254,7 @@ async function main(): Promise<void> {
       challenges: resultsData.challenges.length,
       eliminations: resultsData.eliminations.length,
       events: resultsData.events.length,
+      voteHistory: resultsData.voteHistory.length,
     },
     warnings: validation.warnings,
   };
@@ -265,6 +267,7 @@ async function main(): Promise<void> {
   console.log(`  Challenges: ${resultsData.challenges.length}`);
   console.log(`  Eliminations: ${resultsData.eliminations.length}`);
   console.log(`  Events: ${resultsData.events.length}`);
+  console.log(`  Vote history: ${resultsData.voteHistory.length}`);
   console.log(`  Firestore pushed: ${firestorePushed}`);
 }
 

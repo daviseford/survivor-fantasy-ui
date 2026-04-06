@@ -73,6 +73,18 @@ export interface ScrapedGameEvent {
   multiplier: number | null;
 }
 
+export interface ScrapedVoteRow {
+  episodeNum: number;
+  tribe: string;
+  voterCastawayId: string;
+  targetCastawayId: string;
+  votedOutCastawayId: string;
+  nullified: boolean;
+  tie: boolean;
+  sogId: number;
+  voteOrder: number;
+}
+
 export interface ScrapeResultsOutput {
   seasonNum: number;
   scrapedAt: string;
@@ -80,5 +92,6 @@ export interface ScrapeResultsOutput {
   challenges: ScrapedChallenge[];
   eliminations: ScrapedElimination[];
   events: ScrapedGameEvent[];
+  voteHistory: ScrapedVoteRow[];
   warnings: string[];
 }

@@ -13,10 +13,10 @@ import {
 } from "@mantine/core";
 import {
   IconArrowLeft,
-  IconChartDonut,
   IconChartLine,
   IconClipboardList,
   IconCrystalBall,
+  IconFlame,
   IconTrophy,
   IconUsers,
 } from "@tabler/icons-react";
@@ -24,17 +24,18 @@ import { Link } from "react-router-dom";
 import { EpisodeAdvanceControl } from "../components/EpisodeAdvanceControl";
 import { PlayerGroupGrid } from "../components/MyPlayers";
 import { PropBetScoring } from "../components/PropBetTables";
-import { ScoringBreakdownSection } from "../components/ScoringBreakdown";
 import {
   PerSurvivorPerEpisodeDetailedScoringTable,
   PerUserPerEpisodeScoringTable,
   ScoringLegendTable,
 } from "../components/ScoringTables";
+import { SeasonStatsSection } from "../components/SeasonStats";
 import { useAutoFinishCompetition } from "../hooks/useAutoFinishCompetition";
 import { useCompetition } from "../hooks/useCompetition";
 import { useEvents } from "../hooks/useEvents";
 import { usePropBetScoring } from "../hooks/useGetPropBetScoring";
 import { useSeason } from "../hooks/useSeason";
+import { useSeasonStats } from "../hooks/useSeasonStats";
 import { useUser } from "../hooks/useUser";
 
 const Section = ({
@@ -72,6 +73,7 @@ export const SingleCompetition = () => {
 
   const { data: season } = useSeason(competition?.season_id);
   const { data: unfilteredEvents } = useEvents(competition?.season_id);
+  const seasonStats = useSeasonStats();
 
   useAutoFinishCompetition({
     events: unfilteredEvents,
@@ -166,7 +168,19 @@ export const SingleCompetition = () => {
         <PerSurvivorPerEpisodeDetailedScoringTable />
       </Section>
 
-      <Section
+      {seasonStats &&
+        (seasonStats.castawayCards.length > 0 ||
+          seasonStats.rosterStats.length > 0) && (
+          <Section
+            title="Season Stats"
+            subtitle="Key storylines and standout performances"
+            icon={<IconFlame size={22} color="var(--mantine-color-orange-6)" />}
+          >
+            <SeasonStatsSection stats={seasonStats} />
+          </Section>
+        )}
+
+      {/* <Section
         title="Scoring Breakdown"
         subtitle="Points by scoring category"
         icon={
@@ -174,7 +188,7 @@ export const SingleCompetition = () => {
         }
       >
         <ScoringBreakdownSection />
-      </Section>
+      </Section> */}
 
       <Accordion variant="subtle" radius="md">
         <Accordion.Item value="scoring-values">

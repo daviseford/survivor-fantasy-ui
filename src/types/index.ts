@@ -214,6 +214,28 @@ export type Competition = {
   finished: boolean;
 };
 
+export type VoteHistory<
+  Id extends CastawayId = CastawayId,
+  SeasonNumber = number,
+> = {
+  id: `vote_${string}`;
+
+  season_id: Season["id"];
+  season_num: SeasonNumber;
+
+  episode_id: Episode["id"];
+  episode_num: number;
+
+  tribe: string;
+  voter_castaway_id: Id;
+  target_castaway_id: Id;
+  voted_out_castaway_id: Id;
+  nullified: boolean;
+  tie: boolean;
+  sog_id: number;
+  vote_order: number;
+};
+
 export type GameEvent<
   Id extends CastawayId = CastawayId,
   SeasonNumber = number,

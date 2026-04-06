@@ -11,6 +11,7 @@ import type {
   ScrapedEpisode,
   ScrapedGameEvent,
   ScrapedPlayer,
+  ScrapedVoteRow,
   ScrapeResult,
   ScrapeResultsOutput,
 } from "./types.js";
@@ -564,6 +565,64 @@ export function generateEventSection(
 }
 
 /**
+ * Generate the SEASON_N_VOTE_HISTORY export Record.
+ */
+export function generateVoteHistorySection(
+  voteHistory: ScrapedVoteRow[],
+  seasonNum: number,
+  castawayIds: string[],
+): string {
+  const lines: string[] = [];
+  const castawayIdSet = new Set(castawayIds);
+
+  lines.push(`export const SEASON_${seasonNum}_VOTE_HISTORY = {`);
+
+  for (const vh of voteHistory) {
+    const id = `vote_${vh.sogId}_${vh.voterCastawayId}_${vh.targetCastawayId}_${vh.voteOrder}`;
+    const voterValid = castawayIdSet.has(vh.voterCastawayId);
+    const targetValid = castawayIdSet.has(vh.targetCastawayId);
+
+    lines.push(`  "${id}": {`);
+    lines.push(`    id: "${id}",`);
+    lines.push(`    season_id: "season_${seasonNum}",`);
+    lines.push(`    season_num: ${seasonNum},`);
+    lines.push(`    episode_id: "episode_${vh.episodeNum}",`);
+    lines.push(`    episode_num: ${vh.episodeNum},`);
+    lines.push(`    tribe: ${escapeString(vh.tribe)},`);
+
+    if (voterValid) {
+      lines.push(`    voter_castaway_id: "${vh.voterCastawayId}",`);
+    } else {
+      lines.push(
+        `    // TODO: resolve voter castaway ID "${vh.voterCastawayId}"`,
+      );
+      lines.push(`    voter_castaway_id: "${vh.voterCastawayId}",`);
+    }
+
+    if (targetValid) {
+      lines.push(`    target_castaway_id: "${vh.targetCastawayId}",`);
+    } else {
+      lines.push(
+        `    // TODO: resolve target castaway ID "${vh.targetCastawayId}"`,
+      );
+      lines.push(`    target_castaway_id: "${vh.targetCastawayId}",`);
+    }
+
+    lines.push(`    voted_out_castaway_id: "${vh.votedOutCastawayId}",`);
+    lines.push(`    nullified: ${vh.nullified},`);
+    lines.push(`    tie: ${vh.tie},`);
+    lines.push(`    sog_id: ${vh.sogId},`);
+    lines.push(`    vote_order: ${vh.voteOrder},`);
+    lines.push(`  },`);
+  }
+
+  lines.push(
+    `} satisfies Record<VoteHistory["id"], VoteHistory<CastawayIdType, SeasonNumber>>;`,
+  );
+  return lines.join("\n");
+}
+
+/**
  * Generate a complete season file from both player scrape and results scrape data.
  * Produces the full TypeScript file ready to write to disk.
  */
@@ -613,13 +672,18 @@ export function generateFullSeasonFile(
     seasonNum,
     castawayIds,
   );
+  const voteHistorySection = generateVoteHistorySection(
+    resultsData.voteHistory,
+    seasonNum,
+    castawayIds,
+  );
 
   // Compose the full file
   const parts: string[] = [];
 
   // Imports
   parts.push(
-    `import {\n  CastawayLookup,\n  Challenge,\n  Elimination,\n  Episode,\n  GameEvent,\n  Player,\n} from "../../types";`,
+    `import {\n  CastawayLookup,\n  Challenge,\n  Elimination,\n  Episode,\n  GameEvent,\n  Player,\n  VoteHistory,\n} from "../../types";`,
   );
   parts.push("");
 
@@ -635,6 +699,8 @@ export function generateFullSeasonFile(
   parts.push(eliminationSection);
   parts.push("");
   parts.push(eventSection);
+  parts.push("");
+  parts.push(voteHistorySection);
   parts.push("");
 
   return parts.join("\n");

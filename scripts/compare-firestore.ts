@@ -95,12 +95,13 @@ async function compare(seasonNum: number): Promise<void> {
 
   console.log("Reading Firestore data (read-only)...\n");
 
-  const [seasonDoc, challengesDoc, eliminationsDoc, eventsDoc] =
+  const [seasonDoc, challengesDoc, eliminationsDoc, eventsDoc, voteHistoryDoc] =
     await Promise.all([
       db.collection("seasons").doc(seasonKey).get(),
       db.collection("challenges").doc(seasonKey).get(),
       db.collection("eliminations").doc(seasonKey).get(),
       db.collection("events").doc(seasonKey).get(),
+      db.collection("vote_history").doc(seasonKey).get(),
     ]);
 
   if (!seasonDoc.exists) {
@@ -112,6 +113,7 @@ async function compare(seasonNum: number): Promise<void> {
   const fsChallenges = docDataOrEmpty(challengesDoc);
   const fsEliminations = docDataOrEmpty(eliminationsDoc);
   const fsEvents = docDataOrEmpty(eventsDoc);
+  const fsVoteHistory = docDataOrEmpty(voteHistoryDoc);
 
   const mismatches: Mismatch[] = [];
 
@@ -408,6 +410,64 @@ async function compare(seasonNum: number): Promise<void> {
       for (const e of scEvts) {
         console.log(
           `  EXTRA in scraped: ${e.action} — ${e.castawayId} (ep${e.episodeNum})`,
+        );
+      }
+    }
+  }
+  console.log();
+
+  // --- Vote History ---
+  console.log("--- VOTE HISTORY ---");
+  const fsVoteHistoryList = Object.values(fsVoteHistory).sort(
+    (a: any, b: any) =>
+      a.episode_num - b.episode_num ||
+      a.sog_id - b.sog_id ||
+      a.vote_order - b.vote_order,
+  );
+  const scrapedVotes = [...(scraped.voteHistory || [])].sort(
+    (a, b) =>
+      a.episodeNum - b.episodeNum ||
+      a.sogId - b.sogId ||
+      a.voteOrder - b.voteOrder,
+  );
+
+  console.log(
+    `  Firestore: ${fsVoteHistoryList.length} votes, Scraped: ${scrapedVotes.length} votes`,
+  );
+
+  const fsVotesByKey = groupBy(
+    fsVoteHistoryList as any[],
+    (v: any) =>
+      `sog${v.sog_id}_vo${v.vote_order}_${v.voter_castaway_id}_${v.target_castaway_id}`,
+  );
+  const scVotesByKey = groupBy(
+    scrapedVotes,
+    (v) =>
+      `sog${v.sogId}_vo${v.voteOrder}_${v.voterCastawayId}_${v.targetCastawayId}`,
+  );
+
+  for (const [key, fsVotes] of fsVotesByKey) {
+    if (!scVotesByKey.has(key)) {
+      for (const v of fsVotes) {
+        recordMismatch(
+          mismatches,
+          {
+            category: "VoteHistory",
+            field: key,
+            scraped: "MISSING",
+            firestore: `${(v as any).voter_castaway_id} → ${(v as any).target_castaway_id} (ep${(v as any).episode_num})`,
+          },
+          `MISSING from scraped: ${(v as any).voter_castaway_id} → ${(v as any).target_castaway_id} (ep${(v as any).episode_num})`,
+        );
+      }
+    }
+  }
+
+  for (const [key, scVotes] of scVotesByKey) {
+    if (!fsVotesByKey.has(key)) {
+      for (const v of scVotes) {
+        console.log(
+          `  EXTRA in scraped: ${v.voterCastawayId} → ${v.targetCastawayId} (ep${v.episodeNum})`,
         );
       }
     }
