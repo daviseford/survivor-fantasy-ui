@@ -19,8 +19,14 @@ const SCORING_CATEGORIES = [
     ],
   },
   {
-    label: "Idols Found",
-    actions: ["find_idol", "find_idol_nullifier"],
+    label: "Idols",
+    actions: [
+      "find_idol",
+      "find_idol_nullifier",
+      "use_idol",
+      "use_idol_nullifier",
+      "win_idol",
+    ],
   },
   {
     label: "Advantages Found",
@@ -38,10 +44,6 @@ const SCORING_CATEGORIES = [
     ],
   },
   {
-    label: "Idols Used",
-    actions: ["use_idol", "use_idol_nullifier", "voted_out_with_idol"],
-  },
-  {
     label: "Advantages Used",
     actions: [
       "use_extra_vote",
@@ -54,12 +56,7 @@ const SCORING_CATEGORIES = [
       "use_amulet",
       "use_challenge_advantage",
       "use_other_advantage",
-      "voted_out_with_advantage",
     ],
-  },
-  {
-    label: "Idols Won",
-    actions: ["win_idol"],
   },
   {
     label: "Advantages Won",
@@ -75,21 +72,28 @@ const SCORING_CATEGORIES = [
     actions: [
       "votes_negated_by_idol",
       "eliminated",
+      "voted_out_with_idol",
+      "voted_out_with_advantage",
       "use_shot_in_the_dark_unsuccessfully",
       "use_shot_in_the_dark_successfully",
       "win_fire_making",
     ],
   },
   {
-    label: "Journeys and Beware",
+    label: "Journeys",
     actions: [
-      "find_beware_advantage",
-      "accept_beware_advantage",
-      "fulfill_beware_advantage",
       "go_on_journey",
       "journey_risked_vote",
       "journey_won_game",
       "journey_lost_vote",
+    ],
+  },
+  {
+    label: "Beware Advantages",
+    actions: [
+      "find_beware_advantage",
+      "accept_beware_advantage",
+      "fulfill_beware_advantage",
     ],
   },
 ] as const;
