@@ -67,9 +67,11 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0222",
     full_name: "Steve Morris",
-    img: "",
-    description: "Age: 47 | Hometown: Marion, Virginia",
+    img: "/images/season_15/Steve-Morris.jpg",
+    description:
+      "Age: 47 | Hometown: Marion, Virginia | Occupation: Chicken Farmer",
     age: 47,
+    profession: "Chicken Farmer",
     hometown: "Marion, Virginia",
     nickname: "Chicken",
   }),
@@ -146,9 +148,11 @@ export const SEASON_15_PLAYERS = [
   buildPlayer({
     castaway_id: "US0230",
     full_name: "Michael Zernow",
-    img: "",
-    description: "Age: 20 | Hometown: Chicago, Illinois",
+    img: "/images/season_15/Michael-Zernow.jpg",
+    description:
+      "Age: 20 | Hometown: Chicago, Illinois | Occupation: Student/Athlete",
     age: 20,
+    profession: "Student/Athlete",
     hometown: "Chicago, Illinois",
     nickname: "Frosti",
   }),

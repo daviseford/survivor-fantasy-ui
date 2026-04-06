@@ -247,9 +247,11 @@ export const SEASON_17_PLAYERS = [
   buildPlayer({
     castaway_id: "US0265",
     full_name: "Robert Crowley",
-    img: "",
-    description: "Age: 57 | Hometown: South Portland, Maine",
+    img: "/images/season_17/Robert-Crowley.jpg",
+    description:
+      "Age: 57 | Hometown: South Portland, Maine | Occupation: Physics Teacher",
     age: 57,
+    profession: "Physics Teacher",
     hometown: "South Portland, Maine",
     nickname: "Bob",
   }),

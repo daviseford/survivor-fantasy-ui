@@ -143,18 +143,22 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0210",
     full_name: "James Reid",
-    img: "",
-    description: "Age: 28 | Hometown: Los Angeles, California",
+    img: "/images/season_14/James-Reid.jpg",
+    description:
+      "Age: 28 | Hometown: Los Angeles, California | Occupation: Bartender",
     age: 28,
+    profession: "Bartender",
     hometown: "Los Angeles, California",
     nickname: "Rocky",
   }),
   buildPlayer({
     castaway_id: "US0211",
     full_name: "Lisette Linares",
-    img: "",
-    description: "Age: 36 | Hometown: Los Angeles, California",
+    img: "/images/season_14/Lisette-Linares.jpg",
+    description:
+      "Age: 36 | Hometown: Los Angeles, California | Occupation: Customer Service Representative",
     age: 36,
+    profession: "Customer Service Representative",
     hometown: "Los Angeles, California",
     nickname: "Lisi",
   }),
@@ -211,9 +215,11 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0217",
     full_name: "Kenward Bernis",
-    img: "",
-    description: "Age: 34 | Hometown: Lafayette, Louisiana",
+    img: "/images/season_14/Kenward-Bernis.jpg",
+    description:
+      "Age: 34 | Hometown: Lafayette, Louisiana | Occupation: Construction Worker",
     age: 34,
+    profession: "Construction Worker",
     hometown: "Lafayette, Louisiana",
     nickname: "Boo",
   }),
@@ -230,9 +236,11 @@ export const SEASON_14_PLAYERS = [
   buildPlayer({
     castaway_id: "US0219",
     full_name: "Andria Herd",
-    img: "",
-    description: "Age: 25 | Hometown: Wilmington, North Carolina",
+    img: "/images/season_14/Andria-Herd.jpg",
+    description:
+      "Age: 25 | Hometown: Wilmington, North Carolina | Occupation: Cheerleading Coach",
     age: 25,
+    profession: "Cheerleading Coach",
     hometown: "Wilmington, North Carolina",
     nickname: "Dreamz",
   }),

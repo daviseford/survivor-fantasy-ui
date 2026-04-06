@@ -75,9 +75,11 @@ export const SEASON_21_PLAYERS = [
   buildPlayer({
     castaway_id: "US0302",
     full_name: "Wendy-Jo DeSmidt-Kohlhoff",
-    img: "",
-    description: "Age: 48 | Hometown: Fromberg, Montana",
+    img: "/images/season_21/Wendy-Jo-DeSmidt-Kohlhoff.jpg",
+    description:
+      "Age: 48 | Hometown: Fromberg, Montana | Occupation: Goat Rancher",
     age: 48,
+    profession: "Goat Rancher",
     hometown: "Fromberg, Montana",
     nickname: "Wendy",
   }),
@@ -105,9 +107,11 @@ export const SEASON_21_PLAYERS = [
   buildPlayer({
     castaway_id: "US0305",
     full_name: "James Tarantino",
-    img: "",
-    description: "Age: 48 | Hometown: Gloucester, Massachusetts",
+    img: "/images/season_21/James-Tarantino.jpg",
+    description:
+      "Age: 48 | Hometown: Gloucester, Massachusetts | Occupation: Commercial Fisherman",
     age: 48,
+    profession: "Commercial Fisherman",
     hometown: "Gloucester, Massachusetts",
     nickname: "Jimmy T.",
   }),
@@ -250,9 +254,11 @@ export const SEASON_21_PLAYERS = [
   buildPlayer({
     castaway_id: "US0319",
     full_name: "Matthew Lenahan",
-    img: "",
-    description: "Age: 30 | Hometown: New York City, New York",
+    img: "/images/season_21/Matthew-Lenahan.jpg",
+    description:
+      "Age: 30 | Hometown: New York City, New York | Occupation: Real Estate Broker",
     age: 30,
+    profession: "Real Estate Broker",
     hometown: "New York City, New York",
     nickname: "Sash",
   }),

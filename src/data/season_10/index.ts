@@ -124,9 +124,11 @@ export const SEASON_10_PLAYERS = [
   buildPlayer({
     castaway_id: "US0136",
     full_name: "Kimberly Mullen",
-    img: "",
-    description: "Age: 25 | Hometown: Huber Heights, Ohio",
+    img: "/images/season_10/Kimberly-Mullen.jpg",
+    description:
+      "Age: 25 | Hometown: Huber Heights, Ohio | Occupation: Graduate Student",
     age: 25,
+    profession: "Graduate Student",
     hometown: "Huber Heights, Ohio",
     nickname: "Kim",
   }),

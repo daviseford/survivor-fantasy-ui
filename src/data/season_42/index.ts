@@ -81,10 +81,13 @@ export const SEASON_42_PLAYERS = [
   buildPlayer({
     castaway_id: "US0626",
     full_name: "Zach Wurthenberger",
-    img: "",
-    description: "Age: 21 | Hometown: St. Louis, Missouri",
+    img: "/images/season_42/Zach-Wurthenberger.jpg",
+    description:
+      "Age: 21 | Hometown: St. Louis, Missouri | Occupation: Student",
     age: 21,
+    profession: "Student",
     hometown: "St. Louis, Missouri",
+    nickname: "Zach",
   }),
   buildPlayer({
     castaway_id: "US0618",

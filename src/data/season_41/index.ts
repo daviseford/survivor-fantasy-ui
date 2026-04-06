@@ -205,9 +205,11 @@ export const SEASON_41_PLAYERS = [
   buildPlayer({
     castaway_id: "US0596",
     full_name: "Ricard Foye",
-    img: "",
-    description: "Age: 31 | Hometown: Sedro-Woolley, Washington",
+    img: "/images/season_41/Ricard-Foye.jpg",
+    description:
+      "Age: 31 | Hometown: Sedro-Woolley, Washington | Occupation: Flight Attendant",
     age: 31,
+    profession: "Flight Attendant",
     hometown: "Sedro-Woolley, Washington",
   }),
   buildPlayer({

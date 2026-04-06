@@ -235,9 +235,11 @@ export const SEASON_28_PLAYERS = [
   buildPlayer({
     castaway_id: "US0423",
     full_name: "Yung Hwang",
-    img: "",
-    description: "Age: 29 | Hometown: Newport Beach, California",
+    img: "/images/season_28/Yung-Hwang.jpg",
+    description:
+      "Age: 29 | Hometown: Newport Beach, California | Occupation: Martial Arts Instructor",
     age: 29,
+    profession: "Martial Arts Instructor",
     hometown: "Newport Beach, California",
     nickname: "Woo",
   }),

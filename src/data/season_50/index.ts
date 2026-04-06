@@ -321,9 +321,11 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0695",
     full_name: "Tiffany Ervin",
-    img: "",
-    description: "Age: 34 | Hometown: Los Angeles, California",
+    img: "/images/season_50/Tiffany-Ervin.jpg",
+    description:
+      "Age: 34 | Hometown: Los Angeles, California | Occupation: Artist",
     age: 34,
+    profession: "Artist",
     hometown: "Los Angeles, California",
   }),
 ] satisfies Player<CastawayIdType, SeasonNumber>[];
