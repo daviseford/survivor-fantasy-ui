@@ -17,6 +17,7 @@ import {
   IconChartLine,
   IconClipboardList,
   IconCrystalBall,
+  IconFlame,
   IconTrophy,
   IconUsers,
 } from "@tabler/icons-react";
@@ -30,11 +31,13 @@ import {
   PerUserPerEpisodeScoringTable,
   ScoringLegendTable,
 } from "../components/ScoringTables";
+import { SeasonStatsSection } from "../components/SeasonStats";
 import { useAutoFinishCompetition } from "../hooks/useAutoFinishCompetition";
 import { useCompetition } from "../hooks/useCompetition";
 import { useEvents } from "../hooks/useEvents";
 import { usePropBetScoring } from "../hooks/useGetPropBetScoring";
 import { useSeason } from "../hooks/useSeason";
+import { useSeasonStats } from "../hooks/useSeasonStats";
 import { useUser } from "../hooks/useUser";
 
 const Section = ({
@@ -72,6 +75,7 @@ export const SingleCompetition = () => {
 
   const { data: season } = useSeason(competition?.season_id);
   const { data: unfilteredEvents } = useEvents(competition?.season_id);
+  const seasonStats = useSeasonStats();
 
   useAutoFinishCompetition({
     events: unfilteredEvents,
@@ -145,6 +149,18 @@ export const SingleCompetition = () => {
       >
         <PerUserPerEpisodeScoringTable />
       </Section>
+
+      {seasonStats &&
+        (seasonStats.castawayCards.length > 0 ||
+          seasonStats.rosterCards.length > 0) && (
+          <Section
+            title="Season Stats"
+            subtitle="Key storylines and standout performances"
+            icon={<IconFlame size={22} color="var(--mantine-color-orange-6)" />}
+          >
+            <SeasonStatsSection stats={seasonStats} />
+          </Section>
+        )}
 
       {activePropBetKeys.length > 0 && (
         <Section
