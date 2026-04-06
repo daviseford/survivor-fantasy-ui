@@ -13,7 +13,6 @@ import {
 } from "@mantine/core";
 import {
   IconArrowLeft,
-  IconChartDonut,
   IconChartLine,
   IconClipboardList,
   IconCrystalBall,
@@ -25,7 +24,6 @@ import { Link } from "react-router-dom";
 import { EpisodeAdvanceControl } from "../components/EpisodeAdvanceControl";
 import { PlayerGroupGrid } from "../components/MyPlayers";
 import { PropBetScoring } from "../components/PropBetTables";
-import { ScoringBreakdownSection } from "../components/ScoringBreakdown";
 import {
   PerSurvivorPerEpisodeDetailedScoringTable,
   PerUserPerEpisodeScoringTable,
