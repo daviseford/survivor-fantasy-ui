@@ -503,7 +503,7 @@ function leastVotesReceived(
     group: "castaway",
     tone: "positive",
     title: "Under the Radar",
-    subtitle: "Fewest post-merge votes received",
+    subtitle: "Fewest votes received (post-merge players)",
     winners: winners.map((w) => ({
       id: w.id,
       label: input.resolveName(w.id as CastawayId),
