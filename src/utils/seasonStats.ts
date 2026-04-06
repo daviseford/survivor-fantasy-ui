@@ -83,6 +83,20 @@ function getParticipantName(competition: Competition, uid: string): string {
   );
 }
 
+/** Get drafted castaways who made the merge. */
+function getPostMergeIds(
+  events: Record<string, GameEvent>,
+  draftedIds: Set<CastawayId>,
+): Set<CastawayId> {
+  const ids = new Set<CastawayId>();
+  for (const ev of Object.values(events)) {
+    if (ev.action === "make_merge" && draftedIds.has(ev.castaway_id)) {
+      ids.add(ev.castaway_id);
+    }
+  }
+  return ids;
+}
+
 /** Return all IDs tied for the top value (max or min). */
 function topN(
   items: [string, number][],
@@ -134,8 +148,10 @@ function lowestScoringCastaway(
   input: SeasonStatsInput,
   draftedIds: Set<CastawayId>,
 ): StatCard | null {
+  const postMergeIds = getPostMergeIds(input.filteredEvents, draftedIds);
+  const pool = postMergeIds.size >= 3 ? postMergeIds : draftedIds;
   const entries: [string, number][] = [];
-  for (const id of draftedIds) {
+  for (const id of pool) {
     const episodes = input.survivorPointsByEpisode[id];
     if (!episodes) continue;
     const total = episodes.reduce((s, e) => s + e.total, 0);
@@ -148,7 +164,10 @@ function lowestScoringCastaway(
     group: "castaway",
     tone: "negative",
     title: "Lowest Scoring Survivor",
-    subtitle: "The tribe has spoken",
+    subtitle:
+      postMergeIds.size >= 3
+        ? "The tribe has spoken (post-merge players)"
+        : "The tribe has spoken",
     winners: winners.map((w) => ({
       id: w.id,
       label: input.resolveName(w.id as CastawayId),
@@ -198,9 +217,11 @@ function mostConsistentCastaway(
   input: SeasonStatsInput,
   draftedIds: Set<CastawayId>,
 ): StatCard | null {
+  const postMergeIds = getPostMergeIds(input.filteredEvents, draftedIds);
+  const pool = postMergeIds.size >= 3 ? postMergeIds : draftedIds;
   // Require at least 3 episodes for consistency to be meaningful
   const candidates: { id: string; stddev: number; avg: number }[] = [];
-  for (const id of draftedIds) {
+  for (const id of pool) {
     const episodes = input.survivorPointsByEpisode[id];
     if (!episodes || episodes.length < 3) continue;
     const totals = episodes.map((e) => e.total);
@@ -475,13 +496,8 @@ function leastVotesReceived(
   const votes = Object.values(input.filteredVoteHistory);
   if (votes.length === 0) return null;
 
-  // Only qualify post-merge castaways (make_merge event)
-  const postMergeIds = new Set<CastawayId>();
-  for (const ev of Object.values(input.filteredEvents)) {
-    if (ev.action === "make_merge" && draftedIds.has(ev.castaway_id)) {
-      postMergeIds.add(ev.castaway_id);
-    }
-  }
+  // Only qualify post-merge castaways
+  const postMergeIds = getPostMergeIds(input.filteredEvents, draftedIds);
   if (postMergeIds.size < 3) return null; // Suppress pre-merge or too few
 
   // Further restrict to post-merge castaways with Tribal attendance

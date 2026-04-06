@@ -1,4 +1,4 @@
-import { Badge, Group, Stack, Text } from "@mantine/core";
+import { Group, Stack, Text } from "@mantine/core";
 import { StatCard } from "../../utils/seasonStats";
 import classes from "./SeasonStatsSection.module.css";
 
@@ -18,31 +18,21 @@ export const SeasonStatsCard = ({ card }: { card: StatCard }) => {
           </Text>
         )}
 
-        {isTied ? (
-          <div className={classes.tieList}>
-            {card.winners.map((w, idx) => (
-              <Badge key={`${w.id}_${idx}`} variant="light" size="md">
-                {w.label} — {w.value} {card.unit}
-              </Badge>
-            ))}
-            <Text size="xs" c="dimmed" mt={2}>
-              Tied
-            </Text>
+        {card.winners.map((w, idx) => (
+          <div key={`${w.id}_${idx}`}>
+            <Group gap="xs" align="baseline">
+              <Text className={classes.cardValue}>{w.label}</Text>
+              <Text className={classes.cardUnit}>
+                {w.value} {card.unit}
+              </Text>
+            </Group>
+            {w.detail && <Text className={classes.cardDetail}>{w.detail}</Text>}
           </div>
-        ) : (
-          card.winners.map((w, idx) => (
-            <div key={`${w.id}_${idx}`}>
-              <Group gap="xs" align="baseline">
-                <Text className={classes.cardValue}>{w.label}</Text>
-                <Text className={classes.cardUnit}>
-                  {w.value} {card.unit}
-                </Text>
-              </Group>
-              {w.detail && (
-                <Text className={classes.cardDetail}>{w.detail}</Text>
-              )}
-            </div>
-          ))
+        ))}
+        {isTied && (
+          <Text size="xs" c="dimmed">
+            Tied
+          </Text>
         )}
       </Stack>
     </div>
