@@ -7,6 +7,9 @@ import { RefObject, useEffect } from "react";
  */
 export function useDragScroll(ref: RefObject<HTMLDivElement | null>) {
   useEffect(() => {
+    // Skip on touch devices — native touch scrolling is better
+    if (window.matchMedia("(max-width: 48em)").matches) return;
+
     const viewport = ref.current?.querySelector<HTMLDivElement>(
       ".mantine-ScrollArea-viewport",
     );
