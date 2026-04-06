@@ -1,10 +1,9 @@
 import { Table, Text, Tooltip } from "@mantine/core";
 import { IconTrophy } from "@tabler/icons-react";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { PropBetQuestionKey, PropBetsQuestions } from "../../data/propbets";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useDragScroll } from "../../hooks/useDragScroll";
-import { useIsMobile } from "../../hooks/useIsMobile";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useUser } from "../../hooks/useUser";
 import { PropBetScores } from "../../utils/propBetUtils";
@@ -23,18 +22,8 @@ export const PerUserPerEpisodeScoringTable = () => {
     propBetScores,
   } = useScoringCalculations();
 
-  const isMobile = useIsMobile();
   const scrollRef = useRef<HTMLDivElement>(null);
   useDragScroll(scrollRef);
-  useEffect(() => {
-    if (isMobile) return;
-    const viewport = scrollRef.current?.querySelector<HTMLDivElement>(
-      ".mantine-ScrollArea-viewport",
-    );
-    if (viewport) {
-      viewport.scrollLeft = viewport.scrollWidth;
-    }
-  }, [filteredEpisodes.length, isMobile]);
 
   const sortedEntries = Object.entries(pointsByUserPerEpisodeWithPropBets).sort(
     (a, b) => b[1].total - a[1].total,
