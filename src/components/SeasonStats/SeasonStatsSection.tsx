@@ -1,11 +1,10 @@
-import { Stack, Table, Text, Title } from "@mantine/core";
+import { Divider, SimpleGrid, Stack, Table, Text } from "@mantine/core";
 import { RosterStat, SeasonStatsResult } from "../../utils/seasonStats";
 import { SeasonStatsCard } from "./SeasonStatsCard";
-import classes from "./SeasonStatsSection.module.css";
 
-const RosterStatTable = ({ stat }: { stat: RosterStat }) => (
+const RosterStatRow = ({ stat }: { stat: RosterStat }) => (
   <Table.Tr>
-    <Table.Td className={classes.rosterStatLabel}>
+    <Table.Td style={{ minWidth: 140 }}>
       <Text size="xs" fw={600}>
         {stat.title}
       </Text>
@@ -37,50 +36,52 @@ export const SeasonStatsSection = ({ stats }: { stats: SeasonStatsResult }) => {
 
   if (!hasCastaway && !hasRoster) return null;
 
-  // Use the first roster stat's rows for column headers (all share the same participants)
   const participants = hasRoster ? stats.rosterStats[0].rows : [];
 
   return (
     <Stack gap="md">
       {hasCastaway && (
         <div>
-          <Title order={6} c="dimmed" mb={4}>
+          <Text size="sm" fw={600} c="dimmed" mb="xs">
             Castaway Stats
-          </Title>
-          <div className={classes.cardGrid}>
+          </Text>
+          <SimpleGrid cols={{ base: 1, xs: 2, md: 3 }} spacing="xs">
             {stats.castawayCards.map((card) => (
               <SeasonStatsCard key={card.key} card={card} />
             ))}
-          </div>
+          </SimpleGrid>
         </div>
       )}
       {hasRoster && (
-        <div className={hasCastaway ? classes.sectionDivider : undefined}>
-          <Title order={6} c="dimmed" mb={4}>
-            Roster Stats
-          </Title>
-          <Table.ScrollContainer minWidth={400}>
-            <Table verticalSpacing={6} horizontalSpacing="sm">
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th />
-                  {participants.map((p) => (
-                    <Table.Th key={p.uid} ta="center">
-                      <Text size="sm" fw={600}>
-                        {p.label}
-                      </Text>
-                    </Table.Th>
+        <>
+          {hasCastaway && <Divider />}
+          <div>
+            <Text size="sm" fw={600} c="dimmed" mb="xs">
+              Roster Stats
+            </Text>
+            <Table.ScrollContainer minWidth={400}>
+              <Table verticalSpacing="xs" horizontalSpacing="sm">
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th />
+                    {participants.map((p) => (
+                      <Table.Th key={p.uid} ta="center">
+                        <Text size="sm" fw={600}>
+                          {p.label}
+                        </Text>
+                      </Table.Th>
+                    ))}
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  {stats.rosterStats.map((stat) => (
+                    <RosterStatRow key={stat.key} stat={stat} />
                   ))}
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
-                {stats.rosterStats.map((stat) => (
-                  <RosterStatTable key={stat.key} stat={stat} />
-                ))}
-              </Table.Tbody>
-            </Table>
-          </Table.ScrollContainer>
-        </div>
+                </Table.Tbody>
+              </Table>
+            </Table.ScrollContainer>
+          </div>
+        </>
       )}
     </Stack>
   );
