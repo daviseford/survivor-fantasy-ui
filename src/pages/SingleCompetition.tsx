@@ -173,19 +173,24 @@ export const SingleCompetition = () => {
       {seasonStats &&
         (seasonStats.castawayCards.length > 0 ||
           seasonStats.rosterCards.length > 0) && (
-          <Accordion variant="subtle" radius="md">
-            <Accordion.Item value="season-stats">
-              <Accordion.Control>
-                <Group gap="sm">
-                  <IconFlame size={18} color="var(--mantine-color-orange-6)" />
-                  <Title order={4}>Season Stats</Title>
-                </Group>
-              </Accordion.Control>
-              <Accordion.Panel>
-                <SeasonStatsSection stats={seasonStats} />
-              </Accordion.Panel>
-            </Accordion.Item>
-          </Accordion>
+          <Section
+            title="Season Stats"
+            subtitle="Key storylines and standout performances"
+            icon={<IconFlame size={22} color="var(--mantine-color-orange-6)" />}
+          >
+            <Accordion
+              variant="subtle"
+              radius="md"
+              defaultValue="season-stats-content"
+            >
+              <Accordion.Item value="season-stats-content">
+                <Accordion.Control>Show / hide stats</Accordion.Control>
+                <Accordion.Panel>
+                  <SeasonStatsSection stats={seasonStats} />
+                </Accordion.Panel>
+              </Accordion.Item>
+            </Accordion>
+          </Section>
         )}
 
       <Section

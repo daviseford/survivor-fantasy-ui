@@ -358,6 +358,35 @@ function advantagesPlayed(
   };
 }
 
+function mostIdolsFound(
+  input: SeasonStatsInput,
+  draftedIds: Set<CastawayId>,
+): StatCard | null {
+  const counts = new Map<string, number>();
+  for (const ev of Object.values(input.filteredEvents)) {
+    if (ev.action !== "find_idol") continue;
+    if (!draftedIds.has(ev.castaway_id)) continue;
+    counts.set(ev.castaway_id, (counts.get(ev.castaway_id) ?? 0) + 1);
+  }
+  const entries: [string, number][] = [...counts.entries()];
+  const winners = topN(entries, "max");
+  if (winners.length === 0 || winners[0].value === 0) return null;
+  if (winners.length >= 3) return null;
+  return {
+    key: "most_idols_found",
+    group: "castaway",
+    tone: "positive",
+    title: "Idol Finder",
+    subtitle: "Hidden immunity idols found",
+    winners: winners.map((w) => ({
+      id: w.id,
+      label: input.resolveName(w.id as CastawayId),
+      value: w.value,
+    })),
+    unit: "idols",
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Vote-history cards
 // ---------------------------------------------------------------------------
@@ -564,6 +593,49 @@ function heroCard(
   };
 }
 
+const CHALLENGE_POINTS: Record<string, number> = {
+  duel: 2,
+  reward: 2,
+  team_reward: 1,
+  immunity: 3,
+  team_immunity: 2,
+};
+
+function rosterChallengePoints(
+  input: SeasonStatsInput,
+  draftedIds: Set<CastawayId>,
+): StatCard | null {
+  const ownership = getDraftOwnership(input.competition.draft_picks);
+  const rosterPoints = new Map<string, number>();
+
+  for (const ch of Object.values(input.filteredChallenges)) {
+    const pts = CHALLENGE_POINTS[ch.variant] ?? 0;
+    for (const id of ch.winning_castaways) {
+      if (!draftedIds.has(id)) continue;
+      const owner = ownership.get(id);
+      if (!owner) continue;
+      rosterPoints.set(owner.uid, (rosterPoints.get(owner.uid) ?? 0) + pts);
+    }
+  }
+
+  const entries: [string, number][] = [...rosterPoints.entries()];
+  const winners = topN(entries, "max");
+  if (winners.length === 0 || winners[0].value === 0) return null;
+  return {
+    key: "roster_challenge_points",
+    group: "roster",
+    tone: "positive",
+    title: "Challenge Domination",
+    subtitle: "Most points from challenges across roster",
+    winners: winners.map((w) => ({
+      id: w.id,
+      label: getParticipantName(input.competition, w.id),
+      value: w.value,
+    })),
+    unit: "pts",
+  };
+}
+
 function rosterVotePressure(
   input: SeasonStatsInput,
   draftedIds: Set<CastawayId>,
@@ -645,6 +717,7 @@ export function computeSeasonStats(input: SeasonStatsInput): SeasonStatsResult {
     () => challengeBeast(input, draftedIds, "reward"),
     () => advantagesFound(input, draftedIds),
     () => advantagesPlayed(input, draftedIds),
+    () => mostIdolsFound(input, draftedIds),
     () => bestSingleEpisodeCastaway(input, draftedIds),
     () => mostConsistentCastaway(input, draftedIds),
     // Vote cards
@@ -663,6 +736,7 @@ export function computeSeasonStats(input: SeasonStatsInput): SeasonStatsResult {
   const rosterFns: (() => StatCard | null)[] = [
     () => bestSingleTeamEpisode(input),
     () => heroCard(input, draftedIds),
+    () => rosterChallengePoints(input, draftedIds),
     () => rosterVotePressure(input, draftedIds, "most"),
     () => rosterVotePressure(input, draftedIds, "least"),
   ];
