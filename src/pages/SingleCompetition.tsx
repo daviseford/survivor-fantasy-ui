@@ -182,7 +182,7 @@ export const SingleCompetition = () => {
           </Section>
         )}
 
-      <Section
+      {/* <Section
         title="Scoring Breakdown"
         subtitle="Points by scoring category"
         icon={
@@ -190,7 +190,7 @@ export const SingleCompetition = () => {
         }
       >
         <ScoringBreakdownSection />
-      </Section>
+      </Section> */}
 
       <Accordion variant="subtle" radius="md">
         <Accordion.Item value="scoring-values">
