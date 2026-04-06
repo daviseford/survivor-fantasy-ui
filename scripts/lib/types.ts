@@ -4,6 +4,7 @@ export interface ScrapedPlayer {
   wikiPageTitle: string;
   localName: string;
   castawayId: string;
+  castawayShortName?: string;
   matchStatus: "exact" | "fuzzy" | "unmatched";
   age?: number;
   profession?: string;

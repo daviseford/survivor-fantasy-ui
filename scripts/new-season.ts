@@ -22,19 +22,14 @@ import {
   transformPlayers,
   transformResults,
 } from "./lib/survivor-transformer.js";
-import type { ScrapedPlayer } from "./lib/types.js";
 import {
-  delay,
   downloadImage,
   fetchImageUrl,
-  fetchImageUrls,
   fetchWikitext,
   getSeasonPageName,
 } from "./lib/wiki-api.js";
-import {
-  parseContestantPage,
-  parseSeasonInfobox,
-} from "./lib/wikitext-parser.js";
+import { fetchWikiSupplemental } from "./lib/wiki-supplemental.js";
+import { parseSeasonInfobox } from "./lib/wikitext-parser.js";
 
 const TOTAL_STEPS = 7;
 const SEPARATOR = "=".repeat(60);
@@ -43,91 +38,6 @@ function logStep(step: number, message: string): void {
   console.log(`\n${SEPARATOR}`);
   console.log(`Step ${step}/${TOTAL_STEPS}: ${message}`);
   console.log(SEPARATOR);
-}
-
-function imageDir(projectRoot: string, seasonKey: string): string {
-  return path.join(projectRoot, "public", "images", seasonKey);
-}
-
-/**
- * Fetch player images and bios from the Survivor Wiki as a supplemental step
- * after survivoR data fetch. Uses survivoR full_name as wiki page titles.
- */
-async function fetchWikiSupplemental(
-  players: ScrapedPlayer[],
-  seasonNum: number,
-  projectRoot: string,
-): Promise<void> {
-  const seasonKey = `season_${seasonNum}`;
-  const imageFileNames = new Map<string, string>(); // wikiPageTitle -> imageFileName
-
-  for (let i = 0; i < players.length; i++) {
-    const player = players[i];
-    console.log(
-      `  [${i + 1}/${players.length}] Fetching wiki page: ${player.wikiPageTitle}`,
-    );
-
-    const wikitext = await fetchWikitext(player.wikiPageTitle);
-    if (!wikitext) {
-      console.warn(
-        `    ⚠ Wiki page not found for "${player.wikiPageTitle}" — skipping`,
-      );
-    } else {
-      const info = parseContestantPage(wikitext, seasonNum);
-      if (!info) {
-        console.warn(
-          `    ⚠ No {{Contestant}} infobox found for "${player.wikiPageTitle}" — skipping`,
-        );
-      } else {
-        if (info.imageFileName) {
-          imageFileNames.set(player.wikiPageTitle, info.imageFileName);
-        }
-        if (info.occupation) {
-          player.profession = info.occupation;
-        }
-        if (info.nickname) {
-          player.nickname = info.nickname;
-        }
-      }
-    }
-
-    if (i < players.length - 1) await delay(150);
-  }
-
-  if (imageFileNames.size === 0) return;
-
-  // Batch-resolve image URLs and download
-  console.log(`\n  Resolving ${imageFileNames.size} image URLs...`);
-  const imageUrls = await fetchImageUrls([...imageFileNames.values()]);
-  console.log(`  Resolved ${imageUrls.size}/${imageFileNames.size} image URLs`);
-
-  const imgDirPath = imageDir(projectRoot, seasonKey);
-  let downloaded = 0;
-
-  for (const player of players) {
-    const fileName = imageFileNames.get(player.wikiPageTitle);
-    if (!fileName) continue;
-    const url = imageUrls.get(fileName);
-    if (!url) continue;
-
-    const name = player.localName || player.wikiPageTitle;
-    const thumbUrl = url.replace(
-      /\/revision\/latest.*/,
-      "/revision/latest/scale-to-width-down/400",
-    );
-    const localFileName = name.replace(/\s+/g, "-") + ".jpg";
-    const localPath = path.join(imgDirPath, localFileName);
-
-    const ok = await downloadImage(thumbUrl, localPath);
-    if (ok) {
-      player.imageUrl = `/images/${seasonKey}/${localFileName}`;
-      downloaded++;
-    } else {
-      console.warn(`    Failed to download image for ${name}`);
-    }
-    await delay(100);
-  }
-  console.log(`  Downloaded ${downloaded}/${imageUrls.size} images`);
 }
 
 /**
@@ -140,7 +50,7 @@ async function fetchSeasonLogo(
   projectRoot: string,
 ): Promise<string> {
   const seasonKey = `season_${seasonNum}`;
-  const imgDirPath = imageDir(projectRoot, seasonKey);
+  const imgDirPath = path.join(projectRoot, "public", "images", seasonKey);
 
   async function tryDownload(
     url: string,

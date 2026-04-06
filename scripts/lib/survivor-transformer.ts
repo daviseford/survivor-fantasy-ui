@@ -98,6 +98,7 @@ export function transformPlayers(
       wikiPageTitle: c.full_name,
       localName: c.full_name,
       castawayId: c.castaway_id,
+      castawayShortName: c.castaway,
       matchStatus: "exact" as const,
       age: c.age ?? undefined,
       hometown,
