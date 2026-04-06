@@ -178,18 +178,7 @@ export const SingleCompetition = () => {
             subtitle="Key storylines and standout performances"
             icon={<IconFlame size={22} color="var(--mantine-color-orange-6)" />}
           >
-            <Accordion
-              variant="subtle"
-              radius="md"
-              defaultValue="season-stats-content"
-            >
-              <Accordion.Item value="season-stats-content">
-                <Accordion.Control>Show / hide stats</Accordion.Control>
-                <Accordion.Panel>
-                  <SeasonStatsSection stats={seasonStats} />
-                </Accordion.Panel>
-              </Accordion.Item>
-            </Accordion>
+            <SeasonStatsSection stats={seasonStats} />
           </Section>
         )}
 

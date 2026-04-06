@@ -333,24 +333,30 @@ describe("computeSeasonStats", () => {
       expect(card!.winners[0].detail).toBe("(2 nullified by idol)");
     });
 
-    it("returns least votes received with qualification", () => {
+    it("returns least votes received for post-merge players", () => {
       const result = computeSeasonStats(
         buildInput({
+          filteredEvents: {
+            // All four made the merge
+            e1: makeEvent("1", 5, "make_merge", ALICE),
+            e2: makeEvent("2", 5, "make_merge", BOB),
+            e3: makeEvent("3", 5, "make_merge", CHARLIE),
+            e4: makeEvent("4", 5, "make_merge", DANA),
+          },
           filteredVoteHistory: {
             // Alice voted at tribal but received 0 votes
-            v1: makeVote("1", 1, ALICE, BOB),
+            v1: makeVote("1", 6, ALICE, BOB),
             // Charlie voted and received 1
-            v2: makeVote("2", 1, CHARLIE, BOB),
-            v3: makeVote("3", 1, DANA, CHARLIE),
+            v2: makeVote("2", 6, CHARLIE, BOB),
+            v3: makeVote("3", 6, DANA, CHARLIE),
             // BOB was targeted but also attended
-            v4: makeVote("4", 1, BOB, ALICE),
+            v4: makeVote("4", 6, BOB, ALICE),
           },
         }),
       );
       const card = findCard(result.castawayCards, "least_votes_received");
       expect(card).toBeDefined();
-      // ALICE received 0 votes but attended tribal (voted)
-      // Should win "least votes received"
+      // DANA received 0 votes but attended tribal (voted) and made merge
     });
 
     it("suppresses least votes when too few attendees", () => {

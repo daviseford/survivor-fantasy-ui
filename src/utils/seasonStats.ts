@@ -475,11 +475,20 @@ function leastVotesReceived(
   const votes = Object.values(input.filteredVoteHistory);
   if (votes.length === 0) return null;
 
-  // Only qualify castaways with Tribal attendance
-  const attendees = getTribalAttendees(votes, draftedIds);
-  if (attendees.size < 3) return null; // Suppress if too few qualified
+  // Only qualify post-merge castaways (make_merge event)
+  const postMergeIds = new Set<CastawayId>();
+  for (const ev of Object.values(input.filteredEvents)) {
+    if (ev.action === "make_merge" && draftedIds.has(ev.castaway_id)) {
+      postMergeIds.add(ev.castaway_id);
+    }
+  }
+  if (postMergeIds.size < 3) return null; // Suppress pre-merge or too few
 
-  const counts = countVotesReceived(votes, draftedIds);
+  // Further restrict to post-merge castaways with Tribal attendance
+  const attendees = getTribalAttendees(votes, postMergeIds);
+  if (attendees.size < 3) return null;
+
+  const counts = countVotesReceived(votes, postMergeIds);
 
   // Include qualified attendees with 0 votes
   const entries: [string, number][] = [...attendees].map((id) => [
@@ -494,7 +503,7 @@ function leastVotesReceived(
     group: "castaway",
     tone: "positive",
     title: "Under the Radar",
-    subtitle: "Fewest votes received at tribal",
+    subtitle: "Fewest post-merge votes received",
     winners: winners.map((w) => ({
       id: w.id,
       label: input.resolveName(w.id as CastawayId),
