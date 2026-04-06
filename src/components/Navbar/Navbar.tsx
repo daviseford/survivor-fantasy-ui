@@ -18,6 +18,7 @@ import {
   IconMail,
   IconMoon,
   IconSettings,
+  IconStarFilled,
   IconSun,
   IconUser,
 } from "@tabler/icons-react";
@@ -38,6 +39,7 @@ const data: NavItem[] = [
   { link: "/admin", label: "Admin", icon: IconSettings, adminOnly: true },
   { link: "/seasons", label: "Seasons", icon: IconLayoutBoard },
   { link: "/competitions", label: "Competitions", icon: IconKarate },
+  { link: "/scoring", label: "Scoring", icon: IconStarFilled },
 ];
 
 export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
@@ -53,6 +55,7 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
       (pathname.startsWith("/seasons") && item.link === "/seasons") ||
       (pathname.startsWith("/competitions") && item.link === "/competitions") ||
       (pathname.startsWith("/admin") && item.link === "/admin") ||
+      (pathname === "/scoring" && item.link === "/scoring") ||
       item.link === pathname ||
       undefined;
 

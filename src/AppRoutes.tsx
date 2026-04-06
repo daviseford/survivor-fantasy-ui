@@ -13,13 +13,14 @@ import { useDisclosure } from "@mantine/hooks";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useLayoutEffect } from "react";
 import {
   Link,
   Navigate,
   Route,
   BrowserRouter as Router,
   Routes,
+  useLocation,
   useParams,
 } from "react-router-dom";
 import classes from "./AppRoutes.module.css";
@@ -51,6 +52,11 @@ const SingleCompetition = lazy(() =>
     default: m.SingleCompetition,
   })),
 );
+const ScoringReference = lazy(() =>
+  import("./pages/ScoringReference").then((m) => ({
+    default: m.ScoringReference,
+  })),
+);
 const SingleSeason = lazy(() =>
   import("./pages/SingleSeason").then((m) => ({ default: m.SingleSeason })),
 );
@@ -60,6 +66,26 @@ const RedirectToAdmin = () => {
   const { seasonId } = useParams();
   if (!seasonId) return <Navigate to="/admin" replace />;
   return <Navigate to={`/admin/${seasonId}`} replace />;
+};
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const previousScrollRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+
+    return () => {
+      window.history.scrollRestoration = previousScrollRestoration;
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+    document.getElementById("main-content")?.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
 };
 
 const modals = { AuthModal };
@@ -77,6 +103,7 @@ export const AppRoutes = () => {
     <MantineProvider theme={theme} defaultColorScheme="auto">
       <Notifications />
       <Router>
+        <ScrollToTop />
         <ModalsProvider modals={modals}>
           <AppShell
             header={{
@@ -158,6 +185,9 @@ export const AppRoutes = () => {
                     element={<SingleCompetition />}
                   />
                   <Route path="/competitions" element={<Competitions />} />
+
+                  {/* Scoring */}
+                  <Route path="/scoring" element={<ScoringReference />} />
 
                   {/* Admin */}
                   <Route path="/admin/:seasonId" element={<SeasonAdmin />} />

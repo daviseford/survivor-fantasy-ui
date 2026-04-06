@@ -1,5 +1,6 @@
 import { Badge, Table, Text } from "@mantine/core";
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
+import classes from "./ScoringLegendTable.module.css";
 
 const SCORING_CATEGORIES = [
   {
@@ -97,6 +98,11 @@ const scoringByAction = new Map(
   BASE_PLAYER_SCORING.map((entry) => [entry.action, entry]),
 );
 
+/** Convert "find_extra_vote" → "Find Extra Vote" */
+function toTitleCase(action: string): string {
+  return action.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 export const ScoringLegendTable = () => {
   const rows = SCORING_CATEGORIES.flatMap((category) => {
     const categoryRows = category.actions
@@ -106,10 +112,10 @@ export const ScoringLegendTable = () => {
         <Table.Tr key={x.action}>
           <Table.Td>
             <Badge variant="light" color="gray" size="sm">
-              {x.action.replace(/_/g, " ")}
+              {toTitleCase(x.action)}
             </Badge>
           </Table.Td>
-          <Table.Td>
+          <Table.Td className={classes.descriptionCell}>
             <Text size="sm">{x.description}</Text>
           </Table.Td>
           <Table.Td ta="center">
@@ -119,12 +125,13 @@ export const ScoringLegendTable = () => {
                 fw={600}
                 size="sm"
                 c={x.fixed_value > 0 ? "teal" : "red"}
+                aria-label={`${x.fixed_value > 0 ? "positive" : "negative"} ${Math.abs(x.fixed_value)} points`}
               >
                 {x.fixed_value > 0 ? "+" : ""}
                 {x.fixed_value}
               </Text>
             ) : (
-              <Text span size="sm" c="dimmed">
+              <Text span size="sm" c="dimmed" aria-label="variable points">
                 varies
               </Text>
             )}
@@ -137,24 +144,31 @@ export const ScoringLegendTable = () => {
     }
 
     return [
-      <Table.Tr key={`category-${category.label}`}>
-        <Table.Td
-          colSpan={3}
-          bg="light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7))"
-        >
+      <Table.Tr
+        key={`category-${category.label}`}
+        className={classes.categoryRow}
+      >
+        <Table.Th colSpan={3} scope="colgroup" className={classes.categoryCell}>
           <Text fw={700} size="sm">
             {category.label}
           </Text>
-        </Table.Td>
+        </Table.Th>
       </Table.Tr>,
       ...categoryRows,
     ];
   });
 
   return (
-    <Table.ScrollContainer minWidth={300}>
-      <Table verticalSpacing="xs" highlightOnHover>
-        <Table.Thead>
+    <div className={classes.tableWrapper}>
+      <Table
+        verticalSpacing="xs"
+        highlightOnHover
+        highlightOnHoverColor="light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))"
+        stickyHeader
+        stickyHeaderOffset="var(--app-shell-header-height, 0)"
+        aria-label="Scoring reference — actions and point values"
+      >
+        <Table.Thead className={classes.stickyHead}>
           <Table.Tr>
             <Table.Th>Action</Table.Th>
             <Table.Th>Description</Table.Th>
@@ -165,6 +179,6 @@ export const ScoringLegendTable = () => {
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
-    </Table.ScrollContainer>
+    </div>
   );
 };
