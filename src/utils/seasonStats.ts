@@ -246,7 +246,10 @@ function mostConsistentCastaway(
     group: "castaway",
     tone: "positive",
     title: "Most Consistent",
-    subtitle: "Steady as she goes",
+    subtitle:
+      postMergeIds.size >= 3
+        ? "Lowest variance (post-merge players)"
+        : "Lowest variance across episodes",
     winners: tied.map((w) => ({
       id: w.id,
       label: input.resolveName(w.id as CastawayId),
@@ -727,10 +730,12 @@ function rosterVotePressure(
 export interface SeasonStatsResult {
   castawayCards: StatCard[];
   rosterCards: StatCard[];
+  hasPostMerge: boolean;
 }
 
 export function computeSeasonStats(input: SeasonStatsInput): SeasonStatsResult {
   const draftedIds = getDraftedCastawayIds(input.competition);
+  const postMergeIds = getPostMergeIds(input.filteredEvents, draftedIds);
 
   const castawayCards: StatCard[] = [];
   const rosterCards: StatCard[] = [];
@@ -771,5 +776,5 @@ export function computeSeasonStats(input: SeasonStatsInput): SeasonStatsResult {
     if (card) rosterCards.push(card);
   }
 
-  return { castawayCards, rosterCards };
+  return { castawayCards, rosterCards, hasPostMerge: postMergeIds.size >= 3 };
 }

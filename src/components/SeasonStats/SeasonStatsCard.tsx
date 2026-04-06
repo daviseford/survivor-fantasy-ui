@@ -12,6 +12,11 @@ export const SeasonStatsCard = ({ card }: { card: StatCard }) => {
     >
       <Stack gap={2}>
         <Text className={classes.cardLabel}>{card.title}</Text>
+        {card.subtitle && (
+          <Text size="xs" c="dimmed" mt={-1} mb={2}>
+            {card.subtitle}
+          </Text>
+        )}
 
         {card.winners.map((w, idx) => (
           <div key={`${w.id}_${idx}`}>
