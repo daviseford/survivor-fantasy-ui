@@ -10,11 +10,10 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useDragScroll } from "../../hooks/useDragScroll";
-import { useIsMobile } from "../../hooks/useIsMobile";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
 import { useUser } from "../../hooks/useUser";
@@ -90,7 +89,6 @@ const SortableHeader = ({
 };
 
 export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
-  const isMobile = useIsMobile();
   const { data: competition } = useCompetition();
   const { data: season } = useSeason(competition?.season_id);
   const { slimUser } = useUser();
@@ -356,15 +354,6 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
 
   const scrollRef = useRef<HTMLDivElement>(null);
   useDragScroll(scrollRef);
-  useEffect(() => {
-    if (isMobile) return;
-    const viewport = scrollRef.current?.querySelector<HTMLDivElement>(
-      ".mantine-ScrollArea-viewport",
-    );
-    if (viewport) {
-      viewport.scrollLeft = viewport.scrollWidth;
-    }
-  }, [filteredEpisodes.length, isMobile]);
 
   return (
     <>
