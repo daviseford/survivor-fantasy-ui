@@ -45,20 +45,15 @@ import type {
   SurvivorTribeMapping,
   SurvivorVoteHistory,
 } from "./lib/survivor-types.js";
-import type { ScrapedPlayer } from "./lib/types.js";
 import { validateSeasonData } from "./lib/validate-season.js";
 import {
-  delay,
   downloadImage,
   fetchImageUrl,
-  fetchImageUrls,
   fetchWikitext,
   getSeasonPageName,
 } from "./lib/wiki-api.js";
-import {
-  parseContestantPage,
-  parseSeasonInfobox,
-} from "./lib/wikitext-parser.js";
+import { fetchWikiSupplemental } from "./lib/wiki-supplemental.js";
+import { parseSeasonInfobox } from "./lib/wikitext-parser.js";
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, "..");
 const SEASONS_FILE = path.join(PROJECT_ROOT, "src", "data", "seasons.ts");
@@ -92,86 +87,6 @@ function getAllSeasons(): number[] {
 /** Determine which seasons are missing (no data file yet) */
 function getMissingSeasons(): number[] {
   return getAllSeasons().filter((n) => !seasonExists(n));
-}
-
-/** Fetch player images and bios from the Survivor Wiki */
-async function fetchWikiSupplemental(
-  players: ScrapedPlayer[],
-  seasonNum: number,
-): Promise<void> {
-  const seasonKey = `season_${seasonNum}`;
-  const imageFileNames = new Map<string, string>();
-  const isNotLast = (i: number): boolean => i < players.length - 1;
-
-  for (let i = 0; i < players.length; i++) {
-    const player = players[i];
-    const { wikiPageTitle } = player;
-    console.log(
-      `    [${i + 1}/${players.length}] Fetching wiki page: ${wikiPageTitle}`,
-    );
-
-    const wikitext = await fetchWikitext(wikiPageTitle);
-    if (!wikitext) {
-      console.warn(
-        `      ⚠ Wiki page not found for "${wikiPageTitle}" — skipping`,
-      );
-      if (isNotLast(i)) await delay(150);
-      continue;
-    }
-
-    const info = parseContestantPage(wikitext, seasonNum);
-    if (!info) {
-      if (isNotLast(i)) await delay(150);
-      continue;
-    }
-
-    if (info.imageFileName) {
-      imageFileNames.set(wikiPageTitle, info.imageFileName);
-    }
-    if (info.occupation) {
-      player.profession = info.occupation;
-    }
-    if (info.nickname) {
-      player.nickname = info.nickname;
-    }
-
-    if (isNotLast(i)) await delay(150);
-  }
-
-  if (imageFileNames.size === 0) return;
-
-  // Batch-resolve image URLs and download
-  console.log(`    Resolving ${imageFileNames.size} image URLs...`);
-  const imageUrls = await fetchImageUrls([...imageFileNames.values()]);
-  console.log(
-    `    Resolved ${imageUrls.size}/${imageFileNames.size} image URLs`,
-  );
-
-  const imgDir = path.join(PROJECT_ROOT, "public", "images", seasonKey);
-  let downloaded = 0;
-
-  for (const player of players) {
-    const fileName = imageFileNames.get(player.wikiPageTitle);
-    if (!fileName) continue;
-    const url = imageUrls.get(fileName);
-    if (!url) continue;
-
-    const name = player.localName || player.wikiPageTitle;
-    const thumbUrl = url.replace(
-      /\/revision\/latest.*/,
-      "/revision/latest/scale-to-width-down/400",
-    );
-    const localFileName = name.replace(/\s+/g, "-") + ".jpg";
-    const localPath = path.join(imgDir, localFileName);
-
-    const ok = await downloadImage(thumbUrl, localPath);
-    if (ok) {
-      player.imageUrl = `/images/${seasonKey}/${localFileName}`;
-      downloaded++;
-    }
-    await delay(100);
-  }
-  console.log(`    Downloaded ${downloaded}/${imageUrls.size} images`);
 }
 
 /** Try to download a logo image and return its public path, or empty string on failure. */
@@ -421,7 +336,11 @@ async function main(): Promise<void> {
 
       if (!skipWiki) {
         console.log("  Fetching wiki supplemental...");
-        await fetchWikiSupplemental(playerData.players, seasonNum);
+        await fetchWikiSupplemental(
+          playerData.players,
+          seasonNum,
+          PROJECT_ROOT,
+        );
       }
 
       const fileContent = generateFullSeasonFile(
