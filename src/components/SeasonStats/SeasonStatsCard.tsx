@@ -11,7 +11,7 @@ export const SeasonStatsCard = ({ card }: { card: StatCard }) => {
       padding="sm"
       radius="md"
       withBorder
-      className={isNegative ? classes.cardNegative : undefined}
+      className={`${classes.card} ${isNegative ? classes.cardNegative : ""}`}
     >
       <Stack gap={4}>
         <Text size="xs" tt="uppercase" lts="0.4px" c="dimmed" fw={500}>
