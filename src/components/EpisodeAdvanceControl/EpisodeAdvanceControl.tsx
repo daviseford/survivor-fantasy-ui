@@ -248,7 +248,7 @@ export const EpisodeAdvanceControl = ({
             </Button>
           )}
         </Group>
-        {canAdvance && (
+        {canAdvance ? (
           <Button
             variant="subtle"
             size="compact-sm"
@@ -257,6 +257,15 @@ export const EpisodeAdvanceControl = ({
           >
             Switch to Live
           </Button>
+        ) : (
+          <Badge
+            variant="light"
+            color="green"
+            size="lg"
+            style={{ alignSelf: "center" }}
+          >
+            Season Complete
+          </Badge>
         )}
       </Stack>
     </Paper>
