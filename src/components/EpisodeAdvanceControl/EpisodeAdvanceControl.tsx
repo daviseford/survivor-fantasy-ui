@@ -235,26 +235,29 @@ export const EpisodeAdvanceControl = ({
           >
             Back
           </Button>
-          <Button
-            variant="filled"
-            size="sm"
-            rightSection={<IconChevronRight size={14} />}
-            disabled={!canAdvance}
-            onClick={advanceEpisode}
-          >
-            {currentEpisode === 0
-              ? "Reveal Ep 1"
-              : `Reveal Ep ${currentEpisode + 1}`}
-          </Button>
+          {canAdvance && (
+            <Button
+              variant="filled"
+              size="sm"
+              rightSection={<IconChevronRight size={14} />}
+              onClick={advanceEpisode}
+            >
+              {currentEpisode === 0
+                ? "Reveal Ep 1"
+                : `Reveal Ep ${currentEpisode + 1}`}
+            </Button>
+          )}
         </Group>
-        <Button
-          variant="subtle"
-          size="compact-sm"
-          onClick={switchToLive}
-          style={{ alignSelf: "center" }}
-        >
-          Switch to Live
-        </Button>
+        {canAdvance && (
+          <Button
+            variant="subtle"
+            size="compact-sm"
+            onClick={switchToLive}
+            style={{ alignSelf: "center" }}
+          >
+            Switch to Live
+          </Button>
+        )}
       </Stack>
     </Paper>
   );
