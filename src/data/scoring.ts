@@ -272,13 +272,13 @@ export const BASE_PLAYER_SCORING: CategorizedPlayerScoring[] = [
   },
   {
     action: "voted_out_with_idol",
-    fixed_value: -3,
+    fixed_value: -1,
     description: "Voted out while holding an unplayed idol.",
     category: "Idols",
   },
   {
     action: "voted_out_with_advantage",
-    fixed_value: -2,
+    fixed_value: -0.5,
     description: "Voted out while holding an unplayed advantage.",
     category: "Advantages",
   },
