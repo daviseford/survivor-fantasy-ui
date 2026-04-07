@@ -175,7 +175,7 @@ export const ScoringLegendTable = () => {
         <Table.Thead className={classes.stickyHead}>
           <Table.Tr>
             <Table.Th>Action</Table.Th>
-            <Table.Th>Description</Table.Th>
+            <Table.Th className={classes.descriptionCell}>Description</Table.Th>
             <Table.Th ta="center" w={80}>
               Points
             </Table.Th>
