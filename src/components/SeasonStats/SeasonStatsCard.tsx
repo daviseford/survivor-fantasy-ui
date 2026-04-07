@@ -13,15 +13,17 @@ export const SeasonStatsCard = ({ card }: { card: StatCard }) => {
       withBorder
       className={`${classes.card} ${isNegative ? classes.cardNegative : ""}`}
     >
-      <Stack gap={4}>
-        <Text size="xs" tt="uppercase" lts="0.4px" c="dimmed" fw={500}>
-          {card.title}
-        </Text>
-        {card.subtitle && (
-          <Text size="xs" c="dimmed" mt={-2}>
-            {card.subtitle}
+      <Stack gap={4} h="100%" justify="space-between">
+        <div>
+          <Text size="xs" tt="uppercase" lts="0.4px" c="dimmed" fw={500}>
+            {card.title}
           </Text>
-        )}
+          {card.subtitle && (
+            <Text size="xs" c="dimmed" mt={-2}>
+              {card.subtitle}
+            </Text>
+          )}
+        </div>
 
         {isTied ? (
           <div>
@@ -33,17 +35,19 @@ export const SeasonStatsCard = ({ card }: { card: StatCard }) => {
             </Text>
           </div>
         ) : (
-          card.winners.map((w, idx) => (
-            <div key={`${w.id}_${idx}`}>
-              <Text size="lg" fw={700} lh={1.2}>
-                {w.label}
-              </Text>
-              <Text size="xs" c="dimmed">
-                {w.value} {card.unit}
-                {w.detail ? ` · ${w.detail}` : ""}
-              </Text>
-            </div>
-          ))
+          <div>
+            {card.winners.map((w, idx) => (
+              <div key={`${w.id}_${idx}`}>
+                <Text size="lg" fw={700} lh={1.2}>
+                  {w.label}
+                </Text>
+                <Text size="xs" c="dimmed">
+                  {w.value} {card.unit}
+                  {w.detail ? ` · ${w.detail}` : ""}
+                </Text>
+              </div>
+            ))}
+          </div>
         )}
       </Stack>
     </Card>
