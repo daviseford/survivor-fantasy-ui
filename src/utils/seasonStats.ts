@@ -596,9 +596,11 @@ function computeRosterStats(
     description: "Total points earned from challenge wins across roster",
     unit: "pts",
     direction: "high",
-    rows: [...challengePts.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .map(([uid, v]) => ({ uid, label: getName(uid), value: v })),
+    rows: uids.map((uid) => ({
+      uid,
+      label: getName(uid),
+      value: challengePts.get(uid) ?? 0,
+    })),
   });
 
   // Best single team episode
@@ -621,14 +623,15 @@ function computeRosterStats(
       description: "Highest single-episode score across all roster players",
       unit: "pts",
       direction: "high",
-      rows: [...bestEp.entries()]
-        .sort((a, b) => b[1].value - a[1].value)
-        .map(([uid, d]) => ({
+      rows: uids.map((uid) => {
+        const d = bestEp.get(uid) ?? { value: 0, ep: 0 };
+        return {
           uid,
           label: getName(uid),
           value: d.value,
           detail: d.value > 0 ? `Ep ${d.ep}` : undefined,
-        })),
+        };
+      }),
     });
   }
 
@@ -655,14 +658,15 @@ function computeRosterStats(
     description: "Highest-scoring individual castaway on each roster",
     unit: "pts",
     direction: "high",
-    rows: [...bestPick.entries()]
-      .sort((a, b) => b[1].value - a[1].value)
-      .map(([uid, d]) => ({
+    rows: uids.map((uid) => {
+      const d = bestPick.get(uid) ?? { value: 0, castaway: "" };
+      return {
         uid,
         label: getName(uid),
         value: d.value,
         detail: d.castaway || undefined,
-      })),
+      };
+    }),
   });
 
   // Idols & Advantages points
@@ -689,9 +693,11 @@ function computeRosterStats(
     description: "Points from finding and playing idols and advantages",
     unit: "pts",
     direction: "high",
-    rows: [...advPts.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .map(([uid, v]) => ({ uid, label: getName(uid), value: v })),
+    rows: uids.map((uid) => ({
+      uid,
+      label: getName(uid),
+      value: advPts.get(uid) ?? 0,
+    })),
   });
 
   // Votes against roster
@@ -711,9 +717,11 @@ function computeRosterStats(
       description: "Total tribal council votes targeting roster players",
       unit: "votes",
       direction: "low",
-      rows: [...voteCounts.entries()]
-        .sort((a, b) => a[1] - b[1])
-        .map(([uid, v]) => ({ uid, label: getName(uid), value: v })),
+      rows: uids.map((uid) => ({
+        uid,
+        label: getName(uid),
+        value: voteCounts.get(uid) ?? 0,
+      })),
     });
   }
 

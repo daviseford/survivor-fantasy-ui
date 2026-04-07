@@ -33,6 +33,12 @@ const RosterStatRow = ({
   const best = Math.max(...values);
   const worst = Math.min(...values);
 
+  // Compute rank from value (sorted descending for "high", ascending for "low")
+  const sorted = [...values].sort((a, b) =>
+    stat.direction === "high" ? b - a : a - b,
+  );
+  const rankByValue = (v: number) => sorted.indexOf(v) + 1;
+
   return (
     <Table.Tr>
       <Table.Td style={{ minWidth: 140 }}>
@@ -43,9 +49,9 @@ const RosterStatRow = ({
           {stat.description}
         </Text>
       </Table.Td>
-      {stat.rows.map((row, idx) => {
+      {stat.rows.map((row) => {
         const bg = getCellColor(row.value, best, worst, stat.direction);
-        const rank = showRank ? getRank(idx) : null;
+        const rank = showRank ? getRank(rankByValue(row.value) - 1) : null;
         return (
           <Table.Td key={row.uid} ta="center" bg={bg}>
             {rank && (
