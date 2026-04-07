@@ -2,3 +2,10 @@
   border-left: 3px solid
     light-dark(var(--mantine-color-red-4), var(--mantine-color-red-7));
 }
+
+/* Equal-height stat cards on mobile so grid rows align */
+@media (max-width: 62em) {
+  .card {
+    min-height: 10rem;
+  }
+}

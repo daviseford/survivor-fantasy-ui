@@ -105,7 +105,7 @@ export const SeasonStatsSection = ({ stats }: { stats: SeasonStatsResult }) => {
             <Text size="sm" fw={600} c="dimmed">
               Roster Stats
             </Text>
-            <Table.ScrollContainer minWidth={400}>
+            <Table.ScrollContainer minWidth={500}>
               <Table verticalSpacing="xs" horizontalSpacing="sm">
                 <Table.Thead>
                   <Table.Tr>
