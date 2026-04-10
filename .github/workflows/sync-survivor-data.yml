@@ -132,9 +132,17 @@ jobs:
             fi
             PR_BODY="${PR_BODY}\n\n---\n*This PR was created automatically by the [survivoR data sync workflow](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}).*"
 
-            gh pr create --title "$PR_TITLE" --body "$(echo -e "$PR_BODY")" --base main
+            PR_URL=$(gh pr create --title "$PR_TITLE" --body "$(echo -e "$PR_BODY")" --base main)
+            # Auto-merge episode updates; new season bootstraps need manual review
+            if [ "$IS_NEW" != "true" ]; then
+              gh pr merge "$PR_URL" --auto --merge
+            fi
           else
             echo "PR #${EXISTING_PR} already exists for branch ${BRANCH}"
+            # Re-enable auto-merge in case force-push reset it
+            if [ "$IS_NEW" != "true" ]; then
+              gh pr merge "$EXISTING_PR" --auto --merge
+            fi
           fi
 
       - name: Write job summary
