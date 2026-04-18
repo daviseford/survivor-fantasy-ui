@@ -260,11 +260,11 @@ export const EpisodeAdvanceControl = ({
         ) : (
           <Badge
             variant="light"
-            color="green"
+            color={hasWinner ? "green" : "blue"}
             size="lg"
             style={{ alignSelf: "center" }}
           >
-            Season Complete
+            {hasWinner ? "Season Complete" : "Up to Date"}
           </Badge>
         )}
       </Stack>
