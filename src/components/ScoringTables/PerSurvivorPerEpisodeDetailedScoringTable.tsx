@@ -388,7 +388,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
             value={filterUserUid}
             onChange={setFilterUserUid}
             clearable
-            searchable
+            allowDeselect
             aria-label="Filter players by drafter"
           />
         </Group>
