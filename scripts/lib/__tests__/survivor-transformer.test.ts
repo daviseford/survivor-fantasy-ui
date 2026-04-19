@@ -387,4 +387,31 @@ describe("transformResults", { timeout: 60000 }, () => {
       expect(castawayIds).toContain(ev.castawayId);
     }
   });
+
+  it("treats S50 'Escaped Exile Island' journey reward as non-scoring participation only", async () => {
+    const data = await fetchSeasonData(50);
+    const result = transformResults(data, 50);
+
+    // Cirie (US0179) escaped Exile Island in episode 8 — a new journey outcome
+    // that grants no advantage and costs no vote. She should only get the base
+    // go_on_journey participation event; no win/risk/lost-vote events.
+    const cirieEp8 = result.events.filter(
+      (e) => e.castawayId === "US0179" && e.episodeNum === 8,
+    );
+
+    const goOnJourney = cirieEp8.filter((e) => e.action === "go_on_journey");
+    expect(goOnJourney).toHaveLength(1);
+
+    const nonParticipationJourneyActions = cirieEp8.filter((e) =>
+      ["journey_won_game", "journey_risked_vote", "journey_lost_vote"].includes(
+        e.action,
+      ),
+    );
+    expect(nonParticipationJourneyActions).toHaveLength(0);
+
+    const winActions = cirieEp8.filter(
+      (e) => e.action.startsWith("win_") && e.action !== "win_survivor",
+    );
+    expect(winActions).toHaveLength(0);
+  });
 });
