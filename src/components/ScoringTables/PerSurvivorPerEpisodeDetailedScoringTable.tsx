@@ -3,6 +3,7 @@ import {
   Badge,
   Box,
   Group,
+  Select,
   Stack,
   Table,
   Text,
@@ -109,6 +110,16 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
 
   const [sortField, setSortField] = useState<SortField>("rank");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [filterUserUid, setFilterUserUid] = useState<string | null>(null);
+
+  const userFilterOptions = useMemo(
+    () =>
+      (competition?.participants ?? []).map((p) => ({
+        value: p.uid,
+        label: p.displayName || p.email || p.uid,
+      })),
+    [competition?.participants],
+  );
 
   const handleSort = (field: SortField) => {
     if (field === sortField) {
@@ -172,6 +183,16 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
     return entries.slice().sort(compareFn);
   }, [entries, sortField, sortDir]);
 
+  const visibleEntries = useMemo(() => {
+    if (!filterUserUid) return sorted;
+    const pickedCastawayIds = new Set(
+      (competition?.draft_picks ?? [])
+        .filter((p) => p.user_uid === filterUserUid)
+        .map((p) => p.castaway_id),
+    );
+    return sorted.filter((entry) => pickedCastawayIds.has(entry.castawayId));
+  }, [sorted, filterUserUid, competition?.draft_picks]);
+
   const scoringDescriptionLookup = useMemo(
     () =>
       BASE_PLAYER_SCORING.reduce(
@@ -184,7 +205,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
     [],
   );
 
-  const rows = sorted.map((entry) => {
+  const rows = visibleEntries.map((entry) => {
     const {
       castawayId,
       displayName,
@@ -357,6 +378,21 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
 
   return (
     <>
+      {userFilterOptions.length > 0 && (
+        <Group mb="xs" px="md">
+          <Select
+            size="xs"
+            w={240}
+            placeholder="Filter by user"
+            data={userFilterOptions}
+            value={filterUserUid}
+            onChange={setFilterUserUid}
+            clearable
+            searchable
+            aria-label="Filter players by drafter"
+          />
+        </Group>
+      )}
       <Group gap="md" mb="xs" px="md" wrap="wrap">
         <Group gap={4}>
           <Box
