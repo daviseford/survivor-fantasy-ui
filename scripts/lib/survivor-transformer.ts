@@ -583,6 +583,7 @@ const IGNORED_JOURNEY_REWARDS = new Set([
   "Regained vote",
   "Returned to camp",
   "Sanctuary feast",
+  "Escaped Exile Island",
 ]);
 
 /** Map journeys.reward → specific win action. */
