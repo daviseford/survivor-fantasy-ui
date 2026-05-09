@@ -556,6 +556,7 @@ const IGNORED_VOTE_EVENTS = new Set([
   "Won immunity challenge",
   "Sacrificed vote to extend idol",
   "Sacrificed vote to extend idol; goodwill advantage",
+  "Steal a vote; won beast challenge",
   "Summit",
   "Vote blocked",
 ]);
