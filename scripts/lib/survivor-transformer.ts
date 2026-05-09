@@ -556,7 +556,6 @@ const IGNORED_VOTE_EVENTS = new Set([
   "Won immunity challenge",
   "Sacrificed vote to extend idol",
   "Sacrificed vote to extend idol; goodwill advantage",
-  "Steal a vote; won beast challenge",
   "Summit",
   "Vote blocked",
 ]);
@@ -706,6 +705,20 @@ function transformEvents(
   // Track beware advantage_ids that have been "Found (beware)" to detect fulfill
   const bewareFoundIds = new Set<number>();
 
+  // Mr. Beast "super beware advantage" twist (S50 ep10): a coin flip that
+  // grants individual immunity at this tribal AND a hidden immunity idol.
+  // survivoR encodes the win on the victim's vote_history row as a compound
+  // vote_event ("Steal a vote; won beast challenge") in the actual episode,
+  // but its advantage_movement records a separate "Found" event for the same
+  // idol one episode later. We score immunity + win_idol from the vote_event
+  // and suppress the duplicate "Found" so the idol isn't double-counted.
+  const twistIdolEpByCastaway = new Map<string, number>();
+  for (const v of voteHistory) {
+    if (v.vote_event === "Steal a vote; won beast challenge") {
+      twistIdolEpByCastaway.set(v.castaway_id, Math.round(v.episode));
+    }
+  }
+
   // Advantage events — type-aware mapping using advantage_details
   for (const adv of advantageMovement) {
     const epNum = Math.round(adv.episode);
@@ -743,6 +756,18 @@ function transformEvents(
         multiplier: null,
       });
     } else if (event.startsWith("Found")) {
+      // Skip the duplicate "Found" survivoR records for an idol acquired via
+      // the Mr. Beast coin-flip twist — already scored from vote_history below.
+      const twistEp = twistIdolEpByCastaway.get(castawayId);
+      if (
+        twistEp !== undefined &&
+        IDOL_TYPES.has(advType) &&
+        epNum - twistEp >= 0 &&
+        epNum - twistEp <= 1
+      ) {
+        continue;
+      }
+
       if (bewareFoundIds.has(adv.advantage_id)) {
         events.push({
           episodeNum: epNum,
@@ -974,6 +999,23 @@ function transformEvents(
         action: success
           ? "use_shot_in_the_dark_successfully"
           : "use_shot_in_the_dark_unsuccessfully",
+        multiplier: null,
+      });
+    } else if (v.vote_event === "Steal a vote; won beast challenge") {
+      // Mr. Beast "super beware advantage" coin-flip twist (S50 ep10).
+      // Winning grants individual immunity at this tribal + a hidden immunity
+      // idol (and doubles the prize pot). The advantage_movement "Found"
+      // record for the same idol is suppressed in transformEvents.
+      events.push({
+        episodeNum: epNum,
+        castawayId,
+        action: "immunity",
+        multiplier: null,
+      });
+      events.push({
+        episodeNum: epNum,
+        castawayId,
+        action: "win_idol",
         multiplier: null,
       });
     } else if (
