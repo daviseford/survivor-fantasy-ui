@@ -414,4 +414,77 @@ describe("transformResults", { timeout: 60000 }, () => {
     );
     expect(winActions).toHaveLength(0);
   });
+
+  it("scores Mr. Beast super-beware coin-flip twist (S50 ep10) as immunity + win_idol", async () => {
+    const data = await fetchSeasonData(50);
+    const result = transformResults(data, 50);
+
+    // Rick (US0560) won the Mr. Beast coin flip in S50 ep10 — gaining individual
+    // immunity at this tribal AND a hidden immunity idol. survivoR encodes this
+    // on Rick's vote_history row as "Steal a vote; won beast challenge" because
+    // Stephenie also played a Steal a Vote on him. Both rewards should be scored
+    // in ep10 (not ep11, where survivoR's advantage_movement records the Found).
+    //
+    // The idol is a game event, but immunity is a ChallengeWinAction scored off
+    // challenges.winning_castaways — emitting it as an event produces season
+    // data that fails to type-check.
+    const rickEp10 = result.events.filter(
+      (e) => e.castawayId === "US0560" && e.episodeNum === 10,
+    );
+    expect(rickEp10.map((e) => e.action).sort()).toEqual(["win_idol"]);
+
+    const rickEp10Immunity = result.challenges.filter(
+      (c) =>
+        c.episodeNum === 10 &&
+        c.variant === "immunity" &&
+        c.winnerCastawayIds.includes("US0560"),
+    );
+    expect(rickEp10Immunity).toHaveLength(1);
+
+    // The duplicate advantage_movement "Found" for the same idol (recorded in
+    // ep11 by survivoR) must be suppressed so the idol isn't double-counted.
+    const rickEp11FindIdol = result.events.filter(
+      (e) =>
+        e.castawayId === "US0560" &&
+        e.episodeNum === 11 &&
+        e.action === "find_idol",
+    );
+    expect(rickEp11FindIdol).toHaveLength(0);
+
+    // Sanity: Rick still gets the use_idol event in ep11 from the Played row.
+    const rickEp11Use = result.events.filter(
+      (e) =>
+        e.castawayId === "US0560" &&
+        e.episodeNum === 11 &&
+        e.action === "use_idol",
+    );
+    expect(rickEp11Use).toHaveLength(1);
+  });
+
+  it("never emits a challenge-win action as a game event", async () => {
+    // Challenge wins are scored from challenges.winning_castaways and are not
+    // part of GameEventAction, so emitting one as an event generates season
+    // data that fails to compile. Guard every season we can transform.
+    const challengeWinActions = new Set([
+      "duel",
+      "reward",
+      "team_reward",
+      "immunity",
+      "team_immunity",
+    ]);
+
+    for (const seasonNum of [48, 49, 50]) {
+      const result = transformResults(
+        await fetchSeasonData(seasonNum),
+        seasonNum,
+      );
+      const offenders = result.events.filter((e) =>
+        challengeWinActions.has(e.action),
+      );
+      expect(
+        offenders,
+        `S${seasonNum} emitted challenge-win actions as events: ${JSON.stringify(offenders)}`,
+      ).toHaveLength(0);
+    }
+  });
 });

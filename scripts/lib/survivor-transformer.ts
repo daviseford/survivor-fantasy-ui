@@ -133,7 +133,10 @@ export function transformResults(
     data.tribeMapping,
     hasWinner,
   );
-  const challenges = transformChallenges(data.challengeResults);
+  const challenges = transformChallenges(
+    data.challengeResults,
+    data.voteHistory,
+  );
   const eliminations = transformEliminations(data.castaways);
   const events = transformEvents(
     data.advantageMovement,
@@ -257,6 +260,7 @@ function getImmunityVariant(
 
 function transformChallenges(
   results: SurvivorChallengeResult[],
+  voteHistory: SurvivorVoteHistory[],
 ): ScrapedChallenge[] {
   const byChallenge = groupBy(results, (r) => Math.round(r.challenge_id));
 
@@ -332,7 +336,49 @@ function transformChallenges(
     }
   }
 
+  order = applyBeastChallengeImmunity(challenges, voteHistory, order);
+
   return challenges;
+}
+
+/**
+ * Grant individual immunity to castaways who won it via the Mr. Beast
+ * coin-flip twist rather than by winning the challenge itself. Immunity is
+ * scored off challenges.winning_castaways (it is a ChallengeWinAction, not a
+ * GameEventAction), so it has to land here rather than in transformEvents.
+ *
+ * Prefers adding the castaway to the episode's existing individual immunity
+ * challenge; if that episode has none, emits a standalone entry.
+ */
+function applyBeastChallengeImmunity(
+  challenges: ScrapedChallenge[],
+  voteHistory: SurvivorVoteHistory[],
+  startOrder: number,
+): number {
+  let order = startOrder;
+
+  for (const [castawayId, epNum] of beastChallengeEpisodes(voteHistory)) {
+    const existing = challenges.find(
+      (c) => c.episodeNum === epNum && c.variant === "immunity",
+    );
+
+    if (existing) {
+      if (!existing.winnerCastawayIds.includes(castawayId)) {
+        existing.winnerCastawayIds.push(castawayId);
+      }
+      continue;
+    }
+
+    challenges.push({
+      episodeNum: epNum,
+      variant: "immunity",
+      winnerCastawayIds: [castawayId],
+      winnerTribe: null,
+      order: order++,
+    });
+  }
+
+  return order;
 }
 
 /**
@@ -562,8 +608,30 @@ const IGNORED_VOTE_EVENTS = new Set([
   // events into one field with "; " and lowercases everything after the
   // first clause, so these are matched case-insensitively.
   "goodwill advantage",
-  "won beast challenge",
 ]);
+
+/**
+ * Mr. Beast "super beware advantage" coin-flip twist (S50 ep10). Winning
+ * grants a hidden immunity idol plus individual immunity at that tribal.
+ * survivoR records it as a trailing clause on the castaway's vote_history
+ * row, and separately logs an advantage_movement "Found" for the same idol
+ * an episode later, which transformEvents suppresses.
+ */
+const BEAST_CHALLENGE_VOTE_EVENT = "won beast challenge";
+
+/** Map castaway_id → episode for every beast-challenge win in the season. */
+function beastChallengeEpisodes(
+  voteHistory: SurvivorVoteHistory[],
+): Map<string, number> {
+  const byCastaway = new Map<string, number>();
+  for (const v of voteHistory) {
+    const won = splitVoteField(v.vote_event).some((clause) =>
+      matchesVoteEvent(clause, BEAST_CHALLENGE_VOTE_EVENT),
+    );
+    if (won) byCastaway.set(v.castaway_id, Math.round(v.episode));
+  }
+  return byCastaway;
+}
 
 /**
  * survivoR packs multiple events into `vote_event` / `vote_event_outcome`
@@ -740,6 +808,14 @@ function transformEvents(
   // Track beware advantage_ids that have been "Found (beware)" to detect fulfill
   const bewareFoundIds = new Set<number>();
 
+  // Mr. Beast "super beware advantage" twist (S50 ep10): a coin flip that
+  // grants individual immunity at this tribal AND a hidden immunity idol.
+  // survivoR encodes the win as a clause on the castaway's vote_history row
+  // in the actual episode, but its advantage_movement records a separate
+  // "Found" event for the same idol one episode later. We score win_idol from
+  // the vote_event and suppress the duplicate "Found" here.
+  const twistIdolEpByCastaway = beastChallengeEpisodes(voteHistory);
+
   // Advantage events — type-aware mapping using advantage_details
   for (const adv of advantageMovement) {
     const epNum = Math.round(adv.episode);
@@ -777,6 +853,18 @@ function transformEvents(
         multiplier: null,
       });
     } else if (event.startsWith("Found")) {
+      // Skip the duplicate "Found" survivoR records for an idol acquired via
+      // the Mr. Beast coin-flip twist — already scored from vote_history below.
+      const twistEp = twistIdolEpByCastaway.get(castawayId);
+      if (
+        twistEp !== undefined &&
+        IDOL_TYPES.has(advType) &&
+        epNum - twistEp >= 0 &&
+        epNum - twistEp <= 1
+      ) {
+        continue;
+      }
+
       if (bewareFoundIds.has(adv.advantage_id)) {
         events.push({
           episodeNum: epNum,
@@ -1038,6 +1126,16 @@ function transformEvents(
           });
         }
         // "Lost", "Saved", "Immune", "Vote not required" → no event
+      } else if (matchesVoteEvent(voteEvent, BEAST_CHALLENGE_VOTE_EVENT)) {
+        // The idol is a game event. The individual immunity is NOT — immunity
+        // is scored off challenges.winning_castaways, so it is applied to the
+        // episode's individual immunity challenge in transformChallenges.
+        events.push({
+          episodeNum: epNum,
+          castawayId,
+          action: "win_idol",
+          multiplier: null,
+        });
       } else if (hasVoteEvent(ADVANTAGE_PLAY_VOTE_EVENTS, voteEvent)) {
         // Already scored via advantage_movement "Played" events — skip to avoid double-counting
       } else if (!hasVoteEvent(IGNORED_VOTE_EVENTS, voteEvent)) {
