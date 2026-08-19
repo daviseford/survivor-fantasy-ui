@@ -159,7 +159,7 @@ export const SEASON_20_PLAYERS = [
   buildPlayer({
     castaway_id: "US0281",
     full_name: "James Thomas Jr.",
-    img: "",
+    img: "/images/season_20/James-Thomas-Jr..jpg",
     description: "Age: 25 | Hometown: Mobile, Alabama",
     age: 25,
     hometown: "Mobile, Alabama",

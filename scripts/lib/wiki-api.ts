@@ -149,6 +149,12 @@ export async function fetchImageUrls(
         if (imgUrl && page.title) {
           const fileName = page.title.replace(/^File:/, "");
           result.set(fileName, imgUrl);
+          // MediaWiki normalizes "_" to " " in returned titles. Callers that
+          // took the name straight from an infobox (e.g. "Jason_Linden_Alt.jpg")
+          // would otherwise never match their own key.
+          if (fileName.includes(" ")) {
+            result.set(fileName.replace(/ /g, "_"), imgUrl);
+          }
         }
       }
     } catch {

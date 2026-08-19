@@ -80,7 +80,7 @@ export const SEASON_30_PLAYERS = [
   buildPlayer({
     castaway_id: "US0444",
     full_name: "Vince Sly",
-    img: "",
+    img: "/images/season_30/Vince-Sly.jpg",
     description: "Age: 32 | Hometown: Santa Monica, California",
     age: 32,
     hometown: "Santa Monica, California",

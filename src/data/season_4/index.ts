@@ -173,7 +173,7 @@ export const SEASON_4_PLAYERS = [
   buildPlayer({
     castaway_id: "US0062",
     full_name: "Kathy Vavrick-O'Brien",
-    img: "",
+    img: "/images/season_4/Kathy-Vavrick-O'Brien.jpg",
     description: "Age: 46 | Hometown: Burlington, Vermont",
     age: 46,
     hometown: "Burlington, Vermont",

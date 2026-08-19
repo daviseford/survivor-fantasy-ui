@@ -116,7 +116,7 @@ export const SEASON_39_PLAYERS = [
   buildPlayer({
     castaway_id: "US0576",
     full_name: "Jason Linden",
-    img: "",
+    img: "/images/season_39/Jason-Linden.jpg",
     description: "Age: 32 | Hometown: New York City, New York",
     age: 32,
     hometown: "New York City, New York",
