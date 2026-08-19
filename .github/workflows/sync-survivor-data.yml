@@ -105,6 +105,18 @@ jobs:
             COMMIT_MSG="chore: sync season ${SEASON} data from survivoR"
           fi
 
+          # GitHub rejects --auto on a PR that is already mergeable ("Pull
+          # request is in clean status"), which happens when no required status
+          # check is pending. Fall back to merging outright so the sync run does
+          # not fail on what is really a success.
+          enable_auto_merge() {
+            if gh pr merge "$1" --auto --merge; then
+              return 0
+            fi
+            echo "Auto-merge unavailable for $1; merging directly."
+            gh pr merge "$1" --merge
+          }
+
           # Configure git
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -136,13 +148,13 @@ jobs:
             PR_URL=$(gh pr create --title "$PR_TITLE" --body "$(echo -e "$PR_BODY")" --base main)
             # Auto-merge episode updates; new season bootstraps need manual review
             if [ "$IS_NEW" != "true" ]; then
-              gh pr merge "$PR_URL" --auto --merge
+              enable_auto_merge "$PR_URL"
             fi
           else
             echo "PR #${EXISTING_PR} already exists for branch ${BRANCH}"
             # Re-enable auto-merge in case force-push reset it
             if [ "$IS_NEW" != "true" ]; then
-              gh pr merge "$EXISTING_PR" --auto --merge
+              enable_auto_merge "$EXISTING_PR"
             fi
           fi
 
