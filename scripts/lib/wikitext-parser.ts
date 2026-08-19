@@ -203,7 +203,15 @@ export function parseContestantPage(
   }
 
   if (fields.image) {
-    const imageFileName = extractImageFileName(fields.image);
+    // Gallery entries contain "|" separators, so the generic field parser
+    // truncates the value to a bare "<gallery>". Re-read the block from the
+    // raw wikitext in that case.
+    const imageSource = /<gallery>/i.test(fields.image)
+      ? (/\|\s*image\s*=\s*(<gallery>[\s\S]*?<\/gallery>)/i.exec(
+          wikitext,
+        )?.[1] ?? fields.image)
+      : fields.image;
+    const imageFileName = extractImageFileName(imageSource, targetSeasonNum);
     if (imageFileName) {
       info.imageFileName = imageFileName;
     }
@@ -265,8 +273,32 @@ function stripWikiMarkup(raw: string): string {
 }
 
 /** Extract a clean image filename from an infobox `image` field value. */
-function extractImageFileName(raw: string): string | null {
+function extractImageFileName(
+  raw: string,
+  targetSeasonNum?: number,
+): string | null {
   let imgFile = raw.trim();
+
+  // Handle multi-season gallery format, used by returning contestants:
+  //   <gallery>
+  //   S8 Kathy Vavrick-O'Brien.jpg|All-Stars
+  //   S4 Kathy Vavrick-O'Brien.jpg|Marquesas
+  //   </gallery>
+  // Prefer the entry for the season being generated; fall back to the first.
+  if (/<gallery>/i.test(imgFile)) {
+    const body = imgFile.replace(/<\/?gallery[^>]*>/gi, "");
+    const entries = body
+      .split(/\r?\n/)
+      .map((line) => line.split("|")[0].trim())
+      .filter((name) => /\.(jpg|jpeg|png|webp)$/i.test(name));
+    if (entries.length === 0) return null;
+    const forSeason = targetSeasonNum
+      ? entries.find((name) =>
+          new RegExp(`^S${targetSeasonNum}\\b`, "i").test(name),
+        )
+      : undefined;
+    return forSeason ?? entries[0];
+  }
 
   // Handle tabber format: <tabber>Label=[[File:S50 Colby.jpg]]</tabber>
   const fileMatch = imgFile.match(/\[\[File:([^\]|]+)/i);

@@ -180,7 +180,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0277",
     full_name: "Benjamin Wade",
-    img: "",
+    img: "/images/season_50/Coach-Wade.jpg",
     description: "Age: 53 | Hometown: Susanville, California",
     age: 53,
     hometown: "Susanville, California",
@@ -238,7 +238,7 @@ export const SEASON_50_PLAYERS = [
   buildPlayer({
     castaway_id: "US0695",
     full_name: "Tiffany Nicole Ervin",
-    img: "",
+    img: "/images/season_50/Tiffany-Ervin.jpg",
     description: "Age: 34 | Hometown: Los Angeles, California",
     age: 34,
     hometown: "Los Angeles, California",
