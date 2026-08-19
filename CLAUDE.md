@@ -50,6 +50,7 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 - **Firebase backend:** Firestore (seasons, competitions), Realtime Database (live drafts), Firebase Auth, hosted on Firebase Hosting
 - **Dual database pattern:** Firestore for persistent read-heavy data (seasons, competitions, game events), Realtime Database for live collaborative state (drafts in progress)
 - **Documented solutions:** `docs/solutions/` contains past problem resolutions organized by category with YAML frontmatter (`module`, `tags`, `problem_type`). Relevant when debugging or implementing in documented areas.
+- **Shared vocabulary:** `CONCEPTS.md` defines project-specific domain terms (entities, named processes, status concepts). Relevant when orienting to the codebase or discussing domain concepts.
 
 ## Key Patterns
 
@@ -79,4 +80,4 @@ The project configures MCP servers in `.mcp.json`:
 
 ## Deployment
 
-Merges to `main` auto-deploy to Firebase Hosting via GitHub Actions (`.github/workflows/firebase-hosting-merge.yml`). PRs get preview deploys. Firebase project: `survivor-fantasy-51c4b`.
+Merges to `main` auto-deploy to Firebase Hosting via GitHub Actions (`.github/workflows/firebase-hosting-merge.yml`). PRs run the required `ci` check (`.github/workflows/ci.yml` — format, lint, typecheck, tests, build); there is no preview deploy workflow. Firebase project: `survivor-fantasy-51c4b`.
