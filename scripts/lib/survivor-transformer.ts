@@ -19,6 +19,7 @@ import type {
   ScrapedChallenge,
   ScrapedChallengeVariant,
   ScrapedElimination,
+  ScrapedEliminationVariant,
   ScrapedEpisode,
   ScrapedGameEvent,
   ScrapedPlayer,
@@ -132,7 +133,10 @@ export function transformResults(
     data.tribeMapping,
     hasWinner,
   );
-  const challenges = transformChallenges(data.challengeResults);
+  const challenges = transformChallenges(
+    data.challengeResults,
+    data.voteHistory,
+  );
   const eliminations = transformEliminations(data.castaways);
   const events = transformEvents(
     data.advantageMovement,
@@ -256,6 +260,7 @@ function getImmunityVariant(
 
 function transformChallenges(
   results: SurvivorChallengeResult[],
+  voteHistory: SurvivorVoteHistory[],
 ): ScrapedChallenge[] {
   const byChallenge = groupBy(results, (r) => Math.round(r.challenge_id));
 
@@ -331,7 +336,49 @@ function transformChallenges(
     }
   }
 
+  order = applyBeastChallengeImmunity(challenges, voteHistory, order);
+
   return challenges;
+}
+
+/**
+ * Grant individual immunity to castaways who won it via the Mr. Beast
+ * coin-flip twist rather than by winning the challenge itself. Immunity is
+ * scored off challenges.winning_castaways (it is a ChallengeWinAction, not a
+ * GameEventAction), so it has to land here rather than in transformEvents.
+ *
+ * Prefers adding the castaway to the episode's existing individual immunity
+ * challenge; if that episode has none, emits a standalone entry.
+ */
+function applyBeastChallengeImmunity(
+  challenges: ScrapedChallenge[],
+  voteHistory: SurvivorVoteHistory[],
+  startOrder: number,
+): number {
+  let order = startOrder;
+
+  for (const [castawayId, epNum] of beastChallengeEpisodes(voteHistory)) {
+    const existing = challenges.find(
+      (c) => c.episodeNum === epNum && c.variant === "immunity",
+    );
+
+    if (existing) {
+      if (!existing.winnerCastawayIds.includes(castawayId)) {
+        existing.winnerCastawayIds.push(castawayId);
+      }
+      continue;
+    }
+
+    challenges.push({
+      episodeNum: epNum,
+      variant: "immunity",
+      winnerCastawayIds: [castawayId],
+      winnerTribe: null,
+      order: order++,
+    });
+  }
+
+  return order;
 }
 
 /**
@@ -555,10 +602,66 @@ const IGNORED_VOTE_EVENTS = new Set([
   "Unanimous decision",
   "Won immunity challenge",
   "Sacrificed vote to extend idol",
-  "Sacrificed vote to extend idol; goodwill advantage",
   "Summit",
   "Vote blocked",
+  // Trailing clauses of compound vote_event values. survivoR joins several
+  // events into one field with "; " and lowercases everything after the
+  // first clause, so these are matched case-insensitively.
+  "goodwill advantage",
 ]);
+
+/**
+ * Mr. Beast "super beware advantage" coin-flip twist (S50 ep10). Winning
+ * grants a hidden immunity idol plus individual immunity at that tribal.
+ * survivoR records it as a trailing clause on the castaway's vote_history
+ * row, and separately logs an advantage_movement "Found" for the same idol
+ * an episode later, which transformEvents suppresses.
+ */
+const BEAST_CHALLENGE_VOTE_EVENT = "won beast challenge";
+
+/** Map castaway_id → episode for every beast-challenge win in the season. */
+function beastChallengeEpisodes(
+  voteHistory: SurvivorVoteHistory[],
+): Map<string, number> {
+  const byCastaway = new Map<string, number>();
+  for (const v of voteHistory) {
+    const won = splitVoteField(v.vote_event).some((clause) =>
+      matchesVoteEvent(clause, BEAST_CHALLENGE_VOTE_EVENT),
+    );
+    if (won) byCastaway.set(v.castaway_id, Math.round(v.episode));
+  }
+  return byCastaway;
+}
+
+/**
+ * survivoR packs multiple events into `vote_event` / `vote_event_outcome`
+ * using "; " as the separator (e.g. "Steal a vote; won beast challenge").
+ * Split into trimmed, non-empty clauses.
+ */
+function splitVoteField(field: string | null | undefined): string[] {
+  if (!field) return [];
+  return field
+    .split(";")
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0);
+}
+
+/**
+ * Compare two vote-event clauses. Casing is inconsistent in the source data —
+ * clauses after the first are lowercased — so match case-insensitively.
+ */
+function matchesVoteEvent(clause: string, expected: string): boolean {
+  return clause.toLowerCase() === expected.toLowerCase();
+}
+
+/** Case-insensitive membership test against a vote-event set. */
+function hasVoteEvent(set: Set<string>, clause: string): boolean {
+  const needle = clause.toLowerCase();
+  for (const entry of set) {
+    if (entry.toLowerCase() === needle) return true;
+  }
+  return false;
+}
 
 /**
  * Vote events that correspond to advantage plays — these are already scored
@@ -707,17 +810,11 @@ function transformEvents(
 
   // Mr. Beast "super beware advantage" twist (S50 ep10): a coin flip that
   // grants individual immunity at this tribal AND a hidden immunity idol.
-  // survivoR encodes the win on the victim's vote_history row as a compound
-  // vote_event ("Steal a vote; won beast challenge") in the actual episode,
-  // but its advantage_movement records a separate "Found" event for the same
-  // idol one episode later. We score immunity + win_idol from the vote_event
-  // and suppress the duplicate "Found" so the idol isn't double-counted.
-  const twistIdolEpByCastaway = new Map<string, number>();
-  for (const v of voteHistory) {
-    if (v.vote_event === "Steal a vote; won beast challenge") {
-      twistIdolEpByCastaway.set(v.castaway_id, Math.round(v.episode));
-    }
-  }
+  // survivoR encodes the win as a clause on the castaway's vote_history row
+  // in the actual episode, but its advantage_movement records a separate
+  // "Found" event for the same idol one episode later. We score win_idol from
+  // the vote_event and suppress the duplicate "Found" here.
+  const twistIdolEpByCastaway = beastChallengeEpisodes(voteHistory);
 
   // Advantage events — type-aware mapping using advantage_details
   for (const adv of advantageMovement) {
@@ -991,52 +1088,61 @@ function transformEvents(
     const epNum = Math.round(v.episode);
     const castawayId = v.castaway_id;
 
-    if (v.vote_event === "Shot in the dark") {
-      const success = v.vote_event_outcome === "Safe";
-      events.push({
-        episodeNum: epNum,
-        castawayId,
-        action: success
-          ? "use_shot_in_the_dark_successfully"
-          : "use_shot_in_the_dark_unsuccessfully",
-        multiplier: null,
-      });
-    } else if (v.vote_event === "Steal a vote; won beast challenge") {
-      // Mr. Beast "super beware advantage" coin-flip twist (S50 ep10).
-      // Winning grants individual immunity at this tribal + a hidden immunity
-      // idol (and doubles the prize pot). The advantage_movement "Found"
-      // record for the same idol is suppressed in transformEvents.
-      events.push({
-        episodeNum: epNum,
-        castawayId,
-        action: "immunity",
-        multiplier: null,
-      });
-      events.push({
-        episodeNum: epNum,
-        castawayId,
-        action: "win_idol",
-        multiplier: null,
-      });
-    } else if (
-      v.vote_event === "Fire challenge" ||
-      v.vote_event === "Fire challenge (f4)"
-    ) {
-      if (v.vote_event_outcome === "Won") {
+    // A single row can carry several semicolon-joined events, with
+    // vote_event_outcome listing the matching outcomes in the same order
+    // (e.g. "Steal a vote; won beast challenge" / "Lost vote; gained
+    // individual immunity"). Handle each pair independently.
+    const voteEvents = splitVoteField(v.vote_event);
+    const outcomes = splitVoteField(v.vote_event_outcome);
+
+    for (const [i, voteEvent] of voteEvents.entries()) {
+      // Only trust positional pairing when the counts line up; otherwise fall
+      // back to the single outcome so we never read a neighbour's result.
+      const outcome =
+        voteEvents.length === outcomes.length
+          ? outcomes[i]
+          : (v.vote_event_outcome ?? "");
+
+      if (matchesVoteEvent(voteEvent, "Shot in the dark")) {
+        const success = matchesVoteEvent(outcome, "Safe");
         events.push({
           episodeNum: epNum,
           castawayId,
-          action: "win_fire_making",
+          action: success
+            ? "use_shot_in_the_dark_successfully"
+            : "use_shot_in_the_dark_unsuccessfully",
           multiplier: null,
         });
+      } else if (
+        matchesVoteEvent(voteEvent, "Fire challenge") ||
+        matchesVoteEvent(voteEvent, "Fire challenge (f4)")
+      ) {
+        if (matchesVoteEvent(outcome, "Won")) {
+          events.push({
+            episodeNum: epNum,
+            castawayId,
+            action: "win_fire_making",
+            multiplier: null,
+          });
+        }
+        // "Lost", "Saved", "Immune", "Vote not required" → no event
+      } else if (matchesVoteEvent(voteEvent, BEAST_CHALLENGE_VOTE_EVENT)) {
+        // The idol is a game event. The individual immunity is NOT — immunity
+        // is scored off challenges.winning_castaways, so it is applied to the
+        // episode's individual immunity challenge in transformChallenges.
+        events.push({
+          episodeNum: epNum,
+          castawayId,
+          action: "win_idol",
+          multiplier: null,
+        });
+      } else if (hasVoteEvent(ADVANTAGE_PLAY_VOTE_EVENTS, voteEvent)) {
+        // Already scored via advantage_movement "Played" events — skip to avoid double-counting
+      } else if (!hasVoteEvent(IGNORED_VOTE_EVENTS, voteEvent)) {
+        throw new Error(
+          `Unknown vote_event "${voteEvent}" (from "${v.vote_event}") for ${castawayId} in episode ${epNum}. Add it to ADVANTAGE_PLAY_VOTE_EVENTS or IGNORED_VOTE_EVENTS.`,
+        );
       }
-      // "Lost", "Saved", "Immune", "Vote not required" → no event
-    } else if (ADVANTAGE_PLAY_VOTE_EVENTS.has(v.vote_event)) {
-      // Already scored via advantage_movement "Played" events — skip to avoid double-counting
-    } else if (!IGNORED_VOTE_EVENTS.has(v.vote_event)) {
-      throw new Error(
-        `Unknown vote_event "${v.vote_event}" for ${castawayId} in episode ${epNum}. Add it to ADVANTAGE_PLAY_VOTE_EVENTS or IGNORED_VOTE_EVENTS.`,
-      );
     }
   }
 

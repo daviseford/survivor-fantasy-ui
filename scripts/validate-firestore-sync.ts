@@ -248,8 +248,6 @@ async function main(): Promise<void> {
     }
   }
 
-  const totalIssues =
-    totalMissing + totalExtra + totalVoteMissing + totalVoteExtra;
   console.log(
     `\n${outOfSync.length === 0 ? "All seasons in sync!" : `${outOfSync.length} season(s) out of sync. Events: ${totalMissing} missing, ${totalExtra} extra. Votes: ${totalVoteMissing} missing, ${totalVoteExtra} extra.`}`,
   );

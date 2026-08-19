@@ -18,14 +18,14 @@
 import { FieldValue, getFirestore } from "firebase-admin/firestore";
 
 // Trigger Firebase Admin init
-import "./lib/admin.js";
+import { adminApp } from "./lib/admin.js";
 
 async function main(): Promise<void> {
   const upload = process.argv.includes("--upload");
   const db = getFirestore();
 
   // Log project ID for operator verification
-  const projectId = db.projectId;
+  const projectId = adminApp.options.projectId;
   console.log(`Firebase project: ${projectId}`);
   console.log(
     `Mode: ${upload ? "UPLOAD (writing to Firestore)" : "DRY RUN (read-only)"}\n`,

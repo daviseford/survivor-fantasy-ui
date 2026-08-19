@@ -447,11 +447,38 @@ describe("computeSeasonStats", () => {
       );
       const stat = findRosterStat(result.rosterStats, "votes_against");
       expect(stat).toBeDefined();
-      // Sorted ascending (low direction) — USER_B (0 votes) first, USER_A (4) second
-      expect(stat!.rows[0].label).toBe("Bob P");
-      expect(stat!.rows[0].value).toBe(0);
-      expect(stat!.rows[1].label).toBe("Alice P");
-      expect(stat!.rows[1].value).toBe(4);
+      // Rows stay in participant order (never sorted by value) — the UI renders
+      // participants as columns and relies on every stat lining up with the
+      // header row. `direction: "low"` only drives ranking and cell colour.
+      expect(stat!.direction).toBe("low");
+      // USER_A rosters Alice (2 votes against) + Bob (2) = 4; USER_B rosters
+      // Charlie + Dana, neither of whom was voted for.
+      expect(stat!.rows[0].label).toBe("Alice P");
+      expect(stat!.rows[0].value).toBe(4);
+      expect(stat!.rows[1].label).toBe("Bob P");
+      expect(stat!.rows[1].value).toBe(0);
+    });
+
+    it("keeps every roster stat in the same participant order", () => {
+      const result = computeSeasonStats(
+        buildInput({
+          filteredChallenges: {
+            c1: makeChallenge("1", 1, "immunity", [CHARLIE]),
+          },
+          filteredVoteHistory: {
+            v1: makeVote("1", 1, CHARLIE, ALICE),
+          },
+        }),
+      );
+      // The stats table renders participants as columns keyed off the first
+      // stat's rows, so a stat that reordered its rows would show its values
+      // under the wrong participant.
+      expect(result.rosterStats.length).toBeGreaterThan(1);
+      const expected = result.rosterStats[0].rows.map((r) => r.uid);
+      expect(expected).toEqual([USER_A, USER_B]);
+      for (const stat of result.rosterStats) {
+        expect(stat.rows.map((r) => r.uid)).toEqual(expected);
+      }
     });
   });
 

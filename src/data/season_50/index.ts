@@ -838,7 +838,7 @@ export const SEASON_50_CHALLENGES = {
     episode_num: 10,
     variant: "immunity",
     order: 27,
-    winning_castaways: ["US0695"],
+    winning_castaways: ["US0695", "US0560"],
   },
   challenge_28: {
     id: "challenge_28",
@@ -1498,16 +1498,6 @@ export const SEASON_50_EVENTS = {
     episode_num: 8,
     castaway_id: "US0277",
     action: "use_shot_in_the_dark_unsuccessfully",
-    multiplier: null,
-  },
-  event_37: {
-    id: "event_37",
-    season_id: "season_50",
-    season_num: 50,
-    episode_id: "episode_10",
-    episode_num: 10,
-    castaway_id: "US0560",
-    action: "immunity",
     multiplier: null,
   },
   event_38: {
