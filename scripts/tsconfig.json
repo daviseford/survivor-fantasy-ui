@@ -1,8 +1,12 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "node16",
-    "moduleResolution": "node16",
+    // Scripts run through tsx and their tests through vitest, both of which
+    // resolve extensionless relative imports. Node16 resolution would demand
+    // explicit .js extensions that neither runtime needs, and would also
+    // reject the extensionless imports in the shared src/data season files.
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "lib": ["ES2020"],
     "strict": true,
     "esModuleInterop": true,

@@ -19,6 +19,7 @@ import type {
   ScrapedChallenge,
   ScrapedChallengeVariant,
   ScrapedElimination,
+  ScrapedEliminationVariant,
   ScrapedEpisode,
   ScrapedGameEvent,
   ScrapedPlayer,
@@ -555,10 +556,44 @@ const IGNORED_VOTE_EVENTS = new Set([
   "Unanimous decision",
   "Won immunity challenge",
   "Sacrificed vote to extend idol",
-  "Sacrificed vote to extend idol; goodwill advantage",
   "Summit",
   "Vote blocked",
+  // Trailing clauses of compound vote_event values. survivoR joins several
+  // events into one field with "; " and lowercases everything after the
+  // first clause, so these are matched case-insensitively.
+  "goodwill advantage",
+  "won beast challenge",
 ]);
+
+/**
+ * survivoR packs multiple events into `vote_event` / `vote_event_outcome`
+ * using "; " as the separator (e.g. "Steal a vote; won beast challenge").
+ * Split into trimmed, non-empty clauses.
+ */
+function splitVoteField(field: string | null | undefined): string[] {
+  if (!field) return [];
+  return field
+    .split(";")
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0);
+}
+
+/**
+ * Compare two vote-event clauses. Casing is inconsistent in the source data —
+ * clauses after the first are lowercased — so match case-insensitively.
+ */
+function matchesVoteEvent(clause: string, expected: string): boolean {
+  return clause.toLowerCase() === expected.toLowerCase();
+}
+
+/** Case-insensitive membership test against a vote-event set. */
+function hasVoteEvent(set: Set<string>, clause: string): boolean {
+  const needle = clause.toLowerCase();
+  for (const entry of set) {
+    if (entry.toLowerCase() === needle) return true;
+  }
+  return false;
+}
 
 /**
  * Vote events that correspond to advantage plays — these are already scored
@@ -965,35 +1000,51 @@ function transformEvents(
     const epNum = Math.round(v.episode);
     const castawayId = v.castaway_id;
 
-    if (v.vote_event === "Shot in the dark") {
-      const success = v.vote_event_outcome === "Safe";
-      events.push({
-        episodeNum: epNum,
-        castawayId,
-        action: success
-          ? "use_shot_in_the_dark_successfully"
-          : "use_shot_in_the_dark_unsuccessfully",
-        multiplier: null,
-      });
-    } else if (
-      v.vote_event === "Fire challenge" ||
-      v.vote_event === "Fire challenge (f4)"
-    ) {
-      if (v.vote_event_outcome === "Won") {
+    // A single row can carry several semicolon-joined events, with
+    // vote_event_outcome listing the matching outcomes in the same order
+    // (e.g. "Steal a vote; won beast challenge" / "Lost vote; gained
+    // individual immunity"). Handle each pair independently.
+    const voteEvents = splitVoteField(v.vote_event);
+    const outcomes = splitVoteField(v.vote_event_outcome);
+
+    for (const [i, voteEvent] of voteEvents.entries()) {
+      // Only trust positional pairing when the counts line up; otherwise fall
+      // back to the single outcome so we never read a neighbour's result.
+      const outcome =
+        voteEvents.length === outcomes.length
+          ? outcomes[i]
+          : (v.vote_event_outcome ?? "");
+
+      if (matchesVoteEvent(voteEvent, "Shot in the dark")) {
+        const success = matchesVoteEvent(outcome, "Safe");
         events.push({
           episodeNum: epNum,
           castawayId,
-          action: "win_fire_making",
+          action: success
+            ? "use_shot_in_the_dark_successfully"
+            : "use_shot_in_the_dark_unsuccessfully",
           multiplier: null,
         });
+      } else if (
+        matchesVoteEvent(voteEvent, "Fire challenge") ||
+        matchesVoteEvent(voteEvent, "Fire challenge (f4)")
+      ) {
+        if (matchesVoteEvent(outcome, "Won")) {
+          events.push({
+            episodeNum: epNum,
+            castawayId,
+            action: "win_fire_making",
+            multiplier: null,
+          });
+        }
+        // "Lost", "Saved", "Immune", "Vote not required" → no event
+      } else if (hasVoteEvent(ADVANTAGE_PLAY_VOTE_EVENTS, voteEvent)) {
+        // Already scored via advantage_movement "Played" events — skip to avoid double-counting
+      } else if (!hasVoteEvent(IGNORED_VOTE_EVENTS, voteEvent)) {
+        throw new Error(
+          `Unknown vote_event "${voteEvent}" (from "${v.vote_event}") for ${castawayId} in episode ${epNum}. Add it to ADVANTAGE_PLAY_VOTE_EVENTS or IGNORED_VOTE_EVENTS.`,
+        );
       }
-      // "Lost", "Saved", "Immune", "Vote not required" → no event
-    } else if (ADVANTAGE_PLAY_VOTE_EVENTS.has(v.vote_event)) {
-      // Already scored via advantage_movement "Played" events — skip to avoid double-counting
-    } else if (!IGNORED_VOTE_EVENTS.has(v.vote_event)) {
-      throw new Error(
-        `Unknown vote_event "${v.vote_event}" for ${castawayId} in episode ${epNum}. Add it to ADVANTAGE_PLAY_VOTE_EVENTS or IGNORED_VOTE_EVENTS.`,
-      );
     }
   }
 

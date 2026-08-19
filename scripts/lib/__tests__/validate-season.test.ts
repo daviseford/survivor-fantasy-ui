@@ -87,6 +87,7 @@ function makeResultsData(
     challenges: [],
     eliminations: [],
     events: [],
+    voteHistory: [],
     warnings: [],
     ...overrides,
   };

@@ -22,7 +22,11 @@ const databaseURL = process.env.VITE_FIREBASE_DATABASE_URL;
 
 const app = initializeApp({
   credential: cert(serviceAccount),
+  // Set explicitly so app.options.projectId is populated — callers log it so
+  // the operator can confirm which project they are about to write to.
+  projectId: serviceAccount.project_id,
   ...(databaseURL ? { databaseURL } : {}),
 });
 
+export const adminApp = app;
 export const adminAuth = getAuth(app);
