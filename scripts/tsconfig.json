@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    // These run only on Node (>=24, see package.json engines), so target and
+    // lib can track the runtime rather than the browser baseline used by the app.
+    "target": "ES2023",
     // Scripts run through tsx and their tests through vitest, both of which
     // resolve extensionless relative imports. Node16 resolution would demand
     // explicit .js extensions that neither runtime needs, and would also
     // reject the extensionless imports in the shared src/data season files.
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "lib": ["ES2020"],
+    "lib": ["ES2023"],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
