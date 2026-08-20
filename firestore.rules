@@ -32,6 +32,32 @@ service cloud.firestore {
       allow update: if (isAdmin() || (isAuthenticated() && request.auth.uid == resource.data.creator_uid && request.resource.data.creator_uid == resource.data.creator_uid))
         && !(resource.data.finished == true && !(request.resource.data.finished == true));
       allow delete: if isAdmin();
+
+      // Trades: participants propose and resolve trades; the competition doc
+      // itself is never mutated by trades. Castaway ownership/alive/deadline
+      // validation happens client-side; these rules enforce authorship and
+      // the status state machine.
+      match /trades/{tradeId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated()
+          && request.resource.data.competition_id == competitionId
+          && request.resource.data.offered_by_uid == request.auth.uid
+          && request.resource.data.offered_to_uid != request.auth.uid
+          && request.resource.data.status == "pending"
+          && request.resource.data.offered_by_uid in get(/databases/$(database)/documents/competitions/$(competitionId)).data.participant_uids
+          && request.resource.data.offered_to_uid in get(/databases/$(database)/documents/competitions/$(competitionId)).data.participant_uids;
+        allow update: if isAuthenticated()
+          && resource.data.status == "pending"
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["status", "effective_episode", "resolved_at"])
+          && (request.resource.data.status != "accepted" || request.resource.data.effective_episode is number)
+          && (
+            (request.auth.uid == resource.data.offered_to_uid
+              && request.resource.data.status in ["accepted", "rejected"])
+            || (request.auth.uid == resource.data.offered_by_uid
+              && request.resource.data.status == "canceled")
+          );
+        allow delete: if false;
+      }
     }
 
     // Season-data collections: all share authenticated-read / admin-write. Keep in sync.
@@ -57,6 +83,13 @@ service cloud.firestore {
 
     // Eliminations
     match /eliminations/{seasonId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Vote history
+
+    match /vote_history/{seasonId} {
       allow read: if isAuthenticated();
       allow write: if isAdmin();
     }

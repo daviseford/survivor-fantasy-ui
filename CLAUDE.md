@@ -19,6 +19,7 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 - **E2E screenshots:** `yarn e2e:screenshot` (Playwright — screenshots all pages)
 - **E2E auth setup:** `yarn e2e:setup` (login once, save session for reuse)
 - **E2E interactive:** `yarn e2e:ui` (Playwright UI mode)
+- **E2E trades (live, two users):** `yarn e2e:trades` (Playwright with `playwright.trades.config.ts` — seeds two real test users and a real competition via `scripts/e2e-trade-setup.ts`, exercises the full trade flow in the UI as both users, then tears everything down. **This suite writes to production Firebase** — unlike the read-only screenshot/audit suites.)
 - **New season (preferred):** `yarn new-season <season_number> [--force] [--push]` (scrapes players + results, generates full season file, registers in seasons.ts, optionally pushes to Firestore)
 - **Add season (slash command):** `/add-season <season_number>` — preferred way to add a new season in Claude Code; wraps `yarn new-season` with validation, progress reporting, and post-generation verification
 - **Batch new seasons:** `yarn tsx scripts/batch-new-season.ts [season_numbers...] [--force] [--skip-wiki] [--push] [--dry-run]` (generate multiple seasons in one run; fetches survivoR tables once, then iterates)

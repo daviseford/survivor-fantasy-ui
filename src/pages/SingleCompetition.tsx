@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import {
   IconArrowLeft,
+  IconArrowsExchange,
   IconChartLine,
   IconClipboardList,
   IconCrystalBall,
@@ -31,6 +32,7 @@ import {
   ScoringLegendTable,
 } from "../components/ScoringTables";
 import { SeasonStatsSection } from "../components/SeasonStats";
+import { TradesSection } from "../components/Trades";
 import { useAutoFinishCompetition } from "../hooks/useAutoFinishCompetition";
 import { useChallenges } from "../hooks/useChallenges";
 import { useCompetition } from "../hooks/useCompetition";
@@ -173,6 +175,16 @@ export const SingleCompetition = () => {
         icon={<IconUsers size={22} color="var(--mantine-color-blue-6)" />}
       >
         <PlayerGroupGrid />
+      </Section>
+
+      <Section
+        title="Trades"
+        subtitle="Trade active players with other participants"
+        icon={
+          <IconArrowsExchange size={22} color="var(--mantine-color-grape-6)" />
+        }
+      >
+        <TradesSection />
       </Section>
 
       <Section

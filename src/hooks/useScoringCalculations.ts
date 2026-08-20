@@ -9,12 +9,14 @@ import {
   EnhancedScores,
   getEnhancedSurvivorPoints,
 } from "../utils/scoringUtils";
+import { getOwnedCastawaysAtEpisode } from "../utils/tradeUtils";
 import { useChallenges } from "./useChallenges";
 import { useCompetition } from "./useCompetition";
 import { useEliminations } from "./useEliminations";
 import { useEvents } from "./useEvents";
 import { usePropBetScoring } from "./useGetPropBetScoring";
 import { useSeason } from "./useSeason";
+import { useTrades } from "./useTrades";
 
 export const useScoringCalculations = () => {
   const { data: competition } = useCompetition();
@@ -22,6 +24,7 @@ export const useScoringCalculations = () => {
   const { data: challenges } = useChallenges(competition?.season_id);
   const { data: eliminations } = useEliminations(competition?.season_id);
   const { data: events } = useEvents(season?.id);
+  const { data: trades } = useTrades(competition?.id);
 
   const { data: propBetScores, activeKeys } = usePropBetScoring();
 
@@ -82,13 +85,18 @@ export const useScoringCalculations = () => {
         (accum, participant) => {
           const { uid } = participant;
 
-          const myCastawayIds = competition.draft_picks
-            .filter((x) => x.user_uid === uid)
-            .map((x) => x.castaway_id);
-
           const playerPointsPerEpisode = filteredEpisodes.map((e) => {
+            // Ownership is resolved per episode so trades only move
+            // future points — past points stay with the original owner.
+            const ownedAtEpisode = getOwnedCastawaysAtEpisode(
+              competition.draft_picks,
+              trades,
+              uid,
+              e.order,
+            );
+
             return sum(
-              myCastawayIds.flatMap(
+              ownedAtEpisode.flatMap(
                 (id) =>
                   (survivorPointsByEpisode || {})?.[id]?.[e.order - 1]?.total ||
                   0,
@@ -107,6 +115,7 @@ export const useScoringCalculations = () => {
       competition?.participants,
       filteredEpisodes,
       survivorPointsByEpisode,
+      trades,
     ],
   );
 
