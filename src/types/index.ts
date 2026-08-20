@@ -16,6 +16,8 @@ export type Season = {
   players: Player[];
   episodes: Episode[];
   castawayLookup: CastawayLookup;
+  /** ISO timestamp of the last data sync; present only on Firestore docs. */
+  last_synced_at?: string;
 };
 
 export type Episode<SeasonNumber = number> = {
@@ -26,6 +28,9 @@ export type Episode<SeasonNumber = number> = {
 
   order: number;
   name: string;
+
+  /** ISO air date (YYYY-MM-DD) from survivoR, when known. */
+  air_date?: string;
 
   finale: boolean;
   post_merge: boolean;

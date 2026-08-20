@@ -81,6 +81,7 @@ export async function pushSeasonToFirestore(
         players,
         episodes,
         castawayLookup: castawayLookup || {},
+        last_synced_at: new Date().toISOString(),
       },
     },
     {
