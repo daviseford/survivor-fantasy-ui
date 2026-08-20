@@ -41,7 +41,7 @@ import { useSeason } from "../hooks/useSeason";
 import { useSeasonStats } from "../hooks/useSeasonStats";
 import { useUser } from "../hooks/useUser";
 import {
-  getAwaitingDataEpisode,
+  getCompetitionAwaitingDataEpisode,
   getLatestDataEpisode,
 } from "../utils/episodeAirDate";
 
@@ -79,9 +79,15 @@ export const SingleCompetition = () => {
   const { activeKeys: activePropBetKeys } = usePropBetScoring();
 
   const { data: season } = useSeason(competition?.season_id);
-  const { data: unfilteredEvents } = useEvents(competition?.season_id);
-  const { data: challenges } = useChallenges(competition?.season_id);
-  const { data: eliminations } = useEliminations(competition?.season_id);
+  const { data: unfilteredEvents, isReady: areEventsReady } = useEvents(
+    competition?.season_id,
+  );
+  const { data: challenges, isReady: areChallengesReady } = useChallenges(
+    competition?.season_id,
+  );
+  const { data: eliminations, isReady: areEliminationsReady } = useEliminations(
+    competition?.season_id,
+  );
   const seasonStats = useSeasonStats();
 
   useAutoFinishCompetition({
@@ -111,13 +117,16 @@ export const SingleCompetition = () => {
     eliminations,
     unfilteredEvents,
   );
-  const isCaughtUp =
-    competition.current_episode === null ||
-    competition.current_episode >= latestDataEpisode;
-  const awaitingDataEpisode =
-    !competition.finished && !hasWinner && isCaughtUp
-      ? getAwaitingDataEpisode(season, latestDataEpisode)
-      : null;
+  const isScoringDataReady =
+    areChallengesReady && areEliminationsReady && areEventsReady;
+  const awaitingDataEpisode = getCompetitionAwaitingDataEpisode({
+    season,
+    latestDataEpisode,
+    isScoringDataReady,
+    currentEpisode: competition.current_episode,
+    finished: competition.finished,
+    hasWinner,
+  });
 
   return (
     <Stack gap="xl" p={{ base: "sm", sm: "lg" }}>

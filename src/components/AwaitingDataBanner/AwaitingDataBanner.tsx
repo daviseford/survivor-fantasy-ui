@@ -20,7 +20,7 @@ export const AwaitingDataBanner = ({ episode }: { episode: Episode }) => (
     title={`Awaiting data for Episode ${episode.order}`}
     icon={<IconClockExclamation size={20} />}
   >
-    {episode.name} aired
+    This episode aired
     {episode.air_date ? ` on ${formatAirDate(episode.air_date)}` : ""}. We're
     still awaiting scoring data — check back later.
   </Alert>

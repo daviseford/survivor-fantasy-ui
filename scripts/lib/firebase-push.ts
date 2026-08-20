@@ -9,6 +9,7 @@ import * as path from "path";
 
 // Import to trigger shared Firebase Admin initialization
 import "./admin.js";
+import { buildSeasonDocument } from "./season-document.js";
 
 interface FirestoreDocument {
   collection: string;
@@ -73,16 +74,13 @@ export async function pushSeasonToFirestore(
     {
       collection: "seasons",
       docId: seasonKey,
-      data: {
-        id: seasonKey,
-        order: seasonNum,
-        name: `Survivor ${seasonNum}`,
-        img: seasonImg,
+      data: buildSeasonDocument({
+        seasonNum,
+        seasonImg,
         players,
         episodes,
         castawayLookup: castawayLookup || {},
-        last_synced_at: new Date().toISOString(),
-      },
+      }),
     },
     {
       collection: "challenges",
@@ -119,21 +117,21 @@ export async function pushSeasonToFirestore(
   const db = getFirestore();
   console.log(`\nUploading season ${seasonNum} data to Firestore...\n`);
 
-  const failures: string[] = [];
+  const batch = db.batch();
   for (const doc of documents) {
-    const docPath = `${doc.collection}/${doc.docId}`;
-    try {
-      await db.collection(doc.collection).doc(doc.docId).set(doc.data);
-      console.log(`  [OK] ${docPath}`);
-    } catch (err) {
-      console.error(`  [FAIL] ${docPath}:`, err);
-      failures.push(docPath);
-    }
+    batch.set(db.collection(doc.collection).doc(doc.docId), doc.data);
   }
 
-  if (failures.length > 0) {
+  try {
+    await batch.commit();
+    for (const doc of documents) {
+      const docPath = `${doc.collection}/${doc.docId}`;
+      console.log(`  [OK] ${docPath}`);
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
     throw new Error(
-      `Firestore upload partially failed. ${failures.length} document(s) failed: ${failures.join(", ")}`,
+      `Firestore upload failed without applying the season update: ${message}`,
     );
   }
 

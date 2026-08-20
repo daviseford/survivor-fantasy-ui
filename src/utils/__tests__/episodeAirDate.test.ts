@@ -9,6 +9,7 @@ import {
 } from "../../types";
 import {
   getAwaitingDataEpisode,
+  getCompetitionAwaitingDataEpisode,
   getLatestDataEpisode,
   getNextAiringEpisode,
 } from "../episodeAirDate";
@@ -70,8 +71,9 @@ const makeEvent = (id: string, episodeNum: number): GameEvent => ({
   castaway_id: ALICE,
 });
 
-// Fixed "today" so tests are deterministic: 2026-03-12 (a Thursday).
-const TODAY = new Date(2026, 2, 12, 9, 0, 0);
+// Fixed instants so tests are deterministic in every local timezone.
+const BEFORE_BROADCAST = new Date("2026-03-12T19:59:00-07:00");
+const AFTER_BROADCAST = new Date("2026-03-12T20:00:00-07:00");
 
 describe("getLatestDataEpisode", () => {
   it("returns 0 when there is no scoring data", () => {
@@ -89,7 +91,7 @@ describe("getLatestDataEpisode", () => {
 describe("getAwaitingDataEpisode", () => {
   it("returns null when episodes have no air dates", () => {
     const season = makeSeason([makeEpisode(1), makeEpisode(2)]);
-    expect(getAwaitingDataEpisode(season, 1, TODAY)).toBeNull();
+    expect(getAwaitingDataEpisode(season, 1, BEFORE_BROADCAST)).toBeNull();
   });
 
   it("returns the aired episode that has no data yet", () => {
@@ -100,7 +102,7 @@ describe("getAwaitingDataEpisode", () => {
       makeEpisode(4, "2026-03-18"), // future
     ]);
     const latest = 2;
-    const result = getAwaitingDataEpisode(season, latest, TODAY);
+    const result = getAwaitingDataEpisode(season, latest, BEFORE_BROADCAST);
     expect(result?.order).toBe(3);
   });
 
@@ -110,15 +112,23 @@ describe("getAwaitingDataEpisode", () => {
       makeEpisode(2, "2026-03-04"),
       makeEpisode(3, "2026-03-18"), // future
     ]);
-    expect(getAwaitingDataEpisode(season, 2, TODAY)).toBeNull();
+    expect(getAwaitingDataEpisode(season, 2, BEFORE_BROADCAST)).toBeNull();
   });
 
-  it("treats an episode airing today as awaiting data", () => {
+  it("does not treat an episode as aired before its 8 PM PT broadcast", () => {
     const season = makeSeason([
       makeEpisode(1, "2026-02-25"),
-      makeEpisode(2, "2026-03-12"), // airs today
+      makeEpisode(2, "2026-03-12"),
     ]);
-    expect(getAwaitingDataEpisode(season, 1, TODAY)?.order).toBe(2);
+    expect(getAwaitingDataEpisode(season, 1, BEFORE_BROADCAST)).toBeNull();
+  });
+
+  it("treats an episode as aired at its 8 PM PT broadcast", () => {
+    const season = makeSeason([
+      makeEpisode(1, "2026-02-25"),
+      makeEpisode(2, "2026-03-12"),
+    ]);
+    expect(getAwaitingDataEpisode(season, 1, AFTER_BROADCAST)?.order).toBe(2);
   });
 
   it("returns the earliest awaiting episode when several are missing", () => {
@@ -127,17 +137,58 @@ describe("getAwaitingDataEpisode", () => {
       makeEpisode(2, "2026-03-04"),
       makeEpisode(3, "2026-03-11"),
     ]);
-    expect(getAwaitingDataEpisode(season, 1, TODAY)?.order).toBe(2);
+    expect(getAwaitingDataEpisode(season, 1, BEFORE_BROADCAST)?.order).toBe(2);
   });
 
   it("returns null before the premiere when there is no data", () => {
     const season = makeSeason([makeEpisode(1, "2026-03-18")]);
-    expect(getAwaitingDataEpisode(season, 0, TODAY)).toBeNull();
+    expect(getAwaitingDataEpisode(season, 0, BEFORE_BROADCAST)).toBeNull();
   });
 
   it("returns the premiere once it has aired but data is missing", () => {
     const season = makeSeason([makeEpisode(1, "2026-03-11")]);
-    expect(getAwaitingDataEpisode(season, 0, TODAY)?.order).toBe(1);
+    expect(getAwaitingDataEpisode(season, 0, BEFORE_BROADCAST)?.order).toBe(1);
+  });
+});
+
+describe("getCompetitionAwaitingDataEpisode", () => {
+  const season = makeSeason([
+    makeEpisode(1, "2026-03-04"),
+    makeEpisode(2, "2026-03-11"),
+  ]);
+
+  const getResult = (
+    overrides: Partial<
+      Parameters<typeof getCompetitionAwaitingDataEpisode>[0]
+    > = {},
+  ) =>
+    getCompetitionAwaitingDataEpisode({
+      season,
+      latestDataEpisode: 1,
+      isScoringDataReady: true,
+      currentEpisode: null,
+      finished: false,
+      hasWinner: false,
+      now: BEFORE_BROADCAST,
+      ...overrides,
+    });
+
+  it("waits for every scoring document before showing the banner", () => {
+    expect(getResult({ isScoringDataReady: false })).toBeNull();
+  });
+
+  it("shows the banner for live and legacy competitions", () => {
+    expect(getResult({ currentEpisode: null })?.order).toBe(2);
+    expect(getResult({ currentEpisode: undefined })?.order).toBe(2);
+  });
+
+  it("does not show the banner to a behind watch-along competition", () => {
+    expect(getResult({ currentEpisode: 0 })).toBeNull();
+  });
+
+  it("does not show the banner after the competition or season ends", () => {
+    expect(getResult({ finished: true })).toBeNull();
+    expect(getResult({ hasWinner: true })).toBeNull();
   });
 });
 
@@ -148,7 +199,7 @@ describe("getNextAiringEpisode", () => {
       makeEpisode(2, "2026-03-18"),
       makeEpisode(3, "2026-03-25"),
     ]);
-    expect(getNextAiringEpisode(season, TODAY)?.order).toBe(2);
+    expect(getNextAiringEpisode(season, BEFORE_BROADCAST)?.order).toBe(2);
   });
 
   it("returns null when no episodes are future-dated", () => {
@@ -156,11 +207,11 @@ describe("getNextAiringEpisode", () => {
       makeEpisode(1, "2026-02-25"),
       makeEpisode(2, "2026-03-11"),
     ]);
-    expect(getNextAiringEpisode(season, TODAY)).toBeNull();
+    expect(getNextAiringEpisode(season, BEFORE_BROADCAST)).toBeNull();
   });
 
   it("returns null when episodes have no air dates", () => {
     const season = makeSeason([makeEpisode(1), makeEpisode(2)]);
-    expect(getNextAiringEpisode(season, TODAY)).toBeNull();
+    expect(getNextAiringEpisode(season, BEFORE_BROADCAST)).toBeNull();
   });
 });

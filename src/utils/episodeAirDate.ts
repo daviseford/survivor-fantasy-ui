@@ -8,11 +8,40 @@ import { Challenge, Elimination, Episode, GameEvent, Season } from "../types";
  * by hours because the data sync runs on a daily schedule.
  */
 
-const toLocalISODate = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+// CBS airs Survivor at 8 PM ET/PT. Wait for the West Coast broadcast so the
+// banner cannot announce an episode before it has aired across the mainland US.
+const SURVIVOR_TIME_ZONE = "America/Los_Angeles";
+const SURVIVOR_AIR_HOUR = 20;
+
+const broadcastDateTimeFormatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: SURVIVOR_TIME_ZONE,
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  hourCycle: "h23",
+});
+
+const toBroadcastDateTime = (date: Date): { date: string; hour: number } => {
+  const parts = Object.fromEntries(
+    broadcastDateTimeFormatter
+      .formatToParts(date)
+      .filter((part) => part.type !== "literal")
+      .map((part) => [part.type, part.value]),
+  );
+
+  return {
+    date: `${parts.year}-${parts.month}-${parts.day}`,
+    hour: Number(parts.hour),
+  };
+};
+
+const hasAired = (airDate: string, now: Date): boolean => {
+  const broadcastNow = toBroadcastDateTime(now);
+  return (
+    airDate < broadcastNow.date ||
+    (airDate === broadcastNow.date && broadcastNow.hour >= SURVIVOR_AIR_HOUR)
+  );
 };
 
 const byOrder = (a: Episode, b: Episode) => a.order - b.order;
@@ -46,19 +75,50 @@ export function getLatestDataEpisode(
 export function getAwaitingDataEpisode(
   season: Season,
   latestDataEpisode: number,
-  today: Date = new Date(),
+  now: Date = new Date(),
 ): Episode | null {
-  const todayISO = toLocalISODate(today);
   return (
     [...(season.episodes ?? [])]
       .sort(byOrder)
       .find(
         (ep) =>
           ep.air_date !== undefined &&
-          ep.air_date <= todayISO &&
+          hasAired(ep.air_date, now) &&
           ep.order > latestDataEpisode,
       ) ?? null
   );
+}
+
+interface CompetitionAwaitingDataInput {
+  season: Season;
+  latestDataEpisode: number;
+  isScoringDataReady: boolean;
+  currentEpisode: number | null | undefined;
+  finished: boolean;
+  hasWinner: boolean;
+  now?: Date;
+}
+
+/**
+ * Applies competition visibility rules to the aired-but-unsynced episode.
+ */
+export function getCompetitionAwaitingDataEpisode({
+  season,
+  latestDataEpisode,
+  isScoringDataReady,
+  currentEpisode,
+  finished,
+  hasWinner,
+  now = new Date(),
+}: CompetitionAwaitingDataInput): Episode | null {
+  const isCaughtUp =
+    currentEpisode == null || currentEpisode >= latestDataEpisode;
+
+  if (!isScoringDataReady || finished || hasWinner || !isCaughtUp) {
+    return null;
+  }
+
+  return getAwaitingDataEpisode(season, latestDataEpisode, now);
 }
 
 /**
@@ -67,12 +127,13 @@ export function getAwaitingDataEpisode(
  */
 export function getNextAiringEpisode(
   season: Season,
-  today: Date = new Date(),
+  now: Date = new Date(),
 ): Episode | null {
-  const todayISO = toLocalISODate(today);
+  const broadcastDate = toBroadcastDateTime(now).date;
   return (
     [...(season.episodes ?? [])]
       .sort(byOrder)
-      .find((ep) => ep.air_date !== undefined && ep.air_date > todayISO) ?? null
+      .find((ep) => ep.air_date !== undefined && ep.air_date > broadcastDate) ??
+    null
   );
 }
