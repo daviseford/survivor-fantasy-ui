@@ -21,6 +21,7 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
+import { AwaitingDataBanner } from "../components/AwaitingDataBanner";
 import { EpisodeAdvanceControl } from "../components/EpisodeAdvanceControl";
 import { PlayerGroupGrid } from "../components/MyPlayers";
 import { PropBetScoring } from "../components/PropBetTables";
@@ -31,12 +32,18 @@ import {
 } from "../components/ScoringTables";
 import { SeasonStatsSection } from "../components/SeasonStats";
 import { useAutoFinishCompetition } from "../hooks/useAutoFinishCompetition";
+import { useChallenges } from "../hooks/useChallenges";
 import { useCompetition } from "../hooks/useCompetition";
+import { useEliminations } from "../hooks/useEliminations";
 import { useEvents } from "../hooks/useEvents";
 import { usePropBetScoring } from "../hooks/useGetPropBetScoring";
 import { useSeason } from "../hooks/useSeason";
 import { useSeasonStats } from "../hooks/useSeasonStats";
 import { useUser } from "../hooks/useUser";
+import {
+  getCompetitionAwaitingDataEpisode,
+  getLatestDataEpisode,
+} from "../utils/episodeAirDate";
 
 const Section = ({
   title,
@@ -72,7 +79,15 @@ export const SingleCompetition = () => {
   const { activeKeys: activePropBetKeys } = usePropBetScoring();
 
   const { data: season } = useSeason(competition?.season_id);
-  const { data: unfilteredEvents } = useEvents(competition?.season_id);
+  const { data: unfilteredEvents, isReady: areEventsReady } = useEvents(
+    competition?.season_id,
+  );
+  const { data: challenges, isReady: areChallengesReady } = useChallenges(
+    competition?.season_id,
+  );
+  const { data: eliminations, isReady: areEliminationsReady } = useEliminations(
+    competition?.season_id,
+  );
   const seasonStats = useSeasonStats();
 
   useAutoFinishCompetition({
@@ -96,6 +111,22 @@ export const SingleCompetition = () => {
   const hasWinner = Object.values(unfilteredEvents).some(
     (e) => e.action === "win_survivor",
   );
+
+  const latestDataEpisode = getLatestDataEpisode(
+    challenges,
+    eliminations,
+    unfilteredEvents,
+  );
+  const isScoringDataReady =
+    areChallengesReady && areEliminationsReady && areEventsReady;
+  const awaitingDataEpisode = getCompetitionAwaitingDataEpisode({
+    season,
+    latestDataEpisode,
+    isScoringDataReady,
+    currentEpisode: competition.current_episode,
+    finished: competition.finished,
+    hasWinner,
+  });
 
   return (
     <Stack gap="xl" p={{ base: "sm", sm: "lg" }}>
@@ -124,6 +155,10 @@ export const SingleCompetition = () => {
         </Group>
         <Title order={2}>{competition.competition_name}</Title>
       </Box>
+
+      {awaitingDataEpisode && (
+        <AwaitingDataBanner episode={awaitingDataEpisode} />
+      )}
 
       <EpisodeAdvanceControl
         competition={competition}

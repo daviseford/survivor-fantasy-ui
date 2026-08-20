@@ -411,6 +411,9 @@ export function generateEpisodeSection(
     lines.push(`    season_num: ${seasonNum},`);
     lines.push(`    order: ${ep.order},`);
     lines.push(`    name: ${escapeString(ep.title)},`);
+    if (ep.airDate) {
+      lines.push(`    air_date: "${ep.airDate}",`);
+    }
     lines.push(`    post_merge: ${ep.postMerge},`);
     lines.push(`    finale: ${ep.isFinale},`);
     lines.push(`    merge_occurs: ${ep.mergeOccurs},`);

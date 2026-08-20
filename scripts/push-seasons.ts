@@ -17,6 +17,7 @@ import { getFirestore } from "firebase-admin/firestore";
 import * as fs from "fs";
 import * as path from "path";
 import "./lib/admin.js";
+import { buildSeasonDocument } from "./lib/season-document.js";
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, "..");
 const VALID_COLLECTIONS = [
@@ -79,15 +80,13 @@ async function pushSeason(
   const allDocs: { collection: Collection; data: Record<string, unknown> }[] = [
     {
       collection: "seasons",
-      data: {
-        id: seasonKey,
-        order: seasonNum,
-        name: `Survivor ${seasonNum}`,
-        img: "",
+      data: buildSeasonDocument({
+        seasonNum,
+        seasonImg: "",
         players: players || [],
         episodes: episodes || [],
         castawayLookup: castawayLookup || {},
-      },
+      }),
     },
     {
       collection: "challenges",
@@ -113,6 +112,8 @@ async function pushSeason(
 
   const db = dryRun ? null : getFirestore();
 
+  const selectedDocs = allDocs.filter((doc) => collections.has(doc.collection));
+
   for (const doc of allDocs) {
     const docPath = `${doc.collection}/${seasonKey}`;
 
@@ -127,14 +128,25 @@ async function pushSeason(
       pushed.push(docPath);
       continue;
     }
+  }
+
+  if (!dryRun && selectedDocs.length > 0) {
+    const batch = db!.batch();
+    for (const doc of selectedDocs) {
+      batch.set(db!.collection(doc.collection).doc(seasonKey), doc.data);
+    }
 
     try {
-      await db!.collection(doc.collection).doc(seasonKey).set(doc.data);
-      pushed.push(docPath);
+      await batch.commit();
+      pushed.push(
+        ...selectedDocs.map((doc) => `${doc.collection}/${seasonKey}`),
+      );
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      console.error(`    [FAIL] ${docPath}: ${msg}`);
-      failed.push(docPath);
+      console.error(`    [FAIL] season ${seasonNum}: ${msg}`);
+      failed.push(
+        ...selectedDocs.map((doc) => `${doc.collection}/${seasonKey}`),
+      );
     }
   }
 
