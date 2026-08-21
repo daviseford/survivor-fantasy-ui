@@ -14,6 +14,10 @@ export const useDraft = () => {
   const { data: season } = useSeason();
 
   const [draft, setDraft] = useState<Draft>();
+  // True once the first RTDB snapshot has resolved, so callers can tell a
+  // loaded-but-absent draft (deleted/nonexistent) apart from one that is
+  // still loading.
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     if (!season || !draftId || !slimUser) return;
@@ -25,6 +29,7 @@ export const useDraft = () => {
       (snapshot) => {
         const data = snapshot.val() as RealtimeDraft | null;
         setDraft(normalizeDraft(data));
+        setLoaded(true);
       },
       (error) => {
         console.error("Failed to read draft:", error);
@@ -35,5 +40,5 @@ export const useDraft = () => {
     return () => unsubscribe();
   }, [draftId, season, slimUser]);
 
-  return { draft };
+  return { draft, loaded };
 };

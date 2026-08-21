@@ -53,14 +53,34 @@ export type UseAuthContinuationResult = {
 };
 
 /**
+ * Pure guard-reset decision, extracted for testing.
+ *
+ * A claim cycle is keyed by the in-memory state key it started for (the
+ * refresh-recovery scan uses a sentinel). A different non-null key means a
+ * new intent was saved after a previous cycle — e.g. a second account
+ * signing in on the same mounted route — so the guard must reset and allow
+ * a fresh claim. The same key (Strict Mode replay, re-render) never resets.
+ */
+export const isNewClaimStateKey = (
+  startedForKey: string | null,
+  stateKey: string | null | undefined,
+): boolean => !!stateKey && stateKey !== startedForKey;
+
+// Marks a claim cycle started by the refresh-recovery scan (no in-memory
+// state key), keeping that path once-per-mount. Not a real state key.
+const SCAN_CLAIM_SENTINEL = "__scan__";
+
+/**
  * Consume a single-use authentication intent on a route.
  *
  * Once isReady, the pending intent is claimed (removed from storage) exactly
  * once before any side effect runs, then executed. A ref guard makes React
  * Strict Mode effect replays and re-renders no-ops; the storage claim makes
- * cross-tab double execution impossible. On a transient failure the intent
- * is restored under its original state key (preserving any preallocated
- * draft ID) and retry() claims and executes it again.
+ * cross-tab double execution impossible. A new non-null stateKey re-opens
+ * the guard so a later intent on the same mounted route is still claimed.
+ * On a transient failure the intent is restored under its original state
+ * key (preserving any preallocated draft ID) and retry() claims and
+ * executes it again.
  */
 export const useAuthContinuation = ({
   isReady,
@@ -82,8 +102,9 @@ export const useAuthContinuation = ({
   }, [execute, matches]);
 
   // Set synchronously before any async work so a replayed effect can never
-  // claim or execute a second time.
-  const startedRef = useRef(false);
+  // claim or execute a second time. Holds the stateKey the current claim
+  // cycle started for, or a sentinel for the refresh-recovery scan path.
+  const startedForKeyRef = useRef<string | null>(null);
   const claimedRef = useRef<{ stateKey: string; intent: AuthIntent } | null>(
     null,
   );
@@ -114,7 +135,17 @@ export const useAuthContinuation = ({
   }, []);
 
   useEffect(() => {
-    if (!isReady || startedRef.current) return;
+    if (!isReady) return;
+
+    // A new in-memory state key (e.g. a second account's intent after a
+    // sign-out/sign-in on the same mounted route) re-opens the guard for a
+    // fresh claim cycle. The reset is idempotent: a Strict Mode replay with
+    // the SAME key still sees the ref set below and cannot double-claim.
+    // The scan path (no stateKey) never resets here, staying once-per-mount.
+    if (isNewClaimStateKey(startedForKeyRef.current, stateKey)) {
+      startedForKeyRef.current = null;
+    }
+    if (startedForKeyRef.current) return;
 
     const claimed = stateKey
       ? (() => {
@@ -131,7 +162,7 @@ export const useAuthContinuation = ({
       return;
     }
 
-    startedRef.current = true;
+    startedForKeyRef.current = stateKey ?? SCAN_CLAIM_SENTINEL;
     claimedRef.current = claimed;
     void run(claimed.stateKey, claimed.intent);
   }, [isReady, stateKey, run]);

@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { decideJoinContinuation } from "../useAuthContinuation";
+import {
+  decideJoinContinuation,
+  isNewClaimStateKey,
+} from "../useAuthContinuation";
 
 describe("decideJoinContinuation", () => {
   it("returns missing when the draft does not exist", () => {
@@ -50,5 +53,31 @@ describe("decideJoinContinuation", () => {
         isParticipant: false,
       }),
     ).toBe("join");
+  });
+});
+
+describe("isNewClaimStateKey", () => {
+  it("allows a fresh claim cycle when a different state key arrives", () => {
+    expect(isNewClaimStateKey("key-a", "key-b")).toBe(true);
+  });
+
+  it("blocks a replayed effect carrying the same state key", () => {
+    expect(isNewClaimStateKey("key-a", "key-a")).toBe(false);
+  });
+
+  it("blocks the scan path (no state key) from resetting the guard", () => {
+    expect(isNewClaimStateKey("key-a", null)).toBe(false);
+    expect(isNewClaimStateKey("key-a", undefined)).toBe(false);
+    expect(isNewClaimStateKey("__scan__", null)).toBe(false);
+  });
+
+  it("treats a fresh key after the scan sentinel as new", () => {
+    expect(isNewClaimStateKey("__scan__", "key-a")).toBe(true);
+  });
+
+  it("is a harmless no-op when the guard has not started yet", () => {
+    // Resetting null -> null changes nothing; the scan path stays blocked.
+    expect(isNewClaimStateKey(null, "key-a")).toBe(true);
+    expect(isNewClaimStateKey(null, null)).toBe(false);
   });
 });

@@ -83,7 +83,7 @@ export const DraftComponent = () => {
   const { slimUser } = useUser();
   const { data: season } = useSeason();
 
-  const { draft } = useDraft();
+  const { draft, loaded: draftLoaded } = useDraft();
   const { data: competition } = useCompetition(draft?.competiton_id);
 
   const sawNotStartedRef = useRef(false);
@@ -272,7 +272,7 @@ export const DraftComponent = () => {
         };
       }
       const decision = decideJoinContinuation({
-        draftExists: !!draft,
+        draftExists: draft !== undefined,
         draftStarted: draft?.started === true,
         isParticipant: userIsParticipant,
       });
@@ -319,7 +319,11 @@ export const DraftComponent = () => {
   );
 
   const continuation = useAuthContinuation({
-    isReady: !!slimUser && !!season && !!draft,
+    // Ready once auth and season are known and the draft subscription has
+    // delivered its first snapshot — a loaded-but-absent draft must still
+    // run the continuation so it classifies as "missing" instead of
+    // hanging unclaimed.
+    isReady: !!slimUser && !!season && draftLoaded,
     stateKey: pendingStateKey,
     matches: matchesJoinIntent,
     execute: executeJoinIntent,
