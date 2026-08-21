@@ -308,6 +308,160 @@
   );
 }
 
+/* Player trades */
+
+.tradeSection {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 85% 15%,
+      light-dark(
+        color-mix(in srgb, var(--mantine-color-cyan-2) 52%, transparent),
+        color-mix(in srgb, var(--mantine-color-cyan-8) 18%, transparent)
+      ),
+      transparent 40%
+    ),
+    light-dark(
+      color-mix(in srgb, var(--mantine-color-teal-0) 62%, white),
+      color-mix(
+        in srgb,
+        var(--mantine-color-dark-7) 88%,
+        var(--mantine-color-teal-9)
+      )
+    );
+}
+
+.tradeContent {
+  padding-top: clamp(3.5rem, 8vw, 6rem);
+  padding-bottom: clamp(3.5rem, 8vw, 6rem);
+}
+
+.tradeLayout {
+  align-items: center;
+}
+
+.tradeCopy {
+  position: relative;
+  z-index: 1;
+}
+
+.tradeBenefits {
+  counter-reset: trade-benefit;
+}
+
+.tradeBenefit {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: var(--mantine-spacing-sm);
+  align-items: start;
+}
+
+.tradeBenefitNumber {
+  padding-top: 2px;
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: light-dark(var(--mantine-color-teal-7), var(--mantine-color-teal-3));
+}
+
+.tradePreview {
+  position: relative;
+  z-index: 1;
+  background: light-dark(
+    color-mix(
+      in srgb,
+      var(--mantine-color-white) 90%,
+      var(--mantine-color-teal-0)
+    ),
+    color-mix(
+      in srgb,
+      var(--mantine-color-dark-6) 90%,
+      var(--mantine-color-teal-9)
+    )
+  );
+  border-color: light-dark(
+    color-mix(
+      in srgb,
+      var(--mantine-color-teal-3) 55%,
+      var(--mantine-color-gray-2)
+    ),
+    color-mix(
+      in srgb,
+      var(--mantine-color-teal-7) 45%,
+      var(--mantine-color-dark-4)
+    )
+  );
+  box-shadow: 0 24px 60px
+    light-dark(
+      color-mix(in srgb, var(--mantine-color-teal-9) 12%, transparent),
+      color-mix(in srgb, var(--mantine-color-black) 30%, transparent)
+    );
+}
+
+.tradeStatus {
+  flex-shrink: 0;
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: light-dark(var(--mantine-color-teal-8), var(--mantine-color-teal-2));
+  background: light-dark(
+    var(--mantine-color-teal-0),
+    color-mix(in srgb, var(--mantine-color-teal-9) 38%, transparent)
+  );
+}
+
+.tradeSwap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: var(--mantine-spacing-sm);
+  align-items: center;
+  margin-top: clamp(1.75rem, 5vw, 2.5rem);
+  margin-bottom: clamp(1.75rem, 5vw, 2.5rem);
+}
+
+.tradeSide {
+  min-width: 0;
+  padding: var(--mantine-spacing-md);
+  border-radius: var(--mantine-radius-lg);
+  background: light-dark(
+    color-mix(
+      in srgb,
+      var(--mantine-color-white) 78%,
+      var(--mantine-color-cyan-0)
+    ),
+    color-mix(
+      in srgb,
+      var(--mantine-color-dark-5) 90%,
+      var(--mantine-color-cyan-9)
+    )
+  );
+  border: 1px solid
+    light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
+}
+
+.tradeSwapIcon {
+  box-shadow: 0 6px 18px
+    color-mix(in srgb, var(--mantine-color-teal-6) 30%, transparent);
+}
+
+.tradeTiming {
+  padding-top: var(--mantine-spacing-md);
+  border-top: 1px solid
+    light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
+  color: light-dark(var(--mantine-color-teal-8), var(--mantine-color-teal-2));
+}
+
+@media (max-width: $mantine-breakpoint-xs) {
+  .tradeSwap {
+    grid-template-columns: 1fr;
+  }
+
+  .tradeSwapIcon {
+    justify-self: center;
+    transform: rotate(90deg);
+  }
+}
+
 /* Closing CTA */
 
 .ctaSection {

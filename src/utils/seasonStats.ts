@@ -10,13 +10,14 @@ import {
   CastawayId,
   Challenge,
   Competition,
-  DraftPick,
   Elimination,
   GameEvent,
   PlayerAction,
+  Trade,
   VoteHistory,
 } from "../types";
 import { EnhancedScores } from "./scoringUtils";
+import { getOwnerAtEpisode, getOwnershipWindows } from "./tradeUtils";
 
 const IDOL_ADVANTAGE_ACTIONS = new Set<PlayerAction>(
   BASE_PLAYER_SCORING.filter(
@@ -55,6 +56,8 @@ export interface StatCard {
 
 export interface SeasonStatsInput {
   competition: Competition;
+  /** Accepted trades move roster ownership from their effective_episode on. */
+  trades: Trade[];
   filteredChallenges: Record<string, Challenge>;
   filteredEliminations: Record<string, Elimination>;
   filteredEvents: Record<string, GameEvent>;
@@ -71,18 +74,34 @@ export interface SeasonStatsInput {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function getDraftedCastawayIds(competition: Competition): Set<CastawayId> {
+/**
+ * Every castaway in the competition, whoever owns them now.
+ *
+ * Drawn from draft_picks because that is the immutable record of which
+ * castaways are in play -- a trade moves a castaway between rosters but never
+ * adds or removes one from this set. Anything asking "whose roster is this on"
+ * wants getOwnerResolver instead.
+ */
+function getCompetitionCastawayIds(competition: Competition): Set<CastawayId> {
   return new Set(competition.draft_picks.map((p) => p.castaway_id));
 }
 
-function getDraftOwnership(
-  picks: DraftPick[],
-): Map<CastawayId, { uid: string; name: string }> {
-  const map = new Map<CastawayId, { uid: string; name: string }>();
-  for (const p of picks) {
-    map.set(p.castaway_id, { uid: p.user_uid, name: p.user_name });
-  }
-  return map;
+/**
+ * Resolve who owned a castaway during a given episode.
+ *
+ * Roster stats must match the Standings table, which credits an episode's
+ * points to whoever held the castaway *that* episode (see
+ * useScoringCalculations). Attributing everything to the original drafter
+ * would make the two halves of the competition page disagree after a trade.
+ */
+function getOwnerResolver(
+  input: SeasonStatsInput,
+): (id: CastawayId, episode: number) => string | undefined {
+  const windows = getOwnershipWindows(
+    input.competition.draft_picks,
+    input.trades,
+  );
+  return (id, episode) => getOwnerAtEpisode(windows, id, episode);
 }
 
 function getParticipantName(competition: Competition, uid: string): string {
@@ -91,14 +110,14 @@ function getParticipantName(competition: Competition, uid: string): string {
   );
 }
 
-/** Get drafted castaways who made the merge. */
+/** Castaways in the competition who made the merge. */
 function getPostMergeIds(
   events: Record<string, GameEvent>,
-  draftedIds: Set<CastawayId>,
+  castawayIds: Set<CastawayId>,
 ): Set<CastawayId> {
   const ids = new Set<CastawayId>();
   for (const ev of Object.values(events)) {
-    if (ev.action === "make_merge" && draftedIds.has(ev.castaway_id)) {
+    if (ev.action === "make_merge" && castawayIds.has(ev.castaway_id)) {
       ids.add(ev.castaway_id);
     }
   }
@@ -126,10 +145,10 @@ function topN(
 
 function highestScoringCastaway(
   input: SeasonStatsInput,
-  draftedIds: Set<CastawayId>,
+  castawayIds: Set<CastawayId>,
 ): StatCard | null {
   const entries: [string, number][] = [];
-  for (const id of draftedIds) {
+  for (const id of castawayIds) {
     const episodes = input.survivorPointsByEpisode[id];
     if (!episodes) continue;
     const total = episodes.reduce((s, e) => s + e.total, 0);
@@ -154,10 +173,10 @@ function highestScoringCastaway(
 
 function lowestScoringCastaway(
   input: SeasonStatsInput,
-  draftedIds: Set<CastawayId>,
+  castawayIds: Set<CastawayId>,
 ): StatCard | null {
-  const postMergeIds = getPostMergeIds(input.filteredEvents, draftedIds);
-  const pool = postMergeIds.size >= 3 ? postMergeIds : draftedIds;
+  const postMergeIds = getPostMergeIds(input.filteredEvents, castawayIds);
+  const pool = postMergeIds.size >= 3 ? postMergeIds : castawayIds;
   const entries: [string, number][] = [];
   for (const id of pool) {
     const episodes = input.survivorPointsByEpisode[id];
@@ -187,11 +206,11 @@ function lowestScoringCastaway(
 
 function bestSingleEpisodeCastaway(
   input: SeasonStatsInput,
-  draftedIds: Set<CastawayId>,
+  castawayIds: Set<CastawayId>,
 ): StatCard | null {
   let best: { id: string; value: number; ep: number }[] = [];
   let bestVal = -Infinity;
-  for (const id of draftedIds) {
+  for (const id of castawayIds) {
     const episodes = input.survivorPointsByEpisode[id];
     if (!episodes) continue;
     for (let i = 0; i < episodes.length; i++) {
@@ -223,10 +242,10 @@ function bestSingleEpisodeCastaway(
 
 function mostConsistentCastaway(
   input: SeasonStatsInput,
-  draftedIds: Set<CastawayId>,
+  castawayIds: Set<CastawayId>,
 ): StatCard | null {
-  const postMergeIds = getPostMergeIds(input.filteredEvents, draftedIds);
-  const pool = postMergeIds.size >= 3 ? postMergeIds : draftedIds;
+  const postMergeIds = getPostMergeIds(input.filteredEvents, castawayIds);
+  const pool = postMergeIds.size >= 3 ? postMergeIds : castawayIds;
   // Require at least 3 episodes for consistency to be meaningful
   const candidates: { id: string; stddev: number; avg: number }[] = [];
   for (const id of pool) {
@@ -269,7 +288,7 @@ function mostConsistentCastaway(
 
 function challengeBeast(
   input: SeasonStatsInput,
-  draftedIds: Set<CastawayId>,
+  castawayIds: Set<CastawayId>,
   variant: "immunity" | "reward",
 ): StatCard | null {
   const challengeList = Object.values(input.filteredChallenges);
@@ -277,7 +296,7 @@ function challengeBeast(
   for (const ch of challengeList) {
     if (ch.variant !== variant) continue;
     for (const id of ch.winning_castaways) {
-      if (!draftedIds.has(id)) continue;
+      if (!castawayIds.has(id)) continue;
       counts.set(id, (counts.get(id) ?? 0) + 1);
     }
   }
@@ -306,7 +325,7 @@ function challengeBeast(
 
 function advantagesFound(
   input: SeasonStatsInput,
-  draftedIds: Set<CastawayId>,
+  castawayIds: Set<CastawayId>,
 ): StatCard | null {
   const findActions = new Set([
     "find_idol",
@@ -325,7 +344,7 @@ function advantagesFound(
   const counts = new Map<string, number>();
   for (const ev of Object.values(input.filteredEvents)) {
     if (!findActions.has(ev.action)) continue;
-    if (!draftedIds.has(ev.castaway_id)) continue;
+    if (!castawayIds.has(ev.castaway_id)) continue;
     counts.set(ev.castaway_id, (counts.get(ev.castaway_id) ?? 0) + 1);
   }
   const entries: [string, number][] = [...counts.entries()];
@@ -349,7 +368,7 @@ function advantagesFound(
 
 function advantagesPlayed(
   input: SeasonStatsInput,
-  draftedIds: Set<CastawayId>,
+  castawayIds: Set<CastawayId>,
 ): StatCard | null {
   const useActions = new Set([
     "use_idol",
@@ -368,7 +387,7 @@ function advantagesPlayed(
   const counts = new Map<string, number>();
   for (const ev of Object.values(input.filteredEvents)) {
     if (!useActions.has(ev.action)) continue;
-    if (!draftedIds.has(ev.castaway_id)) continue;
+    if (!castawayIds.has(ev.castaway_id)) continue;
     counts.set(ev.castaway_id, (counts.get(ev.castaway_id) ?? 0) + 1);
   }
   const entries: [string, number][] = [...counts.entries()];
@@ -392,12 +411,12 @@ function advantagesPlayed(
 
 function mostIdolsFound(
   input: SeasonStatsInput,
-  draftedIds: Set<CastawayId>,
+  castawayIds: Set<CastawayId>,
 ): StatCard | null {
   const counts = new Map<string, number>();
   for (const ev of Object.values(input.filteredEvents)) {
     if (ev.action !== "find_idol") continue;
-    if (!draftedIds.has(ev.castaway_id)) continue;
+    if (!castawayIds.has(ev.castaway_id)) continue;
     counts.set(ev.castaway_id, (counts.get(ev.castaway_id) ?? 0) + 1);
   }
   const entries: [string, number][] = [...counts.entries()];
@@ -424,16 +443,16 @@ function mostIdolsFound(
 // ---------------------------------------------------------------------------
 
 /**
- * Count total votes received per drafted castaway from filtered vote rows.
+ * Count total votes received per competition castaway from filtered vote rows.
  * Returns { total, nullified } per castaway.
  */
 function countVotesReceived(
   votes: VoteHistory[],
-  draftedIds: Set<CastawayId>,
+  castawayIds: Set<CastawayId>,
 ): Map<CastawayId, { total: number; nullified: number }> {
   const counts = new Map<CastawayId, { total: number; nullified: number }>();
   for (const v of votes) {
-    if (!draftedIds.has(v.target_castaway_id)) continue;
+    if (!castawayIds.has(v.target_castaway_id)) continue;
     const existing = counts.get(v.target_castaway_id) ?? {
       total: 0,
       nullified: 0,
@@ -451,12 +470,13 @@ function countVotesReceived(
  */
 function getTribalAttendees(
   votes: VoteHistory[],
-  draftedIds: Set<CastawayId>,
+  castawayIds: Set<CastawayId>,
 ): Set<CastawayId> {
   const attendees = new Set<CastawayId>();
   for (const v of votes) {
-    if (draftedIds.has(v.voter_castaway_id)) attendees.add(v.voter_castaway_id);
-    if (draftedIds.has(v.target_castaway_id))
+    if (castawayIds.has(v.voter_castaway_id))
+      attendees.add(v.voter_castaway_id);
+    if (castawayIds.has(v.target_castaway_id))
       attendees.add(v.target_castaway_id);
   }
   return attendees;
@@ -464,12 +484,12 @@ function getTribalAttendees(
 
 function mostVotesReceived(
   input: SeasonStatsInput,
-  draftedIds: Set<CastawayId>,
+  castawayIds: Set<CastawayId>,
 ): StatCard | null {
   const votes = Object.values(input.filteredVoteHistory);
   if (votes.length === 0) return null;
 
-  const counts = countVotesReceived(votes, draftedIds);
+  const counts = countVotesReceived(votes, castawayIds);
   const entries: [string, number][] = [...counts.entries()].map(([id, c]) => [
     id,
     c.total,
@@ -502,13 +522,13 @@ function mostVotesReceived(
 
 function leastVotesReceived(
   input: SeasonStatsInput,
-  draftedIds: Set<CastawayId>,
+  castawayIds: Set<CastawayId>,
 ): StatCard | null {
   const votes = Object.values(input.filteredVoteHistory);
   if (votes.length === 0) return null;
 
   // Only qualify post-merge castaways
-  const postMergeIds = getPostMergeIds(input.filteredEvents, draftedIds);
+  const postMergeIds = getPostMergeIds(input.filteredEvents, castawayIds);
   if (postMergeIds.size < 3) return null; // Suppress pre-merge or too few
 
   // Further restrict to post-merge castaways with Tribal attendance
@@ -571,9 +591,9 @@ const CHALLENGE_POINTS: Record<string, number> = {
 
 function computeRosterStats(
   input: SeasonStatsInput,
-  draftedIds: Set<CastawayId>,
+  castawayIds: Set<CastawayId>,
 ): RosterStat[] {
-  const ownership = getDraftOwnership(input.competition.draft_picks);
+  const ownerAt = getOwnerResolver(input);
   const uids = input.competition.participant_uids;
   const getName = (uid: string) => getParticipantName(input.competition, uid);
   const stats: RosterStat[] = [];
@@ -584,10 +604,9 @@ function computeRosterStats(
   for (const ch of Object.values(input.filteredChallenges)) {
     const pts = CHALLENGE_POINTS[ch.variant] ?? 0;
     for (const id of ch.winning_castaways) {
-      if (!draftedIds.has(id)) continue;
-      const owner = ownership.get(id);
-      if (owner)
-        challengePts.set(owner.uid, (challengePts.get(owner.uid) ?? 0) + pts);
+      if (!castawayIds.has(id)) continue;
+      const owner = ownerAt(id, ch.episode_num);
+      if (owner) challengePts.set(owner, (challengePts.get(owner) ?? 0) + pts);
     }
   }
   stats.push({
@@ -638,18 +657,25 @@ function computeRosterStats(
   // Best draft pick (highest-scoring single castaway per roster)
   const bestPick = new Map<string, { value: number; castaway: string }>();
   for (const uid of uids) bestPick.set(uid, { value: 0, castaway: "" });
-  for (const id of draftedIds) {
+  for (const id of castawayIds) {
     const episodes = input.survivorPointsByEpisode[id];
     if (!episodes) continue;
-    const total = episodes.reduce((s, e) => s + e.total, 0);
-    const owner = ownership.get(id);
-    if (!owner) continue;
-    const cur = bestPick.get(owner.uid);
-    if (!cur || total > cur.value) {
-      bestPick.set(owner.uid, {
-        value: total,
-        castaway: input.resolveName(id),
-      });
+    // A traded castaway counts toward each owner only for the episodes that
+    // owner actually held them.
+    const totalByOwner = new Map<string, number>();
+    for (const ep of episodes) {
+      const owner = ownerAt(id, ep.episode_num);
+      if (!owner) continue;
+      totalByOwner.set(owner, (totalByOwner.get(owner) ?? 0) + ep.total);
+    }
+    for (const [owner, total] of totalByOwner) {
+      const cur = bestPick.get(owner);
+      if (!cur || total > cur.value) {
+        bestPick.set(owner, {
+          value: total,
+          castaway: input.resolveName(id),
+        });
+      }
     }
   }
   stats.push({
@@ -672,20 +698,17 @@ function computeRosterStats(
   // Idols & Advantages points
   const advPts = new Map<string, number>();
   for (const uid of uids) advPts.set(uid, 0);
-  for (const id of draftedIds) {
+  for (const id of castawayIds) {
     const episodes = input.survivorPointsByEpisode[id];
     if (!episodes) continue;
-    const owner = ownership.get(id);
-    if (!owner) continue;
-    const pts = episodes.reduce(
-      (sum, ep) =>
-        sum +
-        ep.actions
-          .filter((a) => IDOL_ADVANTAGE_ACTIONS.has(a.action))
-          .reduce((s, a) => s + a.points_awarded, 0),
-      0,
-    );
-    advPts.set(owner.uid, (advPts.get(owner.uid) ?? 0) + pts);
+    for (const ep of episodes) {
+      const owner = ownerAt(id, ep.episode_num);
+      if (!owner) continue;
+      const pts = ep.actions
+        .filter((a) => IDOL_ADVANTAGE_ACTIONS.has(a.action))
+        .reduce((s, a) => s + a.points_awarded, 0);
+      if (pts !== 0) advPts.set(owner, (advPts.get(owner) ?? 0) + pts);
+    }
   }
   stats.push({
     key: "idol_advantage_pts",
@@ -706,10 +729,9 @@ function computeRosterStats(
     const voteCounts = new Map<string, number>();
     for (const uid of uids) voteCounts.set(uid, 0);
     for (const v of votes) {
-      if (!draftedIds.has(v.target_castaway_id)) continue;
-      const owner = ownership.get(v.target_castaway_id);
-      if (owner)
-        voteCounts.set(owner.uid, (voteCounts.get(owner.uid) ?? 0) + 1);
+      if (!castawayIds.has(v.target_castaway_id)) continue;
+      const owner = ownerAt(v.target_castaway_id, v.episode_num);
+      if (owner) voteCounts.set(owner, (voteCounts.get(owner) ?? 0) + 1);
     }
     stats.push({
       key: "votes_against",
@@ -738,25 +760,25 @@ export interface SeasonStatsResult {
 }
 
 export function computeSeasonStats(input: SeasonStatsInput): SeasonStatsResult {
-  const draftedIds = getDraftedCastawayIds(input.competition);
+  const castawayIds = getCompetitionCastawayIds(input.competition);
 
   const castawayCards: StatCard[] = [];
 
   // Castaway score/challenge/advantage cards
   const cardFns: (() => StatCard | null)[] = [
-    () => highestScoringCastaway(input, draftedIds),
-    () => challengeBeast(input, draftedIds, "immunity"),
-    () => challengeBeast(input, draftedIds, "reward"),
-    () => advantagesFound(input, draftedIds),
-    () => advantagesPlayed(input, draftedIds),
-    () => mostIdolsFound(input, draftedIds),
-    () => bestSingleEpisodeCastaway(input, draftedIds),
-    () => mostConsistentCastaway(input, draftedIds),
+    () => highestScoringCastaway(input, castawayIds),
+    () => challengeBeast(input, castawayIds, "immunity"),
+    () => challengeBeast(input, castawayIds, "reward"),
+    () => advantagesFound(input, castawayIds),
+    () => advantagesPlayed(input, castawayIds),
+    () => mostIdolsFound(input, castawayIds),
+    () => bestSingleEpisodeCastaway(input, castawayIds),
+    () => mostConsistentCastaway(input, castawayIds),
     // Vote cards
-    () => mostVotesReceived(input, draftedIds),
-    () => leastVotesReceived(input, draftedIds),
+    () => mostVotesReceived(input, castawayIds),
+    () => leastVotesReceived(input, castawayIds),
     // Negative cards
-    () => lowestScoringCastaway(input, draftedIds),
+    () => lowestScoringCastaway(input, castawayIds),
   ];
 
   for (const fn of cardFns) {
@@ -764,7 +786,7 @@ export function computeSeasonStats(input: SeasonStatsInput): SeasonStatsResult {
     if (card) castawayCards.push(card);
   }
 
-  const rosterStats = computeRosterStats(input, draftedIds);
+  const rosterStats = computeRosterStats(input, castawayIds);
 
   return { castawayCards, rosterStats };
 }

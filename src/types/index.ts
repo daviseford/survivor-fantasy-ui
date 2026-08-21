@@ -219,6 +219,50 @@ export type Competition = {
   finished: boolean;
 };
 
+export const TradeStatuses = [
+  "pending",
+  "accepted",
+  "rejected",
+  "canceled",
+] as const;
+
+export type TradeStatus = (typeof TradeStatuses)[number];
+
+/**
+ * A proposed or completed trade between two competition participants.
+ * Lives in the `competitions/{id}/trades` subcollection; `draft_picks` on the
+ * competition is never mutated — ownership history is derived from the base
+ * draft picks plus accepted trades (see utils/tradeUtils.ts).
+ */
+export type Trade = {
+  id: `trade_${string}`;
+
+  competition_id: Competition["id"];
+  season_id: Season["id"];
+
+  /** Participant who created the trade offer. */
+  offered_by_uid: string;
+  /** Participant the offer is directed at. */
+  offered_to_uid: string;
+
+  /** Castaways offered_by gives up. */
+  offered_castaway_ids: CastawayId[];
+  /** Castaways offered_to gives up. */
+  requested_castaway_ids: CastawayId[];
+
+  status: TradeStatus;
+
+  /**
+   * First episode whose points go to the new owner. Points from earlier
+   * episodes stay with the original owner. Set at acceptance time.
+   */
+  effective_episode?: number;
+
+  /** ISO timestamps. */
+  created_at: string;
+  resolved_at?: string;
+};
+
 export type VoteHistory<
   Id extends CastawayId = CastawayId,
   SeasonNumber = number,

@@ -32,6 +32,66 @@ service cloud.firestore {
       allow update: if (isAdmin() || (isAuthenticated() && request.auth.uid == resource.data.creator_uid && request.resource.data.creator_uid == resource.data.creator_uid))
         && !(resource.data.finished == true && !(request.resource.data.finished == true));
       allow delete: if isAdmin();
+
+      // Trades: participants propose and resolve trades; the competition doc
+      // itself is never mutated by trades. Castaway *ownership* (who currently
+      // holds a castaway) cannot be read from the competition doc, so that
+      // check stays client-side in validateTrade. Everything these rules CAN
+      // check is checked here: authorship, participant membership, document
+      // shape, and the status state machine.
+      match /trades/{tradeId} {
+        function competitionDoc() {
+          return get(/databases/$(database)/documents/competitions/$(competitionId)).data;
+        }
+
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated()
+          && request.resource.data.competition_id == competitionId
+          && request.resource.data.offered_by_uid == request.auth.uid
+          && request.resource.data.offered_to_uid != request.auth.uid
+          && request.resource.data.status == "pending"
+          && request.resource.data.offered_by_uid in competitionDoc().participant_uids
+          && request.resource.data.offered_to_uid in competitionDoc().participant_uids
+          // Document shape. Without these, a client can write a doc that the
+          // trades UI cannot render or sort, and `allow delete: if false`
+          // means nobody but an admin can remove it again.
+          && request.resource.data.season_id == competitionDoc().season_id
+          && request.resource.data.created_at is string
+          && request.resource.data.offered_castaway_ids is list
+          && request.resource.data.requested_castaway_ids is list
+          && request.resource.data.offered_castaway_ids.size() > 0
+          && request.resource.data.requested_castaway_ids.size() > 0
+          && !request.resource.data.offered_castaway_ids.hasAny(request.resource.data.requested_castaway_ids);
+        allow update: if isAuthenticated()
+          && resource.data.status == "pending"
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["status", "effective_episode", "resolved_at"])
+          // The accepting participant is the one who benefits from an early
+          // cutoff, so the cutoff cannot be left to them.
+          //
+          // Watch-along: the cutoff is the next episode to be revealed, which
+          // this rule can derive from the competition doc, so pin it exactly.
+          // A client cannot reach back and take points already on the board,
+          // nor push the cutoff far out so points never transfer.
+          //
+          // Live: `current_episode` is null and scoring data is not readable
+          // from rules, so only the coarse floor applies. Accepting a trade in
+          // a live competition with a hand-written cutoff remains possible for
+          // a participant using the SDK directly -- the documented trust
+          // boundary for this feature.
+          && (request.resource.data.status != "accepted" || (
+            request.resource.data.effective_episode is int
+            && (competitionDoc().current_episode is int
+              ? request.resource.data.effective_episode == competitionDoc().current_episode + 1
+              : request.resource.data.effective_episode >= 1)
+          ))
+          && (
+            (request.auth.uid == resource.data.offered_to_uid
+              && request.resource.data.status in ["accepted", "rejected"])
+            || (request.auth.uid == resource.data.offered_by_uid
+              && request.resource.data.status == "canceled")
+          );
+        allow delete: if false;
+      }
     }
 
     // Season-data collections: all share authenticated-read / admin-write. Keep in sync.
@@ -57,6 +117,13 @@ service cloud.firestore {
 
     // Eliminations
     match /eliminations/{seasonId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Vote history
+
+    match /vote_history/{seasonId} {
       allow read: if isAuthenticated();
       allow write: if isAdmin();
     }

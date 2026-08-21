@@ -1,0 +1,106 @@
+.offer {
+  overflow: hidden;
+  border: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  border-radius: var(--mantine-radius-md);
+  background: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-7)
+  );
+  padding: var(--mantine-spacing-md);
+}
+
+.exchange {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: stretch;
+  gap: var(--mantine-spacing-sm);
+  margin-top: var(--mantine-spacing-md);
+}
+
+.exchangeSide {
+  min-width: 0;
+  border-radius: var(--mantine-radius-sm);
+  background: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-6)
+  );
+  padding: var(--mantine-spacing-sm);
+}
+
+.exchangeLabel {
+  margin-bottom: var(--mantine-spacing-xs);
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-1));
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.exchangeArrow {
+  align-self: center;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 50%;
+  color: light-dark(var(--mantine-color-grape-7), var(--mantine-color-grape-3));
+  background: light-dark(
+    var(--mantine-color-grape-0),
+    var(--mantine-color-grape-9)
+  );
+}
+
+.offerActions {
+  display: flex;
+  justify-content: flex-end;
+  margin: var(--mantine-spacing-md) calc(var(--mantine-spacing-md) * -1)
+    calc(var(--mantine-spacing-md) * -1);
+  border-top: 1px solid
+    light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+  background: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-8)
+  );
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md);
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-md);
+  border: 1px dashed
+    light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-3));
+  border-radius: var(--mantine-radius-md);
+  padding: var(--mantine-spacing-lg);
+}
+
+.emptyIcon {
+  display: grid;
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: 50%;
+  color: light-dark(var(--mantine-color-blue-7), var(--mantine-color-blue-3));
+  background: light-dark(
+    var(--mantine-color-blue-0),
+    var(--mantine-color-blue-9)
+  );
+}
+
+@media (max-width: 36em) {
+  .exchange {
+    grid-template-columns: 1fr;
+  }
+
+  .exchangeArrow {
+    justify-self: center;
+    margin-block: -0.25rem;
+    transform: rotate(90deg);
+  }
+
+  .offerActions > * {
+    width: 100%;
+  }
+}

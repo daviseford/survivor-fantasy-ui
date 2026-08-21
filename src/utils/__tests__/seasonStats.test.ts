@@ -127,6 +127,7 @@ function buildInput(
       { castaway_id: CHARLIE, user_uid: USER_B, user_name: "Bob P" },
       { castaway_id: DANA, user_uid: USER_B, user_name: "Bob P" },
     ]),
+    trades: [],
     filteredChallenges: {},
     filteredEliminations: {},
     filteredEvents: {},
@@ -412,6 +413,40 @@ describe("computeSeasonStats", () => {
       expect(stat!.rows[0].value).toBe(6);
       expect(stat!.rows[1].label).toBe("Bob P");
       expect(stat!.rows[1].value).toBe(2);
+    });
+
+    it("credits challenge points to the owner at that episode, not the drafter", () => {
+      // Alice is drafted by USER_A, then traded to USER_B from episode 3 on.
+      const result = computeSeasonStats(
+        buildInput({
+          trades: [
+            {
+              id: "trade_1",
+              competition_id: "competition_test",
+              season_id: "season_46",
+              offered_by_uid: USER_A,
+              offered_to_uid: USER_B,
+              offered_castaway_ids: [ALICE],
+              requested_castaway_ids: [CHARLIE],
+              status: "accepted",
+              effective_episode: 3,
+              created_at: "2026-01-01T00:00:00.000Z",
+              resolved_at: "2026-01-02T00:00:00.000Z",
+            },
+          ],
+          filteredChallenges: {
+            c1: makeChallenge("1", 1, "immunity", [ALICE]),
+            c3: makeChallenge("3", 3, "immunity", [ALICE]),
+          },
+        }),
+      );
+      const stat = findRosterStat(result.rosterStats, "challenge_pts");
+      const byUid = Object.fromEntries(stat!.rows.map((r) => [r.uid, r.value]));
+      // Episode 1 predates the cutoff and stays with the drafter; episode 3
+      // belongs to the new owner. Attributing both to USER_A would contradict
+      // the Standings table.
+      expect(byUid[USER_A]).toBe(3);
+      expect(byUid[USER_B]).toBe(3);
     });
 
     it("returns best team night for all participants", () => {
