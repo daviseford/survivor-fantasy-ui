@@ -290,6 +290,47 @@ export const claimAuthIntentMatching = (
 };
 
 /**
+ * Scan every pending record and return the first valid, unexpired intent
+ * that satisfies the predicate, with its state key, WITHOUT consuming it.
+ * With no predicate, the first valid pending intent is returned. Expired or
+ * invalid records encountered during the scan are discarded.
+ *
+ * This is the non-destructive lookup used when a flow (for example the
+ * password-reset request) needs the current continuation's state key but
+ * must leave the intent pending for its owning route to claim.
+ */
+export const findAuthIntent = (
+  predicate: (intent: AuthIntent) => boolean = () => true,
+  options: AuthIntentOptions = {},
+): { stateKey: string; intent: AuthIntent } | null => {
+  const storage = resolveStorage(options.storage);
+  const now = resolveNow(options.now);
+  const file = readFile(storage);
+  let changed = false;
+  let found: { stateKey: string; intent: AuthIntent } | null = null;
+
+  for (const [stateKey, record] of Object.entries(file.records)) {
+    if (
+      typeof record !== "object" ||
+      record === null ||
+      typeof record.createdAt !== "number" ||
+      isExpired(record, now()) ||
+      !isValidIntent(record.intent)
+    ) {
+      delete file.records[stateKey];
+      changed = true;
+      continue;
+    }
+    if (!found && predicate(record.intent)) {
+      found = { stateKey, intent: record.intent };
+    }
+  }
+
+  if (changed) writeFile(storage, file);
+  return found;
+};
+
+/**
  * Explicit retry path: restore a previously claimed intent under its original
  * state key, preserving the preallocated draft ID, with a fresh expiry
  * window. This is the only way a claimed intent becomes pending again.

@@ -58,6 +58,9 @@ const ScoringReference = lazy(() =>
     default: m.ScoringReference,
   })),
 );
+const ResetPassword = lazy(() =>
+  import("./pages/ResetPassword").then((m) => ({ default: m.ResetPassword })),
+);
 const SingleSeason = lazy(() =>
   import("./pages/SingleSeason").then((m) => ({ default: m.SingleSeason })),
 );
@@ -75,8 +78,13 @@ const PageTracker = () => {
   const location = useLocation();
 
   useEffect(() => {
+    // The reset route's query string carries the one-time action code and
+    // continuation state; only its pathname may reach analytics.
+    const pagePath = location.pathname.startsWith("/reset-password")
+      ? location.pathname
+      : location.pathname + location.search;
     trackEvent("page_view", {
-      page_path: location.pathname + location.search,
+      page_path: pagePath,
       page_title: document.title,
     });
   }, [location]);
@@ -181,6 +189,7 @@ export const AppRoutes = () => {
 
                   {/* User stuff */}
                   <Route path="/logout" element={<Logout />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
 
                   {/* Drafting */}
                   <Route

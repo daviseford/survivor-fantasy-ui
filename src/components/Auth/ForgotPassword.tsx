@@ -3,6 +3,7 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { FormEvent, useState } from "react";
 import { auth } from "../../firebase";
 import { getResetRequestOutcome } from "./authErrors";
+import { findAuthIntent } from "./authIntent";
 import type { AuthFormProps } from "./AuthModal";
 
 export type ForgotPasswordProps = AuthFormProps & {
@@ -40,7 +41,18 @@ export const ForgotPassword = ({
 
     let failure: unknown = null;
     try {
-      await sendPasswordResetEmail(auth, email);
+      // Land the reset link on the app-owned handler. The continue URL
+      // carries only the opaque state key of the current pending intent
+      // (looked up non-destructively; the owning route still claims it),
+      // never raw intent fields.
+      const pendingIntent = findAuthIntent();
+      const actionCodeSettings = {
+        url: `${window.location.origin}/reset-password${
+          pendingIntent ? `?state=${pendingIntent.stateKey}` : ""
+        }`,
+        handleCodeInApp: false,
+      };
+      await sendPasswordResetEmail(auth, email, actionCodeSettings);
     } catch (error) {
       failure = error;
     }

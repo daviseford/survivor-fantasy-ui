@@ -37,6 +37,11 @@ export type AuthFormProps = {
 export type AuthModalInnerProps = {
   /** Which form to show first. Defaults to "login". */
   initialMode?: AuthMode;
+  /**
+   * Pre-fill the shared email field, e.g. the verified account email after
+   * an app-owned password reset. Defaults to empty.
+   */
+  initialEmail?: string;
   /** Short human label for the action that continues after auth. */
   actionDescription?: string;
   /** Fired exactly once after a successful login or registration. */
@@ -65,12 +70,13 @@ export const AuthModal = ({
 }: ContextModalProps<AuthModalInnerProps>) => {
   const {
     initialMode = "login",
+    initialEmail = "",
     actionDescription,
     onAuthenticated,
   } = innerProps;
 
   const [mode, setMode] = useState<AuthMode>(initialMode);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(initialEmail);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<AuthError | null>(null);
   const [confirmation, setConfirmation] = useState<string | null>(null);
