@@ -263,6 +263,19 @@ export function getUpcomingMoveTiming(move: UpcomingMove): string {
 }
 
 /**
+ * Tooltip copy for a pending swap, naming both sides of the move. Timing
+ * stays relative -- an absolute episode number would leak season progress.
+ */
+export function getUpcomingMoveLabel(
+  move: UpcomingMove,
+  participants: SlimUser[],
+): string {
+  const from = getParticipantName(participants, move.fromUid);
+  const to = getParticipantName(participants, move.toUid);
+  return `Traded from ${from} to ${to}. Takes effect ${getUpcomingMoveTiming(move)}`;
+}
+
+/**
  * Tooltip copy for a traded-in castaway. Deliberately says nothing about which
  * episode the trade took effect -- that would leak how far the season has run
  * to a competition that has not revealed it yet.

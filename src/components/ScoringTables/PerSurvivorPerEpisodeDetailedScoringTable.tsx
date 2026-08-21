@@ -28,7 +28,7 @@ import { CastawayId, PlayerAction } from "../../types";
 import { getNumberWithOrdinal, getParticipantName } from "../../utils/misc";
 import {
   getAcquisitionLabel,
-  getUpcomingMoveTiming,
+  getUpcomingMoveLabel,
 } from "../../utils/tradeUtils";
 import { PlayerHoverCard } from "./PlayerHoverCard";
 import classes from "./ScoringTables.module.css";
@@ -243,10 +243,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
 
     const upcomingMove = upcomingMoves[castawayId];
     const upcomingLabel = upcomingMove
-      ? `Trades to ${getParticipantName(
-          participants,
-          upcomingMove.toUid,
-        )} ${getUpcomingMoveTiming(upcomingMove)}`
+      ? getUpcomingMoveLabel(upcomingMove, participants)
       : null;
 
     const acquisition = acquisitions[castawayId];

@@ -3,10 +3,9 @@ import { useCompetition } from "../../hooks/useCompetition";
 import { useCompetitionMeta } from "../../hooks/useCompetitionMeta";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { SlimUser } from "../../types";
-import { getParticipantName } from "../../utils/misc";
 import {
   getAcquisitionLabel,
-  getUpcomingMoveTiming,
+  getUpcomingMoveLabel,
 } from "../../utils/tradeUtils";
 
 export const PlayerGroup = ({ uid }: { uid: SlimUser["uid"] }) => {
@@ -51,7 +50,7 @@ export const PlayerGroup = ({ uid }: { uid: SlimUser["uid"] }) => {
           p.full_name,
           isEliminated ? "(Eliminated)" : null,
           upcomingMove
-            ? `Trades to ${getParticipantName(participants, upcomingMove.toUid)} ${getUpcomingMoveTiming(upcomingMove)}`
+            ? getUpcomingMoveLabel(upcomingMove, participants)
             : null,
           acquisition
             ? getAcquisitionLabel(
@@ -81,10 +80,10 @@ export const PlayerGroup = ({ uid }: { uid: SlimUser["uid"] }) => {
         const timing = landsNextEpisode
           ? "next episode"
           : "in an upcoming episode";
-        const label = `${player.full_name} · Joins from ${getParticipantName(
+        const label = `${player.full_name} · ${getUpcomingMoveLabel(
+          { fromUid, toUid: uid, landsNextEpisode },
           participants,
-          fromUid,
-        )} ${timing}`;
+        )}`;
         return (
           <Tooltip label={label} key={player.castaway_id}>
             <Avatar

@@ -21,6 +21,7 @@ import {
   getOwnershipWindows,
   getRosterEpisode,
   getTradeLockEpisode,
+  getUpcomingMoveLabel,
   getUpcomingMoves,
   validateTrade,
 } from "../tradeUtils";
@@ -426,6 +427,45 @@ describe("getDrafters / getAcquisitions", () => {
       uid: CAROL,
       fromUid: BOB,
     });
+  });
+});
+
+describe("getUpcomingMoveLabel", () => {
+  const participants: SlimUser[] = [
+    {
+      uid: ALICE,
+      displayName: "Alice",
+      email: "alice@example.com",
+      isAdmin: false,
+    },
+    { uid: BOB, displayName: "Bob", email: "bob@example.com", isAdmin: false },
+  ];
+
+  it("names both sides and the relative timing", () => {
+    expect(
+      getUpcomingMoveLabel(
+        { fromUid: ALICE, toUid: BOB, landsNextEpisode: true },
+        participants,
+      ),
+    ).toBe("Traded from Alice to Bob. Takes effect next episode");
+  });
+
+  it("softens the timing when the cutoff is further out", () => {
+    expect(
+      getUpcomingMoveLabel(
+        { fromUid: ALICE, toUid: BOB, landsNextEpisode: false },
+        participants,
+      ),
+    ).toBe("Traded from Alice to Bob. Takes effect in an upcoming episode");
+  });
+
+  it("says nothing about episode numbers, which would leak season progress", () => {
+    expect(
+      getUpcomingMoveLabel(
+        { fromUid: ALICE, toUid: BOB, landsNextEpisode: true },
+        participants,
+      ),
+    ).not.toMatch(/\d/);
   });
 });
 

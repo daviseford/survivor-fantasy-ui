@@ -26,7 +26,7 @@ import { getParticipantName } from "../../utils/misc";
 import {
   Acquisition,
   getAcquisitionLabel,
-  getUpcomingMoveTiming,
+  getUpcomingMoveLabel,
   UpcomingMove,
 } from "../../utils/tradeUtils";
 import { PlayerGroup } from "./PlayerGroup";
@@ -285,10 +285,7 @@ const TeamCard = ({
                     : null;
                   const upcomingMove = upcomingMoves[p.castaway_id];
                   const upcomingLabel = upcomingMove
-                    ? `Trades to ${getParticipantName(
-                        participants,
-                        upcomingMove.toUid,
-                      )} ${getUpcomingMoveTiming(upcomingMove)}`
+                    ? getUpcomingMoveLabel(upcomingMove, participants)
                     : null;
                   return (
                     <Group key={p.castaway_id} gap={4} wrap="nowrap">
@@ -355,14 +352,14 @@ const TeamCard = ({
                           variant="light"
                           color="yellow"
                           role="img"
-                          aria-label={`Joins from ${getParticipantName(
+                          aria-label={getUpcomingMoveLabel(
+                            {
+                              fromUid,
+                              toUid: participant.uid,
+                              landsNextEpisode,
+                            },
                             participants,
-                            fromUid,
-                          )} ${
-                            landsNextEpisode
-                              ? "next episode"
-                              : "in an upcoming episode"
-                          }`}
+                          )}
                           style={{ flexShrink: 0 }}
                         >
                           from {getParticipantName(participants, fromUid)}
