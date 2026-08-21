@@ -131,6 +131,8 @@ export const ResetPassword = () => {
       innerProps: {
         initialMode: "forgot-password",
         initialEmail: email ?? undefined,
+        // Re-requested reset emails keep the same continuation identity.
+        pendingStateKey: params.stateKey ?? undefined,
       },
     });
   };

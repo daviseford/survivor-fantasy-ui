@@ -257,6 +257,7 @@ export const DraftComponent = () => {
         actionDescription: season
           ? `Join the ${season.name} draft`
           : "Join this draft",
+        pendingStateKey: stateKey,
       },
     });
   };

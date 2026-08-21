@@ -74,6 +74,7 @@ export const SingleSeason = () => {
       innerProps: {
         initialMode: mode,
         actionDescription: `Start a draft for ${season.name}`,
+        pendingStateKey: stateKey,
       },
     });
   };

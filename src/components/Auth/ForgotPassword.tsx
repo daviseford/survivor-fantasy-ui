@@ -3,10 +3,15 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { FormEvent, useState } from "react";
 import { auth } from "../../firebase";
 import { getResetRequestOutcome } from "./authErrors";
-import { findAuthIntent } from "./authIntent";
 import type { AuthFormProps } from "./AuthModal";
 
 export type ForgotPasswordProps = AuthFormProps & {
+  /**
+   * The state key of the pending intent owned by the modal that rendered
+   * this form. When provided, the reset email's continue URL carries exactly
+   * this key; when absent, the email carries no state at all.
+   */
+  pendingStateKey?: string;
   /** Switches the modal back to the sign-in mode, keeping the email. */
   onBackToSignIn?: () => void;
 };
@@ -17,6 +22,7 @@ export const ForgotPassword = ({
   pending: pendingProp,
   onPendingChange,
   onOutcome,
+  pendingStateKey,
   onBackToSignIn,
 }: ForgotPasswordProps = {}) => {
   const [localEmail, setLocalEmail] = useState("");
@@ -42,13 +48,13 @@ export const ForgotPassword = ({
     let failure: unknown = null;
     try {
       // Land the reset link on the app-owned handler. The continue URL
-      // carries only the opaque state key of the current pending intent
-      // (looked up non-destructively; the owning route still claims it),
-      // never raw intent fields.
-      const pendingIntent = findAuthIntent();
+      // carries only the opaque state key of the intent this modal owns
+      // (threaded down from the gate that saved it; the owning route still
+      // claims it), never raw intent fields. Without an owning key the
+      // email carries no state, never an arbitrary scanned intent.
       const actionCodeSettings = {
         url: `${window.location.origin}/reset-password${
-          pendingIntent ? `?state=${pendingIntent.stateKey}` : ""
+          pendingStateKey ? `?state=${pendingStateKey}` : ""
         }`,
         handleCodeInApp: false,
       };

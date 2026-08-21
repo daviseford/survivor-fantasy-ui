@@ -11,7 +11,6 @@ import {
   claimAuthIntent,
   claimAuthIntentMatching,
   clearAuthIntents,
-  findAuthIntent,
   generateAuthStateKey,
   readAuthIntent,
   restoreClaimedIntent,
@@ -359,80 +358,6 @@ describe("authIntent", () => {
       const predicate = () => true;
 
       expect(claimAuthIntentMatching(predicate, { storage })).toBeNull();
-      expect(storage.getItem("survivor_auth_intents")).toBeNull();
-    });
-  });
-
-  describe("findAuthIntent", () => {
-    const matchesSeason47 = (intent: AuthIntent) =>
-      intent.kind === "start-draft" && intent.seasonId === startIntent.seasonId;
-
-    it("returns null when no intents are stored", () => {
-      const storage = createMemoryStorage();
-
-      expect(findAuthIntent(undefined, { storage })).toBeNull();
-    });
-
-    it("returns the pending intent with its state key without consuming it", () => {
-      const storage = createMemoryStorage();
-      const stateKey = saveAuthIntent(startIntent, { storage });
-
-      expect(findAuthIntent(undefined, { storage })).toEqual({
-        stateKey,
-        intent: startIntent,
-      });
-      // Non-destructive: the intent is still pending afterwards.
-      expect(readAuthIntent(stateKey, { storage })).toEqual(startIntent);
-      expect(findAuthIntent(undefined, { storage })).toEqual({
-        stateKey,
-        intent: startIntent,
-      });
-    });
-
-    it("returns the first intent matching the predicate", () => {
-      const storage = createMemoryStorage();
-      saveAuthIntent(joinIntent, { storage });
-      const startKey = saveAuthIntent(startIntent, { storage });
-
-      expect(findAuthIntent(matchesSeason47, { storage })).toEqual({
-        stateKey: startKey,
-        intent: startIntent,
-      });
-    });
-
-    it("returns null when no intent matches the predicate", () => {
-      const storage = createMemoryStorage();
-      saveAuthIntent(joinIntent, { storage });
-
-      expect(findAuthIntent(matchesSeason47, { storage })).toBeNull();
-    });
-
-    it("skips and discards expired records while scanning", () => {
-      const storage = createMemoryStorage();
-      let now = 1_000_000;
-      const options = { storage, now: () => now };
-      const expiredKey = saveAuthIntent(startIntent, options);
-
-      now += AUTH_INTENT_TTL_MS + 1;
-      const freshKey = saveAuthIntent(joinIntent, options);
-
-      expect(findAuthIntent(undefined, options)).toEqual({
-        stateKey: freshKey,
-        intent: joinIntent,
-      });
-      expect(readAuthIntent(expiredKey, options)).toBeNull();
-    });
-
-    it("discards invalid records instead of offering them to the predicate", () => {
-      const storage = createMemoryStorage();
-      const stateKey = saveAuthIntent(startIntent, { storage });
-      const raw = JSON.parse(
-        storage.getItem("survivor_auth_intents") as string,
-      );
-      raw.records[stateKey].intent.kind = "delete-everything";
-      storage.setItem("survivor_auth_intents", JSON.stringify(raw));
-
-      expect(findAuthIntent(() => true, { storage })).toBeNull();
       expect(storage.getItem("survivor_auth_intents")).toBeNull();
     });
   });

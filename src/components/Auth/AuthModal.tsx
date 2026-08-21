@@ -11,7 +11,7 @@ import type { ContextModalProps } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import { useEffect, useRef, useState } from "react";
 import type { AuthError } from "./authErrors";
-import { clearAuthIntents } from "./authIntent";
+import { claimAuthIntent } from "./authIntent";
 import { ForgotPassword } from "./ForgotPassword";
 import { Login } from "./Login";
 import { Register } from "./Register";
@@ -44,6 +44,12 @@ export type AuthModalInnerProps = {
   initialEmail?: string;
   /** Short human label for the action that continues after auth. */
   actionDescription?: string;
+  /**
+   * The state key of the single-use intent saved by the gate that opened
+   * this modal. Set only when the modal owns a pending intent; dismissal
+   * cancels exactly that record and leaves every other tab's intent alone.
+   */
+  pendingStateKey?: string;
   /** Fired exactly once after a successful login or registration. */
   onAuthenticated?: () => void;
 };
@@ -72,6 +78,7 @@ export const AuthModal = ({
     initialMode = "login",
     initialEmail = "",
     actionDescription,
+    pendingStateKey,
     onAuthenticated,
   } = innerProps;
 
@@ -81,28 +88,37 @@ export const AuthModal = ({
   const [error, setError] = useState<AuthError | null>(null);
   const [confirmation, setConfirmation] = useState<string | null>(null);
   const completedRef = useRef(false);
+  const resetRequestSentRef = useRef(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   // Dismissal without a successful auth (close button, Escape, click outside)
-  // is a cancellation: drop any pending intent so an abandoned action can
-  // never execute later. The success path sets completedRef before closing.
-  // The clear is scheduled and cancelled on remount because React Strict Mode
-  // runs this cleanup once immediately after mount; a real dismissal never
-  // remounts, so its scheduled clear always runs.
+  // is a cancellation: drop the intent this modal owns so an abandoned action
+  // can never execute later. The success path sets completedRef before
+  // closing, and a sent reset email sets resetRequestSentRef because the
+  // emailed continue URL points at the intent's state key, so it must stay
+  // pending. Modals that own no intent (navbar, competitions, reset page)
+  // clear nothing. The clear is scheduled and cancelled on remount because
+  // React Strict Mode runs this cleanup once immediately after mount; a real
+  // dismissal never remounts, so its scheduled clear always runs.
   useEffect(() => {
     if (scheduledIntentClear !== undefined) {
       clearTimeout(scheduledIntentClear);
       scheduledIntentClear = undefined;
     }
     return () => {
-      if (!completedRef.current) {
+      if (
+        !completedRef.current &&
+        !resetRequestSentRef.current &&
+        pendingStateKey
+      ) {
         scheduledIntentClear = setTimeout(() => {
           scheduledIntentClear = undefined;
-          clearAuthIntents();
+          // Claim and discard: cancellation removes only this modal's record.
+          claimAuthIntent(pendingStateKey);
         }, 0);
       }
     };
-  }, []);
+  }, [pendingStateKey]);
 
   // Move focus to the mode heading on every mode change.
   useEffect(() => {
@@ -140,6 +156,9 @@ export const AuthModal = ({
         complete();
         break;
       case "confirmed":
+        // The reset email's continue URL carries the pending intent's state
+        // key, so dismissal after this point must leave that intent alone.
+        resetRequestSentRef.current = true;
         setError(null);
         setConfirmation(outcome.message);
         break;
@@ -232,6 +251,7 @@ export const AuthModal = ({
       {mode === "forgot-password" && (
         <ForgotPassword
           {...formProps}
+          pendingStateKey={pendingStateKey}
           onBackToSignIn={() => switchMode("login")}
         />
       )}
