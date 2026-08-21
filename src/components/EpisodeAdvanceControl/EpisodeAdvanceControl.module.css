@@ -1,0 +1,44 @@
+.modeControl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mantine-spacing-md);
+}
+
+.modeSummary {
+  min-width: 0;
+}
+
+.modeActions,
+.primaryModeAction {
+  flex: 0 0 auto;
+}
+
+.episodeNavigation {
+  justify-content: flex-end;
+}
+
+.switchModeAction,
+.completionBadge {
+  align-self: center;
+}
+
+@media (max-width: 48em) {
+  .modeControl {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modeActions,
+  .primaryModeAction {
+    width: 100%;
+  }
+
+  .episodeNavigation > button {
+    flex: 1 1 0;
+  }
+
+  .switchModeAction {
+    width: 100%;
+  }
+}

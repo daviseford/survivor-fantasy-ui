@@ -1,3 +1,13 @@
+.competitionHeader {
+  display: grid;
+  gap: var(--mantine-spacing-md);
+}
+
+.competitionIdentity,
+.episodeControl {
+  min-width: 0;
+}
+
 .tabsAnchor {
   scroll-margin-top: var(--mantine-spacing-md);
 }
@@ -12,6 +22,14 @@
 .tab {
   min-width: max-content;
   white-space: nowrap;
+}
+
+@media (min-width: 62em) {
+  .competitionHeader[data-has-episode-control] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--mantine-spacing-xl);
+    align-items: center;
+  }
 }
 
 @media (max-width: 30em) {

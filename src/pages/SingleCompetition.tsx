@@ -52,7 +52,7 @@ import {
 } from "../utils/episodeAirDate";
 import classes from "./SingleCompetition.module.css";
 
-const VALID_TABS = ["overview", "scoring", "trades", "stats"] as const;
+const VALID_TABS = ["overview", "trades", "stats"] as const;
 type TabValue = (typeof VALID_TABS)[number];
 const DEFAULT_TAB: TabValue = "overview";
 
@@ -139,6 +139,7 @@ export const SingleCompetition = () => {
   const episodeCount = season.episodes?.length ?? 0;
   const isCreator = slimUser?.uid === competition.creator_uid;
   const isWatchAlong = competition.current_episode != null;
+  const showEpisodeControl = isWatchAlong || isCreator;
   const hasWinner = Object.values(unfilteredEvents).some(
     (e) => e.action === "win_survivor",
   );
@@ -178,33 +179,42 @@ export const SingleCompetition = () => {
       >
         Back to competitions
       </Button>
-      <Box>
-        <Group gap="xs" mb={4}>
-          <Badge variant="light" size="sm">
-            Season {competition.season_num}
-          </Badge>
-          <Badge variant="light" color="gray" size="sm">
-            {competition.participants.length} players
-          </Badge>
-          {episodeCount > 0 && !isWatchAlong && (
-            <Badge variant="light" color="gray" size="sm">
-              {episodeCount} {episodeCount === 1 ? "episode" : "episodes"}
+      <Box
+        className={classes.competitionHeader}
+        data-has-episode-control={showEpisodeControl || undefined}
+      >
+        <Box className={classes.competitionIdentity}>
+          <Group gap="xs" mb={4}>
+            <Badge variant="light" size="sm">
+              Season {competition.season_num}
             </Badge>
-          )}
-        </Group>
-        <Title order={2}>{competition.competition_name}</Title>
+            <Badge variant="light" color="gray" size="sm">
+              {competition.participants.length} players
+            </Badge>
+            {episodeCount > 0 && !isWatchAlong && (
+              <Badge variant="light" color="gray" size="sm">
+                {episodeCount} {episodeCount === 1 ? "episode" : "episodes"}
+              </Badge>
+            )}
+          </Group>
+          <Title order={2}>{competition.competition_name}</Title>
+        </Box>
+
+        {showEpisodeControl && (
+          <Box className={classes.episodeControl}>
+            <EpisodeAdvanceControl
+              competition={competition}
+              season={season}
+              isCreator={isCreator}
+              hasWinner={hasWinner}
+            />
+          </Box>
+        )}
       </Box>
 
       {awaitingDataEpisode && (
         <AwaitingDataBanner episode={awaitingDataEpisode} />
       )}
-
-      <EpisodeAdvanceControl
-        competition={competition}
-        season={season}
-        isCreator={isCreator}
-        hasWinner={hasWinner}
-      />
 
       <Box ref={tabsRef} className={classes.tabsAnchor}>
         <Tabs value={activeTab} onChange={handleTabChange}>
@@ -219,13 +229,6 @@ export const SingleCompetition = () => {
               className={classes.tab}
             >
               Overview
-            </Tabs.Tab>
-            <Tabs.Tab
-              value="scoring"
-              leftSection={<IconChartLine size={17} />}
-              className={classes.tab}
-            >
-              Scoring
             </Tabs.Tab>
             <Tabs.Tab
               value="trades"
@@ -247,7 +250,7 @@ export const SingleCompetition = () => {
             <Stack gap="xl">
               <Section
                 title="Rosters"
-                subtitle="Drafted castaways by participant"
+                subtitle="Current castaways by participant, after any trades"
                 icon={
                   <IconUsers size={22} color="var(--mantine-color-blue-6)" />
                 }
@@ -264,11 +267,7 @@ export const SingleCompetition = () => {
               >
                 <PerUserPerEpisodeScoringTable />
               </Section>
-            </Stack>
-          </Tabs.Panel>
 
-          <Tabs.Panel value="scoring" pt="lg">
-            <Stack gap="xl">
               {activePropBetKeys.length > 0 && (
                 <Section
                   title="Prop Bets"

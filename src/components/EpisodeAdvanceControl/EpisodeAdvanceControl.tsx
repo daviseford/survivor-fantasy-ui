@@ -20,6 +20,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../../firebase";
 import { Competition, Season } from "../../types";
+import classes from "./EpisodeAdvanceControl.module.css";
 
 type Props = {
   competition: Competition;
@@ -114,27 +115,30 @@ export const EpisodeAdvanceControl = ({
 
     return (
       <Paper p="md" radius="md" withBorder>
-        <Stack gap="sm">
-          <Group gap="xs">
-            <IconPlayerPlay size={18} color="var(--mantine-color-green-6)" />
-            <Title order={4}>Live</Title>
-            <Badge variant="light" color="green" size="sm">
-              All episodes visible
-            </Badge>
-          </Group>
-          <Text size="sm" c="dimmed">
-            All episode results are shown as they happen. Switch to watch-along
-            mode if you need to avoid spoilers.
-          </Text>
+        <div className={classes.modeControl}>
+          <Stack gap={4} className={classes.modeSummary}>
+            <Group gap="xs">
+              <IconPlayerPlay size={18} color="var(--mantine-color-green-6)" />
+              <Title order={4}>Live</Title>
+              <Badge variant="light" color="green" size="sm">
+                All episodes visible
+              </Badge>
+            </Group>
+            <Text size="sm" c="dimmed">
+              All episode results are shown as they happen. Switch to
+              watch-along mode if you need to avoid spoilers.
+            </Text>
+          </Stack>
           <Button
             variant="light"
             size="sm"
             leftSection={<IconEye size={16} />}
             onClick={openEpisodePicker}
+            className={classes.primaryModeAction}
           >
             Switch to Watch-Along
           </Button>
-        </Stack>
+        </div>
       </Paper>
     );
   }
@@ -201,8 +205,8 @@ export const EpisodeAdvanceControl = ({
   // Watch-Along — creator view
   return (
     <Paper p="md" radius="md" withBorder>
-      <Stack gap="sm">
-        <Group justify="space-between" align="center">
+      <div className={classes.modeControl}>
+        <Stack gap={4} className={classes.modeSummary}>
           <Group gap="xs">
             <IconEye size={18} color="var(--mantine-color-blue-6)" />
             <Title order={4}>Watch-Along</Title>
@@ -210,64 +214,65 @@ export const EpisodeAdvanceControl = ({
               Episode {currentEpisode} of {totalEpisodes}
             </Badge>
           </Group>
-        </Group>
-
-        {currentEpisode === 0 ? (
-          <Text size="sm" c="dimmed">
-            No episodes revealed yet. Reveal the first episode when your group
-            is ready.
-          </Text>
-        ) : (
-          <Text size="sm" c="dimmed">
-            Showing: Episode {currentEpisode}
-            {currentEpisodeData ? ` — ${currentEpisodeData.name}` : ""}
-          </Text>
-        )}
-
-        <Group gap="xs" justify="center">
-          <Button
-            variant="light"
-            color="gray"
-            size="sm"
-            leftSection={<IconChevronLeft size={14} />}
-            disabled={!canGoBack}
-            onClick={goBackEpisode}
-          >
-            Back
-          </Button>
-          {canAdvance && (
-            <Button
-              variant="filled"
-              size="sm"
-              rightSection={<IconChevronRight size={14} />}
-              onClick={advanceEpisode}
-            >
-              {currentEpisode === 0
-                ? "Reveal Ep 1"
-                : `Reveal Ep ${currentEpisode + 1}`}
-            </Button>
+          {currentEpisode === 0 ? (
+            <Text size="sm" c="dimmed">
+              No episodes revealed yet. Reveal the first episode when your group
+              is ready.
+            </Text>
+          ) : (
+            <Text size="sm" c="dimmed">
+              Showing: Episode {currentEpisode}
+              {currentEpisodeData ? ` — ${currentEpisodeData.name}` : ""}
+            </Text>
           )}
-        </Group>
-        {canAdvance ? (
-          <Button
-            variant="subtle"
-            size="compact-sm"
-            onClick={switchToLive}
-            style={{ alignSelf: "center" }}
-          >
-            Switch to Live
-          </Button>
-        ) : (
-          <Badge
-            variant="light"
-            color={hasWinner ? "green" : "blue"}
-            size="lg"
-            style={{ alignSelf: "center" }}
-          >
-            {hasWinner ? "Season Complete" : "Up to Date"}
-          </Badge>
-        )}
-      </Stack>
+        </Stack>
+
+        <Stack gap={4} className={classes.modeActions}>
+          <Group gap="xs" wrap="nowrap" className={classes.episodeNavigation}>
+            <Button
+              variant="light"
+              color="gray"
+              size="sm"
+              leftSection={<IconChevronLeft size={14} />}
+              disabled={!canGoBack}
+              onClick={goBackEpisode}
+            >
+              Back
+            </Button>
+            {canAdvance && (
+              <Button
+                variant="filled"
+                size="sm"
+                rightSection={<IconChevronRight size={14} />}
+                onClick={advanceEpisode}
+              >
+                {currentEpisode === 0
+                  ? "Reveal Ep 1"
+                  : `Reveal Ep ${currentEpisode + 1}`}
+              </Button>
+            )}
+          </Group>
+          {canAdvance ? (
+            <Button
+              variant="subtle"
+              size="compact-sm"
+              onClick={switchToLive}
+              className={classes.switchModeAction}
+            >
+              Switch to Live
+            </Button>
+          ) : (
+            <Badge
+              variant="light"
+              color={hasWinner ? "green" : "blue"}
+              size="lg"
+              className={classes.completionBadge}
+            >
+              {hasWinner ? "Season Complete" : "Up to Date"}
+            </Badge>
+          )}
+        </Stack>
+      </div>
     </Paper>
   );
 };

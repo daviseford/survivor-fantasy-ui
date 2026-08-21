@@ -7,7 +7,7 @@
 
 /** Season ID used for dynamic route parameters */
 const SEASON_ID = "season_50";
-export type CompetitionTab = "Overview" | "Scoring" | "Trades" | "Stats";
+export type CompetitionTab = "Overview" | "Trades" | "Stats";
 
 export interface AuditRoute {
   path: string;
@@ -42,11 +42,6 @@ export const ADMIN_ROUTES: AuditRoute[] = [
     competitionTab: "Overview",
   },
   {
-    path: `/competitions/${WATCH_ALONG_COMP}?tab=scoring`,
-    name: "competition-watch-along-scoring",
-    competitionTab: "Scoring",
-  },
-  {
     path: `/competitions/${WATCH_ALONG_COMP}?tab=trades`,
     name: "competition-watch-along-trades",
     competitionTab: "Trades",
@@ -60,11 +55,6 @@ export const ADMIN_ROUTES: AuditRoute[] = [
     path: `/competitions/${COMPLETE_COMP}?tab=overview`,
     name: "competition-complete-overview",
     competitionTab: "Overview",
-  },
-  {
-    path: `/competitions/${COMPLETE_COMP}?tab=scoring`,
-    name: "competition-complete-scoring",
-    competitionTab: "Scoring",
   },
   {
     path: `/competitions/${COMPLETE_COMP}?tab=trades`,
@@ -94,9 +84,6 @@ export const SCROLL_SECTIONS: Record<
     { label: "header", selector: "h2" },
     { label: "rosters", selector: "h3:has-text('Rosters')" },
     { label: "standings", selector: "h3:has-text('Standings')" },
-  ],
-  "competition-watch-along-scoring": [
-    { label: "header", selector: "h2" },
     { label: "prop-bets", selector: "h3:has-text('Prop Bets')" },
     { label: "player-scores", selector: "h3:has-text('Player Scores')" },
     {
@@ -116,9 +103,6 @@ export const SCROLL_SECTIONS: Record<
     { label: "header", selector: "h2" },
     { label: "rosters", selector: "h3:has-text('Rosters')" },
     { label: "standings", selector: "h3:has-text('Standings')" },
-  ],
-  "competition-complete-scoring": [
-    { label: "header", selector: "h2" },
     { label: "prop-bets", selector: "h3:has-text('Prop Bets')" },
     { label: "player-scores", selector: "h3:has-text('Player Scores')" },
     {
