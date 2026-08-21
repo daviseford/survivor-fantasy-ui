@@ -12,11 +12,12 @@ import {
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconAlertCircle, IconLogin, IconUserPlus } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCreateDraft } from "../hooks/useCreateDraft";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
+import { trackEvent } from "../utils/analytics";
 import { Players } from "./Players";
 import classes from "./SingleSeason.module.css";
 
@@ -27,6 +28,12 @@ export const SingleSeason = () => {
   const { slimUser } = useUser();
   const { createDraft } = useCreateDraft();
   const [isCreating, setIsCreating] = useState(false);
+
+  useEffect(() => {
+    if (season) {
+      trackEvent("season_viewed", { season_num: season.order });
+    }
+  }, [season]);
 
   const handleCreateDraft = async () => {
     if (isCreating) return;
