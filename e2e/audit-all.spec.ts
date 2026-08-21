@@ -47,6 +47,18 @@ for (const route of ALL_ROUTES) {
       // Verify the page actually rendered
       await expect(page.locator("body")).not.toBeEmpty();
 
+      // Competition tab routes are deep links. Confirm the requested panel is
+      // active before capturing it so a broken query-param contract cannot
+      // silently produce four copies of the default Overview screen.
+      if (route.competitionTab) {
+        const tab = page.getByRole("tab", {
+          name: route.competitionTab,
+          exact: true,
+        });
+        await expect(tab).toBeVisible();
+        await expect(tab).toHaveAttribute("aria-selected", "true");
+      }
+
       // Full-page screenshot
       await page.screenshot({
         path: `e2e/screenshots/audit-${route.name}-${viewportLabel}-${colorScheme}.png`,

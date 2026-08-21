@@ -8,7 +8,7 @@ import * as fs from "fs";
  * scripts/e2e-trade-setup.ts) against production Firebase:
  *   1. Trader Alice proposes a trade to Trader Bob.
  *   2. Bob sees it in real time and accepts.
- *   3. Rosters swap in the Teams grid for both users.
+ *   3. Rosters swap in the Rosters grid for both users.
  *   4. Standings totals do NOT change — past points stay with the original
  *      owner (the season is complete, so the cutoff episode is beyond all
  *      scored episodes).
@@ -33,6 +33,7 @@ const state: TradesTestState = JSON.parse(
 );
 
 const COMPETITION_NAME = "E2E Trades Test League";
+type CompetitionTab = "Overview" | "Scoring" | "Trades" | "Stats";
 
 async function loginAs(
   page: Page,
@@ -58,9 +59,24 @@ async function openCompetition(page: Page): Promise<void> {
   await expect(
     page.getByRole("heading", { name: COMPETITION_NAME }),
   ).toBeVisible({ timeout: 15_000 });
+  await expect(
+    page.getByRole("tab", { name: "Overview", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
 }
 
-/** The Teams card for a participant. */
+async function selectCompetitionTab(
+  page: Page,
+  name: CompetitionTab,
+): Promise<void> {
+  const tab = page.getByRole("tab", { name, exact: true });
+  await tab.click();
+  await expect(tab).toHaveAttribute("aria-selected", "true");
+  await expect
+    .poll(() => new URL(page.url()).searchParams.get("tab"))
+    .toBe(name.toLowerCase());
+}
+
+/** The Rosters card for a participant. */
 const teamCard = (page: Page, displayName: string) =>
   page
     .locator("div.mantine-Card-root")
@@ -129,23 +145,28 @@ test("two users trade players back and forth", async ({ browser }) => {
   const bobRowBefore = await standingsText(pageA, bob.displayName);
 
   // 1. Alice proposes: her first player for Bob's first player.
+  await selectCompetitionTab(pageA, "Trades");
   await proposeTrade(pageA, bob.displayName, alicePlayer, bobPlayer);
 
   // 2. Bob sees the offer and accepts.
   // Reload so Bob's trades listener attaches with a settled auth token —
   // guards against a subscribe race on freshly minted users.
+  await selectCompetitionTab(pageB, "Trades");
   await pageB.reload();
-  await expect(pageB.getByText("Incoming offers")).toBeVisible({
-    timeout: 15_000,
-  });
   await expect(
-    pageB.getByText(
-      `${alice.displayName} gives ${alicePlayer} to ${bob.displayName} for ${bobPlayer}`,
-    ),
+    pageB.getByRole("tab", { name: "Trades", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
+  await expect(
+    pageB.getByRole("heading", { name: "Incoming offers" }),
+  ).toBeVisible({ timeout: 15_000 });
+  await expect(
+    pageB.getByText(`Offer from ${alice.displayName}`, { exact: true }),
   ).toBeVisible();
-  await pageB.getByRole("button", { name: "Accept" }).click();
+  await pageB.getByRole("button", { name: "Accept offer" }).click();
 
   // 3. Rosters swap for both users (live snapshots, no reload needed).
+  await selectCompetitionTab(pageA, "Overview");
+  await selectCompetitionTab(pageB, "Overview");
   await expect(
     teamCard(pageA, bob.displayName).getByAltText(alicePlayer),
   ).toBeVisible({ timeout: 15_000 });
@@ -159,19 +180,24 @@ test("two users trade players back and forth", async ({ browser }) => {
 
   // History records the accepted trade with its points cutoff. The fixture is
   // a watch-along on episode 2, so the cutoff is the next episode to reveal.
-  await expect(pageA.getByText("Accepted · from Ep 3")).toBeVisible();
+  await selectCompetitionTab(pageA, "Trades");
+  await expect(pageA.getByText("Accepted · from Ep 3").first()).toBeVisible();
 
   // 5. Bob trades the players back; Alice accepts.
+  await selectCompetitionTab(pageB, "Trades");
   await proposeTrade(pageB, alice.displayName, alicePlayer, bobPlayer);
   await pageA.reload();
   await expect(
-    pageA.getByText(
-      `${bob.displayName} gives ${alicePlayer} to ${alice.displayName} for ${bobPlayer}`,
-    ),
+    pageA.getByRole("tab", { name: "Trades", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
+  await expect(
+    pageA.getByText(`Offer from ${bob.displayName}`, { exact: true }),
   ).toBeVisible({ timeout: 15_000 });
-  await pageA.getByRole("button", { name: "Accept" }).click();
+  await pageA.getByRole("button", { name: "Accept offer" }).click();
 
   // Rosters are restored and totals are still untouched.
+  await selectCompetitionTab(pageA, "Overview");
+  await selectCompetitionTab(pageB, "Overview");
   await expect(
     teamCard(pageA, alice.displayName).getByAltText(alicePlayer),
   ).toBeVisible({ timeout: 15_000 });
