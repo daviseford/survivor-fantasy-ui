@@ -1,0 +1,23 @@
+{
+  // These tests run on Node against the Firestore emulator, not in the
+  // browser, so they need Node's globals and lib rather than the app's DOM
+  // baseline. Typechecked by `yarn tsc:rules`.
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2023"],
+    "types": ["node"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules"]
+}

@@ -43,8 +43,23 @@ jobs:
       - name: Typecheck (scripts)
         run: yarn tsc:scripts
 
+      - name: Typecheck (rules tests)
+        run: yarn tsc:rules
+
       - name: Test
         run: yarn test --run
+
+      # firestore.rules is the only server-side control on trades, and the
+      # trades e2e only drives the valid UI path -- a rule that became too
+      # permissive would still pass it. The Firestore emulator needs a JVM.
+      - name: Set up Java (Firestore emulator)
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Test security rules
+        run: yarn test:rules
 
       # A renamed or deleted repository variable would otherwise build
       # cleanly and ship `apiKey:void 0`. Skipped for fork PRs, which

@@ -5,7 +5,15 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [react()],
   test: {
-    exclude: ["e2e/**", "node_modules/**", ".claude/**", ".def/**"],
+    // rules-tests/** needs the Firestore emulator; it runs via
+    // `yarn test:rules` with vitest.rules.config.ts, not in the default suite.
+    exclude: [
+      "e2e/**",
+      "rules-tests/**",
+      "node_modules/**",
+      ".claude/**",
+      ".def/**",
+    ],
     // Importing anything that transitively reaches src/firebase.ts initializes
     // the Firebase app at module load, and getAuth() throws
     // auth/invalid-api-key on an empty key. Pin inert placeholders so unit

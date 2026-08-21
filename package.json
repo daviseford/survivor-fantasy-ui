@@ -14,8 +14,9 @@
     "format": "yarn prettier . --write",
     "format:check": "yarn prettier . --check",
     "prepush": "yarn format && yarn lint --fix && yarn tsc",
-    "ci": "yarn format:check && yarn lint && yarn tsc && yarn tsc:scripts && yarn test --run && yarn build",
+    "ci": "yarn format:check && yarn lint && yarn tsc && yarn tsc:scripts && yarn tsc:rules && yarn test --run && yarn build",
     "test": "vitest",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-survivor-fantasy-rules \"vitest run --config vitest.rules.config.ts\"",
     "coverage": "vitest run --coverage",
     "deploy:local": "yarn prepush && yarn build && firebase deploy",
     "up": "yarn upgrade-interactive --latest",
@@ -30,6 +31,7 @@
     "push-all-seasons": "tsx scripts/push-all-seasons.ts",
     "optimize-images": "tsx scripts/optimize-images.ts",
     "tsc:scripts": "tsc -p scripts/tsconfig.json --noEmit",
+    "tsc:rules": "tsc -p rules-tests/tsconfig.json --noEmit",
     "set-admin": "tsx scripts/set-admin-claim.ts"
   },
   "dependencies": {
@@ -49,6 +51,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@firebase/rules-unit-testing": "^5.0.2",
     "@mantine/mcp-server": "^9.0.0",
     "@playwright/test": "^1.58.2",
     "@types/d3-shape": "^3.1.8",
