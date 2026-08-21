@@ -58,17 +58,33 @@ const getPlayers = (
       },
   );
 
-const StatusBadge = ({ trade }: { trade: Trade }) => {
-  if (trade.status === "accepted")
+const StatusBadge = ({
+  trade,
+  currentEpisode,
+}: {
+  trade: Trade;
+  /** null means the competition is not episode-limited, so nothing is hidden. */
+  currentEpisode: number | null;
+}) => {
+  if (trade.status === "accepted") {
+    // `effective_episode` is stamped from the season's latest *data* episode,
+    // which for a watch-along competition runs ahead of what this group has
+    // seen. Printing it would reveal how far the season has progressed, so
+    // only show it once the competition has reached it.
+    const cutoff = trade.effective_episode;
+    const showCutoff =
+      typeof cutoff === "number" &&
+      (currentEpisode === null || cutoff <= currentEpisode);
     return (
       <Badge
         color="green"
         variant="light"
         leftSection={<IconCheck size={12} />}
       >
-        Accepted · from Ep {trade.effective_episode}
+        {showCutoff ? `Accepted · from Ep ${cutoff}` : "Accepted"}
       </Badge>
     );
+  }
   if (trade.status === "rejected")
     return (
       <Badge color="red" variant="light" leftSection={<IconX size={12} />}>
@@ -179,9 +195,22 @@ export const TradesSection = () => {
   const { data: trades } = useTrades(competition?.id);
   const { survivorsByUserUid, eliminatedSurvivors } = useCompetitionMeta();
 
-  const { data: challenges } = useChallenges(competition?.season_id);
-  const { data: eliminations } = useEliminations(competition?.season_id);
-  const { data: events } = useEvents(competition?.season_id);
+  const { data: challenges, isReady: areChallengesReady } = useChallenges(
+    competition?.season_id,
+  );
+  const { data: eliminations, isReady: areEliminationsReady } = useEliminations(
+    competition?.season_id,
+  );
+  const { data: events, isReady: areEventsReady } = useEvents(
+    competition?.season_id,
+  );
+
+  // acceptTrade derives the points cutoff from these three records. Accepting
+  // before they arrive would compute a cutoff of episode 1 and hand over every
+  // point already scored -- and the cutoff can never be corrected afterwards,
+  // because firestore.rules only allows updates while status is "pending".
+  const isScoringDataReady =
+    areChallengesReady && areEliminationsReady && areEventsReady;
 
   const [modalOpen, setModalOpen] = useState(false);
   const [resolvingTradeId, setResolvingTradeId] = useState<string | null>(null);
@@ -324,11 +353,12 @@ export const TradesSection = () => {
                     <Button
                       color="green"
                       leftSection={<IconCheck size={16} />}
-                      disabled={tradingClosed}
+                      disabled={tradingClosed || !isScoringDataReady}
                       loading={isResolving}
                       onClick={() =>
                         resolveTrade(trade.id, () =>
                           acceptTrade({
+                            isScoringDataReady,
                             trade,
                             competition,
                             season,
@@ -368,7 +398,12 @@ export const TradesSection = () => {
                 key={trade.id}
                 trade={trade}
                 {...view}
-                status={<StatusBadge trade={trade} />}
+                status={
+                  <StatusBadge
+                    trade={trade}
+                    currentEpisode={competition.current_episode}
+                  />
+                }
                 actions={
                   <Button
                     variant="subtle"
@@ -398,7 +433,12 @@ export const TradesSection = () => {
               key={trade.id}
               trade={trade}
               {...perspective(trade)}
-              status={<StatusBadge trade={trade} />}
+              status={
+                <StatusBadge
+                  trade={trade}
+                  currentEpisode={competition.current_episode}
+                />
+              }
             />
           ))}
         </Stack>

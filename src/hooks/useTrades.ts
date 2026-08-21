@@ -4,6 +4,17 @@ import { db } from "../firebase";
 import { Competition, Trade } from "../types";
 
 /**
+ * Trade documents are written by clients, so a malformed one can reach this
+ * subscription. Skip anything we cannot sort or render rather than throwing
+ * inside the snapshot callback and taking the whole trades UI down for every
+ * participant — `allow delete: if false` means only an admin could clean it up.
+ */
+const isRenderableTrade = (trade: Trade): boolean =>
+  typeof trade?.created_at === "string" &&
+  Array.isArray(trade.offered_castaway_ids) &&
+  Array.isArray(trade.requested_castaway_ids);
+
+/**
  * Live subscription to a competition's trades subcollection,
  * newest first.
  */
@@ -20,6 +31,7 @@ export const useTrades = (competitionId?: Competition["id"]) => {
       (snap) => {
         const trades = snap.docs
           .map((d) => d.data() as Trade)
+          .filter(isRenderableTrade)
           .sort((a, b) => b.created_at.localeCompare(a.created_at));
         setData(trades);
         setLoaded(true);

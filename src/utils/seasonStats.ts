@@ -10,13 +10,14 @@ import {
   CastawayId,
   Challenge,
   Competition,
-  DraftPick,
   Elimination,
   GameEvent,
   PlayerAction,
+  Trade,
   VoteHistory,
 } from "../types";
 import { EnhancedScores } from "./scoringUtils";
+import { getOwnerAtEpisode, getOwnershipWindows } from "./tradeUtils";
 
 const IDOL_ADVANTAGE_ACTIONS = new Set<PlayerAction>(
   BASE_PLAYER_SCORING.filter(
@@ -55,6 +56,8 @@ export interface StatCard {
 
 export interface SeasonStatsInput {
   competition: Competition;
+  /** Accepted trades move roster ownership from their effective_episode on. */
+  trades: Trade[];
   filteredChallenges: Record<string, Challenge>;
   filteredEliminations: Record<string, Elimination>;
   filteredEvents: Record<string, GameEvent>;
@@ -75,14 +78,22 @@ function getDraftedCastawayIds(competition: Competition): Set<CastawayId> {
   return new Set(competition.draft_picks.map((p) => p.castaway_id));
 }
 
-function getDraftOwnership(
-  picks: DraftPick[],
-): Map<CastawayId, { uid: string; name: string }> {
-  const map = new Map<CastawayId, { uid: string; name: string }>();
-  for (const p of picks) {
-    map.set(p.castaway_id, { uid: p.user_uid, name: p.user_name });
-  }
-  return map;
+/**
+ * Resolve who owned a castaway during a given episode.
+ *
+ * Roster stats must match the Standings table, which credits an episode's
+ * points to whoever held the castaway *that* episode (see
+ * useScoringCalculations). Attributing everything to the original drafter
+ * would make the two halves of the competition page disagree after a trade.
+ */
+function getOwnerResolver(
+  input: SeasonStatsInput,
+): (id: CastawayId, episode: number) => string | undefined {
+  const windows = getOwnershipWindows(
+    input.competition.draft_picks,
+    input.trades,
+  );
+  return (id, episode) => getOwnerAtEpisode(windows, id, episode);
 }
 
 function getParticipantName(competition: Competition, uid: string): string {
@@ -573,7 +584,7 @@ function computeRosterStats(
   input: SeasonStatsInput,
   draftedIds: Set<CastawayId>,
 ): RosterStat[] {
-  const ownership = getDraftOwnership(input.competition.draft_picks);
+  const ownerAt = getOwnerResolver(input);
   const uids = input.competition.participant_uids;
   const getName = (uid: string) => getParticipantName(input.competition, uid);
   const stats: RosterStat[] = [];
@@ -585,9 +596,8 @@ function computeRosterStats(
     const pts = CHALLENGE_POINTS[ch.variant] ?? 0;
     for (const id of ch.winning_castaways) {
       if (!draftedIds.has(id)) continue;
-      const owner = ownership.get(id);
-      if (owner)
-        challengePts.set(owner.uid, (challengePts.get(owner.uid) ?? 0) + pts);
+      const owner = ownerAt(id, ch.episode_num);
+      if (owner) challengePts.set(owner, (challengePts.get(owner) ?? 0) + pts);
     }
   }
   stats.push({
@@ -641,15 +651,22 @@ function computeRosterStats(
   for (const id of draftedIds) {
     const episodes = input.survivorPointsByEpisode[id];
     if (!episodes) continue;
-    const total = episodes.reduce((s, e) => s + e.total, 0);
-    const owner = ownership.get(id);
-    if (!owner) continue;
-    const cur = bestPick.get(owner.uid);
-    if (!cur || total > cur.value) {
-      bestPick.set(owner.uid, {
-        value: total,
-        castaway: input.resolveName(id),
-      });
+    // A traded castaway counts toward each owner only for the episodes that
+    // owner actually held them.
+    const totalByOwner = new Map<string, number>();
+    for (const ep of episodes) {
+      const owner = ownerAt(id, ep.episode_num);
+      if (!owner) continue;
+      totalByOwner.set(owner, (totalByOwner.get(owner) ?? 0) + ep.total);
+    }
+    for (const [owner, total] of totalByOwner) {
+      const cur = bestPick.get(owner);
+      if (!cur || total > cur.value) {
+        bestPick.set(owner, {
+          value: total,
+          castaway: input.resolveName(id),
+        });
+      }
     }
   }
   stats.push({
@@ -675,17 +692,14 @@ function computeRosterStats(
   for (const id of draftedIds) {
     const episodes = input.survivorPointsByEpisode[id];
     if (!episodes) continue;
-    const owner = ownership.get(id);
-    if (!owner) continue;
-    const pts = episodes.reduce(
-      (sum, ep) =>
-        sum +
-        ep.actions
-          .filter((a) => IDOL_ADVANTAGE_ACTIONS.has(a.action))
-          .reduce((s, a) => s + a.points_awarded, 0),
-      0,
-    );
-    advPts.set(owner.uid, (advPts.get(owner.uid) ?? 0) + pts);
+    for (const ep of episodes) {
+      const owner = ownerAt(id, ep.episode_num);
+      if (!owner) continue;
+      const pts = ep.actions
+        .filter((a) => IDOL_ADVANTAGE_ACTIONS.has(a.action))
+        .reduce((s, a) => s + a.points_awarded, 0);
+      if (pts !== 0) advPts.set(owner, (advPts.get(owner) ?? 0) + pts);
+    }
   }
   stats.push({
     key: "idol_advantage_pts",
@@ -707,9 +721,8 @@ function computeRosterStats(
     for (const uid of uids) voteCounts.set(uid, 0);
     for (const v of votes) {
       if (!draftedIds.has(v.target_castaway_id)) continue;
-      const owner = ownership.get(v.target_castaway_id);
-      if (owner)
-        voteCounts.set(owner.uid, (voteCounts.get(owner.uid) ?? 0) + 1);
+      const owner = ownerAt(v.target_castaway_id, v.episode_num);
+      if (owner) voteCounts.set(owner, (voteCounts.get(owner) ?? 0) + 1);
     }
     stats.push({
       key: "votes_against",

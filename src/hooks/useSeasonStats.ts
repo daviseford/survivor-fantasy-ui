@@ -5,12 +5,14 @@ import { computeSeasonStats, SeasonStatsResult } from "../utils/seasonStats";
 import { useCompetition } from "./useCompetition";
 import { useScoringCalculations } from "./useScoringCalculations";
 import { useSeason } from "./useSeason";
+import { useTrades } from "./useTrades";
 import { useVoteHistory } from "./useVoteHistory";
 
 export const useSeasonStats = (): SeasonStatsResult | null => {
   const { data: competition } = useCompetition();
   const { data: season } = useSeason(competition?.season_id);
   const { data: voteHistoryAll } = useVoteHistory(competition?.season_id);
+  const { data: trades } = useTrades(competition?.id);
 
   const {
     filteredChallenges,
@@ -38,6 +40,7 @@ export const useSeasonStats = (): SeasonStatsResult | null => {
 
     return computeSeasonStats({
       competition,
+      trades,
       filteredChallenges,
       filteredEliminations,
       filteredEvents,
@@ -48,6 +51,7 @@ export const useSeasonStats = (): SeasonStatsResult | null => {
     });
   }, [
     competition,
+    trades,
     filteredChallenges,
     filteredEliminations,
     filteredEvents,

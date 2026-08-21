@@ -6,6 +6,7 @@ import {
   Season,
   Trade,
 } from "../types";
+import { getBroadcastDate } from "./episodeAirDate";
 
 /**
  * Trade ownership logic.
@@ -112,23 +113,21 @@ export function getOwnedCastawaysAtEpisode(
   );
 }
 
-const toLocalISODate = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-};
-
 /**
  * Trades are allowed up to the day an episode airs. Returns the episode
  * airing today (the lock), or null when trading is open. Seasons without
  * air dates never lock.
+ *
+ * "Today" is the broadcast day, not the viewer's local day: `air_date` comes
+ * from survivoR in broadcast terms, so comparing it against a local date would
+ * open and close the lock at different instants for participants in different
+ * timezones — in the same league, trading against each other.
  */
 export function getTradeLockEpisode(
   season: Season,
   today: Date = new Date(),
 ): Episode | null {
-  const todayISO = toLocalISODate(today);
+  const todayISO = getBroadcastDate(today);
   return (
     [...(season.episodes ?? [])]
       .sort((a, b) => a.order - b.order)

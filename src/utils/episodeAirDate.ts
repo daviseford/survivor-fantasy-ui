@@ -36,6 +36,16 @@ const toBroadcastDateTime = (date: Date): { date: string; hour: number } => {
   };
 };
 
+/**
+ * Today's date (YYYY-MM-DD) in the broadcast timezone.
+ *
+ * Anything that compares against `Episode.air_date` must use this rather than
+ * the viewer's local date, or two users in different timezones disagree about
+ * what "today" is at the same instant.
+ */
+export const getBroadcastDate = (now: Date = new Date()): string =>
+  toBroadcastDateTime(now).date;
+
 const hasAired = (airDate: string, now: Date): boolean => {
   const broadcastNow = toBroadcastDateTime(now);
   return (

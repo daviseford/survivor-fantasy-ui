@@ -72,6 +72,8 @@ export type AcceptTradeInput = {
   challenges: Record<string, Challenge>;
   eliminations: Record<string, Elimination>;
   events: Record<string, GameEvent>;
+  /** Whether challenges/eliminations/events have finished loading. */
+  isScoringDataReady: boolean;
 };
 
 /**
@@ -83,6 +85,14 @@ export const acceptTrade = async (
   input: AcceptTradeInput,
 ): Promise<boolean> => {
   const { trade } = input;
+
+  // The cutoff is derived from the scoring records and is permanent once
+  // written, so never compute it from a half-loaded snapshot: empty records
+  // yield episode 1, which transfers every point already scored.
+  if (!input.isScoringDataReady) {
+    showError("Still loading this season's scores. Try again in a moment.");
+    return false;
+  }
 
   const validation = validateTrade({
     competition: input.competition,
@@ -122,18 +132,44 @@ export const acceptTrade = async (
   }
 };
 
-export const rejectTrade = async (trade: Trade): Promise<void> => {
-  await updateDoc(tradeRef(trade.competition_id, trade.id), {
-    status: "rejected",
-    resolved_at: new Date().toISOString(),
-  });
-  notifications.show({ message: "Trade rejected." });
+/**
+ * Reject and cancel race each other by design: firestore.rules only allows an
+ * update while `status == "pending"`, so whichever participant acts second has
+ * their write denied. That is a normal outcome here, not an exceptional one, so
+ * both paths report it the same way proposeTrade/acceptTrade do.
+ */
+const resolvePendingTrade = async (
+  trade: Trade,
+  status: Extract<Trade["status"], "rejected" | "canceled">,
+  successMessage: string,
+  failureMessage: string,
+): Promise<boolean> => {
+  try {
+    await updateDoc(tradeRef(trade.competition_id, trade.id), {
+      status,
+      resolved_at: new Date().toISOString(),
+    });
+    notifications.show({ message: successMessage });
+    return true;
+  } catch (err) {
+    console.error(`${status} trade failed`, err);
+    showError(failureMessage);
+    return false;
+  }
 };
 
-export const cancelTrade = async (trade: Trade): Promise<void> => {
-  await updateDoc(tradeRef(trade.competition_id, trade.id), {
-    status: "canceled",
-    resolved_at: new Date().toISOString(),
-  });
-  notifications.show({ message: "Trade canceled." });
-};
+export const rejectTrade = async (trade: Trade): Promise<boolean> =>
+  resolvePendingTrade(
+    trade,
+    "rejected",
+    "Trade rejected.",
+    "Could not reject the trade. It may have already been resolved.",
+  );
+
+export const cancelTrade = async (trade: Trade): Promise<boolean> =>
+  resolvePendingTrade(
+    trade,
+    "canceled",
+    "Trade canceled.",
+    "Could not cancel the trade. It may have already been resolved.",
+  );

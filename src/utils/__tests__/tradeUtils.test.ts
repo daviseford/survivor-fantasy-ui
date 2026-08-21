@@ -260,6 +260,22 @@ describe("getTradeLockEpisode", () => {
       getTradeLockEpisode(makeSeason([makeEpisode(1)]), WEDNESDAY),
     ).toBeNull();
   });
+
+  // The lock must key off the broadcast day, not the viewer's local day --
+  // otherwise two participants in the same league disagree about whether
+  // trading is open at the very same instant.
+  it("uses the broadcast day, not the runner's local day", () => {
+    // 2026-03-13T04:00Z is still 2026-03-12 (9pm) in America/Los_Angeles,
+    // but already 2026-03-13 anywhere at or east of UTC.
+    const lateNightPacific = new Date("2026-03-13T04:00:00Z");
+    expect(getTradeLockEpisode(season, lateNightPacific)?.order).toBe(3);
+  });
+
+  it("reopens once the broadcast day is over", () => {
+    // 2026-03-13T08:00Z is 2026-03-13 (1am) in America/Los_Angeles.
+    const afterPacificMidnight = new Date("2026-03-13T08:00:00Z");
+    expect(getTradeLockEpisode(season, afterPacificMidnight)).toBeNull();
+  });
 });
 
 describe("validateTrade", () => {
