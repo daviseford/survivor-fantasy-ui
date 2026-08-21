@@ -12,6 +12,7 @@ import {
   Title,
 } from "@mantine/core";
 import {
+  IconAlertCircle,
   IconArrowRight,
   IconArrowsExchange,
   IconCheck,
@@ -22,7 +23,7 @@ import {
   IconPlus,
   IconX,
 } from "@tabler/icons-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useChallenges } from "../../hooks/useChallenges";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useCompetitionMeta } from "../../hooks/useCompetitionMeta";
@@ -36,7 +37,8 @@ import {
 } from "../../hooks/useTradeActions";
 import { useTrades } from "../../hooks/useTrades";
 import { useUser } from "../../hooks/useUser";
-import { CastawayId, Player, SlimUser, Trade } from "../../types";
+import { CastawayId, Player, Trade } from "../../types";
+import { getParticipantName } from "../../utils/misc";
 import { getTradeLockEpisode } from "../../utils/tradeUtils";
 import { ProposeTradeModal } from "./ProposeTradeModal";
 import styles from "./TradesSection.module.css";
@@ -45,11 +47,6 @@ const HISTORY_BATCH_SIZE = 5;
 
 const resolvedAt = (trade: Trade): string =>
   typeof trade.resolved_at === "string" ? trade.resolved_at : trade.created_at;
-
-const participantName = (participants: SlimUser[], uid: string): string =>
-  participants.find((p) => p.uid === uid)?.displayName ??
-  participants.find((p) => p.uid === uid)?.email ??
-  "Unknown participant";
 
 type TradePlayer = Pick<Player, "castaway_id" | "full_name" | "img">;
 
@@ -200,7 +197,11 @@ export const TradesSection = () => {
   const { slimUser } = useUser();
   const { data: competition } = useCompetition();
   const { data: season } = useSeason(competition?.season_id);
-  const { data: trades, loaded: tradesLoaded } = useTrades(competition?.id);
+  const {
+    data: trades,
+    loaded: tradesLoaded,
+    error: tradesError,
+  } = useTrades(competition?.id);
   const { survivorsByUserUid, eliminatedSurvivors } = useCompetitionMeta();
 
   const { data: challenges, isReady: areChallengesReady } = useChallenges(
@@ -227,27 +228,35 @@ export const TradesSection = () => {
     count: HISTORY_BATCH_SIZE,
   });
 
-  if (!competition || !season) return null;
-
   const visibleHistoryCount =
-    historyVisibility.competitionId === competition.id
+    historyVisibility.competitionId === competition?.id
       ? historyVisibility.count
       : HISTORY_BATCH_SIZE;
-
   const myUid = slimUser?.uid;
+
+  const { incoming, outgoing, history } = useMemo(() => {
+    const pending = trades.filter((trade) => trade.status === "pending");
+
+    return {
+      incoming: pending.filter((trade) => trade.offered_to_uid === myUid),
+      outgoing: pending.filter((trade) => trade.offered_by_uid === myUid),
+      history: trades
+        .filter((trade) => trade.status !== "pending")
+        .sort((a, b) => resolvedAt(b).localeCompare(resolvedAt(a))),
+    };
+  }, [myUid, trades]);
+  const visibleHistory = useMemo(
+    () => history.slice(0, visibleHistoryCount),
+    [history, visibleHistoryCount],
+  );
+  const remainingHistoryCount = history.length - visibleHistory.length;
+
+  if (!competition || !season) return null;
+
   const isParticipant = !!myUid && competition.participant_uids.includes(myUid);
 
   const lockEpisode = getTradeLockEpisode(season, competition.current_episode);
   const tradingClosed = competition.finished || !!lockEpisode;
-
-  const pending = trades.filter((trade) => trade.status === "pending");
-  const incoming = pending.filter((trade) => trade.offered_to_uid === myUid);
-  const outgoing = pending.filter((trade) => trade.offered_by_uid === myUid);
-  const history = trades
-    .filter((trade) => trade.status !== "pending")
-    .sort((a, b) => resolvedAt(b).localeCompare(resolvedAt(a)));
-  const visibleHistory = history.slice(0, visibleHistoryCount);
-  const remainingHistoryCount = history.length - visibleHistory.length;
 
   const resolveTrade = async (
     tradeId: string,
@@ -270,11 +279,11 @@ export const TradesSection = () => {
       season.players,
       trade.requested_castaway_ids,
     );
-    const offeredBy = participantName(
+    const offeredBy = getParticipantName(
       competition.participants,
       trade.offered_by_uid,
     );
-    const offeredTo = participantName(
+    const offeredTo = getParticipantName(
       competition.participants,
       trade.offered_to_uid,
     );
@@ -324,12 +333,25 @@ export const TradesSection = () => {
         </Alert>
       )}
 
+      {tradesError && (
+        <Alert
+          variant="light"
+          color="red"
+          icon={<IconAlertCircle size={18} />}
+          title="Trade activity is unavailable"
+          role="alert"
+        >
+          Refresh the page to reconnect before proposing or responding to a
+          trade.
+        </Alert>
+      )}
+
       {isParticipant && !competition.finished && (
         <Group justify="flex-end">
           <Button
             leftSection={<IconPlus size={17} />}
             onClick={() => setModalOpen(true)}
-            disabled={tradingClosed}
+            disabled={tradingClosed || !tradesLoaded || !!tradesError}
           >
             Propose trade
           </Button>
@@ -447,7 +469,7 @@ export const TradesSection = () => {
         </Stack>
       )}
 
-      {!tradesLoaded && (
+      {!tradesLoaded && !tradesError && (
         <Center py="xl" role="status" aria-live="polite">
           <Stack align="center" gap="xs">
             <Loader size="sm" />
@@ -523,7 +545,7 @@ export const TradesSection = () => {
         </Box>
       )}
 
-      {myUid && (
+      {myUid && !tradesError && (
         <ProposeTradeModal
           opened={modalOpen}
           onClose={() => setModalOpen(false)}

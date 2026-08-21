@@ -1,5 +1,6 @@
 import { expect, Page, test } from "@playwright/test";
 import * as fs from "fs";
+import type { CompetitionTab } from "./helpers";
 
 /**
  * Live two-user trades e2e.
@@ -33,7 +34,6 @@ const state: TradesTestState = JSON.parse(
 );
 
 const COMPETITION_NAME = "E2E Trades Test League";
-type CompetitionTab = "Overview" | "Scoring" | "Trades" | "Stats";
 
 async function loginAs(
   page: Page,
@@ -69,6 +69,16 @@ async function selectCompetitionTab(
   name: CompetitionTab,
 ): Promise<void> {
   const tab = page.getByRole("tab", { name, exact: true });
+  const tabParam = new URL(page.url()).searchParams.get("tab");
+
+  if (
+    name === "Overview" &&
+    tabParam === null &&
+    (await tab.getAttribute("aria-selected")) === "true"
+  ) {
+    return;
+  }
+
   await tab.click();
   await expect(tab).toHaveAttribute("aria-selected", "true");
   await expect
@@ -159,10 +169,17 @@ test("two users trade players back and forth", async ({ browser }) => {
   await expect(
     pageB.getByRole("heading", { name: "Incoming offers" }),
   ).toBeVisible({ timeout: 15_000 });
+  const aliceOffer = pageB.locator("[data-trade-id]").filter({
+    has: pageB.getByText(`Offer from ${alice.displayName}`, { exact: true }),
+  });
   await expect(
-    pageB.getByText(`Offer from ${alice.displayName}`, { exact: true }),
+    aliceOffer.getByText(`Offer from ${alice.displayName}`, { exact: true }),
   ).toBeVisible();
-  await pageB.getByRole("button", { name: "Accept offer" }).click();
+  await expect(
+    aliceOffer.getByText(alicePlayer, { exact: true }),
+  ).toBeVisible();
+  await expect(aliceOffer.getByText(bobPlayer, { exact: true })).toBeVisible();
+  await aliceOffer.getByRole("button", { name: "Accept offer" }).click();
 
   // 3. Rosters swap for both users (live snapshots, no reload needed).
   await selectCompetitionTab(pageA, "Overview");
@@ -190,10 +207,15 @@ test("two users trade players back and forth", async ({ browser }) => {
   await expect(
     pageA.getByRole("tab", { name: "Trades", exact: true }),
   ).toHaveAttribute("aria-selected", "true");
+  const bobOffer = pageA.locator("[data-trade-id]").filter({
+    has: pageA.getByText(`Offer from ${bob.displayName}`, { exact: true }),
+  });
   await expect(
-    pageA.getByText(`Offer from ${bob.displayName}`, { exact: true }),
+    bobOffer.getByText(`Offer from ${bob.displayName}`, { exact: true }),
   ).toBeVisible({ timeout: 15_000 });
-  await pageA.getByRole("button", { name: "Accept offer" }).click();
+  await expect(bobOffer.getByText(alicePlayer, { exact: true })).toBeVisible();
+  await expect(bobOffer.getByText(bobPlayer, { exact: true })).toBeVisible();
+  await bobOffer.getByRole("button", { name: "Accept offer" }).click();
 
   // Rosters are restored and totals are still untouched.
   await selectCompetitionTab(pageA, "Overview");

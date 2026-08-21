@@ -7,6 +7,7 @@ type TradesState = {
   competitionId?: Competition["id"];
   data: Trade[];
   loaded: boolean;
+  error: Error | null;
 };
 
 /**
@@ -29,10 +30,18 @@ export const useTrades = (competitionId?: Competition["id"]) => {
     competitionId,
     data: [],
     loaded: false,
+    error: null,
   });
 
   useEffect(() => {
-    setState({ competitionId, data: [], loaded: false });
+    setState((current) =>
+      current.competitionId === competitionId &&
+      current.data.length === 0 &&
+      !current.loaded &&
+      !current.error
+        ? current
+        : { competitionId, data: [], loaded: false, error: null },
+    );
 
     if (!competitionId) return;
 
@@ -46,7 +55,7 @@ export const useTrades = (competitionId?: Competition["id"]) => {
           .sort((a, b) => b.created_at.localeCompare(a.created_at));
         setState((current) =>
           current.competitionId === competitionId
-            ? { competitionId, data: trades, loaded: true }
+            ? { competitionId, data: trades, loaded: true, error: null }
             : current,
         );
       },
@@ -54,7 +63,7 @@ export const useTrades = (competitionId?: Competition["id"]) => {
         console.error("useTrades: onSnapshot error", error);
         setState((current) =>
           current.competitionId === competitionId
-            ? { ...current, loaded: true }
+            ? { competitionId, data: [], loaded: false, error }
             : current,
         );
       },
@@ -64,8 +73,8 @@ export const useTrades = (competitionId?: Competition["id"]) => {
   }, [competitionId]);
 
   if (state.competitionId !== competitionId) {
-    return { data: [], loaded: false };
+    return { data: [], loaded: false, error: null };
   }
 
-  return { data: state.data, loaded: state.loaded };
+  return { data: state.data, loaded: state.loaded, error: state.error };
 };
