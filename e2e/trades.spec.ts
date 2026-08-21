@@ -128,7 +128,7 @@ async function proposeTrade(
   await modal.getByRole("checkbox", { name: givePlayer }).click();
   await modal.getByRole("checkbox", { name: receivePlayer }).click();
 
-  await modal.getByRole("button", { name: "Propose trade" }).click();
+  await modal.getByRole("button", { name: "Send offer" }).click();
   await expect(modal).not.toBeVisible({ timeout: 10_000 });
 }
 
@@ -245,10 +245,13 @@ test("two users trade players back and forth", async ({ browser }) => {
   await expect(
     pageA.getByRole("tab", { name: "Trades, 1 pending offer" }),
   ).toBeVisible({ timeout: 15_000 });
+  // Page A was left on Overview by the reveal step; move to Trades so the
+  // reload (which guards against a subscribe race on fresh users) lands there.
+  await selectCompetitionTab(pageA, "Trades");
   await pageA.reload();
   await expect(
     pageA.getByRole("tab", { name: "Trades, 1 pending offer", exact: true }),
-  ).toHaveAttribute("aria-selected", "true");
+  ).toHaveAttribute("aria-selected", "true", { timeout: 15_000 });
   const bobOffer = pageA.locator("[data-trade-id]").filter({
     has: pageA.getByText(`Offer from ${bob.displayName}`, { exact: true }),
   });
