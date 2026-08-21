@@ -25,24 +25,27 @@ import { isNotEmpty, useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import {
+  IconAlertCircle,
   IconCheck,
   IconClipboardList,
   IconCopy,
   IconCrystalBall,
   IconDice5,
   IconFlame,
+  IconLogin,
   IconTargetArrow,
   IconTrophy,
   IconUserPlus,
   IconUsers,
   IconX,
 } from "@tabler/icons-react";
-import { ref, set, update } from "firebase/database";
+import { ref, runTransaction, set, update } from "firebase/database";
 import { doc, setDoc } from "firebase/firestore";
 import { shuffle } from "lodash-es";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { v4 } from "uuid";
+import { saveAuthIntent, type AuthIntent } from "../components/Auth/authIntent";
 import { DraftOrderReveal } from "../components/DraftOrderReveal";
 import { DraftTable } from "../components/DraftTable";
 import { MyDraftedPlayers } from "../components/MyPlayers/MyDraftedPlayers";
@@ -54,6 +57,10 @@ import {
   PropBetsQuestions,
 } from "../data/propbets";
 import { db, rt_db } from "../firebase";
+import {
+  decideJoinContinuation,
+  useAuthContinuation,
+} from "../hooks/useAuthContinuation";
 import { useCompetition } from "../hooks/useCompetition";
 import { useDraft } from "../hooks/useDraft";
 import { useSeason } from "../hooks/useSeason";
@@ -65,6 +72,7 @@ import {
   PropBetsEntry,
   PropBetsFormData,
   Season,
+  SlimUser,
 } from "../types";
 import { trackEvent } from "../utils/analytics";
 import { buildPickOrderUidMap, buildTurnsMap } from "../utils/draftRealtime";
@@ -75,7 +83,7 @@ export const DraftComponent = () => {
   const { slimUser } = useUser();
   const { data: season } = useSeason();
 
-  const { draft } = useDraft();
+  const { draft, loaded: draftLoaded } = useDraft();
   const { data: competition } = useCompetition(draft?.competiton_id);
 
   const sawNotStartedRef = useRef(false);
@@ -191,24 +199,135 @@ export const DraftComponent = () => {
 
   const { draftId } = useParams();
 
+  const [pendingStateKey, setPendingStateKey] = useState<string | null>(null);
+
+  // Create-if-absent membership write (KTD1): the transaction aborts when a
+  // participant record already exists, so double clicks, Strict Mode replays,
+  // and cross-tab races converge on one record and one analytics event.
+  const joinDraftWithTransaction = useCallback(
+    async (
+      user: SlimUser,
+      id: Draft["id"],
+    ): Promise<"joined" | "already-joined" | "failed"> => {
+      try {
+        const result = await runTransaction(
+          ref(rt_db, `drafts/${id}/participants/${user.uid}`),
+          (current: SlimUser | null) => (current ? undefined : user),
+        );
+        if (!result.committed) return "already-joined";
+        trackEvent("draft_joined", { season_num: season?.order });
+        return "joined";
+      } catch {
+        return "failed";
+      }
+    },
+    [season?.order],
+  );
+
   const joinDraft = async () => {
     const id = draft?.id ?? draftId;
     if (!id || !slimUser) return;
-    try {
-      await set(
-        ref(rt_db, `drafts/${id}/participants/${slimUser.uid}`),
-        slimUser,
-      );
-      trackEvent("draft_joined", { season_num: season?.order });
-    } catch (err) {
+    const outcome = await joinDraftWithTransaction(slimUser, id as Draft["id"]);
+    if (outcome === "failed") {
       notifications.show({
         title: "Failed to join draft",
-        message: err instanceof Error ? err.message : "Unknown error",
+        message: "Check your connection and try again.",
         color: "red",
         icon: <IconX size={16} />,
       });
     }
   };
+
+  // Signed-out invitee: retain the join as a single-use intent, then open
+  // account entry. The continuation below executes it exactly once after
+  // authentication.
+  const handleJoinIntent = (mode: "login" | "register") => {
+    const id = (draft?.id ?? draftId) as Draft["id"] | undefined;
+    if (!id) return;
+    const stateKey = saveAuthIntent({
+      kind: "join-draft",
+      draftId: id,
+      returnPath: `/seasons/${season?.id}/draft/${id}`,
+    });
+    setPendingStateKey(stateKey);
+    modals.openContextModal({
+      modal: "AuthModal",
+      innerProps: {
+        initialMode: mode,
+        actionDescription: season
+          ? `Join the ${season.name} draft`
+          : "Join this draft",
+        pendingStateKey: stateKey,
+      },
+    });
+  };
+
+  const executeJoinIntent = useCallback(
+    async (intent: AuthIntent) => {
+      if (intent.kind !== "join-draft" || !slimUser || !season) {
+        return {
+          result: "failed" as const,
+          message:
+            "We couldn't finish joining the draft. Check your connection and try again.",
+        };
+      }
+      const decision = decideJoinContinuation({
+        draftExists: draft !== undefined,
+        draftStarted: draft?.started === true,
+        isParticipant: userIsParticipant,
+      });
+      switch (decision) {
+        case "missing":
+          return {
+            result: "invalid" as const,
+            message: "This draft could not be found. It may have been removed.",
+          };
+        case "unavailable":
+          return {
+            result: "invalid" as const,
+            message:
+              "This draft has already started and can no longer be joined.",
+          };
+        case "already-joined":
+          // Already a member: land in the lobby without another membership
+          // write or analytics event.
+          return { result: "completed" as const };
+        case "join": {
+          const outcome = await joinDraftWithTransaction(
+            slimUser,
+            intent.draftId,
+          );
+          if (outcome === "failed") {
+            return {
+              result: "failed" as const,
+              message:
+                "We couldn't add you to the draft. Check your connection and try again.",
+            };
+          }
+          return { result: "completed" as const };
+        }
+      }
+    },
+    [draft, slimUser, season, userIsParticipant, joinDraftWithTransaction],
+  );
+
+  const routeDraftId = draft?.id ?? draftId;
+  const matchesJoinIntent = useCallback(
+    (intent: AuthIntent) =>
+      intent.kind === "join-draft" && intent.draftId === routeDraftId,
+    [routeDraftId],
+  );
+
+  const continuation = useAuthContinuation({
+    // Ready once auth and season are known and the draft subscription has
+    // delivered its first snapshot — a loaded-but-absent draft must still
+    // run the continuation so it classifies as "missing" instead of
+    // hanging unclaimed.
+    isReady: !!slimUser && !!season && draftLoaded,
+    stateKey: pendingStateKey,
+    matches: matchesJoinIntent,
+    execute: executeJoinIntent,
+  });
 
   const startDraft = async () => {
     if (!draft || !slimUser?.uid) return;
@@ -333,6 +452,53 @@ export const DraftComponent = () => {
 
   return (
     <div>
+      {continuation.status === "executing" && (
+        <Alert color="blue" variant="light" m="lg">
+          Adding you to the draft...
+        </Alert>
+      )}
+      {continuation.status === "failed" && (
+        <Alert
+          color="red"
+          variant="light"
+          m="lg"
+          icon={<IconAlertCircle size={18} />}
+        >
+          <Stack gap="xs">
+            <Text size="sm">{continuation.error}</Text>
+            <Button
+              size="xs"
+              variant="light"
+              onClick={continuation.retry}
+              w="fit-content"
+            >
+              Try again
+            </Button>
+          </Stack>
+        </Alert>
+      )}
+      {continuation.status === "invalid" && (
+        <Alert
+          color="orange"
+          variant="light"
+          m="lg"
+          icon={<IconAlertCircle size={18} />}
+          title="This draft can no longer be joined"
+        >
+          <Stack gap="xs">
+            <Text size="sm">{continuation.error}</Text>
+            <Button
+              size="xs"
+              variant="light"
+              component={Link}
+              to="/competitions"
+              w="fit-content"
+            >
+              Browse competitions
+            </Button>
+          </Stack>
+        </Alert>
+      )}
       {phase === "pre-draft" ? (
         <Stack gap="lg" p="lg">
           {/* ===== JOIN CTA (non-participant, logged in) ===== */}
@@ -383,23 +549,30 @@ export const DraftComponent = () => {
                     You're invited to this draft!
                   </Title>
                   <Text size="sm" c="rgba(255,255,255,0.85)">
-                    Log in to join the draft and start picking players.
+                    Join this draft and start picking players: create a free
+                    account or sign in.
                   </Text>
                 </Stack>
-                <Button
-                  size="lg"
-                  variant="white"
-                  color="blue"
-                  leftSection={<IconUserPlus size={20} />}
-                  onClick={() =>
-                    modals.openContextModal({
-                      modal: "AuthModal",
-                      innerProps: {},
-                    })
-                  }
-                >
-                  Log in to join
-                </Button>
+                <Group gap="xs" wrap="wrap">
+                  <Button
+                    size="lg"
+                    variant="white"
+                    color="blue"
+                    leftSection={<IconUserPlus size={20} />}
+                    onClick={() => handleJoinIntent("register")}
+                  >
+                    Create account
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="subtle"
+                    c="white"
+                    leftSection={<IconLogin size={20} />}
+                    onClick={() => handleJoinIntent("login")}
+                  >
+                    Sign in
+                  </Button>
+                </Group>
               </Group>
             </Paper>
           )}

@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 import type { Draft, DraftPick, PropBetsEntry, SlimUser } from "../types";
 
 type IndexedRecord<T> = Record<string, T>;
@@ -48,6 +49,10 @@ function recordValues<T>(value?: IndexedRecord<T> | T[]): T[] {
   if (!value) return [];
   if (Array.isArray(value)) return value.filter(Boolean);
   return Object.values(value);
+}
+
+export function generateDraftId(): Draft["id"] {
+  return `draft_${v4()}`;
 }
 
 export function buildParticipantMap(

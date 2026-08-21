@@ -1,69 +1,111 @@
 import {
+  Anchor,
   Button,
-  Container,
   Paper,
   PasswordInput,
   Text,
   TextInput,
-  Title,
 } from "@mantine/core";
-import { modals } from "@mantine/modals";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { auth } from "../../firebase";
 import { trackEvent } from "../../utils/analytics";
+import { mapAuthError } from "./authErrors";
+import type { AuthFormProps } from "./AuthModal";
 
-export const Login = () => {
-  const [email, setEmail] = useState("");
+export type LoginProps = AuthFormProps & {
+  /** Switches the modal to the reset-request mode, keeping the email. */
+  onForgotPassword?: () => void;
+};
+
+export const Login = ({
+  email: emailProp,
+  onEmailChange,
+  pending: pendingProp,
+  onPendingChange,
+  onOutcome,
+  onForgotPassword,
+}: LoginProps = {}) => {
+  const [localEmail, setLocalEmail] = useState("");
+  const [localPending, setLocalPending] = useState(false);
+  const [localError, setLocalError] = useState<string | null>(null);
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  const onLogin = (e: { preventDefault: () => void }) => {
+  const email = emailProp ?? localEmail;
+  const setEmail = onEmailChange ?? setLocalEmail;
+  const pending = pendingProp ?? localPending;
+  const setPending = onPendingChange ?? setLocalPending;
+
+  const onLogin = async (e: FormEvent) => {
     e.preventDefault();
+    if (pending) return;
 
-    setError("");
+    setPending(true);
+    setLocalError(null);
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        trackEvent("login", { method: "password" });
-        modals.closeAll();
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      trackEvent("login", { method: "password" });
+      if (onOutcome) {
+        onOutcome({ status: "authenticated" });
+      } else {
+        setPending(false);
+      }
+    } catch (error) {
+      const mapped = mapAuthError(error);
+      if (onOutcome) {
+        onOutcome({ status: "error", error: mapped });
+      } else {
+        setPending(false);
+        setLocalError(mapped.message);
+      }
+    }
   };
 
   return (
-    <Container size={420} my={40}>
-      <Title ta="center">Welcome back!</Title>
-
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+    <Paper withBorder shadow="md" p={30} mt="md" radius="md">
+      <form onSubmit={onLogin}>
         <TextInput
           label="Email"
           placeholder="hello@gmail.com"
+          type="email"
+          autoComplete="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.currentTarget.value)}
           required
         />
         <PasswordInput
           label="Password"
           placeholder="Your password"
+          autoComplete="current-password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.currentTarget.value)}
           required
           mt="md"
         />
 
-        {error && (
+        {onForgotPassword && (
+          <Anchor
+            component="button"
+            type="button"
+            size="sm"
+            mt="sm"
+            onClick={onForgotPassword}
+          >
+            Forgot password?
+          </Anchor>
+        )}
+
+        {localError && (
           <Text c="red" mt="lg">
-            {error}
+            {localError}
           </Text>
         )}
 
-        <Button fullWidth mt="xl" onClick={onLogin}>
+        <Button fullWidth mt="xl" type="submit" loading={pending}>
           Sign in
         </Button>
-      </Paper>
-    </Container>
+      </form>
+    </Paper>
   );
 };
