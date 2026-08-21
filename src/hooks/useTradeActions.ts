@@ -11,6 +11,7 @@ import {
   Season,
   Trade,
 } from "../types";
+import { trackEvent } from "../utils/analytics";
 import { getEffectiveEpisode, validateTrade } from "../utils/tradeUtils";
 
 const tradeRef = (competitionId: Competition["id"], tradeId: Trade["id"]) =>
@@ -53,6 +54,11 @@ export const proposeTrade = async (
 
   try {
     await setDoc(tradeRef(input.competition.id, trade.id), trade);
+    trackEvent("trade_proposed", {
+      season_id: trade.season_id,
+      offered_count: trade.offered_castaway_ids.length,
+      requested_count: trade.requested_castaway_ids.length,
+    });
     notifications.show({ color: "green", message: "Trade proposed." });
     return true;
   } catch (err) {
@@ -119,6 +125,10 @@ export const acceptTrade = async (
       effective_episode: effectiveEpisode,
       resolved_at: new Date().toISOString(),
     });
+    trackEvent("trade_accepted", {
+      season_id: trade.season_id,
+      effective_episode: effectiveEpisode,
+    });
     notifications.show({
       color: "green",
       message: `Trade accepted. Points transfer from Episode ${effectiveEpisode} onward.`,
@@ -147,6 +157,9 @@ const resolvePendingTrade = async (
     await updateDoc(tradeRef(trade.competition_id, trade.id), {
       status,
       resolved_at: new Date().toISOString(),
+    });
+    trackEvent(status === "rejected" ? "trade_rejected" : "trade_canceled", {
+      season_id: trade.season_id,
     });
     notifications.show({ message: successMessage });
     return true;
