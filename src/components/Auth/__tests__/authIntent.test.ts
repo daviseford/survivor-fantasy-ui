@@ -9,6 +9,7 @@ import type {
 import {
   AUTH_INTENT_TTL_MS,
   claimAuthIntent,
+  claimAuthIntentMatching,
   clearAuthIntents,
   generateAuthStateKey,
   readAuthIntent,
@@ -267,6 +268,97 @@ describe("authIntent", () => {
       expect(() =>
         restoreClaimedIntent(generateAuthStateKey(), invalid, { storage }),
       ).toThrow();
+    });
+  });
+
+  describe("claimAuthIntentMatching", () => {
+    const matchesSeason47 = (intent: AuthIntent) =>
+      intent.kind === "start-draft" && intent.seasonId === startIntent.seasonId;
+    const matchesJoinInvite1 = (intent: AuthIntent) =>
+      intent.kind === "join-draft" && intent.draftId === joinIntent.draftId;
+
+    it("returns null when no intents are stored", () => {
+      const storage = createMemoryStorage();
+
+      expect(claimAuthIntentMatching(matchesSeason47, { storage })).toBeNull();
+    });
+
+    it("claims the matching intent and returns it with its state key", () => {
+      const storage = createMemoryStorage();
+      const stateKey = saveAuthIntent(startIntent, { storage });
+
+      const claimed = claimAuthIntentMatching(matchesSeason47, { storage });
+
+      expect(claimed).toEqual({ stateKey, intent: startIntent });
+      expect(readAuthIntent(stateKey, { storage })).toBeNull();
+    });
+
+    it("leaves non-matching intents pending", () => {
+      const storage = createMemoryStorage();
+      const otherKey = saveAuthIntent(joinIntent, { storage });
+
+      expect(claimAuthIntentMatching(matchesSeason47, { storage })).toBeNull();
+      expect(readAuthIntent(otherKey, { storage })).toEqual(joinIntent);
+    });
+
+    it("claims only the first match when several intents match", () => {
+      const storage = createMemoryStorage();
+      const first = saveAuthIntent(startIntent, { storage });
+      const second = saveAuthIntent(
+        { ...startIntent, draftId: "draft_preallocated_2" as Draft["id"] },
+        { storage },
+      );
+
+      const claimed = claimAuthIntentMatching(matchesSeason47, { storage });
+
+      expect(claimed).toEqual({ stateKey: first, intent: startIntent });
+      expect(claimAuthIntentMatching(matchesSeason47, { storage })).toEqual({
+        stateKey: second,
+        intent: { ...startIntent, draftId: "draft_preallocated_2" },
+      });
+    });
+
+    it("is single-use: a second matching claim returns null", () => {
+      const storage = createMemoryStorage();
+      saveAuthIntent(joinIntent, { storage });
+
+      expect(
+        claimAuthIntentMatching(matchesJoinInvite1, { storage }),
+      ).not.toBeNull();
+      expect(
+        claimAuthIntentMatching(matchesJoinInvite1, { storage }),
+      ).toBeNull();
+    });
+
+    it("skips and discards expired records while scanning", () => {
+      const storage = createMemoryStorage();
+      let now = 1_000_000;
+      const options = { storage, now: () => now };
+      const expiredKey = saveAuthIntent(startIntent, options);
+
+      now += AUTH_INTENT_TTL_MS + 1;
+      const freshKey = saveAuthIntent(joinIntent, options);
+
+      expect(claimAuthIntentMatching(() => true, options)).toEqual({
+        stateKey: freshKey,
+        intent: joinIntent,
+      });
+      expect(readAuthIntent(expiredKey, options)).toBeNull();
+    });
+
+    it("discards invalid records instead of offering them to the predicate", () => {
+      const storage = createMemoryStorage();
+      const stateKey = saveAuthIntent(startIntent, { storage });
+      const raw = JSON.parse(
+        storage.getItem("survivor_auth_intents") as string,
+      );
+      raw.records[stateKey].intent.kind = "delete-everything";
+      storage.setItem("survivor_auth_intents", JSON.stringify(raw));
+
+      const predicate = () => true;
+
+      expect(claimAuthIntentMatching(predicate, { storage })).toBeNull();
+      expect(storage.getItem("survivor_auth_intents")).toBeNull();
     });
   });
 

@@ -247,6 +247,49 @@ export const claimAuthIntent = (
 };
 
 /**
+ * Scan every pending record, claim (remove) the first valid, unexpired
+ * intent that satisfies the predicate, and return it with its state key.
+ * The scan and the claim happen in a single storage write, so concurrent
+ * consumers can never claim the same record. Expired or invalid records
+ * encountered during the scan are discarded.
+ *
+ * This is the refresh-recovery path: after a reload the in-memory state
+ * key is gone, so a route claims by matching kind plus its own route IDs.
+ */
+export const claimAuthIntentMatching = (
+  predicate: (intent: AuthIntent) => boolean,
+  options: AuthIntentOptions = {},
+): { stateKey: string; intent: AuthIntent } | null => {
+  const storage = resolveStorage(options.storage);
+  const now = resolveNow(options.now);
+  const file = readFile(storage);
+  let changed = false;
+  let found: { stateKey: string; intent: AuthIntent } | null = null;
+
+  for (const [stateKey, record] of Object.entries(file.records)) {
+    if (
+      typeof record !== "object" ||
+      record === null ||
+      typeof record.createdAt !== "number" ||
+      isExpired(record, now()) ||
+      !isValidIntent(record.intent)
+    ) {
+      delete file.records[stateKey];
+      changed = true;
+      continue;
+    }
+    if (!found && predicate(record.intent)) {
+      found = { stateKey, intent: record.intent };
+      delete file.records[stateKey];
+      changed = true;
+    }
+  }
+
+  if (changed) writeFile(storage, file);
+  return found;
+};
+
+/**
  * Explicit retry path: restore a previously claimed intent under its original
  * state key, preserving the preallocated draft ID, with a fresh expiry
  * window. This is the only way a claimed intent becomes pending again.
