@@ -15,14 +15,13 @@ import { notifications } from "@mantine/notifications";
 import { IconAlertCircle, IconLogin, IconUserPlus } from "@tabler/icons-react";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { v4 } from "uuid";
 import { saveAuthIntent, type AuthIntent } from "../components/Auth/authIntent";
 import { useAuthContinuation } from "../hooks/useAuthContinuation";
 import { useCreateDraft } from "../hooks/useCreateDraft";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
-import { Draft } from "../types";
 import { trackEvent } from "../utils/analytics";
+import { generateDraftId } from "../utils/draftRealtime";
 import { Players } from "./Players";
 import classes from "./SingleSeason.module.css";
 
@@ -66,7 +65,7 @@ export const SingleSeason = () => {
     const stateKey = saveAuthIntent({
       kind: "start-draft",
       seasonId: season.id,
-      draftId: `draft_${v4()}` as Draft["id"],
+      draftId: generateDraftId(),
       returnPath: `/seasons/${season.id}`,
     });
     setPendingStateKey(stateKey);
@@ -113,11 +112,16 @@ export const SingleSeason = () => {
     [createDraft, slimUser, season, navigate],
   );
 
+  const matchesStartIntent = useCallback(
+    (intent: AuthIntent) =>
+      intent.kind === "start-draft" && intent.seasonId === season?.id,
+    [season?.id],
+  );
+
   const continuation = useAuthContinuation({
     isReady: !!slimUser && !!season,
     stateKey: pendingStateKey,
-    matches: (intent) =>
-      intent.kind === "start-draft" && intent.seasonId === season?.id,
+    matches: matchesStartIntent,
     execute: executeStartIntent,
   });
 

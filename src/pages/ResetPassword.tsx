@@ -15,7 +15,10 @@ import { confirmPasswordReset, verifyPasswordResetCode } from "firebase/auth";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { AuthError } from "../components/Auth/authErrors";
-import { mapAuthError } from "../components/Auth/authErrors";
+import {
+  mapAuthError,
+  RESET_LINK_INVALID_MESSAGE,
+} from "../components/Auth/authErrors";
 import type { AuthIntent } from "../components/Auth/authIntent";
 import { readAuthIntent } from "../components/Auth/authIntent";
 import { auth } from "../firebase";
@@ -37,11 +40,6 @@ import {
  */
 
 type ResetStatus = "verifying" | "invalid" | "form" | "success";
-
-// Matches the expired-action-code message in authErrors; used when the link
-// arrived without a usable code, so there is no provider error to map.
-const INVALID_OR_EXPIRED_MESSAGE =
-  "This password reset link is invalid or has expired. Request a new reset email.";
 
 const describeIntent = (intent: AuthIntent): string =>
   intent.kind === "start-draft"
@@ -166,7 +164,7 @@ export const ResetPassword = () => {
       ? "Verifying your reset link..."
       : (submitError?.message ??
         (status === "invalid"
-          ? (verifyError?.message ?? INVALID_OR_EXPIRED_MESSAGE)
+          ? (verifyError?.message ?? RESET_LINK_INVALID_MESSAGE)
           : ""));
 
   return (
@@ -189,7 +187,7 @@ export const ResetPassword = () => {
         {status === "invalid" && (
           <Stack gap="md" mt="md">
             <Text c="dimmed" size="sm" ta="center">
-              {verifyError?.message ?? INVALID_OR_EXPIRED_MESSAGE}
+              {verifyError?.message ?? RESET_LINK_INVALID_MESSAGE}
             </Text>
             <Button fullWidth onClick={openForgotPassword}>
               Request a new reset email

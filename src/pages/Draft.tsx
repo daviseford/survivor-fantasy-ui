@@ -310,11 +310,17 @@ export const DraftComponent = () => {
     [draft, slimUser, season, userIsParticipant, joinDraftWithTransaction],
   );
 
+  const routeDraftId = draft?.id ?? draftId;
+  const matchesJoinIntent = useCallback(
+    (intent: AuthIntent) =>
+      intent.kind === "join-draft" && intent.draftId === routeDraftId,
+    [routeDraftId],
+  );
+
   const continuation = useAuthContinuation({
     isReady: !!slimUser && !!season && !!draft,
     stateKey: pendingStateKey,
-    matches: (intent) =>
-      intent.kind === "join-draft" && intent.draftId === (draft?.id ?? draftId),
+    matches: matchesJoinIntent,
     execute: executeJoinIntent,
   });
 

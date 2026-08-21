@@ -27,6 +27,10 @@ const GENERIC_MESSAGE = "Something went wrong. Try again.";
 const INVALID_CREDENTIALS_MESSAGE =
   "We could not sign you in with that email and password. Check both and try again.";
 
+/** Shown for invalid, expired, and reused reset links (KTD5). */
+export const RESET_LINK_INVALID_MESSAGE =
+  "This password reset link is invalid or has expired. Request a new reset email.";
+
 const MESSAGES: Record<AuthErrorCategory, string> = {
   "invalid-credentials": INVALID_CREDENTIALS_MESSAGE,
   "email-in-use":
@@ -34,8 +38,7 @@ const MESSAGES: Record<AuthErrorCategory, string> = {
   "weak-password": "Choose a stronger password. Use at least 6 characters.",
   "too-many-requests": "Too many attempts. Wait a few minutes and try again.",
   network: "The network request failed. Check your connection and try again.",
-  "expired-action-code":
-    "This password reset link is invalid or has expired. Request a new reset email.",
+  "expired-action-code": RESET_LINK_INVALID_MESSAGE,
   generic: GENERIC_MESSAGE,
 };
 
