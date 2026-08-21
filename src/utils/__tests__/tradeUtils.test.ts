@@ -9,6 +9,7 @@ import {
 } from "../../types";
 import {
   getCurrentOwners,
+  getEffectiveEpisode,
   getOwnedCastawaysAtEpisode,
   getOwnerAtEpisode,
   getOwnershipWindows,
@@ -275,6 +276,53 @@ describe("getTradeLockEpisode", () => {
     // 2026-03-13T08:00Z is 2026-03-13 (1am) in America/Los_Angeles.
     const afterPacificMidnight = new Date("2026-03-13T08:00:00Z");
     expect(getTradeLockEpisode(season, afterPacificMidnight)).toBeNull();
+  });
+});
+
+describe("getEffectiveEpisode", () => {
+  const noScoringData = { challenges: {}, eliminations: {}, events: {} };
+
+  it("is episode 1 for a watch-along that has revealed nothing yet", () => {
+    expect(
+      getEffectiveEpisode({
+        competition: makeCompetition([], { current_episode: 0 }),
+        ...noScoringData,
+      }),
+    ).toBe(1);
+  });
+
+  it("is the next episode to reveal for a watch-along in progress", () => {
+    expect(
+      getEffectiveEpisode({
+        competition: makeCompetition([], { current_episode: 4 }),
+        ...noScoringData,
+      }),
+    ).toBe(5);
+  });
+
+  it("ignores how far the season's data runs ahead of the group", () => {
+    // The season is fully scored, but a group on episode 2 trades for episode 3.
+    expect(
+      getEffectiveEpisode({
+        competition: makeCompetition([], { current_episode: 2 }),
+        challenges: {
+          c1: { episode_num: 14 } as never,
+        },
+        eliminations: {},
+        events: {},
+      }),
+    ).toBe(3);
+  });
+
+  it("falls back to the first unscored episode for a live competition", () => {
+    expect(
+      getEffectiveEpisode({
+        competition: makeCompetition([], { current_episode: null }),
+        challenges: { c1: { episode_num: 6 } as never },
+        eliminations: {},
+        events: {},
+      }),
+    ).toBe(7);
   });
 });
 

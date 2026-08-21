@@ -1,12 +1,15 @@
 import {
   CastawayId,
+  Challenge,
   Competition,
   DraftPick,
+  Elimination,
   Episode,
+  GameEvent,
   Season,
   Trade,
 } from "../types";
-import { getBroadcastDate } from "./episodeAirDate";
+import { getBroadcastDate, getLatestDataEpisode } from "./episodeAirDate";
 
 /**
  * Trade ownership logic.
@@ -132,6 +135,36 @@ export function getTradeLockEpisode(
     [...(season.episodes ?? [])]
       .sort((a, b) => a.order - b.order)
       .find((ep) => ep.air_date === todayISO) ?? null
+  );
+}
+
+/**
+ * First episode whose points go to the new owner.
+ *
+ * A trade takes effect for the next episode the competition has not seen yet,
+ * so points already on the board stay with the previous owner:
+ *
+ * - Watch-along (`current_episode` is a number, and 0 on a brand-new
+ *   competition): the next episode to be revealed. Trade before revealing
+ *   anything and the cutoff is episode 1; trade while sitting on episode 4 and
+ *   the cutoff is episode 5.
+ * - Live (`current_episode` is null): nothing is revealed on a schedule, so the
+ *   same idea against the only clock available -- the first episode that has no
+ *   scoring data yet.
+ */
+export function getEffectiveEpisode(input: {
+  competition: Competition;
+  challenges: Record<string, Challenge>;
+  eliminations: Record<string, Elimination>;
+  events: Record<string, GameEvent>;
+}): number {
+  return (
+    (input.competition.current_episode ??
+      getLatestDataEpisode(
+        input.challenges,
+        input.eliminations,
+        input.events,
+      )) + 1
   );
 }
 

@@ -67,14 +67,14 @@ const StatusBadge = ({
   currentEpisode: number | null;
 }) => {
   if (trade.status === "accepted") {
-    // `effective_episode` is stamped from the season's latest *data* episode,
-    // which for a watch-along competition runs ahead of what this group has
-    // seen. Printing it would reveal how far the season has progressed, so
-    // only show it once the competition has reached it.
+    // A cutoff is normally the next episode to be revealed, which is safe to
+    // name. Trades accepted before the cutoff was tied to `current_episode`
+    // carry the season's latest *data* episode instead, which would reveal how
+    // far the season has progressed -- hide anything beyond the next reveal.
     const cutoff = trade.effective_episode;
     const showCutoff =
       typeof cutoff === "number" &&
-      (currentEpisode === null || cutoff <= currentEpisode);
+      (currentEpisode === null || cutoff <= currentEpisode + 1);
     return (
       <Badge
         color="green"
@@ -353,7 +353,11 @@ export const TradesSection = () => {
                     <Button
                       color="green"
                       leftSection={<IconCheck size={16} />}
-                      disabled={tradingClosed || !isScoringDataReady}
+                      disabled={
+                        tradingClosed ||
+                        (competition.current_episode === null &&
+                          !isScoringDataReady)
+                      }
                       loading={isResolving}
                       onClick={() =>
                         resolveTrade(trade.id, () =>

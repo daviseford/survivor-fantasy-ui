@@ -157,8 +157,9 @@ test("two users trade players back and forth", async ({ browser }) => {
   expect(await standingsText(pageA, alice.displayName)).toBe(aliceRowBefore);
   expect(await standingsText(pageA, bob.displayName)).toBe(bobRowBefore);
 
-  // History records the accepted trade with its points cutoff.
-  await expect(pageA.getByText(/Accepted · points from Ep \d+/)).toBeVisible();
+  // History records the accepted trade with its points cutoff. The fixture is
+  // a watch-along on episode 2, so the cutoff is the next episode to reveal.
+  await expect(pageA.getByText("Accepted · from Ep 3")).toBeVisible();
 
   // 5. Bob trades the players back; Alice accepts.
   await proposeTrade(pageB, alice.displayName, alicePlayer, bobPlayer);

@@ -11,8 +11,7 @@ import {
   Season,
   Trade,
 } from "../types";
-import { getLatestDataEpisode } from "../utils/episodeAirDate";
-import { validateTrade } from "../utils/tradeUtils";
+import { getEffectiveEpisode, validateTrade } from "../utils/tradeUtils";
 
 const tradeRef = (competitionId: Competition["id"], tradeId: Trade["id"]) =>
   doc(db, "competitions", competitionId, "trades", tradeId);
@@ -78,18 +77,20 @@ export type AcceptTradeInput = {
 
 /**
  * Accept a pending trade. Revalidates ownership/alive/deadline at acceptance
- * time and stamps the points cutoff: the new owner earns points from
- * `latestDataEpisode + 1` onward — past points stay with the original owner.
+ * time and stamps the points cutoff — past points stay with the original owner.
  */
 export const acceptTrade = async (
   input: AcceptTradeInput,
 ): Promise<boolean> => {
   const { trade } = input;
 
-  // The cutoff is derived from the scoring records and is permanent once
-  // written, so never compute it from a half-loaded snapshot: empty records
-  // yield episode 1, which transfers every point already scored.
-  if (!input.isScoringDataReady) {
+  // A live competition derives the cutoff from the scoring records, and the
+  // cutoff is permanent once written, so never compute it from a half-loaded
+  // snapshot: empty records yield episode 1, which would transfer every point
+  // already scored. Watch-along competitions read `current_episode` instead and
+  // do not need to wait.
+  const needsScoringData = input.competition.current_episode === null;
+  if (needsScoringData && !input.isScoringDataReady) {
     showError("Still loading this season's scores. Try again in a moment.");
     return false;
   }
@@ -110,9 +111,7 @@ export const acceptTrade = async (
     return false;
   }
 
-  const effectiveEpisode =
-    getLatestDataEpisode(input.challenges, input.eliminations, input.events) +
-    1;
+  const effectiveEpisode = getEffectiveEpisode(input);
 
   try {
     await updateDoc(tradeRef(trade.competition_id, trade.id), {

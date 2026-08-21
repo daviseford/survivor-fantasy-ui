@@ -66,16 +66,23 @@ service cloud.firestore {
           && resource.data.status == "pending"
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["status", "effective_episode", "resolved_at"])
           // The accepting participant is the one who benefits from an early
-          // cutoff, so the cutoff must be bounded server-side: it may never
-          // reach back before the competition's current episode, which would
-          // retroactively move points that are already on the board.
-          // `current_episode` is nullable, so only compare against it when it
-          // is actually a number; otherwise fall back to the weaker floor.
+          // cutoff, so the cutoff cannot be left to them.
+          //
+          // Watch-along: the cutoff is the next episode to be revealed, which
+          // this rule can derive from the competition doc, so pin it exactly.
+          // A client cannot reach back and take points already on the board,
+          // nor push the cutoff far out so points never transfer.
+          //
+          // Live: `current_episode` is null and scoring data is not readable
+          // from rules, so only the coarse floor applies. Accepting a trade in
+          // a live competition with a hand-written cutoff remains possible for
+          // a participant using the SDK directly -- the documented trust
+          // boundary for this feature.
           && (request.resource.data.status != "accepted" || (
             request.resource.data.effective_episode is int
-            && request.resource.data.effective_episode >= 1
-            && (!(competitionDoc().current_episode is int)
-              || request.resource.data.effective_episode >= competitionDoc().current_episode)
+            && (competitionDoc().current_episode is int
+              ? request.resource.data.effective_episode == competitionDoc().current_episode + 1
+              : request.resource.data.effective_episode >= 1)
           ))
           && (
             (request.auth.uid == resource.data.offered_to_uid
