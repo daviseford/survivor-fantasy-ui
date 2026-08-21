@@ -1,12 +1,16 @@
 import { Avatar, Tooltip } from "@mantine/core";
+import { useCompetition } from "../../hooks/useCompetition";
 import { useCompetitionMeta } from "../../hooks/useCompetitionMeta";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { SlimUser } from "../../types";
+import { getAcquisitionLabel } from "../../utils/tradeUtils";
 
 export const PlayerGroup = ({ uid }: { uid: SlimUser["uid"] }) => {
   const isMobile = useIsMobile();
 
-  const { survivorsByUserUid, eliminatedSurvivors } = useCompetitionMeta();
+  const { data: competition } = useCompetition();
+  const { survivorsByUserUid, eliminatedSurvivors, drafters, acquisitions } =
+    useCompetitionMeta();
 
   const userSurvivors = survivorsByUserUid[uid];
 
@@ -19,7 +23,20 @@ export const PlayerGroup = ({ uid }: { uid: SlimUser["uid"] }) => {
 
         const avatarStyle = isEliminated ? { filter: "grayscale(1)" } : {};
 
-        const label = `${p.full_name}${isEliminated ? " (Eliminated)" : ""}`;
+        const acquisition = acquisitions[p.castaway_id];
+        const label = [
+          p.full_name,
+          isEliminated ? "(Eliminated)" : null,
+          acquisition
+            ? getAcquisitionLabel(
+                acquisition,
+                drafters[p.castaway_id],
+                competition?.participants ?? [],
+              )
+            : null,
+        ]
+          .filter(Boolean)
+          .join(" · ");
 
         return (
           <Tooltip label={label} key={p.castaway_id}>

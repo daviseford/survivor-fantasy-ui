@@ -9,19 +9,27 @@ import {
   StyleProp,
   Text,
   Title,
+  Tooltip,
 } from "@mantine/core";
-import { IconChevronDown, IconChevronUp, IconFlame } from "@tabler/icons-react";
+import {
+  IconArrowsExchange,
+  IconChevronDown,
+  IconChevronUp,
+  IconFlame,
+} from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useCompetitionMeta } from "../../hooks/useCompetitionMeta";
 import { useEvents } from "../../hooks/useEvents";
 import { CastawayId, Player, SlimUser } from "../../types";
+import { Acquisition, getAcquisitionLabel } from "../../utils/tradeUtils";
 import { PlayerGroup } from "./PlayerGroup";
 
 export const PlayerGroupGrid = () => {
   const { data: competition } = useCompetition();
 
-  const { survivorsByUserUid, eliminatedSurvivors } = useCompetitionMeta();
+  const { survivorsByUserUid, eliminatedSurvivors, drafters, acquisitions } =
+    useCompetitionMeta();
   const { data: events } = useEvents(competition?.season_id);
 
   const [openUids, setOpenUids] = useState<ReadonlySet<string>>(new Set());
@@ -104,6 +112,9 @@ export const PlayerGroupGrid = () => {
             participant={x}
             userSurvivors={survivorsByUserUid[x.uid] ?? []}
             eliminatedSurvivors={eliminatedSurvivors}
+            participants={competition.participants}
+            drafters={drafters}
+            acquisitions={acquisitions}
             winnerCastawayId={winnerCastawayId}
             isFinished={isFinished}
             isOpen={openUids.has(x.uid)}
@@ -119,6 +130,9 @@ const TeamCard = ({
   participant,
   userSurvivors,
   eliminatedSurvivors,
+  participants,
+  drafters,
+  acquisitions,
   winnerCastawayId,
   isFinished,
   isOpen,
@@ -127,19 +141,27 @@ const TeamCard = ({
   participant: SlimUser;
   userSurvivors: Player[];
   eliminatedSurvivors: CastawayId[];
+  participants: SlimUser[];
+  drafters: Record<CastawayId, string>;
+  acquisitions: Record<CastawayId, Acquisition>;
   winnerCastawayId: CastawayId | null;
   isFinished: boolean;
   isOpen: boolean;
   onToggle: () => void;
 }) => {
-  const numDrafted = userSurvivors.length;
+  // Everything on this card is about the roster as it stands now, so a
+  // castaway received in a trade counts here and not on the drafter's card.
+  const numOnRoster = userSurvivors.length;
   const numEliminated = userSurvivors.filter((s) =>
     eliminatedSurvivors.includes(s.castaway_id),
   ).length;
-  const numActive = numDrafted - numEliminated;
+  const numActive = numOnRoster - numEliminated;
+  const numAcquired = userSurvivors.filter(
+    (s) => acquisitions[s.castaway_id],
+  ).length;
 
-  const areAllEliminated = numDrafted > 0 && numEliminated === numDrafted;
-  const draftedWinner =
+  const areAllEliminated = numOnRoster > 0 && numEliminated === numOnRoster;
+  const ownsWinner =
     winnerCastawayId != null &&
     userSurvivors.some((s) => s.castaway_id === winnerCastawayId);
 
@@ -157,7 +179,7 @@ const TeamCard = ({
         <Group justify="space-between" align="center">
           <Title order={4}>{participant.displayName}</Title>
           {isFinished ? (
-            draftedWinner ? (
+            ownsWinner ? (
               <Badge
                 variant="light"
                 color="orange"
@@ -183,7 +205,9 @@ const TeamCard = ({
         </Group>
 
         <Text size="xs" c="dimmed">
-          {numDrafted} drafted · {numEliminated} eliminated
+          {numOnRoster} on roster
+          {numAcquired > 0 ? ` · ${numAcquired} via trade` : ""} ·{" "}
+          {numEliminated} eliminated
         </Text>
 
         <PlayerGroup uid={participant.uid} />
@@ -215,17 +239,37 @@ const TeamCard = ({
                   const isEliminated = eliminatedSurvivors.includes(
                     p.castaway_id,
                   );
+                  const acquisition = acquisitions[p.castaway_id];
+                  const acquisitionLabel = acquisition
+                    ? getAcquisitionLabel(
+                        acquisition,
+                        drafters[p.castaway_id],
+                        participants,
+                      )
+                    : null;
                   return (
-                    <Text
-                      key={p.castaway_id}
-                      fz={{ base: "xs", sm: "sm" }}
-                      truncate
-                      c={isEliminated ? "dimmed" : undefined}
-                      td={isEliminated ? "line-through" : undefined}
-                      title={p.full_name}
-                    >
-                      {p.full_name}
-                    </Text>
+                    <Group key={p.castaway_id} gap={4} wrap="nowrap">
+                      <Text
+                        fz={{ base: "xs", sm: "sm" }}
+                        truncate
+                        c={isEliminated ? "dimmed" : undefined}
+                        td={isEliminated ? "line-through" : undefined}
+                        title={p.full_name}
+                      >
+                        {p.full_name}
+                      </Text>
+                      {acquisitionLabel && (
+                        <Tooltip label={acquisitionLabel}>
+                          <IconArrowsExchange
+                            size={13}
+                            role="img"
+                            aria-label={acquisitionLabel}
+                            color="var(--mantine-color-dimmed)"
+                            style={{ flexShrink: 0 }}
+                          />
+                        </Tooltip>
+                      )}
+                    </Group>
                   );
                 })}
               </Stack>

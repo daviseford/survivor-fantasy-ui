@@ -7,9 +7,11 @@ import {
   Episode,
   GameEvent,
   Season,
+  SlimUser,
   Trade,
 } from "../types";
 import { getBroadcastDate, getLatestDataEpisode } from "./episodeAirDate";
+import { getParticipantName } from "./misc";
 
 /**
  * Trade ownership logic.
@@ -101,6 +103,73 @@ export function getCurrentOwners(
       segments[segments.length - 1].uid,
     ]),
   ) as Record<CastawayId, string>;
+}
+
+/**
+ * Who drafted each castaway. Draft history is fixed -- a trade moves the
+ * roster, it never rewrites who made the pick.
+ */
+export function getDrafters(
+  draftPicks: DraftPick[],
+): Record<CastawayId, string> {
+  return Object.fromEntries(
+    draftPicks.map((pick) => [pick.castaway_id, pick.user_uid]),
+  ) as Record<CastawayId, string>;
+}
+
+export type Acquisition = {
+  /** Current owner, who is not the drafter. */
+  uid: string;
+  /** Previous owner -- who they came from in the trade that moved them here. */
+  fromUid: string;
+};
+
+/**
+ * Castaways currently sitting on a roster other than their drafter's, so the
+ * UI can say "acquired" where it would otherwise say "drafted".
+ *
+ * A castaway traded away and later traded back is absent: their drafter owns
+ * them again, so nothing distinguishes them from a pick that never moved.
+ */
+export function getAcquisitions(
+  draftPicks: DraftPick[],
+  trades: Trade[],
+): Record<CastawayId, Acquisition> {
+  const windows = getOwnershipWindows(draftPicks, trades);
+  const acquisitions: Record<string, Acquisition> = {};
+
+  for (const [castawayId, segments] of Object.entries(windows)) {
+    const drafter = segments[0].uid;
+    const current = segments[segments.length - 1];
+    if (current.uid === drafter) continue;
+
+    acquisitions[castawayId] = {
+      uid: current.uid,
+      fromUid: segments[segments.length - 2].uid,
+    };
+  }
+
+  return acquisitions as Record<CastawayId, Acquisition>;
+}
+
+/**
+ * Tooltip copy for a traded-in castaway. Deliberately says nothing about which
+ * episode the trade took effect -- that would leak how far the season has run
+ * to a competition that has not revealed it yet.
+ */
+export function getAcquisitionLabel(
+  acquisition: Acquisition,
+  drafterUid: string | undefined,
+  participants: SlimUser[],
+): string {
+  const from = getParticipantName(participants, acquisition.fromUid);
+  const drafter = drafterUid
+    ? getParticipantName(participants, drafterUid)
+    : null;
+
+  return drafter && drafterUid !== acquisition.fromUid
+    ? `Acquired from ${from} · drafted by ${drafter}`
+    : `Acquired from ${from} in a trade`;
 }
 
 /** Castaways owned by `uid` during `episode` — what scoring sums over. */

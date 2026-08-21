@@ -6,7 +6,7 @@ Shared domain vocabulary for this project — entities, named processes, and sta
 
 - A **Season** owns its **Castaways** and **Episodes**. Every **Challenge win**, **Elimination**, **Game event**, **Tribal council vote**, and **Tribe** is scoped to exactly one season.
 - A **Draft** produces exactly one **Competition**, once, at completion. The competition holds a forward copy of the **Draft picks** and prop-bet answers rather than reading live draft state.
-- A **Draft pick** is the only link from **Participant** to **Castaway**; a **Roster** is the set of picks sharing a participant. Ownership is fixed for the competition's life.
+- A **Draft pick** binds a **Castaway** to the **Participant** who drafted them, permanently; a **Trade** moves ownership afterwards. A **Roster** is the set of castaways a participant owns _now_, which is the picks they made only until their first accepted trade.
 - **Scores are never stored.** Standings are derived on demand: challenge wins, eliminations, and game events produce a per-castaway per-episode **Episode score**, summed across a roster and added to separately-derived **Prop bet** points.
 - The three **Player action** families map onto three different record collections. Choosing the wrong collection scores nothing, silently.
 - The **Current episode** boundary sits between every result collection and every consumer. The only sanctioned bypass is an **Unfiltered read**.
@@ -18,7 +18,7 @@ Shared domain vocabulary for this project — entities, named processes, and sta
 
 ### Competition
 
-One group's instance of the fantasy game for a single season: a fixed set of human participants, the roster assignments their draft produced, their prop-bet answers, and the episode boundary governing what they may see.
+One group's instance of the fantasy game for a single season: a fixed set of human participants, the rosters their draft produced and their trades have since reshaped, their prop-bet answers, and the episode boundary governing what they may see.
 
 A competition comes into existence only when its draft completes, and carries a forward copy of the picks rather than reading them back from the draft. It reaches a terminal state once the season's winner has been recorded _and_ the group's own episode boundary has reached the finale — a group still behind the finale stays open even though the season is over.
 
@@ -35,13 +35,21 @@ Every castaway in the season is drafted, with turns cycling in order until the c
 
 ### Draft pick
 
-The single record binding one castaway to one participant — the only statement of ownership the scoring layer consults.
+The single record binding one castaway to the participant who drafted them — the starting point every ownership question is answered from.
 
-Ownership is set at draft time and never changes. A castaway being voted out does not reassign or clear their pick; it only stops them accruing points.
+A pick never changes. A castaway being voted out does not reassign or clear their pick; it only stops them accruing points. A **Trade** does not rewrite it either: the pick keeps saying who drafted the castaway, while current ownership is derived by replaying accepted trades on top of it. "Drafted by" and "on this roster" are therefore different claims once a trade has happened, and naming a participant beside a castaway asserts one of them.
+
+### Trade
+
+An exchange of castaways between two participants of one competition, proposed by one and accepted by the other, which moves ownership without touching the draft.
+
+Trades live beside the competition rather than in it, so ownership is derived rather than stored. Each accepted trade takes effect from a cutoff episode: points already on the board stay with the previous owner, and only later episodes score for the new one. Trading closes for the episode a group is about to reveal, so nobody can trade on what they have already watched.
 
 ### Roster
 
-The set of castaways one participant owns in one competition — the group of contestants whose combined points are that participant's score.
+The set of castaways one participant owns in one competition right now — the group of contestants whose combined points are that participant's score.
+
+After a **Trade** a roster is no longer the same thing as a participant's draft picks: a castaway sits on the roster of whoever owns them today, while the pick still records who drafted them.
 _Avoid:_ team (which means a **Tribe** here).
 
 ### Prop bet
@@ -220,4 +228,5 @@ Its central invariant is monotonicity: a regenerated season may never contain fe
 - **"Event"** is overloaded: a **Game event** is a specific scoring record family, but prose also says "event" for anything that happens in an episode, including challenge wins. Given the challenge-versus-event scoring split, this one is actively dangerous.
 - **"Finished"** exists on both a **Draft** and a **Competition** with different meanings — all picks made, versus season concluded and revealed.
 - **"Current episode"** carries three distinguishable states: absent (**Live mode**, everything visible), zero (**Watch-along mode**, nothing revealed), and positive. "No episodes revealed" is easily confused with "no boundary set".
+- **"Drafted"** had been used for both senses of ownership — who made the pick, and whose roster a castaway is on. Since **Trades** exist these are distinct: _drafted by_ is fixed history, _on this roster_ is current ownership.
 - **"Eliminated"** has two senses: an **Elimination** record exists, versus the castaway is actually out — a later event or challenge win overrides an earlier elimination for returnee twists.

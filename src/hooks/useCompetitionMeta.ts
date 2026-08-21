@@ -1,7 +1,11 @@
 import { useMemo } from "react";
 import { CastawayId, Player } from "../types";
 import { filterRecordByEpisode } from "../utils/episodeFilter";
-import { getCurrentOwners } from "../utils/tradeUtils";
+import {
+  getAcquisitions,
+  getCurrentOwners,
+  getDrafters,
+} from "../utils/tradeUtils";
 import { useCompetition } from "./useCompetition";
 import { useEliminations } from "./useEliminations";
 import { useSeason } from "./useSeason";
@@ -25,6 +29,18 @@ export const useCompetitionMeta = () => {
 
   const currentOwners = useMemo(
     () => getCurrentOwners(competition?.draft_picks || [], trades),
+    [competition?.draft_picks, trades],
+  );
+
+  // Rosters follow current ownership, but the UI still has to be able to say
+  // where a castaway came from: drafted here, or acquired in a trade.
+  const drafters = useMemo(
+    () => getDrafters(competition?.draft_picks || []),
+    [competition?.draft_picks],
+  );
+
+  const acquisitions = useMemo(
+    () => getAcquisitions(competition?.draft_picks || [], trades),
     [competition?.draft_picks, trades],
   );
 
@@ -60,5 +76,8 @@ export const useCompetitionMeta = () => {
     mySurvivors,
     eliminatedSurvivors,
     survivorsByUserUid,
+    currentOwners,
+    drafters,
+    acquisitions,
   };
 };

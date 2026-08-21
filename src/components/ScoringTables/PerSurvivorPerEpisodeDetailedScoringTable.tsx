@@ -10,7 +10,11 @@ import {
   Tooltip,
   UnstyledButton,
 } from "@mantine/core";
-import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
+import {
+  IconArrowsExchange,
+  IconChevronDown,
+  IconChevronUp,
+} from "@tabler/icons-react";
 import { useMemo, useRef, useState } from "react";
 import { BASE_PLAYER_SCORING } from "../../data/scoring";
 import { useCompetition } from "../../hooks/useCompetition";
@@ -20,8 +24,12 @@ import { useSeason } from "../../hooks/useSeason";
 import { useTrades } from "../../hooks/useTrades";
 import { useUser } from "../../hooks/useUser";
 import { CastawayId, PlayerAction } from "../../types";
-import { getNumberWithOrdinal } from "../../utils/misc";
-import { getCurrentOwners } from "../../utils/tradeUtils";
+import { getNumberWithOrdinal, getParticipantName } from "../../utils/misc";
+import {
+  getAcquisitionLabel,
+  getAcquisitions,
+  getCurrentOwners,
+} from "../../utils/tradeUtils";
 import { PlayerHoverCard } from "./PlayerHoverCard";
 import classes from "./ScoringTables.module.css";
 
@@ -115,13 +123,19 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
   const [filterUserUid, setFilterUserUid] = useState<string | null>(null);
 
   // Two different questions get asked of ownership in this table, and after a
-  // trade they have different answers: "who drafted this castaway" (the
-  // caption and the draft-order sort, which stay on draft_picks because draft
-  // history does not change) and "whose roster is this on now" (the
-  // participant filter and the my-roster highlight, below).
+  // trade they have different answers: "who drafted this castaway" (the Pick
+  // column and the draft-order sort, which stay on draft_picks because draft
+  // history does not change) and "whose roster is this on now" (the caption
+  // under each name, the participant filter, and the my-roster highlight).
+  // Where the two disagree the caption names the current owner and flags the
+  // trade, so a name under a castaway is never read as the drafter.
   const { data: trades } = useTrades(competition?.id);
   const currentOwners = useMemo(
     () => getCurrentOwners(competition?.draft_picks ?? [], trades),
+    [competition?.draft_picks, trades],
+  );
+  const acquisitions = useMemo(
+    () => getAcquisitions(competition?.draft_picks ?? [], trades),
     [competition?.draft_picks, trades],
   );
 
@@ -228,12 +242,21 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
       (x) => x.castaway_id === castawayId,
     );
 
-    const draftPick = competition?.draft_picks.find(
-      (x) => x.castaway_id === castawayId,
-    );
-    const draftedBy = competition?.participants.find(
-      (x) => x.uid === draftPick?.user_uid,
-    );
+    const participants = competition?.participants ?? [];
+    const ownerUid = currentOwners[castawayId];
+    const ownedBy = ownerUid
+      ? getParticipantName(participants, ownerUid)
+      : null;
+
+    const acquisition = acquisitions[castawayId];
+    const acquisitionLabel = acquisition
+      ? getAcquisitionLabel(
+          acquisition,
+          competition?.draft_picks.find((x) => x.castaway_id === castawayId)
+            ?.user_uid,
+          participants,
+        )
+      : null;
 
     const playerElimination = Object.values(eliminations).find(
       (x) => x.castaway_id === castawayId,
@@ -315,10 +338,20 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
               >
                 {displayName}
               </Text>
-              {(draftedBy || playerElimination) && (
+              {(ownedBy || playerElimination) && (
                 <Text fz="xs" c="dimmed" lh={1.2} truncate>
-                  {draftedBy ? draftedBy.displayName || draftedBy.email : ""}
-                  {draftedBy && playerElimination && " · "}
+                  {ownedBy ?? ""}
+                  {acquisitionLabel && (
+                    <Tooltip label={acquisitionLabel}>
+                      <IconArrowsExchange
+                        size={11}
+                        role="img"
+                        aria-label={acquisitionLabel}
+                        style={{ marginLeft: 3, verticalAlign: "-1px" }}
+                      />
+                    </Tooltip>
+                  )}
+                  {ownedBy && playerElimination && " · "}
                   {eliminationLabel && (
                     <Text
                       span
@@ -394,13 +427,13 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
           <Select
             size="xs"
             w={240}
-            placeholder="Filter by user"
+            placeholder="Filter by roster"
             data={userFilterOptions}
             value={filterUserUid}
             onChange={setFilterUserUid}
             clearable
             allowDeselect
-            aria-label="Filter players by drafter"
+            aria-label="Filter players by roster owner"
           />
         </Group>
       )}

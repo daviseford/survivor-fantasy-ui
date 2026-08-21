@@ -5,10 +5,14 @@ import {
   DraftPick,
   Episode,
   Season,
+  SlimUser,
   Trade,
 } from "../../types";
 import {
+  getAcquisitionLabel,
+  getAcquisitions,
   getCurrentOwners,
+  getDrafters,
   getEffectiveEpisode,
   getOwnedCastawaysAtEpisode,
   getOwnerAtEpisode,
@@ -212,6 +216,120 @@ describe("getCurrentOwners", () => {
       [C1]: BOB,
       [C2]: ALICE,
     });
+  });
+});
+
+describe("getDrafters / getAcquisitions", () => {
+  const picks = [makePick(C1, ALICE), makePick(C2, BOB)];
+  const aliceToBob = makeTrade({
+    offered_by_uid: ALICE,
+    offered_to_uid: BOB,
+    offered_castaway_ids: [C1],
+    requested_castaway_ids: [C2],
+    status: "accepted",
+    effective_episode: 5,
+  });
+
+  it("keeps draft history intact after a trade", () => {
+    expect(getDrafters(picks)).toEqual({ [C1]: ALICE, [C2]: BOB });
+    expect(getCurrentOwners(picks, [aliceToBob])).toEqual({
+      [C1]: BOB,
+      [C2]: ALICE,
+    });
+  });
+
+  it("reports nothing acquired when no trade has been accepted", () => {
+    expect(getAcquisitions(picks, [])).toEqual({});
+    expect(
+      getAcquisitions(picks, [{ ...aliceToBob, status: "pending" }]),
+    ).toEqual({});
+  });
+
+  it("names the current owner and who they came from", () => {
+    expect(getAcquisitions(picks, [aliceToBob])).toEqual({
+      [C1]: { uid: BOB, fromUid: ALICE },
+      [C2]: { uid: ALICE, fromUid: BOB },
+    });
+  });
+
+  it("drops a castaway traded back to their drafter", () => {
+    const backToAlice = makeTrade({
+      offered_by_uid: BOB,
+      offered_to_uid: ALICE,
+      offered_castaway_ids: [C1],
+      requested_castaway_ids: [],
+      status: "accepted",
+      effective_episode: 8,
+    });
+    const acquisitions = getAcquisitions(picks, [aliceToBob, backToAlice]);
+
+    expect(acquisitions[C1]).toBeUndefined();
+    expect(acquisitions[C2]).toEqual({ uid: ALICE, fromUid: BOB });
+  });
+
+  it("credits the most recent owner when a castaway changes hands twice", () => {
+    const bobToCarol = makeTrade({
+      offered_by_uid: BOB,
+      offered_to_uid: CAROL,
+      offered_castaway_ids: [C1],
+      requested_castaway_ids: [],
+      status: "accepted",
+      effective_episode: 9,
+    });
+
+    expect(getAcquisitions(picks, [aliceToBob, bobToCarol])[C1]).toEqual({
+      uid: CAROL,
+      fromUid: BOB,
+    });
+  });
+});
+
+describe("getAcquisitionLabel", () => {
+  const participants: SlimUser[] = [
+    {
+      uid: ALICE,
+      displayName: "Alice",
+      email: "alice@example.com",
+      isAdmin: false,
+    },
+    { uid: BOB, displayName: "Bob", email: "bob@example.com", isAdmin: false },
+    { uid: CAROL, displayName: "", email: "carol@example.com", isAdmin: false },
+  ];
+
+  it("names only the previous owner when they also drafted the castaway", () => {
+    expect(
+      getAcquisitionLabel({ uid: BOB, fromUid: ALICE }, ALICE, participants),
+    ).toBe("Acquired from Alice in a trade");
+  });
+
+  it("names the drafter too when the castaway has changed hands twice", () => {
+    expect(
+      getAcquisitionLabel({ uid: CAROL, fromUid: BOB }, ALICE, participants),
+    ).toBe("Acquired from Bob · drafted by Alice");
+  });
+
+  it("keeps drafter provenance when distinct participants share a display name", () => {
+    const namesakes = participants.map((participant) =>
+      participant.uid === ALICE || participant.uid === BOB
+        ? { ...participant, displayName: "Alex" }
+        : participant,
+    );
+
+    expect(
+      getAcquisitionLabel({ uid: CAROL, fromUid: BOB }, ALICE, namesakes),
+    ).toBe("Acquired from Alex · drafted by Alex");
+  });
+
+  it("falls back to email when a participant has no display name", () => {
+    expect(
+      getAcquisitionLabel({ uid: ALICE, fromUid: CAROL }, CAROL, participants),
+    ).toBe("Acquired from carol@example.com in a trade");
+  });
+
+  it("says nothing about episodes, which would leak season progress", () => {
+    expect(
+      getAcquisitionLabel({ uid: BOB, fromUid: ALICE }, ALICE, participants),
+    ).not.toMatch(/\d/);
   });
 });
 
