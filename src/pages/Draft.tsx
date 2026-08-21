@@ -32,6 +32,7 @@ import {
   IconCrystalBall,
   IconDice5,
   IconFlame,
+  IconLogin,
   IconTargetArrow,
   IconTrophy,
   IconUserPlus,
@@ -240,7 +241,7 @@ export const DraftComponent = () => {
   // Signed-out invitee: retain the join as a single-use intent, then open
   // account entry. The continuation below executes it exactly once after
   // authentication.
-  const handleJoinIntent = () => {
+  const handleJoinIntent = (mode: "login" | "register") => {
     const id = (draft?.id ?? draftId) as Draft["id"] | undefined;
     if (!id) return;
     const stateKey = saveAuthIntent({
@@ -252,7 +253,7 @@ export const DraftComponent = () => {
     modals.openContextModal({
       modal: "AuthModal",
       innerProps: {
-        initialMode: "register",
+        initialMode: mode,
         actionDescription: season
           ? `Join the ${season.name} draft`
           : "Join this draft",
@@ -537,18 +538,30 @@ export const DraftComponent = () => {
                     You're invited to this draft!
                   </Title>
                   <Text size="sm" c="rgba(255,255,255,0.85)">
-                    Log in to join the draft and start picking players.
+                    Join this draft and start picking players: create a free
+                    account or sign in.
                   </Text>
                 </Stack>
-                <Button
-                  size="lg"
-                  variant="white"
-                  color="blue"
-                  leftSection={<IconUserPlus size={20} />}
-                  onClick={handleJoinIntent}
-                >
-                  Log in to join
-                </Button>
+                <Group gap="xs" wrap="wrap">
+                  <Button
+                    size="lg"
+                    variant="white"
+                    color="blue"
+                    leftSection={<IconUserPlus size={20} />}
+                    onClick={() => handleJoinIntent("register")}
+                  >
+                    Create account
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="subtle"
+                    c="white"
+                    leftSection={<IconLogin size={20} />}
+                    onClick={() => handleJoinIntent("login")}
+                  >
+                    Sign in
+                  </Button>
+                </Group>
               </Group>
             </Paper>
           )}

@@ -291,6 +291,11 @@ const SLOW = { timeout: 20_000 };
 
 const dialog = (page: Page) => page.getByRole("dialog");
 
+const main = (page: Page) => page.getByRole("main");
+
+const mainNav = (page: Page) =>
+  page.getByRole("navigation", { name: "Main navigation" });
+
 const registerThrough = async (
   page: Page,
   user: { name: string; email: string; password: string },
@@ -307,8 +312,9 @@ const signInThrough = async (
   page: Page,
   user: { email: string; password: string },
 ) => {
-  // Season and draft gates open the modal in register mode; the navbar opens
-  // it in sign-in mode. Selecting the tab is a no-op in the latter case.
+  // Gates opened via "Create account" start in register mode; gates opened via
+  // "Sign in" and the navbar start in sign-in mode. Selecting the tab is a
+  // no-op in the latter case.
   await dialog(page).getByRole("tab", { name: "Sign in" }).click();
   await dialog(page).getByLabel("Email").fill(user.email);
   await dialog(page)
@@ -329,9 +335,9 @@ const expectSignedIn = async (page: Page, isMobile: boolean) => {
 
 const signOutViaNavbar = async (page: Page, isMobile: boolean) => {
   if (isMobile) await openMobileNav(page);
-  await page.getByRole("button", { name: "Logout" }).click();
+  await mainNav(page).getByRole("button", { name: "Logout" }).click();
   await expect(
-    page.getByRole("button", { name: "Login", exact: true }),
+    mainNav(page).getByRole("button", { name: "Sign in", exact: true }),
   ).toBeVisible(SLOW);
   if (isMobile) await openMobileNav(page); // close the overlay again
 };
@@ -375,7 +381,9 @@ test("suite guard: app talks only to local emulators", async ({ page }) => {
   await firestoreRequest;
 
   const authRequest = page.waitForRequest((r) => r.url().startsWith(AUTH_EMU));
-  await page.getByRole("button", { name: "Log in", exact: true }).click();
+  await main(page)
+    .getByRole("button", { name: "Sign in", exact: true })
+    .click();
   await signInThrough(page, { email: user.email, password: PASSWORD });
   await authRequest;
 
@@ -395,7 +403,9 @@ test("registration from Start creates exactly one draft and lands in its lobby (
   const email = uniqueEmail("register-start");
 
   await page.goto(`/seasons/${SEASON_ID}`);
-  await page.getByRole("button", { name: "Log in", exact: true }).click();
+  await main(page)
+    .getByRole("button", { name: "Create account", exact: true })
+    .click();
   await expect(
     dialog(page).getByText(`Start a draft for ${SEASON_NAME}`),
   ).toBeVisible();
@@ -436,7 +446,9 @@ test("sign-in from Start creates one draft without another click", async ({
   );
 
   await page.goto(`/seasons/${SEASON_ID}`);
-  await page.getByRole("button", { name: "Log in", exact: true }).click();
+  await main(page)
+    .getByRole("button", { name: "Sign in", exact: true })
+    .click();
   await signInThrough(page, { email: user.email, password: PASSWORD });
 
   await expect(page).toHaveURL(
@@ -463,7 +475,9 @@ test("registration from a valid invitation joins exactly once (AE2)", async ({
   const email = uniqueEmail("invitee");
 
   await page.goto(`/seasons/${SEASON_ID}/draft/${VALID_INVITE_DRAFT}`);
-  await page.getByRole("button", { name: "Log in to join" }).click();
+  await main(page)
+    .getByRole("button", { name: "Create account", exact: true })
+    .click();
   await expect(
     dialog(page).getByText(`Join the ${SEASON_NAME} draft`),
   ).toBeVisible();
@@ -504,7 +518,9 @@ test("sign-in as an existing participant adds no duplicate membership", async ({
   await seedDraft(MEMBER_DRAFT, [host, member], { started: false });
 
   await page.goto(`/seasons/${SEASON_ID}/draft/${MEMBER_DRAFT}`);
-  await page.getByRole("button", { name: "Log in to join" }).click();
+  await main(page)
+    .getByRole("button", { name: "Sign in", exact: true })
+    .click();
   await signInThrough(page, { email: member.email, password: PASSWORD });
 
   await expect(page.getByRole("heading", { name: "Draft Lobby" })).toBeVisible(
@@ -532,7 +548,9 @@ test("stale invitation: started draft stays signed in, adds no participant, show
   const email = uniqueEmail("late-invitee");
 
   await page.goto(`/seasons/${SEASON_ID}/draft/${STARTED_DRAFT}`);
-  await page.getByRole("button", { name: "Log in to join" }).click();
+  await main(page)
+    .getByRole("button", { name: "Create account", exact: true })
+    .click();
   await registerThrough(page, {
     name: "Late Friend",
     email,
@@ -570,7 +588,9 @@ test("reset request shows the identical confirmation for known and unknown email
   const unknownEmail = uniqueEmail("ghost");
 
   await page.goto(`/seasons/${SEASON_ID}`);
-  await page.getByRole("button", { name: "Log in", exact: true }).click();
+  await main(page)
+    .getByRole("button", { name: "Sign in", exact: true })
+    .click();
   await dialog(page).getByRole("tab", { name: "Sign in" }).click();
   await dialog(page).getByLabel("Email").fill(unknownEmail);
   await dialog(page).getByRole("button", { name: "Forgot password?" }).click();
@@ -626,7 +646,9 @@ test("reset completion: new password signs in, old password fails, reused code i
   ).toBeVisible(SLOW);
 
   // Sign in with the new password; the email is prefilled from verification.
-  await page.getByRole("button", { name: "Sign in" }).click();
+  await main(page)
+    .getByRole("button", { name: "Sign in", exact: true })
+    .click();
   await expect(dialog(page).getByLabel("Email")).toHaveValue(user.email);
   await dialog(page)
     .getByRole("textbox", { name: "Password" })
@@ -639,7 +661,9 @@ test("reset completion: new password signs in, old password fails, reused code i
 
   // The old password no longer signs in.
   await page.goto(`/seasons/${SEASON_ID}`);
-  await page.getByRole("button", { name: "Log in", exact: true }).click();
+  await main(page)
+    .getByRole("button", { name: "Sign in", exact: true })
+    .click();
   await signInThrough(page, { email: user.email, password: PASSWORD });
   await expect(dialog(page).getByRole("alert")).toContainText(
     "We could not sign you in with that email and password",
@@ -656,8 +680,9 @@ test("reset completion: new password signs in, old password fails, reused code i
   ).toBeVisible();
 });
 
-// AE8-lite: sign-out restores signed-out entry points.
-test("logout from the navbar restores signed-out entry points (AE8-lite)", async ({
+// AE8: sign-out restores signed-out entry points, and the legacy /logout
+// route signs the user out and offers account entry without a 404.
+test("sign-out from the navbar and the /logout route restores signed-out state (AE8)", async ({
   page,
   isMobile,
 }) => {
@@ -666,18 +691,59 @@ test("logout from the navbar restores signed-out entry points (AE8-lite)", async
   const user = await createUser(uniqueEmail("logout"), PASSWORD, "Logout User");
 
   await page.goto("/");
-  await page.getByRole("button", { name: "Login", exact: true }).click();
+  await mainNav(page)
+    .getByRole("button", { name: "Sign in", exact: true })
+    .click();
   await signInThrough(page, { email: user.email, password: PASSWORD });
-  await expect(page.getByRole("button", { name: "Logout" })).toBeVisible(SLOW);
-
-  await page.getByRole("button", { name: "Logout" }).click();
   await expect(
-    page.getByRole("button", { name: "Login", exact: true }),
+    mainNav(page).getByRole("button", { name: "Logout" }),
   ).toBeVisible(SLOW);
 
+  // Sign out from the navbar: the signed-out entries return.
+  await mainNav(page).getByRole("button", { name: "Logout" }).click();
+  await expect(
+    mainNav(page).getByRole("button", { name: "Sign in", exact: true }),
+  ).toBeVisible(SLOW);
+  await expect(
+    mainNav(page).getByRole("button", { name: "Create account", exact: true }),
+  ).toBeVisible();
+
+  // Protected actions present both entry choices again.
   await page.goto(`/seasons/${SEASON_ID}`);
   await expect(
-    page.getByRole("button", { name: "Log in", exact: true }),
+    main(page).getByRole("button", { name: "Create account", exact: true }),
+  ).toBeVisible();
+  await expect(
+    main(page).getByRole("button", { name: "Sign in", exact: true }),
+  ).toBeVisible();
+
+  // Sign back in, then sign out via the legacy /logout route.
+  await mainNav(page)
+    .getByRole("button", { name: "Sign in", exact: true })
+    .click();
+  await signInThrough(page, { email: user.email, password: PASSWORD });
+  await expect(
+    mainNav(page).getByRole("button", { name: "Logout" }),
+  ).toBeVisible(SLOW);
+
+  await page.goto("/logout");
+  await expect(page).toHaveURL("/logout");
+  await expect(
+    page.getByRole("heading", { name: "You're signed out" }),
+  ).toBeVisible(SLOW);
+  await expect(
+    mainNav(page).getByRole("button", { name: "Sign in", exact: true }),
+  ).toBeVisible();
+  await expect(
+    mainNav(page).getByRole("button", { name: "Logout" }),
+  ).toHaveCount(0);
+
+  // The page offers account entry without the removed /login route.
+  await main(page)
+    .getByRole("button", { name: "Sign in", exact: true })
+    .click();
+  await expect(
+    dialog(page).getByRole("heading", { name: "Sign in" }),
   ).toBeVisible();
 });
 
@@ -690,7 +756,9 @@ test("login completes with keyboard only", async ({ page, isMobile }) => {
   );
 
   await page.goto("/");
-  await page.getByRole("button", { name: "Login", exact: true }).click();
+  await mainNav(page)
+    .getByRole("button", { name: "Sign in", exact: true })
+    .click();
   await expect(dialog(page)).toBeVisible();
 
   // The modal heading starts focused; tab forward to each field.
@@ -715,4 +783,141 @@ test("login completes with keyboard only", async ({ page, isMobile }) => {
   await page.keyboard.press("Enter");
 
   await expect(page.getByRole("button", { name: "Logout" })).toBeVisible(SLOW);
+});
+
+// ---------------------------------------------------------------------------
+// U6: entry-point copy and signed-out states
+// ---------------------------------------------------------------------------
+
+// R2/R15: both account entries are discoverable in the navigation on desktop
+// and mobile, and each opens the modal in its own mode.
+test("signed-out navigation offers distinct Sign in and Create account choices", async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto("/");
+  if (isMobile) await openMobileNav(page);
+
+  const signIn = mainNav(page).getByRole("button", {
+    name: "Sign in",
+    exact: true,
+  });
+  const createAccount = mainNav(page).getByRole("button", {
+    name: "Create account",
+    exact: true,
+  });
+  await expect(signIn).toBeVisible();
+  await expect(createAccount).toBeVisible();
+
+  await signIn.click();
+  await expect(
+    dialog(page).getByRole("heading", { name: "Sign in" }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog(page)).toBeHidden();
+
+  await createAccount.click();
+  await expect(
+    dialog(page).getByRole("heading", { name: "Create account" }),
+  ).toBeVisible();
+});
+
+// R2/R3: the season gate presents both choices and names the pending Start
+// action in each mode.
+test("season gate names the pending Start action in both entry modes", async ({
+  page,
+}) => {
+  await seedSeason();
+  await page.goto(`/seasons/${SEASON_ID}`);
+
+  const createAccount = main(page).getByRole("button", {
+    name: "Create account",
+    exact: true,
+  });
+  const signIn = main(page).getByRole("button", {
+    name: "Sign in",
+    exact: true,
+  });
+  await expect(createAccount).toBeVisible();
+  await expect(signIn).toBeVisible();
+
+  await createAccount.click();
+  await expect(
+    dialog(page).getByRole("heading", { name: "Create account" }),
+  ).toBeVisible();
+  await expect(
+    dialog(page).getByText(`Start a draft for ${SEASON_NAME}`),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog(page)).toBeHidden();
+
+  await signIn.click();
+  await expect(
+    dialog(page).getByRole("heading", { name: "Sign in" }),
+  ).toBeVisible();
+  await expect(
+    dialog(page).getByText(`Start a draft for ${SEASON_NAME}`),
+  ).toBeVisible();
+});
+
+// R10 + KTD1: an abandoned Start action is cleared on dismissal, so a later,
+// unrelated sign-in cannot inherit it and create a draft.
+test("a dismissed Start intent cannot execute for a later sign-in", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(Boolean(isMobile), "desktop-only scenario");
+  await seedSeason();
+  const user = await createUser(
+    uniqueEmail("abandoned"),
+    PASSWORD,
+    "Abandoned Intent",
+  );
+
+  // Save a pending start-draft intent, then abandon it by dismissing the
+  // modal without authenticating.
+  await page.goto(`/seasons/${SEASON_ID}`);
+  await main(page)
+    .getByRole("button", { name: "Create account", exact: true })
+    .click();
+  await expect(
+    dialog(page).getByText(`Start a draft for ${SEASON_NAME}`),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog(page)).toBeHidden();
+
+  // Sign in from the navbar as an existing, unrelated account.
+  await mainNav(page)
+    .getByRole("button", { name: "Sign in", exact: true })
+    .click();
+  await signInThrough(page, { email: user.email, password: PASSWORD });
+  await expect(dialog(page)).toBeHidden(SLOW);
+
+  // No draft is created and the visitor stays on the season page.
+  await expect(page).toHaveURL(new RegExp(`/seasons/${SEASON_ID}$`));
+  await expect
+    .poll(async () => Object.keys((await readDrafts()) ?? {}))
+    .toEqual([]);
+});
+
+// R1/R14: public pages render signed out without any auth prompt, and the
+// homepage no longer claims that joining works without an account.
+test("public browsing stays account-free and makes no no-signup claims", async ({
+  page,
+}) => {
+  await seedSeason();
+
+  await page.goto("/");
+  await expect(
+    page.getByRole("heading", { name: /Grab your torch/ }),
+  ).toBeVisible(SLOW);
+  await expect(dialog(page)).toHaveCount(0);
+  await expect(page.getByText(/No accounts needed/)).toHaveCount(0);
+  await expect(page.getByText(/No signup wall/)).toHaveCount(0);
+
+  await page.goto(`/seasons/${SEASON_ID}`);
+  await expect(page.getByRole("heading", { name: SEASON_NAME })).toBeVisible(
+    SLOW,
+  );
+  await expect(dialog(page)).toHaveCount(0);
 });

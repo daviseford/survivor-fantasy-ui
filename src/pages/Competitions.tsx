@@ -21,6 +21,7 @@ import {
   IconChevronRight,
   IconChevronUp,
   IconLogin,
+  IconUserPlus,
 } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -215,21 +216,36 @@ export const Competitions = () => {
     return (
       <Center py="xl">
         <Stack align="center" gap="md">
-          <Alert title="Sign in to see your competitions">
+          <Alert title="Competitions require an account">
             Competitions track your draft scores against friends across a whole
-            season. Log in to view yours or start a new one.
+            season. Create a free account to start one, or sign in to view
+            yours.
           </Alert>
-          <Button
-            leftSection={<IconLogin size={18} />}
-            onClick={() =>
-              modals.openContextModal({
-                modal: "AuthModal",
-                innerProps: {},
-              })
-            }
-          >
-            Log in
-          </Button>
+          <Group gap="sm">
+            <Button
+              leftSection={<IconUserPlus size={18} />}
+              onClick={() =>
+                modals.openContextModal({
+                  modal: "AuthModal",
+                  innerProps: { initialMode: "register" },
+                })
+              }
+            >
+              Create account
+            </Button>
+            <Button
+              variant="default"
+              leftSection={<IconLogin size={18} />}
+              onClick={() =>
+                modals.openContextModal({
+                  modal: "AuthModal",
+                  innerProps: { initialMode: "login" },
+                })
+              }
+            >
+              Sign in
+            </Button>
+          </Group>
         </Stack>
       </Center>
     );

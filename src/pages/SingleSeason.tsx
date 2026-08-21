@@ -61,7 +61,7 @@ export const SingleSeason = () => {
   // Signed-out start: retain the action as a single-use intent with a
   // preallocated draft ID, then open account entry. The continuation below
   // executes it exactly once after authentication.
-  const handleStartDraftIntent = () => {
+  const handleStartDraftIntent = (mode: "login" | "register") => {
     if (!season) return;
     const stateKey = saveAuthIntent({
       kind: "start-draft",
@@ -73,7 +73,7 @@ export const SingleSeason = () => {
     modals.openContextModal({
       modal: "AuthModal",
       innerProps: {
-        initialMode: "register",
+        initialMode: mode,
         actionDescription: `Start a draft for ${season.name}`,
       },
     });
@@ -224,17 +224,28 @@ export const SingleSeason = () => {
           <Paper p="md" radius="md" className={classes.loginBanner}>
             <Group gap="md" align="center" wrap="wrap">
               <Text size="sm" c="white" fw={500}>
-                Log in to start a draft with friends
+                Start a draft with friends: create a free account or sign in.
               </Text>
-              <Button
-                size="sm"
-                variant="white"
-                color="blue"
-                leftSection={<IconLogin size={16} />}
-                onClick={handleStartDraftIntent}
-              >
-                Log in
-              </Button>
+              <Group gap="xs" wrap="nowrap">
+                <Button
+                  size="sm"
+                  variant="white"
+                  color="blue"
+                  leftSection={<IconUserPlus size={16} />}
+                  onClick={() => handleStartDraftIntent("register")}
+                >
+                  Create account
+                </Button>
+                <Button
+                  size="sm"
+                  variant="subtle"
+                  c="white"
+                  leftSection={<IconLogin size={16} />}
+                  onClick={() => handleStartDraftIntent("login")}
+                >
+                  Sign in
+                </Button>
+              </Group>
             </Group>
           </Paper>
         )}

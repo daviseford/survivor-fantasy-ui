@@ -455,7 +455,8 @@ export const Home = () => {
             </Text>
 
             <Text className={classes.featureDescription} c="dimmed">
-              No accounts needed to browse, no complicated setup. Kick off the
+              Browse every season and castaway without an account. When you're
+              ready to play, a free account is all it takes to kick off the
               draft, watch the animated order reveal, and take turns picking
               from the full cast, all in real time on any device.
             </Text>
@@ -465,8 +466,8 @@ export const Home = () => {
                 [
                   {
                     icon: IconUsers,
-                    title: "One link, no friction",
-                    desc: "Friends click and join. No signup wall.",
+                    title: "One link, one free account",
+                    desc: "Friends click your link, create a free account, and join.",
                     color: "cyan",
                   },
                   {

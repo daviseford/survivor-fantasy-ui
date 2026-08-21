@@ -21,10 +21,12 @@ import {
   IconStarFilled,
   IconSun,
   IconUser,
+  IconUserPlus,
 } from "@tabler/icons-react";
 import { Link, useLocation } from "react-router-dom";
 import { auth } from "../../firebase";
 import { useUser } from "../../hooks/useUser";
+import { clearAuthIntents } from "../Auth/authIntent";
 import classes from "./Navbar.module.css";
 
 type NavItem = {
@@ -78,6 +80,9 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
   const isDark = computedColorScheme === "dark";
 
   const handleLogout = () => {
+    // Drop any abandoned Start/Join intent so a later account can never
+    // inherit it (R10 + KTD1).
+    clearAuthIntents();
     auth.signOut();
   };
 
@@ -105,21 +110,38 @@ export const Navbar = ({ onNavigate }: { onNavigate?: () => void }) => {
         />
 
         {!slimUser && (
-          <NavLink
-            component="button"
-            type="button"
-            className={classes.link}
-            label="Login"
-            leftSection={
-              <IconLogin className={classes.linkIcon} stroke={1.5} />
-            }
-            onClick={() =>
-              modals.openContextModal({
-                modal: "AuthModal",
-                innerProps: {},
-              })
-            }
-          />
+          <>
+            <NavLink
+              component="button"
+              type="button"
+              className={classes.link}
+              label="Sign in"
+              leftSection={
+                <IconLogin className={classes.linkIcon} stroke={1.5} />
+              }
+              onClick={() =>
+                modals.openContextModal({
+                  modal: "AuthModal",
+                  innerProps: { initialMode: "login" },
+                })
+              }
+            />
+            <NavLink
+              component="button"
+              type="button"
+              className={classes.link}
+              label="Create account"
+              leftSection={
+                <IconUserPlus className={classes.linkIcon} stroke={1.5} />
+              }
+              onClick={() =>
+                modals.openContextModal({
+                  modal: "AuthModal",
+                  innerProps: { initialMode: "register" },
+                })
+              }
+            />
+          </>
         )}
 
         {slimUser && (
