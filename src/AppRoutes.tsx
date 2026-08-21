@@ -31,6 +31,7 @@ import { Home } from "./components/Home/Home";
 import { Navbar } from "./components/Navbar";
 import { NotFound } from "./components/NotFound";
 import { theme } from "./theme";
+import { trackEvent } from "./utils/analytics";
 
 const Admin = lazy(() =>
   import("./pages/Admin").then((m) => ({ default: m.Admin })),
@@ -66,6 +67,21 @@ const RedirectToAdmin = () => {
   const { seasonId } = useParams();
   if (!seasonId) return <Navigate to="/admin" replace />;
   return <Navigate to={`/admin/${seasonId}`} replace />;
+};
+
+// Logs a GA4 page_view on every route change (SPA navigation isn't
+// tracked automatically). No-ops outside production builds.
+const PageTracker = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    trackEvent("page_view", {
+      page_path: location.pathname + location.search,
+      page_title: document.title,
+    });
+  }, [location]);
+
+  return null;
 };
 
 const ScrollToTop = () => {
@@ -104,6 +120,7 @@ export const AppRoutes = () => {
       <Notifications />
       <Router>
         <ScrollToTop />
+        <PageTracker />
         <ModalsProvider modals={modals}>
           <AppShell
             header={{

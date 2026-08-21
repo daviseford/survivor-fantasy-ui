@@ -13,6 +13,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { auth, db } from "../../firebase";
 import { useUser } from "../../hooks/useUser";
+import { trackEvent } from "../../utils/analytics";
 
 export const Register = () => {
   const { user } = useUser();
@@ -48,6 +49,8 @@ export const Register = () => {
         email: _user.email,
         displayName,
       });
+
+      trackEvent("sign_up", { method: "password" });
 
       modals.closeAll();
 
