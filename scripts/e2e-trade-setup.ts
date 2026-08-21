@@ -43,8 +43,8 @@ const E2E_MARKER_FIELD = "e2e_fixture";
 const RUN_ID = randomBytes(4).toString("hex");
 const competitionIdFor = (runId: string) => `competition_e2e_trades_${runId}`;
 const emailsFor = (runId: string) => ({
-  a: `trader-a+${runId}@survivor-fantasy.test`,
-  b: `trader-b+${runId}@survivor-fantasy.test`,
+  a: `trader-a+${runId}@grabyourtorch.test`,
+  b: `trader-b+${runId}@grabyourtorch.test`,
 });
 
 const COMPETITION_ID = competitionIdFor(RUN_ID);

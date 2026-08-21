@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Users create competitions, draft contestants, and earn points based on in-game events (challenge wins, idol plays, eliminations, etc.). The scoring engine is in `src/utils/scoringUtils.ts` with rules defined in `src/data/scoring.ts`.
+Grab Your Torch is a fantasy sports-style web app for the TV show Survivor. Users create competitions, draft contestants, and earn points based on in-game events (challenge wins, idol plays, eliminations, etc.). The scoring engine is in `src/utils/scoringUtils.ts` with rules defined in `src/data/scoring.ts`.
 
 ## Commands
 

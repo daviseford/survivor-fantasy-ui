@@ -4,7 +4,7 @@ import classes from "./Footer.module.css";
 
 const links = [
   {
-    link: "https://github.com/daviseford/survivor-fantasy-ui/",
+    link: "https://github.com/daviseford/grab-your-torch/",
     label: "Github",
   },
   { link: "//daviseford.com", label: "daviseford.com" },
