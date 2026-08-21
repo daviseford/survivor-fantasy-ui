@@ -68,7 +68,9 @@ async function selectCompetitionTab(
   page: Page,
   name: CompetitionTab,
 ): Promise<void> {
-  const tab = page.getByRole("tab", { name, exact: true });
+  const accessibleName =
+    name === "Trades" ? /^Trades(?:, \d+ pending offers?)?$/ : name;
+  const tab = page.getByRole("tab", { name: accessibleName, exact: true });
   const tabParam = new URL(page.url()).searchParams.get("tab");
 
   if (
@@ -159,12 +161,16 @@ test("two users trade players back and forth", async ({ browser }) => {
   await proposeTrade(pageA, bob.displayName, alicePlayer, bobPlayer);
 
   // 2. Bob sees the offer and accepts.
+  await expect(
+    pageB.getByRole("tab", { name: "Trades, 1 pending offer" }),
+  ).toBeVisible({ timeout: 15_000 });
+
   // Reload so Bob's trades listener attaches with a settled auth token —
   // guards against a subscribe race on freshly minted users.
   await selectCompetitionTab(pageB, "Trades");
   await pageB.reload();
   await expect(
-    pageB.getByRole("tab", { name: "Trades", exact: true }),
+    pageB.getByRole("tab", { name: "Trades, 1 pending offer", exact: true }),
   ).toHaveAttribute("aria-selected", "true");
   await expect(
     pageB.getByRole("heading", { name: "Incoming offers" }),
@@ -180,6 +186,9 @@ test("two users trade players back and forth", async ({ browser }) => {
   ).toBeVisible();
   await expect(aliceOffer.getByText(bobPlayer, { exact: true })).toBeVisible();
   await aliceOffer.getByRole("button", { name: "Accept offer" }).click();
+  await expect(
+    pageB.getByRole("tab", { name: "Trades", exact: true }),
+  ).toBeVisible();
 
   // 3. Rosters swap for both users (live snapshots, no reload needed).
   await selectCompetitionTab(pageA, "Overview");
@@ -203,9 +212,12 @@ test("two users trade players back and forth", async ({ browser }) => {
   // 5. Bob trades the players back; Alice accepts.
   await selectCompetitionTab(pageB, "Trades");
   await proposeTrade(pageB, alice.displayName, alicePlayer, bobPlayer);
+  await expect(
+    pageA.getByRole("tab", { name: "Trades, 1 pending offer" }),
+  ).toBeVisible({ timeout: 15_000 });
   await pageA.reload();
   await expect(
-    pageA.getByRole("tab", { name: "Trades", exact: true }),
+    pageA.getByRole("tab", { name: "Trades, 1 pending offer", exact: true }),
   ).toHaveAttribute("aria-selected", "true");
   const bobOffer = pageA.locator("[data-trade-id]").filter({
     has: pageA.getByText(`Offer from ${bob.displayName}`, { exact: true }),
@@ -216,6 +228,9 @@ test("two users trade players back and forth", async ({ browser }) => {
   await expect(bobOffer.getByText(alicePlayer, { exact: true })).toBeVisible();
   await expect(bobOffer.getByText(bobPlayer, { exact: true })).toBeVisible();
   await bobOffer.getByRole("button", { name: "Accept offer" }).click();
+  await expect(
+    pageA.getByRole("tab", { name: "Trades", exact: true }),
+  ).toBeVisible();
 
   // Rosters are restored and totals are still untouched.
   await selectCompetitionTab(pageA, "Overview");

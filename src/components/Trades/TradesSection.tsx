@@ -35,7 +35,6 @@ import {
   cancelTrade,
   rejectTrade,
 } from "../../hooks/useTradeActions";
-import { useTrades } from "../../hooks/useTrades";
 import { useUser } from "../../hooks/useUser";
 import { CastawayId, Player, Trade } from "../../types";
 import { getParticipantName } from "../../utils/misc";
@@ -193,15 +192,20 @@ const TradeOffer = ({
   </Box>
 );
 
-export const TradesSection = () => {
+type TradesSectionProps = {
+  trades: Trade[];
+  tradesLoaded: boolean;
+  tradesError: Error | null;
+};
+
+export const TradesSection = ({
+  trades,
+  tradesLoaded,
+  tradesError,
+}: TradesSectionProps) => {
   const { slimUser } = useUser();
   const { data: competition } = useCompetition();
   const { data: season } = useSeason(competition?.season_id);
-  const {
-    data: trades,
-    loaded: tradesLoaded,
-    error: tradesError,
-  } = useTrades(competition?.id);
   const { survivorsByUserUid, eliminatedSurvivors } = useCompetitionMeta();
 
   const { data: challenges, isReady: areChallengesReady } = useChallenges(

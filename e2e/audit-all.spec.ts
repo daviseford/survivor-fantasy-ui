@@ -51,8 +51,12 @@ for (const route of ALL_ROUTES) {
       // active before capturing it so a broken query-param contract cannot
       // silently produce four copies of the default Overview screen.
       if (route.competitionTab) {
+        const tabName =
+          route.competitionTab === "Trades"
+            ? /^Trades(?:, \d+ pending offers?)?$/
+            : route.competitionTab;
         const tab = page.getByRole("tab", {
-          name: route.competitionTab,
+          name: tabName,
           exact: true,
         });
         await expect(tab).toBeVisible();

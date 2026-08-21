@@ -45,6 +45,7 @@ import { useEvents } from "../hooks/useEvents";
 import { usePropBetScoring } from "../hooks/useGetPropBetScoring";
 import { useSeason } from "../hooks/useSeason";
 import { useSeasonStats } from "../hooks/useSeasonStats";
+import { useTrades } from "../hooks/useTrades";
 import { useUser } from "../hooks/useUser";
 import {
   getCompetitionAwaitingDataEpisode,
@@ -90,6 +91,7 @@ export const SingleCompetition = () => {
   const { data: competition } = useCompetition();
   const { slimUser } = useUser();
   const { activeKeys: activePropBetKeys } = usePropBetScoring();
+  const tradeState = useTrades(competition?.id);
 
   const { data: season } = useSeason(competition?.season_id);
   const { data: unfilteredEvents, isReady: areEventsReady } = useEvents(
@@ -167,6 +169,16 @@ export const SingleCompetition = () => {
     seasonStats != null &&
     (seasonStats.castawayCards.length > 0 ||
       seasonStats.rosterStats.length > 0);
+  const incomingTradeCount = slimUser?.uid
+    ? tradeState.data.filter(
+        (trade) =>
+          trade.status === "pending" && trade.offered_to_uid === slimUser.uid,
+      ).length
+    : 0;
+  const tradesTabLabel =
+    incomingTradeCount > 0
+      ? `Trades, ${incomingTradeCount} pending ${incomingTradeCount === 1 ? "offer" : "offers"}`
+      : "Trades";
 
   return (
     <Stack gap="xl" p={{ base: "sm", sm: "lg" }}>
@@ -234,8 +246,23 @@ export const SingleCompetition = () => {
               value="trades"
               leftSection={<IconArrowsExchange size={17} />}
               className={classes.tab}
+              aria-label={tradesTabLabel}
             >
-              Trades
+              <span className={classes.tabLabel}>
+                Trades
+                {incomingTradeCount > 0 && (
+                  <Badge
+                    size="xs"
+                    variant="filled"
+                    color="grape"
+                    circle={incomingTradeCount < 10}
+                    className={classes.tabBadge}
+                    aria-hidden="true"
+                  >
+                    {incomingTradeCount > 99 ? "99+" : incomingTradeCount}
+                  </Badge>
+                )}
+              </span>
             </Tabs.Tab>
             <Tabs.Tab
               value="stats"
@@ -328,7 +355,11 @@ export const SingleCompetition = () => {
                 />
               }
             >
-              <TradesSection />
+              <TradesSection
+                trades={tradeState.data}
+                tradesLoaded={tradeState.loaded}
+                tradesError={tradeState.error}
+              />
             </Section>
           </Tabs.Panel>
 
