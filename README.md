@@ -24,8 +24,9 @@ yarn dev
 ```
 
 Copy `.env.example` to `.env` and add the required Firebase configuration values
-before starting the app. Use `yarn ci` to run the same formatting, linting,
-type-checking, tests, and build checks used in GitHub Actions.
+before starting the app. Use `yarn ci` to run the application formatting,
+linting, type-checking, unit-test, and build suite. Run `yarn test:rules`
+separately to match the Firestore security rules check in GitHub Actions.
 
 ## Production
 
