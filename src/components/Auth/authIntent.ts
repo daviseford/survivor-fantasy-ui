@@ -158,11 +158,19 @@ const writeFile = (
   storage: AuthIntentStorage,
   file: StoredIntentFile,
 ): void => {
-  if (Object.keys(file.records).length === 0) {
-    storage.removeItem(STORAGE_KEY);
-    return;
+  // Constraint: private-mode/quota write failures must never throw into
+  // click handlers or continuation runs. A failed write degrades to a
+  // no-op; the intent simply is not persisted, and callers already treat
+  // an absent state key as "no pending intent".
+  try {
+    if (Object.keys(file.records).length === 0) {
+      storage.removeItem(STORAGE_KEY);
+      return;
+    }
+    storage.setItem(STORAGE_KEY, JSON.stringify(file));
+  } catch {
+    // Storage write failed (QuotaExceededError, restricted storage); ignore.
   }
-  storage.setItem(STORAGE_KEY, JSON.stringify(file));
 };
 
 const isExpired = (record: StoredIntentRecord, now: number): boolean =>
@@ -309,5 +317,11 @@ export const restoreClaimedIntent = (
 
 /** Remove every pending intent (account-entry cancellation or sign-out). */
 export const clearAuthIntents = (options: AuthIntentOptions = {}): void => {
-  resolveStorage(options.storage).removeItem(STORAGE_KEY);
+  // Same constraint as writeFile: a restricted-storage write failure must
+  // never throw into click handlers; a failed clear degrades to a no-op.
+  try {
+    resolveStorage(options.storage).removeItem(STORAGE_KEY);
+  } catch {
+    // Storage write failed (QuotaExceededError, restricted storage); ignore.
+  }
 };

@@ -389,4 +389,37 @@ describe("authIntent", () => {
       clearAuthIntents();
     });
   });
+
+  describe("storage write failures", () => {
+    const createThrowingWriteStorage = (): AuthIntentStorage => ({
+      getItem: () => null,
+      setItem: () => {
+        throw new DOMException("quota exceeded", "QuotaExceededError");
+      },
+      removeItem: () => {
+        throw new DOMException("quota exceeded", "QuotaExceededError");
+      },
+    });
+
+    it("saveAuthIntent does not throw when setItem throws", () => {
+      const storage = createThrowingWriteStorage();
+
+      expect(() => saveAuthIntent(startIntent, { storage })).not.toThrow();
+    });
+
+    it("clearAuthIntents does not throw when removeItem throws", () => {
+      const storage = createThrowingWriteStorage();
+
+      expect(() => clearAuthIntents({ storage })).not.toThrow();
+    });
+
+    it("claimAuthIntent on a healthy store still works after a failed save", () => {
+      saveAuthIntent(startIntent, { storage: createThrowingWriteStorage() });
+
+      const storage = createMemoryStorage();
+      const stateKey = saveAuthIntent(startIntent, { storage });
+
+      expect(claimAuthIntent(stateKey, { storage })).toEqual(startIntent);
+    });
+  });
 });
