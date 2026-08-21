@@ -4,7 +4,9 @@ import {
   Badge,
   Box,
   Button,
+  Center,
   Group,
+  Loader,
   Stack,
   Text,
   Title,
@@ -13,6 +15,7 @@ import {
   IconArrowRight,
   IconArrowsExchange,
   IconCheck,
+  IconChevronDown,
   IconClock,
   IconHistory,
   IconLock,
@@ -37,6 +40,11 @@ import { CastawayId, Player, SlimUser, Trade } from "../../types";
 import { getTradeLockEpisode } from "../../utils/tradeUtils";
 import { ProposeTradeModal } from "./ProposeTradeModal";
 import styles from "./TradesSection.module.css";
+
+const HISTORY_BATCH_SIZE = 5;
+
+const resolvedAt = (trade: Trade): string =>
+  typeof trade.resolved_at === "string" ? trade.resolved_at : trade.created_at;
 
 const participantName = (participants: SlimUser[], uid: string): string =>
   participants.find((p) => p.uid === uid)?.displayName ??
@@ -192,7 +200,7 @@ export const TradesSection = () => {
   const { slimUser } = useUser();
   const { data: competition } = useCompetition();
   const { data: season } = useSeason(competition?.season_id);
-  const { data: trades } = useTrades(competition?.id);
+  const { data: trades, loaded: tradesLoaded } = useTrades(competition?.id);
   const { survivorsByUserUid, eliminatedSurvivors } = useCompetitionMeta();
 
   const { data: challenges, isReady: areChallengesReady } = useChallenges(
@@ -214,8 +222,17 @@ export const TradesSection = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [resolvingTradeId, setResolvingTradeId] = useState<string | null>(null);
+  const [historyVisibility, setHistoryVisibility] = useState({
+    competitionId: competition?.id,
+    count: HISTORY_BATCH_SIZE,
+  });
 
   if (!competition || !season) return null;
+
+  const visibleHistoryCount =
+    historyVisibility.competitionId === competition.id
+      ? historyVisibility.count
+      : HISTORY_BATCH_SIZE;
 
   const myUid = slimUser?.uid;
   const isParticipant = !!myUid && competition.participant_uids.includes(myUid);
@@ -226,7 +243,11 @@ export const TradesSection = () => {
   const pending = trades.filter((trade) => trade.status === "pending");
   const incoming = pending.filter((trade) => trade.offered_to_uid === myUid);
   const outgoing = pending.filter((trade) => trade.offered_by_uid === myUid);
-  const history = trades.filter((trade) => trade.status !== "pending");
+  const history = trades
+    .filter((trade) => trade.status !== "pending")
+    .sort((a, b) => resolvedAt(b).localeCompare(resolvedAt(a)));
+  const visibleHistory = history.slice(0, visibleHistoryCount);
+  const remainingHistoryCount = history.length - visibleHistory.length;
 
   const resolveTrade = async (
     tradeId: string,
@@ -426,13 +447,34 @@ export const TradesSection = () => {
         </Stack>
       )}
 
-      {history.length > 0 && (
+      {!tradesLoaded && (
+        <Center py="xl" role="status" aria-live="polite">
+          <Stack align="center" gap="xs">
+            <Loader size="sm" />
+            <Text size="sm" c="dimmed">
+              Loading trade activity
+            </Text>
+          </Stack>
+        </Center>
+      )}
+
+      {tradesLoaded && history.length > 0 && (
         <Stack gap="sm">
-          <Group gap="xs">
-            <IconHistory size={18} color="var(--mantine-color-dimmed)" />
-            <Title order={4}>Trade history</Title>
+          <Group justify="space-between" gap="sm" wrap="nowrap">
+            <Group gap="xs" wrap="nowrap">
+              <IconHistory size={18} color="var(--mantine-color-dimmed)" />
+              <Title order={4}>Trade history</Title>
+            </Group>
+            <Text
+              size="xs"
+              c="dimmed"
+              style={{ whiteSpace: "nowrap" }}
+              aria-live="polite"
+            >
+              Showing {visibleHistory.length} of {history.length}
+            </Text>
           </Group>
-          {history.map((trade) => (
+          {visibleHistory.map((trade) => (
             <TradeOffer
               key={trade.id}
               trade={trade}
@@ -445,10 +487,29 @@ export const TradesSection = () => {
               }
             />
           ))}
+          {remainingHistoryCount > 0 && (
+            <Button
+              variant="light"
+              size="md"
+              fullWidth
+              leftSection={<IconChevronDown size={17} />}
+              onClick={() =>
+                setHistoryVisibility((current) => ({
+                  competitionId: competition.id,
+                  count:
+                    (current.competitionId === competition.id
+                      ? current.count
+                      : HISTORY_BATCH_SIZE) + HISTORY_BATCH_SIZE,
+                }))
+              }
+            >
+              Load {Math.min(HISTORY_BATCH_SIZE, remainingHistoryCount)} more
+            </Button>
+          )}
         </Stack>
       )}
 
-      {trades.length === 0 && (
+      {tradesLoaded && trades.length === 0 && (
         <Box className={styles.emptyState}>
           <div className={styles.emptyIcon} aria-hidden="true">
             <IconArrowRight size={22} />

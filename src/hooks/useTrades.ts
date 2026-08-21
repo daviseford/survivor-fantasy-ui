@@ -3,6 +3,12 @@ import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { Competition, Trade } from "../types";
 
+type TradesState = {
+  competitionId?: Competition["id"];
+  data: Trade[];
+  loaded: boolean;
+};
+
 /**
  * Trade documents are written by clients, so a malformed one can reach this
  * subscription. Skip anything we cannot sort or render rather than throwing
@@ -19,10 +25,15 @@ const isRenderableTrade = (trade: Trade): boolean =>
  * newest first.
  */
 export const useTrades = (competitionId?: Competition["id"]) => {
-  const [data, setData] = useState<Trade[]>([]);
-  const [loaded, setLoaded] = useState(false);
+  const [state, setState] = useState<TradesState>({
+    competitionId,
+    data: [],
+    loaded: false,
+  });
 
   useEffect(() => {
+    setState({ competitionId, data: [], loaded: false });
+
     if (!competitionId) return;
 
     const q = query(collection(db, "competitions", competitionId, "trades"));
@@ -33,17 +44,28 @@ export const useTrades = (competitionId?: Competition["id"]) => {
           .map((d) => d.data() as Trade)
           .filter(isRenderableTrade)
           .sort((a, b) => b.created_at.localeCompare(a.created_at));
-        setData(trades);
-        setLoaded(true);
+        setState((current) =>
+          current.competitionId === competitionId
+            ? { competitionId, data: trades, loaded: true }
+            : current,
+        );
       },
       (error) => {
         console.error("useTrades: onSnapshot error", error);
-        setLoaded(true);
+        setState((current) =>
+          current.competitionId === competitionId
+            ? { ...current, loaded: true }
+            : current,
+        );
       },
     );
 
     return unsub;
   }, [competitionId]);
 
-  return { data, loaded };
+  if (state.competitionId !== competitionId) {
+    return { data: [], loaded: false };
+  }
+
+  return { data: state.data, loaded: state.loaded };
 };
