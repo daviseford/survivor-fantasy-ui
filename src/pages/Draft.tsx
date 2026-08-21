@@ -521,7 +521,7 @@ export const DraftComponent = () => {
                     2. Random Order
                   </Text>
                   <Text size="xs" c="dimmed" ta="center">
-                    Pick order is randomly shuffled when the draft starts — no
+                    Pick order is randomly shuffled when the draft starts. No
                     peeking!
                   </Text>
                 </Stack>
@@ -698,7 +698,7 @@ export const DraftComponent = () => {
               <Stack gap="lg" mt="md">
                 {!allPlayersDoneWithPropBets && (
                   <Alert color="yellow" variant="light">
-                    Waiting for prop bets — {draft?.prop_bets?.length || 0} of{" "}
+                    Waiting for prop bets: {draft?.prop_bets?.length || 0} of{" "}
                     {draft?.participants?.length} submitted
                   </Alert>
                 )}

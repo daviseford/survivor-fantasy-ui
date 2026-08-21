@@ -85,10 +85,10 @@ async function generateOgImage() {
 
       <!-- Title text -->
       <text x="420" y="240" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="900" fill="white" letter-spacing="-2">
-        Survivor
+        Grab Your
       </text>
       <text x="420" y="330" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="900" fill="url(#accent)" letter-spacing="-2">
-        Fantasy
+        Torch
       </text>
 
       <!-- Tagline -->
