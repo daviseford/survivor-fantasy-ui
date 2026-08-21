@@ -176,7 +176,12 @@ const requestResetEmail = async (email: string) => {
   }
 };
 
-type OobCode = { email: string; requestType: string; oobCode: string };
+type OobCode = {
+  email: string;
+  requestType: string;
+  oobCode: string;
+  oobLink: string;
+};
 
 const getPasswordResetCodes = async (email: string): Promise<OobCode[]> => {
   const res = await fetch(
@@ -678,6 +683,137 @@ test("reset completion: new password signs in, old password fails, reused code i
   await expect(
     page.getByRole("button", { name: "Request a new reset email" }),
   ).toBeVisible();
+});
+
+// Real-flow fidelity (AE4): the reset request is submitted through the UI so
+// ForgotPassword's generated actionCodeSettings continue URL, the state-key
+// propagation, and the continuation handoff are all exercised. Only the OOB
+// entry itself is read from the emulator; the app route is composed from the
+// generated link's own parameters, never hand-assembled.
+test("reset through the generated email link continues the retained start-draft intent", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(Boolean(isMobile), "desktop-only scenario");
+  await seedSeason();
+  const user = await createUser(
+    uniqueEmail("reset-flow"),
+    PASSWORD,
+    "Reset Flow User",
+  );
+
+  // Save a start-draft intent through the gate, then request the reset
+  // through the UI so the app builds the real action URL.
+  await page.goto(`/seasons/${SEASON_ID}`);
+  await main(page)
+    .getByRole("button", { name: "Create account", exact: true })
+    .click();
+  await expect(
+    dialog(page).getByText(`Start a draft for ${SEASON_NAME}`),
+  ).toBeVisible();
+  await dialog(page).getByRole("tab", { name: "Sign in" }).click();
+  await dialog(page).getByRole("button", { name: "Forgot password?" }).click();
+  await dialog(page).getByLabel("Email").fill(user.email);
+  await dialog(page).getByRole("button", { name: "Send reset email" }).click();
+  await expect(dialog(page).getByRole("alert")).toHaveText(
+    RESET_REQUEST_CONFIRMATION,
+    SLOW,
+  );
+
+  // A confirmed reset request must survive dismissal: the emailed continue
+  // URL still points at the pending intent's state key.
+  await page.keyboard.press("Escape");
+  await expect(dialog(page)).toBeHidden();
+
+  await expect
+    .poll(async () => (await getPasswordResetCodes(user.email)).length, {
+      timeout: 15_000,
+    })
+    .toBe(1);
+  const oobLink = (await getPasswordResetCodes(user.email))[0].oobLink;
+
+  // The emulator's oobLink wraps its own handler with the generated action
+  // parameters. Its continue URL must be the app's own reset route carrying
+  // the saved intent's state key.
+  const link = new URL(oobLink);
+  expect(link.searchParams.get("mode")).toBe("resetPassword");
+  expect(link.searchParams.get("oobCode")).toBeTruthy();
+  const continueUrl = link.searchParams.get("continueUrl");
+  if (!continueUrl) {
+    throw new Error("generated reset link carries no continueUrl");
+  }
+  const continueTarget = new URL(continueUrl);
+  expect(continueTarget.origin).toBe(new URL(page.url()).origin);
+  expect(continueTarget.pathname).toBe("/reset-password");
+  const stateKey = continueTarget.searchParams.get("state");
+  expect(stateKey).toBeTruthy();
+
+  // The state key identifies the intent saved above, not a forged value.
+  const storedIntents = await page.evaluate(() =>
+    window.localStorage.getItem("survivor_auth_intents"),
+  );
+  const intentRecords = (
+    JSON.parse(storedIntents ?? "{}") as { records?: Record<string, unknown> }
+  ).records;
+  expect(
+    intentRecords !== undefined &&
+      stateKey !== null &&
+      stateKey in intentRecords,
+  ).toBe(true);
+
+  // In production the console email template points the link at the app's
+  // reset route with exactly these generated parameters; compose it the same
+  // way here. The one-time code is captured into page memory and stripped
+  // from the address bar before any form renders.
+  await page.goto(`/reset-password${link.search}`);
+  await expect(page).toHaveURL("/reset-password");
+
+  await page.getByRole("textbox", { name: "New password" }).fill(NEW_PASSWORD);
+  await page.getByRole("button", { name: "Set new password" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Password updated" }),
+  ).toBeVisible(SLOW);
+
+  // Sign in from the page: the account email is prefilled and the retained
+  // start-draft action is described.
+  await main(page)
+    .getByRole("button", { name: "Sign in", exact: true })
+    .click();
+  await expect(dialog(page).getByLabel("Email")).toHaveValue(user.email);
+  await expect(
+    dialog(page).getByText("Sign in to continue starting your draft."),
+  ).toBeVisible();
+  await dialog(page)
+    .getByRole("textbox", { name: "Password" })
+    .fill(NEW_PASSWORD);
+  await dialog(page).getByRole("button", { name: "Sign in" }).click();
+
+  // The continuation returns to the season page and executes exactly once:
+  // one draft in RTDB with this user as creator.
+  await expect(page).toHaveURL(
+    new RegExp(`/seasons/${SEASON_ID}/draft/draft_`),
+    SLOW,
+  );
+  await expect(page.getByRole("heading", { name: "Draft Lobby" })).toBeVisible(
+    SLOW,
+  );
+  const drafts = await readDrafts();
+  const draftRecords = Object.values(drafts ?? {});
+  expect(draftRecords).toHaveLength(1);
+  expect(draftRecords[0].creator_uid).toBe(user.uid);
+
+  await signOutViaNavbar(page, Boolean(isMobile));
+
+  // The old password no longer signs in.
+  await page.goto(`/seasons/${SEASON_ID}`);
+  await main(page)
+    .getByRole("button", { name: "Sign in", exact: true })
+    .click();
+  await signInThrough(page, { email: user.email, password: PASSWORD });
+  await expect(dialog(page).getByRole("alert")).toContainText(
+    "We could not sign you in with that email and password",
+    SLOW,
+  );
 });
 
 // AE8: sign-out restores signed-out entry points, and the legacy /logout
