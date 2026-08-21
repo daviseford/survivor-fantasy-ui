@@ -9,11 +9,13 @@ import type { CompetitionTab } from "./helpers";
  * scripts/e2e-trade-setup.ts) against production Firebase:
  *   1. Trader Alice proposes a trade to Trader Bob.
  *   2. Bob sees it in real time and accepts.
- *   3. Rosters swap in the Rosters grid for both users.
+ *   3. Rosters do NOT swap yet — the fixture is a watch-along on episode 2 and
+ *      the cutoff is episode 3, so both cards show pending-trade indicators
+ *      (outgoing marked "trading away", incoming previewed as a ghost).
  *   4. Standings totals do NOT change — past points stay with the original
- *      owner (the season is complete, so the cutoff episode is beyond all
- *      scored episodes).
- *   5. Bob trades back and Alice accepts, restoring the rosters.
+ *      owner.
+ *   5. The creator reveals episode 3 and the swap lands for both users.
+ *   6. Bob trades back and Alice accepts; the return trip is pending again.
  */
 
 interface TestUser {
@@ -190,15 +192,26 @@ test("two users trade players back and forth", async ({ browser }) => {
     pageB.getByRole("tab", { name: "Trades", exact: true }),
   ).toBeVisible();
 
-  // 3. Rosters swap for both users (live snapshots, no reload needed).
+  // 3. Rosters do NOT swap yet (live snapshots, no reload needed): the trade
+  // lands next episode. The outgoing player stays on the sender's card marked
+  // as trading away, and the receiving card previews the arrival.
   await selectCompetitionTab(pageA, "Overview");
   await selectCompetitionTab(pageB, "Overview");
   await expect(
-    teamCard(pageA, bob.displayName).getByAltText(alicePlayer),
+    teamCard(pageA, alice.displayName).getByAltText(
+      `${alicePlayer} (trading away)`,
+    ),
   ).toBeVisible({ timeout: 15_000 });
   await expect(
-    teamCard(pageB, alice.displayName).getByAltText(bobPlayer),
+    teamCard(pageA, bob.displayName).getByAltText(
+      `${alicePlayer} (arriving next episode)`,
+    ),
   ).toBeVisible();
+  await expect(
+    teamCard(pageB, alice.displayName).getByAltText(
+      `${bobPlayer} (arriving next episode)`,
+    ),
+  ).toBeVisible({ timeout: 15_000 });
 
   // 4. Past points did not move with the traded players.
   expect(await standingsText(pageA, alice.displayName)).toBe(aliceRowBefore);
@@ -209,7 +222,24 @@ test("two users trade players back and forth", async ({ browser }) => {
   await selectCompetitionTab(pageA, "Trades");
   await expect(pageA.getByText("Accepted · from Ep 3").first()).toBeVisible();
 
-  // 5. Bob trades the players back; Alice accepts.
+  // 5. The creator reveals the cutoff episode and the swap lands everywhere.
+  await selectCompetitionTab(pageA, "Overview");
+  await pageA.getByRole("button", { name: "Reveal Ep 3" }).click();
+  await expect(
+    teamCard(pageA, bob.displayName).getByAltText(alicePlayer, { exact: true }),
+  ).toBeVisible({ timeout: 15_000 });
+  await expect(
+    teamCard(pageB, alice.displayName).getByAltText(bobPlayer, {
+      exact: true,
+    }),
+  ).toBeVisible({ timeout: 15_000 });
+  await expect(
+    teamCard(pageA, bob.displayName).getByAltText(
+      `${alicePlayer} (arriving next episode)`,
+    ),
+  ).not.toBeVisible();
+
+  // 6. Bob trades the players back; Alice accepts.
   await selectCompetitionTab(pageB, "Trades");
   await proposeTrade(pageB, alice.displayName, alicePlayer, bobPlayer);
   await expect(
@@ -232,14 +262,23 @@ test("two users trade players back and forth", async ({ browser }) => {
     pageA.getByRole("tab", { name: "Trades", exact: true }),
   ).toBeVisible();
 
-  // Rosters are restored and totals are still untouched.
+  // The return trip is pending in turn: rosters still show the
+  // post-episode-3 state, with the players marked as moving back at the next
+  // reveal.
   await selectCompetitionTab(pageA, "Overview");
   await selectCompetitionTab(pageB, "Overview");
   await expect(
-    teamCard(pageA, alice.displayName).getByAltText(alicePlayer),
+    teamCard(pageA, bob.displayName).getByAltText(
+      `${alicePlayer} (trading away)`,
+    ),
   ).toBeVisible({ timeout: 15_000 });
-  expect(await standingsText(pageB, alice.displayName)).toBe(aliceRowBefore);
-  expect(await standingsText(pageB, bob.displayName)).toBe(bobRowBefore);
+  await expect(
+    teamCard(pageB, alice.displayName).getByAltText(
+      `${alicePlayer} (arriving next episode)`,
+    ),
+  ).toBeVisible({ timeout: 15_000 });
+  await selectCompetitionTab(pageA, "Trades");
+  await expect(pageA.getByText("Accepted · from Ep 4").first()).toBeVisible();
 
   await contextA.close();
   await contextB.close();

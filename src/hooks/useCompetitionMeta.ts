@@ -2,9 +2,12 @@ import { useMemo } from "react";
 import { CastawayId, Player } from "../types";
 import { filterRecordByEpisode } from "../utils/episodeFilter";
 import {
-  getAcquisitions,
+  getAcquisitionsAtEpisode,
   getCurrentOwners,
   getDrafters,
+  getOwnersAtEpisode,
+  getRosterEpisode,
+  getUpcomingMoves,
 } from "../utils/tradeUtils";
 import { useCompetition } from "./useCompetition";
 import { useEliminations } from "./useEliminations";
@@ -27,40 +30,96 @@ export const useCompetitionMeta = () => {
     [eliminations, maxEpisode],
   );
 
+  // Two ownership questions with different answers while a trade's cutoff is
+  // still ahead of the competition:
+  //   - display (rosters, scoring, badges): who owns the castaway as of the
+  //     episode the competition is on -- an accepted trade stays invisible
+  //     until its cutoff episode is revealed.
+  //   - trading (propose/accept eligibility): who owns the castaway after
+  //     every accepted trade -- a player already promised away cannot be
+  //     offered again, even while the roster still displays them.
+  const rosterEpisode = competition ? getRosterEpisode(competition) : Infinity;
+
+  const displayOwners = useMemo(
+    () =>
+      getOwnersAtEpisode(competition?.draft_picks || [], trades, rosterEpisode),
+    [competition?.draft_picks, trades, rosterEpisode],
+  );
+
   const currentOwners = useMemo(
     () => getCurrentOwners(competition?.draft_picks || [], trades),
     [competition?.draft_picks, trades],
   );
 
-  // Rosters follow current ownership, but the UI still has to be able to say
-  // where a castaway came from: drafted here, or acquired in a trade.
+  // Rosters follow ownership, but the UI still has to be able to say where a
+  // castaway came from: drafted here, or acquired in a trade.
   const drafters = useMemo(
     () => getDrafters(competition?.draft_picks || []),
     [competition?.draft_picks],
   );
 
   const acquisitions = useMemo(
-    () => getAcquisitions(competition?.draft_picks || [], trades),
-    [competition?.draft_picks, trades],
+    () =>
+      getAcquisitionsAtEpisode(
+        competition?.draft_picks || [],
+        trades,
+        rosterEpisode,
+      ),
+    [competition?.draft_picks, trades, rosterEpisode],
   );
 
-  const survivorsByUserUid = (competition?.participants || []).reduce<
-    Record<string, Player[]>
-  >((accum, user) => {
-    const castawayIds = (
-      Object.entries(currentOwners) as [CastawayId, string][]
-    )
-      .filter(([, uid]) => uid === user?.uid)
-      .map(([id]) => id);
+  // Accepted trades whose cutoff the competition has not revealed yet, keyed
+  // by castaway -- what "next episode" indicators render from.
+  const upcomingMoves = useMemo(
+    () =>
+      getUpcomingMoves(competition?.draft_picks || [], trades, rosterEpisode),
+    [competition?.draft_picks, trades, rosterEpisode],
+  );
 
-    accum[user.uid] = castawayIds.reduce<Player[]>((accum, id) => {
-      const _p = season?.players.find((p) => p.castaway_id === id);
+  const groupByOwner = (owners: Record<CastawayId, string>) =>
+    (competition?.participants || []).reduce<Record<string, Player[]>>(
+      (accum, user) => {
+        const castawayIds = (Object.entries(owners) as [CastawayId, string][])
+          .filter(([, uid]) => uid === user?.uid)
+          .map(([id]) => id);
 
-      if (_p) accum.push(_p);
+        accum[user.uid] = castawayIds.reduce<Player[]>((accum, id) => {
+          const _p = season?.players.find((p) => p.castaway_id === id);
 
-      return accum;
-    }, []);
+          if (_p) accum.push(_p);
 
+          return accum;
+        }, []);
+
+        return accum;
+      },
+      {},
+    );
+
+  const survivorsByUserUid = groupByOwner(displayOwners);
+  const tradableSurvivorsByUserUid = groupByOwner(currentOwners);
+
+  // Castaways arriving on each roster at the next reveal, for previews on the
+  // receiving team's card.
+  const incomingByUserUid = (
+    Object.entries(upcomingMoves) as [
+      CastawayId,
+      (typeof upcomingMoves)[CastawayId],
+    ][]
+  ).reduce<
+    Record<
+      string,
+      { player: Player; fromUid: string; landsNextEpisode: boolean }[]
+    >
+  >((accum, [id, move]) => {
+    const player = season?.players.find((p) => p.castaway_id === id);
+    if (player) {
+      (accum[move.toUid] ??= []).push({
+        player,
+        fromUid: move.fromUid,
+        landsNextEpisode: move.landsNextEpisode,
+      });
+    }
     return accum;
   }, {});
 
@@ -76,6 +135,10 @@ export const useCompetitionMeta = () => {
     mySurvivors,
     eliminatedSurvivors,
     survivorsByUserUid,
+    tradableSurvivorsByUserUid,
+    incomingByUserUid,
+    upcomingMoves,
+    displayOwners,
     currentOwners,
     drafters,
     acquisitions,

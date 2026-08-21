@@ -11,13 +11,17 @@ import {
 import {
   getAcquisitionLabel,
   getAcquisitions,
+  getAcquisitionsAtEpisode,
   getCurrentOwners,
   getDrafters,
   getEffectiveEpisode,
   getOwnedCastawaysAtEpisode,
   getOwnerAtEpisode,
+  getOwnersAtEpisode,
   getOwnershipWindows,
+  getRosterEpisode,
   getTradeLockEpisode,
+  getUpcomingMoves,
   validateTrade,
 } from "../tradeUtils";
 
@@ -215,6 +219,147 @@ describe("getCurrentOwners", () => {
     expect(getCurrentOwners(picks, [trade])).toEqual({
       [C1]: BOB,
       [C2]: ALICE,
+    });
+  });
+});
+
+describe("getRosterEpisode", () => {
+  it("is the current episode for a watch-along", () => {
+    expect(getRosterEpisode(makeCompetition([], { current_episode: 4 }))).toBe(
+      4,
+    );
+  });
+
+  it("floors a brand-new watch-along at episode 1 so episode-1 cutoffs display", () => {
+    expect(getRosterEpisode(makeCompetition([], { current_episode: 0 }))).toBe(
+      1,
+    );
+  });
+
+  it("is unbounded for a live competition, which hides nothing", () => {
+    expect(
+      getRosterEpisode(makeCompetition([], { current_episode: null })),
+    ).toBe(Infinity);
+  });
+});
+
+describe("getOwnersAtEpisode", () => {
+  const picks = [makePick(C1, ALICE), makePick(C2, BOB)];
+  const trade = makeTrade({
+    offered_by_uid: ALICE,
+    offered_to_uid: BOB,
+    offered_castaway_ids: [C1],
+    requested_castaway_ids: [C2],
+    status: "accepted",
+    effective_episode: 5,
+  });
+
+  it("keeps the previous owner before the cutoff", () => {
+    expect(getOwnersAtEpisode(picks, [trade], 4)).toEqual({
+      [C1]: ALICE,
+      [C2]: BOB,
+    });
+  });
+
+  it("moves ownership from the cutoff episode on", () => {
+    expect(getOwnersAtEpisode(picks, [trade], 5)).toEqual({
+      [C1]: BOB,
+      [C2]: ALICE,
+    });
+  });
+});
+
+describe("getUpcomingMoves", () => {
+  const picks = [makePick(C1, ALICE), makePick(C2, BOB), makePick(C3, CAROL)];
+  const trade = makeTrade({
+    offered_by_uid: ALICE,
+    offered_to_uid: BOB,
+    offered_castaway_ids: [C1],
+    requested_castaway_ids: [C2],
+    status: "accepted",
+    effective_episode: 5,
+  });
+
+  it("flags both sides of a trade whose cutoff is still ahead", () => {
+    expect(getUpcomingMoves(picks, [trade], 4)).toEqual({
+      [C1]: { fromUid: ALICE, toUid: BOB, landsNextEpisode: true },
+      [C2]: { fromUid: BOB, toUid: ALICE, landsNextEpisode: true },
+    });
+  });
+
+  it("clears once the competition reaches the cutoff", () => {
+    expect(getUpcomingMoves(picks, [trade], 5)).toEqual({});
+  });
+
+  it("ignores pending trades", () => {
+    expect(
+      getUpcomingMoves(picks, [{ ...trade, status: "pending" }], 4),
+    ).toEqual({});
+  });
+
+  it("does not promise next episode for a cutoff further out", () => {
+    // Legacy trades can carry a cutoff past current_episode + 1 (see
+    // StatusBadge); the indicator still shows, with softened wording.
+    expect(getUpcomingMoves(picks, [trade], 2)[C1]).toEqual({
+      fromUid: ALICE,
+      toUid: BOB,
+      landsNextEpisode: false,
+    });
+  });
+
+  it("points at the next hop when a castaway is promised onward", () => {
+    const bobToCarol = makeTrade({
+      offered_by_uid: BOB,
+      offered_to_uid: CAROL,
+      offered_castaway_ids: [C1],
+      requested_castaway_ids: [],
+      status: "accepted",
+      effective_episode: 6,
+    });
+
+    expect(getUpcomingMoves(picks, [trade, bobToCarol], 4)[C1]).toEqual({
+      fromUid: ALICE,
+      toUid: BOB,
+      landsNextEpisode: true,
+    });
+  });
+
+  it("nets out two trades sharing a cutoff episode", () => {
+    const backToAlice = makeTrade({
+      offered_by_uid: BOB,
+      offered_to_uid: ALICE,
+      offered_castaway_ids: [C1],
+      requested_castaway_ids: [],
+      status: "accepted",
+      effective_episode: 5,
+      resolved_at: "2026-03-11T00:00:00.000Z",
+    });
+
+    expect(
+      getUpcomingMoves(picks, [trade, backToAlice], 4)[C1],
+    ).toBeUndefined();
+  });
+});
+
+describe("getAcquisitionsAtEpisode", () => {
+  const picks = [makePick(C1, ALICE), makePick(C2, BOB)];
+  const trade = makeTrade({
+    offered_by_uid: ALICE,
+    offered_to_uid: BOB,
+    offered_castaway_ids: [C1],
+    requested_castaway_ids: [C2],
+    status: "accepted",
+    effective_episode: 5,
+  });
+
+  it("shows nothing acquired before the cutoff", () => {
+    expect(getAcquisitionsAtEpisode(picks, [trade], 4)).toEqual({});
+  });
+
+  it("marks the acquisition when the swap lands", () => {
+    expect(getAcquisitionsAtEpisode(picks, [trade], 5)).toEqual({
+      [C1]: { uid: BOB, fromUid: ALICE },
+      [C2]: { uid: ALICE, fromUid: BOB },
     });
   });
 });

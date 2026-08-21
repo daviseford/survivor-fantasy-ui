@@ -206,7 +206,11 @@ export const TradesSection = ({
   const { slimUser } = useUser();
   const { data: competition } = useCompetition();
   const { data: season } = useSeason(competition?.season_id);
-  const { survivorsByUserUid, eliminatedSurvivors } = useCompetitionMeta();
+  // The propose modal works with tradable rosters (every accepted trade
+  // applied), not display rosters: a player already promised away in a trade
+  // that cuts over next episode cannot be offered again.
+  const { tradableSurvivorsByUserUid, eliminatedSurvivors } =
+    useCompetitionMeta();
 
   const { data: challenges, isReady: areChallengesReady } = useChallenges(
     competition?.season_id,
@@ -558,8 +562,8 @@ export const TradesSection = ({
           existingTrades={trades}
           eliminatedCastawayIds={eliminatedSurvivors}
           myUid={myUid}
-          myPlayers={survivorsByUserUid[myUid] ?? []}
-          playersByUid={survivorsByUserUid}
+          myPlayers={tradableSurvivorsByUserUid[myUid] ?? []}
+          playersByUid={tradableSurvivorsByUserUid}
         />
       )}
     </Stack>

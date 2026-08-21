@@ -91,18 +91,51 @@ export function getOwnerAtEpisode(
   return owner;
 }
 
-/** Current owner of every drafted castaway (after all accepted trades). */
+/**
+ * The episode whose ownership rosters and scoring should display. An accepted
+ * trade whose cutoff is still in the future has not happened yet as far as
+ * revealed game state goes, so the UI keeps the previous owner until the
+ * competition reaches the cutoff.
+ *
+ * - Watch-along: the current episode, floored at 1 so a brand-new competition
+ *   (episode 0) shows episode-1 cutoffs immediately -- nothing has been
+ *   revealed for the swap to contradict.
+ * - Live (`current_episode` is null): Infinity. Results appear as they air, so
+ *   there is no revealed episode for a completed trade to contradict; every
+ *   accepted trade displays at once.
+ */
+export function getRosterEpisode(competition: Competition): number {
+  return competition.current_episode === null
+    ? Infinity
+    : Math.max(competition.current_episode, 1);
+}
+
+/** Owner of every drafted castaway as of `episode` (see getRosterEpisode). */
+export function getOwnersAtEpisode(
+  draftPicks: DraftPick[],
+  trades: Trade[],
+  episode: number,
+): Record<CastawayId, string> {
+  const windows = getOwnershipWindows(draftPicks, trades);
+  return Object.fromEntries(
+    (Object.keys(windows) as CastawayId[]).map((id) => [
+      id,
+      getOwnerAtEpisode(windows, id, episode)!,
+    ]),
+  ) as Record<CastawayId, string>;
+}
+
+/**
+ * Current owner of every drafted castaway (after all accepted trades,
+ * including ones whose cutoff the competition has not reached yet). This is
+ * what trading logic wants -- a castaway already promised away cannot be
+ * offered again -- while display surfaces want getOwnersAtEpisode.
+ */
 export function getCurrentOwners(
   draftPicks: DraftPick[],
   trades: Trade[],
 ): Record<CastawayId, string> {
-  const windows = getOwnershipWindows(draftPicks, trades);
-  return Object.fromEntries(
-    Object.entries(windows).map(([id, segments]) => [
-      id,
-      segments[segments.length - 1].uid,
-    ]),
-  ) as Record<CastawayId, string>;
+  return getOwnersAtEpisode(draftPicks, trades, Infinity);
 }
 
 /**
@@ -135,21 +168,98 @@ export function getAcquisitions(
   draftPicks: DraftPick[],
   trades: Trade[],
 ): Record<CastawayId, Acquisition> {
+  return getAcquisitionsAtEpisode(draftPicks, trades, Infinity);
+}
+
+/**
+ * Acquisitions as of `episode`: only trades whose cutoff has been reached
+ * count, so the "acquired" marker appears when the roster swap does and not an
+ * episode early.
+ */
+export function getAcquisitionsAtEpisode(
+  draftPicks: DraftPick[],
+  trades: Trade[],
+  episode: number,
+): Record<CastawayId, Acquisition> {
   const windows = getOwnershipWindows(draftPicks, trades);
   const acquisitions: Record<string, Acquisition> = {};
 
   for (const [castawayId, segments] of Object.entries(windows)) {
+    const arrived = segments.filter((s) => s.fromEpisode <= episode);
     const drafter = segments[0].uid;
-    const current = segments[segments.length - 1];
-    if (current.uid === drafter) continue;
+    const current = arrived[arrived.length - 1];
+    if (!current || current.uid === drafter) continue;
 
     acquisitions[castawayId] = {
       uid: current.uid,
-      fromUid: segments[segments.length - 2].uid,
+      fromUid: arrived[arrived.length - 2].uid,
     };
   }
 
   return acquisitions as Record<CastawayId, Acquisition>;
+}
+
+export type UpcomingMove = {
+  /** Owner as of the displayed episode -- whose roster the castaway leaves. */
+  fromUid: string;
+  /** Owner after the next unreached cutoff -- the next hop, not necessarily
+   * the final owner when further trades are chained behind it. */
+  toUid: string;
+  /**
+   * True when the move lands at the very next reveal. Usually the case, since
+   * a cutoff is normally `current_episode + 1` -- but trades accepted before
+   * the cutoff was tied to `current_episode` can carry a later episode (see
+   * StatusBadge in TradesSection), so wording must not promise "next episode"
+   * unless this is set. Either way the copy stays relative; absolute episode
+   * numbers would leak how far the season has run.
+   */
+  landsNextEpisode: boolean;
+};
+
+/**
+ * Castaways whose accepted trade has not reached its cutoff as of `episode`:
+ * they still sit on `fromUid`'s roster and move to `toUid` when the
+ * competition reaches the trade's cutoff.
+ */
+export function getUpcomingMoves(
+  draftPicks: DraftPick[],
+  trades: Trade[],
+  episode: number,
+): Record<CastawayId, UpcomingMove> {
+  const windows = getOwnershipWindows(draftPicks, trades);
+  const moves: Record<string, UpcomingMove> = {};
+
+  for (const [castawayId, segments] of Object.entries(windows)) {
+    const owner = getOwnerAtEpisode(
+      windows,
+      castawayId as CastawayId,
+      episode,
+    )!;
+    const nextCutoff = segments.find((s) => s.fromEpisode > episode);
+    if (!nextCutoff) continue;
+
+    // Net owner once the next cutoff is reached -- resolves chains where two
+    // trades share a cutoff episode.
+    const nextOwner = getOwnerAtEpisode(
+      windows,
+      castawayId as CastawayId,
+      nextCutoff.fromEpisode,
+    )!;
+    if (nextOwner !== owner) {
+      moves[castawayId] = {
+        fromUid: owner,
+        toUid: nextOwner,
+        landsNextEpisode: nextCutoff.fromEpisode === episode + 1,
+      };
+    }
+  }
+
+  return moves as Record<CastawayId, UpcomingMove>;
+}
+
+/** Relative timing phrase for an upcoming move -- never an episode number. */
+export function getUpcomingMoveTiming(move: UpcomingMove): string {
+  return move.landsNextEpisode ? "next episode" : "in an upcoming episode";
 }
 
 /**

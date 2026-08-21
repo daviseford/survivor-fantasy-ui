@@ -22,14 +22,26 @@ import { useCompetition } from "../../hooks/useCompetition";
 import { useCompetitionMeta } from "../../hooks/useCompetitionMeta";
 import { useEvents } from "../../hooks/useEvents";
 import { CastawayId, Player, SlimUser } from "../../types";
-import { Acquisition, getAcquisitionLabel } from "../../utils/tradeUtils";
+import { getParticipantName } from "../../utils/misc";
+import {
+  Acquisition,
+  getAcquisitionLabel,
+  getUpcomingMoveTiming,
+  UpcomingMove,
+} from "../../utils/tradeUtils";
 import { PlayerGroup } from "./PlayerGroup";
 
 export const PlayerGroupGrid = () => {
   const { data: competition } = useCompetition();
 
-  const { survivorsByUserUid, eliminatedSurvivors, drafters, acquisitions } =
-    useCompetitionMeta();
+  const {
+    survivorsByUserUid,
+    eliminatedSurvivors,
+    drafters,
+    acquisitions,
+    upcomingMoves,
+    incomingByUserUid,
+  } = useCompetitionMeta();
   const { data: events } = useEvents(competition?.season_id);
 
   const [openUids, setOpenUids] = useState<ReadonlySet<string>>(new Set());
@@ -47,8 +59,12 @@ export const PlayerGroupGrid = () => {
   if (!competition) return null;
 
   const numParticipants = competition.participant_uids.length;
+  // A card can have names to show either from its current roster or from
+  // arrivals previewed on it, so both count for the show/hide-all toggle.
   const participantsWithTeams = competition.participants.filter(
-    (p) => (survivorsByUserUid[p.uid]?.length ?? 0) > 0,
+    (p) =>
+      (survivorsByUserUid[p.uid]?.length ?? 0) > 0 ||
+      (incomingByUserUid[p.uid]?.length ?? 0) > 0,
   );
   const allOpen =
     participantsWithTeams.length > 0 &&
@@ -115,6 +131,8 @@ export const PlayerGroupGrid = () => {
             participants={competition.participants}
             drafters={drafters}
             acquisitions={acquisitions}
+            upcomingMoves={upcomingMoves}
+            incoming={incomingByUserUid[x.uid] ?? []}
             winnerCastawayId={winnerCastawayId}
             isFinished={isFinished}
             isOpen={openUids.has(x.uid)}
@@ -133,6 +151,8 @@ const TeamCard = ({
   participants,
   drafters,
   acquisitions,
+  upcomingMoves,
+  incoming,
   winnerCastawayId,
   isFinished,
   isOpen,
@@ -144,13 +164,17 @@ const TeamCard = ({
   participants: SlimUser[];
   drafters: Record<CastawayId, string>;
   acquisitions: Record<CastawayId, Acquisition>;
+  upcomingMoves: Record<CastawayId, UpcomingMove>;
+  incoming: { player: Player; fromUid: string; landsNextEpisode: boolean }[];
   winnerCastawayId: CastawayId | null;
   isFinished: boolean;
   isOpen: boolean;
   onToggle: () => void;
 }) => {
-  // Everything on this card is about the roster as it stands now, so a
-  // castaway received in a trade counts here and not on the drafter's card.
+  // Everything on this card is about the roster as of the episode the
+  // competition is on: a trade whose cutoff has not been revealed yet keeps
+  // the castaway here, marked as leaving, with a preview on the receiving
+  // card.
   const numOnRoster = userSurvivors.length;
   const numEliminated = userSurvivors.filter((s) =>
     eliminatedSurvivors.includes(s.castaway_id),
@@ -159,6 +183,13 @@ const TeamCard = ({
   const numAcquired = userSurvivors.filter(
     (s) => acquisitions[s.castaway_id],
   ).length;
+  const outgoingMoves = userSurvivors
+    .map((s) => upcomingMoves[s.castaway_id])
+    .filter(Boolean);
+  const numMoving = outgoingMoves.length + incoming.length;
+  const allMovesLandNext =
+    outgoingMoves.every((m) => m.landsNextEpisode) &&
+    incoming.every((i) => i.landsNextEpisode);
 
   const areAllEliminated = numOnRoster > 0 && numEliminated === numOnRoster;
   const ownsWinner =
@@ -208,11 +239,16 @@ const TeamCard = ({
           {numOnRoster} on roster
           {numAcquired > 0 ? ` · ${numAcquired} via trade` : ""} ·{" "}
           {numEliminated} eliminated
+          {numMoving > 0
+            ? allMovesLandNext
+              ? " · trade lands next episode"
+              : " · trade pending"
+            : ""}
         </Text>
 
         <PlayerGroup uid={participant.uid} />
 
-        {userSurvivors.length > 0 && (
+        {(userSurvivors.length > 0 || incoming.length > 0) && (
           <>
             <Button
               variant="subtle"
@@ -247,6 +283,13 @@ const TeamCard = ({
                         participants,
                       )
                     : null;
+                  const upcomingMove = upcomingMoves[p.castaway_id];
+                  const upcomingLabel = upcomingMove
+                    ? `Trades to ${getParticipantName(
+                        participants,
+                        upcomingMove.toUid,
+                      )} ${getUpcomingMoveTiming(upcomingMove)}`
+                    : null;
                   return (
                     <Group key={p.castaway_id} gap={4} wrap="nowrap">
                       <Text
@@ -269,9 +312,65 @@ const TeamCard = ({
                           />
                         </Tooltip>
                       )}
+                      {upcomingLabel && upcomingMove && (
+                        <Tooltip label={upcomingLabel}>
+                          <Badge
+                            size="xs"
+                            variant="light"
+                            color="yellow"
+                            role="img"
+                            aria-label={upcomingLabel}
+                            style={{ flexShrink: 0 }}
+                          >
+                            →{" "}
+                            {getParticipantName(
+                              participants,
+                              upcomingMove.toUid,
+                            )}
+                          </Badge>
+                        </Tooltip>
+                      )}
                     </Group>
                   );
                 })}
+                {incoming.length > 0 && (
+                  <Stack gap={4} mt={4}>
+                    <Text fz="xs" fw={600} c="dimmed">
+                      {incoming.every((i) => i.landsNextEpisode)
+                        ? "Arriving next episode"
+                        : "Arriving in upcoming episodes"}
+                    </Text>
+                    {incoming.map(({ player, fromUid, landsNextEpisode }) => (
+                      <Group key={player.castaway_id} gap={4} wrap="nowrap">
+                        <Text
+                          fz={{ base: "xs", sm: "sm" }}
+                          truncate
+                          c="dimmed"
+                          title={player.full_name}
+                        >
+                          {player.full_name}
+                        </Text>
+                        <Badge
+                          size="xs"
+                          variant="light"
+                          color="yellow"
+                          role="img"
+                          aria-label={`Joins from ${getParticipantName(
+                            participants,
+                            fromUid,
+                          )} ${
+                            landsNextEpisode
+                              ? "next episode"
+                              : "in an upcoming episode"
+                          }`}
+                          style={{ flexShrink: 0 }}
+                        >
+                          from {getParticipantName(participants, fromUid)}
+                        </Badge>
+                      </Group>
+                    ))}
+                  </Stack>
+                )}
               </Stack>
             </Collapse>
           </>
