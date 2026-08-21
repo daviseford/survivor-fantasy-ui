@@ -11,6 +11,7 @@ import { modals } from "@mantine/modals";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { auth } from "../../firebase";
+import { trackEvent } from "../../utils/analytics";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ export const Login = () => {
 
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
+        trackEvent("login", { method: "password" });
         modals.closeAll();
       })
       .catch((error) => {
