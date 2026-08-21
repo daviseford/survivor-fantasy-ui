@@ -87,6 +87,10 @@ export const AuthModal = ({
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<AuthError | null>(null);
   const [confirmation, setConfirmation] = useState<string | null>(null);
+  // Hides the forms during the modal's closing animation: once auth succeeds
+  // the user state arrives before the modal finishes closing, and Register
+  // would otherwise flash its "already signed in" guard.
+  const [completing, setCompleting] = useState(false);
   const completedRef = useRef(false);
   const resetRequestSentRef = useRef(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -134,6 +138,7 @@ export const AuthModal = ({
   const complete = () => {
     if (completedRef.current) return;
     completedRef.current = true;
+    setCompleting(true);
     onAuthenticated?.();
     context.closeModal(id);
   };
@@ -241,14 +246,14 @@ export const AuthModal = ({
         </Alert>
       )}
 
-      {mode === "login" && (
+      {!completing && mode === "login" && (
         <Login
           {...formProps}
           onForgotPassword={() => switchMode("forgot-password")}
         />
       )}
-      {mode === "register" && <Register {...formProps} />}
-      {mode === "forgot-password" && (
+      {!completing && mode === "register" && <Register {...formProps} />}
+      {!completing && mode === "forgot-password" && (
         <ForgotPassword
           {...formProps}
           pendingStateKey={pendingStateKey}
