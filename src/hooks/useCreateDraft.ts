@@ -4,6 +4,7 @@ import { ref, set } from "firebase/database";
 import { v4 } from "uuid";
 import { useSeason } from "../hooks/useSeason";
 import { useUser } from "../hooks/useUser";
+import { trackEvent } from "../utils/analytics";
 import {
   buildParticipantMap,
   type RealtimeDraft,
@@ -41,6 +42,8 @@ export const useCreateDraft = () => {
     } satisfies RealtimeDraft;
 
     await set(ref(rt_db, "drafts/" + draftId), newDraft);
+
+    trackEvent("draft_created", { season_num: season.order });
 
     return draftId;
   };

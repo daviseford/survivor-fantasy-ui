@@ -124,6 +124,7 @@ export const DraftComponent = () => {
         ref(rt_db, `drafts/${draft.id}/prop_bets/${slimUser.uid}`),
         propBetEntry,
       );
+      trackEvent("prop_bets_submitted", { season_num: draft.season_num });
       notifications.show({
         title: "Prop bets submitted",
         message: "Good luck!",
@@ -198,6 +199,7 @@ export const DraftComponent = () => {
         ref(rt_db, `drafts/${id}/participants/${slimUser.uid}`),
         slimUser,
       );
+      trackEvent("draft_joined", { season_num: season?.order });
     } catch (err) {
       notifications.show({
         title: "Failed to join draft",
