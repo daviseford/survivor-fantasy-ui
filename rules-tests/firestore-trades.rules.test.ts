@@ -225,7 +225,9 @@ describe("trades: create", () => {
 });
 
 describe("trades: accept", () => {
-  beforeEach(seedPendingTrade);
+  // Wrapped: vitest passes a TestContext to beforeEach callbacks, which would
+  // otherwise be spread into the trade document.
+  beforeEach(() => seedPendingTrade());
 
   const accept = (uid: string, effectiveEpisode: unknown) =>
     updateDoc(doc(db(uid), tradePath()), {
@@ -299,7 +301,9 @@ describe("trades: accept", () => {
 });
 
 describe("trades: reject and cancel", () => {
-  beforeEach(seedPendingTrade);
+  // Wrapped: vitest passes a TestContext to beforeEach callbacks, which would
+  // otherwise be spread into the trade document.
+  beforeEach(() => seedPendingTrade());
 
   const setStatus = (uid: string, status: string) =>
     updateDoc(doc(db(uid), tradePath()), {
@@ -334,7 +338,9 @@ describe("trades: reject and cancel", () => {
 });
 
 describe("trades: delete", () => {
-  beforeEach(seedPendingTrade);
+  // Wrapped: vitest passes a TestContext to beforeEach callbacks, which would
+  // otherwise be spread into the trade document.
+  beforeEach(() => seedPendingTrade());
 
   it("denies deletes to everyone, including the proposer", async () => {
     await assertFails(deleteDoc(doc(db(ALICE), tradePath())));
