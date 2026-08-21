@@ -227,16 +227,6 @@ export const SingleCompetition = () => {
           </Section>
         )}
 
-      {/* <Section
-        title="Scoring Breakdown"
-        subtitle="Points by scoring category"
-        icon={
-          <IconChartDonut size={22} color="var(--mantine-color-orange-6)" />
-        }
-      >
-        <ScoringBreakdownSection />
-      </Section> */}
-
       <Accordion variant="subtle" radius="md">
         <Accordion.Item value="scoring-values">
           <Accordion.Control>

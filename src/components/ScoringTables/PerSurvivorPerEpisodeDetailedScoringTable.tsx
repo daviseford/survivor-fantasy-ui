@@ -17,9 +17,11 @@ import { useCompetition } from "../../hooks/useCompetition";
 import { useDragScroll } from "../../hooks/useDragScroll";
 import { useScoringCalculations } from "../../hooks/useScoringCalculations";
 import { useSeason } from "../../hooks/useSeason";
+import { useTrades } from "../../hooks/useTrades";
 import { useUser } from "../../hooks/useUser";
 import { CastawayId, PlayerAction } from "../../types";
 import { getNumberWithOrdinal } from "../../utils/misc";
+import { getCurrentOwners } from "../../utils/tradeUtils";
 import { PlayerHoverCard } from "./PlayerHoverCard";
 import classes from "./ScoringTables.module.css";
 
@@ -112,6 +114,17 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [filterUserUid, setFilterUserUid] = useState<string | null>(null);
 
+  // Two different questions get asked of ownership in this table, and after a
+  // trade they have different answers: "who drafted this castaway" (the
+  // caption and the draft-order sort, which stay on draft_picks because draft
+  // history does not change) and "whose roster is this on now" (the
+  // participant filter and the my-roster highlight, below).
+  const { data: trades } = useTrades(competition?.id);
+  const currentOwners = useMemo(
+    () => getCurrentOwners(competition?.draft_picks ?? [], trades),
+    [competition?.draft_picks, trades],
+  );
+
   const userFilterOptions = useMemo(
     () =>
       (competition?.participants ?? []).map((p) => ({
@@ -185,13 +198,10 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
 
   const visibleEntries = useMemo(() => {
     if (!filterUserUid) return sorted;
-    const pickedCastawayIds = new Set(
-      (competition?.draft_picks ?? [])
-        .filter((p) => p.user_uid === filterUserUid)
-        .map((p) => p.castaway_id),
+    return sorted.filter(
+      (entry) => currentOwners[entry.castawayId] === filterUserUid,
     );
-    return sorted.filter((entry) => pickedCastawayIds.has(entry.castawayId));
-  }, [sorted, filterUserUid, competition?.draft_picks]);
+  }, [sorted, filterUserUid, currentOwners]);
 
   const scoringDescriptionLookup = useMemo(
     () =>
@@ -249,14 +259,15 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
       (x) => x.castaway_id === castawayId && x.action === "win_survivor",
     );
 
-    const isDraftedByCurrentUser = draftPick?.user_uid === slimUser?.uid;
+    const isOwnedByCurrentUser =
+      !!slimUser?.uid && currentOwners[castawayId] === slimUser.uid;
 
     const trStyle = {
       backgroundColor: isWinner
         ? "var(--mantine-color-green-light)"
         : playerElimination
           ? "var(--mantine-color-gray-light)"
-          : isDraftedByCurrentUser
+          : isOwnedByCurrentUser
             ? "var(--mantine-color-blue-light)"
             : "var(--mantine-color-body)",
     };
