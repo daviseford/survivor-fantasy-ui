@@ -1,115 +1,151 @@
 import {
   Button,
-  Container,
   Paper,
   PasswordInput,
   Text,
   TextInput,
   Title,
 } from "@mantine/core";
-import { modals } from "@mantine/modals";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { auth, db } from "../../firebase";
 import { useUser } from "../../hooks/useUser";
 import { trackEvent } from "../../utils/analytics";
+import { mapAuthError } from "./authErrors";
+import type { AuthFormOutcome, AuthFormProps } from "./AuthModal";
 
-export const Register = () => {
+const SETUP_WARNING_MESSAGE =
+  "Your account was created and you are signed in, but profile setup did not finish. Your email will show as your name for now, and you can update your profile later.";
+
+export const Register = ({
+  email: emailProp,
+  onEmailChange,
+  pending: pendingProp,
+  onPendingChange,
+  onOutcome,
+}: AuthFormProps = {}) => {
   const { user } = useUser();
 
   const [displayName, setDisplayName] = useState("");
-  const [email, setEmail] = useState("");
+  const [localEmail, setLocalEmail] = useState("");
+  const [localPending, setLocalPending] = useState(false);
+  const [localError, setLocalError] = useState<string | null>(null);
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  const onSubmit = async (e: { preventDefault: () => void }) => {
+  const email = emailProp ?? localEmail;
+  const setEmail = onEmailChange ?? setLocalEmail;
+  const pending = pendingProp ?? localPending;
+  const setPending = onPendingChange ?? setLocalPending;
+
+  const report = (outcome: AuthFormOutcome) => {
+    if (onOutcome) {
+      onOutcome(outcome);
+    } else {
+      setPending(false);
+      if (outcome.status === "error") {
+        setLocalError(outcome.error.message);
+      }
+    }
+  };
+
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (pending) return;
 
-    setError("");
+    setPending(true);
+    setLocalError(null);
 
+    let userCredential;
     try {
-      const userCredential = await createUserWithEmailAndPassword(
+      userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password,
       );
+    } catch (error) {
+      // The account was not created, so this is a real registration failure.
+      report({ status: "error", error: mapAuthError(error) });
+      return;
+    }
 
-      const _user = userCredential.user;
+    // The Auth account now exists; the sign-up event fires exactly once here.
+    trackEvent("sign_up", { method: "password" });
 
-      if (displayName && auth.currentUser) {
-        await updateProfile(auth.currentUser, { displayName });
+    // KTD4: profile and user-document provisioning are separate from account
+    // creation. A failure here is a retryable setup warning, not a
+    // registration failure, and must not send the user back to sign up.
+    try {
+      if (displayName) {
+        await updateProfile(userCredential.user, { displayName });
       }
 
-      const { uid } = _user;
-
-      // Create a doc for this user
+      const { uid } = userCredential.user;
       await setDoc(doc(db, "users", uid), {
         uid,
-        email: _user.email,
+        email: userCredential.user.email,
         displayName,
       });
 
-      trackEvent("sign_up", { method: "password" });
-
-      modals.closeAll();
-
-      window.location.reload();
-      // ...
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "Registration failed");
+      report({ status: "authenticated" });
+    } catch {
+      report({ status: "setup-warning", message: SETUP_WARNING_MESSAGE });
     }
   };
 
   if (user) {
     return (
-      <Container size={420} my={40}>
-        <Title ta="center">You are already logged in.</Title>
-        <Button onClick={() => auth.signOut()}>Logout</Button>
-      </Container>
+      <Paper withBorder shadow="md" p={30} mt="md" radius="md" ta="center">
+        <Title order={3}>You are already signed in.</Title>
+        <Button mt="md" onClick={() => auth.signOut()}>
+          Sign out
+        </Button>
+      </Paper>
     );
   }
 
   return (
-    <Container size={420} my={40}>
-      <Title ta="center">Create a new account</Title>
-
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+    <Paper withBorder shadow="md" p={30} mt="md" radius="md">
+      <form onSubmit={onSubmit}>
         <TextInput
           label="Display Name"
           placeholder="John Doe"
           description="Other users will see this name"
+          autoComplete="nickname"
           value={displayName}
-          onChange={(e) => setDisplayName(e.target.value)}
+          onChange={(e) => setDisplayName(e.currentTarget.value)}
           required
         />
         <TextInput
           label="Email"
           placeholder="hello@gmail.com"
+          type="email"
+          autoComplete="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.currentTarget.value)}
           required
           mt="md"
         />
         <PasswordInput
           label="Password"
           placeholder="Your password"
+          autoComplete="new-password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.currentTarget.value)}
           required
           mt="md"
         />
 
-        {error && (
+        {localError && (
           <Text c="red" mt="lg">
-            {error}
+            {localError}
           </Text>
         )}
 
-        <Button fullWidth mt="xl" onClick={onSubmit}>
-          Register
+        <Button fullWidth mt="xl" type="submit" loading={pending}>
+          Create account
         </Button>
-      </Paper>
-    </Container>
+      </form>
+    </Paper>
   );
 };
