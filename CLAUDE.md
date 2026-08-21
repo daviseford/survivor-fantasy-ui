@@ -58,7 +58,7 @@ Survivor Fantasy is a fantasy sports-style web app for the TV show Survivor. Use
 - **Typed IDs:** Domain types use branded string IDs (`season_${number}`, `draft_${string}`, `episode_${string}`, `US${string}` for `CastawayId`, etc.) defined in `src/types/index.ts`. `CastawayId` uses survivoR's format (e.g., `US0693`) as the canonical player identifier.
 - **Hooks per entity:** Each Firestore/RTDB entity has a dedicated hook (`useSeason`, `useCompetition`, `useDraft`, `useChallenges`, `useEliminations`, `useEvents`). Hooks read route params via `useParams()` with optional ID override. All onSnapshot hooks include error callbacks.
 - **CSS Modules** for component-scoped styles (`.module.css` files), PostCSS with `postcss-preset-mantine`.
-- **No em-dashes in user-facing content.** Never use `—` in strings rendered to users (UI copy, page metadata, aria-labels, placeholders). Use a colon, period, or restructure the sentence. Code comments are exempt.
+- **No em-dashes in user-facing content.** Never use `—` in strings rendered to users (UI copy, page metadata, aria-labels). Use a colon, period, or restructure the sentence. Exceptions: a standalone `—` as an empty-value placeholder (e.g., blank table cells), and code comments.
 
 ## Spoiler-Free Experience
 
