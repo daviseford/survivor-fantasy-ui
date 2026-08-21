@@ -247,18 +247,22 @@ describe("getTradeLockEpisode", () => {
     makeEpisode(3, "2026-03-12"), // airs Thursday
   ]);
 
+  // Episode 3 airs Thursday 2026-03-12. A live competition (null) sees
+  // everything as it arrives, so any air date closes trading.
+  const LIVE = null;
+
   it("is open the day before an episode airs", () => {
-    expect(getTradeLockEpisode(season, WEDNESDAY)).toBeNull();
+    expect(getTradeLockEpisode(season, LIVE, WEDNESDAY)).toBeNull();
   });
 
-  it("locks on the air date", () => {
+  it("locks a live competition on the air date", () => {
     const thursday = new Date(2026, 2, 12, 8, 0, 0);
-    expect(getTradeLockEpisode(season, thursday)?.order).toBe(3);
+    expect(getTradeLockEpisode(season, LIVE, thursday)?.order).toBe(3);
   });
 
   it("never locks without air dates", () => {
     expect(
-      getTradeLockEpisode(makeSeason([makeEpisode(1)]), WEDNESDAY),
+      getTradeLockEpisode(makeSeason([makeEpisode(1)]), LIVE, WEDNESDAY),
     ).toBeNull();
   });
 
@@ -269,13 +273,36 @@ describe("getTradeLockEpisode", () => {
     // 2026-03-13T04:00Z is still 2026-03-12 (9pm) in America/Los_Angeles,
     // but already 2026-03-13 anywhere at or east of UTC.
     const lateNightPacific = new Date("2026-03-13T04:00:00Z");
-    expect(getTradeLockEpisode(season, lateNightPacific)?.order).toBe(3);
+    expect(getTradeLockEpisode(season, LIVE, lateNightPacific)?.order).toBe(3);
   });
 
   it("reopens once the broadcast day is over", () => {
     // 2026-03-13T08:00Z is 2026-03-13 (1am) in America/Los_Angeles.
     const afterPacificMidnight = new Date("2026-03-13T08:00:00Z");
-    expect(getTradeLockEpisode(season, afterPacificMidnight)).toBeNull();
+    expect(getTradeLockEpisode(season, LIVE, afterPacificMidnight)).toBeNull();
+  });
+
+  describe("watch-along", () => {
+    const thursday = new Date(2026, 2, 12, 8, 0, 0);
+
+    it("locks when tonight's episode is the group's next reveal", () => {
+      // On episode 2, about to reveal 3 -- and 3 airs tonight.
+      expect(getTradeLockEpisode(season, 2, thursday)?.order).toBe(3);
+    });
+
+    it("keeps trading open for a group behind the broadcast", () => {
+      // On episode 1 while episode 3 airs tonight: nothing they are about to
+      // watch is at stake, so there is no hindsight to guard against.
+      expect(getTradeLockEpisode(season, 1, thursday)).toBeNull();
+    });
+
+    it("keeps trading open for a brand-new competition", () => {
+      expect(getTradeLockEpisode(season, 0, thursday)).toBeNull();
+    });
+
+    it("keeps trading open once the group has passed tonight's episode", () => {
+      expect(getTradeLockEpisode(season, 3, thursday)).toBeNull();
+    });
   });
 });
 

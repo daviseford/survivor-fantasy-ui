@@ -117,25 +117,42 @@ export function getOwnedCastawaysAtEpisode(
 }
 
 /**
- * Trades are allowed up to the day an episode airs. Returns the episode
- * airing today (the lock), or null when trading is open. Seasons without
- * air dates never lock.
+ * The episode whose air date closes trading today, or null when trading is
+ * open. Seasons without air dates never lock.
+ *
+ * The lock exists to stop someone trading on knowledge of an episode they have
+ * already seen, so it only applies to the episode a competition is *about to*
+ * reveal:
+ *
+ * - Watch-along: locks only when the episode airing today is
+ *   `current_episode + 1`. A group on episode 3 while the broadcast is on
+ *   episode 11 has no hindsight to exploit and keeps trading normally; they
+ *   only lock once they have caught up to the broadcast.
+ * - Live: every participant sees results as they arrive, so any episode airing
+ *   today closes trading.
  *
  * "Today" is the broadcast day, not the viewer's local day: `air_date` comes
  * from survivoR in broadcast terms, so comparing it against a local date would
  * open and close the lock at different instants for participants in different
  * timezones — in the same league, trading against each other.
+ *
+ * Because the lock can only ever name the next episode a group will reveal, its
+ * `order` is safe to show them.
  */
 export function getTradeLockEpisode(
   season: Season,
+  currentEpisode: number | null,
   today: Date = new Date(),
 ): Episode | null {
   const todayISO = getBroadcastDate(today);
-  return (
+  const airingToday =
     [...(season.episodes ?? [])]
       .sort((a, b) => a.order - b.order)
-      .find((ep) => ep.air_date === todayISO) ?? null
-  );
+      .find((ep) => ep.air_date === todayISO) ?? null;
+
+  if (!airingToday) return null;
+  if (currentEpisode === null) return airingToday;
+  return airingToday.order === currentEpisode + 1 ? airingToday : null;
 }
 
 /**
@@ -204,7 +221,11 @@ export function validateTrade(input: TradeValidationInput): TradeValidation {
     return { valid: false, reason: "This competition has finished." };
   }
 
-  const lockEpisode = getTradeLockEpisode(season, today);
+  const lockEpisode = getTradeLockEpisode(
+    season,
+    competition.current_episode,
+    today,
+  );
   if (lockEpisode) {
     return {
       valid: false,

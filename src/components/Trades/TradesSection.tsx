@@ -220,7 +220,7 @@ export const TradesSection = () => {
   const myUid = slimUser?.uid;
   const isParticipant = !!myUid && competition.participant_uids.includes(myUid);
 
-  const lockEpisode = getTradeLockEpisode(season);
+  const lockEpisode = getTradeLockEpisode(season, competition.current_episode);
   const tradingClosed = competition.finished || !!lockEpisode;
 
   const pending = trades.filter((trade) => trade.status === "pending");
