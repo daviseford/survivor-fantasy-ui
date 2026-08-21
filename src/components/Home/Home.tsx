@@ -10,7 +10,9 @@ import {
   Title,
 } from "@mantine/core";
 import {
+  IconArrowsExchange,
   IconChartBar,
+  IconClock,
   IconCrystalBall,
   IconEyeOff,
   IconFlame,
@@ -522,6 +524,147 @@ export const Home = () => {
               Pick a season and draft
             </Button>
           </Stack>
+        </Container>
+      </section>
+
+      {/* Player Trades */}
+      <section className={classes.tradeSection}>
+        <Container size={700} className={classes.tradeContent}>
+          <SimpleGrid
+            cols={{ base: 1, sm: 2 }}
+            spacing={{ base: "xl", sm: 48 }}
+            className={classes.tradeLayout}
+          >
+            <Stack gap="lg" className={classes.tradeCopy}>
+              <Group gap="sm">
+                <ThemeIcon size={48} radius="xl" variant="light" color="teal">
+                  <IconArrowsExchange size={24} />
+                </ThemeIcon>
+                <div>
+                  <Text
+                    size="sm"
+                    fw={600}
+                    c="dimmed"
+                    tt="uppercase"
+                    className={classes.featureEyebrow}
+                  >
+                    Midseason moves
+                  </Text>
+                  <Title order={2} className={classes.featureTitle}>
+                    Outwit your friends after the draft
+                  </Title>
+                </div>
+              </Group>
+
+              <Text className={classes.featureDescription} c="dimmed">
+                Your opening roster is only the beginning. Package active
+                players into an offer, send it to another participant, and
+                negotiate your way back into contention.
+              </Text>
+
+              <Stack gap="md" className={classes.tradeBenefits}>
+                <div className={classes.tradeBenefit}>
+                  <Text className={classes.tradeBenefitNumber}>01</Text>
+                  <Text size="sm">
+                    <Text component="span" inherit fw={700}>
+                      Build the deal.
+                    </Text>{" "}
+                    Swap one or more active players in a single offer.
+                  </Text>
+                </div>
+                <div className={classes.tradeBenefit}>
+                  <Text className={classes.tradeBenefitNumber}>02</Text>
+                  <Text size="sm">
+                    <Text component="span" inherit fw={700}>
+                      Stay in control.
+                    </Text>{" "}
+                    Accept, reject, or withdraw while an offer is pending.
+                  </Text>
+                </div>
+                <div className={classes.tradeBenefit}>
+                  <Text className={classes.tradeBenefitNumber}>03</Text>
+                  <Text size="sm">
+                    <Text component="span" inherit fw={700}>
+                      Keep scoring fair.
+                    </Text>{" "}
+                    Deals take effect at the next episode reveal, so past points
+                    stay put.
+                  </Text>
+                </div>
+              </Stack>
+
+              <Button
+                variant="light"
+                color="teal"
+                size="md"
+                component={Link}
+                to={slimUser ? "/competitions" : "/seasons"}
+                leftSection={<IconArrowsExchange size={18} />}
+                className={classes.selfStart}
+              >
+                {slimUser
+                  ? "Open your competitions"
+                  : "Draft a team to start trading"}
+              </Button>
+            </Stack>
+
+            <Paper
+              className={classes.tradePreview}
+              withBorder
+              radius="xl"
+              p={{ base: "lg", sm: "xl" }}
+              aria-label="Example player trade"
+            >
+              <Group justify="space-between" align="flex-start" gap="md">
+                <div>
+                  <Text fw={800}>Trade offer</Text>
+                  <Text size="xs" c="dimmed" mt={2}>
+                    A roster shake-up is on the table
+                  </Text>
+                </div>
+                <Text className={classes.tradeStatus} size="xs" fw={700}>
+                  Awaiting reply
+                </Text>
+              </Group>
+
+              <div className={classes.tradeSwap}>
+                <div className={classes.tradeSide}>
+                  <Text size="xs" fw={700} c="dimmed" tt="uppercase" lts={0.8}>
+                    You send
+                  </Text>
+                  <Text fw={700} mt={6}>
+                    Your active pick
+                  </Text>
+                </div>
+
+                <ThemeIcon
+                  className={classes.tradeSwapIcon}
+                  size={42}
+                  radius="xl"
+                  variant="gradient"
+                  gradient={{ from: "teal", to: "cyan" }}
+                >
+                  <IconArrowsExchange size={21} />
+                </ThemeIcon>
+
+                <div className={classes.tradeSide}>
+                  <Text size="xs" fw={700} c="dimmed" tt="uppercase" lts={0.8}>
+                    You receive
+                  </Text>
+                  <Text fw={700} mt={6}>
+                    A friend's pick
+                  </Text>
+                </div>
+              </div>
+
+              <Group gap="xs" wrap="nowrap" className={classes.tradeTiming}>
+                <IconClock size={17} aria-hidden="true" />
+                <Text size="sm" fw={600}>
+                  Applies at the next episode reveal
+                </Text>
+              </Group>
+            </Paper>
+          </SimpleGrid>
         </Container>
       </section>
 
