@@ -1,0 +1,22 @@
+.tabsAnchor {
+  scroll-margin-top: var(--mantine-spacing-md);
+}
+
+.tabsList {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--mantine-color-gray-5) transparent;
+}
+
+.tab {
+  min-width: max-content;
+  white-space: nowrap;
+}
+
+@media (max-width: 30em) {
+  .tab {
+    padding-inline: var(--mantine-spacing-xs);
+    font-size: var(--mantine-font-size-xs);
+  }
+}
