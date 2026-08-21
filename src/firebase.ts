@@ -1,5 +1,9 @@
 // Import the functions you need from the SDKs you need
-import { Analytics, getAnalytics, isSupported } from "firebase/analytics";
+import {
+  Analytics,
+  initializeAnalytics,
+  isSupported,
+} from "firebase/analytics";
 import { FirebaseOptions, initializeApp } from "firebase/app";
 import {
   browserLocalPersistence,
@@ -62,6 +66,10 @@ if (isE2EAuthMode) {
 
 // Initialize Google Analytics (GA4) in production builds only.
 // Stays null in dev/test, so all tracking calls are no-ops there.
+// Automatic page_view is disabled: gtag's first hit would snapshot the full
+// URL before React can strip the one-time reset action code from
+// /reset-password, and PageTracker already logs a sanitized page_view on
+// every route change including the initial load.
 export let analytics: Analytics | null = null;
 if (
   typeof window !== "undefined" &&
@@ -70,7 +78,9 @@ if (
 ) {
   isSupported().then((supported) => {
     if (supported) {
-      analytics = getAnalytics(app);
+      analytics = initializeAnalytics(app, {
+        config: { send_page_view: false },
+      });
     }
   });
 }
