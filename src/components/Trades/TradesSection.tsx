@@ -278,6 +278,15 @@ export const TradesSection = ({
     }
   };
 
+  // The pending subtitles describe an action still open ("review", "waiting"),
+  // so resolved trades get a status-appropriate line instead.
+  const subtitleFor = (trade: Trade, pendingCopy: string): string => {
+    if (trade.status === "accepted") return "Completed trade";
+    if (trade.status === "rejected") return "Offer declined";
+    if (trade.status === "canceled") return "Offer withdrawn";
+    return pendingCopy;
+  };
+
   const perspective = (trade: Trade) => {
     const offeredPlayers = getPlayers(
       season.players,
@@ -299,7 +308,7 @@ export const TradesSection = ({
     if (trade.offered_to_uid === myUid) {
       return {
         title: `Offer from ${offeredBy}`,
-        subtitle: "Review what changes hands",
+        subtitle: subtitleFor(trade, "Review what changes hands"),
         leftLabel: "You receive",
         leftPlayers: offeredPlayers,
         rightLabel: "You send",
@@ -310,7 +319,7 @@ export const TradesSection = ({
     if (trade.offered_by_uid === myUid) {
       return {
         title: `Offer to ${offeredTo}`,
-        subtitle: "Waiting for their response",
+        subtitle: subtitleFor(trade, "Waiting for their response"),
         leftLabel: "You send",
         leftPlayers: offeredPlayers,
         rightLabel: "You receive",
@@ -320,7 +329,7 @@ export const TradesSection = ({
 
     return {
       title: `${offeredBy} and ${offeredTo}`,
-      subtitle: "Trade between participants",
+      subtitle: subtitleFor(trade, "Trade between participants"),
       leftLabel: `${offeredBy} sends`,
       leftPlayers: offeredPlayers,
       rightLabel: `${offeredTo} sends`,

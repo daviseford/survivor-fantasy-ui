@@ -120,7 +120,18 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
 
   const [sortField, setSortField] = useState<SortField>("rank");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
-  const [filterUserUid, setFilterUserUid] = useState<string | null>(null);
+  // SingleCompetition stays mounted when the route's competition id changes,
+  // so plain state would carry one competition's roster filter (a uid that may
+  // name the same user elsewhere) into the next and silently filter its table.
+  // Key the filter to the competition, like TradesSection's historyVisibility.
+  const [rosterFilter, setRosterFilter] = useState<{
+    competitionId: string | undefined;
+    uid: string | null;
+  }>({ competitionId: undefined, uid: null });
+  const filterUserUid =
+    rosterFilter.competitionId === competition?.id ? rosterFilter.uid : null;
+  const handleFilterChange = (uid: string | null) =>
+    setRosterFilter({ competitionId: competition?.id, uid });
 
   // Two different questions get asked of ownership in this table, and after a
   // trade they have different answers: "who drafted this castaway" (the Pick
@@ -439,7 +450,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
             placeholder="Filter by roster"
             data={userFilterOptions}
             value={filterUserUid}
-            onChange={setFilterUserUid}
+            onChange={handleFilterChange}
             clearable
             allowDeselect
             aria-label="Filter players by roster owner"
