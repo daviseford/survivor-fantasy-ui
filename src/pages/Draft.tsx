@@ -66,6 +66,7 @@ import {
   PropBetsFormData,
   Season,
 } from "../types";
+import { trackEvent } from "../utils/analytics";
 import { buildPickOrderUidMap, buildTurnsMap } from "../utils/draftRealtime";
 
 export const DraftComponent = () => {
@@ -162,6 +163,10 @@ export const DraftComponent = () => {
 
     try {
       await setDoc(doc(db, "competitions", competition.id), competition);
+      trackEvent("competition_created", {
+        season_num: season.order,
+        watch_along: watchAlong,
+      });
       notifications.show({
         title: "Competition created!",
         message: competition_name,
@@ -252,6 +257,12 @@ export const DraftComponent = () => {
         "state/current_pick_number": nextPickNumber,
         ...(isFinalPick ? { "state/finished": true } : {}),
       });
+      if (isFinalPick) {
+        trackEvent("draft_completed", {
+          season_num: season.order,
+          participant_count: draft.participants.length,
+        });
+      }
     } catch (err) {
       notifications.show({
         title: "Failed to draft player",
@@ -521,7 +532,7 @@ export const DraftComponent = () => {
                     2. Random Order
                   </Text>
                   <Text size="xs" c="dimmed" ta="center">
-                    Pick order is randomly shuffled when the draft starts — no
+                    Pick order is randomly shuffled when the draft starts. No
                     peeking!
                   </Text>
                 </Stack>
@@ -698,7 +709,7 @@ export const DraftComponent = () => {
               <Stack gap="lg" mt="md">
                 {!allPlayersDoneWithPropBets && (
                   <Alert color="yellow" variant="light">
-                    Waiting for prop bets — {draft?.prop_bets?.length || 0} of{" "}
+                    Waiting for prop bets: {draft?.prop_bets?.length || 0} of{" "}
                     {draft?.participants?.length} submitted
                   </Alert>
                 )}

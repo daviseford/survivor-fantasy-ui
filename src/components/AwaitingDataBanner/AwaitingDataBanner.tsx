@@ -22,6 +22,6 @@ export const AwaitingDataBanner = ({ episode }: { episode: Episode }) => (
   >
     This episode aired
     {episode.air_date ? ` on ${formatAirDate(episode.air_date)}` : ""}. We're
-    still awaiting scoring data — check back later.
+    still awaiting scoring data. Check back later.
   </Alert>
 );

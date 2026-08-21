@@ -170,7 +170,7 @@ export const ScoringLegendTable = () => {
         highlightOnHoverColor="light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))"
         stickyHeader
         stickyHeaderOffset="var(--app-shell-header-height, 0)"
-        aria-label="Scoring reference — actions and point values"
+        aria-label="Scoring reference: actions and point values"
       >
         <Table.Thead className={classes.stickyHead}>
           <Table.Tr>

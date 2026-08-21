@@ -42,7 +42,7 @@ const EpisodePickerModal = ({
     { value: "0", label: "No episodes revealed" },
     ...(season.episodes ?? []).map((e) => ({
       value: String(e.order),
-      label: `Episode ${e.order} — ${e.name}`,
+      label: `Episode ${e.order}: ${e.name}`,
     })),
   ];
 
@@ -195,7 +195,7 @@ export const EpisodeAdvanceControl = ({
         <Group gap="xs" justify="center">
           <IconEye size={16} />
           <Text size="sm" fw={500}>
-            Watch-Along — Episode {currentEpisode} of {totalEpisodes}
+            Watch-Along: Episode {currentEpisode} of {totalEpisodes}
           </Text>
         </Group>
       </Paper>
@@ -222,7 +222,7 @@ export const EpisodeAdvanceControl = ({
           ) : (
             <Text size="sm" c="dimmed">
               Showing: Episode {currentEpisode}
-              {currentEpisodeData ? ` — ${currentEpisodeData.name}` : ""}
+              {currentEpisodeData ? ` (${currentEpisodeData.name})` : ""}
             </Text>
           )}
         </Stack>

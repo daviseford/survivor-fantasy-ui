@@ -31,7 +31,7 @@ export const SeasonStatsCard = ({ card }: { card: StatCard }) => {
               {card.winners.map((w) => w.label).join(", ")}
             </Text>
             <Text size="xs" c="dimmed">
-              Tied — {card.winners[0].value} {card.unit}
+              Tied: {card.winners[0].value} {card.unit}
             </Text>
           </div>
         ) : (

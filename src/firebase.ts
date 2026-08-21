@@ -1,4 +1,5 @@
 // Import the functions you need from the SDKs you need
+import { Analytics, getAnalytics, isSupported } from "firebase/analytics";
 import { FirebaseOptions, initializeApp } from "firebase/app";
 import {
   browserLocalPersistence,
@@ -32,5 +33,20 @@ export const db = getFirestore(app);
 
 // Initialize Cloud Realtime Database and get a reference to the service
 export const rt_db = getDatabase(app);
+
+// Initialize Google Analytics (GA4) in production builds only.
+// Stays null in dev/test, so all tracking calls are no-ops there.
+export let analytics: Analytics | null = null;
+if (
+  typeof window !== "undefined" &&
+  import.meta.env.PROD &&
+  import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+) {
+  isSupported().then((supported) => {
+    if (supported) {
+      analytics = getAnalytics(app);
+    }
+  });
+}
 
 export default app;

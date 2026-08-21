@@ -277,7 +277,7 @@ export const SingleCompetition = () => {
             <Stack gap="xl">
               <Section
                 title="Rosters"
-                subtitle="Castaways by participant — accepted trades land at the next episode reveal"
+                subtitle="Castaways by participant. Accepted trades land at the next episode reveal"
                 icon={
                   <IconUsers size={22} color="var(--mantine-color-blue-6)" />
                 }

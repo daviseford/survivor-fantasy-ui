@@ -455,7 +455,7 @@ export function validateTrade(input: TradeValidationInput): TradeValidation {
   if (lockEpisode) {
     return {
       valid: false,
-      reason: `Trades are locked — Episode ${lockEpisode.order} airs today.`,
+      reason: `Trades are locked. Episode ${lockEpisode.order} airs today.`,
     };
   }
 
