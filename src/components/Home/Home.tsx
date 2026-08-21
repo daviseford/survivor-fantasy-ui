@@ -36,11 +36,10 @@ export const Home = () => {
             Fantasy Survivor for friends
           </Text>
           <Title order={1} className={classes.title}>
-            Draft your{" "}
             <Text component="span" variant="gradient" inherit>
-              Survivor Fantasy
+              Grab your torch
             </Text>{" "}
-            team with friends
+            and draft your Survivor fantasy team
           </Title>
 
           <Text className={classes.description} c="dimmed">

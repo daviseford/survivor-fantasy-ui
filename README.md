@@ -1,5 +1,5 @@
-# survivor-fantasy-ui
+# Grab Your Torch
 
 Hosted with firebase
 
-[Deployed link](https://survivor-fantasy-51c4b.web.app/)
+[Deployed link](https://grabyourtorch.com/)

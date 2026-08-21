@@ -138,10 +138,10 @@ export const AppRoutes = () => {
                   underline="never"
                 >
                   <Text component="span" inherit fw={900}>
-                    Survivor
+                    Grab Your
                   </Text>{" "}
                   <Text component="span" inherit variant="gradient">
-                    Fantasy
+                    Torch
                   </Text>
                 </Anchor>
               </Group>
