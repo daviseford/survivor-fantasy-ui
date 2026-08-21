@@ -242,6 +242,50 @@ describe("getRosterEpisode", () => {
       getRosterEpisode(makeCompetition([], { current_episode: null })),
     ).toBe(Infinity);
   });
+
+  it("is unbounded for a finished competition -- nothing left to reveal", () => {
+    expect(
+      getRosterEpisode(
+        makeCompetition([], { current_episode: 12, finished: true }),
+      ),
+    ).toBe(Infinity);
+  });
+});
+
+describe("unreachable cutoffs (legacy trades past the last episode)", () => {
+  const picks = [makePick(C1, ALICE), makePick(C2, BOB)];
+  // Legacy live-mode acceptance on a 14-episode season: cutoff 15 can never
+  // be revealed by a watch-along.
+  const legacyTrade = makeTrade({
+    offered_by_uid: ALICE,
+    offered_to_uid: BOB,
+    offered_castaway_ids: [C1],
+    requested_castaway_ids: [C2],
+    status: "accepted",
+    effective_episode: 15,
+  });
+
+  it("displays the swap immediately instead of pending forever", () => {
+    expect(getOwnersAtEpisode(picks, [legacyTrade], 12, 14)).toEqual({
+      [C1]: BOB,
+      [C2]: ALICE,
+    });
+    expect(getUpcomingMoves(picks, [legacyTrade], 12, 14)).toEqual({});
+    expect(getAcquisitionsAtEpisode(picks, [legacyTrade], 12, 14)).toEqual({
+      [C1]: { uid: BOB, fromUid: ALICE },
+      [C2]: { uid: ALICE, fromUid: BOB },
+    });
+  });
+
+  it("still honors a reachable cutoff when the last episode is known", () => {
+    const reachable = { ...legacyTrade, effective_episode: 13 };
+    expect(getOwnersAtEpisode(picks, [reachable], 12, 14)[C1]).toBe(ALICE);
+    expect(getUpcomingMoves(picks, [reachable], 12, 14)[C1]).toEqual({
+      fromUid: ALICE,
+      toUid: BOB,
+      landsNextEpisode: true,
+    });
+  });
 });
 
 describe("getOwnersAtEpisode", () => {

@@ -39,11 +39,19 @@ export const useCompetitionMeta = () => {
   //     every accepted trade -- a player already promised away cannot be
   //     offered again, even while the roster still displays them.
   const rosterEpisode = competition ? getRosterEpisode(competition) : Infinity;
+  // A cutoff past the season's last episode can never be revealed; the
+  // display helpers treat it as already effective rather than pending forever.
+  const lastEpisode = season?.episodes?.length;
 
   const displayOwners = useMemo(
     () =>
-      getOwnersAtEpisode(competition?.draft_picks || [], trades, rosterEpisode),
-    [competition?.draft_picks, trades, rosterEpisode],
+      getOwnersAtEpisode(
+        competition?.draft_picks || [],
+        trades,
+        rosterEpisode,
+        lastEpisode,
+      ),
+    [competition?.draft_picks, trades, rosterEpisode, lastEpisode],
   );
 
   const currentOwners = useMemo(
@@ -64,16 +72,22 @@ export const useCompetitionMeta = () => {
         competition?.draft_picks || [],
         trades,
         rosterEpisode,
+        lastEpisode,
       ),
-    [competition?.draft_picks, trades, rosterEpisode],
+    [competition?.draft_picks, trades, rosterEpisode, lastEpisode],
   );
 
   // Accepted trades whose cutoff the competition has not revealed yet, keyed
   // by castaway -- what "next episode" indicators render from.
   const upcomingMoves = useMemo(
     () =>
-      getUpcomingMoves(competition?.draft_picks || [], trades, rosterEpisode),
-    [competition?.draft_picks, trades, rosterEpisode],
+      getUpcomingMoves(
+        competition?.draft_picks || [],
+        trades,
+        rosterEpisode,
+        lastEpisode,
+      ),
+    [competition?.draft_picks, trades, rosterEpisode, lastEpisode],
   );
 
   const groupByOwner = (owners: Record<CastawayId, string>) =>

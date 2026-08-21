@@ -103,20 +103,52 @@ export function getOwnerAtEpisode(
  * - Live (`current_episode` is null): Infinity. Results appear as they air, so
  *   there is no revealed episode for a completed trade to contradict; every
  *   accepted trade displays at once.
+ * - Finished: Infinity. Everything has been revealed, so nothing is left for a
+ *   pending indicator to wait on -- final ownership displays.
  */
 export function getRosterEpisode(competition: Competition): number {
-  return competition.current_episode === null
+  return competition.finished || competition.current_episode === null
     ? Infinity
     : Math.max(competition.current_episode, 1);
 }
 
-/** Owner of every drafted castaway as of `episode` (see getRosterEpisode). */
+/**
+ * Ownership windows for display purposes. A cutoff past the season's last
+ * episode can never be revealed by a watch-along (legacy trades carry the
+ * latest data episode + 1 -- see StatusBadge in TradesSection), so waiting for
+ * it would leave the swap "pending" forever. Those cutoffs are treated as
+ * already effective: live-mode semantics, where the roster moves and past
+ * points stay with the previous owner. Without `lastEpisode` the windows are
+ * used as-is.
+ */
+function getDisplayWindows(
+  draftPicks: DraftPick[],
+  trades: Trade[],
+  lastEpisode?: number,
+): Record<CastawayId, OwnershipWindow[]> {
+  const windows = getOwnershipWindows(draftPicks, trades);
+  if (lastEpisode === undefined) return windows;
+
+  for (const segments of Object.values(windows)) {
+    for (const segment of segments) {
+      if (segment.fromEpisode > lastEpisode) segment.fromEpisode = 1;
+    }
+  }
+  return windows;
+}
+
+/**
+ * Owner of every drafted castaway as of `episode` (see getRosterEpisode).
+ * Pass the season's last episode so unreachable cutoffs display immediately
+ * (see getDisplayWindows).
+ */
 export function getOwnersAtEpisode(
   draftPicks: DraftPick[],
   trades: Trade[],
   episode: number,
+  lastEpisode?: number,
 ): Record<CastawayId, string> {
-  const windows = getOwnershipWindows(draftPicks, trades);
+  const windows = getDisplayWindows(draftPicks, trades, lastEpisode);
   return Object.fromEntries(
     (Object.keys(windows) as CastawayId[]).map((id) => [
       id,
@@ -180,8 +212,9 @@ export function getAcquisitionsAtEpisode(
   draftPicks: DraftPick[],
   trades: Trade[],
   episode: number,
+  lastEpisode?: number,
 ): Record<CastawayId, Acquisition> {
-  const windows = getOwnershipWindows(draftPicks, trades);
+  const windows = getDisplayWindows(draftPicks, trades, lastEpisode);
   const acquisitions: Record<string, Acquisition> = {};
 
   for (const [castawayId, segments] of Object.entries(windows)) {
@@ -225,8 +258,9 @@ export function getUpcomingMoves(
   draftPicks: DraftPick[],
   trades: Trade[],
   episode: number,
+  lastEpisode?: number,
 ): Record<CastawayId, UpcomingMove> {
-  const windows = getOwnershipWindows(draftPicks, trades);
+  const windows = getDisplayWindows(draftPicks, trades, lastEpisode);
   const moves: Record<string, UpcomingMove> = {};
 
   for (const [castawayId, segments] of Object.entries(windows)) {
