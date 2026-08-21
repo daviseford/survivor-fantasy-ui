@@ -202,7 +202,7 @@ export const EliminationCRUDTable = () => {
                 size="xs"
                 min={0}
                 value={editValues.votes_received ?? ""}
-                placeholder="—"
+                placeholder="N/A"
                 onChange={(val) =>
                   setEditValues({
                     ...editValues,
@@ -247,7 +247,7 @@ export const EliminationCRUDTable = () => {
               e.castaway_id}
           </Table.Td>
           <Table.Td>episode_{e.episode_num}</Table.Td>
-          <Table.Td>{e.votes_received ?? "—"}</Table.Td>
+          <Table.Td>{e.votes_received ?? "N/A"}</Table.Td>
           {slimUser?.isAdmin && (
             <Table.Td>
               <Group gap="xs">

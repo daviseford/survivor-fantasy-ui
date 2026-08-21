@@ -157,7 +157,7 @@ export const Home = () => {
             <Text className={classes.featureDescription} c="dimmed">
               From the original Borneo to the latest New Era twists, all 50 US
               seasons are ready to play. Browse by era, search by name or
-              location, and start a competition on any season — past or present.
+              location, and start a competition on any season, past or present.
               The currently airing season gets live updates as each episode
               airs, so you're never behind.
             </Text>
@@ -229,8 +229,8 @@ export const Home = () => {
             <Text className={classes.watchAlongDescription} c="dimmed">
               Rewatching a classic season with friends who've never seen it?
               Catching up on a season you missed? Watch-along mode is built for
-              you. The competition creator controls which episodes are revealed
-              — scores, standings, and predictions only reflect what your group
+              you. The competition creator controls which episodes are revealed.
+              Scores, standings, and predictions only reflect what your group
               has actually watched. No accidental spoilers, no peeking ahead.
               When you're ready for the next episode, advance the counter and
               watch the points shift in real time.
@@ -241,7 +241,7 @@ export const Home = () => {
                 [
                   {
                     title: "Creator controls pacing",
-                    desc: "Advance episodes when your group is ready — one tap is all it takes.",
+                    desc: "Advance episodes when your group is ready. One tap is all it takes.",
                     color: "grape",
                   },
                   {
@@ -319,11 +319,10 @@ export const Home = () => {
             </Group>
 
             <Text className={classes.featureDescription} c="dimmed">
-              31 scoring actions across 5 categories — no single path to
-              victory. Challenge beasts, strategic idol players, and social
-              savants all earn points their own way. Even early boots
-              contribute: elimination points scale by episode, so every pick
-              matters.
+              31 scoring actions across 5 categories. No single path to victory.
+              Challenge beasts, strategic idol players, and social savants all
+              earn points their own way. Even early boots contribute:
+              elimination points scale by episode, so every pick matters.
             </Text>
 
             <Group gap="xs" wrap="wrap">
@@ -384,7 +383,7 @@ export const Home = () => {
 
             <Text className={classes.featureDescription} c="dimmed">
               After the draft, every participant fills out pre-season
-              predictions. Correct calls earn up to 44 bonus points — enough to
+              predictions. Correct calls earn up to 44 bonus points, enough to
               swing the standings even if your draft goes sideways.
             </Text>
 
@@ -456,7 +455,7 @@ export const Home = () => {
             <Text className={classes.featureDescription} c="dimmed">
               No accounts needed to browse, no complicated setup. Kick off the
               draft, watch the animated order reveal, and take turns picking
-              from the full cast — all in real time on any device.
+              from the full cast, all in real time on any device.
             </Text>
 
             <Stack gap="sm">
@@ -465,7 +464,7 @@ export const Home = () => {
                   {
                     icon: IconUsers,
                     title: "One link, no friction",
-                    desc: "Friends click and join — no signup wall.",
+                    desc: "Friends click and join. No signup wall.",
                     color: "cyan",
                   },
                   {
