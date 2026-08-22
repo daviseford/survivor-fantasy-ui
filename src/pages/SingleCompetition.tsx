@@ -24,6 +24,7 @@ import {
   IconFlame,
   IconLayoutDashboard,
   IconLogin,
+  IconShirtSport,
   IconTrophy,
   IconUserPlus,
   IconUsers,
@@ -33,6 +34,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { AwaitingDataBanner } from "../components/AwaitingDataBanner";
 import { EpisodeAdvanceControl } from "../components/EpisodeAdvanceControl";
 import { PlayerGroupGrid } from "../components/MyPlayers";
+import { MyTeamSection } from "../components/MyTeam";
 import { PropBetScoring } from "../components/PropBetTables";
 import {
   PerSurvivorPerEpisodeDetailedScoringTable,
@@ -57,7 +59,7 @@ import {
 } from "../utils/episodeAirDate";
 import classes from "./SingleCompetition.module.css";
 
-const VALID_TABS = ["overview", "trades", "stats"] as const;
+const VALID_TABS = ["overview", "team", "trades", "stats"] as const;
 type TabValue = (typeof VALID_TABS)[number];
 const DEFAULT_TAB: TabValue = "overview";
 
@@ -110,11 +112,17 @@ export const SingleCompetition = () => {
   );
   const seasonStats = useSeasonStats();
 
+  // My Team only exists for participants; a shared ?tab=team link opened by
+  // anyone else lands on the overview instead of an empty panel.
+  const isParticipant =
+    !!slimUser && !!competition?.participant_uids.includes(slimUser.uid);
   const tabParam = searchParams.get("tab");
-  const activeTab: TabValue =
+  const requestedTab: TabValue =
     tabParam && (VALID_TABS as readonly string[]).includes(tabParam)
       ? (tabParam as TabValue)
       : DEFAULT_TAB;
+  const activeTab: TabValue =
+    requestedTab === "team" && !isParticipant ? DEFAULT_TAB : requestedTab;
 
   const handleTabChange = (value: string | null) => {
     if (!value || value === activeTab) return;
@@ -330,6 +338,15 @@ export const SingleCompetition = () => {
             >
               Overview
             </Tabs.Tab>
+            {isParticipant && (
+              <Tabs.Tab
+                value="team"
+                leftSection={<IconShirtSport size={17} />}
+                className={classes.tab}
+              >
+                My Team
+              </Tabs.Tab>
+            )}
             <Tabs.Tab
               value="trades"
               leftSection={<IconArrowsExchange size={17} />}
@@ -431,6 +448,12 @@ export const SingleCompetition = () => {
               </Accordion>
             </Stack>
           </Tabs.Panel>
+
+          {isParticipant && (
+            <Tabs.Panel value="team" pt="lg">
+              <MyTeamSection trades={tradeState.data} />
+            </Tabs.Panel>
+          )}
 
           <Tabs.Panel value="trades" pt="lg">
             <Section

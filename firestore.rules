@@ -25,21 +25,30 @@ service cloud.firestore {
 
     // Competitions: authenticated read, creator/admin update, admin delete
     // Once finished is true, it cannot be reverted to false (one-way transition).
-    // A participant may also update only their own team_names entry.
-    // Admin SDK bypasses rules for data corrections.
+    // Team names belong to their owners: a participant (the creator included)
+    // may change only their own team_names entry; only an admin may rename
+    // another participant's team. Admin SDK bypasses rules for data corrections.
     match /competitions/{competitionId} {
+      // Within team_names, nothing changed except (at most) the caller's own key.
+      function onlyOwnTeamNameChanged() {
+        return request.resource.data.get("team_names", {})
+          .diff(resource.data.get("team_names", {}))
+          .affectedKeys().hasOnly([request.auth.uid]);
+      }
+
       // Only the team_names map changed, and within it only the caller's own key.
       function isOwnTeamNameEdit() {
         return request.resource.data.diff(resource.data).affectedKeys().hasOnly(["team_names"])
-          && request.resource.data.get("team_names", {})
-            .diff(resource.data.get("team_names", {}))
-            .affectedKeys().hasOnly([request.auth.uid]);
+          && onlyOwnTeamNameChanged();
       }
 
       allow read: if isAuthenticated();
       allow create: if isAuthenticated() && request.resource.data.creator_uid == request.auth.uid;
       allow update: if (isAdmin()
-          || (isAuthenticated() && request.auth.uid == resource.data.creator_uid && request.resource.data.creator_uid == resource.data.creator_uid)
+          || (isAuthenticated()
+            && request.auth.uid == resource.data.creator_uid
+            && request.resource.data.creator_uid == resource.data.creator_uid
+            && onlyOwnTeamNameChanged())
           || (isAuthenticated() && request.auth.uid in resource.data.participant_uids && isOwnTeamNameEdit()))
         && !(resource.data.finished == true && !(request.resource.data.finished == true));
       allow delete: if isAdmin();
