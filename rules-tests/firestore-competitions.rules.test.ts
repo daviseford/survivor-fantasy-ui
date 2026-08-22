@@ -2,9 +2,11 @@
  * Security-rules tests for per-competition team names.
  *
  * Participants can set only their own `team_names` entry on a competition doc
- * and nothing else; the creator keeps full update rights. These rules are the
- * only server-side control -- the edit UI only ever offers the participant's
- * own name, but a client calling the SDK directly skips that entirely.
+ * and nothing else. The creator keeps update rights over the rest of the doc
+ * but, like any participant, may rename only their own team; only an admin
+ * may rename another participant's team. These rules are the only server-side
+ * control -- the edit UI only ever offers the participant's own name, but a
+ * client calling the SDK directly skips that entirely.
  *
  * Run with `yarn test:rules` (starts the Firestore emulator).
  */
@@ -31,6 +33,7 @@ const ALICE = "uid_alice"; // creator
 const BOB = "uid_bob"; // participant
 const CAROL = "uid_carol"; // participant
 const MALLORY = "uid_mallory"; // not in the competition
+const ADMIN = "uid_admin"; // not in the competition, carries the admin claim
 
 const COMPETITION_ID = "competition_team_names_test";
 const FINISHED_COMPETITION_ID = "competition_team_names_test_finished";
@@ -45,6 +48,15 @@ const db = (uid?: string): Firestore =>
 
 const competitionRef = (uid: string | undefined, id = COMPETITION_ID) =>
   doc(db(uid), "competitions", id);
+
+const adminCompetitionRef = (id = COMPETITION_ID) =>
+  doc(
+    testEnv
+      .authenticatedContext(ADMIN, { admin: true })
+      .firestore() as unknown as Firestore,
+    "competitions",
+    id,
+  );
 
 beforeAll(async () => {
   // `yarn test:rules` starts the emulator; running vitest directly against this
@@ -144,10 +156,75 @@ describe("competitions: team_names updates", () => {
     await assertFails(updateDoc(competitionRef(BOB), { current_episode: 5 }));
   });
 
-  it("creator can set any participant's team name", async () => {
+  it("creator can set their own team name", async () => {
     await assertSucceeds(
       updateDoc(competitionRef(ALICE), {
+        "team_names.uid_alice": "Commissioner",
+      }),
+    );
+  });
+
+  it("creator cannot set another participant's team name", async () => {
+    await assertFails(
+      updateDoc(competitionRef(ALICE), {
         "team_names.uid_bob": "Commissioner's Pick",
+      }),
+    );
+  });
+
+  it("creator cannot rename another team alongside an otherwise valid update", async () => {
+    await assertFails(
+      updateDoc(competitionRef(ALICE), {
+        current_episode: 5,
+        "team_names.uid_bob": "Commissioner's Pick",
+      }),
+    );
+  });
+
+  it("creator can still update other fields", async () => {
+    await assertSucceeds(
+      updateDoc(competitionRef(ALICE), { current_episode: 5 }),
+    );
+  });
+
+  it("creator can update other fields while leaving existing team names intact", async () => {
+    await testEnv.withSecurityRulesDisabled(async (ctx) => {
+      await updateDoc(
+        doc(
+          ctx.firestore() as unknown as Firestore,
+          "competitions",
+          COMPETITION_ID,
+        ),
+        { "team_names.uid_bob": "Bob's Team" },
+      );
+    });
+    await assertSucceeds(
+      updateDoc(competitionRef(ALICE), { current_episode: 5 }),
+    );
+  });
+
+  it("admin can set any participant's team name", async () => {
+    await assertSucceeds(
+      updateDoc(adminCompetitionRef(), {
+        "team_names.uid_bob": "Admin's Pick",
+      }),
+    );
+  });
+
+  it("admin can clear any participant's team name", async () => {
+    await testEnv.withSecurityRulesDisabled(async (ctx) => {
+      await updateDoc(
+        doc(
+          ctx.firestore() as unknown as Firestore,
+          "competitions",
+          COMPETITION_ID,
+        ),
+        { "team_names.uid_bob": "Bob's Team" },
+      );
+    });
+    await assertSucceeds(
+      updateDoc(adminCompetitionRef(), {
+        "team_names.uid_bob": deleteField(),
       }),
     );
   });

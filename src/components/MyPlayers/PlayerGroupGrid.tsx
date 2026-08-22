@@ -22,15 +22,14 @@ import {
   IconFlame,
   IconPencil,
 } from "@tabler/icons-react";
-import { deleteField, doc, updateDoc } from "firebase/firestore";
 import { useMemo, useState } from "react";
-import { db } from "../../firebase";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useCompetitionMeta } from "../../hooks/useCompetitionMeta";
 import { useEvents } from "../../hooks/useEvents";
 import { useUser } from "../../hooks/useUser";
 import { CastawayId, Competition, Player, SlimUser } from "../../types";
 import { getParticipantName } from "../../utils/misc";
+import { TEAM_NAME_MAX_LENGTH, updateTeamName } from "../../utils/teamNames";
 import {
   Acquisition,
   getAcquisitionLabel,
@@ -140,10 +139,9 @@ export const PlayerGroupGrid = () => {
             participants={competition.participants}
             teamNames={competition.team_names}
             competitionId={competition.id}
-            canEditTeamName={
-              slimUser?.uid === x.uid ||
-              slimUser?.uid === competition.creator_uid
-            }
+            // Only the team's owner or an admin may rename it; the creator
+            // has no say over other participants' names (see firestore.rules).
+            canEditTeamName={slimUser?.uid === x.uid || !!slimUser?.isAdmin}
             drafters={drafters}
             acquisitions={acquisitions}
             upcomingMoves={upcomingMoves}
@@ -219,12 +217,7 @@ const TeamCard = ({
 
   const saveTeamName = async (name: string) => {
     try {
-      await updateDoc(doc(db, "competitions", competitionId), {
-        // Auth uids never contain dots, so a dot path is safe here.
-        [`team_names.${participant.uid}`]: name.trim()
-          ? name.trim()
-          : deleteField(),
-      });
+      await updateTeamName(competitionId, participant.uid, name);
     } catch (err) {
       notifications.show({
         title: "Failed to update team name",
@@ -477,7 +470,7 @@ const TeamNameModal = ({
         placeholder={fallbackName}
         value={name}
         onChange={(e) => setName(e.currentTarget.value)}
-        maxLength={50}
+        maxLength={TEAM_NAME_MAX_LENGTH}
         data-autofocus
       />
       <Group justify="flex-end" gap="xs">

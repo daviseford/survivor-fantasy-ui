@@ -1,0 +1,105 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--mantine-spacing-md) var(--mantine-spacing-xl);
+}
+
+.identity {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.teamName {
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.nameForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--mantine-spacing-xs);
+}
+
+.nameInput {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+.standing {
+  flex: 0 1 auto;
+  text-align: right;
+}
+
+.rankRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.standingRank {
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+.eliminated {
+  color: var(--mantine-color-dimmed);
+}
+
+.arriving {
+  opacity: 0.7;
+}
+
+.arrivingAvatar {
+  outline: 2px dashed var(--mantine-color-yellow-8);
+  outline-offset: -2px;
+}
+
+.eliminatedAvatar {
+  filter: grayscale(1);
+}
+
+.insights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--mantine-spacing-lg) var(--mantine-spacing-xl);
+}
+
+.statList {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: var(--mantine-spacing-md);
+  row-gap: 6px;
+  margin: 0;
+}
+
+.statList dt {
+  color: var(--mantine-color-dimmed);
+  font-size: var(--mantine-font-size-sm);
+  white-space: nowrap;
+}
+
+.statList dd {
+  margin: 0;
+  min-width: 0;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 36em) {
+  .standing {
+    text-align: left;
+  }
+
+  .rankRow {
+    justify-content: flex-start;
+  }
+}
