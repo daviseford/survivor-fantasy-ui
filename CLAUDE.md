@@ -82,4 +82,4 @@ The project configures MCP servers in `.mcp.json`:
 
 ## Deployment
 
-Merges to `main` auto-deploy to Firebase Hosting via GitHub Actions (`.github/workflows/firebase-hosting-merge.yml`). PRs run the required `ci` check (`.github/workflows/ci.yml` — format, lint, typecheck, tests, build); there is no preview deploy workflow. Firebase project: `survivor-fantasy-51c4b`.
+Merges to `main` auto-deploy via GitHub Actions (`.github/workflows/firebase-hosting-merge.yml`): the job deploys Firestore and Realtime Database security rules first, then Firebase Hosting. Rules changes (`firestore.rules`, `database.rules.json`) therefore need no manual `firebase deploy`; the workflow also accepts `workflow_dispatch` for a manual re-run. CI validates rules against the emulator via `yarn test:rules`. PRs run the required `ci` check (`.github/workflows/ci.yml` — format, lint, typecheck, tests, build); there is no preview deploy workflow. Firebase project: `survivor-fantasy-51c4b`.
