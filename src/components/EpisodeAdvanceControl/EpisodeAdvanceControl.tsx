@@ -114,7 +114,7 @@ export const EpisodeAdvanceControl = ({
     };
 
     return (
-      <Paper p="md" radius="md" withBorder>
+      <Paper p="md" radius="md" withBorder className={classes.root}>
         <div className={classes.modeControl}>
           <Stack gap={4} className={classes.modeSummary}>
             <Group gap="xs">
@@ -204,7 +204,7 @@ export const EpisodeAdvanceControl = ({
 
   // Watch-Along — creator view
   return (
-    <Paper p="md" radius="md" withBorder>
+    <Paper p="md" radius="md" withBorder className={classes.root}>
       <div className={classes.modeControl}>
         <Stack gap={4} className={classes.modeSummary}>
           <Group gap="xs">
