@@ -1,5 +1,6 @@
 import {
   Accordion,
+  Alert,
   Badge,
   Box,
   Button,
@@ -13,6 +14,7 @@ import {
   ThemeIcon,
   Title,
 } from "@mantine/core";
+import { modals } from "@mantine/modals";
 import {
   IconArrowLeft,
   IconArrowsExchange,
@@ -21,10 +23,12 @@ import {
   IconCrystalBall,
   IconFlame,
   IconLayoutDashboard,
+  IconLogin,
   IconTrophy,
+  IconUserPlus,
   IconUsers,
 } from "@tabler/icons-react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { AwaitingDataBanner } from "../components/AwaitingDataBanner";
 import { EpisodeAdvanceControl } from "../components/EpisodeAdvanceControl";
@@ -88,8 +92,9 @@ const Section = ({
 export const SingleCompetition = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const tabsRef = useRef<HTMLDivElement>(null);
-  const { data: competition } = useCompetition();
-  const { slimUser } = useUser();
+  const { data: competition, isLoading: isCompetitionLoading } =
+    useCompetition();
+  const { slimUser, isAuthReady } = useUser();
   const { activeKeys: activePropBetKeys } = usePropBetScoring();
   const tradeState = useTrades(competition?.id);
 
@@ -129,6 +134,89 @@ export const SingleCompetition = () => {
     episodes: season?.episodes ?? [],
     slimUser,
   });
+
+  // Competitions are readable only by signed-in users (firestore.rules), so a
+  // signed-out visitor, typically arriving from a shared link, is sent
+  // straight to sign-in. The modal closes itself on success; the cleanup also
+  // closes it on navigation away and keeps Strict Mode's double-run from
+  // stacking two modals.
+  const requiresSignIn = isAuthReady && !slimUser;
+  useEffect(() => {
+    if (!requiresSignIn) return;
+    const modalId = modals.openContextModal({
+      modal: "AuthModal",
+      innerProps: {
+        initialMode: "login",
+        actionDescription: "Sign in to view this competition",
+      },
+    });
+    return () => modals.close(modalId);
+  }, [requiresSignIn]);
+
+  if (requiresSignIn) {
+    return (
+      <Center py="xl">
+        <Stack align="center" gap="md">
+          <Alert title="Sign in to view this competition">
+            Competitions are only visible to signed-in users. Sign in to see the
+            standings, or create a free account if you're new here.
+          </Alert>
+          <Group gap="sm">
+            <Button
+              leftSection={<IconLogin size={18} />}
+              onClick={() =>
+                modals.openContextModal({
+                  modal: "AuthModal",
+                  innerProps: {
+                    initialMode: "login",
+                    actionDescription: "Sign in to view this competition",
+                  },
+                })
+              }
+            >
+              Sign in
+            </Button>
+            <Button
+              variant="default"
+              leftSection={<IconUserPlus size={18} />}
+              onClick={() =>
+                modals.openContextModal({
+                  modal: "AuthModal",
+                  innerProps: {
+                    initialMode: "register",
+                    actionDescription:
+                      "Create an account to view this competition",
+                  },
+                })
+              }
+            >
+              Create account
+            </Button>
+          </Group>
+        </Stack>
+      </Center>
+    );
+  }
+
+  if (!competition && !isCompetitionLoading) {
+    return (
+      <Center py="xl">
+        <Stack align="center" gap="md">
+          <Alert color="yellow" title="Competition not found">
+            This competition doesn't exist or may have been removed.
+          </Alert>
+          <Button
+            component={Link}
+            to="/competitions"
+            variant="default"
+            leftSection={<IconArrowLeft size={18} />}
+          >
+            Back to competitions
+          </Button>
+        </Stack>
+      </Center>
+    );
+  }
 
   if (!competition || !season) {
     return (

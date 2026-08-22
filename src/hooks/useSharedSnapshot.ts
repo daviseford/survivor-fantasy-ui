@@ -1,6 +1,7 @@
 import { doc, DocumentData, onSnapshot } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 import { db } from "../firebase";
+import { useUser } from "./useUser";
 
 interface CacheEntry {
   data: DocumentData | undefined;
@@ -22,12 +23,21 @@ const cache = new Map<string, CacheEntry>();
  * Returns raw `snap.data()` result — `undefined` until the first snapshot
  * arrives, then the document data (or `undefined` if the document doesn't
  * exist). `loaded` becomes `true` after the first snapshot or error.
+ *
+ * Subscriptions wait for Firebase Auth to resolve and are keyed by the
+ * signed-in user. Security rules are evaluated per user, and a listener that
+ * is denied (or whose user signs out) is terminated by the SDK and never
+ * recovers, so signing in or out must open a fresh listener rather than
+ * reuse the dead one.
  */
 export function useSharedSnapshot(
   collection: string,
   docId: string | undefined,
 ): { data: DocumentData | undefined; loaded: boolean } {
-  const path = docId ? `${collection}/${docId}` : undefined;
+  const { user, isAuthReady } = useUser();
+  const uid = user?.uid ?? "anonymous";
+  const path =
+    docId && isAuthReady ? `${uid}:${collection}/${docId}` : undefined;
 
   const [state, setState] = useState<{
     data: DocumentData | undefined;
