@@ -235,7 +235,8 @@ export const getPropBetScoresForUser = (
 
   const _user = competition.participants.find((x) => x.uid === uid);
 
-  const userName = _user?.displayName || _user?.email || uid;
+  const userName =
+    competition.team_names?.[uid] || _user?.displayName || _user?.email || uid;
   const scores = buildEmptyScores(uid, userName, myPropBets);
 
   // bail if no data

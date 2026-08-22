@@ -303,9 +303,10 @@ export function getUpcomingMoveTiming(move: UpcomingMove): string {
 export function getUpcomingMoveLabel(
   move: UpcomingMove,
   participants: SlimUser[],
+  teamNames?: Record<string, string>,
 ): string {
-  const from = getParticipantName(participants, move.fromUid);
-  const to = getParticipantName(participants, move.toUid);
+  const from = getParticipantName(participants, move.fromUid, teamNames);
+  const to = getParticipantName(participants, move.toUid, teamNames);
   return `Traded from ${from} to ${to}. Takes effect ${getUpcomingMoveTiming(move)}`;
 }
 
@@ -318,10 +319,11 @@ export function getAcquisitionLabel(
   acquisition: Acquisition,
   drafterUid: string | undefined,
   participants: SlimUser[],
+  teamNames?: Record<string, string>,
 ): string {
-  const from = getParticipantName(participants, acquisition.fromUid);
+  const from = getParticipantName(participants, acquisition.fromUid, teamNames);
   const drafter = drafterUid
-    ? getParticipantName(participants, drafterUid)
+    ? getParticipantName(participants, drafterUid, teamNames)
     : null;
 
   return drafter && drafterUid !== acquisition.fromUid

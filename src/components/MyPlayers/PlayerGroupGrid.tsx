@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Badge,
   Button,
   Card,
@@ -8,20 +9,27 @@ import {
   Stack,
   StyleProp,
   Text,
+  TextInput,
   Title,
   Tooltip,
 } from "@mantine/core";
+import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
 import {
   IconArrowsExchange,
   IconChevronDown,
   IconChevronUp,
   IconFlame,
+  IconPencil,
 } from "@tabler/icons-react";
+import { deleteField, doc, updateDoc } from "firebase/firestore";
 import { useMemo, useState } from "react";
+import { db } from "../../firebase";
 import { useCompetition } from "../../hooks/useCompetition";
 import { useCompetitionMeta } from "../../hooks/useCompetitionMeta";
 import { useEvents } from "../../hooks/useEvents";
-import { CastawayId, Player, SlimUser } from "../../types";
+import { useUser } from "../../hooks/useUser";
+import { CastawayId, Competition, Player, SlimUser } from "../../types";
 import { getParticipantName } from "../../utils/misc";
 import {
   Acquisition,
@@ -33,6 +41,7 @@ import { PlayerGroup } from "./PlayerGroup";
 
 export const PlayerGroupGrid = () => {
   const { data: competition } = useCompetition();
+  const { slimUser } = useUser();
 
   const {
     survivorsByUserUid,
@@ -129,6 +138,12 @@ export const PlayerGroupGrid = () => {
             userSurvivors={survivorsByUserUid[x.uid] ?? []}
             eliminatedSurvivors={eliminatedSurvivors}
             participants={competition.participants}
+            teamNames={competition.team_names}
+            competitionId={competition.id}
+            canEditTeamName={
+              slimUser?.uid === x.uid ||
+              slimUser?.uid === competition.creator_uid
+            }
             drafters={drafters}
             acquisitions={acquisitions}
             upcomingMoves={upcomingMoves}
@@ -149,6 +164,9 @@ const TeamCard = ({
   userSurvivors,
   eliminatedSurvivors,
   participants,
+  teamNames,
+  competitionId,
+  canEditTeamName,
   drafters,
   acquisitions,
   upcomingMoves,
@@ -162,6 +180,9 @@ const TeamCard = ({
   userSurvivors: Player[];
   eliminatedSurvivors: CastawayId[];
   participants: SlimUser[];
+  teamNames: Competition["team_names"];
+  competitionId: Competition["id"];
+  canEditTeamName: boolean;
   drafters: Record<CastawayId, string>;
   acquisitions: Record<CastawayId, Acquisition>;
   upcomingMoves: Record<CastawayId, UpcomingMove>;
@@ -196,6 +217,38 @@ const TeamCard = ({
     winnerCastawayId != null &&
     userSurvivors.some((s) => s.castaway_id === winnerCastawayId);
 
+  const saveTeamName = async (name: string) => {
+    try {
+      await updateDoc(doc(db, "competitions", competitionId), {
+        // Auth uids never contain dots, so a dot path is safe here.
+        [`team_names.${participant.uid}`]: name.trim()
+          ? name.trim()
+          : deleteField(),
+      });
+    } catch (err) {
+      notifications.show({
+        title: "Failed to update team name",
+        message: err instanceof Error ? err.message : "Unknown error",
+        color: "red",
+      });
+    }
+  };
+
+  const openTeamNameEditor = () => {
+    modals.open({
+      title: "Edit team name",
+      children: (
+        <TeamNameModal
+          currentName={teamNames?.[participant.uid] ?? ""}
+          fallbackName={
+            participant.displayName || participant.email || "Unknown"
+          }
+          onConfirm={saveTeamName}
+        />
+      ),
+    });
+  };
+
   return (
     <Card
       shadow="sm"
@@ -208,7 +261,24 @@ const TeamCard = ({
     >
       <Stack gap="xs">
         <Group justify="space-between" align="center">
-          <Title order={4}>{participant.displayName}</Title>
+          <Group gap={4} align="center" wrap="nowrap">
+            <Title order={4}>
+              {getParticipantName(participants, participant.uid, teamNames)}
+            </Title>
+            {canEditTeamName && (
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                size="sm"
+                onClick={openTeamNameEditor}
+                aria-label={`Edit team name for ${
+                  participant.displayName || participant.email
+                }`}
+              >
+                <IconPencil size={14} />
+              </ActionIcon>
+            )}
+          </Group>
           {isFinished ? (
             ownsWinner ? (
               <Badge
@@ -281,11 +351,16 @@ const TeamCard = ({
                         acquisition,
                         drafters[p.castaway_id],
                         participants,
+                        teamNames,
                       )
                     : null;
                   const upcomingMove = upcomingMoves[p.castaway_id];
                   const upcomingLabel = upcomingMove
-                    ? getUpcomingMoveLabel(upcomingMove, participants)
+                    ? getUpcomingMoveLabel(
+                        upcomingMove,
+                        participants,
+                        teamNames,
+                      )
                     : null;
                   return (
                     <Group key={p.castaway_id} gap={4} wrap="nowrap">
@@ -323,6 +398,7 @@ const TeamCard = ({
                             {getParticipantName(
                               participants,
                               upcomingMove.toUid,
+                              teamNames,
                             )}
                           </Badge>
                         </Tooltip>
@@ -359,10 +435,12 @@ const TeamCard = ({
                               landsNextEpisode,
                             },
                             participants,
+                            teamNames,
                           )}
                           style={{ flexShrink: 0 }}
                         >
-                          from {getParticipantName(participants, fromUid)}
+                          from{" "}
+                          {getParticipantName(participants, fromUid, teamNames)}
                         </Badge>
                       </Group>
                     ))}
@@ -374,5 +452,47 @@ const TeamCard = ({
         )}
       </Stack>
     </Card>
+  );
+};
+
+const TeamNameModal = ({
+  currentName,
+  fallbackName,
+  onConfirm,
+}: {
+  currentName: string;
+  fallbackName: string;
+  onConfirm: (name: string) => void;
+}) => {
+  const [name, setName] = useState(currentName);
+
+  return (
+    <Stack gap="md">
+      <Text size="sm" c="dimmed">
+        Set a team name for this competition only. Leave it blank to use your
+        account name.
+      </Text>
+      <TextInput
+        label="Team name"
+        placeholder={fallbackName}
+        value={name}
+        onChange={(e) => setName(e.currentTarget.value)}
+        maxLength={50}
+        data-autofocus
+      />
+      <Group justify="flex-end" gap="xs">
+        <Button variant="light" color="gray" onClick={() => modals.closeAll()}>
+          Cancel
+        </Button>
+        <Button
+          onClick={() => {
+            modals.closeAll();
+            onConfirm(name);
+          }}
+        >
+          Save
+        </Button>
+      </Group>
+    </Stack>
   );
 };

@@ -215,6 +215,12 @@ export type Competition = {
    */
   prop_bets?: PropBetsEntry[];
 
+  /**
+   * Per-competition display names, keyed by participant uid.
+   * Absent on pre-feature docs — fall back to SlimUser.displayName.
+   */
+  team_names?: Record<string, string>;
+
   current_episode: number | null;
   finished: boolean;
 };

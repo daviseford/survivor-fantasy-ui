@@ -106,7 +106,9 @@ function getOwnerResolver(
 
 function getParticipantName(competition: Competition, uid: string): string {
   return (
-    competition.participants.find((p) => p.uid === uid)?.displayName ?? uid
+    competition.team_names?.[uid] ??
+    competition.participants.find((p) => p.uid === uid)?.displayName ??
+    uid
   );
 }
 

@@ -398,7 +398,10 @@ export const Admin = () => {
                     <Table.Td>
                       <Text size="sm">
                         {c.participants
-                          .map((p) => p.displayName ?? p.email)
+                          .map(
+                            (p) =>
+                              c.team_names?.[p.uid] ?? p.displayName ?? p.email,
+                          )
                           .join(", ")}
                       </Text>
                     </Table.Td>

@@ -1,5 +1,6 @@
 import { Table, TableScrollContainer, Text } from "@mantine/core";
 import { getActivePropBetKeys, PropBetsQuestions } from "../../data/propbets";
+import { useCompetition } from "../../hooks/useCompetition";
 import { useDraft } from "../../hooks/useDraft";
 import { useSeason } from "../../hooks/useSeason";
 import type { CastawayId, CastawayLookup } from "../../types";
@@ -13,6 +14,7 @@ const resolveAnswer = (answer: string, lookup?: CastawayLookup): string => {
 export const PostDraftPropBetTable = () => {
   const { draft } = useDraft();
   const { data: season } = useSeason(draft?.season_id);
+  const { data: competition } = useCompetition(draft?.competiton_id);
 
   if (!draft?.prop_bets) return null;
 
@@ -25,7 +27,9 @@ export const PostDraftPropBetTable = () => {
     return (
       <Table.Tr key={p.id}>
         <Table.Td fw={600}>
-          <Text size="sm">{p.user_name}</Text>
+          <Text size="sm">
+            {competition?.team_names?.[p.user_uid] || p.user_name}
+          </Text>
         </Table.Td>
         {activeKeys.map((key) => (
           <Table.Td key={key}>

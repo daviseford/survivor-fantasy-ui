@@ -172,7 +172,10 @@ export const ProposeTradeModal = ({
           data={partners.map((participant: SlimUser) => ({
             value: participant.uid,
             label:
-              participant.displayName ?? participant.email ?? participant.uid,
+              competition.team_names?.[participant.uid] ||
+              participant.displayName ||
+              participant.email ||
+              participant.uid,
           }))}
           value={partnerUid}
           onChange={(value) => {
@@ -215,7 +218,11 @@ export const ProposeTradeModal = ({
                 <Text fw={700}>You receive</Text>
                 <Text size="xs" c="dimmed">
                   {partner
-                    ? `From ${partner.displayName ?? partner.email}`
+                    ? `From ${
+                        competition.team_names?.[partner.uid] ||
+                        partner.displayName ||
+                        partner.email
+                      }`
                     : "Choose a partner first"}
                 </Text>
               </div>
