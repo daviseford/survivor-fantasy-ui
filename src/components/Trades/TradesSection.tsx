@@ -299,10 +299,12 @@ export const TradesSection = ({
     const offeredBy = getParticipantName(
       competition.participants,
       trade.offered_by_uid,
+      competition.team_names,
     );
     const offeredTo = getParticipantName(
       competition.participants,
       trade.offered_to_uid,
+      competition.team_names,
     );
 
     if (trade.offered_to_uid === myUid) {

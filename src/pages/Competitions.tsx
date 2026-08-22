@@ -142,7 +142,9 @@ export const Competitions = () => {
   }, [filtered, sortField, sortDir]);
 
   const formatParticipants = (comp: Competition) => {
-    const names = comp.participants.map((p) => p.displayName ?? p.email);
+    const names = comp.participants.map(
+      (p) => comp.team_names?.[p.uid] ?? p.displayName ?? p.email,
+    );
     const maxShow = isMobile ? 2 : names.length;
     const shown = names.slice(0, maxShow).join(", ");
     const remaining = names.length - maxShow;
@@ -172,7 +174,8 @@ export const Competitions = () => {
         </Text>
         <Text size="xs" c="dimmed">
           <VisuallyHidden>Created by: </VisuallyHidden>
-          {x.participants.find((p) => p.uid === x.creator_uid)?.displayName}
+          {x.team_names?.[x.creator_uid] ??
+            x.participants.find((p) => p.uid === x.creator_uid)?.displayName}
         </Text>
       </Table.Td>
       <Table.Td>

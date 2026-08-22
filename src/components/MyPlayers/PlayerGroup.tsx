@@ -22,6 +22,7 @@ export const PlayerGroup = ({ uid }: { uid: SlimUser["uid"] }) => {
   } = useCompetitionMeta();
 
   const participants = competition?.participants ?? [];
+  const teamNames = competition?.team_names;
   const userSurvivors = survivorsByUserUid[uid];
   const incoming = incomingByUserUid[uid] ?? [];
 
@@ -50,13 +51,14 @@ export const PlayerGroup = ({ uid }: { uid: SlimUser["uid"] }) => {
           p.full_name,
           isEliminated ? "(Eliminated)" : null,
           upcomingMove
-            ? getUpcomingMoveLabel(upcomingMove, participants)
+            ? getUpcomingMoveLabel(upcomingMove, participants, teamNames)
             : null,
           acquisition
             ? getAcquisitionLabel(
                 acquisition,
                 drafters[p.castaway_id],
                 participants,
+                teamNames,
               )
             : null,
         ]
@@ -83,6 +85,7 @@ export const PlayerGroup = ({ uid }: { uid: SlimUser["uid"] }) => {
         const label = `${player.full_name} · ${getUpcomingMoveLabel(
           { fromUid, toUid: uid, landsNextEpisode },
           participants,
+          teamNames,
         )}`;
         return (
           <Tooltip label={label} key={player.castaway_id}>

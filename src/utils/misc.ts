@@ -7,13 +7,20 @@ export const getNumberWithOrdinal = (n: number) => {
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 };
 
-/** Display name for a participant uid, falling back to their email. */
+/**
+ * Display name for a participant uid. A per-competition team name (from
+ * `Competition.team_names`) wins, then displayName, then email.
+ */
 export const getParticipantName = (
   participants: SlimUser[],
   uid: string,
+  teamNames?: Record<string, string>,
 ): string => {
   const participant = participants.find((p) => p.uid === uid);
   return (
-    participant?.displayName || participant?.email || "Unknown participant"
+    teamNames?.[uid] ||
+    participant?.displayName ||
+    participant?.email ||
+    "Unknown participant"
   );
 };

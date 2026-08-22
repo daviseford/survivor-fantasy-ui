@@ -147,9 +147,10 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
     () =>
       (competition?.participants ?? []).map((p) => ({
         value: p.uid,
-        label: p.displayName || p.email || p.uid,
+        label:
+          competition?.team_names?.[p.uid] || p.displayName || p.email || p.uid,
       })),
-    [competition?.participants],
+    [competition?.participants, competition?.team_names],
   );
 
   const handleSort = (field: SortField) => {
@@ -247,14 +248,15 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
     );
 
     const participants = competition?.participants ?? [];
+    const teamNames = competition?.team_names;
     const ownerUid = displayOwners[castawayId];
     const ownedBy = ownerUid
-      ? getParticipantName(participants, ownerUid)
+      ? getParticipantName(participants, ownerUid, teamNames)
       : null;
 
     const upcomingMove = upcomingMoves[castawayId];
     const upcomingLabel = upcomingMove
-      ? getUpcomingMoveLabel(upcomingMove, participants)
+      ? getUpcomingMoveLabel(upcomingMove, participants, teamNames)
       : null;
 
     const acquisition = acquisitions[castawayId];
@@ -264,6 +266,7 @@ export const PerSurvivorPerEpisodeDetailedScoringTable = () => {
           competition?.draft_picks.find((x) => x.castaway_id === castawayId)
             ?.user_uid,
           participants,
+          teamNames,
         )
       : null;
 

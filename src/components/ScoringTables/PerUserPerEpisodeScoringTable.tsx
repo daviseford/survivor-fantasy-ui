@@ -81,7 +81,7 @@ export const PerUserPerEpisodeScoringTable = () => {
           className={`${classes.stickyCell} ${classes.stickyDivider}`}
           style={{ left: STICKY_OFFSETS.participant }}
         >
-          {user?.displayName || user?.email}
+          {competition?.team_names?.[uid] || user?.displayName || user?.email}
         </Table.Td>
 
         {values.episodePoints.map((x, idx) => (
