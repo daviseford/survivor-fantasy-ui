@@ -1,3 +1,12 @@
+/*
+ * The control is measured against its own width rather than the viewport:
+ * on the competition page it shares a two-column header with the title, so
+ * at narrower desktop widths its column can be far narrower than the screen.
+ */
+.root {
+  container-type: inline-size;
+}
+
 .modeControl {
   display: flex;
   align-items: center;
@@ -23,7 +32,8 @@
   align-self: center;
 }
 
-@media (max-width: 48em) {
+/* Summary + actions side by side needs roughly 34em; below that, stack. */
+@container (max-width: 34em) {
   .modeControl {
     flex-direction: column;
     align-items: stretch;
