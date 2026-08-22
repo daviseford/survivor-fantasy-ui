@@ -30,6 +30,7 @@ import { Footer } from "./components/Footer";
 import { Home } from "./components/Home/Home";
 import { Navbar } from "./components/Navbar";
 import { NotFound } from "./components/NotFound";
+import { RouteErrorBoundary } from "./components/RouteErrorBoundary/RouteErrorBoundary";
 import { theme } from "./theme";
 import { trackEvent } from "./utils/analytics";
 
@@ -177,52 +178,57 @@ export const AppRoutes = () => {
             </AppShell.Navbar>
 
             <AppShell.Main id="main-content" className={classes.main}>
-              <Suspense
-                fallback={
-                  <Center h="60vh">
-                    <Loader size="lg" />
-                  </Center>
-                }
-              >
-                <Routes>
-                  <Route path="/" element={<Home />} />
+              <RouteErrorBoundary>
+                <Suspense
+                  fallback={
+                    <Center h="60vh">
+                      <Loader size="lg" />
+                    </Center>
+                  }
+                >
+                  <Routes>
+                    <Route path="/" element={<Home />} />
 
-                  {/* User stuff */}
-                  <Route path="/logout" element={<Logout />} />
-                  <Route path="/reset-password" element={<ResetPassword />} />
+                    {/* User stuff */}
+                    <Route path="/logout" element={<Logout />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
 
-                  {/* Drafting */}
-                  <Route
-                    path="/seasons/:seasonId/draft/:draftId"
-                    element={<DraftComponent />}
-                  />
+                    {/* Drafting */}
+                    <Route
+                      path="/seasons/:seasonId/draft/:draftId"
+                      element={<DraftComponent />}
+                    />
 
-                  {/* Seasons */}
-                  <Route
-                    path="/seasons/:seasonId/manage"
-                    element={<RedirectToAdmin />}
-                  />
-                  <Route path="/seasons/:seasonId" element={<SingleSeason />} />
-                  <Route path="/seasons" element={<Seasons />} />
+                    {/* Seasons */}
+                    <Route
+                      path="/seasons/:seasonId/manage"
+                      element={<RedirectToAdmin />}
+                    />
+                    <Route
+                      path="/seasons/:seasonId"
+                      element={<SingleSeason />}
+                    />
+                    <Route path="/seasons" element={<Seasons />} />
 
-                  {/* Competitions */}
-                  <Route
-                    path="/competitions/:competitionId"
-                    element={<SingleCompetition />}
-                  />
-                  <Route path="/competitions" element={<Competitions />} />
+                    {/* Competitions */}
+                    <Route
+                      path="/competitions/:competitionId"
+                      element={<SingleCompetition />}
+                    />
+                    <Route path="/competitions" element={<Competitions />} />
 
-                  {/* Scoring */}
-                  <Route path="/scoring" element={<ScoringReference />} />
+                    {/* Scoring */}
+                    <Route path="/scoring" element={<ScoringReference />} />
 
-                  {/* Admin */}
-                  <Route path="/admin/:seasonId" element={<SeasonAdmin />} />
-                  <Route path="/admin" element={<Admin />} />
+                    {/* Admin */}
+                    <Route path="/admin/:seasonId" element={<SeasonAdmin />} />
+                    <Route path="/admin" element={<Admin />} />
 
-                  {/* 404 catch-all — must be last */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
+                    {/* 404 catch-all — must be last */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </RouteErrorBoundary>
               <Footer />
             </AppShell.Main>
           </AppShell>
