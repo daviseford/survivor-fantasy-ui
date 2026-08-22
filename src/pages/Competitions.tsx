@@ -33,6 +33,8 @@ import { Competition } from "../types";
 import classes from "./Competitions.module.css";
 
 type SortField = "name" | "season" | "participants" | "type" | "status";
+
+const badgeClassNames = { label: classes.badgeLabel };
 type SortDir = "asc" | "desc";
 
 const SortableHeader = ({
@@ -178,12 +180,12 @@ export const Competitions = () => {
             x.participants.find((p) => p.uid === x.creator_uid)?.displayName}
         </Text>
       </Table.Td>
-      <Table.Td>
+      <Table.Td className={classes.badgeCell}>
         <Tooltip
           label={`Season ${x.season_num}`}
           events={{ hover: true, focus: true, touch: true }}
         >
-          <Badge variant="light" size="sm">
+          <Badge variant="light" size="sm" classNames={badgeClassNames}>
             S{x.season_num}
           </Badge>
         </Tooltip>
@@ -191,17 +193,23 @@ export const Competitions = () => {
       <Table.Td>
         <Text size="sm">{formatParticipants(x)}</Text>
       </Table.Td>
-      <Table.Td className={classes.typeCell}>
+      <Table.Td className={`${classes.typeCell} ${classes.badgeCell}`}>
         <Badge
           variant="light"
           color={x.current_episode != null ? "violet" : "cyan"}
           size="sm"
+          classNames={badgeClassNames}
         >
           {x.current_episode != null ? "Watch-Along" : "Live"}
         </Badge>
       </Table.Td>
-      <Table.Td>
-        <Badge variant="light" color={x.finished ? "green" : "blue"} size="sm">
+      <Table.Td className={classes.badgeCell}>
+        <Badge
+          variant="light"
+          color={x.finished ? "green" : "blue"}
+          size="sm"
+          classNames={badgeClassNames}
+        >
           {x.finished ? "Complete" : "In Progress"}
         </Badge>
       </Table.Td>
