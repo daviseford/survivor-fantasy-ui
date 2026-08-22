@@ -833,8 +833,10 @@ test("a return from the hosted reset handler continues the retained intent", asy
     "Hosted Return User",
   );
 
-  // Save a start-draft intent through the gate and read its state key, which
-  // is what the emailed continue URL carries.
+  // Save a start-draft intent through the gate, then request the reset from
+  // the same modal. Only a sent reset request keeps the intent pending after
+  // dismissal (a plain cancel discards it), and this is the path every real
+  // hosted-handler return has taken.
   await page.goto(`/seasons/${SEASON_ID}`);
   await main(page)
     .getByRole("button", { name: "Create account", exact: true })
@@ -842,16 +844,33 @@ test("a return from the hosted reset handler continues the retained intent", asy
   await expect(
     dialog(page).getByText(`Start a draft for ${SEASON_NAME}`),
   ).toBeVisible();
+  await dialog(page).getByRole("tab", { name: "Sign in" }).click();
+  await dialog(page).getByRole("button", { name: "Forgot password?" }).click();
+  await dialog(page).getByLabel("Email").fill(user.email);
+  await dialog(page).getByRole("button", { name: "Send reset email" }).click();
+  await expect(dialog(page).getByRole("alert")).toHaveText(
+    RESET_REQUEST_CONFIRMATION,
+    SLOW,
+  );
   await page.keyboard.press("Escape");
   await expect(dialog(page)).toBeHidden();
 
-  const storedIntents = await page.evaluate(() =>
-    window.localStorage.getItem("survivor_auth_intents"),
-  );
-  const records = (
-    JSON.parse(storedIntents ?? "{}") as { records?: Record<string, unknown> }
-  ).records;
-  const stateKey = Object.keys(records ?? {})[0];
+  // The generated email link's continue URL is the address Firebase's hosted
+  // handler sends the user back to; read the state key from there rather
+  // than from storage.
+  await expect
+    .poll(async () => (await getPasswordResetCodes(user.email)).length, {
+      timeout: 15_000,
+    })
+    .toBe(1);
+  const oobLink = (await getPasswordResetCodes(user.email))[0].oobLink;
+  const continueUrl = new URL(oobLink).searchParams.get("continueUrl");
+  if (!continueUrl) {
+    throw new Error("generated reset link carries no continueUrl");
+  }
+  const continueTarget = new URL(continueUrl);
+  expect(continueTarget.pathname).toBe("/reset-password");
+  const stateKey = continueTarget.searchParams.get("state");
   expect(stateKey).toBeTruthy();
 
   // Exactly what Firebase's hosted handler redirects to after a successful
