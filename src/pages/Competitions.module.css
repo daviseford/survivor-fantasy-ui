@@ -34,3 +34,16 @@
     flex-direction: column;
   }
 }
+
+/* Badges carry the season, type, and status, so they must never shrink to an
+   ellipsis. Mantine's Badge label is a flex item with overflow hidden, which
+   lets the table squeeze it to nothing; making the overflow visible gives it
+   its content width as a minimum, and nowrap on the cell keeps the column
+   from being wrapped around it. */
+.badgeCell {
+  white-space: nowrap;
+}
+
+.badgeLabel {
+  overflow: visible;
+}
