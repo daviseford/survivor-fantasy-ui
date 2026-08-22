@@ -816,6 +816,93 @@ test("reset through the generated email link continues the retained start-draft 
   );
 });
 
+// When Firebase's own hosted handler owns the reset (the console action URL
+// is not pointed at this app), it returns the user to the continue URL after
+// they set the new password there: this route, carrying the state key but no
+// action code. That must not read as a failure, and the retained action must
+// still continue.
+test("a return from the hosted reset handler continues the retained intent", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(Boolean(isMobile), "desktop-only scenario");
+  await seedSeason();
+  const user = await createUser(
+    uniqueEmail("hosted-return"),
+    PASSWORD,
+    "Hosted Return User",
+  );
+
+  // Save a start-draft intent through the gate, then request the reset from
+  // the same modal. Only a sent reset request keeps the intent pending after
+  // dismissal (a plain cancel discards it), and this is the path every real
+  // hosted-handler return has taken.
+  await page.goto(`/seasons/${SEASON_ID}`);
+  await main(page)
+    .getByRole("button", { name: "Create account", exact: true })
+    .click();
+  await expect(
+    dialog(page).getByText(`Start a draft for ${SEASON_NAME}`),
+  ).toBeVisible();
+  await dialog(page).getByRole("tab", { name: "Sign in" }).click();
+  await dialog(page).getByRole("button", { name: "Forgot password?" }).click();
+  await dialog(page).getByLabel("Email").fill(user.email);
+  await dialog(page).getByRole("button", { name: "Send reset email" }).click();
+  await expect(dialog(page).getByRole("alert")).toHaveText(
+    RESET_REQUEST_CONFIRMATION,
+    SLOW,
+  );
+  await page.keyboard.press("Escape");
+  await expect(dialog(page)).toBeHidden();
+
+  // The generated email link's continue URL is the address Firebase's hosted
+  // handler sends the user back to; read the state key from there rather
+  // than from storage.
+  await expect
+    .poll(async () => (await getPasswordResetCodes(user.email)).length, {
+      timeout: 15_000,
+    })
+    .toBe(1);
+  const oobLink = (await getPasswordResetCodes(user.email))[0].oobLink;
+  const continueUrl = new URL(oobLink).searchParams.get("continueUrl");
+  if (!continueUrl) {
+    throw new Error("generated reset link carries no continueUrl");
+  }
+  const continueTarget = new URL(continueUrl);
+  expect(continueTarget.pathname).toBe("/reset-password");
+  const stateKey = continueTarget.searchParams.get("state");
+  expect(stateKey).toBeTruthy();
+
+  // Exactly what Firebase's hosted handler redirects to after a successful
+  // reset: the continue URL, with no mode or oobCode.
+  await page.goto(`/reset-password?state=${stateKey}`);
+  await expect(page).toHaveURL("/reset-password");
+  await expect(
+    page.getByRole("heading", { name: "Sign in with your new password" }),
+  ).toBeVisible(SLOW);
+  await expect(
+    page.getByRole("heading", { name: "Reset link no longer valid" }),
+  ).toHaveCount(0);
+
+  // Signing in from here resumes the retained start-draft action once.
+  await main(page)
+    .getByRole("button", { name: "Sign in", exact: true })
+    .click();
+  await expect(
+    dialog(page).getByText("Sign in to continue starting your draft."),
+  ).toBeVisible();
+  await signInThrough(page, { email: user.email, password: PASSWORD });
+
+  await expect(page).toHaveURL(
+    new RegExp(`/seasons/${SEASON_ID}/draft/draft_`),
+    SLOW,
+  );
+  const drafts = await readDrafts();
+  const draftRecords = Object.values(drafts ?? {});
+  expect(draftRecords).toHaveLength(1);
+  expect(draftRecords[0].creator_uid).toBe(user.uid);
+});
+
 // AE8: sign-out restores signed-out entry points, and the legacy /logout
 // route signs the user out and offers account entry without a 404.
 test("sign-out from the navbar and the /logout route restores signed-out state (AE8)", async ({

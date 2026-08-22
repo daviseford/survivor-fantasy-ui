@@ -39,7 +39,14 @@ import {
  * ordinary AuthModal; this page never claims or executes an intent itself.
  */
 
-type ResetStatus = "verifying" | "invalid" | "form" | "success";
+/**
+ * "returned" covers a visit with no action code. The common cause is
+ * Firebase's own hosted handler sending the user back to this route's
+ * continue URL after they already set a new password there, so an error is
+ * both wrong and alarming. "invalid" stays reserved for a code that was
+ * present and failed verification.
+ */
+type ResetStatus = "verifying" | "returned" | "invalid" | "form" | "success";
 
 const describeIntent = (intent: AuthIntent): string =>
   intent.kind === "start-draft"
@@ -54,7 +61,7 @@ export const ResetPassword = () => {
     parseResetActionParams(window.location.search, window.location.origin),
   );
   const [status, setStatus] = useState<ResetStatus>(() =>
-    isResetPasswordRequest(params) ? "verifying" : "invalid",
+    isResetPasswordRequest(params) ? "verifying" : "returned",
   );
   const [email, setEmail] = useState<string | null>(null);
   const [verifyError, setVerifyError] = useState<AuthError | null>(null);
@@ -154,12 +161,14 @@ export const ResetPassword = () => {
     });
   };
 
-  const heading =
-    status === "success"
-      ? "Password updated"
-      : status === "invalid"
-        ? "Reset link no longer valid"
-        : "Reset your password";
+  const HEADINGS: Record<ResetStatus, string> = {
+    verifying: "Reset your password",
+    returned: "Sign in with your new password",
+    invalid: "Reset link no longer valid",
+    form: "Reset your password",
+    success: "Password updated",
+  };
+  const heading = HEADINGS[status];
 
   const liveMessage =
     status === "verifying"
@@ -183,6 +192,21 @@ export const ResetPassword = () => {
             <Text c="dimmed" size="sm">
               Verifying your reset link...
             </Text>
+          </Stack>
+        )}
+
+        {status === "returned" && (
+          <Stack gap="md" mt="md">
+            <Text c="dimmed" size="sm" ta="center">
+              If you just set a new password, sign in with it to continue. If
+              you still need to reset it, request a new email.
+            </Text>
+            <Button fullWidth onClick={openSignIn}>
+              Sign in
+            </Button>
+            <Button fullWidth variant="default" onClick={openForgotPassword}>
+              Request a new reset email
+            </Button>
           </Stack>
         )}
 
